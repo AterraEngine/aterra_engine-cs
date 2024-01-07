@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using Ansi;
 namespace AterraEngine_Workfloor;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -9,6 +10,6 @@ namespace AterraEngine_Workfloor;
 // ReSharper disable once UnusedType.Global
 static class Program {
     public static void Main(string[] _) {
-        Console.WriteLine("Hello World");
+        Console.WriteLine(AnsiColor.F("maroon","Hello World"));
     }
 }
