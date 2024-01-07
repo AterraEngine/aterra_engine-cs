@@ -13,4 +13,19 @@
       <ProjectReference Include="..\ArgsParser\ArgsParser.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Raylib-cs" Version="5.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\..\resources\audio\boom.wav">
+        <Link>resources\audio\boom.wav</Link>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="..\..\resources\explosion.png">
+        <Link>resources\explosion.png</Link>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
 </Project>

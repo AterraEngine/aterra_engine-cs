@@ -12,6 +12,7 @@ public class ArgOptions {
     [ArgFlag('v', "version")]   public bool ShowVersion { get; set; } = false;
     [ArgFlag('d', "debug")]     public bool EnableDebug { get; set; } = false;
     
+    [ArgFlag('r', "raylib")]    public bool RunRaylib { get; set; } = false;
     [ArgFlag('e', "editor")]    public bool RunEditor { get; set; } = false;
 }
 
@@ -22,9 +23,13 @@ static class Program {
         ArgOptions argOptions = propertyParser.Parse(args);
 
         if (argOptions.ShowHelp) {
-            foreach (var helpDescription in propertyParser.GetReadableDescriptions()) {
+            foreach (var helpDescription in propertyParser.GetDescriptionsReadable()) {
                 Console.WriteLine(helpDescription);
             }
+        } 
+        else if (argOptions.RunRaylib) {
+            var raylibTest = new SpriteExplosion();
+            raylibTest.Main();
         }
     }
 }

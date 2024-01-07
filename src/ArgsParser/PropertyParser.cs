@@ -59,9 +59,9 @@ public class PropertyParser<T> where T:new() {
     /// Each description is formatted as follows:
     /// - [ShortName] -- [LongName] : [Description]
     /// </returns>
-    public IEnumerable<string> GetReadableDescriptions() {
+    public IEnumerable<string> GetDescriptionsReadable() {
         return GetDescriptions()
-            .Select(v => $"-{v?.ShortName.ToString(),-5} --{v?.LongName,-8} : {v?.Description}");
+            .Select(v => $"-{v?.ShortName,-5} --{v?.LongName,-8} : {v?.Description ?? "UNKNOWN DESCRIPTION"}");
     }
 
     /// <summary>
