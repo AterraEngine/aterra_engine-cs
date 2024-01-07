@@ -10,6 +10,9 @@ namespace Ansi;
 // The following class is created by using the following resources:
 //      - https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797#ansi-escape-sequences
 //      - https://github.com/code-of-chaos/AthenaColor (my own package)
+/// <summary>
+/// Provides ANSI escape codes for cursor control, erase functions, graphics modes, color codes, screen modes, and keyboard strings.
+/// </summary>
 public static class AnsiCodes {
     private static string _escapeChar = AnsiEscapeCodes.EscapeHexadecimal;
     public static void ChangeEscapeChar(string escape) => _escapeChar = escape;

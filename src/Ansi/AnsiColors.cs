@@ -8,13 +8,28 @@ namespace Ansi;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public static class AnsiColors { 
+/// <summary>
+/// Provides a collection of ANSI colors represented as RGB byte values.
+/// </summary>
+public static class AnsiColors {
+    /// <summary>
+    /// An instance of the <see cref="Dictionary{TKey,TValue}"/> class that maps strings to <see cref="ByteVector3"/> objects.
+    /// </summary>
     private static readonly Dictionary<string, ByteVector3> _dictionary = new();
+
+    /// <summary>
+    /// Gets a read-only dictionary containing known colors with their corresponding RGB values.
+    /// </summary>
+    /// <value>
+    /// The known colors dictionary.
+    /// </value>
     public static ReadOnlyDictionary<string, ByteVector3> KnownColorsDictionary => _dictionary.AsReadOnly();
     
     // -----------------------------------------------------------------------------------------------------------------
     // Constructor
     // -----------------------------------------------------------------------------------------------------------------
+    /// The AnsiColors class provides a static dictionary of ANSI color names and their corresponding RGB byte values.
+    /// /
     static AnsiColors() {
         _dictionary.Add("maroon",                   new ByteVector3(128,0,0));
         _dictionary.Add("darkred",                  new ByteVector3(139,0,0));
@@ -156,18 +171,37 @@ public static class AnsiColors {
         _dictionary.Add("whitesmoke",               new ByteVector3(245,245,245));
         _dictionary.Add("white",                    new ByteVector3(255,255,255));
     }
-    
+
+    /// <summary>
+    /// Retrieves the color value associated with the given color name from the dictionary.
+    /// </summary>
+    /// <param name="colorName">The name of the color to retrieve.</param>
+    /// <returns>The color value associated with the specified color name, or ByteVector3.Zero if the color name is not found in the dictionary.</returns>
     public static ByteVector3 GetColor(string colorName) {
         return _dictionary.TryGetValue(colorName, out var color) 
             ? color 
             : ByteVector3.Zero; // Handle the case where the color name is not found (e.g., return a default color)
     }
 
+    /// <summary>
+    /// Tries to retrieve a color from the dictionary based on the specified color name.
+    /// </summary>
+    /// <param name="colorName">The name of the color to retrieve.</param>
+    /// <param name="color">When this method returns, contains the color associated with the specified color name if it is found; otherwise, contains a default color.</param>
+    /// <returns>
+    /// <c>true</c> if the color with the specified color name is found in the dictionary; otherwise, <c>false</c>.
+    /// </returns>
     public static bool TryGetColor(string colorName, out ByteVector3 color) {
         color = ByteVector3.Zero;
         return _dictionary.TryGetValue(colorName, out color);
     }
-    
+
+    /// <summary>
+    /// Adds a color to the dictionary.
+    /// </summary>
+    /// <param name="colorName">The name of the color to add.</param>
+    /// <param name="value">The RGB value of the color to add.</param>
+    /// <returns>Returns true if the color was added successfully, false otherwise.</returns>
     public static bool AddColor(string colorName, ByteVector3 value) {
         return _dictionary.TryAdd(colorName, value);
     }
