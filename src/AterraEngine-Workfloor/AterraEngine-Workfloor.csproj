@@ -10,6 +10,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Ansi\Ansi.csproj" />
+      <ProjectReference Include="..\ArgsParser\ArgsParser.csproj" />
     </ItemGroup>
 
 </Project>
