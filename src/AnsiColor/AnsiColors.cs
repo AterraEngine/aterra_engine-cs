@@ -163,7 +163,12 @@ public static class AnsiColors {
             : ByteVector3.Zero; // Handle the case where the color name is not found (e.g., return a default color)
     }
 
-    public static void AddColor(string colorName, ByteVector3 value) {
-        _dictionary.TryAdd(colorName, value);
+    public static bool TryGetColor(string colorName, out ByteVector3 color) {
+        color = ByteVector3.Zero;
+        return _dictionary.TryGetValue(colorName, out color);
+    }
+    
+    public static bool AddColor(string colorName, ByteVector3 value) {
+        return _dictionary.TryAdd(colorName, value);
     }
 }
