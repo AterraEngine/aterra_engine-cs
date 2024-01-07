@@ -14,13 +14,12 @@ public class PropertyParser<T> where T:new() {
     //      Maybe a bit overkill, but might be a good idea in the long run.
     private readonly Dictionary<string, PropertyInfo> _optionProperties = new();
     private readonly Dictionary<string, PropertyInfo> _flagProperties = new();
+    private readonly PropertyInfo[] _propertyInfos = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
     
     public PropertyParser() {
-        var properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-
-        foreach (var prop in properties)
+        foreach (var prop in _propertyInfos)
         {
-            var optionAttr = prop.GetCustomAttribute<ArgAttribute>();
+            var optionAttr = prop.GetCustomAttribute<ArgValueAttribute>();
             var flagAttr = prop.GetCustomAttribute<ArgFlagAttribute>();
 
             if (optionAttr != null) {
@@ -32,6 +31,17 @@ public class PropertyParser<T> where T:new() {
                 _flagProperties[$"--{flagAttr.LongName}"] = prop;
             }
         }
+    }
+    
+    // Easily retrieve the 
+    public IEnumerable<string> GetReadableDescriptions() {
+        return GetDescriptions()
+            .Select(v => $"-{v?.ShortName.ToString(),-5} --{v?.LongName,-8} : {v?.Description}");
+    }
+
+    public IEnumerable<ArgsParserAttribute?> GetDescriptions() {
+        return _propertyInfos
+            .Select(value => value.GetCustomAttribute<ArgsParserAttribute>());
     }
 
     public T Parse(string[] args) {
