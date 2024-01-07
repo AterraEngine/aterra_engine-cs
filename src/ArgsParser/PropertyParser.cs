@@ -21,7 +21,7 @@ public class PropertyParser<T> where T:new() {
         foreach (var prop in properties)
         {
             var optionAttr = prop.GetCustomAttribute<ArgAttribute>();
-            var flagAttr = prop.GetCustomAttribute<ArgsFlagAttribute>();
+            var flagAttr = prop.GetCustomAttribute<ArgFlagAttribute>();
 
             if (optionAttr != null) {
                 _optionProperties[$"-{optionAttr.ShortName}"] = prop;

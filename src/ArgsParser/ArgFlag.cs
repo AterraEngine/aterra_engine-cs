@@ -7,7 +7,7 @@ namespace ArgsParser;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [AttributeUsage(AttributeTargets.Property)]
-public class ArgsFlagAttribute(char shortName, string longName) : Attribute {
+public class ArgFlagAttribute(char shortName, string longName) : Attribute {
     public char ShortName { get; } = shortName;
     public string LongName { get; } = longName;
 }
