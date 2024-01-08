@@ -1,0 +1,56 @@
+﻿<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="urn:attera-engine:engine-config"
+           targetNamespace="urn:attera-engine:engine-config"
+           elementFormDefault="qualified">
+
+    <!-- Define types for custom attributes -->
+    <xs:simpleType name="NoSpacesType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="\S*"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- Define the Plugin type -->
+    <xs:complexType name="PluginType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="id" type="xs:string" use="required"/>
+                <xs:attribute name="nameInternal" type="tns:NoSpacesType" use="required"/>
+                <xs:attribute name="nameReadable" type="xs:string" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <!-- Define the SemanticVersion type (assuming it's a simple type) -->
+    <xs:simpleType name="SemanticVersionType">
+        <xs:restriction base="xs:string">
+            <!-- Add any constraints for SemanticVersion -->
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- Define the PluginsType type -->
+    <xs:complexType name="PluginsType">
+        <xs:sequence>
+            <xs:element name="Plugin" type="tns:PluginType" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Define the EngineConfig type -->
+    <xs:complexType name="EngineConfigType">
+        <xs:sequence>
+            <xs:element name="Version" type="tns:SemanticVersionType"/>
+            <xs:element name="Plugins" type="tns:PluginsType"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Root element declaration -->
+    <xs:element name="EngineConfig">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Version" type="xs:string"/>
+                <xs:element name="Plugins" type="tns:PluginsType"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

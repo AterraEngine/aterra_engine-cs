@@ -1,6 +1,8 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using System.Text;
+using System.Xml;
 using System.Xml.Serialization;
 
 using AterraEngine.Interfaces;
@@ -11,8 +13,28 @@ namespace AterraEngine.Config;
 // ---------------------------------------------------------------------------------------------------------------------
 /// <inheritdoc/>
 public class EngineConfigParser<T>:IEngineConfigParser<T> where T : EngineConfig {
-    private readonly XmlSerializer _serializer = new(typeof(T));
+    private readonly XmlSerializer _serializer = new(typeof(T), "urn:attera-engine:engine-config");
+    private readonly XmlReaderSettings _readerSettings = new();
+    private readonly XmlWriterSettings _writerSettings = new();
     
+    // -----------------------------------------------------------------------------------------------------------------
+    // Constructor
+    // -----------------------------------------------------------------------------------------------------------------
+    public EngineConfigParser() {
+        // Reader Settings
+        _readerSettings.Schemas.Add("urn:attera-engine:engine-config", "xsd/engine_config.xsd");
+        _readerSettings.ValidationType = ValidationType.Schema;
+
+        
+        // Write Settings
+        _writerSettings.Indent = true;
+        _writerSettings.Encoding = Encoding.UTF32;
+        _writerSettings.OmitXmlDeclaration = false;
+    }
+    
+    // -----------------------------------------------------------------------------------------------------------------
+    // Methods
+    // -----------------------------------------------------------------------------------------------------------------
     public bool TryDeserializeFromFile(string filePath, out T? engineConfig) {
         // Default to null
         engineConfig = null;
@@ -22,12 +44,11 @@ public class EngineConfigParser<T>:IEngineConfigParser<T> where T : EngineConfig
             }
             
             using StreamReader reader = new StreamReader(filePath);
-            engineConfig = (T)_serializer.Deserialize(reader)!;
+            using XmlReader xmlReader = XmlReader.Create(reader, _readerSettings);
+            engineConfig = (T)_serializer.Deserialize(xmlReader)!;
+            
             return true;
 
-        }
-        catch (InvalidOperationException e) {
-            return false;
         }
         catch (Exception e)
         {
@@ -41,11 +62,12 @@ public class EngineConfigParser<T>:IEngineConfigParser<T> where T : EngineConfig
         // Default to null
         try {
             using StreamWriter writer = new StreamWriter(filePath);
-            _serializer.Serialize(writer, engineConfig);
+            using XmlWriter xmlWriter = XmlWriter.Create(writer, _writerSettings);
+            _serializer.Serialize(xmlWriter, engineConfig);
             return true;
         }
         catch (Exception e) {
-            Console.WriteLine(e);
+            Console.WriteLine($"An unexpected error occurred: {e.Message}");
             return false;
         }
         

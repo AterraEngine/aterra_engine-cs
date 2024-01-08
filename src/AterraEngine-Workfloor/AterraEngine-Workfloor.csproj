@@ -22,12 +22,18 @@
 
     <!-- Include all files from the "resources" folder -->
     <!--    And als establish a link between the two locations -->
-    <Target Name="CreateSymbolicLink" BeforeTargets="AfterBuild">
-        <Exec Command="mklink /J &quot;$(OutputPath)\resources&quot; &quot;$(SolutionDir)resources&quot;" Condition="!Exists('$(OutputPath)\resources')" />
-    </Target>
     <ItemGroup>
         <Content Include="..\..\resources\**\*">
             <Link>resources\%(RecursiveDir)%(FileName)%(Extension)</Link>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+    
+    <!-- Implement XSD validators   -->
+
+    <ItemGroup>
+        <Content Include="..\..\xsd\**\*">
+            <Link>xsd\%(RecursiveDir)%(FileName)%(Extension)</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
     </ItemGroup>

@@ -21,8 +21,7 @@ public class ConfigTest {
         using StreamReader reader1 = new StreamReader(_engineConfigXml);
         Console.WriteLine(reader1.ReadToEnd());
         
-        if (
-            !engineConfigParser.TryDeserializeFromFile(_engineConfigXml, out EngineConfig? engineConfig)
+        if (!engineConfigParser.TryDeserializeFromFile(_engineConfigXml, out EngineConfig? engineConfig)
             || engineConfig is null) {
             throw new Exception("File coule not be parsed");
         }

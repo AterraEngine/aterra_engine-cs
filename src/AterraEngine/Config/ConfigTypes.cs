@@ -2,19 +2,33 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Xml.Serialization;
+
 using AterraEngine_lib.structs;
 
 namespace AterraEngine.Config;
 
 // ---------------------------------------------------------------------------------------------------------------------
-// Code
+// Config Elements
 // ---------------------------------------------------------------------------------------------------------------------
 public class PluginConfig {
-    [XmlAttribute("id")]    public required string Id { get; set; }
-    [XmlAttribute("name")]  public required string Name { get; set; }
-    [XmlText]               public required string FilePath { get; set; }
+ 
+    [XmlAttribute("id")]            
+    public required string Id { get; set; }
+        
+    
+    [XmlAttribute("nameInternal")]
+    public required string NameInternal { get; set; }
+
+    [XmlAttribute("nameReadable")]  
+    public required string NameReadable { get; set; }
+    
+    [XmlText]                       
+    public required string FilePath { get; set; }
 }
 
+// ---------------------------------------------------------------------------------------------------------------------
+// Actual Config Class
+// ---------------------------------------------------------------------------------------------------------------------
 [XmlRoot("EngineConfig")]
 public class EngineConfig {
     [XmlElement("Version")]
@@ -23,5 +37,6 @@ public class EngineConfig {
     [XmlArray("Plugins")]
     [XmlArrayItem("Plugin", typeof(PluginConfig))]
     public required List<PluginConfig> Plugins { get; set; } = [];
+    
 }
 
