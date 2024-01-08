@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Ansi\Ansi.csproj" />
       <ProjectReference Include="..\AterraEngine.Interfaces\AterraEngine.Interfaces.csproj" />
       <ProjectReference Include="..\AterraEngine\AterraEngine.csproj" />
     </ItemGroup>

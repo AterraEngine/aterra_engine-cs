@@ -14,7 +14,7 @@
     <xs:complexType name="PluginType">
         <xs:simpleContent>
             <xs:extension base="xs:string">
-                <xs:attribute name="id" type="xs:string" use="required"/>
+                <xs:attribute name="id" type="xs:string" use="required" />
                 <xs:attribute name="nameInternal" type="tns:NoSpacesType" use="required"/>
                 <xs:attribute name="nameReadable" type="xs:string" use="required"/>
             </xs:extension>

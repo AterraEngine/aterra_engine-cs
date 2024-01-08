@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using Ansi;
 using AterraEngine.Config;
 using AterraEngine.Plugin;
 
@@ -24,7 +25,10 @@ public class ConfigTest {
         
         // Plugin Test
         EnginePluginManager enginePluginManager = new EnginePluginManager();
-        enginePluginManager.TryLoadOrderFromEngineConfig(engineConfig: engineConfig, out _);
+
+        if (!enginePluginManager.TryLoadOrderFromEngineConfig(engineConfig: engineConfig, out _)) {
+            throw new Exception("SOMETHING WENT WRONG!!!");
+        }
         enginePluginManager.LoadPlugins();
     }
 

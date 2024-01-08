@@ -11,19 +11,11 @@ namespace AterraEngine.Config;
 // Config Elements
 // ---------------------------------------------------------------------------------------------------------------------
 public class PluginConfig {
- 
-    [XmlAttribute("id")]            
-    public required string Id { get; set; }
-        
-    
-    [XmlAttribute("nameInternal")]
-    public required string NameInternal { get; set; }
-
-    [XmlAttribute("nameReadable")]  
-    public required string NameReadable { get; set; }
-    
-    [XmlText]                       
-    public required string FilePath { get; set; }
+    [XmlAttribute("id")]            public required string XmlId { get => Id.ToString(); set => Id = new PluginId(value); }           
+    [XmlIgnore]                     public required PluginId Id { get; set; }
+    [XmlAttribute("nameInternal")]  public required string NameInternal { get; set; }
+    [XmlAttribute("nameReadable")]  public required string NameReadable { get; set; }
+    [XmlText]                       public required string FilePath { get; set; }
 }
 
 // ---------------------------------------------------------------------------------------------------------------------

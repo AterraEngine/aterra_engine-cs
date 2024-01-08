@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Collections.ObjectModel;
 using System.Reflection;
+using AterraEngine_lib.structs;
 using AterraEngine.Config;
 using AterraEngine.Interfaces.Plugin;
 
@@ -12,11 +13,11 @@ namespace AterraEngine.Plugin;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class EnginePluginManager {
-    private Dictionary<string, string> _loadOrder = new();
-    public ReadOnlyDictionary<string, string> LoadOrder => _loadOrder.AsReadOnly();
+    private Dictionary<PluginId, string> _loadOrder = new();
+    public ReadOnlyDictionary<PluginId, string> LoadOrder => _loadOrder.AsReadOnly();
     
-    private Dictionary<string, IEnginePlugin> _enginePlugins = new();
-    public ReadOnlyDictionary<string, IEnginePlugin> EnginePlugins => _enginePlugins.AsReadOnly();
+    private Dictionary<PluginId, IEnginePlugin> _enginePlugins = new();
+    public ReadOnlyDictionary<PluginId, IEnginePlugin> EnginePlugins => _enginePlugins.AsReadOnly();
 
 
     public bool TryLoadOrderFromEngineConfig(EngineConfig engineConfig, out List<Tuple<string, string>> errorPaths) {
