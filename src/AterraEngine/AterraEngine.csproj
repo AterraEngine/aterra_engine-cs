@@ -6,4 +6,9 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\AterraEngine-Lib\AterraEngine-Lib.csproj" />
+      <ProjectReference Include="..\AterraEngine.Interfaces\AterraEngine.Interfaces.csproj" />
+    </ItemGroup>
+
 </Project>

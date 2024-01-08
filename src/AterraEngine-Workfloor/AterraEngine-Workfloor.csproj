@@ -11,21 +11,25 @@
     <ItemGroup>
       <ProjectReference Include="..\Ansi\Ansi.csproj" />
       <ProjectReference Include="..\ArgsParser\ArgsParser.csproj" />
+      <ProjectReference Include="..\AterraEngine.Interfaces\AterraEngine.Interfaces.csproj" />
+      <ProjectReference Include="..\AterraEngine\AterraEngine.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="Raylib-cs" Version="5.0.0" />
     </ItemGroup>
 
+
+    <!-- Include all files from the "resources" folder -->
+    <!--    And als establish a link between the two locations -->
+    <Target Name="CreateSymbolicLink" BeforeTargets="AfterBuild">
+        <Exec Command="mklink /J &quot;$(OutputPath)\resources&quot; &quot;$(SolutionDir)resources&quot;" Condition="!Exists('$(OutputPath)\resources')" />
+    </Target>
     <ItemGroup>
-      <Content Include="..\..\resources\audio\boom.wav">
-        <Link>resources\audio\boom.wav</Link>
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <Content Include="..\..\resources\explosion.png">
-        <Link>resources\explosion.png</Link>
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
+        <Content Include="..\..\resources\**\*">
+            <Link>resources\%(RecursiveDir)%(FileName)%(Extension)</Link>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 
 </Project>
