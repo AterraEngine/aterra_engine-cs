@@ -2,7 +2,6 @@
 <EngineConfig xmlns="urn:attera-engine:engine-config">
     <Version>0.0.0</Version>
     <Plugins>
-        <Plugin id="FFF" nameInternal="Test1" nameReadable="PLugin - Test 1">test.dll</Plugin>
-        <Plugin id="001" nameInternal="Test2" nameReadable="Plugin - Test 2">test.dll</Plugin>
+        <Plugin id="000" nameInternal="TestPlugin" nameReadable="Plugin Test">plugins/EnginePlugin-Test.dll</Plugin>
     </Plugins>
 </EngineConfig>

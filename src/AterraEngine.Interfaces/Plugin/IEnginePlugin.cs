@@ -1,16 +1,12 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Interfaces.Plugin;
-
-namespace AterraEngine.Plugin;
+namespace AterraEngine.Interfaces.Plugin;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class EnginePlugin:IEnginePlugin {
-    public string IdPrefix { get; private set; }
-    public virtual void ManagedInitialize(string idPrefix) {
-        IdPrefix = idPrefix;
-    }
+public interface IEnginePlugin {
+    public string IdPrefix { get;}
+    public void ManagedInitialize(string idPrefix);
 }

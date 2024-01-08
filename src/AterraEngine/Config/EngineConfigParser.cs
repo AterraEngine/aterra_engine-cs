@@ -5,7 +5,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 
-using AterraEngine.Interfaces;
+using AterraEngine.Interfaces.Config;
 namespace AterraEngine.Config;
 
 // ---------------------------------------------------------------------------------------------------------------------

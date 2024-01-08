@@ -38,4 +38,12 @@
         </Content>
     </ItemGroup>
 
+
+    <!-- PLUGINS   -->
+    <ItemGroup>
+        <ContentWithTargetPath Include="..\EnginePlugin-Test\bin\$(Configuration)\net8.0\EnginePlugin-Test.dll">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <TargetPath>plugins\%(FileName)%(Extension)</TargetPath>
+        </ContentWithTargetPath>
+    </ItemGroup>
 </Project>

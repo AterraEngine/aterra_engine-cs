@@ -1,16 +1,18 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Interfaces.Plugin;
+using AterraEngine.Plugin;
 
-namespace AterraEngine.Plugin;
+namespace EnginePlugin_Test;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class EnginePlugin:IEnginePlugin {
-    public string IdPrefix { get; private set; }
-    public virtual void ManagedInitialize(string idPrefix) {
-        IdPrefix = idPrefix;
+public class Plugin : EnginePlugin {
+    public override void ManagedInitialize(string idPrefix) {
+        base.ManagedInitialize(idPrefix);
+        
+        Console.WriteLine("Hello there form the plugin");
+        
     }
 }
