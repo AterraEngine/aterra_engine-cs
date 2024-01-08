@@ -9,9 +9,9 @@ namespace AterraEngine.Config;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class EngineConfigParser<T>:IEngineConfigParser where T : EngineConfig {
+/// <inheritdoc/>
+public class EngineConfigParser<T>:IEngineConfigParser<T> where T : EngineConfig {
     private readonly XmlSerializer _serializer = new(typeof(T));
-    
     
     public bool TryDeserializeFromFile(string filePath, out T? engineConfig) {
         // Default to null
