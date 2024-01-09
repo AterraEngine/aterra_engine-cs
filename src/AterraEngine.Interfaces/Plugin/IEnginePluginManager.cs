@@ -4,6 +4,7 @@
 using System.Collections.ObjectModel;
 using AterraEngine_lib.structs;
 using AterraEngine_lib.Config;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AterraEngine.Interfaces.Plugin;
 
@@ -17,6 +18,6 @@ public interface IEnginePluginManager {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public bool TryLoadOrderFromEngineConfig(EngineConfig? engineConfig, out List<Tuple<string, string>> errorPaths);
-    public void LoadPlugins();
+    public bool TryLoadOrderFromEngineConfig(EngineConfig engineConfig, out List<Tuple<string, string>> errorPaths);
+    public void LoadPlugins(IServiceCollection serviceCollection);
 }

@@ -10,21 +10,26 @@ namespace AterraEngine.Plugin;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class EnginePlugin:IEnginePlugin {
-    public PluginId IdPrefix { get ; set; }
-    
+public class EnginePlugin : IEnginePlugin {
+    public PluginId IdPrefix { get; protected set; }
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods for Plugin Manager to Use
     // -----------------------------------------------------------------------------------------------------------------
-    public virtual void ManagedInitialize(PluginId idPrefix) {
+    public virtual IEnginePlugin DefineConfig(PluginId idPrefix) {
         IdPrefix = idPrefix;
+        return this;
     }
-    
-    public virtual void DefineServices(IServiceCollection service_collection) {}
+
+    public virtual IEnginePlugin DefineServices(IServiceCollection serviceCollection) {
+        return this;
+    }
+
+    public virtual IEnginePlugin DefineData() {
+        return this;
+    }
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    
-    
 }

@@ -2,7 +2,7 @@
 <EngineConfig xmlns="urn:attera-engine:engine-config">
     <Version>0.0.0</Version>
     <Plugins>
-        <Plugin id="000" nameInternal="TestPlugin" nameReadable="Plugin Test">plugins/EnginePlugin-Test.dll</Plugin>
+        <Plugin id="001" nameInternal="TestPlugin" nameReadable="Plugin Test">plugins/EnginePlugin-Test.dll</Plugin>
     </Plugins>
     
     <Raylib>

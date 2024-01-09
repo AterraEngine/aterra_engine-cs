@@ -1,17 +1,23 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine_lib.structs;
-using Microsoft.Extensions.DependencyInjection;
+using System.Numerics;
+using AterraEngine.Interfaces.Draw;
+using Raylib_cs;
 
-namespace AterraEngine.Interfaces.Plugin;
+namespace AterraEngine.Draw;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IEnginePlugin {
-    public PluginId IdPrefix { get;}
-    public IEnginePlugin DefineConfig(PluginId idPrefix);
-    public IEnginePlugin DefineServices(IServiceCollection serviceCollection);
-    public IEnginePlugin DefineData(); // static data (like sprites....)
+public class Sprite :ISprite {
+    public Texture2D Texture { get; set; }
+    public Vector2 Size { get; set; }
+
+    public void Draw(Vector2 pos) {
+        Rectangle sourceRec = new Rectangle(0, 0, Texture.Width, Texture.Height);
+        Rectangle destRec = new Rectangle(0,0, 100, 100);
+        
+        Raylib.DrawTexturePro(Texture, sourceRec, destRec, -pos, 0, Color.WHITE);
+    }
 }

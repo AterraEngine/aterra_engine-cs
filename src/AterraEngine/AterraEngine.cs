@@ -1,9 +1,12 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using System.Numerics;
 using AterraEngine_lib.Config;
 using AterraEngine.Config;
+using AterraEngine.Interfaces.Draw;
 using AterraEngine.Plugin;
+using AterraEngine.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Raylib_cs;
 using Serilog;
@@ -34,6 +37,7 @@ public class AterraEngine {
     }
     
     private bool TryLoadRaylibConfig() {
+        Raylib.SetConfigFlags(ConfigFlags.FLAG_MSAA_4X_HINT);
         Raylib.InitWindow(
             _engineConfig.RaylibConfig.Window.Screen.Width, 
             _engineConfig.RaylibConfig.Window.Screen.Height, 
@@ -64,29 +68,49 @@ public class AterraEngine {
         if (!_pluginManager.TryLoadOrderFromEngineConfig(engineConfig: _engineConfig, out _)) {
             throw new Exception("SOMETHING WENT WRONG!!!");
         }
-        _pluginManager.LoadPlugins();
+        
+        IServiceCollection serviceCollection = new ServiceCollection();
+        _pluginManager.LoadPlugins(serviceCollection);
+        EngineServices.BuildServiceProvider(serviceCollection);
+        
         return true;
         
     }
-    
-    private bool TryLoadPluginServices(){
-        return true;
+
+    private bool TryLoadPluginData() {
+        foreach (var enginePlugin in _pluginManager.GetPluginsSorted()) {
+            enginePlugin.DefineData();
+        }
         
-    }
-    private bool TryLoadPluginFeatures(){
         return true;
-        
     }
     
     // -----------------------------------------------------------------------------------------------------------------
     // Main Loop
     // -----------------------------------------------------------------------------------------------------------------
     private int MainLoop() {
+        Vector2 velocity = new Vector2(.1f, .1f);
+        Vector2 pos = Vector2.Zero;
+        
         while (!Raylib.WindowShouldClose()) {
+            if (Raylib.IsKeyDown(KeyboardKey.KEY_D))
+                pos.X += velocity.X;
+            if (Raylib.IsKeyDown(KeyboardKey.KEY_A))
+                pos.X -= velocity.X;
+            if (Raylib.IsKeyDown(KeyboardKey.KEY_W))
+                pos.Y -= velocity.Y;
+            if (Raylib.IsKeyDown(KeyboardKey.KEY_S))
+                pos.Y += velocity.Y;
+            
             // Your rendering or game loop logic goes here
             Raylib.BeginDrawing();
-            Raylib.ClearBackground(Color.RAYWHITE);
+            Raylib.ClearBackground(Color.BLUE);
             
+            ISpriteAtlas spriteAtlas = EngineServices.GetService<ISpriteAtlas>();
+            spriteAtlas.TryGetSprite("ducky", out ISprite? sprite);
+            
+           if (sprite != null) sprite.Draw(pos);
+
             // Draw your content here
             Raylib.EndDrawing();
 
@@ -127,11 +151,7 @@ public class AterraEngine {
             throw new Exception("Failed during loading of plugin dll's");
         }
         
-        if (!TryLoadPluginServices()) {
-            throw new Exception("Failed during loading of plugin services");
-        }
-        
-        if (!TryLoadPluginFeatures()) {
+        if (!TryLoadPluginData()) {
             throw new Exception("Failed during loading of plugins");
         }
         // Start up the main loop if everything is okay
