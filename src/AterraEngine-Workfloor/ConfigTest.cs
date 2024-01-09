@@ -9,8 +9,7 @@ namespace AterraEngine_Workfloor;
 public class ConfigTest {
 
     public void Main() {
-        AterraEngine.AterraEngine aterraEngine = new AterraEngine.AterraEngine();
-        aterraEngine.Run();
+        AterraEngine.AterraEngine.Instance.Run();
     }
 
 }

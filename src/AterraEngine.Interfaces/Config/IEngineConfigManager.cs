@@ -1,11 +1,19 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraEngine.Window;
+using AterraEngine_lib.Config;
+
+namespace AterraEngine.Interfaces.Config;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class EngineWindow {
+public interface IEngineConfigManager {
+    public string FilePath { get; }
+    
+    public EngineConfig GetDefaultConfig();
+    public bool TryLoadConfigFile(out EngineConfig engineConfig, out string? errorString);
+    public bool TrySaveConfig(EngineConfig config, out string? errorString);
+    public bool TrySaveConfig(EngineConfig config, out string? errorString, string outputPath);
     
 }

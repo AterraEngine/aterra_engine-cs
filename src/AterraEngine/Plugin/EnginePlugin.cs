@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine_lib.structs;
 using AterraEngine.Interfaces.Plugin;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AterraEngine.Plugin;
 
@@ -18,6 +19,8 @@ public class EnginePlugin:IEnginePlugin {
     public virtual void ManagedInitialize(PluginId idPrefix) {
         IdPrefix = idPrefix;
     }
+    
+    public virtual void DefineServices(IServiceCollection service_collection) {}
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods

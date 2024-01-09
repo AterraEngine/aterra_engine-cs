@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 using AterraEngine_lib.structs;
 using AterraEngine_lib.XmlElements;
 
-namespace AterraEngine.Config;
+namespace AterraEngine_lib.Config;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Config Elements
@@ -21,8 +21,8 @@ public class PluginConfig {
 
 public class RaylibWindowElement {
     [XmlElement("screen")]          public required DimensionElement Screen { get; set; }
-    [XmlElement("icon")]        public required string Icon { get; set; }
-    [XmlElement("title")]       public required string Title { get; set; }
+    [XmlElement("icon")]            public required string Icon { get; set; }
+    [XmlElement("title")]           public required string Title { get; set; }
 }
 
 public class RaylibConfig {
@@ -42,26 +42,6 @@ public class EngineConfig {
     
     [XmlElement("Raylib")]
     public required RaylibConfig RaylibConfig { get; set; }
-        
-    // -----------------------------------------------------------------------------------------------------------------
-    // "Constructor"
-    // -----------------------------------------------------------------------------------------------------------------
-    public static EngineConfig GetDefault() {
-        return new EngineConfig {
-            Version = new SemanticVersion(0, 0, 0),
-            Plugins = [], 
-            RaylibConfig = new RaylibConfig { 
-                Window = new RaylibWindowElement {
-                    Screen = new DimensionElement {
-                        Height = 100, 
-                        Width = 100
-                    },
-                    Icon = string.Empty,
-                    Title = string.Empty
-                }
-            }
-        };
-    }
     
 }
 

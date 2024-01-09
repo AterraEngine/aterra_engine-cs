@@ -6,6 +6,8 @@ using System.Xml;
 using System.Xml.Serialization;
 
 using AterraEngine.Interfaces.Config;
+using AterraEngine_lib.Config;
+
 namespace AterraEngine.Config;
 
 // ---------------------------------------------------------------------------------------------------------------------

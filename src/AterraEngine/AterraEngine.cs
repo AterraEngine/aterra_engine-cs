@@ -1,9 +1,14 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraEngine_lib.Config;
 using AterraEngine.Config;
 using AterraEngine.Plugin;
+using Microsoft.Extensions.DependencyInjection;
 using Raylib_cs;
+using Serilog;
+using Serilog.Events;
+// using Serilog.Sinks.SystemConsole.Themes;
 
 namespace AterraEngine;
 
@@ -11,24 +16,20 @@ namespace AterraEngine;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class AterraEngine {
-    private const string _engineConfigXml = "resources/engine_config-example.xml";
-    
     private readonly EnginePluginManager _pluginManager = new();
-    private EngineConfig _engineConfig = EngineConfig.GetDefault();
+    private EngineConfig _engineConfig = null!;
     
+    // There can ONLY BE ONE!
+    private static AterraEngine? _instance;
+    public static AterraEngine Instance => _instance ??= new AterraEngine(); // Only get 
+
     // -----------------------------------------------------------------------------------------------------------------
     // Config
     // -----------------------------------------------------------------------------------------------------------------
     private bool TryLoadEngineConfig() {
+        EngineConfigManager engineConfigManager = new EngineConfigManager("resources/engine_config-example.xml");
+        engineConfigManager.TryLoadConfigFile(out _engineConfig, out _);
         // EngineConfig Test
-        EngineConfigParser<EngineConfig> configParser = new();
-        
-        if (!configParser.TryDeserializeFromFile(_engineConfigXml, out EngineConfig? engineConfig)
-            || engineConfig is null) {
-            throw new Exception("File coule not be parsed");
-        }
-        _engineConfig = engineConfig;
-        
         return true;
     }
     
@@ -38,13 +39,16 @@ public class AterraEngine {
             _engineConfig.RaylibConfig.Window.Screen.Height, 
             _engineConfig.RaylibConfig.Window.Title
         );
-
+        
         if (_engineConfig.RaylibConfig.Window.Icon != string.Empty) {
             // Load the image
             Image iconImage = Raylib.LoadImage(_engineConfig.RaylibConfig.Window.Icon);
             // apply the image
             Raylib.SetWindowIcon(iconImage);
+            
+            Raylib.UnloadImage(iconImage);
         }
+        
         
         Raylib.InitAudioDevice();
 
@@ -94,6 +98,24 @@ public class AterraEngine {
     // Entry
     // -----------------------------------------------------------------------------------------------------------------
     public int Run() {
+        IServiceCollection serviceCollection = new ServiceCollection();
+        
+        // These two have to be added before anything else
+        //      Assigns logging and the Engine
+        serviceCollection.AddSingleton<ILogger>(_ => {
+            var logConfig = new LoggerConfiguration();
+            logConfig.WriteTo.File(
+                "log.log"
+                    .Replace("{timestamp_iso8601}", DateTime.Now.ToString("yyyy-MM-ddTHH-mm-ss"))
+                    .Replace("{timestamp_sortable}", DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"))
+                ,
+                rollOnFileSizeLimit: true
+            );
+            
+            logConfig.MinimumLevel.Is(LogEventLevel.Debug);
+            return logConfig.CreateLogger();
+        });
+        
         if (!TryLoadEngineConfig()) {
             throw new Exception("Failed during loading of engine config data");
         }

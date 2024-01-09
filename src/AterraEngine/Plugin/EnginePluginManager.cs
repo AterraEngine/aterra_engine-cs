@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 using System.Reflection;
 
 using AterraEngine_lib.structs;
-using AterraEngine.Config;
+using AterraEngine_lib.Config;
 using AterraEngine.Interfaces.Plugin;
 
 namespace AterraEngine.Plugin;
@@ -13,7 +13,7 @@ namespace AterraEngine.Plugin;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class EnginePluginManager {
+public class EnginePluginManager: IEnginePluginManager {
     private Dictionary<PluginId, string> _loadOrder = new();
     public ReadOnlyDictionary<PluginId, string> LoadOrder => _loadOrder.AsReadOnly();
     
