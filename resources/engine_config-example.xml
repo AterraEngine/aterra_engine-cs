@@ -4,4 +4,13 @@
     <Plugins>
         <Plugin id="000" nameInternal="TestPlugin" nameReadable="Plugin Test">plugins/EnginePlugin-Test.dll</Plugin>
     </Plugins>
+    
+    <Raylib>
+        <window>
+            <screen width="500" height="500"/>
+            <icon>resources/logo-color.png</icon>
+            <title>Aterra Engine Test</title>
+        </window>
+    </Raylib>
+    
 </EngineConfig>

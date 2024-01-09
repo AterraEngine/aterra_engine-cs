@@ -24,7 +24,6 @@ public class EngineConfigParser<T>:IEngineConfigParser<T> where T : EngineConfig
         // Reader Settings
         _readerSettings.Schemas.Add("urn:attera-engine:engine-config", "xsd/engine_config.xsd");
         _readerSettings.ValidationType = ValidationType.Schema;
-
         
         // Write Settings
         _writerSettings.Indent = true;

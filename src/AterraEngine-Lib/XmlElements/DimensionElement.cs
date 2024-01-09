@@ -1,16 +1,14 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraEngine_Workfloor;
+using System.Xml.Serialization;
+
+namespace AterraEngine_lib.XmlElements;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class ConfigTest {
-
-    public void Main() {
-        AterraEngine.AterraEngine aterraEngine = new AterraEngine.AterraEngine();
-        aterraEngine.Run();
-    }
-
+public class DimensionElement {
+    [XmlAttribute("width")] public int Width { get; set; }
+    [XmlAttribute("height")] public int Height { get; set; }
 }
