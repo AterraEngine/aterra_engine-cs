@@ -4,7 +4,7 @@
 using System.Numerics;
 using AterraEngine_lib.Config;
 using AterraEngine.Config;
-using AterraEngine.Interfaces.Draw;
+using AterraEngine.Interfaces.Component;
 using AterraEngine.Plugin;
 using AterraEngine.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,6 +38,8 @@ public class AterraEngine {
     
     private bool TryLoadRaylibConfig() {
         Raylib.SetConfigFlags(ConfigFlags.FLAG_MSAA_4X_HINT);
+        Raylib.SetConfigFlags(ConfigFlags.FLAG_WINDOW_RESIZABLE);
+        
         Raylib.InitWindow(
             _engineConfig.RaylibConfig.Window.Screen.Width, 
             _engineConfig.RaylibConfig.Window.Screen.Height, 
@@ -52,7 +54,6 @@ public class AterraEngine {
             
             Raylib.UnloadImage(iconImage);
         }
-        
         
         Raylib.InitAudioDevice();
 
@@ -89,29 +90,39 @@ public class AterraEngine {
     // Main Loop
     // -----------------------------------------------------------------------------------------------------------------
     private int MainLoop() {
-        Vector2 velocity = new Vector2(.1f, .1f);
-        Vector2 pos = Vector2.Zero;
+        Camera2D camera = new Camera2D(
+            offset: new Vector2(Raylib.GetScreenWidth() / 2f, Raylib.GetScreenHeight() / 2f), // Camera offset
+            target: new Vector2(0, 0), // Camera target position
+            rotation: 0.0f, // Camera rotation
+            zoom: .5f // Camera zoom
+        );
         
         while (!Raylib.WindowShouldClose()) {
-            if (Raylib.IsKeyDown(KeyboardKey.KEY_D))
-                pos.X += velocity.X;
-            if (Raylib.IsKeyDown(KeyboardKey.KEY_A))
-                pos.X -= velocity.X;
-            if (Raylib.IsKeyDown(KeyboardKey.KEY_W))
-                pos.Y -= velocity.Y;
-            if (Raylib.IsKeyDown(KeyboardKey.KEY_S))
-                pos.Y += velocity.Y;
+            IPlayerController player = EngineServices.GetService<IPlayerController>();
+            player.LoadKeyMapping();
             
             // Your rendering or game loop logic goes here
             Raylib.BeginDrawing();
             Raylib.ClearBackground(Color.BLUE);
             
-            ISpriteAtlas spriteAtlas = EngineServices.GetService<ISpriteAtlas>();
-            spriteAtlas.TryGetSprite("ducky", out ISprite? sprite);
+            // Begin 2D drawing mode (camera)
+            Raylib.BeginMode2D(camera);
             
-           if (sprite != null) sprite.Draw(pos);
+            player.Draw();
+            player.DrawDebug();
 
-            // Draw your content here
+            var pressed = Raylib.GetCharPressed();
+            if (pressed != 0) Console.WriteLine(pressed);
+            
+            // Console.WriteLine(player.Pos);
+            //
+            // sprite?.Draw(player.Position);
+            // sprite?.DrawDebug(player.Position);
+
+            // End 2D drawing mode (camera)
+            Raylib.EndMode2D();
+            
+           // Draw your content here
             Raylib.EndDrawing();
 
         }

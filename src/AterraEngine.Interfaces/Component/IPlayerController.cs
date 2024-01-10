@@ -1,17 +1,9 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Numerics;
-using Raylib_cs;
-
-namespace AterraEngine.Interfaces.Draw;
+namespace AterraEngine.Interfaces.Component;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ISprite {
-    public Texture2D Texture { get; set; }
-
-    public void Draw(float rot, Rectangle box);
-    public void DrawDebug(float rot, Rectangle box);
-}
+public interface IPlayerController : IPlayerComponent{}

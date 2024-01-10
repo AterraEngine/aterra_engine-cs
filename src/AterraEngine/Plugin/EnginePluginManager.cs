@@ -64,6 +64,8 @@ public class EnginePluginManager: IEnginePluginManager {
                             // Add Service mappings with ServiceCollection
                             .DefineServices(serviceCollection);
                         
+                        Console.WriteLine(plugin.IdPrefix);
+                        
                         return (key,plugin);
                     });
             })

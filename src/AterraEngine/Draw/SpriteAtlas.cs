@@ -18,7 +18,7 @@ public class SpriteAtlas : ISpriteAtlas {
     public ISpriteAtlas TryAddSprite(string spriteName,Texture2D texture2D, Vector2 size) {
         ISprite? sprite = EngineServices.GetService<ISprite>();
         sprite.Texture = texture2D;
-        sprite.Size = size;
+        // sprite.Size = size;
         _dictionary.Add(spriteName, sprite);
 
         return this;
