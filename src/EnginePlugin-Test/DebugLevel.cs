@@ -1,17 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine_lib.structs;
-using Microsoft.Extensions.DependencyInjection;
+using AterraEngine.Component;
 
-namespace AterraEngine.Interfaces.Plugin;
+namespace EnginePlugin_Test;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IEnginePlugin {
-    public PluginId IdPrefix { get;}
-    public IEnginePlugin DefineConfig(PluginId idPrefix);
-    public IServiceCollection DefineServices(IServiceCollection serviceCollection);
-    public IEnginePlugin DefineData(); // static data (like sprites....)
+public class DebugLevel: LevelComponent {
+    
 }

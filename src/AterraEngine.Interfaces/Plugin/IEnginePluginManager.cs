@@ -19,5 +19,5 @@ public interface IEnginePluginManager {
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public bool TryLoadOrderFromEngineConfig(EngineConfig engineConfig, out List<Tuple<string, string>> errorPaths);
-    public void LoadPlugins(IServiceCollection serviceCollection);
+    public IServiceCollection LoadPlugins(IServiceCollection serviceCollection);
 }

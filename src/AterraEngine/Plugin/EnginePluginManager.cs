@@ -7,6 +7,7 @@ using System.Reflection;
 using AterraEngine_lib.structs;
 using AterraEngine_lib.Config;
 using AterraEngine.Interfaces.Plugin;
+using AterraEngine.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AterraEngine.Plugin;
@@ -39,7 +40,7 @@ public class EnginePluginManager: IEnginePluginManager {
         return errorPaths.Count == 0;
     }
 
-    public void LoadPlugins(IServiceCollection serviceCollection) {
+    public IServiceCollection LoadPlugins(IServiceCollection serviceCollection) {
 
         IEnginePlugin defaultPlugin = new DefaultPlugin();
         defaultPlugin.DefineConfig(idPrefix: new PluginId(0));
@@ -60,9 +61,9 @@ public class EnginePluginManager: IEnginePluginManager {
                     .Select(pluginType => {
                         IEnginePlugin plugin = ((IEnginePlugin)Activator.CreateInstance(pluginType)!)
                             // THIS HANDLES A LOT OF THE SETUP OF A PLUGIN
-                            .DefineConfig(idPrefix: key)
+                            .DefineConfig(idPrefix: key);
                             // Add Service mappings with ServiceCollection
-                            .DefineServices(serviceCollection);
+                            serviceCollection = plugin.DefineServices(serviceCollection);
                         
                         Console.WriteLine(plugin.IdPrefix);
                         
@@ -77,5 +78,7 @@ public class EnginePluginManager: IEnginePluginManager {
         foreach (var keyValue in loadedPlugins) {
             _enginePlugins.Add(keyValue.key, keyValue.Item2);
         }
+
+        return serviceCollection;
     }
 }

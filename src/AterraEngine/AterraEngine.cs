@@ -69,10 +69,12 @@ public class AterraEngine {
         if (!_pluginManager.TryLoadOrderFromEngineConfig(engineConfig: _engineConfig, out _)) {
             throw new Exception("SOMETHING WENT WRONG!!!");
         }
-        
-        IServiceCollection serviceCollection = new ServiceCollection();
-        _pluginManager.LoadPlugins(serviceCollection);
-        EngineServices.BuildServiceProvider(serviceCollection);
+
+        EngineServices.BuildServiceProvider(
+            _pluginManager.LoadPlugins(
+                new ServiceCollection()
+            )
+        );
         
         return true;
         
@@ -90,6 +92,10 @@ public class AterraEngine {
     // Main Loop
     // -----------------------------------------------------------------------------------------------------------------
     private int MainLoop() {
+        ILevelComponent level = EngineServices.GetService<ILevelComponent>();
+        IPlayerController player = EngineServices.GetService<IPlayerController>();
+        
+        
         Camera2D camera = new Camera2D(
             offset: new Vector2(Raylib.GetScreenWidth() / 2f, Raylib.GetScreenHeight() / 2f), // Camera offset
             target: new Vector2(0, 0), // Camera target position
@@ -98,8 +104,10 @@ public class AterraEngine {
         );
         
         while (!Raylib.WindowShouldClose()) {
-            IPlayerController player = EngineServices.GetService<IPlayerController>();
             player.LoadKeyMapping();
+
+            camera.Target = player.Pos;
+            // camera.Rotation = player.Rotation;
             
             // Your rendering or game loop logic goes here
             Raylib.BeginDrawing();
@@ -108,11 +116,17 @@ public class AterraEngine {
             // Begin 2D drawing mode (camera)
             Raylib.BeginMode2D(camera);
             
+            level.Draw();
+            // level.DrawDebug();
+            
             player.Draw();
             player.DrawDebug();
+            
 
-            var pressed = Raylib.GetCharPressed();
-            if (pressed != 0) Console.WriteLine(pressed);
+            // var pressed = Raylib.GetCharPressed();
+            // if (pressed != 0) Console.WriteLine(pressed);
+            
+            Console.WriteLine(Raylib.GetFPS());
             
             // Console.WriteLine(player.Pos);
             //

@@ -1,17 +1,24 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine_lib.structs;
-using Microsoft.Extensions.DependencyInjection;
+using AterraEngine.Interfaces.Component;
 
-namespace AterraEngine.Interfaces.Plugin;
+namespace AterraEngine.Component;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IEnginePlugin {
-    public PluginId IdPrefix { get;}
-    public IEnginePlugin DefineConfig(PluginId idPrefix);
-    public IServiceCollection DefineServices(IServiceCollection serviceCollection);
-    public IEnginePlugin DefineData(); // static data (like sprites....)
+public class LevelComponent: ILevelComponent {
+    public IDrawableComponent[] DrawableComponents { get; set; } = new IDrawableComponent[0];
+
+    public void Draw() {
+        foreach (var t in DrawableComponents) {
+            t.Draw();
+        }
+    }
+    public void DrawDebug() {
+        foreach (var t in DrawableComponents) {
+            t.DrawDebug();
+        }
+    }
 }

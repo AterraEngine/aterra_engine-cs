@@ -21,8 +21,8 @@ public class EnginePlugin : IEnginePlugin {
         return this;
     }
 
-    public virtual IEnginePlugin DefineServices(IServiceCollection serviceCollection) {
-        return this;
+    public virtual IServiceCollection DefineServices(IServiceCollection serviceCollection) {
+        return serviceCollection;
     }
 
     public virtual IEnginePlugin DefineData() {

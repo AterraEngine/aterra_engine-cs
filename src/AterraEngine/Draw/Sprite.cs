@@ -10,29 +10,30 @@ namespace AterraEngine.Draw;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class Sprite :ISprite {
+public class Sprite : ISprite {
     public Texture2D Texture { get; set; }
-    private Rectangle RectangleSource => new(0, 0, Texture.Width, Texture.Height);
+    public Rectangle SelectionBox { get; set; }
+    
+    public Color Tint { get; set; } = Color.WHITE;
 
-
-    public void Draw(float rot, Rectangle box){
+    public void Draw(Vector2 pos, float rot, Vector2 origin, Vector2 size, Rectangle box){
         Raylib.DrawTexturePro(
             Texture, 
-            RectangleSource, 
-            new Rectangle(box.X + box.Width/2, box.Y + box.Height/2, box.Width,box.Height), 
-            new Vector2(box.Width / 2.0f, box.Height / 2.0f), 
+            SelectionBox, 
+            new Rectangle(pos.X, pos.Y, box.Width, box.Height), // WTF why does this take pos & box, and not only box?
+            origin, // needed for rotation
             rot, 
-            Color.WHITE
+            Tint
         );
     }
     
-    public void DrawDebug(float rot, Rectangle box){
+    public void DrawDebug(Vector2 pos, float rot, Vector2 origin, Vector2 size, Rectangle box){
+        // BOUNDING BOX
         Raylib.DrawRectangleLines((int)box.X, (int)box.Y, (int)box.Width, (int)box.Height, Color.RED);
         
-        const float length = 200;
-        Vector2 center = new Vector2(box.X + box.Width / 2, box.Y + box.Height / 2);
-        Vector2 endPoint = center + new Vector2((float)Math.Cos(Raylib.DEG2RAD * rot), (float)Math.Sin(Raylib.DEG2RAD * rot))* length; 
-        
-        Raylib.DrawLineV(center, endPoint,  Color.DARKGREEN);
+        // ROTATION
+        const float length = 2000;
+        Vector2 endPoint = pos + new Vector2((float)Math.Cos(Raylib.DEG2RAD * rot), (float)Math.Sin(Raylib.DEG2RAD * rot))* length; 
+        Raylib.DrawLineV(pos, endPoint,  Color.DARKGREEN);
     }
 }
