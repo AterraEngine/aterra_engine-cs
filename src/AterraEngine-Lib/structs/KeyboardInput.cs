@@ -1,14 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine_lib.structs;
+using Raylib_cs;
 
-namespace AterraEngine.Interfaces.Component;
+namespace AterraEngine_lib.structs;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IPlayerComponent: IActorComponent {
-    public Dictionary<KeyboardInput, Action> KeyMapping { get; set; }
-    public void LoadKeyMapping();
+public struct KeyboardInput(KeyboardKey[] keyboardKeys) {
+    public KeyboardKey[] Keys { get; set; } = keyboardKeys;
 }

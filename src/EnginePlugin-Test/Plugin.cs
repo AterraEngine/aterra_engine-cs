@@ -45,27 +45,27 @@ public class Plugin : EnginePlugin {
             throw new Exception("Sprite could not be added to atlas");
         }
         sprite2!.Tint = Color.GOLD;
-
-        List<IActorComponent> drawableComponents = [];
-
-        int counter = 0;
+        //
+        // List<IActorComponent> drawableComponents = [];
+        //
+        // int counter = 0;
         
-        for (int i = -250; i < 250; i++) {
-            for (int j = -250; j < 250; j++) {
-                IActorComponent actor = EngineServices.GetService<IActorComponent>();
-                actor.Pos = new Vector2((sprite2.Texture.Width / 4f)*i, (sprite2.Texture.Height / 4f)*j);
-                actor.Rotation = (i * j) * 0.1f;
-                actor.Sprite = sprite2;
-                drawableComponents.Add(actor);
-                
-                Console.WriteLine($"Actor {counter++} created");
-            }
-        }
+        // for (int i = -250; i < 250; i++) {
+        //     for (int j = -250; j < 250; j++) {
+        //         IActorComponent actor = EngineServices.GetService<IActorComponent>();
+        //         actor.Pos = new Vector2((sprite2.Texture.Width / 4f)*i, (sprite2.Texture.Height / 4f)*j);
+        //         actor.Rotation = (i * j) * 0.1f;
+        //         actor.Sprite = sprite2;
+        //         drawableComponents.Add(actor);
+        //         
+        //         Console.WriteLine($"Actor {counter++} created");
+        //     }
+        // }
         
-        Console.WriteLine("Done Prepping");
-        
-        level.DrawableComponents = drawableComponents.ToArray();
-        
+        // Console.WriteLine("Done Prepping");
+        //
+        // level.DrawableComponents = drawableComponents.ToArray();
+        //
         
         return this;
     }
