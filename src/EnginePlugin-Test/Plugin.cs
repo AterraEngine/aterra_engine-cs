@@ -27,10 +27,11 @@ public class Plugin : EnginePlugin {
 
     public override IEnginePlugin DefineData() {
         base.DefineData();
-
+        
+        ITextureAtlas textureAtlas = EngineServices.GetService<ITextureAtlas>();
         ISpriteAtlas spriteAtlas = EngineServices.GetService<ISpriteAtlas>();
         
-        if (!spriteAtlas.TryAddTexture("tDucky", "resources/DuckyHappy.png")) {
+        if (!textureAtlas.TryAddTexture("tDucky", "resources/DuckyHappy.png")) {
             throw new Exception("Texture could not be loaded");
         }
         if (!spriteAtlas.TryAddSprite("sDucky", "tDucky", out ISprite? sprite)) {

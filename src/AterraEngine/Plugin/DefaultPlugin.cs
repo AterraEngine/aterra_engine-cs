@@ -19,6 +19,7 @@ public class DefaultPlugin : EnginePlugin{
         serviceCollection.AddTransient<ISprite, Sprite>();
         serviceCollection.AddTransient<IActorComponent, ActorComponent>();
         serviceCollection.AddSingleton<ISpriteAtlas, SpriteAtlas>();
+        serviceCollection.AddSingleton<ITextureAtlas, TextureAtlas>();
         
         Console.WriteLine("Default Plugin Services applied");
         

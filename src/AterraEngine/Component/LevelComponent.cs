@@ -2,7 +2,6 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.Interfaces.Component;
-
 namespace AterraEngine.Component;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -16,6 +15,7 @@ public class LevelComponent: ILevelComponent {
             t.Draw();
         }
     }
+    
     public void DrawDebug() {
         foreach (var t in DrawableComponents) {
             t.DrawDebug();

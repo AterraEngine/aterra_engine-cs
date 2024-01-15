@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraEngine.Interfaces.Draw;
 using Raylib_cs;
 
 namespace AterraEngine.Draw;
@@ -8,7 +9,7 @@ namespace AterraEngine.Draw;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class TextureAtlas {
+public class TextureAtlas : ITextureAtlas {
     private readonly Dictionary<string, Texture2D> _textures = new();
        
     public bool TryAddTexture(string textureName, string texturePath) {

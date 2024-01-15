@@ -1,19 +1,16 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Drawing;
-using System.Numerics;
 using AterraEngine.Interfaces.Draw;
 using AterraEngine.Services;
 using Raylib_cs;
-using Rectangle = Raylib_cs.Rectangle;
 
 namespace AterraEngine.Draw;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class SpriteAtlas : ISpriteAtlas {
+public class SpriteAtlas(ITextureAtlas textureAtlas) : ISpriteAtlas {
     private readonly Dictionary<string, ISprite> _sprites = new();
 
     public bool TryAddSprite<T>(string spriteName, string textureName, Rectangle? box =null) where T:ISprite {
@@ -23,7 +20,7 @@ public class SpriteAtlas : ISpriteAtlas {
     public bool TryAddSprite<T>(string spriteName, string textureName, out T? sprite, Rectangle? box = null) where T : ISprite {
         sprite = EngineServices.GetService<T>();
         
-        if (!TryGetTexture(textureName, out Texture2D? texture) || texture == null) {
+        if (!textureAtlas.TryGetTexture(textureName, out var texture) || texture == null) {
             return false;
         }
         
