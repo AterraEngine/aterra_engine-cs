@@ -21,5 +21,6 @@ public class Player2DComponent : ActorComponent, IPlayerComponent {
             if (keyInput.Keys.All(key => Raylib.IsKeyDown(key))) action();
         }
     }
-    
+
+    public float DeltaTime => Raylib.GetFrameTime();
 }

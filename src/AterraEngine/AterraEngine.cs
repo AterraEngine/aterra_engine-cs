@@ -106,7 +106,7 @@ public class AterraEngine {
         while (!Raylib.WindowShouldClose()) {
             player.LoadKeyMapping();
 
-            camera.Target = player.Pos;
+            // camera.Target = player.Pos;
             // camera.Rotation = player.Rotation;
             
             // Your rendering or game loop logic goes here
