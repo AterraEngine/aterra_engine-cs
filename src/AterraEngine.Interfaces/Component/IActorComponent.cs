@@ -13,7 +13,7 @@ namespace AterraEngine.Interfaces.Component;
 public interface IActorComponent: IDrawableComponent {
     public Vector2 Pos { get; set; }
     public float Rotation { get; set; }
-    public Rectangle BoundingBox { get; set; }
+    public Rectangle Box { get; set; }
     public Vector2 Velocity { get; set; }
     public ISprite Sprite { get; set; }
 }

@@ -105,9 +105,6 @@ public class AterraEngine {
         
         while (!Raylib.WindowShouldClose()) {
             player.LoadKeyMapping();
-
-            // camera.Target = player.Pos;
-            // camera.Rotation = player.Rotation;
             
             // Your rendering or game loop logic goes here
             Raylib.BeginDrawing();
@@ -116,11 +113,15 @@ public class AterraEngine {
             // Begin 2D drawing mode (camera)
             Raylib.BeginMode2D(camera);
             
-            level.Draw();
-            // level.DrawDebug();
             
-            player.Draw();
-            player.DrawDebug();
+            level.CollideAll();
+            
+            level.Draw();
+            level.DrawDebug();
+            // level.DrawDebug();
+            //
+            // player.Draw();
+            // player.DrawDebug();
             
 
             // var pressed = Raylib.GetCharPressed();

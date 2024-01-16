@@ -7,5 +7,6 @@ namespace AterraEngine.Interfaces.Component;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface ILevelComponent : IDrawableComponent {
-    public IDrawableComponent[] DrawableComponents { get; set; }
+    public IActorComponent[] DrawableComponents { get; set; }
+    public void CollideAll();
 }

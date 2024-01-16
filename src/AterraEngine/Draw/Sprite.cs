@@ -16,11 +16,11 @@ public class Sprite : ISprite {
     
     public Color Tint { get; set; } = Color.WHITE;
 
-    public void Draw(Vector2 pos, float rot, Vector2 origin, Vector2 size, Rectangle box){
+    public void Draw(Vector2 pos, float rot, Vector2 origin, Vector2 size){
         Raylib.DrawTexturePro(
             Texture, 
             SelectionBox, 
-            new Rectangle(pos.X, pos.Y, box.Width, box.Height), // WTF why does this take pos & box, and not only box?
+            new Rectangle(pos.X, pos.Y, size.X, size.Y), // WTF why does this take pos & box, and not only box?
             origin, // needed for rotation
             rot, 
             Tint
@@ -29,7 +29,7 @@ public class Sprite : ISprite {
     
     public void DrawDebug(Vector2 pos, float rot, Vector2 origin, Vector2 size, Rectangle box){
         // BOUNDING BOX
-        Raylib.DrawRectangleLines((int)box.X, (int)box.Y, (int)box.Width, (int)box.Height, Color.RED);
+        Raylib.DrawRectangleLines((int)box.X, (int)box.Y, (int)size.X, (int)size.Y, Color.RED);
         
         // ROTATION
         const float length = 2000;

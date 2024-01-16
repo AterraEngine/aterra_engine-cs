@@ -21,8 +21,7 @@ public interface ISprite {
     /// <param name="pos"></param>
     /// <param name="rot">The rotation angle, in radians.</param>
     /// <param name="origin">The origin point for rotation and scaling.</param>
-    /// <param name="box">The destination rectangle where the texture will be drawn.</param>
-    public void Draw(Vector2 pos, float rot, Vector2 origin, Vector2 size,Rectangle box);
+    public void Draw(Vector2 pos, float rot, Vector2 origin, Vector2 size);
 
     /// <summary>
     /// Draws a debug representation of a box with a rotation.

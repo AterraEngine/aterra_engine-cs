@@ -28,7 +28,7 @@ public class ActorComponent : IActorComponent {
         set { _pos = value; UpdateBoundingBox(); } 
     }
 
-    public Rectangle BoundingBox { get; set; }
+    public Rectangle Box { get; set; }
 
     private Vector2 _size  = new (250,250);
     public Vector2 Size {
@@ -56,25 +56,25 @@ public class ActorComponent : IActorComponent {
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     internal void UpdateBoundingBox() {
-        BoundingBox = new Rectangle(
+        Box = new Rectangle(
             (-Size.X / 2f) + Pos.X, 
             (-Size.Y / 2f) + Pos.Y, 
-            Size.X, 
+            Size.X,
             Size.Y
         );
 
         OriginRelative = new Vector2(
-            BoundingBox.Width/2f,
-            BoundingBox.Height/2f
+            Box.Width/2f,
+            Box.Height/2f
         );
     }
 
     public void Draw() {
-        Sprite.Draw(Pos, Rotation, OriginRelative, Size, BoundingBox);
+        Sprite.Draw(Pos, Rotation, OriginRelative, Size);
     }
 
     public void DrawDebug() {
-        Sprite.DrawDebug(Pos, Rotation, OriginRelative, Size, BoundingBox);
+        Sprite.DrawDebug(Pos, Rotation, OriginRelative, Size, Box);
     }
 
 }
