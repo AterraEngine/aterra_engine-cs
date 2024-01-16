@@ -12,6 +12,7 @@ namespace AterraEngine.Component;
 // ---------------------------------------------------------------------------------------------------------------------
 public class Player2DComponent : ActorComponent, IPlayerComponent {
     public Dictionary<KeyboardInput, Action> KeyMapping { get; set; } = new();
+    public Dictionary<KeyboardInput, Action<bool[]>> OptionalKeyMapping { get; set; } = new();
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
@@ -19,6 +20,12 @@ public class Player2DComponent : ActorComponent, IPlayerComponent {
     public void LoadKeyMapping() {
         foreach ((KeyboardInput keyInput, Action action) in KeyMapping) {
             if (keyInput.Keys.All(key => Raylib.IsKeyDown(key))) action();
+        }
+        
+        foreach ((KeyboardInput keyInput, Action<bool[]> action) in OptionalKeyMapping) {
+            var enumerable = keyInput.Keys.Select(key => (bool)Raylib.IsKeyDown(key)).ToArray();
+            if (enumerable.All(arg => !arg) || enumerable.Length != keyInput.Keys.Length) return; 
+            action(enumerable);
         }
     }
 

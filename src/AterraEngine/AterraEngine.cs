@@ -126,7 +126,7 @@ public class AterraEngine {
             // var pressed = Raylib.GetCharPressed();
             // if (pressed != 0) Console.WriteLine(pressed);
             
-            Console.WriteLine(Raylib.GetFPS());
+            // Console.WriteLine(Raylib.GetFPS());
             
             // Console.WriteLine(player.Pos);
             //

@@ -19,7 +19,7 @@ namespace EnginePlugin_Test;
 public class Plugin : EnginePlugin {
     public override IServiceCollection DefineServices(IServiceCollection serviceCollection) {
         base.DefineServices(serviceCollection);
-        serviceCollection.AddSingleton<IPlayerController, PlayerController>();
+        serviceCollection.AddSingleton<IPlayerController, PlayerControllerLooking>();
         serviceCollection.AddSingleton<ILevelComponent, DebugLevel>();
         
         return serviceCollection;
