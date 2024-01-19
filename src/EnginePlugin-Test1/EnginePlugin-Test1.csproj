@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <RootNamespace>EnginePlugin_Test1</RootNamespace>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\AterraEngine.Interfaces\AterraEngine.Interfaces.csproj" />
+      <ProjectReference Include="..\AterraEngine\AterraEngine.csproj" />
+    </ItemGroup>
+
+</Project>

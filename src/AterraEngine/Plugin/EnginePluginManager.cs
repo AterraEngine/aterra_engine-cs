@@ -67,6 +67,12 @@ public class EnginePluginManager: IEnginePluginManager {
     private IOrderedEnumerable<KeyValuePair<PluginId, string>> GetLoadOrderSorted(){
         return _loadOrder.OrderBy(pair => pair.Key);
     }
+
+    public bool TryGetPluginId(int value, out PluginId? pluginId) {
+        var plugin = GetPluginsSorted().FirstOrDefault(plugin => plugin.IdPrefix.Id == value);
+        pluginId = plugin?.IdPrefix ?? null;
+        return pluginId is not null;
+    }
     
     // -----------------------------------------------------------------------------------------------------------------
     // Final Loading of the plugin methods

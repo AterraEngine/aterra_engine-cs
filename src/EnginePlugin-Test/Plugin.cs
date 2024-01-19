@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Numerics;
 using AterraEngine_lib.structs;
+using AterraEngine.Assets;
 using AterraEngine.Plugin;
 using AterraEngine.Draw;
 using AterraEngine.Interfaces.Component;
@@ -34,15 +35,21 @@ public class Plugin : EnginePlugin {
     }
 
     public override void DefineDataAssets() {
+        var engineAssetId = new EngineAssetId(IdPrefix, NextInternalId());
+        Console.WriteLine(engineAssetId.PluginId);
+        Console.WriteLine(engineAssetId.Id);
+        Console.WriteLine(engineAssetId);
         
-        ISpriteAtlas spriteAtlas = EngineServices.GetService<ISpriteAtlas>();
+        EngineServices.GetAssetAtlas().TryAddAsset(new Asset(engineAssetId, "HELP ME"));
 
+        ISpriteAtlas spriteAtlas = EngineServices.GetService<ISpriteAtlas>();
+        
         if (!spriteAtlas.TryAddSprite("sDucky", "tDucky", out ISprite? sprite)) {
             throw new Exception("Sprite could not be added to atlas");
         }
         
         EngineServices.GetService<IPlayerController>().Sprite = sprite!;
-
+        
         ILevelComponent level = EngineServices.GetService<ILevelComponent>();
         
         List<IActorComponent> drawableComponents = [];
@@ -62,16 +69,16 @@ public class Plugin : EnginePlugin {
                 Console.WriteLine($"Actor {counter++} created");
             }
         }
-        //
+        
         // IActorComponent actor = EngineServices.GetService<IActorComponent>();
         // actor.Pos = new Vector2(250,250);
         // actor.Sprite = sprite2;
         // drawableComponents.Add(actor);
-        
+
         
         drawableComponents.Add(EngineServices.GetService<IPlayerController>());
         level.DrawableComponents = drawableComponents.ToArray();
-        
+
     }
     
 }

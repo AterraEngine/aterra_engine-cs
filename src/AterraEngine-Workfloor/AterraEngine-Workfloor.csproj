@@ -45,5 +45,9 @@
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
             <TargetPath>plugins\%(FileName)%(Extension)</TargetPath>
         </ContentWithTargetPath>
+        <ContentWithTargetPath Include="..\EnginePlugin-Test1\bin\$(Configuration)\net8.0\EnginePlugin-Test1.dll">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <TargetPath>plugins\%(FileName)%(Extension)</TargetPath>
+        </ContentWithTargetPath>
     </ItemGroup>
 </Project>

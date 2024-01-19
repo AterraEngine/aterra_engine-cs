@@ -1,8 +1,10 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraEngine.Assets;
 using AterraEngine.Component;
 using AterraEngine.Draw;
+using AterraEngine.Interfaces.Assets;
 using AterraEngine.Interfaces.Component;
 using AterraEngine.Interfaces.Draw;
 using Microsoft.Extensions.DependencyInjection;
@@ -47,6 +49,7 @@ public static class EngineServices {
     // Quick Call Methods  
     // -----------------------------------------------------------------------------------------------------------------
     // public static ILogger GetLogger() => _serviceProvider.GetRequiredService<ILogger>();
+    public static IAssetAtlas GetAssetAtlas() => _serviceProvider.GetRequiredService<IAssetAtlas>();
     
     // -----------------------------------------------------------------------------------------------------------------
     // Default Services
@@ -58,6 +61,7 @@ public static class EngineServices {
         
         serviceCollection.AddTransient<ISpriteAtlas, SpriteAtlas>();
         serviceCollection.AddSingleton<ITextureAtlas, TextureAtlas>();
+        serviceCollection.AddSingleton<IAssetAtlas, AssetAtlas>();
         
         return serviceCollection;
     }
