@@ -100,14 +100,14 @@ public class AterraEngine {
         world2D.Level2D.ResolveAssetIds();
         
         assetAtlas.TryGetAsset(world2D.PlayerId, out var playerComponent);
-        Console.WriteLine(((IPlayerComponent)playerComponent));
         
         Camera2D camera = new Camera2D(
-            offset: new Vector2(Raylib.GetScreenWidth() / 2f, Raylib.GetScreenHeight() / 2f), // Camera offset
+            offset: new Vector2(Raylib.GetScreenWidth(), Raylib.GetScreenHeight()), // Camera offset
             target: new Vector2(0, 0), // Camera target position
             rotation: 0.0f, // Camera rotation
-            zoom: .5f // Camera zoom
+            zoom: .1f // Camera zoom
         );
+        var worldToScreenSpace =  Raylib.GetWorldToScreen2D(Vector2.Zero, camera: camera);
         
         while (!Raylib.WindowShouldClose()) {
             ((IPlayerComponent)playerComponent!).LoadKeyMapping();
@@ -119,21 +119,20 @@ public class AterraEngine {
 
             // Begin 2D drawing mode (camera)
             Raylib.BeginMode2D(camera);
-
-            world2D.Draw();
-            // world2D.DrawDebug();
-            world2D.Level2D.CollideAll();
             
+            world2D.Draw(worldToScreenSpace);
+            world2D.DrawDebug(worldToScreenSpace);
+            world2D.Level2D.CollideAll();
 
             // End 2D drawing mode (camera)
             Raylib.EndMode2D();
             
-            Raylib.DrawText(Raylib.GetWorldToScreen2D(Vector2.One, camera:camera).ToString(), 100,100,200,Color.RED);
+            Raylib.DrawText(Raylib.GetFPS().ToString(), 100,100,200,Color.RED);
             
            // Draw your content here
             Raylib.EndDrawing();
 
-            camera.Target = ((IPlayerComponent)playerComponent!).Pos;
+            // camera.Target = ((IPlayerComponent)playerComponent!).Pos;
 
         }
         return 0;

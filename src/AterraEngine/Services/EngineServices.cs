@@ -62,7 +62,7 @@ public static class EngineServices {
         serviceCollection.AddTransient<ISprite, Sprite>();
         serviceCollection.AddTransient<IActor2DComponent, Actor2DComponent>();
         
-        serviceCollection.AddTransient<ISpriteAtlas, SpriteAtlas>();
+        serviceCollection.AddSingleton<ISpriteAtlas, SpriteAtlas>();
         serviceCollection.AddSingleton<ITextureAtlas, TextureAtlas>();
         serviceCollection.AddSingleton<IAssetAtlas, AssetAtlas>();
         serviceCollection.AddSingleton<IWorld2D, World2D>();

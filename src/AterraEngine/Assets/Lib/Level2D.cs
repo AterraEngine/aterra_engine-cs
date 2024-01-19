@@ -28,15 +28,15 @@ public class Level2D(EngineAssetId id, string? internalName) : Asset(id, interna
         }).ToArray()!;
     }
     
-    public override void Draw() {
+    public override void Draw(Vector2 worldToScreenSpace) {
         foreach (IAsset asset in _loadedAssets) {
-            asset.Draw();
+            asset.Draw(worldToScreenSpace);
         }
     }
     
-    public override void DrawDebug() {
+    public override void DrawDebug(Vector2 worldToScreenSpace) {
         for (int i = 0; i < _loadedAssets.Length; i++) {
-            _loadedAssets[i].DrawDebug();
+            _loadedAssets[i].DrawDebug(worldToScreenSpace);
         }
     }
     
@@ -45,10 +45,21 @@ public class Level2D(EngineAssetId id, string? internalName) : Asset(id, interna
         int compared = 0;
         List<IActor2DComponent> removeComps = [];
 
+        // Get the distance all of them, and only check those which are within a certain distance of each other
+        
         for (int i = 0; i < count - 1; i++) {
             for (int j = i + 1; j < count; j++) {
                 var box1 = ((IActor2DComponent)_loadedAssets[i]).Box;
                 var box2 = ((IActor2DComponent)_loadedAssets[j]).Box;
+                //
+                // var closestX = Math.Max(box1.X, Math.Min(box2.X, box1.X + box1.Width));
+                // var closestY = Math.Max(box1.Y, Math.Min(box2.Y, box1.Y + box1.Height));
+                //
+                // var distance = Math.Sqrt(Math.Pow(box2.X - closestX, 2) + Math.Pow(box2.Y - closestY, 2));
+                //
+                // if (distance <= 0) {
+                //     removeComps.Add((IActor2DComponent)_loadedAssets[i]);
+                // }
                 
                 // Check for collision between DrawableComponents[i] and DrawableComponents[j]
                 if (Raylib.CheckCollisionRecs(box1, box2) &&  _loadedAssets[i].Id != EngineServices.GetWorld2D().PlayerId) {

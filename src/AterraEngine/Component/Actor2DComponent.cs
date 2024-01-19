@@ -4,8 +4,10 @@
 using System.Numerics;
 using AterraEngine_lib.structs;
 using AterraEngine.Assets;
+using AterraEngine.Draw;
 using AterraEngine.Interfaces.Component;
 using AterraEngine.Interfaces.Draw;
+using AterraEngine.Services;
 using Raylib_cs;
 
 namespace AterraEngine.Component;
@@ -32,7 +34,7 @@ public class Actor2DComponent : Asset, IActor2DComponent {
 
     public Rectangle Box { get; set; }
 
-    private Vector2 _size  = new (250,250);
+    private Vector2 _size  = new (1,1);
     public Vector2 Size {
         get => _size;
         set { _size = value; UpdateBoundingBox(); }
@@ -44,7 +46,7 @@ public class Actor2DComponent : Asset, IActor2DComponent {
     }
 
     public Vector2 Velocity { get; set; } = Vector2.One;
-    
+
     public ISprite Sprite { get; set; } = null!;
     
     // -----------------------------------------------------------------------------------------------------------------
@@ -71,12 +73,12 @@ public class Actor2DComponent : Asset, IActor2DComponent {
         );
     }
 
-    public override void Draw() {
-        Sprite.Draw(Pos, Rotation, OriginRelative, Size);
+    public override void Draw(Vector2 worldToScreenSpace) {
+        Sprite.Draw(Pos, Rotation, OriginRelative, Size, worldToScreenSpace);
     }
 
-    public override void DrawDebug() {
-        Sprite.DrawDebug(Pos, Rotation, OriginRelative, Size, Box);
+    public override void DrawDebug(Vector2 worldToScreenSpace) {
+        Sprite.DrawDebug(Pos, Rotation, OriginRelative, Size, Box, worldToScreenSpace);
     }
 
 }

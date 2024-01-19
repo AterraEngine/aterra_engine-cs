@@ -1,9 +1,9 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using System.Numerics;
 using AterraEngine_lib.structs;
 using AterraEngine.Interfaces.Assets.Lib;
-using AterraEngine.Interfaces.Component;
 
 namespace AterraEngine.Assets.Lib;
 
@@ -14,11 +14,11 @@ public class World2D : IWorld2D {
     public ILevel2D Level2D { get; set; }
     public EngineAssetId PlayerId { get; set; }
 
-    public void Draw() {
-        Level2D.Draw();
+    public void Draw(Vector2 worldToScreenSpace) {
+        Level2D.Draw(worldToScreenSpace);
     }
 
-    public void DrawDebug() {
-        Level2D.DrawDebug();
+    public void DrawDebug(Vector2 worldToScreenSpace) {
+        Level2D.DrawDebug(worldToScreenSpace);
     }
 }

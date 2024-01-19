@@ -40,11 +40,11 @@ public class Plugin : EnginePlugin {
         IAssetAtlas assetAtlas = EngineServices.GetAssetAtlas();
         IWorld2D world2D = EngineServices.GetWorld2D();
         
-        var PlayerComponent = new PlayerControllerLooking(new EngineAssetId(IdPrefix, NextInternalId())); // TODO we shouldn't do this like this.
+        var playerComponent = new PlayerControllerLooking(new EngineAssetId(IdPrefix, NextInternalId())); // TODO we shouldn't do this like this.
         world2D.Level2D = new Level2D(new EngineAssetId(IdPrefix, NextInternalId()), "overworld");
         
         assetAtlas.TryAddAsset(world2D.Level2D);
-        assetAtlas.TryAddAsset(PlayerComponent);
+        assetAtlas.TryAddAsset(playerComponent);
         
         ISpriteAtlas spriteAtlas = EngineServices.GetService<ISpriteAtlas>();
         
@@ -52,8 +52,8 @@ public class Plugin : EnginePlugin {
             throw new Exception("Sprite could not be added to atlas");
         }
         
-        PlayerComponent.Sprite = sprite!;
-        world2D.PlayerId = PlayerComponent.Id;
+        playerComponent.Sprite = sprite!;
+        world2D.PlayerId = playerComponent.Id;
 
         const int v = 25;
         
@@ -63,7 +63,7 @@ public class Plugin : EnginePlugin {
                 if (!spriteAtlas.TryAddSprite(
                         $"sDuckyBackground{i.ToString().PadLeft(3,'0')}{j.ToString().PadLeft(3,'0')}", "" +
                         "tDucky", 
-                        out ISprite? spirteX)
+                        out ISprite? _sprite)
                 ) {
                     throw new Exception("Sprite could not be added to atlas -> inside loop");
                 }
@@ -71,9 +71,9 @@ public class Plugin : EnginePlugin {
                 EngineAssetId assetId = new EngineAssetId(IdPrefix, NextInternalId());
                 Actor2DComponent actor2D = new Actor2DComponent(assetId, $"$actor{i}{j}")
                     {
-                        Pos = new Vector2((spirteX!.Texture.Width / 4f)*i, (spirteX!.Texture.Height / 4f)*j),
+                        Pos = new Vector2(i, j),
                         Rotation = (i * j) * 0.1f,
-                        Sprite = spirteX
+                        Sprite = _sprite!
                     };
 
                 assetAtlas.TryAddAsset(actor2D);
@@ -81,7 +81,7 @@ public class Plugin : EnginePlugin {
             }
         }
         // TODO This shouldn't be the case, the fix should not be to add the player as the last asset
-        world2D.Level2D.Assets.Add(PlayerComponent.Id);
+        world2D.Level2D.Assets.Add(playerComponent.Id);
 
     }
     
