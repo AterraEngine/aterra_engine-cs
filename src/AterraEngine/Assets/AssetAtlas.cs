@@ -19,11 +19,12 @@ public class AssetAtlas:IAssetAtlas {
     
     public bool TryGetAsset(EngineAssetId value, out IAsset? asset) {
         return _assets.TryGetValue(value, out asset);
-
     }
+    
     public bool TryGetAsset(string value, out IAsset? asset) {
-        if (TryParseAssetIdFromString(value: value.PadLeft(12, '0'), out EngineAssetId? engineAssetId) && engineAssetId != null)
-            return TryGetAsset((EngineAssetId)engineAssetId, out asset);
+        if (TryParseAssetIdFromString(value: value, out var engineAssetId) 
+            && engineAssetId != null
+        ) return TryGetAsset((EngineAssetId)engineAssetId, out asset);
         
         asset = null;
         return false;
@@ -31,7 +32,7 @@ public class AssetAtlas:IAssetAtlas {
     
     
     public bool TryParseAssetIdFromString(string value, out EngineAssetId? engineAssetId) {
-        Match match = _rxEngineAssetId.Match(value);
+        Match match = _rxEngineAssetId.Match(value.PadLeft(12, '0')); // PAD to correct length
         if (!match.Success) {
             engineAssetId = null;
         } else {
@@ -48,5 +49,6 @@ public class AssetAtlas:IAssetAtlas {
     public bool TryAddAsset(IAsset asset) {
         return _assets.TryAdd(asset.Id, asset);
     }
+    
     
 }

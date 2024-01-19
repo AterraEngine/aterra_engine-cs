@@ -2,6 +2,8 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Numerics;
+using AterraEngine_lib.structs;
+using AterraEngine.Assets;
 using AterraEngine.Interfaces.Component;
 using AterraEngine.Interfaces.Draw;
 using Raylib_cs;
@@ -11,7 +13,7 @@ namespace AterraEngine.Component;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class ActorComponent : IActorComponent {
+public class Actor2DComponent : Asset, IActor2DComponent {
     private float _rotation;
     public float Rotation {
         get => _rotation;
@@ -48,7 +50,7 @@ public class ActorComponent : IActorComponent {
     // -----------------------------------------------------------------------------------------------------------------
     // Constructor
     // -----------------------------------------------------------------------------------------------------------------
-    public ActorComponent() {
+    public Actor2DComponent(EngineAssetId id, string? internalName) : base(id, internalName) {
         UpdateBoundingBox();
     }
     
@@ -69,11 +71,11 @@ public class ActorComponent : IActorComponent {
         );
     }
 
-    public void Draw() {
+    public override void Draw() {
         Sprite.Draw(Pos, Rotation, OriginRelative, Size);
     }
 
-    public void DrawDebug() {
+    public override void DrawDebug() {
         Sprite.DrawDebug(Pos, Rotation, OriginRelative, Size, Box);
     }
 

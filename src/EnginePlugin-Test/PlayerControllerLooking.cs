@@ -15,13 +15,13 @@ namespace EnginePlugin_Test;
 public class PlayerControllerLooking:Player2DComponent,IPlayerController {
     public new Vector2 Velocity { get; set; } = new(1000f, 1000f);
 
-    public PlayerControllerLooking() {
+    public PlayerControllerLooking(EngineAssetId engineAssetId) : base(engineAssetId, "PLAYERLOOKING") {
         KeyMapping.Add( new KeyboardInput([KeyboardKey.KEY_LEFT]), () => { Rotation -= (Velocity.X / 2)*DeltaTime;});
         KeyMapping.Add( new KeyboardInput([KeyboardKey.KEY_RIGHT]), () => { Rotation += (Velocity.X / 2)*DeltaTime;});
         KeyMapping.Add( new KeyboardInput([KeyboardKey.KEY_LEFT_ALT, KeyboardKey.KEY_P]), () => { Pos = new Vector2(0, 0);});
         
-        KeyMapping.Add( new KeyboardInput([KeyboardKey.KEY_UP]), () => { Size *= 1.001f; });
-        KeyMapping.Add( new KeyboardInput([KeyboardKey.KEY_DOWN]), () => {Size *= 0.999f; });
+        KeyMapping.Add( new KeyboardInput([KeyboardKey.KEY_UP]), () => {  Size += Velocity * DeltaTime; });
+        KeyMapping.Add( new KeyboardInput([KeyboardKey.KEY_DOWN]), () => {Size -= Velocity * DeltaTime; });
         
         OptionalKeyMapping.Add(
             new KeyboardInput([KeyboardKey.KEY_W, KeyboardKey.KEY_S, KeyboardKey.KEY_A, KeyboardKey.KEY_D, KeyboardKey.KEY_LEFT_SHIFT]),

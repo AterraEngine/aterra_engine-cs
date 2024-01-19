@@ -4,6 +4,8 @@
 using System.Numerics;
 using AterraEngine_lib.Config;
 using AterraEngine.Config;
+using AterraEngine.Interfaces.Assets;
+using AterraEngine.Interfaces.Assets.Lib;
 using AterraEngine.Interfaces.Component;
 using AterraEngine.Plugin;
 using AterraEngine.Services;
@@ -93,9 +95,12 @@ public class AterraEngine {
     // Main Loop
     // -----------------------------------------------------------------------------------------------------------------
     private int MainLoop() {
-        ILevelComponent level = EngineServices.GetService<ILevelComponent>();
-        IPlayerController player = EngineServices.GetService<IPlayerController>();
+        IWorld2D world2D = EngineServices.GetWorld2D();
+        IAssetAtlas assetAtlas = EngineServices.GetAssetAtlas();
+        world2D.Level2D.ResolveAssetIds();
         
+        assetAtlas.TryGetAsset(world2D.PlayerId, out var playerComponent);
+        Console.WriteLine(((IPlayerComponent)playerComponent));
         
         Camera2D camera = new Camera2D(
             offset: new Vector2(Raylib.GetScreenWidth() / 2f, Raylib.GetScreenHeight() / 2f), // Camera offset
@@ -105,41 +110,30 @@ public class AterraEngine {
         );
         
         while (!Raylib.WindowShouldClose()) {
-            player.LoadKeyMapping();
+            ((IPlayerComponent)playerComponent!).LoadKeyMapping();
             
             // Your rendering or game loop logic goes here
             Raylib.BeginDrawing();
             Raylib.ClearBackground(Color.BLUE);
             
+
             // Begin 2D drawing mode (camera)
             Raylib.BeginMode2D(camera);
-            
-            
-            level.CollideAll();
-            
-            level.Draw();
-            level.DrawDebug();
-            // level.DrawDebug();
-            //
-            // player.Draw();
-            // player.DrawDebug();
-            
 
-            // var pressed = Raylib.GetCharPressed();
-            // if (pressed != 0) Console.WriteLine(pressed);
+            world2D.Draw();
+            // world2D.DrawDebug();
+            world2D.Level2D.CollideAll();
             
-            // Console.WriteLine(Raylib.GetFPS());
-            
-            // Console.WriteLine(player.Pos);
-            //
-            // sprite?.Draw(player.Position);
-            // sprite?.DrawDebug(player.Position);
 
             // End 2D drawing mode (camera)
             Raylib.EndMode2D();
             
+            Raylib.DrawText(Raylib.GetWorldToScreen2D(Vector2.One, camera:camera).ToString(), 100,100,200,Color.RED);
+            
            // Draw your content here
             Raylib.EndDrawing();
+
+            camera.Target = ((IPlayerComponent)playerComponent!).Pos;
 
         }
         return 0;

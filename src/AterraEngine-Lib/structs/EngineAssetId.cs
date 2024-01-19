@@ -8,7 +8,7 @@ namespace AterraEngine_lib.structs;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public struct EngineAssetId(PluginId pluginId, int value) : IComparable<EngineAssetId> {
+public struct EngineAssetId(PluginId pluginId, int value) : IComparable<EngineAssetId>, IEqualityComparer<EngineAssetId> {
     public PluginId PluginId { get; } = pluginId;
     public int Id { get; } = value;
 
@@ -28,5 +28,23 @@ public struct EngineAssetId(PluginId pluginId, int value) : IComparable<EngineAs
         return pluginIdComparison != 0 
             ? pluginIdComparison 
             : Id.CompareTo(other.Id);
+    }
+    
+    public static bool operator ==(EngineAssetId left, EngineAssetId right)
+    {
+        return left.Equals(right);
+    }
+
+    public static bool operator !=(EngineAssetId left, EngineAssetId right)
+    {
+        return !(left == right);
+    }
+
+    public bool Equals(EngineAssetId x, EngineAssetId y) {
+        return x.PluginId.Equals(y.PluginId) && x.Id == y.Id;
+    }
+
+    public int GetHashCode(EngineAssetId obj) {
+        return HashCode.Combine(obj.PluginId, obj.Id);
     }
 }

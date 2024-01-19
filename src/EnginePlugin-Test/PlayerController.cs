@@ -15,7 +15,7 @@ namespace EnginePlugin_Test;
 public class PlayerController:Player2DComponent,IPlayerController {
     public new Vector2 Velocity { get; set; } = new(1000f, 1000f);
 
-    public PlayerController() {
+    public PlayerController(EngineAssetId id) : base(id, "PLAYER") {
         KeyMapping.Add( new KeyboardInput([KeyboardKey.KEY_Q]), () => { Rotation -= Velocity.X*DeltaTime;});
         KeyMapping.Add( new KeyboardInput([KeyboardKey.KEY_E]), () => { Rotation += Velocity.X*DeltaTime;});
         KeyMapping.Add( new KeyboardInput([KeyboardKey.KEY_V, KeyboardKey.KEY_B]), () => {Console.WriteLine("BOTH ARE PRESSED");});
@@ -31,7 +31,7 @@ public class PlayerController:Player2DComponent,IPlayerController {
         float vertical = 0;
         if (isUpPressed) --vertical;
         if (isDownPressed) ++vertical;
-        if (isLeftPressed) --horizontal;
+        if (isLeftPressed) --horizontal; 
         if (isRightPressed) ++horizontal;
 
         Vector2 movement = new Vector2(horizontal, vertical);

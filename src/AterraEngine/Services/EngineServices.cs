@@ -2,9 +2,11 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.Assets;
+using AterraEngine.Assets.Lib;
 using AterraEngine.Component;
 using AterraEngine.Draw;
 using AterraEngine.Interfaces.Assets;
+using AterraEngine.Interfaces.Assets.Lib;
 using AterraEngine.Interfaces.Component;
 using AterraEngine.Interfaces.Draw;
 using Microsoft.Extensions.DependencyInjection;
@@ -50,6 +52,7 @@ public static class EngineServices {
     // -----------------------------------------------------------------------------------------------------------------
     // public static ILogger GetLogger() => _serviceProvider.GetRequiredService<ILogger>();
     public static IAssetAtlas GetAssetAtlas() => _serviceProvider.GetRequiredService<IAssetAtlas>();
+    public static IWorld2D GetWorld2D() => _serviceProvider.GetRequiredService<IWorld2D>();
     
     // -----------------------------------------------------------------------------------------------------------------
     // Default Services
@@ -57,11 +60,13 @@ public static class EngineServices {
     public static IServiceCollection AssignDefaultServices(IServiceCollection serviceCollection) {
         // TODO remove these two from the services
         serviceCollection.AddTransient<ISprite, Sprite>();
-        serviceCollection.AddTransient<IActorComponent, ActorComponent>();
+        serviceCollection.AddTransient<IActor2DComponent, Actor2DComponent>();
         
         serviceCollection.AddTransient<ISpriteAtlas, SpriteAtlas>();
         serviceCollection.AddSingleton<ITextureAtlas, TextureAtlas>();
         serviceCollection.AddSingleton<IAssetAtlas, AssetAtlas>();
+        serviceCollection.AddSingleton<IWorld2D, World2D>();
+        
         
         return serviceCollection;
     }

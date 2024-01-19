@@ -1,12 +1,17 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraEngine.Interfaces.Component;
+using AterraEngine_lib.structs;
+using AterraEngine.Interfaces.Component;
+
+namespace AterraEngine.Interfaces.Assets.Lib;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ILevelComponent : IDrawableComponent {
-    public IActorComponent[] DrawableComponents { get; set; }
+public interface ILevel2D : IAsset {
+    public List<EngineAssetId> Assets { get; set; }
+    
+    public void ResolveAssetIds();
     public void CollideAll();
 }

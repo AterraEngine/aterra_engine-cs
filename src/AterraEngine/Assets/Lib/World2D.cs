@@ -1,13 +1,24 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Component;
+using AterraEngine_lib.structs;
+using AterraEngine.Interfaces.Assets.Lib;
+using AterraEngine.Interfaces.Component;
 
-namespace EnginePlugin_Test;
+namespace AterraEngine.Assets.Lib;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class DebugLevel: LevelComponent {
-    
+public class World2D : IWorld2D {
+    public ILevel2D Level2D { get; set; }
+    public EngineAssetId PlayerId { get; set; }
+
+    public void Draw() {
+        Level2D.Draw();
+    }
+
+    public void DrawDebug() {
+        Level2D.DrawDebug();
+    }
 }

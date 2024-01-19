@@ -1,19 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Numerics;
-using AterraEngine.Interfaces.Draw;
-using Raylib_cs;
+using AterraEngine_lib.structs;
+using AterraEngine.Interfaces.Component;
 
-namespace AterraEngine.Interfaces.Component;
+namespace AterraEngine.Interfaces.Assets.Lib;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IActorComponent: IDrawableComponent {
-    public Vector2 Pos { get; set; }
-    public float Rotation { get; set; }
-    public Rectangle Box { get; set; }
-    public Vector2 Velocity { get; set; }
-    public ISprite Sprite { get; set; }
+public interface IWorld2D : IDrawableComponent {
+    public ILevel2D Level2D { get; set; }
+    public EngineAssetId PlayerId { get; set; }
 }

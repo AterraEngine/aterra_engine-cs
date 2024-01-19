@@ -4,8 +4,12 @@
 using System.Numerics;
 using AterraEngine_lib.structs;
 using AterraEngine.Assets;
+using AterraEngine.Assets.Lib;
+using AterraEngine.Component;
 using AterraEngine.Plugin;
 using AterraEngine.Draw;
+using AterraEngine.Interfaces.Assets;
+using AterraEngine.Interfaces.Assets.Lib;
 using AterraEngine.Interfaces.Component;
 using AterraEngine.Interfaces.Draw;
 using AterraEngine.Interfaces.Plugin;
@@ -23,8 +27,6 @@ public class Plugin : EnginePlugin {
     public override string NameReadable { get; } = "Example Plugin";
 
     public override void DefineServices(IServiceCollection serviceCollection) {
-        serviceCollection.AddSingleton<IPlayerController, PlayerControllerLooking>();
-        serviceCollection.AddSingleton<ILevelComponent, DebugLevel>();
     }
 
     public override void DefineDataTextures() {
@@ -35,49 +37,51 @@ public class Plugin : EnginePlugin {
     }
 
     public override void DefineDataAssets() {
-        var engineAssetId = new EngineAssetId(IdPrefix, NextInternalId());
-        Console.WriteLine(engineAssetId.PluginId);
-        Console.WriteLine(engineAssetId.Id);
-        Console.WriteLine(engineAssetId);
+        IAssetAtlas assetAtlas = EngineServices.GetAssetAtlas();
+        IWorld2D world2D = EngineServices.GetWorld2D();
         
-        EngineServices.GetAssetAtlas().TryAddAsset(new Asset(engineAssetId, "HELP ME"));
-
+        var PlayerComponent = new PlayerControllerLooking(new EngineAssetId(IdPrefix, NextInternalId())); // TODO we shouldn't do this like this.
+        world2D.Level2D = new Level2D(new EngineAssetId(IdPrefix, NextInternalId()), "overworld");
+        
+        assetAtlas.TryAddAsset(world2D.Level2D);
+        assetAtlas.TryAddAsset(PlayerComponent);
+        
         ISpriteAtlas spriteAtlas = EngineServices.GetService<ISpriteAtlas>();
         
         if (!spriteAtlas.TryAddSprite("sDucky", "tDucky", out ISprite? sprite)) {
             throw new Exception("Sprite could not be added to atlas");
         }
         
-        EngineServices.GetService<IPlayerController>().Sprite = sprite!;
+        PlayerComponent.Sprite = sprite!;
+        world2D.PlayerId = PlayerComponent.Id;
+
+        const int v = 25;
         
-        ILevelComponent level = EngineServices.GetService<ILevelComponent>();
-        
-        List<IActorComponent> drawableComponents = [];
-        int counter = 0;
-        
-        for (int i = -5; i < 5; i++) {
-            for (int j = -5; j < 5; j++) {
-                spriteAtlas.TryAddSprite($"sDuckyBackground{i}{j}", "tDucky", out ISprite? spirteX);
+        for (int i = -v; i < v; i++) {
+            for (int j = -v; j < v; j++) {
                 
-                IActorComponent actor = EngineServices.GetService<IActorComponent>();
-                
-                actor.Pos = new Vector2((spirteX!.Texture.Width / 4f)*i, (spirteX!.Texture.Height / 4f)*j);
-                actor.Rotation = (i * j) * 0.1f;
-                actor.Sprite = spirteX!;
-                drawableComponents.Add(actor);
-                
-                Console.WriteLine($"Actor {counter++} created");
+                if (!spriteAtlas.TryAddSprite(
+                        $"sDuckyBackground{i.ToString().PadLeft(3,'0')}{j.ToString().PadLeft(3,'0')}", "" +
+                        "tDucky", 
+                        out ISprite? spirteX)
+                ) {
+                    throw new Exception("Sprite could not be added to atlas -> inside loop");
+                }
+
+                EngineAssetId assetId = new EngineAssetId(IdPrefix, NextInternalId());
+                Actor2DComponent actor2D = new Actor2DComponent(assetId, $"$actor{i}{j}")
+                    {
+                        Pos = new Vector2((spirteX!.Texture.Width / 4f)*i, (spirteX!.Texture.Height / 4f)*j),
+                        Rotation = (i * j) * 0.1f,
+                        Sprite = spirteX
+                    };
+
+                assetAtlas.TryAddAsset(actor2D);
+                world2D.Level2D.Assets.Add(assetId);
             }
         }
-        
-        // IActorComponent actor = EngineServices.GetService<IActorComponent>();
-        // actor.Pos = new Vector2(250,250);
-        // actor.Sprite = sprite2;
-        // drawableComponents.Add(actor);
-
-        
-        drawableComponents.Add(EngineServices.GetService<IPlayerController>());
-        level.DrawableComponents = drawableComponents.ToArray();
+        // TODO This shouldn't be the case, the fix should not be to add the player as the last asset
+        world2D.Level2D.Assets.Add(PlayerComponent.Id);
 
     }
     
