@@ -1,8 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraEngine.Component;
+using AterraEngine.Draw;
+using AterraEngine.Interfaces.Component;
+using AterraEngine.Interfaces.Draw;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using Serilog.Events;
 
 namespace AterraEngine.Services;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -41,5 +46,19 @@ public static class EngineServices {
     // -----------------------------------------------------------------------------------------------------------------
     // Quick Call Methods  
     // -----------------------------------------------------------------------------------------------------------------
-    public static ILogger GetLogger() => _serviceProvider.GetRequiredService<ILogger>();
+    // public static ILogger GetLogger() => _serviceProvider.GetRequiredService<ILogger>();
+    
+    // -----------------------------------------------------------------------------------------------------------------
+    // Default Services
+    // -----------------------------------------------------------------------------------------------------------------
+    public static IServiceCollection AssignDefaultServices(IServiceCollection serviceCollection) {
+        // TODO remove these two from the services
+        serviceCollection.AddTransient<ISprite, Sprite>();
+        serviceCollection.AddTransient<IActorComponent, ActorComponent>();
+        
+        serviceCollection.AddTransient<ISpriteAtlas, SpriteAtlas>();
+        serviceCollection.AddSingleton<ITextureAtlas, TextureAtlas>();
+        
+        return serviceCollection;
+    }
 }

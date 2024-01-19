@@ -12,6 +12,9 @@ namespace AterraEngine.Draw;
 public class TextureAtlas : ITextureAtlas {
     private readonly Dictionary<string, Texture2D> _textures = new();
        
+    // -----------------------------------------------------------------------------------------------------------------
+    // Methods
+    // -----------------------------------------------------------------------------------------------------------------
     public bool TryAddTexture(string textureName, string texturePath) {
         try {
             Texture2D texture2D = Raylib.LoadTexture(texturePath);

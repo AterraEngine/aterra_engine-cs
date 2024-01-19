@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Numerics;
+using AterraEngine_lib.structs;
 using AterraEngine.Plugin;
 using AterraEngine.Draw;
 using AterraEngine.Interfaces.Component;
@@ -17,23 +18,25 @@ namespace EnginePlugin_Test;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class Plugin : EnginePlugin {
-    public override IServiceCollection DefineServices(IServiceCollection serviceCollection) {
-        base.DefineServices(serviceCollection);
+    public override string NameInternal { get; } = "ExamplePlugin";
+    public override string NameReadable { get; } = "Example Plugin";
+
+    public override void DefineServices(IServiceCollection serviceCollection) {
         serviceCollection.AddSingleton<IPlayerController, PlayerControllerLooking>();
         serviceCollection.AddSingleton<ILevelComponent, DebugLevel>();
-        
-        return serviceCollection;
     }
 
-    public override IEnginePlugin DefineData() {
-        base.DefineData();
-        
+    public override void DefineDataTextures() {
         ITextureAtlas textureAtlas = EngineServices.GetService<ITextureAtlas>();
-        ISpriteAtlas spriteAtlas = EngineServices.GetService<ISpriteAtlas>();
-        
         if (!textureAtlas.TryAddTexture("tDucky", "resources/DuckyHappy.png")) {
             throw new Exception("Texture could not be loaded");
         }
+    }
+
+    public override void DefineDataAssets() {
+        
+        ISpriteAtlas spriteAtlas = EngineServices.GetService<ISpriteAtlas>();
+
         if (!spriteAtlas.TryAddSprite("sDucky", "tDucky", out ISprite? sprite)) {
             throw new Exception("Sprite could not be added to atlas");
         }
@@ -69,7 +72,6 @@ public class Plugin : EnginePlugin {
         drawableComponents.Add(EngineServices.GetService<IPlayerController>());
         level.DrawableComponents = drawableComponents.ToArray();
         
-        return this;
     }
     
 }

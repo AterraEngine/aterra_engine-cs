@@ -7,7 +7,7 @@ using System.Reflection;
 using AterraEngine_lib.structs;
 using AterraEngine_lib.Config;
 using AterraEngine.Interfaces.Plugin;
-using AterraEngine.Services;
+
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AterraEngine.Plugin;
@@ -21,64 +21,70 @@ public class EnginePluginManager: IEnginePluginManager {
     
     private readonly Dictionary<PluginId, IEnginePlugin> _enginePlugins = new();
     public ReadOnlyDictionary<PluginId, IEnginePlugin> EnginePlugins => _enginePlugins.AsReadOnly();
-
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public IEnumerable<IEnginePlugin> GetPluginsSorted(){
-        return EnginePlugins.OrderBy(pair => pair.Key).Select(pair => pair.Value);
-    }
-    
-    public bool TryLoadOrderFromEngineConfig(EngineConfig engineConfig, out List<Tuple<string, string>> errorPaths) {
+    public bool TryLoadOrderFromEngineConfig(EngineConfig engineConfig, out List<string> errorPaths) {
         errorPaths = [];
-        errorPaths.AddRange(
-            from engineConfigPlugin in engineConfig.Plugins 
-            where !_loadOrder.TryAdd(engineConfigPlugin.Id, engineConfigPlugin.FilePath) 
-            select new Tuple<string, string>(_loadOrder[engineConfigPlugin.Id], engineConfigPlugin.FilePath)
-        );
-
+        int pluginIdCounter = 0;
+        
+        foreach (var engineConfigPlugin in engineConfig.Plugins) {
+            if (!_loadOrder.TryAdd(new PluginId(pluginIdCounter), engineConfigPlugin.FilePath)) {
+                errorPaths.Add(engineConfigPlugin.FilePath);
+            }
+            pluginIdCounter++;
+        }
+        
         return errorPaths.Count == 0;
     }
+    
+    public void LoadPlugins() {
+        foreach ((PluginId pluginId, string assemblyLocation) in GetLoadOrderSorted()) {
+            Assembly assembly = Assembly.LoadFrom(assemblyLocation);
 
-    public IServiceCollection LoadPlugins(IServiceCollection serviceCollection) {
-
-        IEnginePlugin defaultPlugin = new DefaultPlugin();
-        defaultPlugin.DefineConfig(idPrefix: new PluginId(0));
-        defaultPlugin.DefineServices(serviceCollection);
-        
-        var loadedPlugins = _loadOrder
-            .OrderBy(pair => pair.Key)
-            .Select(pair => (pair.Key, Assembly.LoadFrom(pair.Value)))
-            .SelectMany(pair => {
-                var (key, assembly) = pair;
-
-                return assembly
-                    .GetTypes()
-                    .Where(type => typeof(IEnginePlugin).IsAssignableFrom(type)
-                                   && !type.IsInterface
-                                   && !type.IsAbstract
-                    )
-                    .Select(pluginType => {
-                        IEnginePlugin plugin = ((IEnginePlugin)Activator.CreateInstance(pluginType)!)
-                            // THIS HANDLES A LOT OF THE SETUP OF A PLUGIN
-                            .DefineConfig(idPrefix: key);
-                            // Add Service mappings with ServiceCollection
-                            serviceCollection = plugin.DefineServices(serviceCollection);
-                        
-                        Console.WriteLine(plugin.IdPrefix);
-                        
-                        return (key,plugin);
-                    });
-            })
-            .ToArray();
-        
-        // TODO, don't do this with a normal dictionary
-        // _enginePlugins.Add(new PluginId(0),defaultPlugin );
-        
-        foreach (var keyValue in loadedPlugins) {
-            _enginePlugins.Add(keyValue.key, keyValue.Item2);
+            foreach (var pluginType in assembly.GetTypes()) {
+                // If at a later point, we want to add more type loading from these assemblies,
+                //      simply expand this with more ifelse 
+                if (typeof(IEnginePlugin).IsAssignableFrom(pluginType) 
+                    && pluginType is { IsInterface: false, IsAbstract: false }
+                ){
+                    // This handles a lot of the basic setup of a plugin
+                    //      Services and other things shouldn't be defined in this config
+                    IEnginePlugin plugin = ((IEnginePlugin)Activator.CreateInstance(pluginType)!).DefineConfig(idPrefix: pluginId);
+                    _enginePlugins.Add(pluginId, plugin);
+                }
+            }
         }
-
-        return serviceCollection;
     }
+    
+    // -----------------------------------------------------------------------------------------------------------------
+    //  General Use-case Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    private IEnumerable<IEnginePlugin> GetPluginsSorted(){
+        return EnginePlugins.OrderBy(pair => pair.Key).Select(pair => pair.Value);
+    }
+    private IOrderedEnumerable<KeyValuePair<PluginId, string>> GetLoadOrderSorted(){
+        return _loadOrder.OrderBy(pair => pair.Key);
+    }
+    
+    // -----------------------------------------------------------------------------------------------------------------
+    // Final Loading of the plugin methods
+    // -----------------------------------------------------------------------------------------------------------------
+    public void DefinePluginServices(IServiceCollection serviceCollection) {
+        foreach (var plugin in GetPluginsSorted()) {
+            plugin.DefineServices(serviceCollection);
+        }
+    }
+    public void DefinePluginTextures() {
+        foreach (var plugin in GetPluginsSorted()) {
+            plugin.DefineDataTextures();
+        }
+    }
+    public void DefinePluginAssets() {
+        foreach (var plugin in GetPluginsSorted()) {
+            plugin.DefineDataAssets();
+        }
+    }
+    
 }

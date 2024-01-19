@@ -11,7 +11,11 @@ namespace AterraEngine.Interfaces.Plugin;
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IEnginePlugin {
     public PluginId IdPrefix { get;}
+    public string NameInternal { get;}
+    public string NameReadable { get;}
+    
     public IEnginePlugin DefineConfig(PluginId idPrefix);
-    public IServiceCollection DefineServices(IServiceCollection serviceCollection);
-    public IEnginePlugin DefineData(); // static data (like sprites....)
+    public void DefineServices(IServiceCollection serviceCollection);
+    public void DefineDataTextures(); // static data (like sprites....)
+    public void DefineDataAssets(); // static data (like sprites....)
 }

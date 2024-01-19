@@ -18,6 +18,9 @@ public interface IEnginePluginManager {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public bool TryLoadOrderFromEngineConfig(EngineConfig engineConfig, out List<Tuple<string, string>> errorPaths);
-    public IServiceCollection LoadPlugins(IServiceCollection serviceCollection);
+    public bool TryLoadOrderFromEngineConfig(EngineConfig engineConfig, out List<string> errorPaths);
+    public void LoadPlugins();
+    public void DefinePluginServices(IServiceCollection serviceCollection);
+    public void DefinePluginTextures();
+    public void DefinePluginAssets();
 }

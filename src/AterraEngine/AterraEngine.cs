@@ -69,22 +69,23 @@ public class AterraEngine {
         if (!_pluginManager.TryLoadOrderFromEngineConfig(engineConfig: _engineConfig, out _)) {
             throw new Exception("SOMETHING WENT WRONG!!!");
         }
-
-        EngineServices.BuildServiceProvider(
-            _pluginManager.LoadPlugins(
-                new ServiceCollection()
-            )
-        );
+        // Firstly, load all plugins from DLL files
+        _pluginManager.LoadPlugins();
+        IServiceCollection serviceCollection = EngineServices.AssignDefaultServices(new ServiceCollection());
+        
+        // Load up all services from the plugins, the order is important
+        _pluginManager.DefinePluginServices(serviceCollection);
+        
+        // Only after everything is loaded, build the service provider
+        EngineServices.BuildServiceProvider(serviceCollection);
         
         return true;
         
     }
 
     private bool TryLoadPluginData() {
-        foreach (var enginePlugin in _pluginManager.GetPluginsSorted()) {
-            enginePlugin.DefineData();
-        }
-        
+        _pluginManager.DefinePluginTextures();
+        _pluginManager.DefinePluginAssets();
         return true;
     }
     
