@@ -4,7 +4,7 @@
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
-using AterraEngine.Interfaces.Config;
+using AterraEngine.Interfaces.EngineLoader.Config;
 using AterraEngine.Paths;
 
 namespace AterraEngine.EngineLoader.Config;

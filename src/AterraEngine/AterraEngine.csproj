@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\AterraEngine.Actors\AterraEngine.Actors.csproj" />
       <ProjectReference Include="..\AterraEngine.Interfaces\AterraEngine.Interfaces.csproj" />
     </ItemGroup>
 

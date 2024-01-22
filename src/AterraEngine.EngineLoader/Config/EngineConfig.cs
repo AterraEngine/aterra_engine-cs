@@ -3,7 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Xml.Serialization;
 
-using AterraEngine.Interfaces.Config;
+using AterraEngine.Interfaces.EngineLoader.Config;
 using AterraEngine.EngineLoader.Config.Xml;
 using AterraEngine.Types;
 

@@ -1,15 +1,18 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using System.Numerics;
 using Raylib_cs;
 
-namespace AterraEngine.Interfaces.Draw;
+namespace AterraEngine.Interfaces.Actors;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ISpriteAtlas {
-    public bool TryAddSprite<T>(string spriteName, string textureName, Rectangle? box =null) where T: ISprite;
-    public bool TryAddSprite<T>(string spriteName, string textureName, out T? sprite, Rectangle? box = null) where T : ISprite;
-    public bool TryGetSprite<T>(string spriteName, out T? sprite) where T : ISprite;
+public interface IActor : IAsset, IDrawableComponent{
+    public Vector2 Pos { get; set; }
+    public float Rotation { get; set; }
+    public Rectangle Box { get; set; }
+    public Vector2 Velocity { get; set; }
+    public ISprite Sprite { get; set; }
 }

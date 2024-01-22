@@ -1,15 +1,11 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Types;
-using AterraEngine.Interfaces.Component;
-
-namespace AterraEngine.Interfaces.Assets;
+namespace AterraEngine.Interfaces.EngineLoader.Config;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IAsset: IDrawableComponent {
-    public EngineAssetId Id { get; }
-    public string? InternalName { get; }
+public interface IEngineConfig {
+    public static abstract IEngineConfig CreateDefault();
 }

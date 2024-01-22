@@ -4,7 +4,7 @@
 using System.Numerics;
 using Raylib_cs;
 
-namespace AterraEngine.Interfaces.Draw;
+namespace AterraEngine.Interfaces.Actors;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

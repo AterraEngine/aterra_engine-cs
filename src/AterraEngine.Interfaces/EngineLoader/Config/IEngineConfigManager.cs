@@ -1,11 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraEngine.Interfaces.Config;
+namespace AterraEngine.Interfaces.EngineLoader.Config;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IEngineConfig {
-    public static abstract IEngineConfig CreateDefault();
+public interface IEngineConfigManager<T> where T :  IEngineConfig {
+    public T LoadConfigFile(string filePath);
+    public bool TrySaveConfig(T config,string outputPath);
+    
 }

@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraEngine.Interfaces.Actors;
 using Raylib_cs;
 
 namespace AterraEngine.Interfaces.WorldSpaces;
@@ -10,6 +11,7 @@ namespace AterraEngine.Interfaces.WorldSpaces;
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IWorldSpace2D {
     Camera2D Camera { get; set; }
+    IPlayer2D Player2D { get; set; }
     float DeltaTime { get; }
 
     void RunSetup();

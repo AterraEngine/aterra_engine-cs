@@ -2,7 +2,10 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Numerics;
+using AterraEngine.Actors;
+using AterraEngine.Interfaces.Actors;
 using AterraEngine.Interfaces.WorldSpaces;
+using AterraEngine.Types;
 using Raylib_cs;
 
 namespace AterraEngine.WorldSpaces;
@@ -16,6 +19,8 @@ public class WorldSpace2D : IWorldSpace2D{
         get => _camera;
         set => UpdateCamera(value);
     }
+
+    public IPlayer2D Player2D { get; set; } = null!;
 
     public Vector2 WorldToScreenSpace { get; private set; }
     public Vector2 ScreenToWorldSpace { get; private set; }
@@ -45,6 +50,9 @@ public class WorldSpace2D : IWorldSpace2D{
     
     public void UpdateFrame() {
         DeltaTime = Raylib.GetFrameTime();
+        
+        Player2D.LoadKeyMapping(DeltaTime);
+        
     }
 
     public void RenderFrameUi() {
@@ -52,6 +60,7 @@ public class WorldSpace2D : IWorldSpace2D{
     }
 
     public void RenderFrameWorld() {
-        
+        Player2D.Draw(WorldToScreenSpace);
+        Player2D.DrawDebug(WorldToScreenSpace);
     }
 }

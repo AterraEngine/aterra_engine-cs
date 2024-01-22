@@ -1,7 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Interfaces.Config;
+using AterraEngine.Interfaces.EngineLoader.Config;
 
 namespace AterraEngine.Interfaces.Engine;
 

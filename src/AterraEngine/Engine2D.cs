@@ -1,8 +1,8 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Interfaces.Config;
 using AterraEngine.Interfaces.Engine;
+using AterraEngine.Interfaces.EngineLoader.Config;
 using AterraEngine.Interfaces.WorldSpaces;
 using Raylib_cs;
 

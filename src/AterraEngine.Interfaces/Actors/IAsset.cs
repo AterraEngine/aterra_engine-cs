@@ -3,14 +3,12 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.Types;
 
-namespace AterraEngine.Interfaces.Assets.Lib;
+namespace AterraEngine.Interfaces.Actors;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ILevel2D : IAsset {
-    public List<EngineAssetId> Assets { get; set; }
-    
-    public void ResolveAssetIds();
-    public void CollideAll();
+public interface IAsset {
+    public EngineAssetId Id { get; }
+    public string? InternalName { get; }
 }
