@@ -1,20 +1,14 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Collections.ObjectModel;
-using AterraEngine.Types;
+using System.Xml.Serialization;
 
-namespace AterraEngine.Interfaces.Assets;
+namespace AterraEngine.EngineLoader.Config.Xml;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IAssetAtlas {
-    public ReadOnlyDictionary<EngineAssetId, IAsset> Assets { get; }
-    public bool TryGetAsset(EngineAssetId value, out IAsset? asset);
-    public bool TryGetAsset(string value, out IAsset? asset);
-
-    public bool TryAddAsset(IAsset asset);
-    public bool TryParseAssetIdFromString(string value, out EngineAssetId? engineAssetId);
-
+public class DimensionElement {
+    [XmlAttribute("width")] public int Width { get; set; }
+    [XmlAttribute("height")] public int Height { get; set; }
 }

@@ -1,20 +1,12 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Collections.ObjectModel;
-using AterraEngine.Types;
-
-namespace AterraEngine.Interfaces.Assets;
+using Raylib_cs;
+namespace AterraEngine.Types;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IAssetAtlas {
-    public ReadOnlyDictionary<EngineAssetId, IAsset> Assets { get; }
-    public bool TryGetAsset(EngineAssetId value, out IAsset? asset);
-    public bool TryGetAsset(string value, out IAsset? asset);
-
-    public bool TryAddAsset(IAsset asset);
-    public bool TryParseAssetIdFromString(string value, out EngineAssetId? engineAssetId);
-
+public struct KeyboardInput(KeyboardKey[] keyboardKeys) {
+    public KeyboardKey[] Keys { get; set; } = keyboardKeys;
 }

@@ -1,20 +1,19 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Collections.ObjectModel;
-using AterraEngine.Types;
+using Raylib_cs;
 
-namespace AterraEngine.Interfaces.Assets;
+namespace AterraEngine.Interfaces.WorldSpaces;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IAssetAtlas {
-    public ReadOnlyDictionary<EngineAssetId, IAsset> Assets { get; }
-    public bool TryGetAsset(EngineAssetId value, out IAsset? asset);
-    public bool TryGetAsset(string value, out IAsset? asset);
+public interface IWorldSpace2D {
+    Camera2D Camera { get; set; }
+    float DeltaTime { get; }
 
-    public bool TryAddAsset(IAsset asset);
-    public bool TryParseAssetIdFromString(string value, out EngineAssetId? engineAssetId);
-
+    void RunSetup();
+    void UpdateFrame();
+    void RenderFrameUi();
+    void RenderFrameWorld();
 }

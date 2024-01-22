@@ -10,7 +10,7 @@ namespace AterraEngine.Interfaces.Config;
 /// Represents a generic interface for an engine configuration parser.
 /// </summary>
 /// <typeparam name="T">The type of the engine configuration.</typeparam>
-public interface IEngineConfigParser<T> {
+public interface IEngineConfigParser<T> where T:IEngineConfig {
     
     /// <summary>
     /// Tries to deserialize an object of type T from a file located at the specified filePath.

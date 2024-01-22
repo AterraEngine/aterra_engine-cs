@@ -1,8 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine_lib.structs;
-using AterraEngine.Interfaces.Component;
+using AterraEngine.Types;
 
 namespace AterraEngine.Interfaces.Assets.Lib;
 

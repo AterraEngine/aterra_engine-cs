@@ -1,7 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine_lib.structs;
+using AterraEngine.Types;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AterraEngine.Interfaces.Plugin;
@@ -16,6 +16,6 @@ public interface IEnginePlugin {
     
     public IEnginePlugin DefineConfig(PluginId idPrefix);
     public void DefineServices(IServiceCollection serviceCollection);
-    public void DefineDataTextures(); // static data (like sprites....)
-    public void DefineDataAssets(); // static data (like sprites....)
+    public void DefineTextures(); // static data (like sprites....)
+    public void DefineAssets(); // static data (like sprites....)
 }

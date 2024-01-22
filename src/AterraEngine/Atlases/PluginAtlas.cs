@@ -1,20 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Collections.ObjectModel;
-using AterraEngine.Types;
+using AterraEngine.Interfaces.Atlases;
 
-namespace AterraEngine.Interfaces.Assets;
+namespace AterraEngine.Atlases;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IAssetAtlas {
-    public ReadOnlyDictionary<EngineAssetId, IAsset> Assets { get; }
-    public bool TryGetAsset(EngineAssetId value, out IAsset? asset);
-    public bool TryGetAsset(string value, out IAsset? asset);
-
-    public bool TryAddAsset(IAsset asset);
-    public bool TryParseAssetIdFromString(string value, out EngineAssetId? engineAssetId);
-
+public class PluginAtlas : IPluginAtlas{
+    
 }
