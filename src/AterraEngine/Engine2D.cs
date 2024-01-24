@@ -23,7 +23,6 @@ public class Engine2D(IWorldSpace2D worldSpace2D) : IEngine{
         worldSpace2D.RunSetup();
         
         while (!Raylib.WindowShouldClose()) {
-            
             // --- Start Logic Handling ---
             worldSpace2D.UpdateFrame();
             // --- End Logic Handling ---
@@ -31,15 +30,12 @@ public class Engine2D(IWorldSpace2D worldSpace2D) : IEngine{
             Raylib.BeginDrawing();
             Raylib.ClearBackground(Color.Black);
             
-            
             // Begin 2D drawing mode (camera)
-            Raylib.BeginMode2D(worldSpace2D.Camera);
+            // Console.WriteLine(worldSpace2D.Camera.Target);
             
             // --- Start Render World ---
             worldSpace2D.RenderFrameWorld();
             // --- End Rendering World ---
-            
-            Raylib.EndMode2D();
             
             // --- Start Render UI ---
             worldSpace2D.RenderFrameUi();

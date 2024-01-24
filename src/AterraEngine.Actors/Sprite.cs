@@ -23,10 +23,6 @@ public class Sprite : ISprite {
         var scaledOrigin = origin * worldToScreenSpace;
         var screenPos = pos * worldToScreenSpace;
         
-        Console.WriteLine((
-            Texture, SelectionBox, scaledOrigin
-        ));
-        
         Raylib.DrawTexturePro(
             (Texture2D)Texture!,
             SelectionBox,
