@@ -10,7 +10,7 @@ namespace ArgsParser;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class CliParser {
+public class CliParser : ICliParser {
     private readonly Dictionary<string, Action<string[]>> _flagToActionMap = new();
     private readonly Dictionary<string, string?> _descriptions = new();
     public IReadOnlyDictionary<string, string?> Descriptions => _descriptions.AsReadOnly(); // Again added for the future, don't know what to add to it.
@@ -26,7 +26,7 @@ public class CliParser {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public CliParser RegisterCli<T>(T cliCommandAtlas, bool force = false) where T:ICliCommandAtlas{
+    public ICliParser RegisterCli<T>(T cliCommandAtlas, bool force = false) where T:ICliCommandAtlas{
         var methods = typeof(T).GetMethods(BindingFlags.Public | BindingFlags.Instance);
 
         foreach (var methodInfo in methods) {
@@ -73,7 +73,7 @@ public class CliParser {
     }
     
     // TODO test this out
-    public CliParser ImportFromDlLs(IEnumerable<string> filePaths) {
+    public ICliParser ImportFromDlLs(IEnumerable<string> filePaths) {
         foreach (var filePath in filePaths) {
             Assembly assembly = Assembly.LoadFrom(filePath);
 
