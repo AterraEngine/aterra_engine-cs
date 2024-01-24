@@ -11,8 +11,8 @@ namespace AterraEngine_Workfloor;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class CliCommandsAtlas : ICliCommandAtlas {
-    public class ArgOptions : IParameterOptions {
+public class CliCommandsAtlas : CliCommandAtlas {
+    public class ArgOptions : ParameterOptions {
         [ArgFlag('h', "help")]      public bool ShowHelp { get; set; } = false;
         [ArgFlag('v', "version")]   public bool ShowVersion { get; set; } = false;
         [ArgFlag('d', "debug")]     public bool EnableDebug { get; set; } = false;

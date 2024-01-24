@@ -7,6 +7,7 @@ namespace ArgsParser.Interfaces;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface ICliCommandAttribute {
-    string CommandName { get;}
+    string Name { get;}
+    string? Description { get; }
     IParameterOptions GetParameters(string[] args);
 }

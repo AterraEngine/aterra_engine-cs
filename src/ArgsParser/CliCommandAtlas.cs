@@ -1,11 +1,14 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace ArgsParser.Interfaces;
+using ArgsParser.Interfaces;
+
+namespace ArgsParser;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IParameterOptions {
-    public bool Verbose { get; set; }
+public class CliCommandAtlas : ICliCommandAtlas{
+    // Created this so I could easily add something in the future
+    //      Has no purpose for now
 }
