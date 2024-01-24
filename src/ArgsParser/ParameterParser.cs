@@ -101,12 +101,13 @@ public class ParameterParser<T> where T: IParameterOptions, new() {
             if (_optionProperties.TryGetValue(argName, out var optionProp) && i < args.Length - 1) {
                 var value = Convert.ChangeType(args[++i], optionProp.PropertyType);
                 optionProp.SetValue(result, value);
-                result.Verbose = result.Verbose || isVerbose;
             }
             else if (_flagProperties.TryGetValue(argName, out var flagProp)) {
                 flagProp.SetValue(result, true);
-                result.Verbose = result.Verbose || isVerbose;
             }
+            
+            // Apply the verbose in correct location, ergo: HERE
+            result.Verbose = result.Verbose || isVerbose;
         }
 
         return result;

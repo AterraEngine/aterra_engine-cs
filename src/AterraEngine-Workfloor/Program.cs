@@ -31,7 +31,7 @@ public class CliCommandsAtlas : CliCommandAtlas {
 
     [CliCommand<ArgOptions>("beta")]
     public void CallbackHelpa(ArgOptions argOptions) {
-        Console.WriteLine($"BETA {argOptions.Something}");
+        Console.WriteLine($"BETA {argOptions.Something}, V:{argOptions.Verbose}");
     }
 }
 
