@@ -13,9 +13,10 @@ namespace ArgsParser;
 public class CliParser : ICliParser {
     private readonly Dictionary<string, Action<string[]>> _flagToActionMap = new();
     private readonly Dictionary<string, string?> _descriptions = new();
-    public IReadOnlyDictionary<string, string?> Descriptions => _descriptions.AsReadOnly(); // Again added for the future, don't know what to add to it.
+    private IReadOnlyDictionary<string, string?> Descriptions => _descriptions.AsReadOnly(); // Again added for the future, don't know what to add to it.
+    
     // -----------------------------------------------------------------------------------------------------------------
-    // Methods
+    // Constructor
     // -----------------------------------------------------------------------------------------------------------------
     public CliParser() {
         // There is one reserved command "HELP", which lists all command
