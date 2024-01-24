@@ -4,6 +4,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Numerics;
 using AterraEngine.Interfaces.Actors;
+using AterraEngine.Types;
 using Raylib_cs;
 
 namespace AterraEngine.Actors;
@@ -12,7 +13,8 @@ namespace AterraEngine.Actors;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class Sprite : ISprite {
-    public Texture2D Texture { get; set; }
+    public TextureId TextureId { get; set; } = null!;
+    public Texture2D? Texture { get; set; } = null;
     public Rectangle SelectionBox { get; set; }
     
     public Color Tint { get; set; } = Color.White;
@@ -20,8 +22,13 @@ public class Sprite : ISprite {
     public void Draw(Vector2 pos, float rot, Vector2 origin, Vector2 size, Vector2 worldToScreenSpace){
         var scaledOrigin = origin * worldToScreenSpace;
         var screenPos = pos * worldToScreenSpace;
+        
+        Console.WriteLine((
+            Texture, SelectionBox, scaledOrigin
+        ));
+        
         Raylib.DrawTexturePro(
-            Texture,
+            (Texture2D)Texture!,
             SelectionBox,
             new Rectangle(screenPos.X, screenPos.Y, size.X * worldToScreenSpace.X, size.Y * worldToScreenSpace.Y),
             scaledOrigin, // we use the scaledOrigin here.

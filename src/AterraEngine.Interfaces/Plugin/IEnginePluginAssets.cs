@@ -1,19 +1,20 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Diagnostics.CodeAnalysis;
-using AterraEngine.Interfaces.Actors;
+using AterraEngine.Interfaces.Atlases;
 using AterraEngine.Types;
-namespace AterraEngine.Interfaces.Atlases;
+
+namespace AterraEngine.Interfaces.Plugin;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IAssetAtlas {
+public interface IEnginePluginAssets {
+    public PluginId IdPrefix { get;}
+    public IAssetAtlas AssetAtlas { get; }
+    public void Define();
 
-    public bool TryGetAsset(EngineAssetId assetId, [MaybeNullWhen(false)] out IAsset asset);
-    public bool TryGetAsset<T>(EngineAssetId assetId, [MaybeNullWhen(false)] out T asset) where T : IAsset?;
-    
-    public bool TryRegisterAsset(IAsset asset);
-
+    public int NextInternalId();
+    public EngineAssetId NewEngineAssetId();
+    public EngineAssetId NewEngineAssetId(int value);
 }

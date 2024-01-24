@@ -3,6 +3,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Numerics;
+using AterraEngine;
 using AterraEngine.Actors;
 using AterraEngine.Interfaces.Actors;
 using AterraEngine.Types;
@@ -29,7 +30,7 @@ public class PlayerControllerLooking:Player2D,IPlayer2D {
             (args, deltaTime) => Movement(deltaTime, args[0], args[1], args[2], args[3], args[4])    
         );
     }
-
+    
     private void Movement(float deltaTime, bool isUpPressed, bool isDownPressed, bool isLeftPressed, bool isRightPressed, bool isRunning) {
         float horizontal = 0;
         float vertical = 0;
@@ -37,7 +38,7 @@ public class PlayerControllerLooking:Player2D,IPlayer2D {
         if (isDownPressed) ++vertical;
         if (isLeftPressed) --horizontal;
         if (isRightPressed) ++horizontal;
-        float speedMultiplier = isRunning ? 2 : 1;
+        float speedMultiplier = isRunning ? 5 : 1;
         
         
         // Create the movement vector

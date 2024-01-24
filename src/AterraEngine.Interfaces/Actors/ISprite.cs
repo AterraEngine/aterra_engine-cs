@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Numerics;
+using AterraEngine.Types;
 using Raylib_cs;
 
 namespace AterraEngine.Interfaces.Actors;
@@ -10,7 +11,8 @@ namespace AterraEngine.Interfaces.Actors;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface ISprite {
-    public Texture2D Texture { get; set; }
+    public TextureId TextureId { get; set; }
+    public Texture2D? Texture { get; set; }
     public Rectangle SelectionBox { get; set; }
     public Color Tint { get; set; }
 

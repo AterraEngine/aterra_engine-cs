@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Collections.ObjectModel;
 using System.Reflection;
+using AterraEngine.Interfaces.Atlases;
 using AterraEngine.Interfaces.Plugin;
 using AterraEngine.Types;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,7 +22,7 @@ public class EnginePluginManager: IEnginePluginManager {
     // -----------------------------------------------------------------------------------------------------------------
     internal void LoadPlugins(IEnumerable<string> filePaths) {
         int pluginIdCounter = 0;
-        
+
         foreach (string assemblyLocation in filePaths) {
             PluginId pluginId = new PluginId(pluginIdCounter++);
             
@@ -32,9 +33,18 @@ public class EnginePluginManager: IEnginePluginManager {
                 //      simply expand this with more ifelse 
                 if (!typeof(IEnginePlugin).IsAssignableFrom(pluginType)
                     || pluginType is not { IsInterface: false, IsAbstract: false }) continue;
+                
+                // TODO SPLIT PLUGIN INTO TWO, one with data, one with the services.
+                
+                // Resolve pluginType instance using ServiceProvider
+                // IEnginePluginServices pluginServices = (IEnginePluginServices)EngineServices.ServiceProvider.GetRequiredService(pluginType);
+                // IEnginePluginTextures pluginTextures = ((IEnginePlugin)Activator.CreateInstance(pluginType)!).DefineConfig(idPrefix: pluginId);
+                // IEnginePluginAssets   pluginAssets   = ((IEnginePlugin)Activator.CreateInstance(pluginType)!).DefineConfig(idPrefix: pluginId);
+                
+                IEnginePlugin plugin = ((IEnginePlugin)Activator.CreateInstance(pluginType)!).DefineConfig(pluginId);
+        
                 // This handles a lot of the basic setup of a plugin
                 //      Services and other things shouldn't be defined in this config
-                IEnginePlugin plugin = ((IEnginePlugin)Activator.CreateInstance(pluginType)!).DefineConfig(idPrefix: pluginId);
                 _enginePlugins.Add(pluginId, plugin);
             }
         }
@@ -42,19 +52,21 @@ public class EnginePluginManager: IEnginePluginManager {
 
     internal void LoadPluginServices(IServiceCollection serviceCollection) {
         foreach (var plugin in EnginePlugins.Values) {
-            plugin.DefineServices(serviceCollection);
+            plugin.PluginServices().Define(serviceCollection);
         }
     }
 
     internal void LoadPluginTextures() {
+        ITexture2DAtlas texture2DAtlas = EngineServices.GetTextureAtlas();
         foreach (var plugin in EnginePlugins.Values) {
-            plugin.DefineTextures();
+            plugin.PluginTextures(texture2DAtlas).Define();
         }
     }
 
     internal void LoadPluginAssets() {
+        IAssetAtlas globalAssetAtlas = EngineServices.GetAssetAtlas();
         foreach (var plugin in EnginePlugins.Values) {
-            plugin.DefineAssets();
+            plugin.PluginAssets(globalAssetAtlas).Define();
         }
     }
 

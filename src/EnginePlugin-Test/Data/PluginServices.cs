@@ -1,19 +1,17 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Diagnostics.CodeAnalysis;
-using AterraEngine.Interfaces.Actors;
-using AterraEngine.Types;
-namespace AterraEngine.Interfaces.Atlases;
+using AterraEngine.Interfaces.Plugin;
+using AterraEngine.Plugins;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace EnginePlugin_Test.Data;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IAssetAtlas {
-
-    public bool TryGetAsset(EngineAssetId assetId, [MaybeNullWhen(false)] out IAsset asset);
-    public bool TryGetAsset<T>(EngineAssetId assetId, [MaybeNullWhen(false)] out T asset) where T : IAsset?;
-    
-    public bool TryRegisterAsset(IAsset asset);
-
+public class PluginServices : AEnginePluginServices {
+    public override void Define(IServiceCollection serviceCollection) {
+        
+    }
 }

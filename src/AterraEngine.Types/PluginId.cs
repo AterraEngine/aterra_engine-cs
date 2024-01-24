@@ -6,7 +6,7 @@ namespace AterraEngine.Types;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public struct PluginId : IComparable<PluginId> {
+public struct PluginId : IComparable<PluginId>, IEqualityComparer<PluginId> {
     public int Id { get; private set; }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -29,8 +29,27 @@ public struct PluginId : IComparable<PluginId> {
     private void ParseFromString(string value) {
         Id = int.Parse(value, System.Globalization.NumberStyles.HexNumber);
     }
+    
+    // -----------------------------------------------------------------------------------------------------------------
+    // Operators and Comparisons
+    // -----------------------------------------------------------------------------------------------------------------
+    public static bool operator ==(PluginId left, PluginId right) {
+        return left.Equals(right);
+    }
 
+    public static bool operator !=(PluginId left, PluginId right) {
+        return !(left == right);
+    }
+    
     public int CompareTo(PluginId other) {
         return Id.CompareTo(other.Id);
+    }
+
+    public bool Equals(PluginId x, PluginId y) {
+        return x.Id == y.Id;
+    }
+
+    public int GetHashCode(PluginId obj) {
+        return obj.Id;
     }
 }

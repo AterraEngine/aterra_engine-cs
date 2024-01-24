@@ -6,6 +6,7 @@ namespace AterraEngine.Interfaces.Atlases;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class ITextureAtlas {
-    
+
+public interface IGlobalAssetAtlas : IAssetAtlas {
+    public bool TryAddDataFromPluginAtlas(IPluginAssetAtlas pluginAssetAtlas);
 }

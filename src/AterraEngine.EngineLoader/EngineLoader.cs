@@ -61,28 +61,27 @@ public class EngineLoader<TEngine>(string? pathToEngineConfig = null) : IEngineL
         // These three atlases are the based services which have to be defined at all times.
         _serviceCollection.AddSingleton<IAssetAtlas, AssetAtlas>();
         _serviceCollection.AddSingleton<IPluginAtlas, PluginAtlas>();
-        _serviceCollection.AddSingleton<ITextureAtlas, TextureAtlas>();
+        _serviceCollection.AddSingleton<ITexture2DAtlas, Texture2DAtlas>();
         
         _serviceCollection.AddSingleton<IWorldSpace2D, WorldSpace2D>();
-        _serviceCollection.AddSingleton<IEngine, TEngine>();
-
+        _serviceCollection.AddSingleton<IEngine, TEngine>(); // magic
     }
     
     private void InitRaylib() {
+        
+        Raylib.SetConfigFlags(ConfigFlags.Msaa4xHint);
+        Raylib.SetConfigFlags(ConfigFlags.ResizableWindow);
         
         Raylib.InitWindow(
             _engineConfig.RaylibConfig.Window.Screen.Width, 
             _engineConfig.RaylibConfig.Window.Screen.Height, 
             _engineConfig.RaylibConfig.Window.Title
         );
+
+        if (_engineConfig.RaylibConfig.Window.Icon == string.Empty) return;
         
-        Raylib.SetConfigFlags(ConfigFlags.Msaa4xHint);
-        Raylib.SetConfigFlags(ConfigFlags.ResizableWindow);
-        
-        if (_engineConfig.RaylibConfig.Window.Icon != string.Empty) {
-            Image iconImage = Raylib.LoadImage(_engineConfig.RaylibConfig.Window.Icon);
-            Raylib.SetWindowIcon(iconImage);
-            Raylib.UnloadImage(iconImage);
-        }
+        Image iconImage = Raylib.LoadImage(_engineConfig.RaylibConfig.Window.Icon);
+        Raylib.SetWindowIcon(iconImage);
+        Raylib.UnloadImage(iconImage);
     }
 }

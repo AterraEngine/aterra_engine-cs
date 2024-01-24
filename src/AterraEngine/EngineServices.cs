@@ -15,6 +15,7 @@ namespace AterraEngine;
 /// </summary>
 public static class EngineServices {
     private static ServiceProvider _serviceProvider = null!;
+    public static ServiceProvider ServiceProvider => _serviceProvider;
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods  
@@ -44,8 +45,7 @@ public static class EngineServices {
     // Quick Call Methods  
     // -----------------------------------------------------------------------------------------------------------------
     public static IAssetAtlas GetAssetAtlas() => _serviceProvider.GetRequiredService<IAssetAtlas>();
-    public static IPluginAtlas GetPluginAtlas() => _serviceProvider.GetRequiredService<IPluginAtlas>();
-    public static ITextureAtlas GetTextureAtlas() => _serviceProvider.GetRequiredService<ITextureAtlas>();
+    public static ITexture2DAtlas GetTextureAtlas() => _serviceProvider.GetRequiredService<ITexture2DAtlas>();
     public static IWorldSpace2D GetWorldSpace2D() => _serviceProvider.GetRequiredService<IWorldSpace2D>();
     public static IEngine GetEngine() => _serviceProvider.GetRequiredService<IEngine>();
 }

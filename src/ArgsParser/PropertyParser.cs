@@ -61,7 +61,7 @@ public class PropertyParser<T> where T:new() {
     /// </returns>
     public IEnumerable<string> GetDescriptionsReadable() {
         return GetDescriptions()
-            .Select(v => $"-{v?.ShortName,-5} --{v?.LongName,-8} : {v?.Description ?? "UNKNOWN DESCRIPTION"}");
+            .Select(v => $"-{v?.ShortName,-3} --{v?.LongName,-8} : {v?.Description ?? "UNKNOWN DESCRIPTION"}");
     }
 
     /// <summary>

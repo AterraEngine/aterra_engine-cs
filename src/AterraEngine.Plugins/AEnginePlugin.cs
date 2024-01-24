@@ -3,19 +3,23 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.Interfaces.Atlases;
 using AterraEngine.Interfaces.Plugin;
-using AterraEngine.Plugins;
-
-using EnginePlugin_Test.Data;
-namespace EnginePlugin_Test;
+using AterraEngine.Types;
+namespace AterraEngine.Plugins;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class Plugin : AEnginePlugin {
-    public override string NameReadable => "Test Plugin";
+public abstract class AEnginePlugin : IEnginePlugin {
+    public PluginId IdPrefix { get; private set; }
+    public abstract string NameReadable { get; }
     
-    public override IEnginePluginServices PluginServices() => new PluginServices();
-    public override IEnginePluginTextures PluginTextures(ITexture2DAtlas texture2DAtlas) => new PluginTextures(texture2DAtlas);
-    public override IEnginePluginAssets   PluginAssets(IAssetAtlas assetAtlas) => new PluginAssets(assetAtlas).DefineConfig(IdPrefix);
+    public IEnginePlugin DefineConfig(PluginId id) {
+        IdPrefix = id;
+        return this;
+    }
+    
+    public abstract IEnginePluginServices PluginServices();
+    public abstract IEnginePluginTextures PluginTextures(ITexture2DAtlas texture2DAtlas);
+    public abstract IEnginePluginAssets   PluginAssets(IAssetAtlas assetAtlas);
     
 }

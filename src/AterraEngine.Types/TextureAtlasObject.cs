@@ -1,19 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Diagnostics.CodeAnalysis;
-using AterraEngine.Interfaces.Actors;
-using AterraEngine.Types;
-namespace AterraEngine.Interfaces.Atlases;
+using Raylib_cs;
+
+namespace AterraEngine.Types;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IAssetAtlas {
-
-    public bool TryGetAsset(EngineAssetId assetId, [MaybeNullWhen(false)] out IAsset asset);
-    public bool TryGetAsset<T>(EngineAssetId assetId, [MaybeNullWhen(false)] out T asset) where T : IAsset?;
-    
-    public bool TryRegisterAsset(IAsset asset);
-
+public class TextureAtlasObject(string filepath) { // YES THIS IS A CLASS, because it is supposed to be a reference type
+    public bool IsLoaded { get; set; }
+    public string FilePath { get; private set; } = filepath;
+    public Texture2D? Texture { get; set; }
 }

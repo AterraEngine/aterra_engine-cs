@@ -1,8 +1,8 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraEngine.Interfaces.Atlases;
 using AterraEngine.Types;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace AterraEngine.Interfaces.Plugin;
 
@@ -11,11 +11,11 @@ namespace AterraEngine.Interfaces.Plugin;
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IEnginePlugin {
     public PluginId IdPrefix { get;}
-    public string NameInternal { get;}
     public string NameReadable { get;}
+
+    public IEnginePlugin DefineConfig(PluginId id);
     
-    public IEnginePlugin DefineConfig(PluginId idPrefix);
-    public void DefineServices(IServiceCollection serviceCollection);
-    public void DefineTextures(); // static data (like sprites....)
-    public void DefineAssets(); // static data (like sprites....)
+    public IEnginePluginServices PluginServices();
+    public IEnginePluginTextures PluginTextures(ITexture2DAtlas texture2DAtlas);
+    public IEnginePluginAssets   PluginAssets(IAssetAtlas assetAtlas) ;
 }

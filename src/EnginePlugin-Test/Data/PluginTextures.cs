@@ -1,19 +1,18 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Numerics;
-using AterraEngine_lib.structs;
-using AterraEngine.Assets;
-using AterraEngine.Draw;
-using AterraEngine.Interfaces.Component;
-using AterraEngine.Interfaces.Draw;
-using AterraEngine.Services;
-using Raylib_cs;
+using AterraEngine.Interfaces.Atlases;
+using AterraEngine.Interfaces.Plugin;
+using AterraEngine.Plugins;
+using EnginePlugin_Test.Data.Textures;
 
-namespace AterraEngine.Component;
+namespace EnginePlugin_Test.Data;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class Actor2DComponent : Asset, IActor2DComponent {
+public class PluginTextures(ITexture2DAtlas texture2DAtlas) : AEnginePluginTextures(texture2DAtlas) {
+    public override void Define() {
+        Texture2DAtlas.TryRegisterTexture(TextureIds.DuckyTest);
+    }
 }

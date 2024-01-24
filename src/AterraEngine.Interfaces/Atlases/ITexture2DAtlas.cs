@@ -1,19 +1,21 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Diagnostics.CodeAnalysis;
-using AterraEngine.Interfaces.Actors;
+using System.Collections.ObjectModel;
 using AterraEngine.Types;
+using Raylib_cs;
+
 namespace AterraEngine.Interfaces.Atlases;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IAssetAtlas {
+public interface ITexture2DAtlas {
+    public ReadOnlyDictionary<string, TextureAtlasObject> TextureAtlasObjects { get; }
 
-    public bool TryGetAsset(EngineAssetId assetId, [MaybeNullWhen(false)] out IAsset asset);
-    public bool TryGetAsset<T>(EngineAssetId assetId, [MaybeNullWhen(false)] out T asset) where T : IAsset?;
+    public bool TryRegisterTexture(TextureId id);   // allows the texture to be used later
+    public bool TryLoadTexture(TextureId id);       // Loads the texture into VRAM
+    public bool TryGetTexture(TextureId id, out Texture2D? texture2D);
+    public bool TryUnLoadTexture(TextureId id);     // Unloads the texture from VRAM
     
-    public bool TryRegisterAsset(IAsset asset);
-
 }
