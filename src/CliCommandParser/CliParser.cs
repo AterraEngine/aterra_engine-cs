@@ -26,6 +26,12 @@ public class CliParser : ICliParser {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
+    public ICliParser RegisterFromCliAtlas<T>(IEnumerable<T> cliCommandAtlas, bool force = false) where T : ICliCommandAtlas {
+        foreach (var atlas in cliCommandAtlas) {
+            RegisterFromCliAtlas(atlas);
+        }
+        return this;
+    }
     public ICliParser RegisterFromCliAtlas<T>(T cliCommandAtlas, bool force = false) where T:ICliCommandAtlas{
         var methods = typeof(T).GetMethods(BindingFlags.Public | BindingFlags.Instance);
 
