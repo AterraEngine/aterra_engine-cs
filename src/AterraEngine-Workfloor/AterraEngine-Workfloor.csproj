@@ -10,7 +10,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Ansi\Ansi.csproj" />
-      <ProjectReference Include="..\ArgsParser\ArgsParser.csproj" />
+      <ProjectReference Include="..\CliCommandParser\CliCommandParser.csproj" />
       <ProjectReference Include="..\AterraEngine.EngineLoader\AterraEngine.EngineLoader.csproj" />
       <ProjectReference Include="..\AterraEngine.Interfaces\AterraEngine.Interfaces.csproj" />
       <ProjectReference Include="..\AterraEngine.Paths\AterraEngine.Paths.csproj" />

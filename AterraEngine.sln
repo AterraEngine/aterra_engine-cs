@@ -18,7 +18,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Interfaces", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ansi", "src\Ansi\Ansi.csproj", "{9C8CA02A-28DA-410A-8ADA-A39B3F6A227B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArgsParser", "src\ArgsParser\ArgsParser.csproj", "{AF334F7B-7918-497A-9B70-553990AA3503}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CliCommandParser", "src\CliCommandParser\CliCommandParser.csproj", "{AF334F7B-7918-497A-9B70-553990AA3503}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnginePlugin-Test", "src\EnginePlugin-Test\EnginePlugin-Test.csproj", "{BEEE9360-F0D3-4B83-83A4-EE3A6501A762}"
 EndProject
