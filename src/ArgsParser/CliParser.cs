@@ -26,7 +26,7 @@ public class CliParser {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void RegisterCli<T>(T cliCommandAtlas, bool force = false) where T:ICliCommandAtlas{
+    public CliParser RegisterCli<T>(T cliCommandAtlas, bool force = false) where T:ICliCommandAtlas{
         var methods = typeof(T).GetMethods(BindingFlags.Public | BindingFlags.Instance);
 
         foreach (var methodInfo in methods) {
@@ -61,6 +61,9 @@ public class CliParser {
                 throw new Exception(errorText);
             }
         }
+
+        // added for easy chaining
+        return this;
     }
 
     public bool TryParse(string[] args) {
@@ -70,7 +73,7 @@ public class CliParser {
     }
     
     // TODO test this out
-    public void ImportFromDlLs(IEnumerable<string> filePaths) {
+    public CliParser ImportFromDlLs(IEnumerable<string> filePaths) {
         foreach (var filePath in filePaths) {
             Assembly assembly = Assembly.LoadFrom(filePath);
 
@@ -89,8 +92,14 @@ public class CliParser {
                 RegisterCli(cliCommandAtlas);
             }
         }
+
+        // added for easy chaining
+        return this;
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
+    // Default Command(s)
+    // -----------------------------------------------------------------------------------------------------------------
     public void HelpCommand(string[] _) {
         int maxCommandNameLength = Math.Max(
             Descriptions.Keys.Select(k => k.Length).Max(), 

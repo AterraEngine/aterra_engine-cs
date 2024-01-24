@@ -26,7 +26,7 @@ public class CliCommandsAtlas : CliCommandAtlas {
 
     [CliCommand<ArgOptions>("test")]
     public void CallbackHelp(ArgOptions argOptions) {
-        Console.WriteLine("HELP");
+        
     }
 
     [CliCommand<ArgOptions>("beta")]
@@ -39,28 +39,13 @@ public class CliCommandsAtlas : CliCommandAtlas {
 // ReSharper disable once UnusedType.Global
 static class Program {
     public static void Main(string[] args) {
-        var cliParser = new CliParser();
-        cliParser.RegisterCli(new CliCommandsAtlas());
+        new CliParser()
+            .RegisterCli(new CliCommandsAtlas())
+            .TryParse(args);
         
-        cliParser.TryParse(args);
-        
-        // var cli = new CliParser();
-        // cli.TryAddCommand("", new ParameterParser<ArgOptions>());
-        //
-        // var propertyParser = new ParameterParser<ArgOptions>();
-        // ArgOptions argOptions = propertyParser.Parse(args);
-        //
-        // if (argOptions.ShowHelp) {
-        //     foreach (var helpDescription in propertyParser.GetDescriptionsReadable()) {
-        //         Console.WriteLine(helpDescription);
-        //     }
-        // } 
-        //
-        // Console.WriteLine(argOptions.Something);
-        //
-        // var engineLoader = new EngineLoader<Engine2D>();
-        // var engine = engineLoader.CreateEngine();
-        // engine.Run();
+        var engineLoader = new EngineLoader<Engine2D>();
+        var engine = engineLoader.CreateEngine();
+        engine.Run();
     }
 }
 
