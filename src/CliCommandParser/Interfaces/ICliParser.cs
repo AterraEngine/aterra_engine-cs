@@ -7,8 +7,8 @@ namespace ArgsParser.Interfaces;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface ICliParser {
-    ICliParser RegisterCli<T>(T cliCommandAtlas, bool force = false) where T : ICliCommandAtlas;
-    ICliParser ImportFromDlLs(IEnumerable<string> filePaths);
+    ICliParser RegisterFromCliAtlas<T>(T cliCommandAtlas, bool force = false) where T : ICliCommandAtlas;
+    ICliParser RegisterFromDlLs(IEnumerable<string> filePaths);
 
     bool TryParse(string[] args);
     

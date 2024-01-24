@@ -26,7 +26,7 @@ public class CliParser : ICliParser {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public ICliParser RegisterCli<T>(T cliCommandAtlas, bool force = false) where T:ICliCommandAtlas{
+    public ICliParser RegisterFromCliAtlas<T>(T cliCommandAtlas, bool force = false) where T:ICliCommandAtlas{
         var methods = typeof(T).GetMethods(BindingFlags.Public | BindingFlags.Instance);
 
         foreach (var methodInfo in methods) {
@@ -73,7 +73,7 @@ public class CliParser : ICliParser {
     }
     
     // TODO test this out
-    public ICliParser ImportFromDlLs(IEnumerable<string> filePaths) {
+    public ICliParser RegisterFromDlLs(IEnumerable<string> filePaths) {
         foreach (var filePath in filePaths) {
             Assembly assembly = Assembly.LoadFrom(filePath);
 
@@ -89,7 +89,7 @@ public class CliParser : ICliParser {
                     throw new Exception($"Command atlas '{objectType}' could not be imported from : '{filePath}'");
                 }
 
-                RegisterCli(cliCommandAtlas);
+                RegisterFromCliAtlas(cliCommandAtlas);
             }
         }
 

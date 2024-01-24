@@ -39,8 +39,12 @@ public class CliCommandsAtlas : CliCommandAtlas {
 // ReSharper disable once UnusedType.Global
 static class Program {
     public static void Main(string[] args) {
+        const  string cliPluginsFolder = @"resources/cli-plugins";
+
+        
         new CliParser()
-            .RegisterCli(new CliCommandsAtlas())
+            .RegisterFromCliAtlas(new CliCommandsAtlas())
+            .RegisterFromDlLs(Directory.GetFiles(cliPluginsFolder, "*.dll"))
             .TryParse(args);
         
         var engineLoader = new EngineLoader<Engine2D>();
