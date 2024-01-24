@@ -1,7 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace ArgsParser;
+namespace ArgsParser.Attributes;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
@@ -9,7 +9,7 @@ namespace ArgsParser;
 /// <summary>
 /// Represents an attribute used to specify the arguments for a parser.
 /// </summary>
-public class ArgsParserAttribute(char shortName, string longName, string? description) : Attribute {
+public abstract class ArgsParserAttribute(char shortName, string longName, string? description) : Attribute {
     /// <summary>
     /// Gets the short name of the property.
     /// </summary>

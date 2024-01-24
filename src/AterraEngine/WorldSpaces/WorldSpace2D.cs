@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Numerics;
 using AterraEngine.Interfaces.Actors;
+using AterraEngine.Interfaces.Atlases;
 using AterraEngine.Interfaces.WorldSpaces;
 using AterraEngine.Types;
 using Raylib_cs;
@@ -45,12 +46,13 @@ public class WorldSpace2D : IWorldSpace2D {
                 Y = Raylib.GetScreenHeight() / 2f
             },
             Rotation = 0.0f,
-            Zoom = 0.5f
+            Zoom = 0.1f
         };
         UpdateCamera();
         
         // THis should eventually be tied to the LEVEL
-        EngineServices.GetAssetAtlas().TryGetAsset(Player2DId, out IPlayer2D? player2D);
+        IAssetAtlas assetAtlas = EngineServices.GetAssetAtlas();
+        assetAtlas.TryGetAsset(Player2DId, out IPlayer2D? player2D);
         Player2D = player2D!;
         
         var textureAtlas = EngineServices.GetTextureAtlas();
@@ -59,6 +61,16 @@ public class WorldSpace2D : IWorldSpace2D {
         textureAtlas.TryGetTexture(Player2D.Sprite.TextureId, out var spriteTexture);
         
         Player2D.Sprite.Texture = spriteTexture!;
+
+        assetAtlas.TryGetAsset(new EngineAssetId(new PluginId(0), 16), out IAsset? asset);
+        var level = (ILevel)asset!;
+        
+        level.Actors.ToList().ForEach(actor => {
+            textureAtlas.TryLoadTexture(actor.Sprite.TextureId);
+            textureAtlas.TryGetTexture(actor.Sprite.TextureId, out var texture2D);
+            actor.Sprite.Texture = texture2D;
+        });
+        
     }
     
     public void UpdateFrame() {
@@ -75,10 +87,13 @@ public class WorldSpace2D : IWorldSpace2D {
     public void RenderFrameWorld() {
         Raylib.BeginMode2D(_camera);
         
-        Console.WriteLine((_camera.Target, _camera.Offset));
-        
         Player2D.Draw(WorldToScreenSpace);
         Player2D.DrawDebug(WorldToScreenSpace);
+        
+        IAssetAtlas assetAtlas = EngineServices.GetAssetAtlas();
+        assetAtlas.TryGetAsset(new EngineAssetId(new PluginId(0), 16), out IAsset? asset);
+        var level = (ILevel)asset!;
+        level.Actors.ToList().ForEach(actor => actor.Draw(WorldToScreenSpace));
 
         Raylib.EndMode2D();
     }
@@ -91,17 +106,14 @@ public class WorldSpace2D : IWorldSpace2D {
         const float lerpSpeed = 0.01f;
         const float minEffectLength = 500f;
 
-        Vector2 playerScreenSpace = Player2D.Pos * WorldToScreenSpace;
+        Vector2 playerScreenSpace = Player2D.Pos * WorldToScreenSpace; //TARGET IS IN SCREEN SPACE! so make the calculations!
         float length = Vector2Length(Vector2Subtract(playerScreenSpace, _camera.Target));
         
         if (!(length > minEffectLength)) return;
         
         // Smoothly interpolate the camera's target position.
-        _camera.Target = Vector2.Lerp(_camera.Target, playerScreenSpace, lerpSpeed) ; //TARGET IS IN SCREEN SPACE!
-        // _camera.Offset = new Vector2 {
-        //     X = width / 2f,
-        //     Y = height / 2f
-        // };
+        _camera.Target = Vector2.Lerp(_camera.Target, playerScreenSpace, DeltaTime) ; //TARGET IS IN SCREEN SPACE!
+        
     }
 
 }

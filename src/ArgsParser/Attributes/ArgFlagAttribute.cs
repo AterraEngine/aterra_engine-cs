@@ -1,14 +1,11 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace ArgsParser;
+namespace ArgsParser.Attributes;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-/// <summary>
-/// Represents an attribute used for specifying an argument value.
-/// </summary>
 [AttributeUsage(AttributeTargets.Property)]
-public abstract class ArgValueAttribute(char shortName, string longName, string? description = null) 
+public class ArgFlagAttribute(char shortName, string longName, string? description = null)
     : ArgsParserAttribute(shortName, longName, description);

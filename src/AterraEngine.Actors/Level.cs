@@ -1,12 +1,19 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace ArgsParser;
+using AterraEngine.Interfaces.Actors;
+using AterraEngine.Types;
+
+namespace AterraEngine.Actors;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-/// Represents an attribute that is used to define an argument flag for the ArgsParser class.
-/// /
-[AttributeUsage(AttributeTargets.Property)]
-public class ArgFlagAttribute(char shortName, string longName, string? description = null) : ArgsParserAttribute(shortName, longName, description);
+public class Level : ILevel {
+    public EngineAssetId Id { get; init;  }
+    public string? InternalName { get; init; }
+    public IActor[] Actors { get; init; }
+    
+    
+    
+}

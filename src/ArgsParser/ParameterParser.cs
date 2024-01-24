@@ -2,6 +2,8 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Reflection;
+using ArgsParser.Attributes;
+using ArgsParser.Interfaces;
 
 namespace ArgsParser;
 
@@ -12,7 +14,7 @@ namespace ArgsParser;
 /// A generic class for parsing command-line arguments and populating a property object.
 /// </summary>
 /// <typeparam name="T">The type of the property object to be populated.</typeparam>
-public class PropertyParser<T> where T:new() {
+public class ParameterParser<T> where T: IParameterOptions, new() {
     // Dictionaries needed to optimize access to the attributes.
     //      Go over and store them once, instead of on every argument like we did before.
     //      Maybe a bit overkill, but might be a good idea in the long run.
@@ -34,7 +36,7 @@ public class PropertyParser<T> where T:new() {
     /// <summary>
     /// Initializes a new instance of the PropertyParser class.
     /// </summary>
-    public PropertyParser() {
+    public ParameterParser() {
         foreach (var prop in _propertyInfos)
         {
             var optionAttr = prop.GetCustomAttribute<ArgValueAttribute>();
