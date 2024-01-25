@@ -73,9 +73,41 @@ public class CliParser : ICliParser {
         return this;
     }
 
-    public bool TryParse(string[] args) {
-        if (!_flagToActionMap.TryGetValue(args[0].ToLower(), out var action)) return false;
-        action(args[1..]); // Strip out the command and keep the arguments
+    public bool TryParse(IEnumerable<string> args, bool parseMutliple) {
+        if (!parseMutliple) {
+            return TryParse(args);
+        }
+        
+        List<List<string>> resultLists = [];
+        int startIndex = 0;
+        var enumerable = args as List<string> ?? args.ToList();
+        var length = enumerable.Count;
+
+        for (int i = 0; i < length; i++) {
+            if (!enumerable[i].Equals("&&")) continue;
+            
+            // Add the sublist from startIndex to i to the resultLists
+            resultLists.Add(enumerable.GetRange(startIndex, i - startIndex));
+            startIndex = i + 1;
+        }
+
+        // Add the last sublist if there's any remaining elements
+        if (startIndex < length) {
+            resultLists.Add(enumerable.GetRange(startIndex, length - startIndex));
+        }
+
+        foreach (var argsSplit in resultLists) {
+            TryParse(argsSplit);
+        }
+
+        return true;
+    }
+    
+    public bool TryParse(IEnumerable<string> args) {
+        var enumerable = args as string[] ?? args.ToArray();
+        
+        if (!_flagToActionMap.TryGetValue(enumerable[0].ToLower(), out var action)) return false;
+        action(enumerable[1..]); // Strip out the command and keep the arguments
         return true;
     }
     

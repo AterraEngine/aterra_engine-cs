@@ -2,19 +2,13 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using ArgsParser;
-using AterraEngine_Workfloor.CliCommands;
+using ArgsParser.Attributes;
 
-namespace AterraEngine_Workfloor;
+namespace AterraEngine_Workfloor.CliCommands;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-static class Program {
-    public static void Main(string[] args) {
-        const  string cliPluginsFolder = @"resources/cli-plugins";
-        
-        new CliParser()
-            .RegisterFromCliAtlas(new AterraEngineCommands())
-            .RegisterFromDlLs(Directory.GetFiles(cliPluginsFolder, "*.dll"))
-            .TryParse(args);
-    }
+public class AterraEngineArgOptions : ParameterOptions {
+    [ArgValue('c', "config")]  public string EngineConfig { get; set; } = "resources/engine_config-example.xml";
 }
