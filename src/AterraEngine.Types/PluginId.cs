@@ -52,4 +52,17 @@ public struct PluginId : IComparable<PluginId>, IEqualityComparer<PluginId> {
     public int GetHashCode(PluginId obj) {
         return obj.Id;
     }
+    public bool Equals(PluginId other) {
+        return Id == other.Id;
+    }
+
+    public override bool Equals(object? obj) {
+        return obj is PluginId other && Equals(other);
+    }
+
+    public override int GetHashCode() {
+        return Id;
+    }
+
+    
 }

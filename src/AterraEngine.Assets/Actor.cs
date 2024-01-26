@@ -70,7 +70,7 @@ public class Actor : Asset, IActor {
     }
 
     public override void Draw(Vector2 worldToScreenSpace) {
-        Sprite.Draw(Pos, Rotation, OriginRelative, Size, worldToScreenSpace);
+        Sprite.Draw(Pos, Rotation, OriginRelative, Size, ref worldToScreenSpace);
     }
 
     public override void DrawDebug(Vector2 worldToScreenSpace) {

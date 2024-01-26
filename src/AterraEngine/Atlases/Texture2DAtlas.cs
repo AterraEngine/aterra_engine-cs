@@ -20,7 +20,7 @@ public class Texture2DAtlas : ITexture2DAtlas {
     }
     
     public bool TryLoadTexture(TextureId id) {
-        if (!_textureAtlasObjects.TryGetValue(id.name, out var value)) return false;
+        if (!_textureAtlasObjects.TryGetValue(id.name, out var value) || value.IsLoaded) return false;
         value.IsLoaded = true;
         value.Texture = Raylib.LoadTexture(value.FilePath);
         

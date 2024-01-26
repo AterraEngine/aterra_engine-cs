@@ -19,18 +19,26 @@ public class Sprite : ISprite {
     
     public Color Tint { get; set; } = Color.White;
 
-    public void Draw(Vector2 pos, float rot, Vector2 origin, Vector2 size, Vector2 worldToScreenSpace){
-        var scaledOrigin = origin * worldToScreenSpace;
-        var screenPos = pos * worldToScreenSpace;
-        
+    public void Draw(Vector2 pos, float rot, Vector2 origin, Vector2 size, ref Vector2 worldToScreenSpace){
         Raylib.DrawTexturePro(
-            (Texture2D)Texture!,
+            Texture ?? default,
             SelectionBox,
-            new Rectangle(screenPos.X, screenPos.Y, size.X * worldToScreenSpace.X, size.Y * worldToScreenSpace.Y),
-            scaledOrigin, // we use the scaledOrigin here.
+            new Rectangle((pos * worldToScreenSpace).X, 
+                (pos * worldToScreenSpace).Y, 
+                (size * worldToScreenSpace).X, 
+                (size * worldToScreenSpace).Y),
+            origin * worldToScreenSpace, 
             rot,
             Tint
         );
+
+        // Raylib.DrawTexture(
+        //     Texture ?? default,
+        //     (int)(pos * worldToScreenSpace).X,
+        //     (int)(pos * worldToScreenSpace).Y,
+        //     Tint
+        //     
+        // );
     }
     
     public void DrawDebug(Vector2 pos, float rot, Vector2 origin, Vector2 size, Rectangle box, Vector2 worldToScreenSpace){

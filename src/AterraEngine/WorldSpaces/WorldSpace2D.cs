@@ -56,6 +56,7 @@ public class WorldSpace2D : IWorldSpace2D {
         IAssetAtlas assetAtlas = EngineServices.GetAssetAtlas();
         assetAtlas.TryGetAsset(StartupLevelId, out ILevel? level);
         LoadedLevel = level!;
+        
         LoadedLevel.Load(Player2DId, out IPlayer2D player2D);
         Player2D = player2D;
 
@@ -86,6 +87,10 @@ public class WorldSpace2D : IWorldSpace2D {
     
     public void RenderFrameUi() {
         // Console.WriteLine(Camera.Target);
+
+        var fps = Raylib.GetFPS();
+        Raylib.DrawText($"{fps}", 20,20,20, Color.Black) ;
+
     }
 
     private void UpdateCameraCenterSmoothFollow() {

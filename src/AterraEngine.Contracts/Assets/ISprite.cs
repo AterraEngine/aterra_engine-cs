@@ -23,7 +23,7 @@ public interface ISprite {
     /// <param name="pos"></param>
     /// <param name="rot">The rotation angle, in radians.</param>
     /// <param name="origin">The origin point for rotation and scaling.</param>
-    public void Draw(Vector2 pos, float rot, Vector2 origin, Vector2 size, Vector2 worldToScreenSpace);
+    public void Draw(Vector2 pos, float rot, Vector2 origin, Vector2 size, ref Vector2 worldToScreenSpace);
 
     /// <summary>
     /// Draws a debug representation of a box with a rotation.

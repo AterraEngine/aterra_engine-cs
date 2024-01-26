@@ -16,7 +16,7 @@ namespace AterraEngine.Assets;
 public class Level2D(IAssetAtlas assetAtlas, ITexture2DAtlas texture2DAtlas) : ILevel {
     public EngineAssetId Id { get; private set;  }
     public string? InternalName { get; private set; }
-    public List<IActor> Actors { get;  } = [];
+    public List<IAssetNode> Assets { get; private set; } = [];
     public Color BufferBackground { get; private set; } = Color.Pink;
     
     // -----------------------------------------------------------------------------------------------------------------
@@ -25,7 +25,7 @@ public class Level2D(IAssetAtlas assetAtlas, ITexture2DAtlas texture2DAtlas) : I
     public void PopulateFromDto(LevelDto levelDto) {
         Id = levelDto.Id;
         InternalName = levelDto.InternalName;
-        // Actor is populated differently
+        // Assets = new AssetNode();
         BufferBackground = levelDto.BufferBackground ?? Color.Pink;
     }
     
@@ -44,19 +44,32 @@ public class Level2D(IAssetAtlas assetAtlas, ITexture2DAtlas texture2DAtlas) : I
         
         player2D.Sprite.Texture = spriteTexture!;
         
-        Actors.ToList().ForEach(actor => {
+        GetActors().ToList().ForEach(actor => {
             texture2DAtlas.TryLoadTexture(actor.Sprite.TextureId);
             texture2DAtlas.TryGetTexture(actor.Sprite.TextureId, out var texture2D);
             actor.Sprite.Texture = texture2D;
         });
     }
-    
+
     public void Draw(Vector2 worldToScreenSpace) {
-        Actors.ForEach(actor => actor.Draw(worldToScreenSpace));
+        foreach (var asset in GetDrawable()) {
+            asset.Draw(worldToScreenSpace);
+        }
     }
 
     public void DrawDebug(Vector2 worldToScreenSpace) {
-        Actors.ForEach(actor => actor.DrawDebug(worldToScreenSpace));
+        foreach (var asset in GetDrawable()) {
+            asset.DrawDebug(worldToScreenSpace);
+        }
+    }
+
+    // Call these methods once, and then only on assets is changed
+    private IEnumerable<IDrawableComponent> GetDrawable() {
+        return Assets.SelectMany(a => a.CachedFlat).OfType<IDrawableComponent>();
+    }
+
+    private IEnumerable<IActor> GetActors() {
+        return Assets.SelectMany(a => a.Flat()).OfType<IActor>();
     }
     
 }
