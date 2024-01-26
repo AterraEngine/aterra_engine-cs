@@ -1,17 +1,14 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.Plugin;
+using AterraEngine.Types;
 
-using EnginePlugin_Test.Data;
-namespace EnginePlugin_Test;
+namespace AterraEngine.Contracts.Actors;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class Plugin: AEnginePlugin {
-    public override string NameReadable => "Test Plugin";
-    
-    public override Type PluginTextures => typeof(PluginTextures);
-    public override Type PluginAssets => typeof(PluginAssets);
+public interface IPlayer2D : IActor {
+    public Dictionary<KeyboardInput, Action<float>> KeyMapping { get; set; }
+    public void LoadKeyMapping(float deltaTime);
 }

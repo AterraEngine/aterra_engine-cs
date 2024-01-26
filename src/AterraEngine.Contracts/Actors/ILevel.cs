@@ -1,17 +1,19 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.Plugin;
+using AterraEngine.Contracts.Atlases;
+using AterraEngine.Types;
+using Raylib_cs;
 
-using EnginePlugin_Test.Data;
-namespace EnginePlugin_Test;
+namespace AterraEngine.Contracts.Actors;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class Plugin: AEnginePlugin {
-    public override string NameReadable => "Test Plugin";
-    
-    public override Type PluginTextures => typeof(PluginTextures);
-    public override Type PluginAssets => typeof(PluginAssets);
+public interface ILevel : IAsset, IDrawableComponent {
+    public List<IActor> Actors { get; init; }
+    public Color BufferBackground { get; init; }
+
+    public void Unload();
+    public void Load(EngineAssetId player2DId, IAssetAtlas assetAtlas, out IPlayer2D player2D);
 }

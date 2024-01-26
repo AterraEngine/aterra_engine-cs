@@ -1,9 +1,10 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
-using AterraEngine.Interfaces.Actors;
-using AterraEngine.Interfaces.Atlases;
+using AterraEngine.Contracts.Actors;
+using AterraEngine.Contracts.Atlases;
 using AterraEngine.Types;
 
 namespace AterraEngine.Atlases;
@@ -27,5 +28,21 @@ public class AssetAtlas: IAssetAtlas {
 
     public bool TryRegisterAsset(IAsset asset) {
         return _dictionary.TryAdd(asset.Id, asset);
+    }
+
+    public IReadOnlyDictionary<EngineAssetId, ILevel> GetAllLevels() {
+        return _dictionary
+            .Where(pair => pair.Value is ILevel)
+            .ToImmutableDictionary(pair => pair.Key, pair => (ILevel)pair.Value);
+    }
+    
+    public bool TryGetLevel<T>(EngineAssetId assetId, [NotNullWhen(true)] out T? asset) where T : ILevel {
+        if (GetAllLevels().TryGetValue(assetId, out ILevel? tempAsset) && tempAsset is T value) {
+            asset = value;
+            return true;
+        }
+
+        asset = default;
+        return false;
     }
 }

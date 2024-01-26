@@ -1,9 +1,9 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Interfaces.Engine;
-using AterraEngine.Interfaces.EngineLoader.Config;
-using AterraEngine.Interfaces.WorldSpaces;
+using AterraEngine.Contracts.Engine;
+using AterraEngine.Contracts.EngineFactory.Config;
+using AterraEngine.Contracts.WorldSpaces;
 using Raylib_cs;
 
 namespace AterraEngine;
@@ -12,12 +12,12 @@ namespace AterraEngine;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class Engine2D(IWorldSpace2D worldSpace2D) : IEngine{
-    public IEngineConfig EngineConfig { get; private set; } = null!;
+    public EngineConfigDto EngineConfig { get; private set; } = null!;
 
-    public void ConfigureFromLoader(IEngineConfig engineConfig) {
+    public void ConfigureFromLoader(EngineConfigDto engineConfig) {
         EngineConfig = engineConfig;
     }
-    
+
     public void Run() {
         // For data that has to be loaded before the main loop
         worldSpace2D.RunSetup();
@@ -28,8 +28,6 @@ public class Engine2D(IWorldSpace2D worldSpace2D) : IEngine{
             // --- End Logic Handling ---
             
             Raylib.BeginDrawing();
-            Raylib.ClearBackground(Color.Black);
-            
             // Begin 2D drawing mode (camera)
             // Console.WriteLine(worldSpace2D.Camera.Target);
             

@@ -1,17 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.Plugin;
-
-using EnginePlugin_Test.Data;
-namespace EnginePlugin_Test;
+namespace AterraEngine.Contracts.EngineFactory.Config;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class Plugin: AEnginePlugin {
-    public override string NameReadable => "Test Plugin";
+public interface IEngineConfigFactory<T> where T : EngineConfigDto {
+    public bool TryLoadConfigFile(string filePath, out T? engineConfig);
+    public bool TrySaveConfig(T config,string outputPath);
     
-    public override Type PluginTextures => typeof(PluginTextures);
-    public override Type PluginAssets => typeof(PluginAssets);
 }

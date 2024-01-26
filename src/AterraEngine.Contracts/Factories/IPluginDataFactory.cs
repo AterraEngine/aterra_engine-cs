@@ -1,17 +1,20 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.Plugin;
+using AterraEngine.Types;
 
-using EnginePlugin_Test.Data;
-namespace EnginePlugin_Test;
+namespace AterraEngine.Contracts.Factories;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class Plugin: AEnginePlugin {
-    public override string NameReadable => "Test Plugin";
+public interface IPluginDataFactory {
+    PluginId PluginId { get;}
+    void Define(PluginId pluginId);
     
-    public override Type PluginTextures => typeof(PluginTextures);
-    public override Type PluginAssets => typeof(PluginAssets);
+    void CreateData();
+    
+    public int LazyNextInternalId();
+    public EngineAssetId NewEngineAssetId();
+    public EngineAssetId NewEngineAssetId(int value);
 }

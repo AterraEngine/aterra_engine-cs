@@ -2,15 +2,18 @@
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
-        <RootNamespace>EnginePlugin_Test</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Ansi\Ansi.csproj" />
       <ProjectReference Include="..\AterraEngine.Contracts\AterraEngine.Contracts.csproj" />
+      <ProjectReference Include="..\AterraEngine.Paths\AterraEngine.Paths.csproj" />
       <ProjectReference Include="..\AterraEngine\AterraEngine.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Raylib-cs" Version="6.0.0" />
     </ItemGroup>
 
 </Project>

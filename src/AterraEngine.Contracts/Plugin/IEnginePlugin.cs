@@ -1,17 +1,22 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.Plugin;
+using AterraEngine.Contracts.Factories;
+using AterraEngine.Types;
+using Microsoft.Extensions.DependencyInjection;
 
-using EnginePlugin_Test.Data;
-namespace EnginePlugin_Test;
+namespace AterraEngine.Contracts.Plugin;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class Plugin: AEnginePlugin {
-    public override string NameReadable => "Test Plugin";
+public interface IEnginePlugin {
+    PluginId Id { get; }
+    string NameReadable { get;}
     
-    public override Type PluginTextures => typeof(PluginTextures);
-    public override Type PluginAssets => typeof(PluginAssets);
+    Type PluginTextures  { get; }
+    Type PluginAssets  { get; }
+
+    void Define(PluginId pluginId);
+    void DefineServices(IServiceCollection serviceCollection);
 }

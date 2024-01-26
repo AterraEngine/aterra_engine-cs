@@ -5,7 +5,7 @@
 using System.Numerics;
 using AterraEngine;
 using AterraEngine.Actors;
-using AterraEngine.Interfaces.Actors;
+using AterraEngine.Contracts.Actors;
 using AterraEngine.Types;
 using Raylib_cs;
 

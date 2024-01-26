@@ -4,14 +4,15 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <RootNamespace>AterraEngine.Contracts</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Raylib-cs" Version="6.0.0" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\AterraEngine.Contracts\AterraEngine.Contracts.csproj" />
+      <ProjectReference Include="..\AterraEngine.Types\AterraEngine.Types.csproj" />
     </ItemGroup>
 
 </Project>

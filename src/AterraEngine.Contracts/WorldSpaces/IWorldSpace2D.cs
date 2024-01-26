@@ -1,17 +1,25 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.Plugin;
+using AterraEngine.Contracts.Actors;
+using AterraEngine.Types;
+using Raylib_cs;
 
-using EnginePlugin_Test.Data;
-namespace EnginePlugin_Test;
+namespace AterraEngine.Contracts.WorldSpaces;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class Plugin: AEnginePlugin {
-    public override string NameReadable => "Test Plugin";
+public interface IWorldSpace2D {
+    Camera2D Camera { get; set; }
+    IPlayer2D Player2D { get; set; }
+    EngineAssetId Player2DId { get; set; }
+    float DeltaTime { get; }
+    ILevel? LoadedLevel { get; }
+    EngineAssetId StartupLevelId { get; set; }
     
-    public override Type PluginTextures => typeof(PluginTextures);
-    public override Type PluginAssets => typeof(PluginAssets);
+    void RunSetup();
+    void UpdateFrame();
+    void RenderFrameUi();
+    void RenderFrameWorld();
 }

@@ -1,17 +1,18 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.Plugin;
+using System.Numerics;
+using Raylib_cs;
 
-using EnginePlugin_Test.Data;
-namespace EnginePlugin_Test;
+namespace AterraEngine.Contracts.Actors;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class Plugin: AEnginePlugin {
-    public override string NameReadable => "Test Plugin";
-    
-    public override Type PluginTextures => typeof(PluginTextures);
-    public override Type PluginAssets => typeof(PluginAssets);
+public interface IActor : IAsset, IDrawableComponent{
+    public Vector2 Pos { get; set; }
+    public float Rotation { get; set; }
+    public Rectangle Box { get; set; }
+    public Vector2 Velocity { get; set; }
+    public ISprite Sprite { get; set; }
 }

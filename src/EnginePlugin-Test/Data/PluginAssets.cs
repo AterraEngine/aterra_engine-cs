@@ -3,9 +3,9 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine;
 using AterraEngine.Actors;
-using AterraEngine.Interfaces.Atlases;
-using AterraEngine.Interfaces.Plugin;
-using AterraEngine.Plugins;
+using AterraEngine.Contracts.Actors;
+using AterraEngine.Contracts.Atlases;
+using AterraEngine.Contracts.Factories;
 using AterraEngine.Types;
 using EnginePlugin_Test.Data.Textures;
 using Raylib_cs;
@@ -15,8 +15,8 @@ namespace EnginePlugin_Test.Data;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class PluginAssets(IAssetAtlas assetAtlas) : AEnginePluginAssets(assetAtlas) {
-    public override void Define() {
+public class PluginAssets(IAssetAtlas assetAtlas, ILevelFactory levelFactory) : APluginDataFactory {
+    public override void CreateData() {
         var worldSpace2D = EngineServices.GetWorldSpace2D();
         var player2d = new PlayerControllerLooking(NewEngineAssetId());
         worldSpace2D.Player2DId = player2d.Id;
@@ -27,21 +27,22 @@ public class PluginAssets(IAssetAtlas assetAtlas) : AEnginePluginAssets(assetAtl
         };
 
         player2d.Sprite = sprite;
-        AssetAtlas.TryRegisterAsset(player2d);
+        assetAtlas.TryRegisterAsset(player2d);
 
         var ducky = new Actor(NewEngineAssetId(), "ducky1");
         ducky.Sprite = new Sprite {
             TextureId = TextureIds.DuckyTest,
             SelectionBox = new Rectangle(0,0, 1024, 1024)
         };
-
-        var level = new Level {
-            Id = NewEngineAssetId(16),
-            InternalName = "LevelTest1",
-            Actors = new[] {
-                ducky
-            }
-        };
-        AssetAtlas.TryRegisterAsset(level);
+        
+        EngineAssetId level1Id = NewEngineAssetId(16);
+        ILevel level1 = levelFactory.CreateLevel(level1Id, "LevelTest1");
+        
+        EngineAssetId level2Id = NewEngineAssetId(32);
+        ILevel level2 = levelFactory.CreateLevel(level2Id, "LevelTest2");
+        level2.Actors.Add(ducky);
+        
+        worldSpace2D.StartupLevelId = level1Id;
+        // worldSpace2D.StartupLevelId = level2Id;
     }
 }

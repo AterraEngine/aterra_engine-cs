@@ -2,9 +2,9 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Numerics;
-using AterraEngine.Interfaces.Actors;
-using AterraEngine.Interfaces.Atlases;
-using AterraEngine.Interfaces.WorldSpaces;
+using AterraEngine.Contracts.Actors;
+using AterraEngine.Contracts.Atlases;
+using AterraEngine.Contracts.WorldSpaces;
 using AterraEngine.Types;
 using Raylib_cs;
 using static Raylib_cs.Raymath;
@@ -29,6 +29,9 @@ public class WorldSpace2D : IWorldSpace2D {
 
     public float DeltaTime { get; private set; }
     
+    public ILevel? LoadedLevel { get; private set; }
+    public EngineAssetId StartupLevelId { get; set; }
+
     private void UpdateCamera() {
         WorldToScreenSpace = Raylib.GetWorldToScreen2D(Vector2.Zero, camera: _camera);
         ScreenToWorldSpace = Raylib.GetScreenToWorld2D(Vector2.Zero, camera: _camera);
@@ -49,28 +52,13 @@ public class WorldSpace2D : IWorldSpace2D {
             Zoom = 0.1f
         };
         UpdateCamera();
-        
-        // THis should eventually be tied to the LEVEL
-        IAssetAtlas assetAtlas = EngineServices.GetAssetAtlas();
-        assetAtlas.TryGetAsset(Player2DId, out IPlayer2D? player2D);
-        Player2D = player2D!;
-        
-        var textureAtlas = EngineServices.GetTextureAtlas();
-        
-        textureAtlas.TryLoadTexture(Player2D.Sprite.TextureId);
-        textureAtlas.TryGetTexture(Player2D.Sprite.TextureId, out var spriteTexture);
-        
-        Player2D.Sprite.Texture = spriteTexture!;
 
-        assetAtlas.TryGetAsset(new EngineAssetId(new PluginId(0), 16), out IAsset? asset);
-        var level = (ILevel)asset!;
-        
-        level.Actors.ToList().ForEach(actor => {
-            textureAtlas.TryLoadTexture(actor.Sprite.TextureId);
-            textureAtlas.TryGetTexture(actor.Sprite.TextureId, out var texture2D);
-            actor.Sprite.Texture = texture2D;
-        });
-        
+        IAssetAtlas assetAtlas = EngineServices.GetAssetAtlas();
+        assetAtlas.TryGetAsset(StartupLevelId, out ILevel? level);
+        LoadedLevel = level!;
+        LoadedLevel.Load(Player2DId, assetAtlas, out IPlayer2D player2D);
+        Player2D = player2D;
+
     }
     
     public void UpdateFrame() {
@@ -85,6 +73,7 @@ public class WorldSpace2D : IWorldSpace2D {
     }
 
     public void RenderFrameWorld() {
+        Raylib.ClearBackground(LoadedLevel.BufferBackground);
         Raylib.BeginMode2D(_camera);
         
         Player2D.Draw(WorldToScreenSpace);
