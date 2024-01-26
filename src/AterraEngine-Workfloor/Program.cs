@@ -15,6 +15,6 @@ static class Program {
         new CliParser()
             .RegisterFromCliAtlas(new AterraEngineCommands())
             .RegisterFromDlLs(Directory.GetFiles(cliPluginsFolder, "*.dll"))
-            .TryParse(args);
+            .TryParse(args, true);
     }
 }

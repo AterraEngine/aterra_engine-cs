@@ -22,8 +22,18 @@ public class EnginePluginManager: IEnginePluginManager {
     // -----------------------------------------------------------------------------------------------------------------
     internal void LoadPlugins(IEnumerable<string> filePaths) {
         int pluginIdCounter = 0;
+        var assemblyLocations = filePaths as string[] ?? filePaths.ToArray();
+        
+        var duplicates = assemblyLocations
+            .GroupBy(f => f)
+            .Where(f => f.Count() > 1)
+            .SelectMany(f => f);
 
-        foreach (string assemblyLocation in filePaths) {
+        foreach (var duplicate in duplicates) {
+            throw new Exception($"Duplicate Plugin loading isn't allowed at {duplicate}");
+        }
+        
+        foreach (string assemblyLocation in assemblyLocations) {
             PluginId pluginId = new PluginId(pluginIdCounter++);
             
             Assembly assembly = Assembly.LoadFrom(assemblyLocation);
@@ -31,21 +41,14 @@ public class EnginePluginManager: IEnginePluginManager {
             foreach (var pluginType in assembly.GetTypes()) {
                 // If at a later point, we want to add more type loading from these assemblies,
                 //      simply expand this with more ifelse 
-                if (!typeof(IEnginePlugin).IsAssignableFrom(pluginType)
-                    || pluginType is not { IsInterface: false, IsAbstract: false }) continue;
-                
-                // TODO SPLIT PLUGIN INTO TWO, one with data, one with the services.
-                
-                // Resolve pluginType instance using ServiceProvider
-                // IEnginePluginServices pluginServices = (IEnginePluginServices)EngineServices.ServiceProvider.GetRequiredService(pluginType);
-                // IEnginePluginTextures pluginTextures = ((IEnginePlugin)Activator.CreateInstance(pluginType)!).DefineConfig(idPrefix: pluginId);
-                // IEnginePluginAssets   pluginAssets   = ((IEnginePlugin)Activator.CreateInstance(pluginType)!).DefineConfig(idPrefix: pluginId);
-                
-                IEnginePlugin plugin = ((IEnginePlugin)Activator.CreateInstance(pluginType)!).DefineConfig(pluginId);
-        
-                // This handles a lot of the basic setup of a plugin
-                //      Services and other things shouldn't be defined in this config
-                _enginePlugins.Add(pluginId, plugin);
+                if (typeof(IEnginePlugin).IsAssignableFrom(pluginType)
+                    && pluginType is { IsInterface: false, IsAbstract: false }) {
+                    
+                    // This handles a lot of the basic setup of a plugin
+                    //      Services and other things shouldn't be defined in this config
+                    IEnginePlugin plugin = ((IEnginePlugin)Activator.CreateInstance(pluginType)!).DefineConfig(pluginId);
+                    _enginePlugins.Add(pluginId, plugin);
+                }
             }
         }
     }

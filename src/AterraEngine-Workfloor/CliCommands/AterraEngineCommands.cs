@@ -22,4 +22,9 @@ public class AterraEngineCommands : CliCommandAtlas {
         engine.Run();
 
     }
+    
+    [CliCommand<AterraEngineArgOptions>("test")]
+    public void CallbackTest(AterraEngineArgOptions argOptions) {
+        Console.WriteLine($"test {argOptions.EngineConfig}");
+    }
 }
