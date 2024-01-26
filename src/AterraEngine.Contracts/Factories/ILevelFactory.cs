@@ -1,8 +1,8 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.Actors;
-using AterraEngine.Types;
+using AterraEngine.Contracts.Assets;
+using AterraEngine.DTO.Assets;
 
 namespace AterraEngine.Contracts.Factories;
 
@@ -10,5 +10,5 @@ namespace AterraEngine.Contracts.Factories;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface ILevelFactory {
-    public ILevel CreateLevel(EngineAssetId assetId, string? internalName = null);
+    public ILevel CreateLevel(LevelDto levelDto);
 }

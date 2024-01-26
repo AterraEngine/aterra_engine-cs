@@ -1,19 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Numerics;
-using AterraEngine.Contracts.Actors;
-using AterraEngine.Types;
+using System.Xml.Serialization;
 
-namespace AterraEngine.Actors;
+namespace AterraEngine.DTO.EngineConfig.Xml;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class Asset(EngineAssetId id, string? internalName) :IAsset {
-    public EngineAssetId Id { get; } = id;
-    public string? InternalName { get; } = internalName;
-    
-    public abstract void Draw(Vector2 worldToScreenSpace);
-    public abstract void DrawDebug(Vector2 worldToScreenSpace);
+public class RaylibConfigDto {
+    [XmlElement("window")]          public required RaylibWindowElementDto Window { get; set; }
 }

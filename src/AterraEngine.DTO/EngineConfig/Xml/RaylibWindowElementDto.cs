@@ -1,14 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Types;
+using System.Xml.Serialization;
 
-namespace AterraEngine.Contracts.Actors;
+namespace AterraEngine.DTO.EngineConfig.Xml;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IAsset {
-    public EngineAssetId Id { get; }
-    public string? InternalName { get; }
+public class RaylibWindowElementDto {
+    [XmlElement("screen")]          public required DimensionElementDto Screen { get; set; }
+    [XmlElement("icon")]            public required string Icon { get; set; }
+    [XmlElement("title")]           public required string Title { get; set; }
 }

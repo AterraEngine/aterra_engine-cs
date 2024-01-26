@@ -2,7 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Diagnostics.CodeAnalysis;
-using AterraEngine.Contracts.Actors;
+using AterraEngine.Contracts.Assets;
 using AterraEngine.Types;
 namespace AterraEngine.Contracts.Atlases;
 

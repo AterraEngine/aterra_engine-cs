@@ -3,11 +3,11 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Numerics;
-using AterraEngine.Contracts.Actors;
+using AterraEngine.Contracts.Assets;
 using AterraEngine.Types;
 using Raylib_cs;
 
-namespace AterraEngine.Actors;
+namespace AterraEngine.Assets;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

@@ -3,7 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
-using AterraEngine.Contracts.Actors;
+using AterraEngine.Contracts.Assets;
 using AterraEngine.Contracts.Atlases;
 using AterraEngine.Types;
 

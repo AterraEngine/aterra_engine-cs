@@ -3,12 +3,12 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Xml.Serialization;
 
-namespace AterraEngine.Contracts.EngineFactory.Config.Xml;
+namespace AterraEngine.DTO.EngineConfig.Xml;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class DimensionElementDto {
-    [XmlAttribute("width")] public int Width { get; set; }
-    [XmlAttribute("height")] public int Height { get; set; }
+public record DimensionElementDto {
+    [XmlAttribute("width")] public int Width;
+    [XmlAttribute("height")] public int Height;
 }

@@ -1,14 +1,14 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Types;
+using System.Numerics;
 
-namespace AterraEngine.Contracts.Actors;
+namespace AterraEngine.Contracts.Assets;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IPlayer2D : IActor {
-    public Dictionary<KeyboardInput, Action<float>> KeyMapping { get; set; }
-    public void LoadKeyMapping(float deltaTime);
+public interface IDrawableComponent {
+    public void Draw(Vector2 worldToScreenSpace);
+    public void DrawDebug(Vector2 worldToScreenSpace);
 }

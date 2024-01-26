@@ -1,7 +1,8 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.EngineFactory.Config;
+
+using AterraEngine.DTO.EngineConfig;
 
 namespace AterraEngine.Contracts.Engine;
 

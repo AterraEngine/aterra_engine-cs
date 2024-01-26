@@ -3,9 +3,8 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Numerics;
-using AterraEngine;
-using AterraEngine.Actors;
-using AterraEngine.Contracts.Actors;
+using AterraEngine.Assets;
+using AterraEngine.Contracts.Assets;
 using AterraEngine.Types;
 using Raylib_cs;
 

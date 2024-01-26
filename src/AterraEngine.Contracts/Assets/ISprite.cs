@@ -5,7 +5,7 @@ using System.Numerics;
 using AterraEngine.Types;
 using Raylib_cs;
 
-namespace AterraEngine.Contracts.Actors;
+namespace AterraEngine.Contracts.Assets;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

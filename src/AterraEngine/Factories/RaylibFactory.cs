@@ -1,8 +1,8 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.EngineFactory.Config;
 using AterraEngine.Contracts.Factories;
+using AterraEngine.DTO.EngineConfig;
 using Raylib_cs;
 
 namespace AterraEngine.Factories;
@@ -11,7 +11,7 @@ namespace AterraEngine.Factories;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class RaylibFactory: IRaylibFactory {
-    public void CreateRaylibWindow(EngineConfigDto? engineConfig){
+    public void CreateRaylibWindow(EngineConfigDto engineConfig){
         Raylib.SetConfigFlags(ConfigFlags.Msaa4xHint);
         Raylib.SetConfigFlags(ConfigFlags.ResizableWindow);
         

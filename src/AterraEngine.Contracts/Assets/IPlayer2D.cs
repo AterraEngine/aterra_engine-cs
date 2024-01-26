@@ -1,19 +1,14 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.Atlases;
 using AterraEngine.Types;
-using Raylib_cs;
 
-namespace AterraEngine.Contracts.Actors;
+namespace AterraEngine.Contracts.Assets;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ILevel : IAsset, IDrawableComponent {
-    public List<IActor> Actors { get; init; }
-    public Color BufferBackground { get; init; }
-
-    public void Unload();
-    public void Load(EngineAssetId player2DId, IAssetAtlas assetAtlas, out IPlayer2D player2D);
+public interface IPlayer2D : IActor {
+    public Dictionary<KeyboardInput, Action<float>> KeyMapping { get; set; }
+    public void LoadKeyMapping(float deltaTime);
 }

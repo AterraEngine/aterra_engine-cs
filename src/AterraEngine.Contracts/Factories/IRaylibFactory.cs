@@ -1,7 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.EngineFactory.Config;
+using AterraEngine.DTO.EngineConfig;
 
 namespace AterraEngine.Contracts.Factories;
 
@@ -9,5 +9,5 @@ namespace AterraEngine.Contracts.Factories;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IRaylibFactory {
-    public void CreateRaylibWindow(EngineConfigDto? engineConfig);
+    public void CreateRaylibWindow(EngineConfigDto engineConfig);
 }

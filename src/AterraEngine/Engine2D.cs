@@ -2,8 +2,8 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.Contracts.Engine;
-using AterraEngine.Contracts.EngineFactory.Config;
 using AterraEngine.Contracts.WorldSpaces;
+using AterraEngine.DTO.EngineConfig;
 using Raylib_cs;
 
 namespace AterraEngine;

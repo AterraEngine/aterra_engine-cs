@@ -1,25 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.Assets;
-using AterraEngine.Types;
-using Raylib_cs;
+using System.Xml.Serialization;
 
-namespace AterraEngine.Contracts.WorldSpaces;
+namespace AterraEngine.DTO.EngineConfig.Xml;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IWorldSpace2D {
-    Camera2D Camera { get; set; }
-    IPlayer2D Player2D { get; set; }
-    EngineAssetId Player2DId { get; set; }
-    float DeltaTime { get; }
-    ILevel? LoadedLevel { get; }
-    EngineAssetId StartupLevelId { get; set; }
-    
-    void RunSetup();
-    void UpdateFrame();
-    void RenderFrameUi();
-    void RenderFrameWorld();
+public class PluginConfigDto {
+    [XmlText]                       public required string FilePath { get; set; }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 using AterraEngine.Contracts.EngineFactory.Config;
+using AterraEngine.DTO.EngineConfig;
 using AterraEngine.Paths;
 
 namespace AterraEngine.EngineFactory.Config;

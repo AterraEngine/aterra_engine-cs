@@ -2,10 +2,11 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine;
-using AterraEngine.Actors;
-using AterraEngine.Contracts.Actors;
+using AterraEngine.Assets;
+using AterraEngine.Contracts.Assets;
 using AterraEngine.Contracts.Atlases;
 using AterraEngine.Contracts.Factories;
+using AterraEngine.DTO.Assets;
 using AterraEngine.Types;
 using EnginePlugin_Test.Data.Textures;
 using Raylib_cs;
@@ -36,13 +37,13 @@ public class PluginAssets(IAssetAtlas assetAtlas, ILevelFactory levelFactory) : 
         };
         
         EngineAssetId level1Id = NewEngineAssetId(16);
-        ILevel level1 = levelFactory.CreateLevel(level1Id, "LevelTest1");
+        ILevel level1 = levelFactory.CreateLevel(new LevelDto(level1Id, "LevelTest1"));
         
         EngineAssetId level2Id = NewEngineAssetId(32);
-        ILevel level2 = levelFactory.CreateLevel(level2Id, "LevelTest2");
+        ILevel level2 = levelFactory.CreateLevel(new LevelDto(level2Id, "LevelTest2", Color.Beige));
         level2.Actors.Add(ducky);
         
-        worldSpace2D.StartupLevelId = level1Id;
-        // worldSpace2D.StartupLevelId = level2Id;
+        // worldSpace2D.StartupLevelId = level1Id;
+        worldSpace2D.StartupLevelId = level2Id;
     }
 }

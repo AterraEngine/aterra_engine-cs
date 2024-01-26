@@ -2,7 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Numerics;
-using AterraEngine.Contracts.Actors;
+using AterraEngine.Contracts.Assets;
 using AterraEngine.Contracts.Atlases;
 using AterraEngine.Contracts.WorldSpaces;
 using AterraEngine.Types;
@@ -56,7 +56,7 @@ public class WorldSpace2D : IWorldSpace2D {
         IAssetAtlas assetAtlas = EngineServices.GetAssetAtlas();
         assetAtlas.TryGetAsset(StartupLevelId, out ILevel? level);
         LoadedLevel = level!;
-        LoadedLevel.Load(Player2DId, assetAtlas, out IPlayer2D player2D);
+        LoadedLevel.Load(Player2DId, out IPlayer2D player2D);
         Player2D = player2D;
 
     }
@@ -73,16 +73,13 @@ public class WorldSpace2D : IWorldSpace2D {
     }
 
     public void RenderFrameWorld() {
-        Raylib.ClearBackground(LoadedLevel.BufferBackground);
+        Raylib.ClearBackground(LoadedLevel!.BufferBackground);
         Raylib.BeginMode2D(_camera);
         
         Player2D.Draw(WorldToScreenSpace);
         Player2D.DrawDebug(WorldToScreenSpace);
         
-        IAssetAtlas assetAtlas = EngineServices.GetAssetAtlas();
-        assetAtlas.TryGetAsset(new EngineAssetId(new PluginId(0), 16), out IAsset? asset);
-        var level = (ILevel)asset!;
-        level.Actors.ToList().ForEach(actor => actor.Draw(WorldToScreenSpace));
+        LoadedLevel.Draw(WorldToScreenSpace);
 
         Raylib.EndMode2D();
     }

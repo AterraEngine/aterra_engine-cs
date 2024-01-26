@@ -3,43 +3,24 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Xml.Serialization;
 
-using AterraEngine.Contracts.EngineFactory.Config.Xml;
+using AterraEngine.DTO.EngineConfig.Xml;
 using AterraEngine.Types;
 
-namespace AterraEngine.Contracts.EngineFactory.Config;
+namespace AterraEngine.DTO.EngineConfig;
 
 // ---------------------------------------------------------------------------------------------------------------------
-// Config Elements
-// ---------------------------------------------------------------------------------------------------------------------
-public class PluginConfig {
-    [XmlAttribute("nameInternal")]  public required string NameInternal { get; set; }
-    [XmlAttribute("nameReadable")]  public required string NameReadable { get; set; }
-    [XmlText]                       public required string FilePath { get; set; }
-}
-
-public class RaylibWindowElement {
-    [XmlElement("screen")]          public required DimensionElementDto Screen { get; set; }
-    [XmlElement("icon")]            public required string Icon { get; set; }
-    [XmlElement("title")]           public required string Title { get; set; }
-}
-
-public class RaylibConfig {
-    [XmlElement("window")]          public required RaylibWindowElement Window { get; set; }
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
-// Actual Config Class
+// Code
 // ---------------------------------------------------------------------------------------------------------------------
 [XmlRoot("EngineConfig")]
 public class EngineConfigDto {
     [XmlElement("Version")] public required SemanticVersion Version { get; set; }
 
     [XmlArray("Plugins")]
-    [XmlArrayItem("Plugin", typeof(PluginConfig))]
-    public required List<PluginConfig> Plugins { get; set; }
+    [XmlArrayItem("Plugin", typeof(PluginConfigDto))]
+    public required List<PluginConfigDto> Plugins { get; set; }
     
     [XmlElement("Raylib")]
-    public required RaylibConfig RaylibConfig { get; set; }
+    public required RaylibConfigDto RaylibConfig { get; set; }
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
@@ -48,8 +29,8 @@ public class EngineConfigDto {
         return new EngineConfigDto {
             Version = new SemanticVersion(0, 0, 0),
             Plugins = [], 
-            RaylibConfig = new RaylibConfig { 
-                Window = new RaylibWindowElement {
+            RaylibConfig = new RaylibConfigDto { 
+                Window = new RaylibWindowElementDto {
                     Screen = new DimensionElementDto {
                         Height = 100, 
                         Width = 100
