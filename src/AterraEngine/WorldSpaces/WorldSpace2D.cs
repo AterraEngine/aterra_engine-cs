@@ -4,10 +4,12 @@
 using System.Numerics;
 using AterraEngine.Contracts.Assets;
 using AterraEngine.Contracts.Atlases;
+using AterraEngine.Contracts.Systems;
 using AterraEngine.Contracts.WorldSpaces;
+using AterraEngine.ComponentSystems;
+using AterraEngine.Contracts.Components;
 using AterraEngine.Types;
 using Raylib_cs;
-using static Raylib_cs.Raymath;
 
 namespace AterraEngine.WorldSpaces;
 
@@ -15,72 +17,64 @@ namespace AterraEngine.WorldSpaces;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class WorldSpace2D : IWorldSpace2D {
-    private Camera2D _camera;
-    public Camera2D Camera {
-        get => _camera;
-        set {_camera = value; UpdateCamera(); }
-    }
-
-    public IPlayer2D Player2D { get; set; } = null!;
-    public EngineAssetId Player2DId { get; set; }
-
-    public Vector2 WorldToScreenSpace { get; private set; }
-    public Vector2 ScreenToWorldSpace { get; private set; }
-
     public float DeltaTime { get; private set; }
     
-    public ILevel? LoadedLevel { get; private set; }
+    public ILevel? LoadedLevel { get; set; }
     public EngineAssetId StartupLevelId { get; set; }
-
-    private void UpdateCamera() {
-        WorldToScreenSpace = Raylib.GetWorldToScreen2D(Vector2.Zero, camera: _camera);
-        ScreenToWorldSpace = Raylib.GetScreenToWorld2D(Vector2.Zero, camera: _camera);
-    }
+    
+    private List<ILogicSystem> _logicSystems = [
+        EngineServices.CreateWithServices<PlayerInput2DSystem>(),
+        EngineServices.CreateWithServices<TransformSystem>()
+    ];
+    private List<IRenderSystem> _renderSystems = [
+        EngineServices.CreateWithServices<Render2DSystem>()
+    ];
+    private List<IUiSystem> _uiSystems = [];
+    private ICameraSystem _cameraSystem = EngineServices.CreateWithServices<CameraSystem>();
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public void RunSetup() {
-        // Updating the camera, also update the World To Screen space
-        _camera = new Camera2D {
-            Target = Vector2.Zero,
-            Offset = new Vector2 {
-                X = Raylib.GetScreenWidth() / 2f,
-                Y = Raylib.GetScreenHeight() / 2f
-            },
-            Rotation = 0.0f,
-            Zoom = 0.1f
-        };
-        UpdateCamera();
-
         IAssetAtlas assetAtlas = EngineServices.GetAssetAtlas();
         assetAtlas.TryGetAsset(StartupLevelId, out ILevel? level);
         LoadedLevel = level!;
         
-        LoadedLevel.Load(Player2DId, out IPlayer2D player2D);
-        Player2D = player2D;
-
+        // Updating the camera, also update the World To Screen space
+        // Process the camera at least once
+        _cameraSystem.Process(LoadedLevel.Camera2D, deltaTime:DeltaTime);
+        
+        foreach (var system in _renderSystems) {
+            foreach (IAsset asset in LoadedLevel.Assets) {
+                system.LoadTextures(asset);
+            }
+        }
     }
     
     public void UpdateFrame() {
         DeltaTime = Raylib.GetFrameTime();
-        Player2D.LoadKeyMapping(DeltaTime);
 
-        // if (Raylib.IsKeyDown(KeyboardKey.Two)) {
-        //     _camera.Target.Y++;
-        // }
-        //
-        UpdateCameraCenterSmoothFollow();
+        foreach (var system in _logicSystems) {
+            foreach (IAsset asset in LoadedLevel!.Assets) {
+                system.Process(asset, deltaTime:DeltaTime);
+            }
+        }
+        // After everything is said and done with the assets, update the camera
+        _cameraSystem.Process(LoadedLevel!.Camera2D, deltaTime:DeltaTime);
+
     }
 
     public void RenderFrameWorld() {
         Raylib.ClearBackground(LoadedLevel!.BufferBackground);
-        Raylib.BeginMode2D(_camera);
         
-        Player2D.Draw(WorldToScreenSpace);
-        Player2D.DrawDebug(WorldToScreenSpace);
+        if (!LoadedLevel.Camera2D.TryGetComponent<ICamera2DComponent>(out var camera2DComponent)) throw new Exception("Camera Undefined");
+        Raylib.BeginMode2D(camera2DComponent.Camera);
         
-        LoadedLevel.Draw(WorldToScreenSpace);
+        foreach (var system in _renderSystems) {
+            foreach (IAsset asset in LoadedLevel.Assets) {
+                system.Process(asset, deltaTime:DeltaTime, camera2DComponent);
+            }
+        }
 
         Raylib.EndMode2D();
     }
@@ -90,21 +84,10 @@ public class WorldSpace2D : IWorldSpace2D {
 
         var fps = Raylib.GetFPS();
         Raylib.DrawText($"{fps}", 20,20,20, Color.Black) ;
-
-    }
-
-    private void UpdateCameraCenterSmoothFollow() {
-        const float lerpSpeed = 0.01f;
-        const float minEffectLength = 500f;
-
-        Vector2 playerScreenSpace = Player2D.Pos * WorldToScreenSpace; //TARGET IS IN SCREEN SPACE! so make the calculations!
-        float length = Vector2Length(Vector2Subtract(playerScreenSpace, _camera.Target));
         
-        if (!(length > minEffectLength)) return;
-        
-        // Smoothly interpolate the camera's target position.
-        _camera.Target = Vector2.Lerp(_camera.Target, playerScreenSpace, DeltaTime) ; //TARGET IS IN SCREEN SPACE!
+        foreach (var system in from system in _uiSystems from asset in LoadedLevel.Assets select system) {
+            // system.Process(asset, DeltaTime, WorldToScreenSpace);
+        }
         
     }
-
 }

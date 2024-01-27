@@ -1,30 +1,51 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using System.Numerics;
 using AterraEngine.Contracts.Assets;
-using AterraEngine.Contracts.Atlases;
-using AterraEngine.Types;
+using AterraEngine.Contracts.Components;
 using Raylib_cs;
+using static Raylib_cs.Raymath;
 
-namespace AterraEngine.Assets;
+namespace AterraEngine.Components;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class Level2D(EngineAssetId id, string? internalName) : EngineAsset(id, internalName), ILevel {
-    public IAssetNode Assets { get;} = new AssetNode();
-    public ICamera2D Camera2D { get; set; }
-    public Color BufferBackground { get; set; }
+
+public class Camera2DStaticComponent : ICamera2DComponent {
+    private Camera2D _camera;
+    public Camera2D Camera {
+        get => _camera;
+        set {_camera = value; UpdateCameraSpace(); }
+    }
+
+    public Vector2 WorldToScreenSpace {get; private set;}
+    public Vector2 ScreenToWorldSpace {get; private set;}
     
     // -----------------------------------------------------------------------------------------------------------------
     // Constructors
     // -----------------------------------------------------------------------------------------------------------------
+    public Camera2DStaticComponent() {
+        _camera = new Camera2D {
+            Target = Vector2.Zero,
+            Offset = new Vector2 {
+                X = Raylib.GetScreenWidth() / 2f,
+                Y = Raylib.GetScreenHeight() / 2f
+            },
+            Rotation = 0.0f,
+            Zoom = 0.1f
+        };
+        UpdateCameraSpace();
+    }
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    private IEnumerable<IActor> GetActors() {
-        return Assets.OfType<IActor>();
+    private void UpdateCameraSpace() {
+        WorldToScreenSpace = Raylib.GetWorldToScreen2D(Vector2.Zero, camera: _camera);
+        ScreenToWorldSpace = Raylib.GetScreenToWorld2D(Vector2.Zero, camera: _camera);
     }
     
+    public void UpdateCamera(Vector2 playerPos, float deltaTime) { }
 }

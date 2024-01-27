@@ -9,6 +9,4 @@ namespace AterraEngine.Contracts.Assets;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IPlayer2D : IActor {
-    public Dictionary<KeyboardInput, Action<float>> KeyMapping { get; set; }
-    public void LoadKeyMapping(float deltaTime);
 }

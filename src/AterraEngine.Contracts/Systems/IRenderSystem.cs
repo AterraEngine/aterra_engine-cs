@@ -2,21 +2,16 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.Contracts.Assets;
-using AterraEngine.Types;
-using Raylib_cs;
+using AterraEngine.Contracts.Components;
 
-namespace AterraEngine.Contracts.WorldSpaces;
+namespace AterraEngine.Contracts.Systems;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IWorldSpace2D {
-    float DeltaTime { get; }
-    ILevel? LoadedLevel { get; }
-    EngineAssetId StartupLevelId { get; set; }
-    
-    void RunSetup();
-    void UpdateFrame();
-    void RenderFrameUi();
-    void RenderFrameWorld();
+public interface IRenderSystem : ISystem {
+
+    public void LoadTextures(IAsset asset);
+    public void UnloadTextures(IAsset asset);
+    public void Process(IAsset asset, float deltaTime, ICamera2DComponent camera2DComponent);
 }

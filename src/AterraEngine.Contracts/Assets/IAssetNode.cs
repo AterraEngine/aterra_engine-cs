@@ -6,8 +6,8 @@ namespace AterraEngine.Contracts.Assets;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IAssetNode {
-    public IAsset Asset { get; set; }
+public interface IAssetNode : IEnumerable<IAsset> {
+    public IAsset? Asset { get; set; }
     public List<IAssetNode> Children { get; }
     public List<IAsset> Flat();
     public int Count();

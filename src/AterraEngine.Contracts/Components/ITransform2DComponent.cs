@@ -1,22 +1,19 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.Assets;
-using AterraEngine.Types;
+using System.Numerics;
 using Raylib_cs;
 
-namespace AterraEngine.Contracts.WorldSpaces;
+namespace AterraEngine.Contracts.Components;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IWorldSpace2D {
-    float DeltaTime { get; }
-    ILevel? LoadedLevel { get; }
-    EngineAssetId StartupLevelId { get; set; }
-    
-    void RunSetup();
-    void UpdateFrame();
-    void RenderFrameUi();
-    void RenderFrameWorld();
+
+public interface ITransform2DComponent : IComponent{
+    public Vector2 Pos { get; set; }
+    public Vector2 Size { get; set; }
+    public float Rot { get; set; }
+    public Rectangle BoundingBox { get; }
+    public Vector2 OriginRelative { get; }
 }

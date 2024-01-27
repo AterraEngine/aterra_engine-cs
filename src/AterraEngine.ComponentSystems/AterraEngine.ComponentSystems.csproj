@@ -7,11 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Raylib-cs" Version="6.0.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\AterraEngine.Components\AterraEngine.Components.csproj" />
       <ProjectReference Include="..\AterraEngine.Contracts\AterraEngine.Contracts.csproj" />
     </ItemGroup>
 

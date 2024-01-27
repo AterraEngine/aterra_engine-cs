@@ -1,7 +1,6 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.Atlases;
 using AterraEngine.Types;
 using Raylib_cs;
 
@@ -10,10 +9,8 @@ namespace AterraEngine.Contracts.Assets;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ILevel : IAsset, IDrawableComponent {
-    public List<IAssetNode> Assets { get; }
+public interface ILevel : IEngineAsset{
+    public IAssetNode Assets { get; }
+    public ICamera2D Camera2D { get; set; }
     public Color BufferBackground { get; }
-
-    public void Unload();
-    public void Load(EngineAssetId player2DId, out IPlayer2D player2D);
 }

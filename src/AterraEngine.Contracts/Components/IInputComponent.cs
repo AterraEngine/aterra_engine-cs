@@ -1,22 +1,19 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.Assets;
+using AterraEngine.DTO.Components;
 using AterraEngine.Types;
-using Raylib_cs;
 
-namespace AterraEngine.Contracts.WorldSpaces;
+namespace AterraEngine.Contracts.Components;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IWorldSpace2D {
-    float DeltaTime { get; }
-    ILevel? LoadedLevel { get; }
-    EngineAssetId StartupLevelId { get; set; }
+public delegate T KeyAction<T>(T dto, bool[] args) where T : Input2DDto, new();
+
+public interface IInputComponent<T> : IComponent  where T : Input2DDto, new() {
+    public Dictionary<KeyboardInput, KeyAction<T>> KeyMapping { get; }
     
-    void RunSetup();
-    void UpdateFrame();
-    void RenderFrameUi();
-    void RenderFrameWorld();
+    public T ProcessInput();
+
 }

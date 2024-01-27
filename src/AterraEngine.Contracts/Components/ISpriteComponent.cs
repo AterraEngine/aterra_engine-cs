@@ -2,21 +2,13 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.Contracts.Assets;
-using AterraEngine.Types;
-using Raylib_cs;
 
-namespace AterraEngine.Contracts.WorldSpaces;
+namespace AterraEngine.Contracts.Components;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IWorldSpace2D {
-    float DeltaTime { get; }
-    ILevel? LoadedLevel { get; }
-    EngineAssetId StartupLevelId { get; set; }
-    
-    void RunSetup();
-    void UpdateFrame();
-    void RenderFrameUi();
-    void RenderFrameWorld();
+
+public class ISpriteComponent {
+    public ISprite? Sprite { get; }
 }

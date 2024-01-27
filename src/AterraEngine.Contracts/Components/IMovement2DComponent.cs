@@ -1,22 +1,21 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.Assets;
-using AterraEngine.Types;
-using Raylib_cs;
+using System.Numerics;
+using AterraEngine.DTO.Components;
 
-namespace AterraEngine.Contracts.WorldSpaces;
+namespace AterraEngine.Contracts.Components;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IWorldSpace2D {
-    float DeltaTime { get; }
-    ILevel? LoadedLevel { get; }
-    EngineAssetId StartupLevelId { get; set; }
-    
-    void RunSetup();
-    void UpdateFrame();
-    void RenderFrameUi();
-    void RenderFrameWorld();
+
+public interface IMovement2DComponent : IComponent{
+    public Vector2 Direction { get; set; }
+    public float Speed { get; set; }
+    public float RotationOffset { get; set; }
+    public Vector2 SizeOffset { get; set; }
+
+    public bool HasMovement();
+    public void AssignFromInputDto<T>(T dto) where T: Input2DDto;
 }

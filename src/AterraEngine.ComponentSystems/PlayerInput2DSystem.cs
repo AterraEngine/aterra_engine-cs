@@ -1,22 +1,26 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Components;
+using System.Numerics;
 using AterraEngine.Contracts.Assets;
 using AterraEngine.Contracts.Components;
+using AterraEngine.Contracts.Systems;
 using AterraEngine.DTO.Components;
-using AterraEngine.Types;
 
-namespace AterraEngine.Assets;
+namespace AterraEngine.ComponentSystems;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class Player2D: Actor, IPlayer2D {
-    // -----------------------------------------------------------------------------------------------------------------
-    // Methods
-    // -----------------------------------------------------------------------------------------------------------------
-    public Player2D(EngineAssetId id, string? internalName) : base(id, internalName) {
-        TryAddComponent<IInputComponent<Input2DDto>, Player2DKeyboardInputComponent<Input2DDto>>();
+public class PlayerInput2DSystem : ILogicSystem {
+    public void Process(IAsset asset, float deltaTime) {
+        if (!asset.TryGetComponent<IInputComponent<Input2DDto>>(out var input)) return;
+        if (!asset.TryGetComponent<IMovement2DComponent>(out var movement)) return;
+
+        Input2DDto inputDto = input.ProcessInput();
+        movement.AssignFromInputDto(inputDto);
+        
+        Console.WriteLine(("PLayerInput2DSystem", movement.Direction, inputDto));
+        
     }
 }

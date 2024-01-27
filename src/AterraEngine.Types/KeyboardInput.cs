@@ -7,6 +7,13 @@ namespace AterraEngine.Types;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public struct KeyboardInput(KeyboardKey[] keyboardKeys) {
+public enum Handling {
+    Any,
+    All,
+    None,
+};
+
+public struct KeyboardInput(KeyboardKey[] keyboardKeys, Handling handling) {
     public KeyboardKey[] Keys { get; set; } = keyboardKeys;
+    public Handling Handling { get; } = handling;
 }

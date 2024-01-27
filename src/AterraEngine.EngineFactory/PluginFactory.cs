@@ -45,8 +45,9 @@ public class PluginFactory {
     // -----------------------------------------------------------------------------------------------------------------
     // Apply data from plugins
     // -----------------------------------------------------------------------------------------------------------------
-    private static IPluginDataFactory LoadPluginDataFactory(PluginId pluginId, Type objectType){
-        IPluginDataFactory factory = (ActivatorUtilities.CreateInstance(EngineServices.ServiceProvider, objectType) as IPluginDataFactory)!;
+    private static IPluginDataFactory LoadPluginDataFactory(PluginId pluginId, Type objectType) {
+        IPluginDataFactory factory = EngineServices.CreateWithServices<IPluginDataFactory>(objectType);
+        // IPluginDataFactory factory = (ActivatorUtilities.CreateInstance(EngineServices.ServiceProvider, objectType) as IPluginDataFactory)!;
         factory.Define(pluginId);
         return factory;
 

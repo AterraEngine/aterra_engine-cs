@@ -1,8 +1,9 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Numerics;
+using System.Diagnostics.CodeAnalysis;
 using AterraEngine.Contracts.Assets;
+using AterraEngine.Contracts.Components;
 using AterraEngine.Types;
 
 namespace AterraEngine.Assets;
@@ -10,10 +11,28 @@ namespace AterraEngine.Assets;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class Asset(EngineAssetId id, string? internalName) :IAsset {
-    public EngineAssetId Id { get; } = id;
-    public string? InternalName { get; } = internalName;
+public class Asset(EngineAssetId id, string? internalName=null) : EngineAsset(id, internalName) , IAsset {
+    protected Dictionary<Type, IComponent> _components { get; set; } = new();
+    public IReadOnlyDictionary<Type, IComponent> Components => _components.AsReadOnly();
     
-    public abstract void Draw(Vector2 worldToScreenSpace);
-    public abstract void DrawDebug(Vector2 worldToScreenSpace);
+    // -----------------------------------------------------------------------------------------------------------------
+    // Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    public bool TryGetComponent<T>([NotNullWhen(true)] out T? component) where T: IComponent {
+        if (_components.TryGetValue(typeof(T), out IComponent? comp)) {
+            component = (T)comp;
+            return true;
+        }
+
+        component = default;
+        return false;
+    }
+
+    public bool TryAddComponent<T, T2>() where T : IComponent where T2 : T, IComponent, new(){
+        return  _components.TryAdd(typeof(T), new T2());
+    }
+
+    public bool TryRemoveComponent<T>() where T : IComponent {
+        return _components.Remove(typeof(T));
+    }
 }

@@ -10,5 +10,5 @@ namespace AterraEngine.Contracts.Factories;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface ILevelFactory {
-    public ILevel CreateLevel(LevelDto levelDto);
+    public ILevel? CreateLevel(LevelDto levelDto);
 }

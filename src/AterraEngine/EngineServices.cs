@@ -40,6 +40,13 @@ public static class EngineServices {
     public static T GetService<T>() where T : notnull{
         return ServiceProvider.GetRequiredService<T>();
     }
+
+    public static T CreateWithServices<T>(Type objectType) {
+        return (T)ActivatorUtilities.CreateInstance(ServiceProvider, objectType);
+    }
+    public static T CreateWithServices<T>(){
+        return (T)ActivatorUtilities.CreateInstance(ServiceProvider, typeof(T));
+    }
     
     // -----------------------------------------------------------------------------------------------------------------
     // Quick Call Methods  
