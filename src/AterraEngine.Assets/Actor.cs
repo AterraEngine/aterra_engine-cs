@@ -12,6 +12,15 @@ namespace AterraEngine.Assets;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class Actor : Asset, IActor {
+    private ITransform2DComponent? _transform;
+    public ITransform2DComponent Transform => _transform ??= GetComponent<ITransform2DComponent>();
+
+    private IMovement2DComponent? _movement; 
+    public IMovement2DComponent Movement => _movement ??= GetComponent<IMovement2DComponent>(); 
+    
+    private IDraw2DComponent? _drawable; 
+    public IDraw2DComponent Drawable => _drawable ??= GetComponent<IDraw2DComponent>(); 
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Constructor
     // -----------------------------------------------------------------------------------------------------------------

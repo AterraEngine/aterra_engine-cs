@@ -17,6 +17,7 @@ public class CameraSystem(IAssetAtlas assetAtlas) : ICameraSystem {
     public void Process(ICamera2D camera, float deltaTime) {
         if (!camera.TryGetComponent<ICamera2DComponent>(out var camera2DComponent)) return;
         
+        // TODO fix this
         if (!assetAtlas.TryGetAsset(new EngineAssetId(new PluginId(0), 0), out var asset)) return;
         
         var player = (IPlayer2D)asset;

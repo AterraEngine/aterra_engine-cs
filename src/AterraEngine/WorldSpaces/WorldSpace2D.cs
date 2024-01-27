@@ -31,7 +31,8 @@ public class WorldSpace2D : IWorldSpace2D {
     ];
     private List<IUiSystem> _uiSystems = [];
     private ICameraSystem _cameraSystem = EngineServices.CreateWithServices<CameraSystem>();
-    
+    private ICamera2DComponent? _camera2DComponent;
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -39,28 +40,31 @@ public class WorldSpace2D : IWorldSpace2D {
         IAssetAtlas assetAtlas = EngineServices.GetAssetAtlas();
         assetAtlas.TryGetAsset(StartupLevelId, out ILevel? level);
         LoadedLevel = level!;
-        
-        // Updating the camera, also update the World To Screen space
-        // Process the camera at least once
-        _cameraSystem.Process(LoadedLevel.Camera2D, deltaTime:DeltaTime);
-        
+
+        if (!LoadedLevel.Camera2D.TryGetComponent<ICamera2DComponent>(out var camera2DComponent))
+            throw new Exception("Camera Undefined");
+
+        // Cache the camera for future use
+        _camera2DComponent = camera2DComponent;
+        _cameraSystem.Process(LoadedLevel.Camera2D, deltaTime: DeltaTime);
+
         foreach (var system in _renderSystems) {
-            foreach (IAsset asset in LoadedLevel.Assets) {
+            foreach (IAsset asset in LoadedLevel.Assets.Flat()) {
                 system.LoadTextures(asset);
             }
         }
     }
     
-    public void UpdateFrame() {
+    public void RunLogic() {
         DeltaTime = Raylib.GetFrameTime();
-
-        foreach (var system in _logicSystems) {
-            foreach (IAsset asset in LoadedLevel!.Assets) {
-                system.Process(asset, deltaTime:DeltaTime);
+        LoadedLevel!.Assets.Flat();
+        
+        foreach (IAsset asset in LoadedLevel!.Assets.CachedFlat) {
+            foreach (var system in _logicSystems) {
+                system.Process(asset, deltaTime: DeltaTime);
             }
         }
-        // After everything is said and done with the assets, update the camera
-        _cameraSystem.Process(LoadedLevel!.Camera2D, deltaTime:DeltaTime);
+        _cameraSystem.Process(LoadedLevel.Camera2D, deltaTime: DeltaTime);
 
     }
 
@@ -70,8 +74,9 @@ public class WorldSpace2D : IWorldSpace2D {
         if (!LoadedLevel.Camera2D.TryGetComponent<ICamera2DComponent>(out var camera2DComponent)) throw new Exception("Camera Undefined");
         Raylib.BeginMode2D(camera2DComponent.Camera);
         
-        foreach (var system in _renderSystems) {
-            foreach (IAsset asset in LoadedLevel.Assets) {
+        
+        foreach (IAsset asset in LoadedLevel!.Assets.CachedFlat) {
+            foreach (var system in _renderSystems) {
                 system.Process(asset, deltaTime:DeltaTime, camera2DComponent);
             }
         }
@@ -85,9 +90,11 @@ public class WorldSpace2D : IWorldSpace2D {
         var fps = Raylib.GetFPS();
         Raylib.DrawText($"{fps}", 20,20,20, Color.Black) ;
         
-        foreach (var system in from system in _uiSystems from asset in LoadedLevel.Assets select system) {
-            // system.Process(asset, DeltaTime, WorldToScreenSpace);
-        }
+        // foreach (var system in _uiSystems) {
+        //     foreach (IAsset asset in LoadedLevel!.Assets.CachedFlat) {
+        //         
+        //     }
+        // }
         
     }
 }

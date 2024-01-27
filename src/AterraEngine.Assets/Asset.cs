@@ -35,4 +35,9 @@ public class Asset(EngineAssetId id, string? internalName=null) : EngineAsset(id
     public bool TryRemoveComponent<T>() where T : IComponent {
         return _components.Remove(typeof(T));
     }
+
+    protected T GetComponent<T>() where T : IComponent {
+        if (!_components.TryGetValue(typeof(T), out IComponent? comp)) throw new Exception();
+        return (T)comp;
+    }
 }

@@ -20,13 +20,21 @@ public class Transform2DComponent : ITransform2DComponent {
     private Vector2 _pos = Vector2.Zero;
     public Vector2 Pos {
         get => _pos;
-        set {_pos = value; UpdateBoundingBox(); }
+        set {
+            if (_pos == value) return;
+            _pos = value;
+            UpdateBoundingBox();
+        }
     }
 
     private Vector2 _size = Vector2.One;
     public Vector2 Size {
         get => _size;
-        set {_size = value; UpdateBoundingBox(); }
+        set {
+            if (_size == value) return;
+            _size = value;
+            UpdateBoundingBox();
+        }
     }
 
     private Rectangle _cachedBoundingBox;
@@ -40,9 +48,13 @@ public class Transform2DComponent : ITransform2DComponent {
         _cachedBoundingBox.Size = Size;
         
         OriginRelative = new Vector2(
-            _cachedBoundingBox.Width/2f,
-            _cachedBoundingBox.Height/2f
+            _cachedBoundingBox.Width / 2f,
+            _cachedBoundingBox.Height / 2f
         );
+    }
+
+    public Transform2DComponent() {
+        UpdateBoundingBox();
     }
     
 }

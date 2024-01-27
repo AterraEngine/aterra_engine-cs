@@ -12,7 +12,7 @@ namespace AterraEngine.Assets;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class Level2D(EngineAssetId id, string? internalName) : EngineAsset(id, internalName), ILevel {
-    public IAssetNode Assets { get;} = new AssetNode();
+    public IAssetNode Assets { get; set; } = new AssetNode();
     public ICamera2D Camera2D { get; set; }
     public Color BufferBackground { get; set; }
     

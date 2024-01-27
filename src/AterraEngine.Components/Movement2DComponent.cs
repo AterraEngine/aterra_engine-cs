@@ -24,10 +24,8 @@ public class Movement2DComponent : IMovement2DComponent {
     }
 
     public bool HasMovement() {
-        return (Direction != Vector2.Zero && Math.Abs(Speed - 1) < 0.01f && RotationOffset != 0);
-    }
-
-    public Movement2DComponent() {
-        Console.WriteLine("Please only see this once");
+        return Direction != Vector2.Zero 
+               && Math.Abs(Speed - 1) < 0.01f 
+               && RotationOffset != 0;
     }
 }

@@ -1,7 +1,6 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Data;
 using System.Numerics;
 using AterraEngine.Contracts.Components;
 using AterraEngine.DTO.Components;
@@ -16,7 +15,7 @@ namespace AterraEngine.Components;
 public class Player2DKeyboardInputComponent<T> : AInputComponent<T> where T : Input2DDto, new() {
     private Vector2 Velocity { get; set; } = new(2f, 2f);
     private float SprintMultiplier { get; set; } = 2f;
-    private float RotationMultiplier { get; set; } = 20f;
+    private float RotationMultiplier { get; set; } = 200f;
     private Vector2 SizeMultiplier { get; set; } = new(1f, 1f);
     
     public Player2DKeyboardInputComponent() {

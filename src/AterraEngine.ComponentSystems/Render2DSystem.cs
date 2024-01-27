@@ -29,8 +29,8 @@ public class Render2DSystem(ITexture2DAtlas texture2DAtlas) : IRenderSystem {
     }
 
     public void Process(IAsset asset, float deltaTime, ICamera2DComponent camera2DComponent) {
-        if (!asset.TryGetComponent<IDraw2DComponent>(out var draw2D)) return;
         if (!asset.TryGetComponent<ITransform2DComponent>(out var transform2D)) return;
+        if (!asset.TryGetComponent<IDraw2DComponent>(out var draw2D)) return;
         
         // Apply the rotation to the movement
         draw2D.Draw(
@@ -41,14 +41,13 @@ public class Render2DSystem(ITexture2DAtlas texture2DAtlas) : IRenderSystem {
             camera2DComponent.WorldToScreenSpace
         );
         
-        
-        if (!asset.TryGetComponent<IDrawDebug2DComponent>(out var drawDebug2D)) return;
-        drawDebug2D.Draw(
-            transform2D.Pos,
-            transform2D.Rot,
-            transform2D.OriginRelative,
-            transform2D.Size,
-            camera2DComponent.WorldToScreenSpace
-        );
+        // if (!asset.TryGetComponent<IDrawDebug2DComponent>(out var drawDebug2D)) return;
+        // drawDebug2D.Draw(
+        //     transform2D.Pos,
+        //     transform2D.Rot,
+        //     transform2D.OriginRelative,
+        //     transform2D.Size,
+        //     camera2DComponent.WorldToScreenSpace
+        // );
     }
 }

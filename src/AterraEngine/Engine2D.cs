@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraEngine.Contracts.Assets;
 using AterraEngine.Contracts.Engine;
 using AterraEngine.Contracts.WorldSpaces;
 using AterraEngine.DTO.EngineConfig;
@@ -24,7 +25,7 @@ public class Engine2D(IWorldSpace2D worldSpace2D) : IEngine{
         
         while (!Raylib.WindowShouldClose()) {
             // --- Start Logic Handling ---
-            worldSpace2D.UpdateFrame();
+            worldSpace2D.RunLogic();
             // --- End Logic Handling ---
             
             Raylib.BeginDrawing();

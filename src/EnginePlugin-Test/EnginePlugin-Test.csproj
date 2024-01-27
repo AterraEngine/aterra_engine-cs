@@ -13,4 +13,8 @@
       <ProjectReference Include="..\AterraEngine\AterraEngine.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Data\Assets\" />
+    </ItemGroup>
+
 </Project>

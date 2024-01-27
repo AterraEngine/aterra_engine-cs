@@ -9,7 +9,7 @@ namespace AterraEngine.Contracts.Assets;
 public interface IAssetNode : IEnumerable<IAsset> {
     public IAsset? Asset { get; set; }
     public List<IAssetNode> Children { get; }
-    public List<IAsset> Flat();
+    public IEnumerable<IAsset> Flat();
     public int Count();
     IEnumerable<IAsset> CachedFlat { get; }
 }

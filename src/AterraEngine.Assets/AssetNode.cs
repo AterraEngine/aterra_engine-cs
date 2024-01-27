@@ -19,17 +19,29 @@ public class AssetNode(IAsset? asset = null, List<IAssetNode>? children = null) 
     // -----------------------------------------------------------------------------------------------------------------
     public IEnumerable<IAsset> CachedFlat {
         get {
-            if (_cachedFlat is not null) return _cachedFlat;
-            _cachedFlat = Flat();
+            if (_cachedFlat is not null) 
+                return _cachedFlat;
+        
+            _cachedFlat = Flat().ToList();
             return _cachedFlat;
         }
     }
 
-    public List<IAsset> Flat() {
-        List<IAsset> assets = [];
-        if (Asset != null) assets.Add(Asset);
-        assets.AddRange(Children.SelectMany(child => child.Flat()).ToList());
-        return assets;
+    public IEnumerable<IAsset> Flat() {
+        var stack = new Stack<IAssetNode>(Children);
+
+        if (Asset != null) 
+            yield return Asset;
+
+        while(stack.Count != 0) {
+            var node = stack.Pop();
+
+            if (node.Asset != null) 
+                yield return node.Asset;
+
+            foreach (var child in node.Children)
+                stack.Push(child);
+        }
     }
 
     public int Count() => CachedFlat.Count();

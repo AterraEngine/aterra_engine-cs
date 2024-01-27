@@ -19,14 +19,15 @@ public class Draw2DComponent : IDraw2DComponent{
     public Color Tint { get; set; } = Color.White;
 
     public void Draw(Vector2 pos, float rot, Vector2 origin, Vector2 size, Vector2 worldToScreenSpace) {
+        Vector2 adjustedPos = pos * worldToScreenSpace;
+        Vector2 adjustedSize = size * worldToScreenSpace;
+        Vector2 adjustedOrigin = origin * worldToScreenSpace;
+    
         Raylib.DrawTexturePro(
             Texture ?? default,
             SelectionBox,
-            new Rectangle((pos * worldToScreenSpace).X,
-                (pos * worldToScreenSpace).Y,
-                (size * worldToScreenSpace).X,
-                (size * worldToScreenSpace).Y),
-            origin * worldToScreenSpace,
+            new Rectangle(adjustedPos.X, adjustedPos.Y, adjustedSize.X, adjustedSize.Y),
+            adjustedOrigin,
             rot,
             Tint
         );

@@ -18,7 +18,7 @@ public class TransformSystem : ILogicSystem {
         if (!asset.TryGetComponent<IMovement2DComponent>(out var movement)) return;
 
         position.Size += movement.SizeOffset * deltaTime;
-        position.Rot += movement.RotationOffset * movement.Speed * deltaTime;
+        position.Rot += movement.RotationOffset * deltaTime;
         
         // Rotation has to be applied before position, because it relies on the rotation
         var newMovement = Vector2.Transform(
@@ -27,8 +27,5 @@ public class TransformSystem : ILogicSystem {
             );
         
         position.Pos += newMovement* movement.Speed * deltaTime;
-
-        
-        Console.WriteLine(("Movement System",(movement.Direction, movement.RotationOffset), position.Pos, position.Rot));
     }
 }

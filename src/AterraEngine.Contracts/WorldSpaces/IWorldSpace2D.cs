@@ -16,7 +16,7 @@ public interface IWorldSpace2D {
     EngineAssetId StartupLevelId { get; set; }
     
     void RunSetup();
-    void UpdateFrame();
+    void RunLogic();
     void RenderFrameUi();
     void RenderFrameWorld();
 }

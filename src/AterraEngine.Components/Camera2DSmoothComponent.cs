@@ -48,15 +48,14 @@ public class Camera2DSmoothComponent : ICamera2DComponent {
     }
     
     public void UpdateCamera(Vector2 playerPos, float deltaTime) {
-        const float lerpSpeed = 0.01f;
-        const float minEffectLength = 500f;
+        const float lerpSpeed = 1f;
+        const float minEffectLengthSquare = 500f * 500f;   // Compare the square of the lengths
 
-        Vector2 playerScreenSpace = playerPos * WorldToScreenSpace; //TARGET IS IN SCREEN SPACE! so make the calculations!
-        float length = Vector2Length(Vector2Subtract(playerScreenSpace, _camera.Target));
-        
-        if (!(length > minEffectLength)) return;
-        
+        Vector2 playerScreenSpace = playerPos * WorldToScreenSpace;
+
+        if (!(Vector2.Subtract(playerScreenSpace, _camera.Target).LengthSquared() > minEffectLengthSquare)) return;
+    
         // Smoothly interpolate the camera's target position.
-        _camera.Target = Vector2.Lerp(_camera.Target, playerScreenSpace, deltaTime) ; //TARGET IS IN SCREEN SPACE!
+        _camera.Target = Vector2.Lerp(_camera.Target, playerScreenSpace, lerpSpeed*deltaTime); //TARGET IS IN SCREEN SPACE!
     }
 }

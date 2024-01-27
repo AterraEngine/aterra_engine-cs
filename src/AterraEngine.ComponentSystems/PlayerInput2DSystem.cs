@@ -20,7 +20,5 @@ public class PlayerInput2DSystem : ILogicSystem {
         Input2DDto inputDto = input.ProcessInput();
         movement.AssignFromInputDto(inputDto);
         
-        Console.WriteLine(("PLayerInput2DSystem", movement.Direction, inputDto));
-        
     }
 }
