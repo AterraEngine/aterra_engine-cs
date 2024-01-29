@@ -2,10 +2,10 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Numerics;
-using AterraEngine.Contracts.Assets;
-using AterraEngine.Contracts.Atlases;
-using AterraEngine.Contracts.Components;
-using AterraEngine.Contracts.Systems;
+using AterraEngine.OldContracts.Assets;
+using AterraEngine.OldContracts.Atlases;
+using AterraEngine.OldContracts.Components;
+using AterraEngine.OldContracts.Systems;
 
 namespace AterraEngine.ComponentSystems;
 

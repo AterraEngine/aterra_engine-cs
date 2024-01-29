@@ -2,8 +2,8 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Reflection;
-using AterraEngine.Contracts.Factories;
-using AterraEngine.Contracts.Plugin;
+using AterraEngine.OldContracts.Factories;
+using AterraEngine.OldContracts.Plugin;
 using AterraEngine.Types;
 using Microsoft.Extensions.DependencyInjection;
 

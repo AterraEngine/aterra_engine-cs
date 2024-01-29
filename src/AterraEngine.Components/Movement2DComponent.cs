@@ -2,7 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Numerics;
-using AterraEngine.Contracts.Components;
+using AterraEngine.OldContracts.Components;
 using AterraEngine.DTO.Components;
 
 namespace AterraEngine.Components;

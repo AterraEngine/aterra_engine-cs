@@ -2,7 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Collections;
-using AterraEngine.Contracts.Assets;
+using AterraEngine.OldContracts.Assets;
 
 namespace AterraEngine.Assets;
 

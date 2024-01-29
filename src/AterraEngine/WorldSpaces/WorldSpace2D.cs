@@ -2,12 +2,12 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Numerics;
-using AterraEngine.Contracts.Assets;
-using AterraEngine.Contracts.Atlases;
-using AterraEngine.Contracts.Systems;
-using AterraEngine.Contracts.WorldSpaces;
+using AterraEngine.OldContracts.Assets;
+using AterraEngine.OldContracts.Atlases;
+using AterraEngine.OldContracts.Systems;
+using AterraEngine.OldContracts.WorldSpaces;
 using AterraEngine.ComponentSystems;
-using AterraEngine.Contracts.Components;
+using AterraEngine.OldContracts.Components;
 using AterraEngine.Types;
 using Raylib_cs;
 

@@ -2,7 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Numerics;
-using AterraEngine.Contracts.Components;
+using AterraEngine.OldContracts.Components;
 using AterraEngine.DTO.Components;
 using AterraEngine.Types;
 using Raylib_cs;

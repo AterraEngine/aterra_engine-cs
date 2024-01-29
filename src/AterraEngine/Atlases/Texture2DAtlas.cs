@@ -2,7 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Collections.ObjectModel;
-using AterraEngine.Contracts.Atlases;
+using AterraEngine.OldContracts.Atlases;
 using AterraEngine.Types;
 using Raylib_cs;
 

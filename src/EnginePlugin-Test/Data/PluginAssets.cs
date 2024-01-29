@@ -4,10 +4,10 @@
 using System.Numerics;
 using AterraEngine;
 using AterraEngine.Assets;
-using AterraEngine.Contracts.Assets;
-using AterraEngine.Contracts.Atlases;
-using AterraEngine.Contracts.Components;
-using AterraEngine.Contracts.Factories;
+using AterraEngine.OldContracts.Assets;
+using AterraEngine.OldContracts.Atlases;
+using AterraEngine.OldContracts.Components;
+using AterraEngine.OldContracts.Factories;
 using AterraEngine.DTO.Assets;
 using AterraEngine.Types;
 using EnginePlugin_Test.Data.Textures;

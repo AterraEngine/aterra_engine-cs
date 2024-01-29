@@ -3,8 +3,8 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
-using AterraEngine.Contracts.Assets;
-using AterraEngine.Contracts.Atlases;
+using AterraEngine.OldContracts.Assets;
+using AterraEngine.OldContracts.Atlases;
 using AterraEngine.Types;
 
 namespace AterraEngine.Atlases;

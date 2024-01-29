@@ -1,12 +1,12 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.Engine;
-using AterraEngine.Contracts.Atlases;
-using AterraEngine.Contracts.WorldSpaces;
+using AterraEngine.OldContracts.Engine;
+using AterraEngine.OldContracts.Atlases;
+using AterraEngine.OldContracts.WorldSpaces;
 using AterraEngine.Atlases;
 using AterraEngine.Factories;
-using AterraEngine.Contracts.Factories;
+using AterraEngine.OldContracts.Factories;
 using AterraEngine.DTO.EngineConfig;
 using AterraEngine.EngineFactory.Config;
 using AterraEngine.WorldSpaces;

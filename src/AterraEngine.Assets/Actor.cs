@@ -2,8 +2,8 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.Components;
-using AterraEngine.Contracts.Assets;
-using AterraEngine.Contracts.Components;
+using AterraEngine.OldContracts.Assets;
+using AterraEngine.OldContracts.Components;
 using AterraEngine.Types;
 
 namespace AterraEngine.Assets;

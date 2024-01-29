@@ -1,10 +1,10 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.Engine;
-using AterraEngine.Contracts.Atlases;
-using AterraEngine.Contracts.Factories;
-using AterraEngine.Contracts.WorldSpaces;
+using AterraEngine.OldContracts.Engine;
+using AterraEngine.OldContracts.Atlases;
+using AterraEngine.OldContracts.Factories;
+using AterraEngine.OldContracts.WorldSpaces;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AterraEngine;

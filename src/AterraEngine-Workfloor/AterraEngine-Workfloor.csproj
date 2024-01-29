@@ -12,7 +12,7 @@
       <ProjectReference Include="..\Ansi\Ansi.csproj" />
       <ProjectReference Include="..\CliCommandParser\CliCommandParser.csproj" />
       <ProjectReference Include="..\AterraEngine.EngineFactory\AterraEngine.EngineFactory.csproj" />
-      <ProjectReference Include="..\AterraEngine.Contracts\AterraEngine.Contracts.csproj" />
+      <ProjectReference Include="..\AterraEngine.OldContracts\AterraEngine.OldContracts.csproj" />
       <ProjectReference Include="..\AterraEngine.Paths\AterraEngine.Paths.csproj" />
       <ProjectReference Include="..\AterraEngine\AterraEngine.csproj" />
     </ItemGroup>

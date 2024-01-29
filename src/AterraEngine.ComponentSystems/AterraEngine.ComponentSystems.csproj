@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\AterraEngine.Contracts\AterraEngine.Contracts.csproj" />
+      <ProjectReference Include="..\AterraEngine.OldContracts\AterraEngine.OldContracts.csproj" />
     </ItemGroup>
 
 </Project>

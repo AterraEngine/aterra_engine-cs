@@ -1,8 +1,8 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.Assets;
-using AterraEngine.Contracts.Atlases;
+using AterraEngine.OldContracts.Assets;
+using AterraEngine.OldContracts.Atlases;
 using AterraEngine.Types;
 using Raylib_cs;
 

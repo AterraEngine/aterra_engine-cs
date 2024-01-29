@@ -2,8 +2,8 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Numerics;
-using AterraEngine.Contracts.Assets;
-using AterraEngine.Contracts.Components;
+using AterraEngine.OldContracts.Assets;
+using AterraEngine.OldContracts.Components;
 using Raylib_cs;
 using static Raylib_cs.Raymath;
 

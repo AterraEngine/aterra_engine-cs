@@ -1,0 +1,20 @@
+﻿// ---------------------------------------------------------------------------------------------------------------------
+// Imports
+// ---------------------------------------------------------------------------------------------------------------------
+using AterraEngine.Types;
+
+namespace AterraEngine.OldContracts.Factories;
+
+// ---------------------------------------------------------------------------------------------------------------------
+// Code
+// ---------------------------------------------------------------------------------------------------------------------
+public interface IPluginDataFactory {
+    PluginId PluginId { get;}
+    void Define(PluginId pluginId);
+    
+    void CreateData();
+    
+    public int LazyNextInternalId();
+    public EngineAssetId NewEngineAssetId();
+    public EngineAssetId NewEngineAssetId(int value);
+}
