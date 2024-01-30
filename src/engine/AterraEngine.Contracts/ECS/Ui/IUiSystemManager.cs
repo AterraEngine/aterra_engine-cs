@@ -2,13 +2,12 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Numerics;
-using AterraEngine.Contracts.Assets;
-
-namespace AterraEngine.Contracts.Systems;
+using AterraEngine.Contracts.ECS.Ui;
+namespace AterraEngine.Contracts.ECS.Logic;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IUiSystem : ISystem {
-    public void Process(IAsset asset, float deltaTime, Vector2 worldToScreen);
+public interface IUiSystemManager : IEntitySystemManager<IUiSystem<IEntity>> {
+    public void UpdateEntities(IEnumerable<IEntity> entities, float deltatime, Vector2 worldToScreen);
 }

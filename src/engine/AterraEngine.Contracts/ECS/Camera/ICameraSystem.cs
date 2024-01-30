@@ -1,17 +1,12 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
-using AterraEngine.Contracts.Components;
-using AterraEngine.Contracts.DTOs.Components;
-using AterraEngine.Contracts.ECS;
-
-namespace AterraEngine.Contracts.Assets;
+using AterraEngine.Contracts.Assets;
+namespace AterraEngine.Contracts.ECS.Camera;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IAsset : IEntity {
-    IInputComponent<Input2DDto> InputComponent { get; }
-    IMovement2DComponent Movement2DComponent { get; }
+public interface ICameraSystem<in T> : IEntitySystem where T : IEntity {
+    public void Process(T asset, float deltaTime, IAsset target);
 }

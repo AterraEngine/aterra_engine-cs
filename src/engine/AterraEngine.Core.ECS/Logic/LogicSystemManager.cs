@@ -1,15 +1,18 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Core.Types;
-
-namespace AterraEngine.Lib.Actors;
+using AterraEngine.Contracts.ECS;
+using AterraEngine.Contracts.ECS.Logic;
+namespace AterraEngine.Core.ECS.Logic;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
-public class EngineAsset(EngineAssetId id, string? internalName=null) {
-    public EngineAssetId Id { get; } = id;
-    public string? InternalName { get; } = internalName;
+public class LogicSystemManager : EntitySystemManager<ILogicSystem<IEntity>>, ILogicSystemManager {
+    public void UpdateEntities(IEnumerable<IEntity> entities, float deltaTime) {
+        ForEachEntity(
+            entities,
+            (system, entity) => system.Process(entity, deltaTime)
+        );
+    }
 }

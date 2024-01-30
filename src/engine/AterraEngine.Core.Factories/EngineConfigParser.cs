@@ -15,7 +15,7 @@ namespace AterraEngine.Core.Factories;
 // ---------------------------------------------------------------------------------------------------------------------
 /// <inheritdoc/>
 public class EngineConfigParser<T>:IEngineConfigParser<T> where T : EngineConfigDto {
-    private readonly XmlSerializer _serializer = new(typeof(T), "urn:attera-engine:engine-config");
+    private readonly XmlSerializer _serializer = new(typeof(T), "urn:aterra-engine:engine-config");
     private readonly XmlReaderSettings _readerSettings = new();
     private readonly XmlWriterSettings _writerSettings = new();
     

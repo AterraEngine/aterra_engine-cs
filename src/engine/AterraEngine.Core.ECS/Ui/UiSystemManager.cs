@@ -1,17 +1,20 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
-using AterraEngine.Contracts.Components;
-using AterraEngine.Contracts.DTOs.Components;
+using System.Numerics;
 using AterraEngine.Contracts.ECS;
-
-namespace AterraEngine.Contracts.Assets;
+using AterraEngine.Contracts.ECS.Logic;
+using AterraEngine.Contracts.ECS.Ui;
+namespace AterraEngine.Core.ECS.Ui;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IAsset : IEntity {
-    IInputComponent<Input2DDto> InputComponent { get; }
-    IMovement2DComponent Movement2DComponent { get; }
+public class UiSystemManager : EntitySystemManager<IUiSystem<IEntity>>, IUiSystemManager {
+    public void UpdateEntities(IEnumerable<IEntity> entities, float deltaTime, Vector2 worldToScreen) {
+        ForEachEntity(
+            entities,
+            (system, entity) => system.Process(entity, deltaTime, worldToScreen)
+        );
+    }
 }

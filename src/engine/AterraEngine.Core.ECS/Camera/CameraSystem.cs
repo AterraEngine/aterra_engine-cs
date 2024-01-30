@@ -2,12 +2,13 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.Contracts.Assets;
-
-namespace AterraEngine.Contracts.Systems;
+using AterraEngine.Contracts.ECS;
+using AterraEngine.Contracts.ECS.Camera;
+namespace AterraEngine.Core.ECS.Ui;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ILogicSystem : ISystem {
-    void Process(IAsset asset, float deltaTime);
+public abstract class CameraSystem<T> : EntitySystem, ICameraSystem<T> where T : IEntity {
+    public abstract void Process(T entity, float deltaTime, IAsset target);
 }

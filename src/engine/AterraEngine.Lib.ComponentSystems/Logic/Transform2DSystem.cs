@@ -4,19 +4,23 @@
 using System.Numerics;
 using AterraEngine.Contracts.Assets;
 using AterraEngine.Contracts.Components;
-using AterraEngine.Contracts.Systems;
+using AterraEngine.Contracts.ECS.Logic;
 using Raylib_cs;
-
-namespace AterraEngine.Lib.ComponentSystems;
+namespace AterraEngine.Lib.ComponentSystems.Logic;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class TransformSystem : ILogicSystem {
+public class Transform2DSystem : ILogicSystem<IAsset> {
+    public Type[] ComponentTypes { get; } = [
+        typeof(ITransform2DComponent),
+        typeof(IMovement2DComponent)
+    ];
+    
     public void Process(IAsset asset, float deltaTime) {
-        if (!asset.TryGetComponent<ITransform2DComponent>(out var position)) return;
-        if (!asset.TryGetComponent<IMovement2DComponent>(out var movement)) return;
-
+        if(! asset.TryGetComponent(out ITransform2DComponent? position)) throw new Exception();
+        if(! asset.TryGetComponent(out IMovement2DComponent? movement)) throw new Exception();
+        
         position.Size += movement.SizeOffset * deltaTime;
         position.Rot += movement.RotationOffset * deltaTime;
         

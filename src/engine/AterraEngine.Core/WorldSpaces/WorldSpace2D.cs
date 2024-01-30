@@ -4,10 +4,16 @@
 using AterraEngine.Contracts.Assets;
 using AterraEngine.Contracts.Atlases;
 using AterraEngine.Contracts.Components;
-using AterraEngine.Contracts.Systems;
+using AterraEngine.Contracts.ECS;
+using AterraEngine.Contracts.ECS.Camera;
+using AterraEngine.Contracts.ECS.Logic;
+using AterraEngine.Contracts.ECS.Render;
+using AterraEngine.Contracts.ECS.Ui;
 using AterraEngine.Contracts.WorldSpaces;
+using AterraEngine.Core.ECS;
 using AterraEngine.Core.Types;
-using AterraEngine.Lib.ComponentSystems;
+using AterraEngine.Lib.ComponentSystems.Logic;
+using AterraEngine.Lib.ComponentSystems.Render;
 using Raylib_cs;
 
 namespace AterraEngine.Core.WorldSpaces;
@@ -21,15 +27,17 @@ public class WorldSpace2D : IWorldSpace2D {
     public ILevel? LoadedLevel { get; set; }
     public EngineAssetId StartupLevelId { get; set; }
     
-    private List<ILogicSystem> _logicSystems = [
+    private List<ILogicSystem<IAsset>> _logicSystems = [
         EngineServices.CreateWithServices<PlayerInput2DSystem>(),
-        EngineServices.CreateWithServices<TransformSystem>()
+        EngineServices.CreateWithServices<Transform2DSystem>()
     ];
-    private List<IRenderSystem> _renderSystems = [
+    
+    private List<IRenderSystem<IAsset>> _renderSystems = [
         EngineServices.CreateWithServices<Render2DSystem>()
     ];
-    private List<IUiSystem> _uiSystems = [];
-    private ICameraSystem _cameraSystem = EngineServices.CreateWithServices<CameraSystem>();
+    
+    private List<IUiSystem<IEntity>> _uiSystems = [];
+    private ICameraSystem<ICamera2D> _cameraSystem = EngineServices.CreateWithServices<Camera2DSystem>();
     private ICamera2DComponent? _camera2DComponent;
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -40,12 +48,14 @@ public class WorldSpace2D : IWorldSpace2D {
         assetAtlas.TryGetAsset(StartupLevelId, out ILevel? level);
         LoadedLevel = level!;
 
-        if (!LoadedLevel.Camera2D.TryGetComponent<ICamera2DComponent>(out var camera2DComponent))
+        if (!LoadedLevel.Camera2D.TryGetComponent(out ICamera2DComponent? camera2DComponent))
             throw new Exception("Camera Undefined");
 
+        if (!assetAtlas.TryGetAsset(new EngineAssetId(new PluginId(0), 0), out IEngineAsset? player)) return;
+        
         // Cache the camera for future use
         _camera2DComponent = camera2DComponent;
-        _cameraSystem.Process(LoadedLevel.Camera2D, deltaTime: DeltaTime);
+        _cameraSystem.Process(LoadedLevel.Camera2D, deltaTime: DeltaTime, (IAsset)player);
 
         foreach (var system in _renderSystems) {
             foreach (IAsset asset in LoadedLevel.Assets.Flat()) {
@@ -55,16 +65,21 @@ public class WorldSpace2D : IWorldSpace2D {
     }
     
     public void RunLogic() {
-        DeltaTime = Raylib.GetFrameTime();
-        LoadedLevel!.Assets.Flat();
         
-        foreach (IAsset asset in LoadedLevel!.Assets.CachedFlat) {
-            foreach (var system in _logicSystems) {
-                system.Process(asset, deltaTime: DeltaTime);
+        IAssetAtlas assetAtlas = EngineServices.GetAssetAtlas();
+        if (!assetAtlas.TryGetAsset(new EngineAssetId(new PluginId(0), 0), out IEngineAsset? player)) return;
+        
+        while (true) {
+            DeltaTime = Raylib.GetFrameTime();
+            LoadedLevel!.Assets.Flat();
+        
+            foreach (IAsset asset in LoadedLevel!.Assets.CachedFlat) {
+                foreach (var system in _logicSystems) {
+                    system.Process(asset, deltaTime: DeltaTime);
+                }
             }
+            _cameraSystem.Process(LoadedLevel.Camera2D, deltaTime: DeltaTime, (IAsset)player);
         }
-        _cameraSystem.Process(LoadedLevel.Camera2D, deltaTime: DeltaTime);
-
     }
 
     public void RenderFrameWorld() {
@@ -72,7 +87,6 @@ public class WorldSpace2D : IWorldSpace2D {
         
         if (!LoadedLevel.Camera2D.TryGetComponent<ICamera2DComponent>(out var camera2DComponent)) throw new Exception("Camera Undefined");
         Raylib.BeginMode2D(camera2DComponent.Camera);
-        
         
         foreach (IAsset asset in LoadedLevel!.Assets.CachedFlat) {
             foreach (var system in _renderSystems) {

@@ -1,17 +1,11 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
-using AterraEngine.Contracts.Components;
-using AterraEngine.Contracts.DTOs.Components;
-using AterraEngine.Contracts.ECS;
-
-namespace AterraEngine.Contracts.Assets;
+namespace AterraEngine.Contracts.ECS;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IAsset : IEntity {
-    IInputComponent<Input2DDto> InputComponent { get; }
-    IMovement2DComponent Movement2DComponent { get; }
+public interface IEntitySystem{
+    Type[] ComponentTypes { get; } // Yes this is supposed to be an array of Types. It's better, trust me. 
 }

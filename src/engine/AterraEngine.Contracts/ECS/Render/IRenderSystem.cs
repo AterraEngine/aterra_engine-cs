@@ -3,21 +3,15 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.Contracts.Assets;
 using AterraEngine.Contracts.Components;
-using AterraEngine.Contracts.DTOs.Components;
-using AterraEngine.Contracts.Systems;
-
-namespace AterraEngine.Lib.ComponentSystems;
+namespace AterraEngine.Contracts.ECS.Render;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class PlayerInput2DSystem : ILogicSystem {
-    public void Process(IAsset asset, float deltaTime) {
-        if (!asset.TryGetComponent<IInputComponent<Input2DDto>>(out var input)) return;
-        if (!asset.TryGetComponent<IMovement2DComponent>(out var movement)) return;
+public interface IRenderSystem<in T> : IEntitySystem where T : IEntity {
+    
+    void LoadTextures(IAsset asset);
+    void UnloadTextures(IAsset asset);
 
-        Input2DDto inputDto = input.ProcessInput();
-        movement.AssignFromInputDto(inputDto);
-        
-    }
+    void Process(T entity, float deltaTime, ICamera2DComponent camera2DComponent);
 }

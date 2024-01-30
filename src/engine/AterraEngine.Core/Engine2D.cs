@@ -21,13 +21,15 @@ public class Engine2D(IWorldSpace2D worldSpace2D) : IEngine{
     public void Run() {
         // For data that has to be loaded before the main loop
         worldSpace2D.RunSetup();
+
+        // --- Start Logic Handling ---
+        Thread thread = new Thread(worldSpace2D.RunLogic);
+        thread.Start();
         
         while (!Raylib.WindowShouldClose()) {
-            // --- Start Logic Handling ---
-            worldSpace2D.RunLogic();
             // --- End Logic Handling ---
-            
             Raylib.BeginDrawing();
+            
             // Begin 2D drawing mode (camera)
             // Console.WriteLine(worldSpace2D.Camera.Target);
             

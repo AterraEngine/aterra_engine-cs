@@ -4,26 +4,24 @@
 using AterraEngine.Contracts.Assets;
 using AterraEngine.Contracts.Atlases;
 using AterraEngine.Contracts.Components;
-using AterraEngine.Contracts.Systems;
+using AterraEngine.Contracts.ECS.Camera;
+using AterraEngine.Contracts.ECS.Logic;
+using AterraEngine.Core.ECS.Ui;
 using AterraEngine.Core.Types;
-
-namespace AterraEngine.Lib.ComponentSystems;
+namespace AterraEngine.Lib.ComponentSystems.Logic;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class CameraSystem(IAssetAtlas assetAtlas) : ICameraSystem {
-    public void Process(ICamera2D camera, float deltaTime) {
-        if (!camera.TryGetComponent<ICamera2DComponent>(out var camera2DComponent)) return;
-        
+public class Camera2DSystem(IAssetAtlas assetAtlas) : CameraSystem<ICamera2D> {
+    public override void Process(ICamera2D camera, float deltaTime, IAsset target) {
         // TODO fix this
-        if (!assetAtlas.TryGetAsset(new EngineAssetId(new PluginId(0), 0), out var asset)) return;
+        // if (!assetAtlas.TryGetAsset(new EngineAssetId(new PluginId(0), 0), out var asset)) return;
         
-        var player = (IPlayer2D)asset;
+        IPlayer2D player = (IPlayer2D)target;
 
-        if(!player.TryGetComponent<ITransform2DComponent>(out var playerTransform)) return;
-        
-        camera2DComponent.UpdateCamera(playerTransform.Pos, deltaTime);
+        if(!player.TryGetComponent(out ITransform2DComponent? playerTransform)) return;
+        camera.Camera2DComponent.UpdateCamera(playerTransform.Pos, deltaTime);
         
     }
 }

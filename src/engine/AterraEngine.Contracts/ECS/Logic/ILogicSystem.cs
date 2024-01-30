@@ -1,17 +1,12 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
-using AterraEngine.Contracts.Components;
-using AterraEngine.Contracts.DTOs.Components;
-using AterraEngine.Contracts.ECS;
-
-namespace AterraEngine.Contracts.Assets;
+namespace AterraEngine.Contracts.ECS.Logic;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IAsset : IEntity {
-    IInputComponent<Input2DDto> InputComponent { get; }
-    IMovement2DComponent Movement2DComponent { get; }
+
+public interface ILogicSystem<in T> : IEntitySystem where T: IEntity {
+    public void Process(T entity, float deltaTime);
 }

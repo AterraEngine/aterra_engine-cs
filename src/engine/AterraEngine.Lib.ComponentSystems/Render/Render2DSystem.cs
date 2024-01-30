@@ -4,15 +4,18 @@
 using AterraEngine.Contracts.Assets;
 using AterraEngine.Contracts.Atlases;
 using AterraEngine.Contracts.Components;
-using AterraEngine.Contracts.Systems;
-
-namespace AterraEngine.Lib.ComponentSystems;
+using AterraEngine.Contracts.ECS.Render;
+namespace AterraEngine.Lib.ComponentSystems.Render;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class Render2DSystem(ITexture2DAtlas texture2DAtlas) : IRenderSystem {
-
+public class Render2DSystem(ITexture2DAtlas texture2DAtlas) : IRenderSystem<IAsset>, IRenderSystem {
+    public Type[] ComponentTypes { get; } = [
+        typeof(ITransform2DComponent),
+        typeof(IDraw2DComponent)
+    ];
+    
     public void LoadTextures(IAsset asset) {
         if (!asset.TryGetComponent<IDraw2DComponent>(out var draw2D)) return;
         

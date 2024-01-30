@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using System.Collections.Concurrent;
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using AterraEngine.Contracts.Assets;
@@ -13,7 +14,7 @@ namespace AterraEngine.Core.Atlases;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class AssetAtlas: IAssetAtlas {
-    private readonly Dictionary<EngineAssetId, IEngineAsset?> _dictionary = new();
+    private readonly ConcurrentDictionary<EngineAssetId, IEngineAsset?> _dictionary = new();
 
     public bool TryGetAsset(EngineAssetId assetId, [NotNullWhen(true)] out IEngineAsset? asset) => TryGetAsset<IEngineAsset>(assetId, out asset);
     public bool TryGetAsset<T>(EngineAssetId assetId, [NotNullWhen(true)] out T? asset) where T : IEngineAsset {
@@ -26,12 +27,13 @@ public class AssetAtlas: IAssetAtlas {
         return false;
     }
 
-    public bool TryRegisterAsset(IEngineAsset? asset) {
-        return asset != null && _dictionary.TryAdd(asset.Id, asset);
+    public bool TryRegisterAsset(IEngineAsset asset) {
+        return _dictionary.TryAdd(asset.Id, asset);
     }
 
     public IReadOnlyDictionary<EngineAssetId, ILevel> GetAllLevels() {
-        return _dictionary
+        var snapshot = _dictionary.ToArray();
+        return snapshot
             .Where(pair => pair.Value is ILevel)
             .ToImmutableDictionary(pair => pair.Key, pair => (ILevel)pair.Value);
     }

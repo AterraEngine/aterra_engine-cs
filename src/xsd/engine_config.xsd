@@ -1,6 +1,6 @@
 ﻿<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           xmlns:tns="urn:attera-engine:engine-config"
-           targetNamespace="urn:attera-engine:engine-config"
+           xmlns:tns="urn:aterra-engine:engine-config"
+           targetNamespace="urn:aterra-engine:engine-config"
            elementFormDefault="qualified">
 
     <!-- Define types for custom attributes -->

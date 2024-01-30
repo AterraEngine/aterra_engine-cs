@@ -1,17 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraEngine.Core.Types;
 
-using AterraEngine.Contracts.Components;
-using AterraEngine.Contracts.DTOs.Components;
-using AterraEngine.Contracts.ECS;
-
-namespace AterraEngine.Contracts.Assets;
+namespace AterraEngine.Core;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IAsset : IEntity {
-    IInputComponent<Input2DDto> InputComponent { get; }
-    IMovement2DComponent Movement2DComponent { get; }
+
+public class EngineAsset(EngineAssetId id, string? internalName=null) {
+    public EngineAssetId Id { get; } = id;
+    public string? InternalName { get; } = internalName;
 }
