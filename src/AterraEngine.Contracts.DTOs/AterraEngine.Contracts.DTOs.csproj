@@ -7,4 +7,8 @@
         <RootNamespace>AterraEngine.Contracts.DTOs</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\AterraEngine.Core.Types\AterraEngine.Core.Types.csproj" />
+    </ItemGroup>
+
 </Project>

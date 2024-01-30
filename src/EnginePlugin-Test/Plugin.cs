@@ -1,7 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.OldContracts.Plugin;
+using AterraEngine.Contracts.Plugin;
 
 using EnginePlugin_Test.Data;
 namespace EnginePlugin_Test;

@@ -2,14 +2,14 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Numerics;
-using AterraEngine;
-using AterraEngine.Assets;
-using AterraEngine.OldContracts.Assets;
-using AterraEngine.OldContracts.Atlases;
-using AterraEngine.OldContracts.Components;
-using AterraEngine.OldContracts.Factories;
-using AterraEngine.DTO.Assets;
-using AterraEngine.Types;
+using AterraEngine.Contracts.Assets;
+using AterraEngine.Contracts.Atlases;
+using AterraEngine.Contracts.Components;
+using AterraEngine.Contracts.DTOs.Assets;
+using AterraEngine.Contracts.Factories;
+using AterraEngine.Core;
+using AterraEngine.Core.Types;
+using AterraEngine.Lib.Actors;
 using EnginePlugin_Test.Data.Textures;
 using Raylib_cs;
 

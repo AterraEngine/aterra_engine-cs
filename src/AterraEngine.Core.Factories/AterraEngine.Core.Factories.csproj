@@ -6,4 +6,13 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\AterraEngine.Contracts.DTOs\AterraEngine.Contracts.DTOs.csproj" />
+      <ProjectReference Include="..\AterraEngine.Contracts\AterraEngine.Contracts.csproj" />
+      <ProjectReference Include="..\AterraEngine.Core.Atlases\AterraEngine.Core.Atlases.csproj" />
+      <ProjectReference Include="..\AterraEngine.Core\AterraEngine.Core.csproj" />
+      <ProjectReference Include="..\AterraEngine.Lib.Actors\AterraEngine.Lib.Actors.csproj" />
+      <ProjectReference Include="..\AterraEngine.Lib.Paths\AterraEngine.Lib.Paths.csproj" />
+    </ItemGroup>
+
 </Project>
