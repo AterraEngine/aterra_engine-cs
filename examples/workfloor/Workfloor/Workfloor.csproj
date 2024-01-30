@@ -9,12 +9,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Ansi\Ansi.csproj" />
-      <ProjectReference Include="..\AterraEngine.Core.Factories\AterraEngine.Core.Factories.csproj" />
-      <ProjectReference Include="..\CliCommandParser\CliCommandParser.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
       <PackageReference Include="Raylib-cs" Version="6.0.0" />
     </ItemGroup>
 
@@ -31,7 +25,7 @@
     <!-- Implement XSD validators   -->
 
     <ItemGroup>
-        <Content Include="..\..\xsd\**\*">
+        <Content Include="..\src\xsd\**\*">
             <Link>xsd\%(RecursiveDir)%(FileName)%(Extension)</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
@@ -40,9 +34,14 @@
 
     <!-- PLUGINS   -->
     <ItemGroup>
-        <ContentWithTargetPath Include="..\EnginePlugin-Test\bin\$(Configuration)\net8.0\EnginePlugin-Test.dll">
+        <ContentWithTargetPath Include="..\Workfloor.Plugin001\bin\$(Configuration)\net8.0\Workfloor.Plugin001.dll">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
             <TargetPath>plugins\%(FileName)%(Extension)</TargetPath>
         </ContentWithTargetPath>
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\src\engine\AterraEngine.Core.Factories\AterraEngine.Core.Factories.csproj" />
+      <ProjectReference Include="..\..\..\src\lib\CliCommandParser\CliCommandParser.csproj" />
     </ItemGroup>
 </Project>

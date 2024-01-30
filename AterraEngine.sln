@@ -8,15 +8,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workfloor", "Workfloor", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lib", "Lib", "{72601D4B-0D88-47AC-9217-34B2F6B46509}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine-Tests", "src\AterraEngine-Tests\AterraEngine-Tests.csproj", "{77D106F5-CE82-4B2B-839D-FBF11B65580F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Workfloor", "examples\workfloor\Workfloor\Workfloor.csproj", "{8E19B251-F781-4C68-A150-B22CCC5FF6DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine-Workfloor", "src\AterraEngine-Workfloor\AterraEngine-Workfloor.csproj", "{8E19B251-F781-4C68-A150-B22CCC5FF6DC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ansi", "src\lib\Ansi\Ansi.csproj", "{9C8CA02A-28DA-410A-8ADA-A39B3F6A227B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ansi", "src\Ansi\Ansi.csproj", "{9C8CA02A-28DA-410A-8ADA-A39B3F6A227B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CliCommandParser", "src\lib\CliCommandParser\CliCommandParser.csproj", "{AF334F7B-7918-497A-9B70-553990AA3503}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CliCommandParser", "src\CliCommandParser\CliCommandParser.csproj", "{AF334F7B-7918-497A-9B70-553990AA3503}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnginePlugin-Test", "src\EnginePlugin-Test\EnginePlugin-Test.csproj", "{BEEE9360-F0D3-4B83-83A4-EE3A6501A762}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Workfloor.Plugin001", "examples\workfloor\Workfloor.Plugin001\Workfloor.Plugin001.csproj", "{BEEE9360-F0D3-4B83-83A4-EE3A6501A762}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contracts", "Contracts", "{0594E3CB-F2CE-4A61-80E3-36F8F855FDB3}"
 EndProject
@@ -24,27 +22,27 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{C14D20B1-A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lib", "Lib", "{25098415-DBB7-4FC5-93A2-5C41C979E520}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Core", "src\AterraEngine.Core\AterraEngine.Core.csproj", "{9FD8B113-9918-413D-80F2-70CC63440C36}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Core", "src\engine\AterraEngine.Core\AterraEngine.Core.csproj", "{9FD8B113-9918-413D-80F2-70CC63440C36}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Core.Atlases", "src\AterraEngine.Core.Atlases\AterraEngine.Core.Atlases.csproj", "{03A66D5E-4A7B-4FFE-8F70-D653E184951A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Core.Atlases", "src\engine\AterraEngine.Core.Atlases\AterraEngine.Core.Atlases.csproj", "{03A66D5E-4A7B-4FFE-8F70-D653E184951A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Core.Factories", "src\AterraEngine.Core.Factories\AterraEngine.Core.Factories.csproj", "{F1881249-A916-491F-972B-F4E14134D9E6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Core.Factories", "src\engine\AterraEngine.Core.Factories\AterraEngine.Core.Factories.csproj", "{F1881249-A916-491F-972B-F4E14134D9E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Core.ECS", "src\AterraEngine.Core.ECS\AterraEngine.Core.ECS.csproj", "{596476F4-17B5-4031-B482-1C0B0F8A5AC5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Core.ECS", "src\engine\AterraEngine.Core.ECS\AterraEngine.Core.ECS.csproj", "{596476F4-17B5-4031-B482-1C0B0F8A5AC5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Core.Types", "src\AterraEngine.Core.Types\AterraEngine.Core.Types.csproj", "{A837C38F-03F3-48D7-8020-B20CC5E76292}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Core.Types", "src\engine\AterraEngine.Core.Types\AterraEngine.Core.Types.csproj", "{A837C38F-03F3-48D7-8020-B20CC5E76292}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Lib.Paths", "src\AterraEngine.Lib.Paths\AterraEngine.Lib.Paths.csproj", "{9700D49E-DB10-430A-8549-897E30BF4CB2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Lib.Paths", "src\engine\AterraEngine.Lib.Paths\AterraEngine.Lib.Paths.csproj", "{9700D49E-DB10-430A-8549-897E30BF4CB2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Lib.Components", "src\AterraEngine.Lib.Components\AterraEngine.Lib.Components.csproj", "{FE2077F4-15EC-423F-89C4-36F97273C79E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Lib.Components", "src\engine\AterraEngine.Lib.Components\AterraEngine.Lib.Components.csproj", "{FE2077F4-15EC-423F-89C4-36F97273C79E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Lib.ComponentSystems", "src\AterraEngine.Lib.ComponentSystems\AterraEngine.Lib.ComponentSystems.csproj", "{96A1B5BA-C02B-4600-873C-C05612FE25CC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Lib.ComponentSystems", "src\engine\AterraEngine.Lib.ComponentSystems\AterraEngine.Lib.ComponentSystems.csproj", "{96A1B5BA-C02B-4600-873C-C05612FE25CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Lib.Actors", "src\AterraEngine.Lib.Actors\AterraEngine.Lib.Actors.csproj", "{39E4FC4B-3C75-4450-BA4B-F87BAAE05D16}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Lib.Actors", "src\engine\AterraEngine.Lib.Actors\AterraEngine.Lib.Actors.csproj", "{39E4FC4B-3C75-4450-BA4B-F87BAAE05D16}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Contracts", "src\AterraEngine.Contracts\AterraEngine.Contracts.csproj", "{84B4C1D1-F6B8-4733-8A60-6631D9ED04DC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Contracts", "src\engine\AterraEngine.Contracts\AterraEngine.Contracts.csproj", "{84B4C1D1-F6B8-4733-8A60-6631D9ED04DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Contracts.DTOs", "src\AterraEngine.Contracts.DTOs\AterraEngine.Contracts.DTOs.csproj", "{C937137B-5FE3-45BD-8627-7F9061BF0785}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Contracts.DTOs", "src\engine\AterraEngine.Contracts.DTOs\AterraEngine.Contracts.DTOs.csproj", "{C937137B-5FE3-45BD-8627-7F9061BF0785}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{A06FC962-E826-4DBE-886A-13F2C5F8380B}"
 EndProject
@@ -56,7 +54,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{77D106F5-CE82-4B2B-839D-FBF11B65580F} = {EB56FFEB-7FE6-44BB-B268-654433136B0F}
 		{8E19B251-F781-4C68-A150-B22CCC5FF6DC} = {BA09286A-862B-4331-98ED-AD330808EDF8}
 		{9C8CA02A-28DA-410A-8ADA-A39B3F6A227B} = {72601D4B-0D88-47AC-9217-34B2F6B46509}
 		{AF334F7B-7918-497A-9B70-553990AA3503} = {72601D4B-0D88-47AC-9217-34B2F6B46509}
@@ -80,10 +77,6 @@ Global
 		{72601D4B-0D88-47AC-9217-34B2F6B46509} = {4AA0EDE6-622F-4F44-A5BB-D52CFDE03219}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{77D106F5-CE82-4B2B-839D-FBF11B65580F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{77D106F5-CE82-4B2B-839D-FBF11B65580F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{77D106F5-CE82-4B2B-839D-FBF11B65580F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{77D106F5-CE82-4B2B-839D-FBF11B65580F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8E19B251-F781-4C68-A150-B22CCC5FF6DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8E19B251-F781-4C68-A150-B22CCC5FF6DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8E19B251-F781-4C68-A150-B22CCC5FF6DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
