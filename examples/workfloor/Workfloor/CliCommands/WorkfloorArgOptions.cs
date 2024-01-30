@@ -1,8 +1,8 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using ArgsParser;
-using ArgsParser.Attributes;
+using CliCommandParser;
+using CliCommandParser.Attributes;
 
 namespace AterraEngine_Workfloor.CliCommands;
 

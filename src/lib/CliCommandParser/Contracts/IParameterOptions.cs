@@ -1,13 +1,11 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace ArgsParser.Interfaces;
+namespace CliCommandParser.Contracts;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ICliCommandAttribute {
-    string Name { get;}
-    string? Description { get; }
-    IParameterOptions GetParameters(string[] args);
+public interface IParameterOptions {
+    public bool Verbose { get; set; }
 }

@@ -2,10 +2,10 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Reflection;
-using ArgsParser.Attributes;
-using ArgsParser.Interfaces;
+using CliCommandParser.Attributes;
+using CliCommandParser.Contracts;
 
-namespace ArgsParser;
+namespace CliCommandParser;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

@@ -3,9 +3,9 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Reflection;
 using System.Text;
-using ArgsParser.Interfaces;
+using CliCommandParser.Contracts;
 
-namespace ArgsParser;
+namespace CliCommandParser;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
