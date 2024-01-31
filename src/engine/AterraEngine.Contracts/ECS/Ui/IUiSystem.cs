@@ -7,6 +7,6 @@ namespace AterraEngine.Contracts.ECS.Ui;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IUiSystem<in T> : IEntitySystem where T : IEntity {
+public interface IUiSystem<T> : IEntitySystem<T> where T : IEntity {
     public void Process(T asset, float deltaTime, Vector2 worldToScreen);
 }

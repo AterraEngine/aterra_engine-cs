@@ -2,8 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.Contracts.Assets;
-using AterraEngine.Contracts.ECS.Camera;
-namespace AterraEngine.Contracts.ECS.Logic;
+namespace AterraEngine.Contracts.ECS.Camera;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

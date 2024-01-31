@@ -9,8 +9,7 @@ namespace AterraEngine.Lib.Actors;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class AssetNode(IAsset asset, List<IAssetNode>? children = null) : IAssetNode {
-    public IAsset Asset { get; set; } = asset;
+public class AssetNodeRoot(List<IAssetNode>? children = null) : IAssetNodeRoot {
     public List<IAssetNode> Children { get; } = children ?? [];
     private List<IAsset>? _cachedFlat;
     
@@ -30,8 +29,6 @@ public class AssetNode(IAsset asset, List<IAssetNode>? children = null) : IAsset
     public IEnumerable<IAsset> Flat() {
         var stack = new Stack<IAssetNode>(Children);
         
-        yield return Asset;
-
         while(stack.Count != 0) {
             var node = stack.Pop();
 

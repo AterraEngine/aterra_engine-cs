@@ -8,6 +8,6 @@ namespace AterraEngine.Core.ECS.Logic;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class LogicSystem<T> : EntitySystem, ILogicSystem<T> where T : IEntity {
-    public abstract void Process(T entity, float deltaTime);
+public abstract class LogicSystem<T> : EntitySystem<T>, ILogicSystem<T> where T : IEntity {
+    public abstract void Process(IEntity entity, float deltaTime);
 }

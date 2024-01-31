@@ -6,6 +6,7 @@ namespace AterraEngine.Contracts.ECS;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IEntitySystem{
+public interface IEntitySystem<out T>{
     Type[] ComponentTypes { get; } // Yes this is supposed to be an array of Types. It's better, trust me. 
+    public T ConvertEntity(IEntity entity); 
 }

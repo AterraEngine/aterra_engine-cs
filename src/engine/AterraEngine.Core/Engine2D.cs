@@ -23,7 +23,7 @@ public class Engine2D(IWorldSpace2D worldSpace2D) : IEngine{
         worldSpace2D.RunSetup();
 
         // --- Start Logic Handling ---
-        Thread thread = new Thread(worldSpace2D.RunLogic);
+        Thread thread = new(worldSpace2D.RunLogic);
         thread.Start();
         
         while (!Raylib.WindowShouldClose()) {

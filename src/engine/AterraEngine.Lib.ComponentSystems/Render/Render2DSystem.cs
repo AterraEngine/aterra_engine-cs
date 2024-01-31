@@ -4,42 +4,28 @@
 using AterraEngine.Contracts.Assets;
 using AterraEngine.Contracts.Atlases;
 using AterraEngine.Contracts.Components;
-using AterraEngine.Contracts.ECS.Render;
+using AterraEngine.Contracts.ECS;
+using AterraEngine.Core.ECS.Render;
 namespace AterraEngine.Lib.ComponentSystems.Render;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class Render2DSystem(ITexture2DAtlas texture2DAtlas) : IRenderSystem<IAsset>, IRenderSystem {
-    public Type[] ComponentTypes { get; } = [
+public class Render2DSystem(ITexture2DAtlas texture2DAtlas) : RenderSystem<IActor>(texture2DAtlas) {
+    public override Type[] ComponentTypes { get; } = [
         typeof(ITransform2DComponent),
         typeof(IDraw2DComponent)
     ];
     
-    public void LoadTextures(IAsset asset) {
-        if (!asset.TryGetComponent<IDraw2DComponent>(out var draw2D)) return;
-        
-        texture2DAtlas.TryLoadTexture(draw2D.TextureId);
-        texture2DAtlas.TryGetTexture(draw2D.TextureId, out var texture2D);
-        draw2D.Texture = texture2D;
-    }
-
-    public void UnloadTextures(IAsset asset) {
-        if (!asset.TryGetComponent<IDraw2DComponent>(out var draw2D)) return;
-        
-        texture2DAtlas.TryUnLoadTexture(draw2D.TextureId);
-    }
-
-    public void Process(IAsset asset, float deltaTime, ICamera2DComponent camera2DComponent) {
-        if (!asset.TryGetComponent<ITransform2DComponent>(out var transform2D)) return;
-        if (!asset.TryGetComponent<IDraw2DComponent>(out var draw2D)) return;
+    public override void Process(IEntity entity, float deltaTime, ICamera2DComponent camera2DComponent) {
+        IActor actor = ConvertEntity(entity);
         
         // Apply the rotation to the movement
-        draw2D.Draw(
-            transform2D.Pos,
-            transform2D.Rot,
-            transform2D.OriginRelative,
-            transform2D.Size,
+        actor.Drawable.Draw(
+            actor.Transform.Pos,
+            actor.Transform.Rot,
+            actor.Transform.OriginRelative,
+            actor.Transform.Size,
             camera2DComponent.WorldToScreenSpace
         );
         

@@ -4,8 +4,7 @@
 using AterraEngine.Contracts.Assets;
 using AterraEngine.Contracts.ECS;
 using AterraEngine.Contracts.ECS.Camera;
-using AterraEngine.Contracts.ECS.Logic;
-namespace AterraEngine.Core.ECS.Ui;
+namespace AterraEngine.Core.ECS.Camera;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

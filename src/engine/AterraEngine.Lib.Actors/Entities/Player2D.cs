@@ -6,13 +6,15 @@ using AterraEngine.Contracts.Components;
 using AterraEngine.Contracts.DTOs.Components;
 using AterraEngine.Core.Types;
 using AterraEngine.Lib.Components;
-
-namespace AterraEngine.Lib.Actors;
+namespace AterraEngine.Lib.Actors.Entities;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class Player2D: Actor, IPlayer2D {
+    private IInputComponent<Input2DDto>? _input;
+    public IInputComponent<Input2DDto> Input => _input ??= GetComponent<IInputComponent<Input2DDto>>();
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------

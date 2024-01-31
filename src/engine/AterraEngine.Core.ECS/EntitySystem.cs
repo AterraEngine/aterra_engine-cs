@@ -7,6 +7,7 @@ namespace AterraEngine.Core.ECS;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class EntitySystem : IEntitySystem{
-    public Type[] ComponentTypes { get; }
+public abstract class EntitySystem<T> : IEntitySystem<T>{
+    public abstract Type[] ComponentTypes { get; }
+    public T ConvertEntity(IEntity entity) => (T)entity;
 }

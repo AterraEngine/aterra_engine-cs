@@ -9,7 +9,6 @@
     <ItemGroup>
       <ProjectReference Include="..\AterraEngine.Contracts.DTOs\AterraEngine.Contracts.DTOs.csproj" />
       <ProjectReference Include="..\AterraEngine.Contracts\AterraEngine.Contracts.csproj" />
-      <ProjectReference Include="..\AterraEngine.Lib.ComponentSystems\AterraEngine.Lib.ComponentSystems.csproj" />
     </ItemGroup>
 
     <ItemGroup>

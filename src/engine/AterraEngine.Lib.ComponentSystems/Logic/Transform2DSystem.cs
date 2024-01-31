@@ -4,32 +4,33 @@
 using System.Numerics;
 using AterraEngine.Contracts.Assets;
 using AterraEngine.Contracts.Components;
+using AterraEngine.Contracts.ECS;
 using AterraEngine.Contracts.ECS.Logic;
+using AterraEngine.Core.ECS.Logic;
 using Raylib_cs;
 namespace AterraEngine.Lib.ComponentSystems.Logic;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class Transform2DSystem : ILogicSystem<IAsset> {
-    public Type[] ComponentTypes { get; } = [
+public class Transform2DSystem : LogicSystem<IAsset> {
+    public override Type[] ComponentTypes { get; } = [
         typeof(ITransform2DComponent),
         typeof(IMovement2DComponent)
     ];
     
-    public void Process(IAsset asset, float deltaTime) {
-        if(! asset.TryGetComponent(out ITransform2DComponent? position)) throw new Exception();
-        if(! asset.TryGetComponent(out IMovement2DComponent? movement)) throw new Exception();
+    public override void Process(IEntity entity, float deltaTime) {
+        IAsset asset = ConvertEntity(entity);
         
-        position.Size += movement.SizeOffset * deltaTime;
-        position.Rot += movement.RotationOffset * deltaTime;
+        asset.Transform.Size += asset.Movement.SizeOffset * deltaTime;
+        asset.Transform.Rot += asset.Movement.RotationOffset * deltaTime;
         
         // Rotation has to be applied before position, because it relies on the rotation
-        var newMovement = Vector2.Transform(
-            movement.Direction, 
-            Matrix3x2.CreateRotation(Raylib.DEG2RAD * (position.Rot + 90))
+        Vector2 newMovement = Vector2.Transform(
+            asset.Movement.Direction, 
+            Matrix3x2.CreateRotation(Raylib.DEG2RAD * (asset.Transform.Rot + 90))
             );
         
-        position.Pos += newMovement* movement.Speed * deltaTime;
+        asset.Transform.Pos += newMovement * asset.Movement.Speed * deltaTime;
     }
 }

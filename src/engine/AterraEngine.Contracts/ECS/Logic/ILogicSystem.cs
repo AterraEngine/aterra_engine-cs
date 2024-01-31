@@ -6,7 +6,6 @@ namespace AterraEngine.Contracts.ECS.Logic;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
-public interface ILogicSystem<in T> : IEntitySystem where T: IEntity {
-    public void Process(T entity, float deltaTime);
+public interface ILogicSystem<out T> : IEntitySystem<T> where T: IEntity {
+    public void Process(IEntity entity, float deltaTime);
 }

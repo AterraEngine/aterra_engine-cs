@@ -9,6 +9,6 @@ namespace AterraEngine.Core.ECS.Ui;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class UiSystem<T> : EntitySystem, IUiSystem<T> where T : IEntity{
+public abstract class UiSystem<T> : EntitySystem<T>, IUiSystem<T> where T : IEntity{
     public abstract void Process(T entity, float deltaTime, Vector2 worldToScreen);
 }

@@ -2,8 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Numerics;
-using AterraEngine.Contracts.ECS.Ui;
-namespace AterraEngine.Contracts.ECS.Logic;
+namespace AterraEngine.Contracts.ECS.Ui;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

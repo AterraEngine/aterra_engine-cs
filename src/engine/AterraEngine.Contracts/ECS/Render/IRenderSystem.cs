@@ -8,10 +8,10 @@ namespace AterraEngine.Contracts.ECS.Render;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IRenderSystem<in T> : IEntitySystem where T : IEntity {
+public interface IRenderSystem<T> : IEntitySystem<T> where T : IEntity {
     
     void LoadTextures(IAsset asset);
     void UnloadTextures(IAsset asset);
 
-    void Process(T entity, float deltaTime, ICamera2DComponent camera2DComponent);
+    void Process(IEntity entity, float deltaTime, ICamera2DComponent camera2DComponent);
 }

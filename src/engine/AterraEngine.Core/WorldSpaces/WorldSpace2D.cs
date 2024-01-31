@@ -10,10 +10,7 @@ using AterraEngine.Contracts.ECS.Logic;
 using AterraEngine.Contracts.ECS.Render;
 using AterraEngine.Contracts.ECS.Ui;
 using AterraEngine.Contracts.WorldSpaces;
-using AterraEngine.Core.ECS;
 using AterraEngine.Core.Types;
-using AterraEngine.Lib.ComponentSystems.Logic;
-using AterraEngine.Lib.ComponentSystems.Render;
 using Raylib_cs;
 
 namespace AterraEngine.Core.WorldSpaces;
@@ -26,19 +23,6 @@ public class WorldSpace2D : IWorldSpace2D {
     
     public ILevel? LoadedLevel { get; set; }
     public EngineAssetId StartupLevelId { get; set; }
-    
-    private List<ILogicSystem<IAsset>> _logicSystems = [
-        EngineServices.CreateWithServices<PlayerInput2DSystem>(),
-        EngineServices.CreateWithServices<Transform2DSystem>()
-    ];
-    
-    private List<IRenderSystem<IAsset>> _renderSystems = [
-        EngineServices.CreateWithServices<Render2DSystem>()
-    ];
-    
-    private List<IUiSystem<IEntity>> _uiSystems = [];
-    private ICameraSystem<ICamera2D> _cameraSystem = EngineServices.CreateWithServices<Camera2DSystem>();
-    private ICamera2DComponent? _camera2DComponent;
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods

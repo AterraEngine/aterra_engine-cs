@@ -10,6 +10,7 @@ using AterraEngine.Contracts.Factories;
 using AterraEngine.Core;
 using AterraEngine.Core.Types;
 using AterraEngine.Lib.Actors;
+using AterraEngine.Lib.Actors.Entities;
 using EnginePlugin_Test.Data.Textures;
 using Raylib_cs;
 

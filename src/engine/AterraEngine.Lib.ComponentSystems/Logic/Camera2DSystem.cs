@@ -6,6 +6,7 @@ using AterraEngine.Contracts.Atlases;
 using AterraEngine.Contracts.Components;
 using AterraEngine.Contracts.ECS.Camera;
 using AterraEngine.Contracts.ECS.Logic;
+using AterraEngine.Core.ECS.Camera;
 using AterraEngine.Core.ECS.Ui;
 using AterraEngine.Core.Types;
 namespace AterraEngine.Lib.ComponentSystems.Logic;
@@ -14,6 +15,10 @@ namespace AterraEngine.Lib.ComponentSystems.Logic;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class Camera2DSystem(IAssetAtlas assetAtlas) : CameraSystem<ICamera2D> {
+    public override Type[] ComponentTypes { get; } = [
+        typeof(ICamera2DComponent)
+    ];
+    
     public override void Process(ICamera2D camera, float deltaTime, IAsset target) {
         // TODO fix this
         // if (!assetAtlas.TryGetAsset(new EngineAssetId(new PluginId(0), 0), out var asset)) return;

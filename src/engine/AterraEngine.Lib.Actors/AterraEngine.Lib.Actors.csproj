@@ -8,6 +8,8 @@
 
     <ItemGroup>
       <ProjectReference Include="..\AterraEngine.Contracts\AterraEngine.Contracts.csproj" />
+      <ProjectReference Include="..\AterraEngine.Core.ECS\AterraEngine.Core.ECS.csproj" />
+      <ProjectReference Include="..\AterraEngine.Lib.ComponentSystems\AterraEngine.Lib.ComponentSystems.csproj" />
       <ProjectReference Include="..\AterraEngine.Lib.Components\AterraEngine.Lib.Components.csproj" />
     </ItemGroup>
 

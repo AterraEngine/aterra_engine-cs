@@ -1,12 +1,14 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.Assets;
-namespace AterraEngine.Contracts.ECS.Camera;
+namespace AterraEngine.Contracts.Assets;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ICameraSystem<T> : IEntitySystem<T> where T : IEntity {
-    public void Process(T asset, float deltaTime, IAsset target);
+public interface IAssetNodeRoot : IEnumerable<IAsset> {
+    public List<IAssetNode> Children { get; }
+    public IEnumerable<IAsset> Flat();
+    public int Count();
+    IEnumerable<IAsset> CachedFlat { get; }
 }
