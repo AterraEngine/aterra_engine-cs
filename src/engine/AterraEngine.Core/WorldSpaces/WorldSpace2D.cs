@@ -40,12 +40,12 @@ public class WorldSpace2D : IWorldSpace2D {
         LoadedLevel.GetCamera().Camera2DComponent.UpdateCameraSpace();
     }
     
-    public void RunLogic() {
+    public void RunLogic(CancellationToken cancellationToken) {
         
         IAssetAtlas assetAtlas = EngineServices.GetAssetAtlas();
         if (!assetAtlas.TryGetAsset(new EngineAssetId(new PluginId(0), 0), out IEngineAsset? player)) return;
         
-        while (true) {
+        while (!cancellationToken.IsCancellationRequested) {
             DeltaTime = Raylib.GetFrameTime();
             
             LoadedLevel!.LogicManager.Process(LoadedLevel!.Assets.Flat());

@@ -20,7 +20,7 @@ public interface IWorldSpace2D {
     EngineAssetId StartupLevelId { get; set; }
     
     void RunSetup();
-    void RunLogic();
+    void RunLogic(CancellationToken cancellationToken);
     void RenderFrameUi();
     void RenderFrameWorld();
 

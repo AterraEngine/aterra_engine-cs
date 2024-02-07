@@ -23,7 +23,8 @@ public class Engine2D(IWorldSpace2D worldSpace2D) : IEngine{
         worldSpace2D.RunSetup();
 
         // --- Start Logic Handling ---
-        Thread thread = new(worldSpace2D.RunLogic);
+        CancellationTokenSource cancellationToken = new CancellationTokenSource();
+        Thread thread = new(() => worldSpace2D.RunLogic(cancellationToken.Token));
         thread.Start();
         
         while (!Raylib.WindowShouldClose()) {
@@ -46,5 +47,6 @@ public class Engine2D(IWorldSpace2D worldSpace2D) : IEngine{
         
         Raylib.CloseWindow();
         EngineServices.DisposeServiceProvider();
+        cancellationToken.Cancel();
     }
 }
