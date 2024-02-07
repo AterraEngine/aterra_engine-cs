@@ -1,8 +1,8 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.Atlases;
-using AterraEngine.Contracts.Factories;
+using OldAterraEngine.Contracts.Atlases;
+using OldAterraEngine.Contracts.Factories;
 using EnginePlugin_Test.Data.Textures;
 
 namespace EnginePlugin_Test.Data;

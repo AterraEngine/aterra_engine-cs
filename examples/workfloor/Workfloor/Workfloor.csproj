@@ -42,6 +42,6 @@
     </ItemGroup>
     
     <ItemGroup>
-      <ProjectReference Include="..\..\..\src\engine\AterraEngine.Core.Factories\AterraEngine.Core.Factories.csproj" />
+      <ProjectReference Include="..\..\..\src\engine\OldAterraEngine.Core.Factories\OldAterraEngine.Core.Factories.csproj" />
     </ItemGroup>
 </Project>
