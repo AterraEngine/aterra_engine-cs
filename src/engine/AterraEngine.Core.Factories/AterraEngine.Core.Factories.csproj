@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\AterraEngine.Contracts.DTOs\AterraEngine.Contracts.DTOs.csproj" />
+      <ProjectReference Include="..\AterraEngine.Contracts\AterraEngine.Contracts.csproj" />
+      <ProjectReference Include="..\AterraEngine.Core.Atlases\AterraEngine.Core.Atlases.csproj" />
+      <ProjectReference Include="..\AterraEngine.Core\AterraEngine.Core.csproj" />
+      <ProjectReference Include="..\AterraEngine.Lib.Actors\AterraEngine.Lib.Actors.csproj" />
+      <ProjectReference Include="..\AterraEngine.Lib.Paths\AterraEngine.Lib.Paths.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="CliArgsParser" Version="0.1.3" />
+    </ItemGroup>
+
+</Project>
