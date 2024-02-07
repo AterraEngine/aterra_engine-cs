@@ -21,6 +21,9 @@ public abstract class AEnginePlugin : IEnginePlugin  {
     // -----------------------------------------------------------------------------------------------------------------
     public void Define(PluginId pluginId) {
         Id = pluginId;
+        
+        Console.WriteLine($"{Id} - {NameReadable}");
+        
     }
 
     public void DefineServices(IServiceCollection serviceCollection) {}

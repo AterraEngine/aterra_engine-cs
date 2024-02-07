@@ -8,7 +8,7 @@ namespace AterraEngine.Contracts.Assets;
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IAssetNodeRoot : IEnumerable<IAsset> {
     public List<IAssetNode> Children { get; }
-    public IEnumerable<IAsset> Flat();
+    public IEnumerable<IAsset?> Flat();
     public int Count();
     IEnumerable<IAsset> CachedFlat { get; }
 }

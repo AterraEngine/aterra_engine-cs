@@ -2,35 +2,30 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Numerics;
-using AterraEngine.Contracts.Assets;
-using AterraEngine.Contracts.Components;
 using AterraEngine.Contracts.ECS;
-using AterraEngine.Contracts.ECS.Logic;
-using AterraEngine.Core.ECS.Logic;
+using AterraEngine.Contracts.ECS.EntityCombinations;
+using AterraEngine.Contracts.WorldSpaces;
+using AterraEngine.Core.ECS;
 using Raylib_cs;
 namespace AterraEngine.Lib.ComponentSystems.Logic;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class Transform2DSystem : LogicSystem<IAsset> {
-    public override Type[] ComponentTypes { get; } = [
-        typeof(ITransform2DComponent),
-        typeof(IMovement2DComponent)
-    ];
-    
-    public override void Process(IEntity entity, float deltaTime) {
-        IAsset asset = ConvertEntity(entity);
-        
-        asset.Transform.Size += asset.Movement.SizeOffset * deltaTime;
-        asset.Transform.Rot += asset.Movement.RotationOffset * deltaTime;
+public class Transform2DSystem(IWorldSpace2D worldSpace2D) : EntityComponentSystem<IMoveableEntity> {
+    public override void Update(IEntity e) {
+        var entity = CastToEntity(e);
+
+        entity.Transform.Size += entity.Movement.SizeOffset * worldSpace2D.DeltaTime;
+        entity.Transform.Rot += entity.Movement.RotationOffset * worldSpace2D.DeltaTime;
         
         // Rotation has to be applied before position, because it relies on the rotation
         Vector2 newMovement = Vector2.Transform(
-            asset.Movement.Direction, 
-            Matrix3x2.CreateRotation(Raylib.DEG2RAD * (asset.Transform.Rot + 90))
+            entity.Movement.Direction, 
+            Matrix3x2.CreateRotation(Raylib.DEG2RAD * (entity.Transform.Rot + 90))
             );
         
-        asset.Transform.Pos += newMovement * asset.Movement.Speed * deltaTime;
+        entity.Transform.Pos += newMovement * entity.Movement.Speed * worldSpace2D.DeltaTime;
+        
     }
 }

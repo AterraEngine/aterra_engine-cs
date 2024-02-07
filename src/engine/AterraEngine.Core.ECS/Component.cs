@@ -1,12 +1,12 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Numerics;
-namespace AterraEngine.Contracts.ECS.Ui;
+using AterraEngine.Contracts.Components;
+namespace AterraEngine.Core.ECS;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IUiSystem<T> : IEntitySystem<T> where T : IEntity {
-    public void Process(T asset, float deltaTime, Vector2 worldToScreen);
+public abstract class Component : IComponent {
+    
 }

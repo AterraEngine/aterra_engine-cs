@@ -9,6 +9,7 @@ using AterraEngine.Contracts.WorldSpaces;
 using AterraEngine.Core.Atlases;
 using AterraEngine.Core.WorldSpaces;
 using Microsoft.Extensions.DependencyInjection;
+using Raylib_cs;
 
 namespace AterraEngine.Core.Factories;
 
@@ -26,6 +27,9 @@ public class EngineFactory<TEngine>(string? pathToEngineConfig = null) where TEn
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public TEngine CreateEngine() {
+        
+        Console.WriteLine($"{PathToEngineConfig} - {File.Exists(PathToEngineConfig)}");
+        
         new EngineConfigFactory<EngineConfigDto>().TryLoadConfigFile(PathToEngineConfig, out EngineConfigDto? engineConfig);
         _engineConfigDto = engineConfig ?? EngineConfigDto.CreateDefault();
         

@@ -2,7 +2,7 @@
 <EngineConfig xmlns="urn:aterra-engine:engine-config">
     <Version>0.0.0</Version>
     <Plugins>
-        <Plugin>plugins/EnginePlugin-Test.dll</Plugin>
+        <Plugin>plugins/Workfloor.Plugin001.dll</Plugin>
     </Plugins>
     
     <Raylib>

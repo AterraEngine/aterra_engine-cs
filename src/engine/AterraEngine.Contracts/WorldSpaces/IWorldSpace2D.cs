@@ -1,7 +1,9 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using System.Numerics;
 using AterraEngine.Contracts.Assets;
+using AterraEngine.Contracts.ECS.EntityCombinations;
 using AterraEngine.Core.Types;
 
 namespace AterraEngine.Contracts.WorldSpaces;
@@ -11,6 +13,9 @@ namespace AterraEngine.Contracts.WorldSpaces;
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IWorldSpace2D {
     float DeltaTime { get; }
+    Vector2 WorldToScreenSpace { get; set; }
+    Vector2 ScreenToWorldSpace { get; set; }
+
     ILevel? LoadedLevel { get; }
     EngineAssetId StartupLevelId { get; set; }
     
@@ -18,4 +23,5 @@ public interface IWorldSpace2D {
     void RunLogic();
     void RenderFrameUi();
     void RenderFrameWorld();
+
 }

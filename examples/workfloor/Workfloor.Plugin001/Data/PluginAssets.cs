@@ -23,15 +23,19 @@ public class PluginAssets(IAssetAtlas assetAtlas, ILevelFactory levelFactory) : 
     public override void CreateData() {
         var worldSpace2D = EngineServices.GetWorldSpace2D();
         var player2d = new Player2D(NewEngineAssetId(0), "player");
+        var camera = new Camera2DSmooth(NewEngineAssetId(1));
+        
         if (!player2d.TryGetComponent<IDraw2DComponent>(out var draw2DComponent)) throw new Exception();
 
         draw2DComponent.TextureId = TextureIds.DuckyTest;
         draw2DComponent.SelectionBox = new Rectangle(0, 0, 1024, 1024);
             
         assetAtlas.TryRegisterAsset(player2d);
+        assetAtlas.TryRegisterAsset(camera);
 
         List<IAssetNode> assets = [
-            new AssetNode(player2d, [])
+            new AssetNode(player2d),
+            new AssetNode(camera)
         ];
 
         const int v = 50;
@@ -47,7 +51,7 @@ public class PluginAssets(IAssetAtlas assetAtlas, ILevelFactory levelFactory) : 
                     Pos = new Vector2(i, 25)
                 }
             };
-
+        
             assetAtlas.TryRegisterAsset(duckyPrime);
             
             List<IAssetNode> assetsNodes = [];
@@ -62,7 +66,7 @@ public class PluginAssets(IAssetAtlas assetAtlas, ILevelFactory levelFactory) : 
                         Pos = new Vector2(i, j)
                     }
                 };
-
+        
                 assetAtlas.TryRegisterAsset(ducky);
                 assetsNodes.Add(new AssetNode(ducky));
             }
@@ -71,28 +75,25 @@ public class PluginAssets(IAssetAtlas assetAtlas, ILevelFactory levelFactory) : 
             assets.Add(currentNode);
         }
         
-        // TO make the player render ontop
-        var assetNode = new AssetNode(
-            null,
-            assets
-        );
-        
-        // EngineAssetId level1Id = NewEngineAssetId();
-        // ILevel? level1 = levelFactory.CreateLevel(new LevelDto(level1Id, "LevelTest1"));
+        EngineAssetId level1Id = NewEngineAssetId();
+        ILevel? level1 = levelFactory.CreateLevel(new LevelDto(level1Id, "LevelTest1"));
         
         EngineAssetId level2Id = NewEngineAssetId();
         ILevel? level2 = levelFactory.CreateLevel(new LevelDto(level2Id, "LevelTest2", Color.Blue));
-        level2.Assets = assetNode;
+        level2.Assets = new AssetNodeRoot(
+            assets
+        );
+        assetAtlas.TryRegisterAsset(level2);
+        
         // level2.Assets.Asset = player2d;
 
-        level2.Camera2D = new Camera2DSmooth(NewEngineAssetId(), "camera");
+        // level2.Camera2D = ;
         // level2.Camera2D = new Camera2DStatic(NewEngineAssetId(), "camera");
 
         // worldSpace2D.StartupLevelId = level1Id;
         worldSpace2D.StartupLevelId = level2Id;
         
-        
-        Console.WriteLine(assetNode.Count());
+        Console.WriteLine(level2.Assets.Count());
         
     }
 }

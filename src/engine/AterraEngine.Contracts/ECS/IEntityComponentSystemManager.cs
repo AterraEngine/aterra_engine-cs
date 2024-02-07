@@ -2,16 +2,13 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.Contracts.Assets;
-using AterraEngine.Contracts.Components;
-namespace AterraEngine.Contracts.ECS.Render;
+
+namespace AterraEngine.Contracts.ECS;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IRenderSystem<T> : IEntitySystem<T> where T : IEntity {
-    
-    void LoadTextures(IAsset asset);
-    void UnloadTextures(IAsset asset);
-
-    void Process(IEntity entity, float deltaTime, ICamera2DComponent camera2DComponent);
+public interface IEntityComponentSystemManager {
+    public void AddSystem(IEntityComponentSystem system);
+    public void Process(IEnumerable<IAsset?> entities);
 }

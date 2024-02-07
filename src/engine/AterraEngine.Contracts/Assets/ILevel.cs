@@ -2,10 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.Contracts.ECS;
-using AterraEngine.Contracts.ECS.Camera;
-using AterraEngine.Contracts.ECS.Logic;
-using AterraEngine.Contracts.ECS.Render;
-using AterraEngine.Contracts.ECS.Ui;
+using AterraEngine.Contracts.ECS.EntityCombinations;
 using Raylib_cs;
 
 namespace AterraEngine.Contracts.Assets;
@@ -15,11 +12,11 @@ namespace AterraEngine.Contracts.Assets;
 // ---------------------------------------------------------------------------------------------------------------------
 public interface ILevel : IEngineAsset{
     public IAssetNodeRoot Assets { get; set; }
-    public ICamera2D Camera2D { get; set; }
     public Color BufferBackground { get; }
     
-    public ILogicSystemManager  LogicSystems {get;set;} 
-    public IRenderSystemManager RenderSystems {get;set;} 
-    public IUiSystemManager     UiSystems {get;set;} 
-    public ICameraSystemManager CameraSystem {get;set;} 
+    public IEntityComponentSystemManager LogicManager {get;set;}
+    public IEntityComponentSystemManager RenderManager {get;set;}
+    
+    IPlayer2DEntity GetPlayer();
+    ICamera2D GetCamera();
 }

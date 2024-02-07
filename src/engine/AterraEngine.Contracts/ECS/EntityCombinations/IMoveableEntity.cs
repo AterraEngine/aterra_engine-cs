@@ -1,18 +1,10 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.ECS;
-using AterraEngine.Contracts.ECS.Logic;
-namespace AterraEngine.Core.ECS.Logic;
+using AterraEngine.Contracts.ECS.EntityTypes;
+namespace AterraEngine.Contracts.ECS.EntityCombinations;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class LogicSystemManager : EntitySystemManager<ILogicSystem<IEntity>>, ILogicSystemManager {
-    public void UpdateEntities(IEnumerable<IEntity> entities, float deltaTime) {
-        ForEachEntity(
-            entities,
-            (system, entity) => system.Process(entity, deltaTime)
-        );
-    }
-}
+public interface IMoveableEntity : ITransformEntity, IMovementEntity;

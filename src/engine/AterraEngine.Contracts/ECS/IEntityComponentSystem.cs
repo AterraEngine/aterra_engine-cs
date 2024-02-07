@@ -1,12 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraEngine.Contracts.DTOs.ECS;
 namespace AterraEngine.Contracts.ECS;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IEntitySystem<out T>{
-    Type[] ComponentTypes { get; } // Yes this is supposed to be an array of Types. It's better, trust me. 
-    public T ConvertEntity(IEntity entity); 
+public interface IEntityComponentSystem {
+    bool CheckEntity(object? entity);
+    void Update(IEntity entity);
 }

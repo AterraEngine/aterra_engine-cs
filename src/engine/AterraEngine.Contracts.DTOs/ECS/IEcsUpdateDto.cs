@@ -1,12 +1,12 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.Assets;
-namespace AterraEngine.Contracts.ECS.Camera;
+namespace AterraEngine.Contracts.DTOs.ECS;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ICameraSystemManager : IEntitySystemManager<ICameraSystem<IEntity>> {
-    public void UpdateEntities(IEnumerable<IEntity> entities, float deltatime, IAsset target);
+
+public interface IEcsUpdateDto {
+    public float DeltaTime { get; }
 }

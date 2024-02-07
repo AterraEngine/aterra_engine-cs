@@ -1,11 +1,10 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraEngine.Contracts.ECS.Logic;
+using AterraEngine.Contracts.ECS.EntityTypes;
+namespace AterraEngine.Contracts.ECS.EntityCombinations;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ILogicSystem<out T> : IEntitySystem<T> where T: IEntity {
-    public void Process(IEntity entity, float deltaTime);
-}
+public interface IRender2DEntity : IDrawableEntity, ITransformEntity;

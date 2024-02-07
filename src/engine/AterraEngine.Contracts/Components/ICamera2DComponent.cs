@@ -10,10 +10,7 @@ namespace AterraEngine.Contracts.Components;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface ICamera2DComponent : IComponent {
-    public Camera2D Camera { get; set; } 
-    
-    public Vector2 WorldToScreenSpace {get;}
-    public Vector2 ScreenToWorldSpace {get;}
-    
+    public Camera2D Camera { get; set; }
+    public void UpdateCameraSpace();
     void UpdateCamera(Vector2 playerPos, float deltaTime);
 }

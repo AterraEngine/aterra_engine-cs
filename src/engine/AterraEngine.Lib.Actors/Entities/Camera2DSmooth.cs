@@ -13,7 +13,8 @@ namespace AterraEngine.Lib.Actors.Entities;
 // ---------------------------------------------------------------------------------------------------------------------
 public class Camera2DSmooth : Asset, ICamera2D {
     private Camera2D? _camera2DCache;
-    public ICamera2DComponent Camera2DComponent { get; }
+    private ICamera2DComponent? _camera2DComponent { get; set; }
+    public ICamera2DComponent Camera2DComponent => _camera2DComponent ??= GetComponent<ICamera2DComponent>();
     
     // -----------------------------------------------------------------------------------------------------------------
     // Constructor

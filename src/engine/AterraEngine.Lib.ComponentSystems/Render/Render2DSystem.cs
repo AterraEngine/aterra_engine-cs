@@ -1,41 +1,36 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.Assets;
-using AterraEngine.Contracts.Atlases;
+using System.Numerics;
 using AterraEngine.Contracts.Components;
+using AterraEngine.Contracts.DTOs.ECS;
 using AterraEngine.Contracts.ECS;
-using AterraEngine.Core.ECS.Render;
+using AterraEngine.Contracts.ECS.EntityCombinations;
+using AterraEngine.Contracts.WorldSpaces;
+using AterraEngine.Core.ECS;
+using Raylib_cs;
 namespace AterraEngine.Lib.ComponentSystems.Render;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class Render2DSystem(ITexture2DAtlas texture2DAtlas) : RenderSystem<IActor>(texture2DAtlas) {
-    public override Type[] ComponentTypes { get; } = [
-        typeof(ITransform2DComponent),
-        typeof(IDraw2DComponent)
-    ];
-    
-    public override void Process(IEntity entity, float deltaTime, ICamera2DComponent camera2DComponent) {
-        IActor actor = ConvertEntity(entity);
+public class Render2DSystem(IWorldSpace2D worldSpace2D) : EntityComponentSystem<IRender2DEntity> {
+    public override void Update(IEntity e) {
+        var entity = CastToEntity(e);
         
         // Apply the rotation to the movement
-        actor.Drawable.Draw(
-            actor.Transform.Pos,
-            actor.Transform.Rot,
-            actor.Transform.OriginRelative,
-            actor.Transform.Size,
-            camera2DComponent.WorldToScreenSpace
-        );
+        Vector2 adjustedPos = entity.Transform.Pos * worldSpace2D.WorldToScreenSpace;
+        Vector2 adjustedSize = entity.Transform.Size * worldSpace2D.WorldToScreenSpace;
+        Vector2 adjustedOrigin = entity.Transform.OriginRelative * worldSpace2D.WorldToScreenSpace;
         
-        // if (!asset.TryGetComponent<IDrawDebug2DComponent>(out var drawDebug2D)) return;
-        // drawDebug2D.Draw(
-        //     transform2D.Pos,
-        //     transform2D.Rot,
-        //     transform2D.OriginRelative,
-        //     transform2D.Size,
-        //     camera2DComponent.WorldToScreenSpace
-        // );
+        Raylib.DrawTexturePro(
+            entity.Drawable.Texture ?? default,
+            entity.Drawable.SelectionBox,
+            new Rectangle(adjustedPos.X, adjustedPos.Y, adjustedSize.X, adjustedSize.Y),
+            adjustedOrigin,
+            entity.Transform.Rot,
+            entity.Drawable.Tint
+        );
     }
+    
 }

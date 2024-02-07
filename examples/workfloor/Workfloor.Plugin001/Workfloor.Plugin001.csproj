@@ -13,4 +13,14 @@
       <ProjectReference Include="..\..\..\src\engine\AterraEngine.Lib.Actors\AterraEngine.Lib.Actors.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="CliArgsParser" Version="0.1.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\..\..\resources\DuckyHappy.png">
+        <Link>DuckyHappy.png</Link>
+      </Content>
+    </ItemGroup>
+
 </Project>

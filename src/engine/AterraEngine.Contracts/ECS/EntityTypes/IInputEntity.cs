@@ -1,13 +1,14 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.ECS;
-namespace AterraEngine.Core.ECS;
+using AterraEngine.Contracts.Components;
+using AterraEngine.Contracts.DTOs.Components;
+namespace AterraEngine.Contracts.ECS.EntityTypes;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class EntitySystem<T> : IEntitySystem<T>{
-    public abstract Type[] ComponentTypes { get; }
-    public T ConvertEntity(IEntity entity) => (T)entity;
+
+public interface IInputEntity {
+    public IInputComponent<Input2DDto> Input { get; }
 }

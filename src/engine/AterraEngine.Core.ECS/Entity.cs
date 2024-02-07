@@ -1,6 +1,8 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using System.Collections.Concurrent;
+using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using AterraEngine.Contracts.Components;
 using AterraEngine.Contracts.ECS;
@@ -11,9 +13,9 @@ namespace AterraEngine.Core.ECS;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class Entity(EngineAssetId id, string? internalName=null)  : EngineAsset(id, internalName), IEntity {
-    protected Dictionary<Type, IComponent> _components { get; } = new();
-    public IReadOnlyDictionary<Type, IComponent> Components => _components.AsReadOnly();
+public abstract class Entity(EngineAssetId id, string? internalName=null)  : EngineAsset(id, internalName), IEntity {
+    private ConcurrentDictionary<Type, IComponent> _components { get; } = new();
+    public ReadOnlyDictionary<Type, IComponent> Components => _components.AsReadOnly();
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
@@ -32,12 +34,12 @@ public class Entity(EngineAssetId id, string? internalName=null)  : EngineAsset(
         return _components.ContainsKey(t);
     }
 
-    public bool TryAddComponent<T, T2>() where T : IComponent where T2 : T, IComponent, new() {
-        return _components.TryAdd(typeof(T), new T2());
+    public bool TryAddComponent<T, T2>() where T : IComponent where T2 : T, IComponent {
+        return _components.TryAdd(typeof(T), EngineServices.CreateWithServices<T2>());
     }
 
-    public bool TryRemoveComponent<T>() where T : IComponent {
-        return _components.Remove(typeof(T));
+    public bool TryRemoveComponent<T>( [NotNullWhen(true)] out IComponent? component) where T : IComponent {
+        return _components.Remove(typeof(T), out component);
     }
 
     public T GetComponent<T>() where T : IComponent {

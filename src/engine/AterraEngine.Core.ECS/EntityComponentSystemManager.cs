@@ -3,12 +3,23 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.Contracts.Assets;
 using AterraEngine.Contracts.ECS;
-using AterraEngine.Contracts.ECS.Camera;
-namespace AterraEngine.Core.ECS.Camera;
+namespace AterraEngine.Core.ECS;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class CameraSystem<T> : EntitySystem<T>, ICameraSystem<T> where T : IEntity {
-    public abstract void Process(T entity, float deltaTime, IAsset target);
+public class EntityComponentSystemManager : IEntityComponentSystemManager {
+    public List<object> Systems { get; init; }= [];
+    
+    public void AddSystem(IEntityComponentSystem system) {
+        Systems.Add(system);
+    }
+    
+    public void Process(IEnumerable<IAsset?> entities) {
+        foreach (IEntityComponentSystem system in Systems) {
+            foreach (IEntity entity in entities) {
+                if(system.CheckEntity(entity)) system.Update(entity);
+            }
+        }
+    }
 }

@@ -2,12 +2,11 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.Contracts.Components;
-namespace AterraEngine.Contracts.ECS.Render;
+namespace AterraEngine.Contracts.ECS.EntityTypes;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IRenderSystemManager {
-    public bool TryAdd(IRenderSystem<IEntity> system);
-    public void UpdateEntities(IEnumerable<IEntity> entities, float deltatime, ICamera2DComponent camera2DComponent);
+public interface IMovementEntity : IEntity{
+    public IMovement2DComponent Movement { get; }
 }

@@ -1,14 +1,10 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using System.Numerics;
 using AterraEngine.Contracts.Assets;
 using AterraEngine.Contracts.Atlases;
 using AterraEngine.Contracts.Components;
-using AterraEngine.Contracts.ECS;
-using AterraEngine.Contracts.ECS.Camera;
-using AterraEngine.Contracts.ECS.Logic;
-using AterraEngine.Contracts.ECS.Render;
-using AterraEngine.Contracts.ECS.Ui;
 using AterraEngine.Contracts.WorldSpaces;
 using AterraEngine.Core.Types;
 using Raylib_cs;
@@ -20,6 +16,8 @@ namespace AterraEngine.Core.WorldSpaces;
 // ---------------------------------------------------------------------------------------------------------------------
 public class WorldSpace2D : IWorldSpace2D {
     public float DeltaTime { get; private set; }
+    public Vector2 WorldToScreenSpace { get; set;}
+    public Vector2 ScreenToWorldSpace { get; set;}
     
     public ILevel? LoadedLevel { get; set; }
     public EngineAssetId StartupLevelId { get; set; }
@@ -31,21 +29,15 @@ public class WorldSpace2D : IWorldSpace2D {
         IAssetAtlas assetAtlas = EngineServices.GetAssetAtlas();
         assetAtlas.TryGetAsset(StartupLevelId, out ILevel? level);
         LoadedLevel = level!;
-
-        if (!LoadedLevel.Camera2D.TryGetComponent(out ICamera2DComponent? camera2DComponent))
-            throw new Exception("Camera Undefined");
-
-        if (!assetAtlas.TryGetAsset(new EngineAssetId(new PluginId(0), 0), out IEngineAsset? player)) return;
         
-        // Cache the camera for future use
-        _camera2DComponent = camera2DComponent;
-        _cameraSystem.Process(LoadedLevel.Camera2D, deltaTime: DeltaTime, (IAsset)player);
+        Console.WriteLine(level);
 
-        foreach (var system in _renderSystems) {
-            foreach (IAsset asset in LoadedLevel.Assets.Flat()) {
-                system.LoadTextures(asset);
-            }
+        foreach (var asset in LoadedLevel!.Assets.Flat()) {
+            LoadTextures(asset);
         }
+
+        LoadedLevel.GetCamera().GetRayLibCamera();
+        LoadedLevel.GetCamera().Camera2DComponent.UpdateCameraSpace();
     }
     
     public void RunLogic() {
@@ -55,28 +47,18 @@ public class WorldSpace2D : IWorldSpace2D {
         
         while (true) {
             DeltaTime = Raylib.GetFrameTime();
-            LoadedLevel!.Assets.Flat();
-        
-            foreach (IAsset asset in LoadedLevel!.Assets.CachedFlat) {
-                foreach (var system in _logicSystems) {
-                    system.Process(asset, deltaTime: DeltaTime);
-                }
-            }
-            _cameraSystem.Process(LoadedLevel.Camera2D, deltaTime: DeltaTime, (IAsset)player);
+            
+            LoadedLevel!.LogicManager.Process(LoadedLevel!.Assets.Flat());
+            
         }
     }
 
     public void RenderFrameWorld() {
         Raylib.ClearBackground(LoadedLevel!.BufferBackground);
         
-        if (!LoadedLevel.Camera2D.TryGetComponent<ICamera2DComponent>(out var camera2DComponent)) throw new Exception("Camera Undefined");
-        Raylib.BeginMode2D(camera2DComponent.Camera);
+        Raylib.BeginMode2D(LoadedLevel.GetCamera().GetRayLibCamera());
         
-        foreach (IAsset asset in LoadedLevel!.Assets.CachedFlat) {
-            foreach (var system in _renderSystems) {
-                system.Process(asset, deltaTime:DeltaTime, camera2DComponent);
-            }
-        }
+        LoadedLevel!.RenderManager.Process(LoadedLevel!.Assets.Flat());
 
         Raylib.EndMode2D();
     }
@@ -93,5 +75,21 @@ public class WorldSpace2D : IWorldSpace2D {
         //     }
         // }
         
+    }
+    
+    public void LoadTextures(IAsset? asset) {
+        if (!asset.TryGetComponent<IDraw2DComponent>(out var draw2D)) return;
+        
+        ITexture2DAtlas texture2DAtlas = EngineServices.GetTexture2DAtlas();
+        texture2DAtlas.TryLoadTexture(draw2D.TextureId);
+        texture2DAtlas.TryGetTexture(draw2D.TextureId, out var texture2D);
+        draw2D.Texture = texture2D;
+    }
+
+    public void UnloadTextures(IAsset asset) {
+        if (!asset.TryGetComponent<IDraw2DComponent>(out var draw2D)) return;
+        
+        ITexture2DAtlas texture2DAtlas = EngineServices.GetTexture2DAtlas();
+        texture2DAtlas.TryUnLoadTexture(draw2D.TextureId);
     }
 }

@@ -1,12 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.Assets;
-namespace AterraEngine.Contracts.ECS.Camera;
+using AterraEngine.Contracts.ECS;
+namespace AterraEngine.Core.ECS;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ICameraSystem<T> : IEntitySystem<T> where T : IEntity {
-    public void Process(T asset, float deltaTime, IAsset target);
+public abstract class EntityComponentSystem<T> : IEntityComponentSystem where T : IEntity {
+    public T CastToEntity(IEntity entity) => (T)entity;
+    public bool CheckEntity(object? entity) => entity is T;
+    
+    public abstract void Update(IEntity entity);
 }

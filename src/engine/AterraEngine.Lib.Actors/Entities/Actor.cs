@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.Contracts.Assets;
 using AterraEngine.Contracts.Components;
+using AterraEngine.Contracts.ECS.EntityCombinations;
 using AterraEngine.Core.Types;
 using AterraEngine.Lib.Components;
 namespace AterraEngine.Lib.Actors.Entities;
@@ -10,7 +11,7 @@ namespace AterraEngine.Lib.Actors.Entities;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class Actor : Asset, IActor {
+public class Actor : Asset, IActor, IRender2DEntity {
     private IDraw2DComponent? _drawable; 
     public IDraw2DComponent Drawable => _drawable ??= GetComponent<IDraw2DComponent>(); 
     

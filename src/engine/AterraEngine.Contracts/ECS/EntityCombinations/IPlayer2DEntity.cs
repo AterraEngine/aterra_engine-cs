@@ -1,11 +1,10 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraEngine.Contracts.ECS.Logic;
+using AterraEngine.Contracts.ECS.EntityTypes;
+namespace AterraEngine.Contracts.ECS.EntityCombinations;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ILogicSystemManager : IEntitySystemManager<ILogicSystem<IEntity>> {
-    public void UpdateEntities(IEnumerable<IEntity> entities, float deltatime);
-}
+public interface IPlayer2DEntity : IMoveableEntity, IRender2DEntity, IInputEntity;

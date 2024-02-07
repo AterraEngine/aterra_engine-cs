@@ -13,4 +13,8 @@
       <ProjectReference Include="..\AterraEngine.Lib.Components\AterraEngine.Lib.Components.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="CliArgsParser" Version="0.1.3" />
+    </ItemGroup>
+
 </Project>

@@ -1,12 +1,12 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Numerics;
-namespace AterraEngine.Contracts.ECS.Ui;
+using AterraEngine.Contracts.Components;
+namespace AterraEngine.Contracts.ECS.EntityTypes;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IUiSystemManager : IEntitySystemManager<IUiSystem<IEntity>> {
-    public void UpdateEntities(IEnumerable<IEntity> entities, float deltatime, Vector2 worldToScreen);
+public interface ITransformEntity : IEntity {
+    public ITransform2DComponent Transform { get; }
 }

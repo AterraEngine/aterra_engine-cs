@@ -11,4 +11,8 @@
         <ProjectReference Include="..\AterraEngine.Core.ECS\AterraEngine.Core.ECS.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="CliArgsParser" Version="0.1.3" />
+    </ItemGroup>
+
 </Project>
