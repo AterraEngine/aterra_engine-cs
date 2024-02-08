@@ -44,8 +44,8 @@ public class EngineConfigParser<T>:IEngineConfigParser<T> where T : EngineConfig
                 return false;
             }
             
-            using StreamReader reader = new StreamReader(filePath);
-            using XmlReader xmlReader = XmlReader.Create(reader, _readerSettings);
+            using var reader = new StreamReader(filePath);
+            using var xmlReader = XmlReader.Create(reader, _readerSettings);
             engineConfig = (T)_serializer.Deserialize(xmlReader)!;
             
             return true;
@@ -62,8 +62,8 @@ public class EngineConfigParser<T>:IEngineConfigParser<T> where T : EngineConfig
     public bool TrySerializeToFile(T engineConfig, string filePath) {
         // Default to null
         try {
-            using StreamWriter writer = new StreamWriter(filePath);
-            using XmlWriter xmlWriter = XmlWriter.Create(writer, _writerSettings);
+            using var writer = new StreamWriter(filePath);
+            using var xmlWriter = XmlWriter.Create(writer, _writerSettings);
             _serializer.Serialize(xmlWriter, engineConfig);
             return true;
         }

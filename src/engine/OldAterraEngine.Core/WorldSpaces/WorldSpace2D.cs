@@ -32,7 +32,7 @@ public class WorldSpace2D : IWorldSpace2D {
         
         Console.WriteLine(level);
 
-        foreach (var asset in LoadedLevel!.Assets.Flat()) {
+        foreach (IAsset? asset in LoadedLevel!.Assets.Flat()) {
             LoadTextures(asset);
         }
 
@@ -66,7 +66,7 @@ public class WorldSpace2D : IWorldSpace2D {
     public void RenderFrameUi() {
         // Console.WriteLine(Camera.Target);
 
-        var fps = Raylib.GetFPS();
+        int fps = Raylib.GetFPS();
         Raylib.DrawText($"{fps}", 20,20,20, Color.Black) ;
         
         // foreach (var system in _uiSystems) {
@@ -78,16 +78,16 @@ public class WorldSpace2D : IWorldSpace2D {
     }
     
     public void LoadTextures(IAsset? asset) {
-        if (!asset.TryGetComponent<IDraw2DComponent>(out var draw2D)) return;
+        if (!asset.TryGetComponent<IDraw2DComponent>(out IDraw2DComponent? draw2D)) return;
         
         ITexture2DAtlas texture2DAtlas = EngineServices.GetTexture2DAtlas();
         texture2DAtlas.TryLoadTexture(draw2D.TextureId);
-        texture2DAtlas.TryGetTexture(draw2D.TextureId, out var texture2D);
+        texture2DAtlas.TryGetTexture(draw2D.TextureId, out Texture2D? texture2D);
         draw2D.Texture = texture2D;
     }
 
     public void UnloadTextures(IAsset asset) {
-        if (!asset.TryGetComponent<IDraw2DComponent>(out var draw2D)) return;
+        if (!asset.TryGetComponent<IDraw2DComponent>(out IDraw2DComponent? draw2D)) return;
         
         ITexture2DAtlas texture2DAtlas = EngineServices.GetTexture2DAtlas();
         texture2DAtlas.TryUnLoadTexture(draw2D.TextureId);

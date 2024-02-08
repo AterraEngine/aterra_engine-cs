@@ -59,7 +59,7 @@ public struct SemanticVersion : IXmlSerializable{
     /// <param name="version">The version string in the format 'Major.Minor.Patch'.</param>
     /// <exception cref="ArgumentException">Thrown when the version string is in an invalid format.</exception>
     private void ParseFromString(string version) {
-        var match = _regex.Match(version);
+        Match? match = _regex.Match(version);
         if (!match.Success) {
             throw new ArgumentException("Invalid version format. Expected format: 'Major.Minor.Patch'");
         }

@@ -14,7 +14,7 @@ namespace OldAterraEngine.Lib.ComponentSystems.Render;
 // ---------------------------------------------------------------------------------------------------------------------
 public class Render2DSystem(IWorldSpace2D worldSpace2D) : EntityComponentSystem<IRender2DEntity> {
     public override void Update(IEntity e) {
-        var entity = CastToEntity(e);
+        IRender2DEntity? entity = CastToEntity(e);
         
         // Apply the rotation to the movement
         Vector2 adjustedPos = entity.Transform.Pos * worldSpace2D.WorldToScreenSpace;

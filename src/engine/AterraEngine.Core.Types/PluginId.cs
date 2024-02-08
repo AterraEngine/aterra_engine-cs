@@ -35,34 +35,15 @@ public struct PluginId : IComparable<PluginId>, IEqualityComparer<PluginId> {
     // -----------------------------------------------------------------------------------------------------------------
     // Operators and Comparisons
     // -----------------------------------------------------------------------------------------------------------------
-    public static bool operator ==(PluginId left, PluginId right) {
-        return left.Equals(right);
-    }
-
-    public static bool operator !=(PluginId left, PluginId right) {
-        return !(left == right);
-    }
+    public static bool operator ==(PluginId left, PluginId right) => left.Equals(right);
+    public static bool operator !=(PluginId left, PluginId right) => !(left == right);
     
-    public int CompareTo(PluginId other) {
-        return Id.CompareTo(other.Id);
-    }
+    public int CompareTo(PluginId other) => Id.CompareTo(other.Id);
+    
+    public override bool Equals(object? obj) => obj is PluginId other && Equals(other);
+    public bool Equals(PluginId other) => Id == other.Id;
+    public bool Equals(PluginId x, PluginId y) => x.Id == y.Id;
 
-    public bool Equals(PluginId x, PluginId y) {
-        return x.Id == y.Id;
-    }
-
-    public int GetHashCode(PluginId obj) {
-        return obj.Id;
-    }
-    public bool Equals(PluginId other) {
-        return Id == other.Id;
-    }
-
-    public override bool Equals(object? obj) {
-        return obj is PluginId other && Equals(other);
-    }
-
-    public override int GetHashCode() {
-        return Id;
-    }
+    public int GetHashCode(PluginId obj) => obj.Id;
+    public override int GetHashCode() => Id;
 }

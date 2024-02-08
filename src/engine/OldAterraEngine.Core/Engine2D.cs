@@ -23,7 +23,7 @@ public class Engine2D(IWorldSpace2D worldSpace2D) : IEngine{
         worldSpace2D.RunSetup();
 
         // --- Start Logic Handling ---
-        CancellationTokenSource cancellationToken = new CancellationTokenSource();
+        var cancellationToken = new CancellationTokenSource();
         Thread thread = new(() => worldSpace2D.RunLogic(cancellationToken.Token));
         thread.Start();
         

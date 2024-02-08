@@ -15,7 +15,7 @@ namespace AterraEngine.Lib.Plugin;
 public abstract class Plugin(PluginId id) : IPlugin {
     public PluginId Id { get; } = id;
 
-    public virtual IPluginServicesFactory? Services { get; } = null;
-    public virtual IPluginAssetsFactory? Assets => null;
-    public virtual IPluginTexturesFactory? Textures => null;
+    public virtual IPluginServicesFactory?  Services    => null;
+    public virtual IPluginAssetsFactory?    Assets      => null;
+    public virtual IPluginTexturesFactory?  Textures    => null;
 }

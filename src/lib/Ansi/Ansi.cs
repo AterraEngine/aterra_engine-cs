@@ -22,7 +22,7 @@ public static class AnsiColor {
     /// Returns <see cref="ByteVector3.Max"/> if the color name is not found in the <see cref="AnsiColors.KnownColorsDictionary"/>.
     /// </returns>
     private static ByteVector3 _tryGetColor(string colorName) {
-        return !AnsiColors.KnownColorsDictionary.TryGetValue(colorName, out var value)
+        return !AnsiColors.KnownColorsDictionary.TryGetValue(colorName, out ByteVector3 value)
             ? ByteVector3.Max
             : value;
     }

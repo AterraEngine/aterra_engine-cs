@@ -60,7 +60,7 @@ public class Player2DKeyboardInputComponent<T> : AInputComponent<T> where T : In
     
     private T ProcessMovement(T dto, bool[] args) {
         float[] factors = args.Select(b => b ? 1f : 0f).ToArray();
-        Vector2 movement = new Vector2(
+        var movement = new Vector2(
             (factors[3] - factors[2]),
             (factors[1] - factors[0])
         );

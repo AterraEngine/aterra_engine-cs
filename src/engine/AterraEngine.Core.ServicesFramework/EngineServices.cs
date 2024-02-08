@@ -13,7 +13,7 @@ public static class EngineServices {
     
     public static void BuildServiceProvider(IServiceCollection serviceCollection) {
         ServiceProvider = serviceCollection.BuildServiceProvider();
-        EngineLogger.Log.Information("Service provider built");
+        EngineStartupLogger.Log.Information("Service provider built");
     }
     public static void DisposeServiceProvider() {
         ServiceProvider.Dispose();

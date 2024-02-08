@@ -18,14 +18,14 @@ public class PluginFactory {
     // Load Plugin assemblies
     // -----------------------------------------------------------------------------------------------------------------
     public void LoadPlugins(IEnumerable<string> filePaths) {
-        int pluginIdCounter = 0;
+        var pluginIdCounter = 0;
         
         foreach (string assemblyLocation in CheckLoadOrderForDuplicates(filePaths.ToArray())) {
-            PluginId pluginId = new PluginId(pluginIdCounter++);
+            var pluginId = new PluginId(pluginIdCounter++);
             
             Assembly assembly = Assembly.LoadFrom(assemblyLocation);
 
-            foreach (var objectType in assembly.GetTypes()) {
+            foreach (Type? objectType in assembly.GetTypes()) {
                 // Handle Engine Plugin (ergo, data)
                 if (typeof(IEnginePlugin).IsAssignableFrom(objectType)
                     && objectType is { IsInterface: false, IsAbstract: false }) {
@@ -33,7 +33,7 @@ public class PluginFactory {
                     // This handles a lot of the basic setup of a plugin
                     //      Services and other things shouldn't be defined in this config
                     
-                    IEnginePlugin plugin = ((IEnginePlugin)Activator.CreateInstance(objectType)!);
+                    var plugin = ((IEnginePlugin)Activator.CreateInstance(objectType)!);
                     plugin.Define(pluginId);
                     _enginePlugins.Add(pluginId, plugin);
                 } 
@@ -45,7 +45,7 @@ public class PluginFactory {
     // Apply data from plugins
     // -----------------------------------------------------------------------------------------------------------------
     private static IPluginDataFactory LoadPluginDataFactory(PluginId pluginId, Type objectType) {
-        IPluginDataFactory factory = EngineServices.CreateWithServices<IPluginDataFactory>(objectType);
+        var factory = EngineServices.CreateWithServices<IPluginDataFactory>(objectType);
         // IPluginDataFactory factory = (ActivatorUtilities.CreateInstance(EngineServices.ServiceProvider, objectType) as IPluginDataFactory)!;
         factory.Define(pluginId);
         return factory;
@@ -53,13 +53,13 @@ public class PluginFactory {
     }
 
     public void LoadPluginTextures() {
-        foreach (var plugin in GetPluginsSorted()) {
+        foreach (IEnginePlugin? plugin in GetPluginsSorted()) {
             LoadPluginDataFactory(plugin.Id, plugin.PluginTextures).CreateData();
         }
     }
 
     public void LoadPluginAssets() {
-        foreach (var plugin in GetPluginsSorted()) {
+        foreach (IEnginePlugin? plugin in GetPluginsSorted()) {
             LoadPluginDataFactory(plugin.Id, plugin.PluginAssets).CreateData();
         }
     }
@@ -73,12 +73,12 @@ public class PluginFactory {
     }
 
     private IEnumerable<string> CheckLoadOrderForDuplicates(string[] filePaths) {
-        var duplicates = filePaths
+        IEnumerable<string>? duplicates = filePaths
             .GroupBy(f => f)
             .Where(f => f.Count() > 1)
             .SelectMany(f => f);
 
-        foreach (var duplicate in duplicates) {
+        foreach (string? duplicate in duplicates) {
             throw new Exception($"Duplicate Plugin loading isn't allowed at {duplicate}");
         }
 

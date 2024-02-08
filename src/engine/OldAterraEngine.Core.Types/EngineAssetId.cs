@@ -22,7 +22,7 @@ public struct EngineAssetId(PluginId pluginId, int value) : IComparable<EngineAs
     }
 
     public int CompareTo(EngineAssetId other) {
-        var pluginIdComparison = PluginId.CompareTo(other.PluginId);
+        int pluginIdComparison = PluginId.CompareTo(other.PluginId);
         return pluginIdComparison != 0 
             ? pluginIdComparison 
             : Id.CompareTo(other.Id);

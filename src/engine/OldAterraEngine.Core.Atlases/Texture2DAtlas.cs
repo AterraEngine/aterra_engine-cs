@@ -20,7 +20,7 @@ public class Texture2DAtlas : ITexture2DAtlas {
     }
     
     public bool TryLoadTexture(TextureId id) {
-        if (!_textureAtlasObjects.TryGetValue(id.name, out var value) || value.IsLoaded) return false;
+        if (!_textureAtlasObjects.TryGetValue(id.name, out TextureAtlasObject? value) || value.IsLoaded) return false;
         value.IsLoaded = true;
         value.Texture = Raylib.LoadTexture(value.FilePath);
         
@@ -29,7 +29,7 @@ public class Texture2DAtlas : ITexture2DAtlas {
 
     public bool TryGetTexture(TextureId id, out Texture2D? texture2D) {
         texture2D = null;
-        if (!_textureAtlasObjects.TryGetValue(id.name, out var value) 
+        if (!_textureAtlasObjects.TryGetValue(id.name, out TextureAtlasObject? value) 
             || !value.IsLoaded 
             || value.Texture is null
         ) return false;
@@ -39,7 +39,7 @@ public class Texture2DAtlas : ITexture2DAtlas {
     }
 
     public bool TryUnLoadTexture(TextureId id) {
-        var result = _textureAtlasObjects.TryGetValue(id.name, out var value);
+        bool result = _textureAtlasObjects.TryGetValue(id.name, out TextureAtlasObject? value);
 
         Raylib.UnloadTexture((Texture2D)value.Texture!);
         

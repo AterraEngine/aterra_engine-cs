@@ -30,12 +30,12 @@ public class AssetNodeRoot(List<IAssetNode>? children = null) : IAssetNodeRoot {
         var stack = new Stack<IAssetNode>(Children);
         
         while(stack.Count != 0) {
-            var node = stack.Pop();
+            IAssetNode? node = stack.Pop();
 
             if (node.Asset != null) 
                 yield return node.Asset;
 
-            foreach (var child in node.Children)
+            foreach (IAssetNode? child in node.Children)
                 stack.Push(child);
         }
     }

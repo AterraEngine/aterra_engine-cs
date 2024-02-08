@@ -15,7 +15,7 @@ namespace OldAterraEngine.Core.Factories;
 // ---------------------------------------------------------------------------------------------------------------------
 public class LevelFactory(IAssetAtlas assetAtlas, ITexture2DAtlas texture2DAtlas) : ILevelFactory{
     public ILevel CreateLevel(LevelDto levelDto) {
-        Level2D level = new Level2D(levelDto.Id, levelDto.InternalName) {
+        var level = new Level2D(levelDto.Id, levelDto.InternalName) {
             BufferBackground = levelDto.BufferBackground ?? Color.Pink
         };
 

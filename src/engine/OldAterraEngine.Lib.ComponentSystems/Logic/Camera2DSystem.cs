@@ -13,7 +13,7 @@ namespace OldAterraEngine.Lib.ComponentSystems.Logic;
 // ---------------------------------------------------------------------------------------------------------------------
 public class Camera2DSystem(IWorldSpace2D worldSpace2D) : EntityComponentSystem<ICamera2D> {
     public override void Update(IEntity e) {
-        var camera = CastToEntity(e);
+        ICamera2D? camera = CastToEntity(e);
         IPlayer2DEntity player = worldSpace2D.LoadedLevel!.GetPlayer();
         
         camera.Camera2DComponent.UpdateCamera(player.Transform.Pos, worldSpace2D.DeltaTime);

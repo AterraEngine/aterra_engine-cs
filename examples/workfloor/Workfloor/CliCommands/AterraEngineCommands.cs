@@ -16,13 +16,13 @@ namespace AterraEngine_Workfloor.CliCommands;
 public class AterraEngineCommands : CliCommandAtlas {
     private IEngine CreateEngine(AterraEngineArgOptions argOptions) {
         var engineLoader = new EngineFactory<Engine2D>(pathToEngineConfig:argOptions.EngineConfig);
-        var engine = engineLoader.CreateEngine();
+        Engine2D? engine = engineLoader.CreateEngine();
         return engine;
     }
     
     [CliCommand<AterraEngineArgOptions>("run")]
     public bool CallbackRun(AterraEngineArgOptions argOptions) {
-        var engine = CreateEngine(argOptions: argOptions);
+        IEngine? engine = CreateEngine(argOptions: argOptions);
         engine.Run();
         return true;
     }

@@ -33,12 +33,12 @@ public class AssetNode(IAsset asset, List<IAssetNode>? children = null) : IAsset
         yield return Asset;
 
         while(stack.Count != 0) {
-            var node = stack.Pop();
+            IAssetNode? node = stack.Pop();
 
             if (node.Asset != null) 
                 yield return node.Asset;
 
-            foreach (var child in node.Children)
+            foreach (IAssetNode? child in node.Children)
                 stack.Push(child);
         }
     }

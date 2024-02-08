@@ -40,10 +40,10 @@ class PluginTest(PluginId id) : Plugin(id) {
 static class Program {
     public static void Main(string[] args) {
         var pluginFactory = new PluginFactory(true);
-        pluginFactory.TryLoadPluginFromType(typeof(PluginTest));
-        pluginFactory.TryLoadPluginFromType(typeof(PluginTest));
-        pluginFactory.TryLoadPluginFromType(typeof(PluginTest));
-        pluginFactory.TryLoadPluginFromType(typeof(PluginTest));
+
+        for (var i = 0; i < 100_000; i++) {
+            pluginFactory.TryLoadPluginFromType(typeof(PluginTest));
+        }
 
         var serviceCollection = new ServiceCollection();
         var pluginLoader = new PluginLoader(serviceCollection);

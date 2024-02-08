@@ -32,7 +32,7 @@ public class AssetAtlas: IAssetAtlas {
     }
 
     public IReadOnlyDictionary<EngineAssetId, ILevel> GetAllLevels() {
-        var snapshot = _dictionary.ToArray();
+        KeyValuePair<EngineAssetId, IEngineAsset>[]? snapshot = _dictionary.ToArray();
         return snapshot
             .Where(pair => pair.Value is ILevel)
             .ToImmutableDictionary(pair => pair.Key, pair => (ILevel)pair.Value);

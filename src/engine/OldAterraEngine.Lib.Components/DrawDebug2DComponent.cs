@@ -17,7 +17,7 @@ public class DrawDebug2DComponent : IDrawDebug2DComponent{
         Vector2 adjustedOrigin = origin * worldToScreenSpace;
         
         // Draw bounding box - corrected for origin
-        Rectangle screenBox = new Rectangle(
+        var screenBox = new Rectangle(
             adjustedPos - adjustedOrigin,
             adjustedSize
         );

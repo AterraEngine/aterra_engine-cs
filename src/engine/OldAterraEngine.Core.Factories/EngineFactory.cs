@@ -9,6 +9,7 @@ using OldAterraEngine.Contracts.WorldSpaces;
 using OldAterraEngine.Core.Atlases;
 using OldAterraEngine.Core.WorldSpaces;
 using Microsoft.Extensions.DependencyInjection;
+using OldAterraEngine.Contracts.Plugin;
 
 namespace OldAterraEngine.Core.Factories;
 
@@ -67,7 +68,7 @@ public class EngineFactory<TEngine>(string? pathToEngineConfig = null) where TEn
         serviceCollection.AddSingleton<IEngine, TEngine>(); // magic
         
         // --- LOAD SERVICES FROM PLUGINS ---
-        foreach (var plugin in _pluginFactory.GetPluginsSorted()) {
+        foreach (IEnginePlugin? plugin in _pluginFactory.GetPluginsSorted()) {
             plugin.DefineServices(serviceCollection); // Might overload default services
         }
         

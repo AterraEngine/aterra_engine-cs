@@ -15,10 +15,10 @@ public abstract class AInputComponent<T>: IInputComponent<T> where T : Input2DDt
     public Dictionary<KeyboardInput, KeyAction<T>> KeyMapping { get; } = new();
     
     public T ProcessInput() {
-        T dto = new T();
+        var dto = new T();
         
-        foreach ((KeyboardInput keyInput, var action) in KeyMapping) {
-            var args = keyInput.Keys.Select(key => (bool)Raylib.IsKeyDown(key)).ToArray();
+        foreach ((KeyboardInput keyInput, KeyAction<T>? action) in KeyMapping) {
+            bool[]? args = keyInput.Keys.Select(key => (bool)Raylib.IsKeyDown(key)).ToArray();
             
             switch (keyInput.Handling) {
                 case KeyboardInputHandling.All:

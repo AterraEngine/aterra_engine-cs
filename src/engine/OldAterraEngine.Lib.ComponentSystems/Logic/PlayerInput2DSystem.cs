@@ -13,7 +13,7 @@ namespace OldAterraEngine.Lib.ComponentSystems.Logic;
 public class PlayerInput2DSystem : EntityComponentSystem<IPlayer2DEntity> {
     
     public override void Update(IEntity e) {
-        var entity = CastToEntity(e);
+        IPlayer2DEntity? entity = CastToEntity(e);
         Input2DDto inputDto = entity.Input.ProcessInput();
         entity.Movement.AssignFromInputDto(inputDto);
     }

@@ -12,6 +12,7 @@ using OldAterraEngine.Core.Types;
 using OldAterraEngine.Lib.Actors;
 using OldAterraEngine.Lib.Actors.Entities;
 using EnginePlugin_Test.Data.Textures;
+using OldAterraEngine.Contracts.WorldSpaces;
 using Raylib_cs;
 
 namespace EnginePlugin_Test.Data;
@@ -21,11 +22,11 @@ namespace EnginePlugin_Test.Data;
 // ---------------------------------------------------------------------------------------------------------------------
 public class PluginAssets(IAssetAtlas assetAtlas, ILevelFactory levelFactory) : APluginDataFactory {
     public override void CreateData() {
-        var worldSpace2D = EngineServices.GetWorldSpace2D();
+        IWorldSpace2D? worldSpace2D = EngineServices.GetWorldSpace2D();
         var player2d = new Player2D(NewEngineAssetId(0), "player");
         var camera = new Camera2DSmooth(NewEngineAssetId(1));
         
-        if (!player2d.TryGetComponent<IDraw2DComponent>(out var draw2DComponent)) throw new Exception();
+        if (!player2d.TryGetComponent<IDraw2DComponent>(out IDraw2DComponent? draw2DComponent)) throw new Exception();
 
         draw2DComponent.TextureId = TextureIds.DuckyTest;
         draw2DComponent.SelectionBox = new Rectangle(0, 0, 1024, 1024);

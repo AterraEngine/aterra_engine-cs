@@ -25,7 +25,7 @@ public class Camera2DSmooth : Asset, ICamera2D {
 
     public Camera2D GetRayLibCamera() {
         if (_camera2DCache is not null) return (Camera2D)_camera2DCache;
-        if (!TryGetComponent<ICamera2DComponent>(out var camera2DComponent)) throw new Exception("Camera not defined");
+        if (!TryGetComponent<ICamera2DComponent>(out ICamera2DComponent? camera2DComponent)) throw new Exception("Camera not defined");
         _camera2DCache = camera2DComponent.Camera;
         return (Camera2D)_camera2DCache;
     }

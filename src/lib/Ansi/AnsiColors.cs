@@ -178,7 +178,7 @@ public static class AnsiColors {
     /// <param name="colorName">The name of the color to retrieve.</param>
     /// <returns>The color value associated with the specified color name, or ByteVector3.Zero if the color name is not found in the dictionary.</returns>
     public static ByteVector3 GetColor(string colorName) {
-        return _dictionary.TryGetValue(colorName, out var color) 
+        return _dictionary.TryGetValue(colorName, out ByteVector3 color) 
             ? color 
             : ByteVector3.Zero; // Handle the case where the color name is not found (e.g., return a default color)
     }

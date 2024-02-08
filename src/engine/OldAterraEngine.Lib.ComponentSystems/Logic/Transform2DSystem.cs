@@ -14,7 +14,7 @@ namespace OldAterraEngine.Lib.ComponentSystems.Logic;
 // ---------------------------------------------------------------------------------------------------------------------
 public class Transform2DSystem(IWorldSpace2D worldSpace2D) : EntityComponentSystem<IMoveableEntity> {
     public override void Update(IEntity e) {
-        var entity = CastToEntity(e);
+        IMoveableEntity? entity = CastToEntity(e);
 
         entity.Transform.Size += entity.Movement.SizeOffset * worldSpace2D.DeltaTime;
         entity.Transform.Rot += entity.Movement.RotationOffset * worldSpace2D.DeltaTime;
