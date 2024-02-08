@@ -2,35 +2,47 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Globalization;
+using System.Text.RegularExpressions;
 namespace AterraEngine.Core.Types;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public struct PluginId : IComparable<PluginId>, IEqualityComparer<PluginId> {
+public partial struct PluginId(ushort value) : IComparable<PluginId>, IEqualityComparer<PluginId> {
+    private static Regex _regex = MyRegex(); 
+    
     // PluginId is basically just a fancy ushort
-    public ushort Id { get; private set; } // which means the max plugin ID will be `FFFF`
+    public ushort Id { get; } = value; // which means the max plugin ID will be `FFFF`
 
     // -----------------------------------------------------------------------------------------------------------------
     // Constructors
     // -----------------------------------------------------------------------------------------------------------------
-    public PluginId(int value) {
-        Id = (ushort)value;
-    }
-    public PluginId(string value) {
-        ParseFromString(value);
-    }
+    public PluginId(int value) : this(CastToUshort(value)) { }
+    public PluginId(string value) : this(CastToUshort(value)) { }
     
     // -----------------------------------------------------------------------------------------------------------------
-    // Constructors
+    // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public override string ToString() {
         return Id.ToString("X").PadLeft(4,'0');
     }
 
-    private void ParseFromString(string value) {
-        Id = ushort.Parse(value, NumberStyles.HexNumber);
+    private static ushort CastToUshort(string value) {
+        if (!_regex.IsMatch(value)) {
+            throw new ArgumentException("Invalid input format.", nameof(value));
+        }
+        return CastToUshort(int.Parse(value, NumberStyles.HexNumber));
     }
+    
+    private static ushort CastToUshort(int input) {
+        if (input is < ushort.MinValue or > ushort.MaxValue) {
+            throw new ArgumentOutOfRangeException(nameof(input), "Value is out of range for ushort.");
+        }
+        return (ushort)input;
+    }
+    
+    [GeneratedRegex(@"^[0-9a-fA-F]{4}$")]
+    private static partial Regex MyRegex();
     
     // -----------------------------------------------------------------------------------------------------------------
     // Operators and Comparisons
@@ -46,4 +58,5 @@ public struct PluginId : IComparable<PluginId>, IEqualityComparer<PluginId> {
 
     public int GetHashCode(PluginId obj) => obj.Id;
     public override int GetHashCode() => Id;
+    
 }

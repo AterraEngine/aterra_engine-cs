@@ -68,6 +68,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lib", "Lib", "{62ADC2B9-AB4
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkfloorNew", "examples\workfloor\WorkfloorNew\WorkfloorNew.csproj", "{D57B5496-F071-4F22-8EE9-25947D240917}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Tests.Core.Types", "tests\AterraEngine.Tests.Core.Types\AterraEngine.Tests.Core.Types.csproj", "{D7AD0C27-9349-431E-9DEE-01E69E661249}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,6 +107,7 @@ Global
 		{62ADC2B9-AB4C-4E7A-AADC-FD92209A4398} = {A333282A-D689-4ADD-9610-827C9E468020}
 		{7BC5EB7D-FE89-4BA7-9C39-5BBD2A7620FF} = {62ADC2B9-AB4C-4E7A-AADC-FD92209A4398}
 		{D57B5496-F071-4F22-8EE9-25947D240917} = {BA09286A-862B-4331-98ED-AD330808EDF8}
+		{D7AD0C27-9349-431E-9DEE-01E69E661249} = {EB56FFEB-7FE6-44BB-B268-654433136B0F}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{8E19B251-F781-4C68-A150-B22CCC5FF6DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -191,5 +194,9 @@ Global
 		{D57B5496-F071-4F22-8EE9-25947D240917}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D57B5496-F071-4F22-8EE9-25947D240917}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D57B5496-F071-4F22-8EE9-25947D240917}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7AD0C27-9349-431E-9DEE-01E69E661249}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7AD0C27-9349-431E-9DEE-01E69E661249}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7AD0C27-9349-431E-9DEE-01E69E661249}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7AD0C27-9349-431E-9DEE-01E69E661249}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
