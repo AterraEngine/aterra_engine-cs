@@ -1,12 +1,11 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.Core.PluginFramework;
-namespace AterraEngine.Lib.Plugin;
+namespace AterraEngine.Contracts.Core.ECSFramework.Events;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class PluginAssetsFactory : IPluginAssetsFactory {
-    public abstract void LoadAssets();
+public interface IEventSystem<T> where T : IEvent {
+    public void HandleEvent(T ev);
 }

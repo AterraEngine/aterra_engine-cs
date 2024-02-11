@@ -1,12 +1,17 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.Core.PluginFramework;
-namespace AterraEngine.Lib.Plugin;
+using System.Numerics;
+using Raylib_cs;
+namespace AterraEngine.Contracts.Lib.ECS.Components;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class PluginAssetsFactory : IPluginAssetsFactory {
-    public abstract void LoadAssets();
+
+public interface ITransform2D {
+    float Rotation { get; set; }
+    Vector2 Position { get; set; }
+    Vector2 Scale { get; set; }
+    Matrix3x2 TransformationMatrix { get; }
 }

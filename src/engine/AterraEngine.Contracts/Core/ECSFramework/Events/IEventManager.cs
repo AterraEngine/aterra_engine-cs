@@ -1,12 +1,16 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.Core.PluginFramework;
-namespace AterraEngine.Lib.Plugin;
+using AterraEngine.Contracts.Delegates;
+
+namespace AterraEngine.Contracts.Core.ECSFramework.Events;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class PluginAssetsFactory : IPluginAssetsFactory {
-    public abstract void LoadAssets();
+
+public interface IEventManager {
+    void Register<TEvent>(EventCallback<TEvent> callback) where TEvent : IEvent;
+    void Unregister<TEvent>() where TEvent : IEvent;
+    void Trigger<TEvent>(TEvent e) where TEvent : IEvent;
 }

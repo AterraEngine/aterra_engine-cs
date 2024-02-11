@@ -1,14 +1,10 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using Microsoft.Extensions.DependencyInjection;
-
-namespace AterraEngine.Contracts.PluginFramework;
+using AterraEngine.Contracts.Core.ECSFramework.Events;
+namespace AterraEngine.Contracts.Delegates;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
-public interface IPluginServicesFactory {
-    public void LoadServices(IServiceCollection serviceCollection);
-}
+public delegate void EventCallback<TEvent>(TEvent e) where TEvent : IEvent;

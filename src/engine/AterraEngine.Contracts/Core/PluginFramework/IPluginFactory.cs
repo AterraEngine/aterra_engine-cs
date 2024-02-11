@@ -1,12 +1,12 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.Core.PluginFramework;
-namespace AterraEngine.Lib.Plugin;
+namespace AterraEngine.Contracts.Core.PluginFramework;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class PluginAssetsFactory : IPluginAssetsFactory {
-    public abstract void LoadAssets();
+public interface IPluginFactory {
+   bool TryLoadPluginFromType(Type objectType);
+   void LoadPluginsFromDLLFilePaths(IEnumerable<string> filePaths, bool throwOnFail);
 }

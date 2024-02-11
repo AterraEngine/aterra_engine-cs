@@ -2,16 +2,12 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.Core.Types;
-
-namespace AterraEngine.Contracts.PluginFramework;
+namespace AterraEngine.Lib.ECS.Entities;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IPlugin {
-    PluginId Id { get; }
+
+public class Player2D(AssetId id) : Actor2D(id) {
     
-    IPluginServicesFactory? Services { get;}
-    IPluginAssetsFactory? Assets { get; }
-    IPluginTexturesFactory? Textures { get; }
 }

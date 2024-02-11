@@ -1,12 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraEngine.Contracts.PluginFramework;
+using AterraEngine.Contracts.Core.ECSFramework.Events;
+using AterraEngine.Core.ECSFramework;
+using AterraEngine.Core.ECSFramework.Events;
+namespace AterraEngine.Lib.ECS.Events;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IPluginFactory {
-   bool TryLoadPluginFromType(Type objectType);
-   void LoadPluginsFromDLLFilePaths(IEnumerable<string> filePaths, bool throwOnFail);
+public class CollisionEvent(Entity collider, Entity collided) : Event {
+    public Entity ColliderEntity { get; } = collider;
+    public Entity CollidedEntity { get; } = collided;
 }

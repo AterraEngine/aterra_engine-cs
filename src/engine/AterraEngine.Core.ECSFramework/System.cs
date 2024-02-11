@@ -1,12 +1,14 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.Core.PluginFramework;
-namespace AterraEngine.Lib.Plugin;
+using AterraEngine.Contracts.Core.ECSFramework;
+namespace AterraEngine.Core.ECSFramework;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class PluginAssetsFactory : IPluginAssetsFactory {
-    public abstract void LoadAssets();
+public abstract class System<T> : ISystem<T> where T : class, IEntity {
+    public IEnumerable<T> Filter(IEnumerable<IEntity> entities) => entities.OfType<T>();
+    
+    public abstract void Process(T entity);
 }

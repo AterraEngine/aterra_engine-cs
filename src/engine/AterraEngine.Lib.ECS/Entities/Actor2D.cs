@@ -1,21 +1,22 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.Core.PluginFramework;
+using AterraEngine.Contracts.Lib.ECS.Components;
+using AterraEngine.Contracts.Lib.ECS.Entities;
+using AterraEngine.Core.ECSFramework;
 using AterraEngine.Core.Types;
-
-namespace AterraEngine.Lib.Plugin;
+using AterraEngine.Lib.ECS.Components;
+namespace AterraEngine.Lib.ECS.Entities;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
-// Whenever a plugin class is constructed, the EngineServices.Provider hasn't been built yet
-//  Meaning that DI doesn't work here
-public abstract class Plugin(PluginId id) : IPlugin {
-    public PluginId Id { get; } = id;
-
-    public virtual IPluginServicesFactory?  Services    => null;
-    public virtual IPluginAssetsFactory?    Assets      => null;
-    public virtual IPluginTexturesFactory?  Textures    => null;
+public class Actor2D : Entity, IActor2D {
+    public ITransform2D Transform2D => GetComponent<Transform2D>();
+    public ISprite Sprite => GetComponent<Sprite>();
+    
+    public Actor2D(AssetId id) : base(id) {
+        TryAddComponent<Transform2D>();
+        TryAddComponent<Sprite>();
+    }
 }

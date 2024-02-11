@@ -1,12 +1,14 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.Core.PluginFramework;
-namespace AterraEngine.Lib.Plugin;
+using AterraEngine.Contracts.Core.ECSFramework;
+using AterraEngine.Contracts.Lib.ECS.Components;
+namespace AterraEngine.Contracts.Lib.ECS.ComponentComposites;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class PluginAssetsFactory : IPluginAssetsFactory {
-    public abstract void LoadAssets();
+public interface IDrawable2D : IEntity {
+    public ITransform2D Transform2D {get;}
+    public ISprite Sprite {get;}
 }

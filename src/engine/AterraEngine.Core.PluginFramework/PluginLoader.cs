@@ -1,7 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.PluginFramework;
+using AterraEngine.Contracts.Core.PluginFramework;
 using AterraEngine.Core.ServicesFramework;
 using Microsoft.Extensions.DependencyInjection;
 

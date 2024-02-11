@@ -1,12 +1,16 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.Core.PluginFramework;
-namespace AterraEngine.Lib.Plugin;
+using System.Numerics;
+using Raylib_cs;
+namespace AterraEngine.Contracts.Lib.ECS.Components;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class PluginAssetsFactory : IPluginAssetsFactory {
-    public abstract void LoadAssets();
+public interface ISprite {
+    Texture2D? Texture { get; set; }
+    Rectangle SelectionBox { get; set; }
+    Color Tint { get; set; }
+    Vector2 OriginRelative { get; }
 }
