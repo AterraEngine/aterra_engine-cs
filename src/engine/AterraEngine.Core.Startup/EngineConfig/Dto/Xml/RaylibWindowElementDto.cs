@@ -1,14 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using Microsoft.Extensions.DependencyInjection;
+using System.Xml.Serialization;
 
-namespace AterraEngine.Contracts.Core.PluginFramework;
+namespace AterraEngine.Core.Startup.EngineConfig.Dto.Xml;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IPluginLoader {
-    void AssignPluginServices(IServiceCollection serviceCollection);
-    void LoadPluginData();
+public class RaylibWindowElementDto {
+    [XmlElement("screen")] public required DimensionElementDto Screen { get; set; }
+    [XmlElement("icon-path")]   public required string IconPath { get; set; }
+    [XmlElement("title")]  public required string Title { get; set; }
 }

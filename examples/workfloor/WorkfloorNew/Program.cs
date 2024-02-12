@@ -46,7 +46,11 @@ static class Program {
         }
 
         var serviceCollection = new ServiceCollection();
+        DefaultServices.LoadServices(serviceCollection);
         var pluginLoader = new PluginLoader(serviceCollection);
         pluginLoader.LoadPlugins(pluginFactory.Plugins);
+        
+        EngineServices.BuildServiceProvider(serviceCollection);
+        
     }
 }

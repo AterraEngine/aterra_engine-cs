@@ -1,14 +1,17 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using Microsoft.Extensions.DependencyInjection;
-
-namespace AterraEngine.Contracts.Core.PluginFramework;
+using Serilog;
+namespace AterraEngine.Core.Logging;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IPluginLoader {
-    void AssignPluginServices(IServiceCollection serviceCollection);
-    void LoadPluginData();
+public static class LoggerFactory {
+    public static ILogger CreateLogger() {
+        return new LoggerConfiguration()
+            .WriteTo.Console()
+            .WriteTo.File("log.txt")
+            .CreateLogger();
+    }
 }

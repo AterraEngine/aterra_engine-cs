@@ -1,11 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraEngine.Core.ServicesFramework;
+using AterraEngine.Contracts;
+using AterraEngine.Core.ServicesFramework;
+using Serilog;
+
+namespace AterraEngine.Core;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public static class DefaultEngineServices {
-    // public static IAssetAtlas GetAssetAtlas() => EngineServices.GetService<_>();
+public class AterraEngine : IAterraEngine {
+    protected ILogger Logger = DefaultServices.GetLogger();
 }

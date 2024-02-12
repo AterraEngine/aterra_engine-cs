@@ -74,6 +74,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Core.ECSFramew
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Lib.ECS", "src\engine\AterraEngine.Lib.ECS\AterraEngine.Lib.ECS.csproj", "{3ACFD571-16BA-4424-99DA-5E2A4E2FB2FC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Core.Startup", "src\engine\AterraEngine.Core.Startup\AterraEngine.Core.Startup.csproj", "{651B4F29-DFCA-4174-A8C9-0F8548CE2306}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Core.Logging", "src\engine\AterraEngine.Core.Logging\AterraEngine.Core.Logging.csproj", "{35516BA8-8EA9-4A55-8343-A602F0539071}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -114,6 +118,8 @@ Global
 		{D7AD0C27-9349-431E-9DEE-01E69E661249} = {EB56FFEB-7FE6-44BB-B268-654433136B0F}
 		{B7CC60F6-52AB-47B7-B87A-D7EC32892B84} = {D63DF220-011D-4FBB-9C2F-98AE7F2E94E8}
 		{3ACFD571-16BA-4424-99DA-5E2A4E2FB2FC} = {62ADC2B9-AB4C-4E7A-AADC-FD92209A4398}
+		{651B4F29-DFCA-4174-A8C9-0F8548CE2306} = {D63DF220-011D-4FBB-9C2F-98AE7F2E94E8}
+		{35516BA8-8EA9-4A55-8343-A602F0539071} = {D63DF220-011D-4FBB-9C2F-98AE7F2E94E8}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{8E19B251-F781-4C68-A150-B22CCC5FF6DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -212,5 +218,13 @@ Global
 		{3ACFD571-16BA-4424-99DA-5E2A4E2FB2FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3ACFD571-16BA-4424-99DA-5E2A4E2FB2FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3ACFD571-16BA-4424-99DA-5E2A4E2FB2FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{651B4F29-DFCA-4174-A8C9-0F8548CE2306}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{651B4F29-DFCA-4174-A8C9-0F8548CE2306}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{651B4F29-DFCA-4174-A8C9-0F8548CE2306}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{651B4F29-DFCA-4174-A8C9-0F8548CE2306}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35516BA8-8EA9-4A55-8343-A602F0539071}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35516BA8-8EA9-4A55-8343-A602F0539071}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35516BA8-8EA9-4A55-8343-A602F0539071}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35516BA8-8EA9-4A55-8343-A602F0539071}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

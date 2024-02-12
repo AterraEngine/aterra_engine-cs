@@ -1,14 +1,11 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using Microsoft.Extensions.DependencyInjection;
-
-namespace AterraEngine.Contracts.Core.PluginFramework;
+namespace AterraEngine.Contracts.Core;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IPluginLoader {
-    void AssignPluginServices(IServiceCollection serviceCollection);
-    void LoadPluginData();
+public interface IWorldSpace2D {
+    
 }

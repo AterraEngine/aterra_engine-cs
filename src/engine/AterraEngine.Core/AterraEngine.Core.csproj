@@ -10,4 +10,9 @@
       <PackageReference Include="Serilog" Version="3.1.1" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\AterraEngine.Contracts\AterraEngine.Contracts.csproj" />
+      <ProjectReference Include="..\AterraEngine.Core.ServicesFramework\AterraEngine.Core.ServicesFramework.csproj" />
+    </ItemGroup>
+
 </Project>

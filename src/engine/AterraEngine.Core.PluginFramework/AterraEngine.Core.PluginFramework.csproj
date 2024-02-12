@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\AterraEngine.Contracts\AterraEngine.Contracts.csproj" />
+      <ProjectReference Include="..\AterraEngine.Core.Logging\AterraEngine.Core.Logging.csproj" />
       <ProjectReference Include="..\AterraEngine.Core.ServicesFramework\AterraEngine.Core.ServicesFramework.csproj" />
     </ItemGroup>
 

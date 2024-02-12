@@ -7,7 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Core\" />
       <Folder Include="Lib\ECS\Systems\" />
     </ItemGroup>
 

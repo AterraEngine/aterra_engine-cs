@@ -21,7 +21,7 @@ public class RaylibFactory: IRaylibFactory {
             engineConfig.RaylibConfig.Window.Title
         );
 
-        if (engineConfig.RaylibConfig.Window.Icon == string.Empty) return;
+        if (engineConfig.RaylibConfig.Window.Icon == string.IsNullOrEmpty()) return;
         
         Image iconImage = Raylib.LoadImage(engineConfig.RaylibConfig.Window.Icon);
         Raylib.SetWindowIcon(iconImage);

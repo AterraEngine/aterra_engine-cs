@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraEngine.Core.Logging;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AterraEngine.Core.ServicesFramework;
@@ -13,8 +14,8 @@ public static class EngineServices {
     
     public static void BuildServiceProvider(IServiceCollection serviceCollection) {
         ServiceProvider = serviceCollection.BuildServiceProvider();
-        EngineStartupLogger.Log.Information("Service provider built");
     }
+    
     public static void DisposeServiceProvider() {
         ServiceProvider.Dispose();
     }

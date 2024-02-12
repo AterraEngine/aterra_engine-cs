@@ -1,14 +1,20 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 
-namespace AterraEngine.Contracts.Core.PluginFramework;
+namespace AterraEngine.Core.Startup;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IPluginLoader {
-    void AssignPluginServices(IServiceCollection serviceCollection);
-    void LoadPluginData();
+
+// A "special" logger to be used before the service collection is built
+//      Don't use this after the startup procedure has ended.
+//      
+public static class StartupLogger {
+    public static ILogger CreateLogger() => new LoggerConfiguration()
+        .WriteTo.Console()
+        .WriteTo.File("log-startup.txt")
+        .CreateLogger();
 }
