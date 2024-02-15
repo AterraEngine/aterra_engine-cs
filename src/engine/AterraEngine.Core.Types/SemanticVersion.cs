@@ -50,6 +50,8 @@ public struct SemanticVersion : IXmlSerializable{
         ParseFromString(version);
     }
 
+    public static SemanticVersion Zero => new(0, 0, 0);
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -91,8 +93,15 @@ public struct SemanticVersion : IXmlSerializable{
         ArgumentNullException.ThrowIfNull(reader);
         ParseFromString( reader.ReadElementContentAsString());
     }
-
     public void WriteXml(XmlWriter writer) {
         writer.WriteString(ToString());
+    }
+    
+    
+    // -----------------------------------------------------------------------------------------------------------------
+    // Comparisons
+    // -----------------------------------------------------------------------------------------------------------------
+    public bool Equals(SemanticVersion other) {
+        return Major == other.Major && Minor == other.Minor && Patch == other.Patch;
     }
 }

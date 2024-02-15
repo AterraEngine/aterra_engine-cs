@@ -1,13 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using Microsoft.Extensions.DependencyInjection;
-namespace AterraEngine.Contracts.Core.PluginFramework;
+using AterraEngine.Lib.Plugin;
+
+namespace Workfloor.Plugin;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
-public interface IPluginServicesFactory {
-    public void LoadServices(IServiceCollection serviceCollection);
+class PluginTestAssets : PluginAssetsBuilder {
+    public override void LoadAssets() {
+        
+    }
 }

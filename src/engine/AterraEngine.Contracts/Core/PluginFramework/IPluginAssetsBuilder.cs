@@ -1,14 +1,12 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.Core.PluginFramework;
-using Microsoft.Extensions.DependencyInjection;
-
-namespace AterraEngine.Lib.Plugin;
+namespace AterraEngine.Contracts.Core.PluginFramework;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class PluginServicesFactory : IPluginServicesFactory {
-    public abstract void LoadServices(IServiceCollection serviceCollection);
+
+public interface IPluginAssetsBuilder {
+    public void LoadAssets();
 }

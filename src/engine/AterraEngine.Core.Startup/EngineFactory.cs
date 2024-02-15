@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.Contracts;
+using AterraEngine.Contracts.Core.PluginFramework;
 using AterraEngine.Contracts.Core.Startup.Config;
 using AterraEngine.Core.Logging;
 using AterraEngine.Core.PluginFramework;
@@ -16,18 +17,18 @@ namespace AterraEngine.Core.Startup;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class EngineFactory(EngineConfigDto? engineConfigDto) {
+public class EngineFactory(EngineConfigDto? engineConfigDto, IPlugin? defaultPlugin) {
     private EngineConfigDto EngineConfigDto { get; set; } = engineConfigDto ?? EngineConfigDto.CreateEmpty();
     private static readonly ILogger _startupLogger = StartupLogger.CreateLogger();
     
     // -----------------------------------------------------------------------------------------------------------------
     // Constructors
     // -----------------------------------------------------------------------------------------------------------------
-    public static EngineFactory CreateFromConfigFile(string filePath) {
+    public static EngineFactory CreateFromConfigFile(string filePath, IPlugin? defaultPlugin = null) {
         var engineConfigFactory = new EngineConfigFactory<EngineConfigDto>(_startupLogger);
 
         if (engineConfigFactory.TryLoadConfigFile(filePath, out EngineConfigDto? engineConfigDto))
-            return new EngineFactory(engineConfigDto);
+            return new EngineFactory(engineConfigDto, defaultPlugin);
 
         string e = $"Engine Config could not be loaded from filepath: {filePath}";
         _startupLogger.Fatal(e);
@@ -51,16 +52,25 @@ public class EngineFactory(EngineConfigDto? engineConfigDto) {
     public IAterraEngine CreateEngine() {
         // Create the list of plugins
         //      Load from the config file
-        var pluginFactory = new PluginFactory(_startupLogger, true);
+        var pluginFactory = new PluginFactory(
+            _startupLogger,
+            true,
+            defaultPlugin is not null ? 1 : 0
+        );
         pluginFactory.LoadPluginsFromDLLFilePaths(EngineConfigDto.Plugins.Select(p => p.FilePath));
-        _startupLogger.Information("Loaded {count} plugins", pluginFactory.Plugins.Count);
 
+        // Assign the default plugin, which in most cases is the actual main content of the game.
+        var plugins = pluginFactory.Plugins.ToList();
+        if (defaultPlugin is not null) plugins.Add(defaultPlugin);
+        
+        _startupLogger.Information("Loaded {count} plugins", plugins.Count);
+        
         // Seed the default services
         //      If a plugin overwrites them, that is okay
         var serviceCollection = new ServiceCollection();
         AssignDefaultServices(serviceCollection);
 
-        var pluginLoader = new PluginLoader(_startupLogger, pluginFactory.Plugins);
+        var pluginLoader = new PluginLoader(_startupLogger, plugins);
         
         // Assigns services which even if they are overloaded in a plugin, they will still use the default one.
         AssignOverRulesServices(serviceCollection);

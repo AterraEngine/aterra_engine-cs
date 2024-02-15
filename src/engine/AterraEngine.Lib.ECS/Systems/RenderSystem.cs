@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Numerics;
+using AterraEngine.Contracts.Core;
 using AterraEngine.Contracts.Lib.ECS.ComponentComposites;
 using AterraEngine.Core.ECSFramework;
 using Raylib_cs;
@@ -11,7 +12,7 @@ namespace AterraEngine.Lib.ECS.Systems;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 // TODO add DI WorldSpace
-public class RenderSystem() : System<IDrawable2D> {
+public class RenderSystem(IWorldSpace2D worldSpace2D) : System<IDrawable2D> {
     public override void Process(IDrawable2D entity) {
         
         // Apply the rotation to the movement

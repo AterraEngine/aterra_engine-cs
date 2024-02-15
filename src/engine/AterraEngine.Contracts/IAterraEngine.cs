@@ -7,5 +7,5 @@ namespace AterraEngine.Contracts;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IAterraEngine {
-    
+    public void Run();
 }

@@ -1,17 +1,14 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using OldAterraEngine.Contracts.Atlases;
-using OldAterraEngine.Contracts.Factories;
-using EnginePlugin_Test.Data.Textures;
+using AterraEngine.Contracts.Core.PluginFramework;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace EnginePlugin_Test.Data;
+namespace AterraEngine.Lib.Plugin;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class PluginTextures(ITexture2DAtlas texture2DAtlas) : APluginDataFactory {
-    public override void CreateData() {
-        texture2DAtlas.TryRegisterTexture(TextureIds.DuckyTest);
-    }
+public abstract class PluginServiceBuilder : IPluginServiceBuilder {
+    public abstract void LoadServices(IServiceCollection serviceCollection);
 }

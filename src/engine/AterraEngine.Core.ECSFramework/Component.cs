@@ -8,6 +8,6 @@ namespace AterraEngine.Core.ECSFramework;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public class Component : IComponent{
+public class Component : IComponent {
     
 }

@@ -10,7 +10,7 @@ namespace AterraEngine.Contracts.Core.PluginFramework;
 public interface IPlugin {
     PluginId Id { get; }
     
-    IPluginServicesFactory? Services { get;}
-    IPluginAssetsFactory? Assets { get; }
-    IPluginTexturesFactory? Textures { get; }
+    IPluginServiceBuilder? Services { get;}
+    IPluginAssetsBuilder? Assets { get; }
+    IPluginTexturesBuilder? Textures { get; }
 }

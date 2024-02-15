@@ -1,20 +1,12 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using Extensions;
-using Workfloor.Cli;
-
-namespace Workfloor;
+namespace AterraEngine.Contracts.Core.PluginFramework;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-static class Program {
-    public static void Main(string[] args) {
-        if (args.IsEmpty()) args = ["run"];
-        
-        new CliArgsParser.CliArgsParser()
-            .RegisterFromCliAtlas(new CommandAtlas())
-            .TryParseMultiple(args);
-    }
+
+public interface IPluginTexturesBuilder {
+    public void LoadTextures();
 }

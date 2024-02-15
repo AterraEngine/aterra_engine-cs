@@ -12,6 +12,6 @@ namespace AterraEngine.Lib.ECS.Systems;
 // TODO add DI EventManager
 public class CollisionSystem(IEventManager eventManager) : EventSystem<CollisionEvent> {
     public override void HandleEvent(CollisionEvent ev) {
-        AssetAtlas.Remove(ev.CollidedEntity);
+        // AssetAtlas.Remove(ev.CollidedEntity);
     }
 }

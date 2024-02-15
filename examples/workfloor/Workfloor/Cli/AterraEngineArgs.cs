@@ -1,12 +1,14 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using OldAterraEngine.Core.Types;
-namespace EnginePlugin_Test.Data.Textures;
+using CliArgsParser;
+using CliArgsParser.Attributes;
+
+namespace Workfloor.Cli;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public static class TextureIds {
-    public static readonly TextureId DuckyTest = new("duckyTest", "resources/DuckyHappy.png");
+public class AterraEngineArgs : ParameterOptions {
+    [ArgValue('c', "config")] public string ConfigFile { get; set; } = "resources/engine_config-example.xml";
 }

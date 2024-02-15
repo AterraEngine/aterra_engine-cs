@@ -12,4 +12,9 @@ namespace AterraEngine.Core;
 // ---------------------------------------------------------------------------------------------------------------------
 public class AterraEngine : IAterraEngine {
     protected ILogger Logger = DefaultServices.GetLogger();
+    
+    
+    public void Run() {
+        throw new NotImplementedException();
+    }
 }

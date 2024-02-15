@@ -1,12 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.Core.PluginFramework;
-namespace AterraEngine.Lib.Plugin;
+using AterraEngine.Lib.Plugin;
+
+namespace Workfloor.Plugin;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class PluginTexturesFactory : IPluginTexturesFactory {
-    public abstract void LoadTextures();
+class PluginTestTextures : PluginTexturesBuilder {
+    public override void LoadTextures() {
+        
+    }
 }

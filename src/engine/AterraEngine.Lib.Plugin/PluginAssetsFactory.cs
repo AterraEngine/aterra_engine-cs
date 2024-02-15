@@ -7,6 +7,6 @@ namespace AterraEngine.Lib.Plugin;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class PluginAssetsFactory : IPluginAssetsFactory {
+public abstract class PluginAssetsBuilder : IPluginAssetsBuilder {
     public abstract void LoadAssets();
 }

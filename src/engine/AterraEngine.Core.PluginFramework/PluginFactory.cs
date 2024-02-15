@@ -11,13 +11,13 @@ namespace AterraEngine.Core.PluginFramework;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class PluginFactory(ILogger logger, bool allowDuplicatePlugins = false) : IPluginFactory {
+public class PluginFactory(ILogger logger, bool allowDuplicatePlugins = false, int idStartsAt = 0) : IPluginFactory {
     private LinkedList<IPlugin> _plugins = [];
 
     private HashSet<Type> _assignedTypes = [];
     public IReadOnlyCollection<IPlugin> Plugins => _plugins;
-    
-    private ushort _pluginIdCounter;
+
+    private ushort _pluginIdCounter = (ushort)idStartsAt;
     public ushort PluginIdCounter {
         get => _pluginIdCounter;
         set {

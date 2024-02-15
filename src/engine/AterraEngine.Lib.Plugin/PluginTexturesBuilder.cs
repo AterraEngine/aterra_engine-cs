@@ -1,13 +1,12 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using CliArgsParser.Attributes;
-
-namespace AterraEngine_Workfloor.CliCommands;
+using AterraEngine.Contracts.Core.PluginFramework;
+namespace AterraEngine.Lib.Plugin;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class AterraEngineArgOptions : ParameterOptions {
-    [ArgValue('c', "config")]  public string EngineConfig { get; set; } = "resources/engine_config-example.xml";
+public abstract class PluginTexturesBuilder : IPluginTexturesBuilder {
+    public abstract void LoadTextures();
 }
