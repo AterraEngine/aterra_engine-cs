@@ -54,8 +54,7 @@ public class EngineFactory(EngineConfigDto? engineConfigDto, IPlugin? defaultPlu
         //      Load from the config file
         var pluginFactory = new PluginFactory(
             _startupLogger,
-            true,
-            defaultPlugin is not null ? 1 : 0
+            defaultPlugin is not null ? 1+defaultPlugin.Id.Id : 0 // count upwards from the default
         );
         pluginFactory.LoadPluginsFromDLLFilePaths(EngineConfigDto.Plugins.Select(p => p.FilePath));
 
@@ -63,7 +62,7 @@ public class EngineFactory(EngineConfigDto? engineConfigDto, IPlugin? defaultPlu
         var plugins = pluginFactory.Plugins.ToList();
         if (defaultPlugin is not null) plugins.Add(defaultPlugin);
         
-        _startupLogger.Information("Loaded {count} plugins", plugins.Count);
+        _startupLogger.Information("Loaded {count} plugin{s}", plugins.Count, plugins.Count > 1 ? "s" : "");
         
         // Seed the default services
         //      If a plugin overwrites them, that is okay
@@ -78,11 +77,11 @@ public class EngineFactory(EngineConfigDto? engineConfigDto, IPlugin? defaultPlu
         // First load the services from the plugins
         //      Only after the Provider has been built,
         //      we can start loading the plugin data as they depend on services
-        pluginLoader.AssignPluginServices(serviceCollection);
+        pluginLoader.AssignServices(serviceCollection);
         EngineServices.BuildServiceProvider(serviceCollection);
         _startupLogger.Information("Service provider built");
 
-        pluginLoader.LoadPluginData();
+        pluginLoader.AssignAssets();
 
         return DefaultServices.GetEngine();
     }

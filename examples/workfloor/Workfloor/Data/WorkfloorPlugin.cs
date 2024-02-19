@@ -1,21 +1,17 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.Core.PluginFramework;
+using AterraEngine.Core.PluginFramework;
 using AterraEngine.Core.Types;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace AterraEngine.Lib.Plugin;
+namespace Workfloor.Data;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
-// Whenever a plugin class is constructed, the EngineServices.Provider hasn't been built yet
-//  Meaning that DI doesn't work here
-public abstract class Plugin(PluginId id) : IPlugin {
-    public PluginId Id { get; } = id;
-
-    public virtual IPluginServiceBuilder?  Services    => null;
-    public virtual IPluginAssetsBuilder?    Assets      => null;
-    public virtual IPluginTexturesBuilder?  Textures    => null;
+public class WorkfloorPlugin(PluginId id) : DefaultPlugin<WorkfloorAssets>(id, "Workfloor Plugin") {
+    public override void AssignServices(IServiceCollection serviceCollection) {
+        
+    }
 }

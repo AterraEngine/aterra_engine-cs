@@ -2,11 +2,16 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.Contracts.Core.PluginFramework;
-namespace AterraEngine.Lib.Plugin;
+using AterraEngine.Core.PluginFramework;
+using Serilog;
+
+namespace Workfloor.Data;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class PluginTexturesBuilder : IPluginTexturesBuilder {
-    public abstract void LoadTextures();
+public class WorkfloorAssets(ILogger logger) : DefaultPluginAssets {
+    public override void AssignAssets() {
+        
+    }
 }

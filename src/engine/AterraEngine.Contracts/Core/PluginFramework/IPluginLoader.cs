@@ -9,6 +9,6 @@ namespace AterraEngine.Contracts.Core.PluginFramework;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IPluginLoader {
-    void AssignPluginServices(IServiceCollection serviceCollection);
-    void LoadPluginData();
+    void AssignServices(IServiceCollection serviceCollection);
+    void AssignAssets();
 }

@@ -2,6 +2,9 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.Core.Types;
+using Microsoft.Extensions.DependencyInjection;
+using Serilog;
+
 namespace AterraEngine.Contracts.Core.PluginFramework;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -9,8 +12,6 @@ namespace AterraEngine.Contracts.Core.PluginFramework;
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IPlugin {
     PluginId Id { get; }
-    
-    IPluginServiceBuilder? Services { get;}
-    IPluginAssetsBuilder? Assets { get; }
-    IPluginTexturesBuilder? Textures { get; }
+    void AssignServices(IServiceCollection serviceCollection);
+    void AssignAssets(ILogger startupLogger);
 }

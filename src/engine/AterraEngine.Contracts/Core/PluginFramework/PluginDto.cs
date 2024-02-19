@@ -1,16 +1,11 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Lib.Plugin;
-using Microsoft.Extensions.DependencyInjection;
+using AterraEngine.Core.Types;
 
-namespace Workfloor.Plugin;
+namespace AterraEngine.Contracts.Core.PluginFramework;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-class PluginTestServices : PluginServiceBuilder {
-    public override void LoadServices(IServiceCollection serviceCollection) {
-        
-    }
-}
+public record PluginDto(PluginId Id, string Name);

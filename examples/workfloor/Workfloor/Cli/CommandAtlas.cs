@@ -6,7 +6,7 @@ using AterraEngine.Core.Startup;
 using AterraEngine.Core.Types;
 using CliArgsParser;
 using CliArgsParser.Attributes;
-using Workfloor.Plugin;
+using Workfloor.Data;
 
 namespace Workfloor.Cli;
 
@@ -17,7 +17,7 @@ namespace Workfloor.Cli;
 public class CommandAtlas: CliCommandAtlas {
 
     private static IAterraEngine CreateEngine(AterraEngineArgs args) {
-        var factory = EngineFactory.CreateFromConfigFile(args.ConfigFile, new PluginTest(new PluginId(0)));
+        var factory = EngineFactory.CreateFromConfigFile(args.ConfigFile, new WorkfloorPlugin(new PluginId(0)));
         return factory.CreateEngine();
     }
     

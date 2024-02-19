@@ -1,13 +1,12 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using Microsoft.Extensions.DependencyInjection;
 namespace AterraEngine.Contracts.Core.PluginFramework;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
-public interface IPluginServiceBuilder {
-    public void LoadServices(IServiceCollection serviceCollection);
+public interface IPluginAssets {
+    public PluginDto ParentPluginDto { get; }
+    public void AssignAssets();
 }

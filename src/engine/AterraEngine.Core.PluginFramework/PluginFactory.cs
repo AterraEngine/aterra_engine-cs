@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using AterraEngine.Contracts.Core.PluginFramework;
 using AterraEngine.Core.Types;
@@ -11,7 +12,7 @@ namespace AterraEngine.Core.PluginFramework;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class PluginFactory(ILogger logger, bool allowDuplicatePlugins = false, int idStartsAt = 0) : IPluginFactory {
+public class PluginFactory(ILogger logger, int idStartsAt = 0) : IPluginFactory {
     private LinkedList<IPlugin> _plugins = [];
 
     private HashSet<Type> _assignedTypes = [];
@@ -37,34 +38,24 @@ public class PluginFactory(ILogger logger, bool allowDuplicatePlugins = false, i
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    private bool _CheckPluginType(Type objectType) {
-        if (!typeof(IPlugin).IsAssignableFrom(objectType)) {
-            logger.Error(
-                "Type {objectType} does not implement the IPlugin Interface and created as a Plugin.", objectType);
-            return false;
-        }
-        
-        if (!allowDuplicatePlugins && _assignedTypes.Contains(objectType)) {
-            string assignedId = _plugins.FirstOrDefault(p => p.GetType() == objectType)?.Id.ToString() ?? "UNDEFINED";
-            logger.Error(
-                "Type {objectType} was already defined as a plugin by id {assignedId}", objectType, assignedId);
-            return false;
-        }
-
-        return true;
-    }
-    
     public bool TryLoadPluginFromType(Type objectType) {
-        if (!_CheckPluginType(objectType)) return false;
+        if (!_CheckObjectType<IPlugin>(objectType)) return false;
         var pluginId = new PluginId(PluginIdCounter++);
         logger.Information("New PluginId assigned: {pluginId}", pluginId);
         
         var plugin = (IPlugin)Activator.CreateInstance(objectType, args: pluginId)!;
-        logger.Information("Plugin created: {plugin}", plugin);
         
         _plugins.AddLast(plugin);
         _assignedTypes.Add(objectType);
         return true;
+    }
+
+    private bool _CheckObjectType<T>(Type objectType) {
+        if (typeof(T).IsAssignableFrom(objectType)) return true;
+
+        logger.Error(
+            "Type {objectType} does not implement the IPlugin Interface and created as a Plugin.", objectType);
+        return false;
     }
     
     public void LoadPluginsFromDLLFilePaths(IEnumerable<string> filePaths, bool throwOnFail = true) {
@@ -73,6 +64,9 @@ public class PluginFactory(ILogger logger, bool allowDuplicatePlugins = false, i
 
             foreach (Type objectType in assembly.GetTypes()) {
                 if (objectType is { IsInterface: true } or { IsAbstract: true }) continue;
+                
+                var pluginId = new PluginId(PluginIdCounter++);
+                logger.Information("New PluginId assigned: {pluginId}", pluginId);
                 
                 // Handle Engine Plugin
                 if (!TryLoadPluginFromType(objectType)) {
