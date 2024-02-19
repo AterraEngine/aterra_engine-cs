@@ -2,10 +2,13 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.Core.Types;
-namespace AterraEngine.Contracts.Core.ECSFramework;
+
+namespace AterraEngine.Contracts.Core.Assets;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IEntity {
+public interface IAsset {
+    public AssetId Id { get; }
+    public AssetType Type { get; }
 }

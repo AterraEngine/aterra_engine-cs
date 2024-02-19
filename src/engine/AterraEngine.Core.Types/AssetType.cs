@@ -1,11 +1,18 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Core.Types;
-namespace AterraEngine.Contracts.Core.ECSFramework;
+namespace AterraEngine.Core.Types;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IEntity {
+[Flags] // ? Isn't this only useful when an asset can be multiple things?
+public enum AssetType {
+    Undefined = 0,
+    StaticActor =   1 << 0, // think trees, props, etc...
+    Texture =       1 << 1,
+    Model =         1 << 2,
+    Audio =         1 << 3,
+    Level =         1 << 4,
+    DynamicActor =  1 << 5, // think animals, npc's, etc...
 }

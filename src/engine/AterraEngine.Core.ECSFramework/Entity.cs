@@ -12,8 +12,7 @@ namespace AterraEngine.Core.ECSFramework;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class Entity(AssetId id) : IEntity {
-    public AssetId Id { get; } = id;
+public abstract class Entity: IEntity {
     protected readonly ConcurrentDictionary<Type, IComponent> _components = new();
     public ReadOnlyDictionary<Type, IComponent> Components => _components.AsReadOnly();
 
