@@ -7,4 +7,4 @@ namespace AterraEngine.Lib.ECS.Entities;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class Player2D(AssetId id): Actor2D(id) ;
+public class Player2D(AssetId id): Actor2D(id, AssetType.DynamicActor) ;

@@ -11,4 +11,5 @@ namespace AterraEngine.Contracts.Core.Assets;
 public interface IAsset {
     public AssetId Id { get; }
     public AssetType Type { get; }
+    public Guid Guid { get; }
 }

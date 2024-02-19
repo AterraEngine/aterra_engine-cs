@@ -4,6 +4,7 @@
 using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
+using AterraEngine.Contracts.Core.Assets;
 using AterraEngine.Contracts.Core.ECSFramework;
 using AterraEngine.Core.ServicesFramework;
 using AterraEngine.Core.Types;
@@ -12,8 +13,11 @@ namespace AterraEngine.Core.ECSFramework;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class Entity: IEntity {
-    protected readonly ConcurrentDictionary<Type, IComponent> _components = new();
+public abstract class Entity(AssetId id, AssetType? assetType): IEntity, IAsset {
+    public AssetId Id { get; } = id;
+    public AssetType Type { get; } = assetType ?? AssetType.Undefined;
+
+    private readonly ConcurrentDictionary<Type, IComponent> _components = new();
     public ReadOnlyDictionary<Type, IComponent> Components => _components.AsReadOnly();
 
     // -----------------------------------------------------------------------------------------------------------------

@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Collections.Concurrent;
+using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using AterraEngine.Contracts.Core.Assets;
 using AterraEngine.Core.Types;
@@ -82,6 +83,9 @@ public class AssetAtlas : IAssetAtlas {
         return true;
     }
 
+    public IReadOnlyDictionary<AssetId, IAsset> GetAllFromType(AssetType assetType) {
+        return _funcs[assetType].AsReadOnly();
+    }
 
 
 }

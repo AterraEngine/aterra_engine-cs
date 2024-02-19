@@ -12,15 +12,12 @@ namespace AterraEngine.Lib.ECS.Entities;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class Actor2D : Entity, IActor2D, IAsset {
-    public AssetId Id { get; }
-    public AssetType Type { get; } = AssetType.DynamicActor;
+public class Actor2D : Entity, IActor2D {
 
     public ITransform2D Transform2D => GetComponent<Transform2D>();
     public ISprite Sprite => GetComponent<Sprite>();
     
-    public Actor2D(AssetId id) {
-        Id = id;
+    public Actor2D(AssetId id, AssetType? assetType) : base(id, assetType ?? AssetType.StaticActor) {
         TryAddComponent<Transform2D>();
         TryAddComponent<Sprite>();
     }
