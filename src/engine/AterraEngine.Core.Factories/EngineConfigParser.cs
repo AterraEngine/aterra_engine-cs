@@ -24,7 +24,7 @@ public class EngineConfigParser<T>:IEngineConfigParser<T> where T : EngineConfig
     // -----------------------------------------------------------------------------------------------------------------
     public EngineConfigParser() {
         // Reader Settings
-        _readerSettings.Schemas.Add("urn:attera-engine:engine-config", PathsStatic.XsdEngineConfig);
+        _readerSettings.Schemas.Add("urn:aterra-engine:engine-config", PathsStatic.XsdEngineConfig);
         _readerSettings.ValidationType = ValidationType.Schema;
         
         // Write Settings
