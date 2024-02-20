@@ -2,9 +2,12 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.Core.Types;
-namespace AterraEngine.Lib.ECS.Entities;
+
+namespace AterraEngine.Contracts.Core.Assets;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class Player2D(AssetId id): Actor2D(id, AssetType.DynamicActor) ;
+
+public interface IAssetDto {
+}

@@ -1,24 +1,35 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using System.Numerics;
 using AterraEngine.Contracts.Core.Assets;
+using AterraEngine.Contracts.Core.ECSFramework;
 using AterraEngine.Contracts.Lib.ECS.Components;
 using AterraEngine.Contracts.Lib.ECS.Entities;
+using AterraEngine.Core.Assets;
 using AterraEngine.Core.ECSFramework;
 using AterraEngine.Core.Types;
 using AterraEngine.Lib.ECS.Components;
+using AterraEngine.Lib.ECS.Dtos.Entities;
+using Serilog;
+
 namespace AterraEngine.Lib.ECS.Entities;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class Actor2D : Entity, IActor2D {
+public abstract class Actor2D : Entity<Actor2DDto>, IActor2D {
 
-    public ITransform2D Transform2D => GetComponent<Transform2D>();
-    public ISprite Sprite => GetComponent<Sprite>();
+    public ITransform2D Transform2D => GetComponent<ITransform2D>();
+    public ISprite Sprite => GetComponent<ISprite>();
+
+    public Actor2D(IAssetAtlas assetAtlas, ILogger logger) : base(assetAtlas, logger) {
+        TryAddComponent<ITransform2D>(DefaultComponents.Transform2D);
+        TryAddComponent<ISprite>(DefaultComponents.Sprite);
+    }
     
-    public Actor2D(AssetId id, AssetType? assetType) : base(id, assetType ?? AssetType.StaticActor) {
-        TryAddComponent<Transform2D>();
-        TryAddComponent<Sprite>();
+    public override void PopulateFromDto(Actor2DDto dto) {
+        Transform2D.TryPopulateFromDto(dto.Transform2DDto);
+        Sprite.TryPopulateFromDto(dto.SpriteDto);
     }
 }

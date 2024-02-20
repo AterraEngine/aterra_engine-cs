@@ -1,16 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.Core.Assets;
-using AterraEngine.Contracts.Core.ECSFramework;
-using AterraEngine.Core.Assets;
-using Serilog;
+using Raylib_cs;
 
-namespace AterraEngine.Core.ECSFramework;
+namespace AterraEngine.Lib.ECS.Dtos.Components;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class Component<TDto>(ILogger logger) : Asset<TDto>(logger), IComponent where TDto : class {
-    
-}
+
+public record SpriteDto(
+    Rectangle SelectionBox,
+    Color Tint
+);

@@ -1,16 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.Core.Assets;
-using AterraEngine.Contracts.Core.ECSFramework;
-using AterraEngine.Core.Assets;
-using Serilog;
+using AterraEngine.Core.Types;
 
-namespace AterraEngine.Core.ECSFramework;
+namespace AterraEngine.Core.Assets;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class Component<TDto>(ILogger logger) : Asset<TDto>(logger), IComponent where TDto : class {
-    
+public class AssetAttribute<TDto>(uint id, AssetType type) : Attribute {
+    public uint Id { get; private set; } = id;
+    public AssetType Type { get; private set; } = type;
+    public Type DtoType { get; private set; } = typeof(TDto);
 }

@@ -10,4 +10,8 @@
       <ProjectReference Include="..\AterraEngine.Core.ECSFramework\AterraEngine.Core.ECSFramework.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Events\" />
+    </ItemGroup>
+
 </Project>

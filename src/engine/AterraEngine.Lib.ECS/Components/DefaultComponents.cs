@@ -1,17 +1,16 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.Core.ECSFramework.Events;
-using AterraEngine.Core.ECSFramework.Events;
-using AterraEngine.Lib.ECS.Events;
-namespace AterraEngine.Lib.ECS.Systems;
+using AterraEngine.Core.Types;
+
+namespace AterraEngine.Lib.ECS.Components;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-// TODO add DI EventManager
-public class CollisionSystem(IEventManager eventManager) : EventSystem<CollisionEvent> {
-    public override void HandleEvent(CollisionEvent ev) {
-        // AssetAtlas.Remove(ev.CollidedEntity);
-    }
+public static class DefaultComponents {
+    internal const uint PTransform2D = 0;
+    internal const uint PSprite = 1;
+    public static readonly AssetId Transform2D = new(new PluginId(0), PTransform2D);
+    public static readonly AssetId Sprite =      new(new PluginId(0), PSprite);
 }

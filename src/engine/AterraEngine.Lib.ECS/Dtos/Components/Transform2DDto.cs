@@ -1,15 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.Core.ECSFramework.Events;
-using AterraEngine.Core.ECSFramework;
-using AterraEngine.Core.ECSFramework.Events;
-namespace AterraEngine.Lib.ECS.Events;
+using System.Numerics;
+
+namespace AterraEngine.Lib.ECS.Dtos.Components;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class CollisionEvent(Entity collider, Entity collided) : Event {
-    public Entity ColliderEntity { get; } = collider;
-    public Entity CollidedEntity { get; } = collided;
-}
+public record Transform2DDto(
+    float? Rotation = null,
+    Vector2? Position = null,
+    Vector2? Scale = null
+);

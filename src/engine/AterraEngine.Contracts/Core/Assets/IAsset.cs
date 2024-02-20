@@ -9,7 +9,6 @@ namespace AterraEngine.Contracts.Core.Assets;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IAsset {
-    public AssetId Id { get; }
-    public AssetType Type { get; }
     public Guid Guid { get; }
+    public bool TryPopulateFromDto(object assetDto);
 }
