@@ -26,9 +26,13 @@
     <!-- Implement XSD validators   -->
 
     <ItemGroup>
+        <Content Include="..\..\..\src\xsd\engine_config.xsd">
+            <Link>xsd\engine_config.xsd</Link>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
         <Content Include="..\src\xsd\**\*">
             <Link>xsd\%(RecursiveDir)%(FileName)%(Extension)</Link>
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
 

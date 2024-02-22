@@ -80,11 +80,13 @@ public class PluginAssets(IAssetAtlas assetAtlas, ILevelFactory levelFactory) : 
         
         EngineAssetId level2Id = NewEngineAssetId();
         ILevel? level2 = levelFactory.CreateLevel(new LevelDto(level2Id, "LevelTest2", Color.Blue));
+        if (level2 == null) return;
+        
         level2.Assets = new AssetNodeRoot(
             assets
         );
         assetAtlas.TryRegisterAsset(level2);
-        
+
         // level2.Assets.Asset = player2d;
 
         // level2.Camera2D = ;
@@ -92,8 +94,7 @@ public class PluginAssets(IAssetAtlas assetAtlas, ILevelFactory levelFactory) : 
 
         // worldSpace2D.StartupLevelId = level1Id;
         worldSpace2D.StartupLevelId = level2Id;
-        
+
         Console.WriteLine(level2.Assets.Count());
-        
     }
 }
