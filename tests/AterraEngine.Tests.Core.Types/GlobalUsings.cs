@@ -1,2 +1,2 @@
 global using Xunit;
-global using AterraEngine.Core.Types;
+global using AterraCore.Types;

@@ -17,7 +17,7 @@ public class PluginIdTest {
     public void PluginIdIntConstructorTest() {
         // Max ushort value test case
         var id = new PluginId(65535);
-        Assert.Equal(65535, id.Id);
+        Assert.Equal(65535, id.Value);
 
         // Negative input throwing exception test case
         Assert.Throws<ArgumentOutOfRangeException>(() => new PluginId(-1));
@@ -28,7 +28,7 @@ public class PluginIdTest {
     public void PluginIdStringConstructorTest() {
         // Max ushort value hexadecimal string test case
         var id = new PluginId("FFFF");
-        Assert.Equal(65535, id.Id);
+        Assert.Equal(65535, id.Value);
 
         // Invalid hexadecimal string test case
         Assert.Throws<ArgumentException>(() => new PluginId("GHIJ"));

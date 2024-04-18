@@ -11,10 +11,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\AterraEngine.Core.Types\AterraEngine.Core.Types.csproj" />
+      <ProjectReference Include="..\AterraCore.Types\AterraCore.Types.csproj" />
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
       <PackageReference Include="Raylib-cs" Version="6.0.0" />
       <PackageReference Include="Serilog" Version="3.1.1" />

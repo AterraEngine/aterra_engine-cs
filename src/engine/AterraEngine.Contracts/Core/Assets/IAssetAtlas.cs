@@ -2,7 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Diagnostics.CodeAnalysis;
-using AterraEngine.Core.Types;
+using AterraCore.Types;
 
 namespace AterraEngine.Contracts.Core.Assets;
 

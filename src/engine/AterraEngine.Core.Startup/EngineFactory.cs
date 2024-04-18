@@ -54,7 +54,7 @@ public class EngineFactory(EngineConfigDto? engineConfigDto, IPlugin? defaultPlu
         //      Load from the config file
         var pluginFactory = new PluginFactory(
             _startupLogger,
-            defaultPlugin is not null ? 1+defaultPlugin.Id.Id : 0 // count upwards from the default
+            defaultPlugin is not null ? 1+defaultPlugin.Id.Value : 0 // count upwards from the default
         );
         pluginFactory.LoadPluginsFromDLLFilePaths(EngineConfigDto.Plugins.Select(p => p.FilePath));
 

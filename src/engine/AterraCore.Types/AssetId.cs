@@ -3,53 +3,42 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Globalization;
 using System.Text.RegularExpressions;
-namespace AterraEngine.Core.Types;
+namespace AterraCore.Types;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public readonly partial struct AssetId : IComparable<AssetId>, IEqualityComparer<AssetId> {
-    private static Regex _regex = MyRegex();
+    private static readonly Regex Regex = MyRegex();
     
     public PluginId PluginId { get; }
-    public uint Id { get; } // So ... allowing for 4 billion assets per plugin ... that isn't overkill, right?
+    public PartialAssetId Id { get; } 
 
     // -----------------------------------------------------------------------------------------------------------------
     // Constructors
     // -----------------------------------------------------------------------------------------------------------------
-    public AssetId(PluginId pluginId, uint value) {
+    public AssetId(PluginId pluginId, PartialAssetId value) {
         PluginId = pluginId;
         Id = value;
     }
     
-    public AssetId(uint value) {
-        PluginId = new PluginId(0);
-        Id = value;
-    }
-    
     public AssetId(string value) {
-        Match match = _regex.Match(value.PadLeft(12,'0'));
+        Match match = Regex.Match(value.PadLeft(12,'0'));
         if (!match.Success) {
             throw new ArgumentException("Invalid input format.", nameof(value));
         }
         PluginId = new PluginId(match.Groups[1].Value);
-        Id = uint.Parse(match.Groups[2].Value, NumberStyles.HexNumber);
+        Id = new PartialAssetId(match.Groups[2].Value);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public override string ToString() {
-        // Plugin String already handles hex parsing
-        var pluginId = PluginId.ToString();
-        string id = Id.ToString("X").PadLeft(8, '0');
-        return $"{pluginId}{id}";
+        return $"{PluginId.ToString()}{Id.ToString()}";
     }
     public string ToStringReadable() {
-        // Plugin String already handles hex parsing
-        var pluginId = PluginId.ToString();
-        string id = Id.ToString("X").PadLeft(8, '0');
-        return $"{pluginId}-{id}";
+        return $"{PluginId.ToString()}-{Id.ToString()}";
     }
     
     [GeneratedRegex("^([0-9a-fA-F]{4})?-?([0-9a-fA-F]{8})$")]
@@ -59,11 +48,11 @@ public readonly partial struct AssetId : IComparable<AssetId>, IEqualityComparer
     // Comparisons
     // -----------------------------------------------------------------------------------------------------------------
     public static bool operator ==(AssetId left, AssetId right) => left.Equals(right);
-    public static bool operator !=(AssetId left, AssetId right) => !(left == right);
+    public static bool operator !=(AssetId left, AssetId right) => !left.Equals(right);
 
     public int CompareTo(AssetId other) {
         int pluginIdComparison = PluginId.CompareTo(other.PluginId);
-        return (pluginIdComparison != 0)
+        return pluginIdComparison != 0
             ? pluginIdComparison 
             : Id.CompareTo(other.Id);
     }

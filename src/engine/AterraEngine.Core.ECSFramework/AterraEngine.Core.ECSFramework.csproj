@@ -10,7 +10,11 @@
       <ProjectReference Include="..\AterraEngine.Contracts\AterraEngine.Contracts.csproj" />
       <ProjectReference Include="..\AterraEngine.Core.Assets\AterraEngine.Core.Assets.csproj" />
       <ProjectReference Include="..\AterraEngine.Core.ServicesFramework\AterraEngine.Core.ServicesFramework.csproj" />
-      <ProjectReference Include="..\AterraEngine.Core.Types\AterraEngine.Core.Types.csproj" />
+      <ProjectReference Include="..\AterraCore.Types\AterraCore.Types.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" />
     </ItemGroup>
 
 </Project>

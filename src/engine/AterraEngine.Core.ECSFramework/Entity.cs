@@ -8,7 +8,7 @@ using AterraEngine.Contracts.Core.Assets;
 using AterraEngine.Contracts.Core.ECSFramework;
 using AterraEngine.Core.Assets;
 using AterraEngine.Core.ServicesFramework;
-using AterraEngine.Core.Types;
+using AterraCore.Types;
 using Serilog;
 
 namespace AterraEngine.Core.ECSFramework;
