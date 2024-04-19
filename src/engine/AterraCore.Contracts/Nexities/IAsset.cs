@@ -4,11 +4,15 @@
 
 using AterraCore.Types;
 
-namespace AterraCore.Contracts.FlexiPlug;
+namespace AterraCore.Contracts.Nexities;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IAsset {
-    public AssetId Id { get;}
+    public Guid Guid { get; }
+    public AssetId AssetId { get; }
+
+    public HashSet<Guid> ComponentIds { get; }
+    public IComponent[] GetComponents();
 }

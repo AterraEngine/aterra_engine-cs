@@ -6,4 +6,13 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\AterraCore.Contracts\AterraCore.Contracts.csproj" />
+      <ProjectReference Include="..\AterraCore.Types\AterraCore.Types.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Systems\" />
+    </ItemGroup>
+
 </Project>

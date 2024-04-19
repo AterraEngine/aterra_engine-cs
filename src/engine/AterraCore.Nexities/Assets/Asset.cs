@@ -2,34 +2,23 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
+using AterraCore.Contracts.Nexities;
 using AterraCore.Types;
-using AterraEngine.Contracts;
-using AterraEngine.Core.Startup;
-using AterraEngine.Core.Types;
-using CliArgsParser;
-using CliArgsParser.Attributes;
-using Workfloor.Data;
 
-namespace Workfloor.Cli;
+namespace AterraCore.Nexities.Assets;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
-public class CommandAtlas: CliCommandAtlas {
-
-    private static IAterraEngine CreateEngine(AterraEngineArgs args) {
-        var factory = EngineFactory.CreateFromConfigFile(args.ConfigFile, new WorkfloorPlugin(new PluginId(0)));
-        return factory.CreateEngine();
-    }
+public class Asset(IAssetDto assetDto) : IAsset {
+    public Guid Guid { get; } = new();
+    public AssetId AssetId { get; } = assetDto.AssetId;
+    public HashSet<Guid> ComponentIds { get; } = [..assetDto.StartingComponentGuids];
     
     // -----------------------------------------------------------------------------------------------------------------
-    // Commands
+    // Methods
     // -----------------------------------------------------------------------------------------------------------------
-
-    [CliCommand<AterraEngineArgs>("run")]
-    public void Run(AterraEngineArgs args) {
-        var engine = CreateEngine(args);
-        engine.Run();
+    public IComponent[] GetComponents() {
+        throw new NotImplementedException();
     }
 }

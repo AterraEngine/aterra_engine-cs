@@ -2,16 +2,17 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
+using AterraCore.Contracts.Nexities;
 using AterraCore.Types;
-using Extensions;
 
-namespace AterraCore.FlexiPlug.Assets;
+namespace AterraCore.Nexities.Assets;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-[AttributeUsage(AttributeTargets.Class)]
-public class AssetAttribute(string? partialId) : Attribute {
-    public PartialAssetId? PartialAssetId { get; } = partialId.IsNotNullOrEmpty() ? new PartialAssetId(partialId!) : null;
-}
+public record AssetConstructorDto(
+    AssetId AssetId,
+    Guid[] StartingComponentGuids
+
+    ) : IAssetDto ;

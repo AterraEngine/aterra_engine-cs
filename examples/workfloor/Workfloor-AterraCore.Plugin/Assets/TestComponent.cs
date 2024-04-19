@@ -2,12 +2,12 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using AterraCore.Types;
-
-namespace AterraCore.FlexiPlug.Assets;
+namespace Workfloor_AterraCore.Plugin.Assets;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
-public record AssetDto(PluginId PluginId, PartialAssetId PartialAssetId);
+[Component("1")]
+public class TestComponent {
+    
+}

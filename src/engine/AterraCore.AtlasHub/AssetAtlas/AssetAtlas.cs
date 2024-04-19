@@ -3,26 +3,30 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 using AterraCore.Contracts.AtlasHub;
+using AterraCore.Contracts.Nexities;
 using AterraCore.Types;
 
-namespace AterraCore.AtlasHub;
+namespace AterraCore.AtlasHub.AssetAtlas;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class AssetAtlas : IAssetAtlas {
-    private readonly ConcurrentDictionary<AssetId, Type?> _dictionary = new();
-    public IReadOnlyDictionary<AssetId, Type?> Dictionary => _dictionary.AsReadOnly();
+    private readonly ConcurrentDictionary<AssetId, AssetRecord> _dictionary = new();
+    public IReadOnlyDictionary<AssetId, AssetRecord> Dictionary => _dictionary.AsReadOnly();
 
-    private HashSet<Type?> _types = [];
+    private readonly ConcurrentBag<Type> _types = []; // Normally this shouldn't really be needed, but you never know.
     
     // ---------------------------------------------------------------------------------------------------------------------
     // Methods
     // ---------------------------------------------------------------------------------------------------------------------
-    public bool TryRegisterAsset<T>(PluginId pluginId, PartialAssetId partialAssetId, out AssetId? registeredId) {
+    public AssetRecord this[AssetId id] => _dictionary.TryGetValue(id, out AssetRecord value) ? value : null;
+    
+    public bool TryRegisterAsset<T>(PluginId pluginId, PartialAssetId partialAssetId, [NotNullWhen(true)] out AssetId? registeredId) {
         registeredId = null;
-        Type? type = typeof(T);
+        Type type = typeof(T);
 
         if (_types.Contains(type)) {
             AssetId knownId = _dictionary.FirstOrDefault(v => v.Value == type).Key;
@@ -37,4 +41,13 @@ public class AssetAtlas : IAssetAtlas {
         _types.Add(type);
         return true;
     }
+
+    public bool TryGetAssetRecord(AssetId assetId, [NotNullWhen(true)] out Type? type) {
+        return _dictionary.TryGetValue(assetId, out type);
+    }
+    
+    public bool TryGetAssetType(string assetId, [NotNullWhen(true)] out Type? type) {
+        return TryGetAssetRecord(new AssetId(assetId), out type);
+    }
+    
 }

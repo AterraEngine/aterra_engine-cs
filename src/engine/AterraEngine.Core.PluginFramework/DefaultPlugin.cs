@@ -1,6 +1,8 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+
+using AterraCore.Types;
 using AterraEngine.Contracts.Core.PluginFramework;
 using AterraEngine.Core.ServicesFramework;
 using AterraEngine.Core.Types;

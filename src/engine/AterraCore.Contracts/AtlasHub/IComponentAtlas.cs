@@ -2,16 +2,15 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Types;
 
-namespace AterraCore.FlexiPlug.Assets;
+namespace AterraCore.Contracts.AtlasHub;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class AAsset(AssetDto assetDto) : IAsset {
-    public AssetId Id { get; } = new(assetDto.PluginId, assetDto.PartialAssetId);
-}
 
-public abstract class AAsset<T>(T assetDto) : AAsset(assetDto) where T : AssetDto;
+public interface IComponentAtlas {
+    public IReadOnlyDictionary<AssetId, Type> Dictionary { get; }
+    
+}

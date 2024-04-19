@@ -4,6 +4,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 using AterraCore.Contracts.FlexiPlug;
+using AterraCore.Contracts.Nexities;
 using AterraCore.Types;
 
 namespace AterraCore.Contracts.AtlasHub;
@@ -15,7 +16,11 @@ namespace AterraCore.Contracts.AtlasHub;
 public interface IInstanceAtlas {
     public IReadOnlyDictionary<Guid, IAsset> Dictionary { get; }
 
-    public bool TryCreateInstance(AssetId assetId, [NotNullWhen(true)] out IAsset? asset);
-    public bool TryCreateInstance<T>(AssetId assetId, [NotNullWhen(true)] out T? asset) where T : IAsset;
+    public bool TryCreateInstance<TDto>(AssetId assetId, TDto assetDto, [NotNullWhen(true)] out IAsset? asset) 
+        where TDto : IAssetDto;
+    public bool TryCreateInstance<T, TDto>(AssetId assetId, TDto assetDto, [NotNullWhen(true)] out T? asset) 
+        where T : IAsset 
+        where TDto : IAssetDto;
 
+    public bool TryRemoveInstance(Guid instanceId);
 }

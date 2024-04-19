@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using System.Xml.Serialization;
+using AterraCore.Types;
 using AterraEngine.Core.Startup.EngineConfig.Dto.Xml;
 using AterraEngine.Core.Types;
 
