@@ -48,12 +48,12 @@ public readonly partial struct AssetId : IComparable<AssetId>, IEqualityComparer
         if (!match.Success) {
             throw new ArgumentException("Invalid input format.", fullId);
         }
-        PluginId = new PluginId(match.Groups[1].Value);
-        Id = new PartialAssetId(match.Groups[2].Value);
+        
+        // because of the internal tag, we can immediately cast to an Uint here, and bypass another regex check
+        PluginId = new PluginId(PluginId.CastToUshort(match.Groups[1].Value));
+        Id = new PartialAssetId(PartialAssetId.CastToUint(match.Groups[2].Value));
     }
     
-    
-
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------

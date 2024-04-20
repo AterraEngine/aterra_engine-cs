@@ -28,7 +28,7 @@ public readonly partial struct PluginId(ushort value) : IComparable<PluginId>, I
         return Value.ToString("X").PadLeft(4,'0');
     }
 
-    private static ushort CastToUshort(string value) {
+    internal static ushort CastToUshort(string value) {
         if (!_regex.IsMatch(value)) {
             throw new ArgumentException("Invalid input format.", nameof(value));
         }

@@ -28,7 +28,7 @@ public readonly partial struct PartialAssetId(uint value) : IComparable<PartialA
         return Value.ToString("X").PadLeft(8,'0');
     }
 
-    private static uint CastToUint(string value) {
+    internal static uint CastToUint(string value) {
         if (!_regex.IsMatch(value)) {
             throw new ArgumentException("Invalid input format.", nameof(value));
         }
