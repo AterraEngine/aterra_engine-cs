@@ -2,8 +2,6 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using JetBrains.Annotations;
-using Xunit;
-using System;
 
 namespace AterraEngine.Tests.Core.Types;
 
@@ -13,65 +11,66 @@ namespace AterraEngine.Tests.Core.Types;
 [TestSubject(typeof(PluginId))]
 public class PluginIdTest {
 
-    [Fact]
-    public void PluginIdIntConstructorTest() {
-        // Max ushort value test case
-        var id = new PluginId(65535);
-        Assert.Equal(65535, id.Value);
-
-        // Negative input throwing exception test case
-        Assert.Throws<ArgumentOutOfRangeException>(() => new PluginId(-1));
-        Assert.Throws<ArgumentOutOfRangeException>(() => new PluginId((int)ushort.MaxValue + 1));
+    [Theory]
+    [InlineData(-1)]
+    [InlineData(65536)]
+    public void ConstructorTest_InvalidInputs(int value) {
+        Assert.Throws<ArgumentOutOfRangeException>(() => new PluginId(value));
     }
 
-    [Fact]
-    public void PluginIdStringConstructorTest() {
-        // Max ushort value hexadecimal string test case
-        var id = new PluginId("FFFF");
-        Assert.Equal(65535, id.Value);
-
-        // Invalid hexadecimal string test case
-        Assert.Throws<ArgumentException>(() => new PluginId("GHIJ"));
+    [Theory]
+    [InlineData("10000")]
+    [InlineData("abcg")]
+    [InlineData("fffff")]
+    [InlineData("-123")]
+    public void ConstructorTest_InvalidStringInputs(string value) {
+        Assert.Throws<ArgumentException>(() => new PluginId(value));
     }
 
-    [Fact]
-    public void ToStringTest() {
-        // Test conversion to hexadecimal string with padding
-        var id = new PluginId(255);
-        Assert.Equal("00FF", id.ToString());
+    [Theory]
+    [InlineData(0, "0000")]
+    [InlineData(15, "000F")]
+    [InlineData(256, "0100")]
+    [InlineData(65535, "FFFF")]
+    public void ToStringTest(ushort value, string expected) {
+        PluginId id = new(value);
+        Assert.Equal(expected, id.ToString());
     }
 
-    [Fact]
-    public void EqualityTest() {
-        var id1 = new PluginId(100);
-        var id2 = new PluginId(100);
-        var id3 = new PluginId(200);
+    [Theory]
+    [InlineData(100, 100, true)]
+    [InlineData(100, 200, false)]
+    public void EqualityTest(ushort value1, ushort value2, bool expected) {
+        PluginId id1 = new(value1);
+        PluginId id2 = new(value2);
 
-        Assert.True(id1 == id2);
-        Assert.False(id1 == id3);
-        Assert.True(id1 != id3);
+        // Test == and != operators, Equals() and GetHashCode()
+        Assert.Equal(expected, id1 == id2);
+        Assert.Equal(expected, id1.Equals(id2));
+        Assert.Equal(expected, id1.Equals((object)id2));
+        Assert.Equal(expected, id1.GetHashCode() == id2.GetHashCode());
+        Assert.Equal(!expected, id1 != id2);
     }
 
-    [Fact]
-    public void CompareToTest() {
-        var id1 = new PluginId(100);
-        var id2 = new PluginId(100);
-        var id3 = new PluginId(200);
-        var id4 = new PluginId(50);
+    [Theory]
+    [InlineData(100, 100, 0)]
+    [InlineData(100, 200, -100)]
+    [InlineData(200, 100, 100)]
+    public void ComparerTest(ushort value1, ushort value2, int expected) {
+        PluginId id1 = new(value1);
+        PluginId id2 = new(value2);
 
-        Assert.Equal(0, id1.CompareTo(id2));
-        Assert.True(id1.CompareTo(id3) < 0);
-        Assert.True(id1.CompareTo(id4) > 0);
+        Assert.Equal(expected, id1.CompareTo(id2));
     }
 
-    [Fact]
-    public void EqualsTest() {
-        var id1 = new PluginId(100);
-        var id2 = new PluginId(100);
-        var id3 = new PluginId(200);
+    [Theory]
+    [InlineData(100, 100, true)]
+    [InlineData(100, 200, false)]
+    public void EqualityComparerTest(ushort value1, ushort value2, bool expected) {
+        PluginId id1 = new(value1);
+        PluginId id2 = new(value2);
 
-        Assert.True(id1.Equals(id2));
-        Assert.False(id1.Equals(id3));
+        Assert.Equal(expected, id1.Equals(id1, id2));
+        Assert.Equal(expected, id1.GetHashCode(id1) == id2.GetHashCode(id2));
     }
-
 }

@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using JetBrains.Annotations;
+
 namespace AterraEngine.Tests.Core.Types;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -9,106 +10,72 @@ namespace AterraEngine.Tests.Core.Types;
 // ---------------------------------------------------------------------------------------------------------------------
 [TestSubject(typeof(AssetId))]
 public class AssetIdTest {
+    private static readonly PluginId TestPluginId = new PluginId("1234");
+    private static readonly PartialAssetId TestPartialAssetId = new PartialAssetId("5678abcd");
 
     [Fact]
-    public void TestConstructorFromPluginIdAndValue() {
-        var pluginId = new PluginId(100);
-        var assetId = new AssetId(pluginId, 1);
+    public void AssetId_ConstructorWithPluginIdAndPartialAssetId_CorrectlyInitializes() {
+        var assetId = new AssetId(TestPluginId, TestPartialAssetId);
+        Assert.Equal(TestPluginId, assetId.PluginId);
+        Assert.Equal(TestPartialAssetId, assetId.Id);
+    }
 
-        Assert.Equal(pluginId, assetId.PluginId);
-        Assert.Equal(1u, assetId.Id);
+    [Theory]
+    [InlineData("12345678abcd", "1234", "5678abcd")]
+    public void AssetId_ConstructorWithString_CorrectlyInitializes(string fullId, string pluginId, string partialId) {
+        var assetId = new AssetId(fullId);
+        Assert.Equal(pluginId, assetId.PluginId.ToString(), StringComparer.OrdinalIgnoreCase);
+        Assert.Equal(partialId, assetId.Id.ToString(), StringComparer.OrdinalIgnoreCase);
+    }
+
+    [Theory]
+    [InlineData("invalid_string")]
+    [InlineData("12345678abcz")] // Includes non-hex character 'z'
+    [InlineData("")]
+    [InlineData(null)]
+    public void AssetId_ConstructorWithString_ThrowsForInvalidFormat(string fullId) {
+        Assert.Throws<ArgumentException>(() => new AssetId(fullId));
+    }
+
+    [Theory]
+    [InlineData("12345678abcd", "1234", "5678abcd")]
+    public void ToString_ReturnsExpectedFormat(string fullId, string pluginId, string partialId) {
+        var assetId = new AssetId(pluginId, partialId);
+        Assert.Equal(fullId, assetId.ToString(), StringComparer.OrdinalIgnoreCase);
+    }
+
+    [Theory]
+    [InlineData("1234-5678abcd", "1234", "5678abcd")]
+    public void ToStringReadable_ReturnsExpectedFormat(string fullIdWithDash, string pluginId, string partialId) {
+        var assetId = new AssetId(pluginId, partialId);
+        Assert.Equal(fullIdWithDash, assetId.ToStringReadable(), StringComparer.OrdinalIgnoreCase);
     }
 
     [Fact]
-    public void TestConstructorFromValue() {
-        var assetId = new AssetId(1);
-        Assert.Equal(new PluginId(0), assetId.PluginId);
-        Assert.Equal(1u, assetId.Id);
-    }
-
-    [Fact]
-    public void TestConstructorFromString() {
-        var assetId = new AssetId("00000001");
-        Assert.Equal(new PluginId(0), assetId.PluginId);
-        Assert.Equal(1u, assetId.Id);
-        
-        var assetId2 = new AssetId("0001-00000001");
-        Assert.Equal(new PluginId(1), assetId2.PluginId);
-        Assert.Equal(1u, assetId2.Id);
-        
-        
-        var assetId3 = new AssetId("1");
-        Assert.Equal(new PluginId(0), assetId3.PluginId);
-        Assert.Equal(1u, assetId3.Id);
-    }
-    
-
-    [Fact]
-    public void TestConstructorFromStringWithInvalidValue() {
-        Assert.Throws<ArgumentException>(() => new AssetId("0000-000100020003"));
-    }
-
-    [Fact]
-    public void TestToString() {
-        var expectedToString = "000000000001";
-        var assetId = new AssetId(1);
-
-        Assert.Equal(expectedToString, assetId.ToString());
-    }
-
-    [Fact]
-    public void TestToStringReadable() {
-        var expectedToString = "0000-00000001";
-        var assetId = new AssetId(1);
-
-        Assert.Equal(expectedToString, assetId.ToStringReadable());
-    }
-
-    [Fact]
-    public void TestCompareTo() {
-        var assetId1 = new AssetId(1);
-        var assetId2 = new AssetId(2);
-
-        Assert.True(assetId1.CompareTo(assetId2) < 0);
-        Assert.True(assetId2.CompareTo(assetId1) > 0);
-    }
-
-    [Fact]
-    public void TestEquals_Operator() {
-        var assetId1 = new AssetId(1);
-        var assetId2 = new AssetId(1);
-
-        Assert.True(assetId1 == assetId2);
-    }
-
-    [Fact]
-    public void TestNotEquals_Operator() {
-        var assetId1 = new AssetId(1);
-        var assetId2 = new AssetId(2);
-
-        Assert.True(assetId1 != assetId2);
-    }
-
-    [Fact]
-    public void TestEquals() {
-        var assetId1 = new AssetId(1);
-        var assetId2 = new AssetId(1);
+    public void Equals_ReturnsExpectedResults() {
+        var assetId1 = new AssetId(TestPluginId, TestPartialAssetId);
+        var assetId2 = new AssetId(TestPluginId, TestPartialAssetId);
+        var assetId3 = new AssetId(new PluginId("abcd"), TestPartialAssetId);
 
         Assert.True(assetId1.Equals(assetId2));
+        Assert.False(assetId1.Equals(assetId3));
     }
 
     [Fact]
-    public void TestEquals_Object() {
-        var assetId1 = new AssetId(1);
-        object assetId2 = new AssetId(1);
+    public void CompareTo_ReturnsExpectedResults() {
+        var assetId1 = new AssetId(TestPluginId, TestPartialAssetId);
+        var assetId2 = new AssetId(TestPluginId, TestPartialAssetId);
+        var assetId3 = new AssetId(new PluginId("abcd"), TestPartialAssetId);
 
-        Assert.True(assetId1.Equals(assetId2));
+        Assert.Equal(0, assetId1.CompareTo(assetId2));
+        Assert.True(assetId1.CompareTo(assetId3) < 0);
+        Assert.True(assetId3.CompareTo(assetId1) > 0);
     }
 
     [Fact]
-    public void TestGetHashCode() {
-        var assetId1 = new AssetId(1);
-        var assetId2 = new AssetId(1);
+    public void GetHashCode_IsConsistent() {
+        var assetId1 = new AssetId(TestPluginId, TestPartialAssetId);
+        var assetId2 = new AssetId(TestPluginId, TestPartialAssetId);
 
         Assert.Equal(assetId1.GetHashCode(), assetId2.GetHashCode());
     }

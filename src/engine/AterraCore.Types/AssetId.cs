@@ -1,7 +1,6 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Globalization;
 using System.Text.RegularExpressions;
 namespace AterraCore.Types;
 
@@ -17,19 +16,43 @@ public readonly partial struct AssetId : IComparable<AssetId>, IEqualityComparer
     // -----------------------------------------------------------------------------------------------------------------
     // Constructors
     // -----------------------------------------------------------------------------------------------------------------
-    public AssetId(PluginId pluginId, PartialAssetId value) {
+    public AssetId(PluginId pluginId, PartialAssetId partialAssetId) {
         PluginId = pluginId;
-        Id = value;
+        Id = partialAssetId;
     }
     
-    public AssetId(string value) {
-        Match match = Regex.Match(value.PadLeft(12,'0'));
+    public AssetId(string pluginId, PartialAssetId partialAssetId) {
+        PluginId = new PluginId(pluginId);
+        Id = partialAssetId;
+    }
+    
+    public AssetId(PluginId pluginId, string partialAssetId) {
+        PluginId = pluginId;
+        Id = new PartialAssetId(partialAssetId);
+    }
+    
+    public AssetId(string pluginId, string partialAssetId) {
+        PluginId = new PluginId(pluginId);
+        Id = new PartialAssetId(partialAssetId);
+    }
+    
+    public AssetId(string fullId) {
+        if(string.IsNullOrWhiteSpace(fullId)) {
+            throw new ArgumentException($"Invalid format: {fullId}", nameof(fullId));
+        }
+        
+        Match match = Regex.Match(fullId
+            .Replace("-","")
+            .PadLeft(12,'0')
+        );
         if (!match.Success) {
-            throw new ArgumentException("Invalid input format.", nameof(value));
+            throw new ArgumentException("Invalid input format.", fullId);
         }
         PluginId = new PluginId(match.Groups[1].Value);
         Id = new PartialAssetId(match.Groups[2].Value);
     }
+    
+    
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
@@ -41,7 +64,7 @@ public readonly partial struct AssetId : IComparable<AssetId>, IEqualityComparer
         return $"{PluginId.ToString()}-{Id.ToString()}";
     }
     
-    [GeneratedRegex("^([0-9a-fA-F]{4})?-?([0-9a-fA-F]{8})$")]
+    [GeneratedRegex("^([0-9a-fA-F]{4})?([0-9a-fA-F]{8})$")]
     private static partial Regex MyRegex();
     
     // -----------------------------------------------------------------------------------------------------------------

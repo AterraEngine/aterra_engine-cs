@@ -1,57 +1,63 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
+using System.Globalization;
+using System.Text.RegularExpressions;
 namespace AterraCore.Types;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
-public readonly struct PartialAssetId : IComparable<PartialAssetId> {
-    public uint Value { get; } // So ... allowing for 4 billion assets per plugin ... that isn't overkill, right?
+public readonly partial struct PartialAssetId(uint value) : IComparable<PartialAssetId>, IEqualityComparer<PartialAssetId> {
+    private static Regex _regex = MyRegex(); 
     
+    // PartialAssetId is basically just a fancy ushort
+    public uint Value { get; } = value; // which means the max plugin ID will be `FFFFFFFF`
+
     // -----------------------------------------------------------------------------------------------------------------
     // Constructors
     // -----------------------------------------------------------------------------------------------------------------
-    public PartialAssetId(uint value) {
-        Value = value;
-    }
-    public PartialAssetId(int value) {
-        if (value < 0) throw new ArgumentOutOfRangeException(nameof(value), "Negative values are not allowed.");
-        Value = (uint)value;
-    }
-    public PartialAssetId(string value) {
-        if (!uint.TryParse(value, out uint parsedValue)) throw new ArgumentException("Invalid input format.", nameof(value));
-        Value = parsedValue;
-    }
+    public PartialAssetId() : this(0) {} // Create an empty
+    public PartialAssetId(int value) : this(CastToUint(value)) { }
+    public PartialAssetId(string value) : this(CastToUint(value)) { }
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public override string ToString() {
-        return Value.ToString("X").PadLeft(8, '0');
+        return Value.ToString("X").PadLeft(8,'0');
     }
 
+    private static uint CastToUint(string value) {
+        if (!_regex.IsMatch(value)) {
+            throw new ArgumentException("Invalid input format.", nameof(value));
+        }
+        return uint.Parse(value, NumberStyles.HexNumber);
+    }
+    
+    private static uint CastToUint(int input) {
+        if (input < 0) {
+            throw new ArgumentOutOfRangeException(nameof(input), "Negative values are not allowed.");
+        }
+        return (uint)input;
+    }
+    
+    [GeneratedRegex(@"^[0-9a-fA-F]{1,8}$")]
+    private static partial Regex MyRegex();
     
     // -----------------------------------------------------------------------------------------------------------------
-    // Comparisons
+    // Operators and Comparisons
     // -----------------------------------------------------------------------------------------------------------------
     public static bool operator ==(PartialAssetId left, PartialAssetId right) => left.Equals(right);
-    public static bool operator !=(PartialAssetId left, PartialAssetId right) => !left.Equals(right);
-
-    public int CompareTo(PartialAssetId other) {
-        return Value.CompareTo(other.Value);
-    }
-
-    public override bool Equals(object? obj) =>  obj is PartialAssetId other && Equals(other);
+    public static bool operator !=(PartialAssetId left, PartialAssetId right) => !(left == right);
+    
+    public int CompareTo(PartialAssetId other) => Value.CompareTo(other.Value);
+    
+    public override bool Equals(object? obj) => obj is PartialAssetId other && Equals(other);
     public bool Equals(PartialAssetId other) => Value == other.Value;
+    public bool Equals(PartialAssetId x, PartialAssetId y) => x.Value == y.Value;
 
-    public override int GetHashCode() {
-        return Value.GetHashCode();
-    }
-
-    public int GetHashCode(PartialAssetId obj) {
-        return (int)obj.Value;
-    }
+    public int GetHashCode(PartialAssetId obj) => (int)obj.Value;
+    public override int GetHashCode() => (int)Value;
+    
 }

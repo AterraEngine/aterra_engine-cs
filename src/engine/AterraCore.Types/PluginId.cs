@@ -42,7 +42,7 @@ public readonly partial struct PluginId(ushort value) : IComparable<PluginId>, I
         return (ushort)input;
     }
     
-    [GeneratedRegex(@"^[0-9a-fA-F]{4}$")]
+    [GeneratedRegex(@"^[0-9a-fA-F]{1,4}$")]
     private static partial Regex MyRegex();
     
     // -----------------------------------------------------------------------------------------------------------------

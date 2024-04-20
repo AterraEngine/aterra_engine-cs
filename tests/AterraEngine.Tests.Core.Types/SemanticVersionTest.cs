@@ -1,9 +1,9 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
 using System.Xml;
 using JetBrains.Annotations;
+
 namespace AterraEngine.Tests.Core.Types;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -11,59 +11,55 @@ namespace AterraEngine.Tests.Core.Types;
 // ---------------------------------------------------------------------------------------------------------------------
 [TestSubject(typeof(SemanticVersion))]
 public class SemanticVersionTest {
-    [Fact]
-    public void TestSemanticVersionConstructorWithIntParams() {
-        var semanticVersion = new SemanticVersion(1, 2, 3);
-        Assert.Equal(1, semanticVersion.Major);
-        Assert.Equal(2, semanticVersion.Minor);
-        Assert.Equal(3, semanticVersion.Patch);
+    
+    // Test for constructor with integer parameters and ToString method
+    [Theory]
+    [InlineData(1, 2, 3, "1.2.3")]
+    [InlineData(10, 20, 30, "10.20.30")]
+    public void TestSemanticVersionWithIntParams(int major, int minor, int patch, string expected) {
+        var semanticVersion = new SemanticVersion(major, minor, patch);
+        Assert.Equal(major, semanticVersion.Major);
+        Assert.Equal(minor, semanticVersion.Minor);
+        Assert.Equal(patch, semanticVersion.Patch);
+        Assert.Equal(expected, semanticVersion.ToString());
     }
 
-    [Fact]
-    public void TestSemanticVersionConstructorWithStringParam_ValidString() {
-        var semanticVersion = new SemanticVersion("1.2.3");
-        Assert.Equal(1, semanticVersion.Major);
-        Assert.Equal(2, semanticVersion.Minor);
-        Assert.Equal(3, semanticVersion.Patch);
+    // Test for constructor with string parameter
+    [Theory]
+    [InlineData("1.2.3", 1, 2, 3)]
+    [InlineData("10.20.30", 10, 20, 30)]
+    public void TestSemanticVersionConstructorWithStringParam_ValidString(string version, int major, int minor, int patch) {
+        var semanticVersion = new SemanticVersion(version);
+        Assert.Equal(major, semanticVersion.Major);
+        Assert.Equal(minor, semanticVersion.Minor);
+        Assert.Equal(patch, semanticVersion.Patch);
     }
 
-    [Fact]
-    public void TestSemanticVersionConstructorWithStringParam_InvalidString() {
-        Assert.Throws<ArgumentException>(() => new SemanticVersion("1.2.3.4"));
-        Assert.Throws<ArgumentException>(() => new SemanticVersion("1.2"));
-        Assert.Throws<ArgumentException>(() => new SemanticVersion("abcd"));
+    // Test for constructor with invalid string parameter
+    [Theory]
+    [InlineData("1.2.3.4")]
+    [InlineData("1.2")]
+    [InlineData("abcd")]
+    public void TestSemanticVersionConstructorWithStringParam_InvalidString(string version) {
+        Assert.Throws<ArgumentException>(() => new SemanticVersion(version));
     }
 
-    [Fact]
-    public void TestToString() {
-        var semanticVersion = new SemanticVersion(1, 2, 3);
-        Assert.Equal("1.2.3", semanticVersion.ToString());
-    }
-
-    [Fact]
-    public void TestReadXml_ValidString() {
-        const string xmlContent = "<SemanticVersion>1.2.3</SemanticVersion>";
+    // Test for ReadXml method
+    [Theory]
+    [InlineData("<SemanticVersion>1.2.3</SemanticVersion>", 1, 2, 3)]
+    [InlineData("<SemanticVersion>10.20.30</SemanticVersion>", 10, 20, 30)]
+    public void TestReadXml_ValidString(string xmlContent, int major, int minor, int patch) {
         var xmlReader = XmlReader.Create(new StringReader(xmlContent));
-        
-        var semanticVersion = SemanticVersion.Zero;
+        SemanticVersion semanticVersion = SemanticVersion.Zero;
+
         while (xmlReader.Read()) {
             if (xmlReader.NodeType != XmlNodeType.Element) continue;
-
-            if (xmlReader.Name == "SemanticVersion") {
-                semanticVersion.ReadXml(xmlReader);
-            }
+            if (xmlReader.Name == "SemanticVersion") semanticVersion.ReadXml(xmlReader);
         }
-    
-        Assert.Equal(1, semanticVersion.Major);
-        Assert.Equal(2, semanticVersion.Minor);
-        Assert.Equal(3, semanticVersion.Patch);
+
+        Assert.Equal(major, semanticVersion.Major);
+        Assert.Equal(minor, semanticVersion.Minor);
+        Assert.Equal(patch, semanticVersion.Patch);
     }
 
-    // [Fact]
-    // public void TestWriteXml() {
-    //     var semanticVersion = new SemanticVersion(1, 2, 3);
-    //     var writer = XmlWriter.Create();
-    //     semanticVersion.WriteXml(writer);
-    //     Assert.Equal("1.2.3", writer.GetWrittenString());
-    // }
 }
