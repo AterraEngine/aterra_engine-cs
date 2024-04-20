@@ -1,11 +1,10 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Diagnostics.CodeAnalysis;
+
 using System.Reflection;
 using AterraCore.Types;
 using AterraEngine.Contracts.Core.PluginFramework;
-using AterraEngine.Core.Types;
 using Serilog;
 
 namespace AterraEngine.Core.PluginFramework;

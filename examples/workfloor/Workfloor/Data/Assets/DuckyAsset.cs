@@ -3,7 +3,6 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.Contracts.Core.Assets;
 using AterraEngine.Core.Assets;
-using AterraEngine.Core.Types;
 using AterraEngine.Lib.ECS.Dtos.Entities;
 using AterraEngine.Lib.ECS.Entities;
 using Serilog;

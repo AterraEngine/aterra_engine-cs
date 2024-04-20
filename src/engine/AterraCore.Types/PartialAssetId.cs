@@ -26,7 +26,7 @@ public readonly partial struct PartialAssetId(uint value) : IComparable<PartialA
     // -----------------------------------------------------------------------------------------------------------------
     public override string ToString() => Value.ToString("X").PadLeft(8,'0');
     public string ToStringReadable() {
-        string stringValue = Value.ToString("X").PadLeft(8, '0');
+        string stringValue = ToString();
         return string.Concat(
             stringValue.AsSpan(0, 4), 
             "-", 
@@ -34,20 +34,20 @@ public readonly partial struct PartialAssetId(uint value) : IComparable<PartialA
     }
 
     internal static uint CastToUint(string value) {
-        if (!_regex.IsMatch(value)) {
+        if (!_regex.IsMatch(value))
             throw new ArgumentException("Invalid input format.", nameof(value));
-        }
+        
         return uint.Parse(value, NumberStyles.HexNumber);
     }
     
     private static uint CastToUint(int input) {
-        if (input < 0) {
+        if (input < 0)
             throw new ArgumentOutOfRangeException(nameof(input), "Negative values are not allowed.");
-        }
+        
         return (uint)input;
     }
     
-    [GeneratedRegex(@"^[0-9a-fA-F]{1,8}$")]
+    [GeneratedRegex("^[0-9a-fA-F]{1,8}$")]
     private static partial Regex MyRegex();
     
     // -----------------------------------------------------------------------------------------------------------------

@@ -10,15 +10,8 @@ namespace AterraEngine.Tests.Core.Types;
 // ---------------------------------------------------------------------------------------------------------------------
 [TestSubject(typeof(AssetId))]
 public class AssetIdTest {
-    private static readonly PluginId TestPluginId = new PluginId("1234");
-    private static readonly PartialAssetId TestPartialAssetId = new PartialAssetId("5678abcd");
-
-    [Fact]
-    public void AssetId_ConstructorWithPluginIdAndPartialAssetId_CorrectlyInitializes() {
-        var assetId = new AssetId(TestPluginId, TestPartialAssetId);
-        Assert.Equal(TestPluginId, assetId.PluginId);
-        Assert.Equal(TestPartialAssetId, assetId.Id);
-    }
+    private static readonly PluginId TestPluginId = new("1234");
+    private static readonly PartialAssetId TestPartialAssetId = new("5678abcd");
 
     [Theory]
     [InlineData("12345678abcd", "1234", "5678abcd")]
@@ -51,6 +44,13 @@ public class AssetIdTest {
         Assert.Equal(fullIdWithDash, assetId.ToStringReadable(), StringComparer.OrdinalIgnoreCase);
     }
 
+    [Fact]
+    public void AssetId_ConstructorWithPluginIdAndPartialAssetId_CorrectlyInitializes() {
+        var assetId = new AssetId(TestPluginId, TestPartialAssetId);
+        Assert.Equal(TestPluginId, assetId.PluginId);
+        Assert.Equal(TestPartialAssetId, assetId.Id);
+    }
+    
     [Fact]
     public void Equals_ReturnsExpectedResults() {
         var assetId1 = new AssetId(TestPluginId, TestPartialAssetId);

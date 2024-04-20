@@ -3,7 +3,6 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using AterraCore.Types;
-using AterraEngine.Core.Types;
 
 namespace AterraEngine.Core.Assets;
 

@@ -1,14 +1,11 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Numerics;
+
 using AterraEngine.Contracts.Core.Assets;
-using AterraEngine.Contracts.Core.ECSFramework;
 using AterraEngine.Contracts.Lib.ECS.Components;
 using AterraEngine.Contracts.Lib.ECS.Entities;
-using AterraEngine.Core.Assets;
 using AterraEngine.Core.ECSFramework;
-using AterraEngine.Core.Types;
 using AterraEngine.Lib.ECS.Components;
 using AterraEngine.Lib.ECS.Dtos.Entities;
 using Serilog;

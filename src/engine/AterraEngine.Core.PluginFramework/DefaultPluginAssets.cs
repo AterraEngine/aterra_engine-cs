@@ -2,7 +2,6 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.Contracts.Core.PluginFramework;
-using Serilog;
 
 namespace AterraEngine.Core.PluginFramework;
 

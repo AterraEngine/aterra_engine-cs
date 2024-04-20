@@ -2,7 +2,6 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.Contracts.Core.PluginFramework;
-using AterraEngine.Core.Types;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 

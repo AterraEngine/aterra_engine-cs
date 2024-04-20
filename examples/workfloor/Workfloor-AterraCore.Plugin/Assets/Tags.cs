@@ -2,15 +2,14 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-namespace AterraCore.Types;
+namespace Workfloor_AterraCore.Plugin.Assets;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public struct AssetRecord {
-    public AssetId AssetId { get; init; }
-    public Type Type { get; init; }
-    public AssetInstanceType InstanceType { get; init; }
-    public Type[] StartingComponentTypes { get; init; }
+public enum Tags {
+    a,
+    b,
+    c
 }

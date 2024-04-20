@@ -11,6 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="AtlasHub\" />
       <Folder Include="Nexities\Systems\" />
     </ItemGroup>
 

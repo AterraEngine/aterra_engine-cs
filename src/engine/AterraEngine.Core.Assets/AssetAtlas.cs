@@ -2,11 +2,9 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Collections.Concurrent;
-using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using AterraCore.Types;
 using AterraEngine.Contracts.Core.Assets;
-using AterraEngine.Core.Types;
 using Serilog;
 
 namespace AterraEngine.Core.Assets;

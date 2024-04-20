@@ -5,7 +5,6 @@
 using AterraCore.Contracts.DI;
 using AterraCore.Loggers;
 using Microsoft.Extensions.DependencyInjection;
-using Serilog;
 
 namespace AterraCore.DI;
 

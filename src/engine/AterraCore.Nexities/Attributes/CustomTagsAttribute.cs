@@ -2,21 +2,23 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using AterraCore.Contracts.FlexiPlug;
-using AterraCore.Types;
-
-namespace Workfloor_AterraCore.Plugin;
+namespace AterraCore.Nexities.Attributes;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class PluginData(int id) : IPluginData {
-    public PluginId Id { get; } = new(id);
-    
-    private int _partialAssetIdCounter;
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+public class CustomTagsAttribute : Attribute {
+    public string[] CustomTags { get; private set; } 
     
     // -----------------------------------------------------------------------------------------------------------------
-    // Methods
+    // Constructors
     // -----------------------------------------------------------------------------------------------------------------
-    public int GetNewPartialAssetId() => Interlocked.Increment(ref _partialAssetIdCounter); // thread safe, I think?
+    public CustomTagsAttribute(params string[] customTags) {
+        CustomTags = customTags.Select(tag => tag.ToLowerInvariant()).ToArray();
+    }
+
+    public CustomTagsAttribute(params Enum[] customTags) {
+        CustomTags = customTags.Select(tag => tag.ToString().ToLowerInvariant()).ToArray();
+    }
 }

@@ -26,7 +26,7 @@ public class EngineLoader {
         engineServiceBuilder.AssignStaticServices();
         engineServiceBuilder.FinishBuilding();
         
-        // After this point all data should be assigned
+        // After this point all plugin data should be assigned
        
         
         // After this point the actual engine should start churning

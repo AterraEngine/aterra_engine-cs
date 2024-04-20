@@ -2,7 +2,6 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using AterraCore.Contracts.Nexities.Components;
 using AterraCore.Types;
 
 namespace AterraCore.Contracts.Nexities.Assets;
