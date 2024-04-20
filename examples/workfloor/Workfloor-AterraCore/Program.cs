@@ -2,6 +2,8 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
+using AterraEngine;
+
 namespace Workfloor_AterraCore;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -10,6 +12,6 @@ namespace Workfloor_AterraCore;
 
 public class Program {
     public static void Main(string[] args) {
-        
+        new EngineLoader().Start();
     }
 }

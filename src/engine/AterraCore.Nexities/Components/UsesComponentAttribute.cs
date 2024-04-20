@@ -1,16 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Numerics;
-using OldAterraEngine.Contracts.Components;
-using OldAterraEngine.Contracts.WorldSpaces;
+using AterraCore.Contracts.Nexities.Components;
 
-namespace OldAterraEngine.Lib.Components;
+namespace AterraCore.Nexities.Components;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
-public class Camera2DStaticComponent(IWorldSpace2D worldSpace2D) : Camera2DComponent(worldSpace2D), ICamera2DComponent {
-    public override void UpdateCamera(Vector2 playerPos, float deltaTime) { }
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+public class UsesComponentAttribute<TComponent>(string? specificId = null) : Attribute where TComponent : IComponent {
+    public Type Type { get; } = typeof(TComponent);
+    public string? Id { get; } = specificId; // WARN THIS IS A BIG ISSUE! HOW TO DEAL WITH IMPORTING COMPONENTS FROM OTHER PLUGINS?
 }

@@ -1,19 +1,19 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Numerics;
-using Raylib_cs;
 
-namespace OldAterraEngine.Contracts.Components;
+using Serilog;
+
+namespace AterraCore.Loggers;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
-public interface ITransform2DComponent : IComponent{
-    public Vector2 Pos { get; set; }
-    public Vector2 Size { get; set; }
-    public float Rot { get; set; }
-    public Rectangle BoundingBox { get; }
-    public Vector2 OriginRelative { get; }
+public static class EngineLogger {
+    public static ILogger CreateLogger() {
+        return new LoggerConfiguration()
+            .WriteTo.Console()
+            .WriteTo.File("log.txt")
+            .CreateLogger();
+    }
 }
