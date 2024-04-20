@@ -45,7 +45,7 @@ public class AssetIdTest {
     }
 
     [Theory]
-    [InlineData("1234-5678abcd", "1234", "5678abcd")]
+    [InlineData("1234-5678-abcd", "1234", "5678abcd")]
     public void ToStringReadable_ReturnsExpectedFormat(string fullIdWithDash, string pluginId, string partialId) {
         var assetId = new AssetId(pluginId, partialId);
         Assert.Equal(fullIdWithDash, assetId.ToStringReadable(), StringComparer.OrdinalIgnoreCase);

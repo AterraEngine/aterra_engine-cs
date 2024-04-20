@@ -52,6 +52,14 @@ public class PartialAssetIdTest {
         var testInstance = new PartialAssetId(input);
         Assert.Equal(expected, testInstance.ToString());
     }
+    
+    [Theory]
+    [InlineData(1234u, "0000-04D2")]
+    [InlineData(5678u, "0000-162E")]
+    public void ToStringReadableMethod_CorrectFormat(uint input, string expected) {
+        var testInstance = new PartialAssetId(input);
+        Assert.Equal(expected, testInstance.ToStringReadable());
+    }
   
     [Theory]
     [InlineData("0000000A", "0000000A", true)]

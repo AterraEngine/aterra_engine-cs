@@ -24,9 +24,8 @@ public readonly partial struct PluginId(ushort value) : IComparable<PluginId>, I
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public override string ToString() {
-        return Value.ToString("X").PadLeft(4,'0');
-    }
+    public override string ToString() => Value.ToString("X").PadLeft(4,'0');
+    public string ToStringReadable() => ToString();
 
     internal static ushort CastToUshort(string value) {
         if (!_regex.IsMatch(value)) {

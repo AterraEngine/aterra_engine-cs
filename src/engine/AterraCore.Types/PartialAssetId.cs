@@ -24,8 +24,13 @@ public readonly partial struct PartialAssetId(uint value) : IComparable<PartialA
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public override string ToString() {
-        return Value.ToString("X").PadLeft(8,'0');
+    public override string ToString() => Value.ToString("X").PadLeft(8,'0');
+    public string ToStringReadable() {
+        string stringValue = Value.ToString("X").PadLeft(8, '0');
+        return string.Concat(
+            stringValue.AsSpan(0, 4), 
+            "-", 
+            stringValue.AsSpan(4, 4));
     }
 
     internal static uint CastToUint(string value) {

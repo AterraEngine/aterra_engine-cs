@@ -16,24 +16,24 @@ public readonly partial struct AssetId : IComparable<AssetId>, IEqualityComparer
     // -----------------------------------------------------------------------------------------------------------------
     // Constructors
     // -----------------------------------------------------------------------------------------------------------------
-    public AssetId(PluginId pluginId, PartialAssetId partialAssetId) {
+    public AssetId(PluginId pluginId, PartialAssetId partialId) {
         PluginId = pluginId;
-        Id = partialAssetId;
+        Id = partialId;
     }
     
-    public AssetId(string pluginId, PartialAssetId partialAssetId) {
+    public AssetId(string pluginId, PartialAssetId partialId) {
         PluginId = new PluginId(pluginId);
-        Id = partialAssetId;
+        Id = partialId;
     }
     
-    public AssetId(PluginId pluginId, string partialAssetId) {
+    public AssetId(PluginId pluginId, string partialId) {
         PluginId = pluginId;
-        Id = new PartialAssetId(partialAssetId);
+        Id = new PartialAssetId(partialId);
     }
     
-    public AssetId(string pluginId, string partialAssetId) {
+    public AssetId(string pluginId, string partialId) {
         PluginId = new PluginId(pluginId);
-        Id = new PartialAssetId(partialAssetId);
+        Id = new PartialAssetId(partialId);
     }
     
     public AssetId(string fullId) {
@@ -57,13 +57,9 @@ public readonly partial struct AssetId : IComparable<AssetId>, IEqualityComparer
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public override string ToString() {
-        return $"{PluginId.ToString()}{Id.ToString()}";
-    }
-    public string ToStringReadable() {
-        return $"{PluginId.ToString()}-{Id.ToString()}";
-    }
-    
+    public override string ToString() => $"{PluginId.ToString()}{Id.ToString()}";
+    public string ToStringReadable() => $"{PluginId.ToStringReadable()}-{Id.ToStringReadable()}";
+
     [GeneratedRegex("^([0-9a-fA-F]{4})?([0-9a-fA-F]{8})$")]
     private static partial Regex MyRegex();
     
