@@ -5,6 +5,7 @@
 using System.Diagnostics.CodeAnalysis;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.Nexities;
+using AterraCore.Contracts.Nexities.Assets;
 using AterraCore.Types;
 
 namespace AterraCore.Contracts.AtlasHub;

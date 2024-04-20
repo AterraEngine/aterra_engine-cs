@@ -11,4 +11,6 @@ namespace AterraCore.Contracts.FlexiPlug;
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IPluginData {
     public PluginId Id { get; }
+
+    public int GetNewPartialAssetId();
 }

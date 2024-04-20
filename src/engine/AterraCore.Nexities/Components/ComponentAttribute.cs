@@ -1,18 +1,18 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
+using AterraCore.Contracts.Nexities.Components;
+using AterraCore.Nexities.Assets;
 using AterraCore.Types;
 
-namespace AterraCore.Contracts.Nexities;
+namespace AterraCore.Nexities.Components;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IAsset {
-    public Guid Guid { get; }
-    public AssetId AssetId { get; }
-
-    public HashSet<Guid> ComponentIds { get; }
-    public IComponent[] GetComponents();
-}
+[AttributeUsage(AttributeTargets.Class)]
+public class ComponentAttribute(
+    string? partialId, 
+    AssetInstanceType instanceType = AssetInstanceType.Multiple
+    
+    ) : AssetAttribute(partialId, AssetType.Component, instanceType);

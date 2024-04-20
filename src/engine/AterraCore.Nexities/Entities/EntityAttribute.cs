@@ -1,17 +1,17 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Nexities.Assets;
+using AterraCore.Types;
 
-namespace AterraCore.Types;
+namespace AterraCore.Nexities.Entities;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
-public enum AssetType {
-    Undefined,
-    Component,
-    Entity,
-    System
- 
-}
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+public class EntityAttribute(
+    string partialId, 
+    AssetInstanceType instanceType = AssetInstanceType.Multiple
+    
+    ) : AssetAttribute(partialId, AssetType.Entity, instanceType);

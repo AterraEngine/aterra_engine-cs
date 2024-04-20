@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using AterraCore.Contracts.Nexities;
+using AterraCore.Contracts.Nexities.Components;
 using AterraCore.Types;
 
 namespace AterraCore.Nexities.Assets;
@@ -10,38 +11,15 @@ namespace AterraCore.Nexities.Assets;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
 [AttributeUsage(AttributeTargets.Class)]
 public class AssetAttribute(
-    string partialId,
-    AssetType type = AssetType.Actor,
-    AssetInstanceType instanceType = AssetInstanceType.Transient,
-    
-    params Type[] startingComponents
+    string? partialId,
+    AssetType type,
+    AssetInstanceType instanceType
     
     ) : Attribute {
     
-    public PartialAssetId PartialAssetId { get; } = new(partialId); 
+    public PartialAssetId? PartialAssetId { get; } = partialId is not null ? new(partialId) : null; // This is nullable to allow for custom assets on runtime, or simply things you don't care about as a developer and simply exist as test values or something
     public AssetType Type { get; } = type;
     public AssetInstanceType InstanceType { get; } = instanceType;
-
-    public Type[] StartingComponents = startingComponents.Select(
-        t => {
-            if (!typeof(IComponent).IsAssignableFrom(t))
-                throw new ArgumentException(t + " does not implement IComponent");
-            return t;
-        }
-    ).ToArray();
-    
-    // -----------------------------------------------------------------------------------------------------------------
-    // Methods
-    // -----------------------------------------------------------------------------------------------------------------
-    public AssetRecord ToRecord(PluginId pluginId, Type attachedObject) {
-        return new AssetRecord {
-            AssetId = new AssetId(pluginId, PartialAssetId),
-            Type = attachedObject, 
-            InstanceType = InstanceType, 
-            StartingComponentTypes = StartingComponents
-        };
-    }
 }

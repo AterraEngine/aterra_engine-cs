@@ -2,12 +2,15 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-namespace AterraCore.Contracts.Nexities;
+using AterraCore.Contracts.Nexities.Components;
+using AterraCore.Types;
+
+namespace AterraCore.Contracts.Nexities.Assets;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
-public interface IComponent {
+public interface IAsset {
     public Guid Guid { get; }
+    public AssetId AssetId { get; }
 }

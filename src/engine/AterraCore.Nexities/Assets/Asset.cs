@@ -3,6 +3,8 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using AterraCore.Contracts.Nexities;
+using AterraCore.Contracts.Nexities.Assets;
+using AterraCore.Contracts.Nexities.Components;
 using AterraCore.Types;
 
 namespace AterraCore.Nexities.Assets;
@@ -10,15 +12,9 @@ namespace AterraCore.Nexities.Assets;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class Asset(IAssetDto assetDto) : IAsset {
+public class Asset<T>(T assetDto) : IAsset where T : IAssetDto {
+
     public Guid Guid { get; } = new();
     public AssetId AssetId { get; } = assetDto.AssetId;
-    public HashSet<Guid> ComponentIds { get; } = [..assetDto.StartingComponentGuids];
-    
-    // -----------------------------------------------------------------------------------------------------------------
-    // Methods
-    // -----------------------------------------------------------------------------------------------------------------
-    public IComponent[] GetComponents() {
-        throw new NotImplementedException();
-    }
+
 }

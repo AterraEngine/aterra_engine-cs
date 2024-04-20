@@ -2,17 +2,16 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using AterraCore.Contracts.Nexities;
-using AterraCore.Types;
+using AterraCore.Contracts.Nexities.Assets;
+using AterraCore.Contracts.Nexities.Components;
 
-namespace AterraCore.Nexities.Assets;
+namespace AterraCore.Contracts.Nexities.Entities;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public record AssetConstructorDto(
-    AssetId AssetId,
-    Guid[] StartingComponentGuids
-
-    ) : IAssetDto ;
+public interface IEntity : IAsset {
+    public HashSet<Guid> ComponentIds { get; }
+    public IComponent[] GetComponents();
+}

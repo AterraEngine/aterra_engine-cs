@@ -2,12 +2,15 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-namespace AterraCore.Nexities.Assets;
+using AterraCore.Types;
+
+namespace AterraCore.Contracts.Nexities.Assets;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public record AssetRecordDto(
-        
-);
+public interface IAssetDto {
+    AssetId AssetId { get; }
+    Guid[] StartingComponentGuids { get; }
+}
