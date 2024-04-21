@@ -3,7 +3,6 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
-using AterraCore.Types;
 using AterraEngine.Contracts.Core.Assets;
 using Serilog;
 

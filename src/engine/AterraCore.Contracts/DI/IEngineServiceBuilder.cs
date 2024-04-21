@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
+using AterraCore.Common;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AterraCore.Contracts.DI;
@@ -17,6 +18,6 @@ public interface IEngineServiceBuilder {
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public void AssignDefaultServices();
-    public void AssignStaticServices();
+    public void AssignStaticServices(IEnumerable<StaticService> services);
     public void FinishBuilding();
 }

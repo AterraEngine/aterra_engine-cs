@@ -2,17 +2,23 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
+using AterraCore.Common;
 using AterraCore.Contracts.DI;
 using AterraCore.Loggers;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 
 namespace AterraCore.DI;
 
 // ---------------------------------------------------------------------------------------------------------------------
-// Code
+// Support Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public class EngineServiceBuilder : IEngineServiceBuilder {
+
+// ---------------------------------------------------------------------------------------------------------------------
+// Code
+// ---------------------------------------------------------------------------------------------------------------------
+public class EngineServiceBuilder(ILogger logger) : IEngineServiceBuilder {
     public IServiceCollection ServiceCollection { get; } = new ServiceCollection();
     
     // -----------------------------------------------------------------------------------------------------------------
@@ -28,12 +34,18 @@ public class EngineServiceBuilder : IEngineServiceBuilder {
         // ---
     }
 
-    public void AssignStaticServices() {
+    public void AssignStaticServices(IEnumerable<StaticService> services) {
         // Add STATIC Services here
         //      These services cannot be overriden
         // ---
-        
-        // TODO add engine here!
+        foreach (StaticService service in services) {
+            if (service.Type != ServiceType.Singleton) continue;
+            
+            ServiceCollection.AddSingleton(service.Interface, service.Implementation);
+            logger.Debug("Assigned {Interface} to {Implementation} as a Singleton", service.Interface.FullName, service.Implementation.FullName);
+
+            // TODO add the other implementations as well
+        }
         
         // ---
     }

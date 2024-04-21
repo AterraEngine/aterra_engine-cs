@@ -2,13 +2,13 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using AterraCore.Common;
-
-namespace AterraCore.Contracts.FlexiPlug;
+namespace AterraCore.Common;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IPluginData {
-    public PluginId Id { get; }
+public enum ServiceType {
+    Singleton,
+    Instanced,
+    Pooled
 }

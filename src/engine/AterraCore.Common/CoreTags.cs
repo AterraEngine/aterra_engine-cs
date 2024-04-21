@@ -2,13 +2,15 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using AterraCore.Common;
-
-namespace AterraCore.Contracts.FlexiPlug;
+namespace AterraCore.Common;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IPluginData {
-    public PluginId Id { get; }
+[Flags]
+public enum CoreTags {
+    None, 
+    Asset     = 1 <<  0,
+    Component = 1 <<  1,
+    Entity    = 1 <<  2,
 }

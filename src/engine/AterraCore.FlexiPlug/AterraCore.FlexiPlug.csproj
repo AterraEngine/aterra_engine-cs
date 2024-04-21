@@ -9,7 +9,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\lib\Extensions\Extensions.csproj" />
       <ProjectReference Include="..\AterraCore.Contracts\AterraCore.Contracts.csproj" />
-      <ProjectReference Include="..\AterraCore.Types\AterraCore.Types.csproj" />
+      <ProjectReference Include="..\AterraCore.Common\AterraCore.Common.csproj" />
     </ItemGroup>
 
 </Project>

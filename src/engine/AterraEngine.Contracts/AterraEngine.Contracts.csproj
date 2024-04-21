@@ -11,7 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\AterraCore.Types\AterraCore.Types.csproj" />
+      <ProjectReference Include="..\AterraCore.Common\AterraCore.Common.csproj" />
     </ItemGroup>
 
     <ItemGroup>

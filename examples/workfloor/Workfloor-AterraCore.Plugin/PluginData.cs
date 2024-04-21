@@ -3,7 +3,6 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using AterraCore.Contracts.FlexiPlug;
-using AterraCore.Types;
 
 namespace Workfloor_AterraCore.Plugin;
 
@@ -12,11 +11,4 @@ namespace Workfloor_AterraCore.Plugin;
 // ---------------------------------------------------------------------------------------------------------------------
 public class PluginData(int id) : IPluginData {
     public PluginId Id { get; } = new(id);
-    
-    private int _partialAssetIdCounter;
-    
-    // -----------------------------------------------------------------------------------------------------------------
-    // Methods
-    // -----------------------------------------------------------------------------------------------------------------
-    public int GetNewPartialAssetId() => Interlocked.Increment(ref _partialAssetIdCounter); // thread safe, I think?
 }

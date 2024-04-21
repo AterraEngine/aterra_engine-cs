@@ -2,7 +2,8 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using AterraCore.Types;
+using AterraCore.Contracts.Nexities.Assets;
+using AterraCore.Common;
 
 namespace AterraCore.Nexities.Assets;
 
@@ -14,9 +15,9 @@ public class AssetAttribute(
     string partialId,
     AssetInstanceType instanceType,
     CoreTags coreTags
-) : Attribute {
+) : Attribute, IAssetAttribute {
     
-    public PartialAssetId? PartialAssetId { get; private set; } = new(partialId);
-    public AssetInstanceType InstanceType { get; private set; } = instanceType;
-    public CoreTags CoreTags { get; private set; } = coreTags | CoreTags.Asset;
+    public PartialAssetId PartialAssetId { get; } = new(partialId);
+    public AssetInstanceType InstanceType { get; } = instanceType;
+    public CoreTags CoreTags { get; } = coreTags | CoreTags.Asset;
 }

@@ -2,15 +2,16 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-namespace AterraCore.Nexities;
+using AterraCore.Common;
+
+namespace AterraCore.Contracts.Nexities.Assets;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Flags]
-public enum CoreTags {
-    None, 
-    Asset = 1 << 0,
-    Component = 1 << 1,
-    Entity = 1 << 2,
+
+public interface IAssetAttribute {
+    public PartialAssetId PartialAssetId { get;}
+    public AssetInstanceType InstanceType { get;}
+    public CoreTags CoreTags { get; }
 }

@@ -6,7 +6,7 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace AterraCore.Types;
+namespace AterraCore.Common;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

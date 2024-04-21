@@ -2,19 +2,21 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-namespace AterraCore.Nexities;
+namespace AterraCore.Common;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
-public enum AssetInstanceType {
-    /// <summary> Each asset ID points to exactly one shared instance of the asset.</summary>
-    Singleton,
-
-    /// <summary> Each asset ID points to individual instances of the asset, creating a new one each time. </summary>
-    Multiple,
-
-    /// <summary> Each asset ID points to a reusable instance of the asset from a pool of asset instances, avoiding the cost of frequently creating and destroying instances.  </summary>
-    Pooled
+public struct StaticService {
+    public Type Interface { get; private set; }
+    public Type Implementation { get; private set; }
+    public ServiceType Type { get; private set; }
+    
+    public static StaticService AsSingleton<T1, T2>() where T2 : T1 {
+        return new StaticService {
+            Interface = typeof(T1),
+            Implementation = typeof(T2),
+            Type = ServiceType.Singleton
+        };
+    }
 }
