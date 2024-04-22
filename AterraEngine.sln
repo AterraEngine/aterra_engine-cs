@@ -66,6 +66,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine", "src\engine\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraCore.Loggers", "src\engine\AterraCore.Loggers\AterraCore.Loggers.csproj", "{A297B9EB-8D76-47A0-886E-976EE5572C87}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extensions", "Extensions", "{33266E3A-881A-4D88-BFF4-D9D48CB9E0FC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraCore.Extensions", "src\engine\AterraCore.Extensions\AterraCore.Extensions.csproj", "{ADD34288-B521-4096-BB82-6A7DE6A6F091}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -102,6 +106,8 @@ Global
 		{498585C0-4B66-442A-ABAE-2CCD21CA9FF4} = {F86D197F-7641-46CE-A43D-CFF48F84B9E6}
 		{2B87390D-7295-4C4D-ACC6-9690A34068F0} = {A333282A-D689-4ADD-9610-827C9E468020}
 		{A297B9EB-8D76-47A0-886E-976EE5572C87} = {F86D197F-7641-46CE-A43D-CFF48F84B9E6}
+		{33266E3A-881A-4D88-BFF4-D9D48CB9E0FC} = {F86D197F-7641-46CE-A43D-CFF48F84B9E6}
+		{ADD34288-B521-4096-BB82-6A7DE6A6F091} = {33266E3A-881A-4D88-BFF4-D9D48CB9E0FC}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{9C8CA02A-28DA-410A-8ADA-A39B3F6A227B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -192,5 +198,9 @@ Global
 		{A297B9EB-8D76-47A0-886E-976EE5572C87}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A297B9EB-8D76-47A0-886E-976EE5572C87}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A297B9EB-8D76-47A0-886E-976EE5572C87}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADD34288-B521-4096-BB82-6A7DE6A6F091}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADD34288-B521-4096-BB82-6A7DE6A6F091}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADD34288-B521-4096-BB82-6A7DE6A6F091}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADD34288-B521-4096-BB82-6A7DE6A6F091}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

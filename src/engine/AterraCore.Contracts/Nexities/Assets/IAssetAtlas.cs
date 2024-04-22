@@ -5,6 +5,7 @@
 using System.Diagnostics.CodeAnalysis;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Common;
+using AterraCore.Contracts.FlexiPlug.Plugin;
 
 namespace AterraCore.Contracts.Nexities.Assets;
 

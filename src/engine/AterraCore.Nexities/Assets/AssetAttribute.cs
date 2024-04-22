@@ -15,6 +15,7 @@ public class AssetAttribute(
     string partialId,
     AssetInstanceType instanceType,
     CoreTags coreTags
+    
 ) : Attribute, IAssetAttribute {
     
     public PartialAssetId PartialAssetId { get; } = new(partialId);
