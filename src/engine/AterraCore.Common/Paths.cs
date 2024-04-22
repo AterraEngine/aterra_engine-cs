@@ -2,21 +2,19 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace AterraCore.Common;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public struct StaticService {
-    public Type Interface { get; private set; }
-    public Type Implementation { get; private set; }
-    public ServiceType Type { get; private set; }
+[SuppressMessage("ReSharper", "InconsistentNaming")]
+public static class Paths {
+    public const string Logs = @"Logs\";
     
-    public static StaticService AsSingleton<T1, T2>() where T2 : T1 {
-        return new StaticService {
-            Interface = typeof(T1),
-            Implementation = typeof(T2),
-            Type = ServiceType.Singleton
-        };
-    }
+    private const string _startupLog = "log-startup.db";
+    public static readonly string StartupLog = Path.Combine(Logs, _startupLog);
+    private const string _engineLog = "log-engine.db";
+    public static readonly string EngineLog = Path.Combine(Logs, _engineLog);
 }

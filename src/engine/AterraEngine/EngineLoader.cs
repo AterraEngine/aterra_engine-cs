@@ -7,7 +7,9 @@ using AterraCore.Contracts.Nexities.Assets;
 using AterraCore.DI;
 using AterraCore.Nexities.Assets;
 using AterraCore.Common;
+using AterraCore.Loggers;
 using AterraEngine.Core.Logging;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
 namespace AterraEngine;
@@ -17,7 +19,7 @@ namespace AterraEngine;
 // ---------------------------------------------------------------------------------------------------------------------
 
 public class EngineLoader {
-    private ILogger _startupLogger = StartupLoggerFactory.CreateLogger();
+    private ILogger _startupLogger = StartupLogger.CreateLogger();
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
@@ -26,17 +28,22 @@ public class EngineLoader {
         
         
         var engineServiceBuilder = new EngineServiceBuilder(_startupLogger);
-        engineServiceBuilder.AssignDefaultServices();
+        
+        // Services which may be overriden
+        engineServiceBuilder.AssignDefaultServices([
+            sc => sc.AddSingleton(EngineLogger.CreateLogger()),
+        ]);
         
         // Load plugins
         
         // After plugins have been loaded
-        //      - Finish up with assigning the Static Services
+        //      - Finish up with assigning the Static Services (services which may not be overriden)
         //      - Build the actual EngineServices
-        engineServiceBuilder.AssignStaticServices((StaticService[])[
-            StaticService.AsSingleton<IAssetAtlas, AssetAtlas>(),
-            StaticService.AsSingleton<IEngine, Engine>()
+        engineServiceBuilder.AssignStaticServices([
+            sc => sc.AddSingleton<IAssetAtlas, AssetAtlas>(),
+            sc => sc.AddSingleton<IEngine, Engine>()
         ]);
+
         engineServiceBuilder.FinishBuilding();
         
         // After this point all plugin data should be assigned

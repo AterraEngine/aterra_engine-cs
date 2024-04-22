@@ -7,6 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.Nexities.Assets;
 using AterraCore.Common;
+using JetBrains.Annotations;
 using Serilog;
 
 namespace AterraCore.Nexities.Assets;
@@ -15,6 +16,7 @@ namespace AterraCore.Nexities.Assets;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
+[UsedImplicitly]
 public class AssetAtlas(ILogger logger) : IAssetAtlas {
     private ConcurrentDictionary<AssetId, Type> _assetsMultiple = new();
     private ConcurrentDictionary<CoreTags, ConcurrentBag<AssetId>> _coreTagedAssets = new(
