@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<EngineConfig xmlns="urn:aterra-engine:engine-config">
+    <Version Major="0" Minor="0" Patch="0"/>
+    <PluginData>
+        <RootFolder>plugins</RootFolder>
+        <Plugins>
+            <Plugin>Workfloor-AterraCore.Plugin.zip</Plugin>
+        </Plugins>
+    </PluginData>
+</EngineConfig>

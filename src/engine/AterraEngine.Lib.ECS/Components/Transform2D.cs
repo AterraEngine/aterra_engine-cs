@@ -13,7 +13,7 @@ namespace AterraEngine.Lib.ECS.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Asset<Transform2DDto>(DefaultComponents.PTransform2D, AssetType.ECSComponent)]
+// [Asset<Transform2DDto>(DefaultComponents.PTransform2D, AssetType.ECSComponent)]
 public class Transform2D(ILogger logger) : Component<Transform2DDto>(logger), ITransform2D{
     private float _rotation;
     public float Rotation {

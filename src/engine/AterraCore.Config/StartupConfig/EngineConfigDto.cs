@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
+using System.Text;
 using System.Xml.Serialization;
 using AterraCore.Common;
 using AterraCore.Config.Xml;
@@ -15,10 +16,9 @@ namespace AterraCore.Config.StartupConfig;
 public class EngineConfigDto {
     [XmlElement("Version")] 
     public required SemanticVersionDto Version { get; set; }
-
-    [XmlArray("Plugins")]
-    [XmlArrayItem("Plugin", typeof(PluginConfigDto))]
-    public required List<PluginConfigDto> Plugins { get; set; }
+    
+    [XmlElement("PluginData")]
+    public required PluginDataDto PluginData { get; set; }
     
     [XmlElement("Raylib")]
     public required RaylibConfigDto RaylibConfig { get; set; }
@@ -29,9 +29,10 @@ public class EngineConfigDto {
     public static EngineConfigDto CreateEmptyConfigDto() =>
         new() {
             Version = new SemanticVersion(0, 0, 0),
-            Plugins = [
-                
-            ], 
+            PluginData = new PluginDataDto {
+                RootFolder = "plugins",
+                Plugins = []
+            }, 
             RaylibConfig = new RaylibConfigDto { 
                 Window = new RaylibWindowElementDto {
                     Screen = new DimensionElementDto {

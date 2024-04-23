@@ -1,11 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
-using System.Reflection;
-using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug.Plugin;
-using AterraCore.FlexiPlug.Plugin;
 using Serilog;
 
 namespace AterraCore.FlexiPlug;
@@ -32,13 +28,13 @@ public class PluginLoader(ILogger logger) {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void FindPluginDLLs(string folderPath) {
+    public IEnumerable<string> FindPluginDlls(string folderPath) {
         try {
             // Grab all DLL files from the folder
-            Directory.GetFiles(folderPath, "*.dll")
-                .Select(Assembly.LoadFrom)
-                .Select(assembly => new PluginData(PluginIdCounter++, assembly)).ToList()
-                .ForEach(data => _plugins.AddLast(data));
+            return Directory.GetFiles(folderPath, "*.dll", SearchOption.AllDirectories);
+            // .Select(Assembly.LoadFrom)
+            // .Select(assembly => new PluginData(PluginIdCounter++, assembly)).ToList()
+            // .ForEach(data => _plugins.AddLast(data));
         }
         
         catch(Exception e) {
@@ -46,6 +42,4 @@ public class PluginLoader(ILogger logger) {
             throw;
         }
     }
-    
-    public void LoadPlugins() {}
 }

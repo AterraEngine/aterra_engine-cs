@@ -20,9 +20,53 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="..\..\..\src\xsd\EngineConfigDto.xsd">
-        <Link>xsd\EngineConfigDto.xsd</Link>
-      </Content>
+        <Content Include="..\..\..\src\xsd\*.xsd">
+            <Link>xsd\%(Filename)%(Extension)</Link>
+        </Content>
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Services\" />
+    </ItemGroup>
+
+    <Target Name="PackingToZip" AfterTargets="Build">
+        <!-- Delete the existing zip file if it exists -->
+        <!--    Else it is going to cause issues for the Wip down below -->
+        <Delete Files="$(OutDir)\package\$(MSBuildProjectName).zip" ContinueOnError="true"/>
+        
+        <!-- Create directories needed -->
+        <MakeDir Directories="$(OutDir)\temp" />
+        <MakeDir Directories="$(OutDir)\temp\bin" />
+        <MakeDir Directories="$(OutDir)\temp\assets" />
+        <MakeDir Directories="$(OutDir)\package" />
+
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+        <!-- Copy necessary files to temp directory -->
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+        
+        <!-- Bin - dll files -->
+        <ItemGroup>
+            <!-- Default dll of the project -->
+            <DllFiles Include="$(OutDir)\$(MSBuildProjectName).dll"/>
+            <!-- Add more dlls when needed -->
+            
+        </ItemGroup>
+        <Copy SourceFiles="@(DllFiles)" DestinationFiles="@(DllFiles->'$(OutDir)\temp\bin\%(Filename)%(Extension)')" />
+
+        <!-- Assets - xml markup files of instances of assets -->
+        <ItemGroup>
+            <!-- <AssetFiles Include="$(OutDir)\___.xml"/>-->
+        </ItemGroup>
+        <Copy SourceFiles="@(AssetFiles)" DestinationFiles="@(AssetFiles->'$(OutDir)\temp\assets\%(Filename)%(Extension)')" />
+
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+        
+        <!-- Zip temp directory contents -->
+        <ZipDirectory SourceDirectory="$(OutDir)\temp"
+                      DestinationFile="$(OutDir)\package\$(MSBuildProjectName).zip" />
+
+        <!-- Optionally, delete temp directory -->
+        <RemoveDir Directories="$(OutDir)\temp" />
+    </Target>
 
 </Project>

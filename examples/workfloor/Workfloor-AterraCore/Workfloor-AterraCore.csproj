@@ -17,4 +17,34 @@
       <ProjectReference Include="..\..\..\src\engine\AterraEngine\AterraEngine.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <Content Include="..\..\..\src\xsd\*.xsd">
+            <Link>xsd\%(Filename)%(Extension)</Link>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+    
+    <Target Name="AddingPlugins" AfterTargets="Build">
+
+        <!-- Create output directories -->
+        <MakeDir Directories="$(OutDir)\plugins" />
+
+        <!-- Define list of plugin files -->
+        <ItemGroup>
+            <PluginFiles Include="..\..\..\examples\workfloor\Workfloor-AterraCore.Plugin\bin\Debug\net8.0\package\Workfloor-AterraCore.Plugin.zip"/>
+        </ItemGroup>
+
+        <!-- Copy plugins to output directory -->
+        <Copy SourceFiles="@(PluginFiles)" DestinationFiles="@(PluginFiles->'$(OutDir)\plugins\%(Filename)%(Extension)')"/>
+
+        <!-- Define list of special config files -->
+        <ItemGroup>
+            <ConfigFiles Include="engine-config.xml"/>
+        </ItemGroup>
+
+        <!-- Copy config files to output directory -->
+        <Copy SourceFiles="@(ConfigFiles)" DestinationFiles="@(ConfigFiles->'$(OutDir)\%(Filename)%(Extension)')"/>
+    
+    </Target>
+
 </Project>

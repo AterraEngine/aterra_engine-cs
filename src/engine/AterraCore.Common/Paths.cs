@@ -18,7 +18,7 @@ public static class Paths {
     private const string _engineLog = "log-engine.db";
     public static readonly string EngineLog = Path.Combine(Logs, _engineLog);
 
-    public const string StartupConfig = @"EngineConfig.xml";
+    public const string StartupConfig = @"engine-config.xml";
 
     public const string XsdEngineConfigDto = "xsd/EngineConfigDto.xsd";
 }

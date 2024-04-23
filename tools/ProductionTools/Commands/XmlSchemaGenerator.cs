@@ -6,6 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
+using AterraCore.Config.PluginConfig;
 using AterraCore.Config.StartupConfig;
 using CliArgsParser;
 using CliArgsParser.Attributes;
@@ -31,7 +32,7 @@ public class ArgsOptions : ParameterOptions {
 public class XmlSchemaGenerator : CliCommandAtlas {
     private readonly Dictionary<string, Type> _dictionary = new() {
         {"engine-config", typeof(EngineConfigDto) },
-        // ReSharper disable once StringLiteralTypo
+        {"plugin-config", typeof(PluginConfigDto) },
     };
     
     // -----------------------------------------------------------------------------------------------------------------

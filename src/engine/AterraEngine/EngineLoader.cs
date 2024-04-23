@@ -8,6 +8,8 @@ using AterraCore.DI;
 using AterraCore.Nexities.Assets;
 using AterraCore.Common;
 using AterraCore.Config.StartupConfig;
+using AterraCore.Config.Xml;
+using AterraCore.FlexiPlug;
 using AterraCore.Loggers;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -32,6 +34,10 @@ public class EngineLoader {
     
     public IEngine Start() {
         EngineConfigDto configDto = GetEngineConfig();
+        _startupLogger.Information("Config loaded with the following data:");
+        _startupLogger.Information("Engine Version : {Version}", configDto.Version);
+        _startupLogger.Information("Plugins - Root Folder : {Version}", configDto.PluginData.RootFolder);
+        _startupLogger.Information("Plugins - Plugins : {Version}", configDto.PluginData.Plugins);
         
         var engineServiceBuilder = new EngineServiceBuilder(_startupLogger);
         
@@ -40,7 +46,18 @@ public class EngineLoader {
             sc => sc.AddSingleton(EngineLogger.CreateLogger()),
         ]);
         
+        _startupLogger.Information("Assigned Default services");
+        
         // Load plugins
+        var pluginLoader = new PluginLoader(_startupLogger);
+        IEnumerable<string> pluginDlls = pluginLoader.FindPluginDlls(configDto.PluginData.RootFolder);
+        // configDto.PluginData.Plugins
+        //     .Select(data => new {
+        //         Data = data, 
+        //         Found = pluginDlls.Contains(data.FilePath),
+        //         AssemblyFilePath = pluginDlls
+        //     })
+            // .Where(data => );
         
         // After plugins have been loaded
         //      - Finish up with assigning the Static Services (services which may not be overriden)
@@ -49,8 +66,10 @@ public class EngineLoader {
             sc => sc.AddSingleton<IAssetAtlas, AssetAtlas>(),
             sc => sc.AddSingleton<IEngine, Engine>()
         ]);
+        _startupLogger.Information("Assigned Static services");
 
         engineServiceBuilder.FinishBuilding();
+        _startupLogger.Information("Dependency Container Built");
         
         // After this point all plugin data should be assigned
         
@@ -59,5 +78,4 @@ public class EngineLoader {
         return EngineServices.GetService<IEngine>();
 
     }
-    
 }

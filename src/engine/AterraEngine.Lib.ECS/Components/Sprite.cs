@@ -14,7 +14,7 @@ namespace AterraEngine.Lib.ECS.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Asset<SpriteDto>(DefaultComponents.PSprite, AssetType.ECSComponent)]
+// [Asset<SpriteDto>(DefaultComponents.PSprite, AssetType.ECSComponent)]
 public class Sprite(ILogger logger) : Component<SpriteDto>(logger), ISprite {
     public Texture2D? Texture { get; set; }
     private Rectangle _selectionBox;

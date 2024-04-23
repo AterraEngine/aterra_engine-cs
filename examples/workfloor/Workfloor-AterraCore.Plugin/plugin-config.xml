@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PluginConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:aterra-engine:plugin-config">
+    <EngineVersion Major="0" Minor="0" Patch="0"/>
+    <Dlls>
+        <Dll>wazea.dll</Dll>
+    </Dlls>
+</PluginConfig>

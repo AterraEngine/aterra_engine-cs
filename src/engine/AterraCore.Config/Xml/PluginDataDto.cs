@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
+using System.Text;
 using System.Xml.Serialization;
 using AterraCore.Common;
 
@@ -11,23 +12,22 @@ namespace AterraCore.Config.Xml;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public class SemanticVersionDto {
-    [XmlAttribute] public int Major { get; set; }
-    [XmlAttribute] public int Minor { get; set; }
-    [XmlAttribute] public int Patch { get; set; }
+public class PluginDataDto {
+    [XmlElement("RootFolder")]
+    public required string RootFolder { get; set; }
+    
+    [XmlArray("Plugins")]
+    [XmlArrayItem("Plugin", typeof(PluginRecordDto))]
+    public required List<PluginRecordDto> Plugins { get; set; }
 
     // -----------------------------------------------------------------------------------------------------------------
-    // Constructors
+    // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    // Conversion methods, allowing the DTO to be easily converted from and to a SemanticVersion instance.
-
-    public static implicit operator SemanticVersionDto(SemanticVersion semanticVersion) => 
-        new() { Major = semanticVersion.Major, Minor = semanticVersion.Minor, Patch = semanticVersion.Patch };
-
-    public static implicit operator SemanticVersion(SemanticVersionDto semanticVersionDto) => 
-        new(semanticVersionDto.Major, semanticVersionDto.Minor, semanticVersionDto.Patch);
-
     public override string ToString() {
-        return new SemanticVersion(Major, Minor, Patch).ToString();
+        var txt = new StringBuilder();
+        txt.Append($"RootFolder : {RootFolder} ");
+        txt.Append($"Plugins : ");
+        Plugins.ForEach(p => txt.Append($"{p} ,"));
+        return txt.ToString();
     }
 }
