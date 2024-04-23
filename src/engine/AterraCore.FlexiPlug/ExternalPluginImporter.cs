@@ -15,6 +15,7 @@ namespace AterraCore.FlexiPlug;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
+// TODO make this clas usable on a per plugin basis so we can keep reusing the same ZipArchive
 public class ExternalPluginImporter(ILogger logger) {
     private PluginConfigParser<PluginConfigDto> _pluginConfigParser = new(logger);
 
