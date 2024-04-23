@@ -20,6 +20,7 @@ public struct ServiceData(Type InstanceType, Type ServiceType) {
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IPluginData {
     public PluginId Id { get; }
+    public string FilePath { get; }
     public PluginValidity Validity { get; set; }
     
     // -----------------------------------------------------------------------------------------------------------------

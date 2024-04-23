@@ -31,7 +31,8 @@ public class PluginLoader(ILogger logger) {
         }
     }
 
-    private ExternalPluginImporter _pluginImporter = new(logger);
+    // private ExternalPluginImporter _pluginImporter = new(logger);
+    private ExternalPluginImporter GetNewPluginImporter(string zipPath) =>  new(logger, zipPath);
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
@@ -49,9 +50,10 @@ public class PluginLoader(ILogger logger) {
             }
             logger.Information("Plugin Zip found at {filepath}", pluginData.FilePath);
             
-            logger.Debug("{filepath} contains {paths}", pluginData.FilePath, _pluginImporter.GetFileNamesInZip(pluginData.FilePath));
-
-            if (!_pluginImporter.TryGetPluginConfig(pluginData.FilePath, out PluginConfigDto? pluginConfigDto)) {
+            // logger.Debug("{filepath} contains {paths}", pluginData.FilePath, _pluginImporter.GetFileNamesInZip(pluginData.FilePath));
+            using ExternalPluginImporter pluginImporter = GetNewPluginImporter(filePath);
+            
+            if (!pluginImporter.TryGetPluginConfig(out PluginConfigDto? pluginConfigDto)) {
                 logger.Warning("Could not extract a valid PluginConfigDto from the plugin {plugin}", pluginData.FilePath);
                 pluginData.Validity = PluginValidity.Invalid;
                 continue;
@@ -62,8 +64,9 @@ public class PluginLoader(ILogger logger) {
             logger.Warning("Skipping engine compatibility check");
             
             // Extract assembly(s)
+            // ToDo import more than one assembly
             pluginData.Dlls = pluginConfigDto.Dlls.Select(f => Path.Combine(Paths.PluginDlls, f)).ToArray();
-            if (!_pluginImporter.TryGetPluginAssembly(pluginData.FilePath, pluginData.Dlls[0], out Assembly? assembly)) {
+            if (!pluginImporter.TryGetPluginAssembly(pluginData.Dlls[0], out Assembly? assembly)) {
                 logger.Warning("Could not load plugin assembly for {filepath}", pluginData.FilePath);
                 pluginData.Validity = PluginValidity.Invalid;
                 continue;
@@ -72,22 +75,19 @@ public class PluginLoader(ILogger logger) {
             
             pluginData.Validity = PluginValidity.Valid;
         }
-
-        return _plugins.All(p => p.Validity == PluginValidity.Valid);
-    }
-    
-    public IEnumerable<string> FindPluginDlls(string folderPath) {
-        try {
-            // Grab all DLL files from the folder
-            return Directory.GetFiles(folderPath, "*.dll", SearchOption.AllDirectories);
-            // .Select(Assembly.LoadFrom)
-            // .Select(assembly => new PluginData(PluginIdCounter++, assembly)).ToList()
-            // .ForEach(data => _plugins.AddLast(data));
+        
+        // Check validity of all and log accordingly
+        bool validity = _plugins.All(p => p.Validity == PluginValidity.Valid);
+        if (!validity) {
+            logger.Error(
+                "Plugins could not be loaded correctly. The following is a full list of which aren't valid {l}",
+                _plugins
+                    .Where(p => p.Validity != PluginValidity.Valid)
+                    .Select(p => new {p.Id, p.FilePath})
+            );
         }
         
-        catch(Exception e) {
-            logger.Error(e, "An error occurred while trying to find plugin DLLs"); // todo rewrite so we try and log the error in the LINQ?
-            throw;
-        }
+        logger.Information("All Plugins validated successfully");
+        return validity;
     }
 }
