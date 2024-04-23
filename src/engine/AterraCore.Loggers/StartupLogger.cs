@@ -16,6 +16,8 @@ namespace AterraCore.Loggers;
 public static class StartupLogger {
     public static ILogger CreateLogger() {
         return new LoggerConfiguration()
+            .MinimumLevel.Debug() 
+            
             .Enrich.FromLogContext()
             .Enrich.WithProperty("Application", "AterraEngine")
             .Enrich.WithProperty("Stage", "Engine")

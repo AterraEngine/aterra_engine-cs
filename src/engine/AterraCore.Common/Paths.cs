@@ -21,4 +21,9 @@ public static class Paths {
     public const string StartupConfig = @"engine-config.xml";
 
     public const string XsdEngineConfigDto = "xsd/EngineConfigDto.xsd";
+    public const string XsdPluginConfigDto = "xsd/PluginConfigDto.xsd";
+    public const string PluginsFolder = "plugins";
+    public const string PluginConfigPath = "plugin-config.xml";
+
+    public const string PluginDlls = "bin";
 }

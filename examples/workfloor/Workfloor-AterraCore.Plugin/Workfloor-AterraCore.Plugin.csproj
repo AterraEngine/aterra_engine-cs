@@ -60,13 +60,19 @@
         <Copy SourceFiles="@(AssetFiles)" DestinationFiles="@(AssetFiles->'$(OutDir)\temp\assets\%(Filename)%(Extension)')" />
 
         <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+        <ItemGroup>
+            <ConfigFiles Include="plugin-config.xml"/>
+        </ItemGroup>
+        <!-- Copy config files to output directory -->
+        <Copy SourceFiles="@(ConfigFiles)" DestinationFiles="@(ConfigFiles->'$(OutDir)\temp\%(Filename)%(Extension)')"/>
         
         <!-- Zip temp directory contents -->
         <ZipDirectory SourceDirectory="$(OutDir)\temp"
                       DestinationFile="$(OutDir)\package\$(MSBuildProjectName).zip" />
 
         <!-- Optionally, delete temp directory -->
-        <RemoveDir Directories="$(OutDir)\temp" />
+<!--        <RemoveDir Directories="$(OutDir)\temp" />-->
     </Target>
 
 </Project>

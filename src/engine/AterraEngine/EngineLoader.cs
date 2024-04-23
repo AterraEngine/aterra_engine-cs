@@ -28,8 +28,12 @@ public class EngineLoader {
     // -----------------------------------------------------------------------------------------------------------------
     private EngineConfigDto GetEngineConfig() {
         var engineConfigFactory = new EngineConfigFactory<EngineConfigDto>(_startupLogger);
-        engineConfigFactory.TryLoadConfigFile(Paths.StartupConfig, out EngineConfigDto? configDto);
-        return configDto ?? EngineConfigDto.CreateEmptyConfigDto();
+        if (!engineConfigFactory.TryLoadConfigFile(Paths.StartupConfig, out EngineConfigDto? configDto)) {
+            _startupLogger.Error("Engine config ile could not be parsed");
+            return EngineConfigDto.CreateEmptyConfigDto();
+        }
+
+        return configDto;
     }
     
     public IEngine Start() {
@@ -37,7 +41,7 @@ public class EngineLoader {
         _startupLogger.Information("Config loaded with the following data:");
         _startupLogger.Information("Engine Version : {Version}", configDto.Version);
         _startupLogger.Information("Plugins - Root Folder : {Version}", configDto.PluginData.RootFolder);
-        _startupLogger.Information("Plugins - Plugins : {Version}", configDto.PluginData.Plugins);
+        _startupLogger.Information("Plugins - Plugins : {Version}", configDto.PluginData.Plugins.Select(r => r.FilePath));
         
         var engineServiceBuilder = new EngineServiceBuilder(_startupLogger);
         
@@ -48,9 +52,18 @@ public class EngineLoader {
         
         _startupLogger.Information("Assigned Default services");
         
+        string[] filePaths = configDto.PluginData.Plugins
+            .Select(p => Path.Join(configDto.PluginData.RootFolder, p.FilePath))
+            .ToArray();
+
+        _startupLogger.Information("All plugin file paths: {paths}", filePaths);
+        
         // Load plugins
         var pluginLoader = new PluginLoader(_startupLogger);
-        IEnumerable<string> pluginDlls = pluginLoader.FindPluginDlls(configDto.PluginData.RootFolder);
+        if(!pluginLoader.TryParseAllPlugins(filePaths)){
+            _startupLogger.Error("Failed to load plugins. Exiting...");
+            Environment.Exit(-1);
+        };
         // configDto.PluginData.Plugins
         //     .Select(data => new {
         //         Data = data, 

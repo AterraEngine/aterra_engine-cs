@@ -1,4 +1,4 @@
-﻿// ---------------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
@@ -6,12 +6,13 @@ using AterraCore.Common;
 using AterraCore.Config.Xml;
 using Serilog;
 
-namespace AterraCore.Config.StartupConfig;
+namespace AterraCore.Config.PluginConfig;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-/// <inheritdoc/>
-public class EngineConfigParser<T>(ILogger logger) :
-    ConfigXmlParser<T>(logger, "urn:aterra-engine:engine-config", Paths.XsdEngineConfigDto);
 
+public class PluginConfigParser<T>(ILogger logger) :
+    ConfigXmlParser<T>(logger, "urn:aterra-engine:plugin-config", Paths.XsdPluginConfigDto)
+    
+    where T : PluginConfigDto;

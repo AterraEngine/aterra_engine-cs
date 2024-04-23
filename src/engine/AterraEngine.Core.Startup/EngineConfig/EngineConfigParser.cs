@@ -14,7 +14,7 @@ namespace AterraEngine.Core.Startup.EngineConfig;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 /// <inheritdoc/>
-public class EngineConfigParser<T>(ILogger logger):IEngineConfigParser<T> where T : EngineConfigDto {
+public class EngineConfigParser<T>(ILogger logger):IConfigXmlParser<T> where T : EngineConfigDto {
     private readonly XmlSerializer _serializer = new(typeof(T), "urn:aterra-engine:engine-config");
     private readonly XmlReaderSettings _readerSettings = new();
     private readonly XmlWriterSettings _writerSettings = new() {
