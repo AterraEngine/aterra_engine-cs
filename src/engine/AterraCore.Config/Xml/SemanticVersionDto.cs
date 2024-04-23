@@ -2,27 +2,28 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
+using System.Xml.Serialization;
 using AterraCore.Common;
 
-namespace AterraCore.Contracts.FlexiPlug.Plugin;
-
-// ---------------------------------------------------------------------------------------------------------------------
-// Support Code
-// ---------------------------------------------------------------------------------------------------------------------
-public struct ServiceData(Type InstanceType, Type ServiceType) {
-    public Type InstanceType { get; } = InstanceType;
-    public Type ServiceType { get; } = ServiceType;
-}
+namespace AterraCore.Config.Xml;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IPluginData {
-    public PluginId Id { get; }
+
+public class SemanticVersionDto {
+    [XmlAttribute] public int Major { get; set; }
+    [XmlAttribute] public int Minor { get; set; }
+    [XmlAttribute] public int Patch { get; set; }
 
     // -----------------------------------------------------------------------------------------------------------------
-    // Methods
+    // Constructors
     // -----------------------------------------------------------------------------------------------------------------
-    public IEnumerable<Type> GetAssetTypes();
-    public IEnumerable<ServiceData> GetServices();
+    // Conversion methods, allowing the DTO to be easily converted from and to a SemanticVersion instance.
+
+    public static implicit operator SemanticVersionDto(SemanticVersion semanticVersion) => 
+        new() { Major = semanticVersion.Major, Minor = semanticVersion.Minor, Patch = semanticVersion.Patch };
+
+    public static implicit operator SemanticVersion(SemanticVersionDto semanticVersionDto) => 
+        new(semanticVersionDto.Major, semanticVersionDto.Minor, semanticVersionDto.Patch);
 }

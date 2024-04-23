@@ -1,14 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using CliArgsParser;
-using CliArgsParser.Attributes;
 
-namespace Workfloor.Cli;
+using System.Xml.Serialization;
+
+namespace AterraCore.Config.Xml;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class AterraEngineArgs : ParameterOptions {
-    [ArgValue('c', "config")] public string ConfigFile { get; set; } = "resources/engine_config-example.xml";
+public class PluginConfigDto {
+    [XmlAttribute("hash")] public string? Hash { get; set; }
+    [XmlText] public required string FilePath { get; set; }
 }

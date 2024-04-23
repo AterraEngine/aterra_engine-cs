@@ -9,10 +9,10 @@
     <ItemGroup>
       <ProjectReference Include="..\AterraCore.Contracts\AterraCore.Contracts.csproj" />
       <ProjectReference Include="..\AterraCore.DI\AterraCore.DI.csproj" />
+      <ProjectReference Include="..\AterraCore.Config\AterraCore.Config.csproj" />
       <ProjectReference Include="..\AterraCore.FlexiPlug\AterraCore.FlexiPlug.csproj" />
       <ProjectReference Include="..\AterraCore.Nexities\AterraCore.Nexities.csproj" />
       <ProjectReference Include="..\AterraCore.Common\AterraCore.Common.csproj" />
-      <ProjectReference Include="..\AterraEngine.Core.Logging\AterraEngine.Core.Logging.csproj" />
     </ItemGroup>
 
     <ItemGroup>

@@ -2,16 +2,13 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using AterraEngine.Core.PluginFramework;
-using Microsoft.Extensions.DependencyInjection;
+using System.Xml.Serialization;
 
-namespace Workfloor.Data;
+namespace AterraCore.Config.Xml;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class WorkfloorPlugin(PluginId id) : DefaultPlugin<WorkfloorAssets>(id, "Workfloor Plugin") {
-    public override void AssignServices(IServiceCollection serviceCollection) {
-        
-    }
+public class RaylibConfigDto {
+    [XmlElement("window")] public required RaylibWindowElementDto Window { get; set; }
 }

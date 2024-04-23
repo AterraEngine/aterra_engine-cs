@@ -1,21 +1,16 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace Extensions;
+
+using System.Xml.Serialization;
+
+namespace AterraCore.Config.Xml;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public static class StringExtensions {
-    public static bool IsNotNullOrEmpty(this string? str) {
-        return !string.IsNullOrEmpty(str);
-    }
-
-    public static bool IsEmpty(this string[] arr) {
-        return arr.Length == 0;
-    }
-    
-    public static bool IsEmpty(this IEnumerable<string> arr) {
-        return !arr.Any();
-    }
+public class RaylibWindowElementDto {
+    [XmlElement("screen")] public required DimensionElementDto Screen { get; set; }
+    [XmlElement("icon-path")]   public required string IconPath { get; set; }
+    [XmlElement("title")]  public required string Title { get; set; }
 }

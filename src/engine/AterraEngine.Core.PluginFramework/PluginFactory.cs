@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using System.Reflection;
+using AterraCore.Common;
 using AterraEngine.Contracts.Core.PluginFramework;
 using Serilog;
 

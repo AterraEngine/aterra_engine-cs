@@ -1,12 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Diagnostics.CodeAnalysis;
-using AterraCore.Contracts.StartupConfig;
-using AterraEngine.Core.Startup.EngineConfig.Dto;
 using Serilog;
 
-namespace AterraEngine.Core.Startup.EngineConfig;
+using System.Diagnostics.CodeAnalysis;
+using AterraCore.Contracts.StartupConfig;
+
+
+namespace AterraCore.Config.StartupConfig;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

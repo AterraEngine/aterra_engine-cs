@@ -1,16 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Diagnostics.CodeAnalysis;
-
-namespace AterraEngine.Contracts.Core.Startup.Config;
+namespace AterraCore.Contracts.StartupConfig;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IEngineConfigFactory<T> {
+public interface IEngineConfigParser<T> {
     
-    public bool TryLoadConfigFile(string filePath, [NotNullWhen(true)] out T? engineConfig);
-    public bool TrySaveConfig(T config,string outputPath);
-    
+    public bool TryDeserializeFromFile(string filePath, out T? engineConfig);
+    public bool TrySerializeToFile(T engineConfig, string filePath);
 }

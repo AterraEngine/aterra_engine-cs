@@ -13,10 +13,9 @@ namespace AterraCore.FlexiPlug;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
-public class FlexiPlugLoader(ILogger logger) {
-    private LinkedList<IPluginData> _plugins = [];
-    public IReadOnlyCollection<IPluginData> Plugins => _plugins.ToList().AsReadOnly();
+public class PluginLoader(ILogger logger) {
+    private readonly LinkedList<IPluginData> _plugins = [];
+    public LinkedList<IPluginData> Plugins => _plugins;
 
     private ushort _pluginIdCounter;
     private ushort PluginIdCounter {

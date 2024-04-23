@@ -1,20 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using Extensions;
-using Workfloor.Cli;
 
-namespace Workfloor;
+using System.Xml.Serialization;
+
+namespace AterraCore.Config.Xml;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-static class Program {
-    public static void Main(string[] args) {
-        if (args.IsEmpty()) args = ["run"];
-        
-        new CliArgsParser.CliArgsParser()
-            .RegisterFromCliAtlas(new CommandAtlas())
-            .TryParseMultiple(args);
-    }
+public record DimensionElementDto {
+    [XmlAttribute("width")] public int Width;
+    [XmlAttribute("height")] public int Height;
 }

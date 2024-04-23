@@ -2,16 +2,16 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using AterraEngine.Core.PluginFramework;
-using Serilog;
+using System.Diagnostics.CodeAnalysis;
 
-namespace Workfloor.Data;
+namespace AterraCore.Contracts.StartupConfig;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class WorkfloorAssets(ILogger logger) : DefaultPluginAssets {
-    public override void AssignAssets() {
-        
-    }
+public interface IEngineConfigFactory<T> {
+    
+    public bool TryLoadConfigFile(string filePath, [NotNullWhen(true)] out T? engineConfig);
+    public bool TrySaveConfig(T config,string outputPath);
+    
 }

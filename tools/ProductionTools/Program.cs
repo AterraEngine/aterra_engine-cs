@@ -2,32 +2,28 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using AterraEngine.Contracts;
-using AterraEngine.Core.Startup;
-using CliArgsParser;
-using CliArgsParser.Attributes;
-using Workfloor.Data;
+using CliArgsParser.Contracts;
+using ProductionTools.Commands;
 
-namespace Workfloor.Cli;
+namespace ProductionTools;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public class CommandAtlas: CliCommandAtlas {
-
-    private static IAterraEngine CreateEngine(AterraEngineArgs args) {
-        var factory = EngineFactory.CreateFromConfigFile(args.ConfigFile, new WorkfloorPlugin(new PluginId(0)));
-        return factory.CreateEngine();
-    }
+public static class Program {
+    private static readonly List<ICliCommandAtlas> CommandAtlasArray = [
+        new XmlSchemaGenerator()
+    ];
     
     // -----------------------------------------------------------------------------------------------------------------
-    // Commands
+    // Methods
     // -----------------------------------------------------------------------------------------------------------------
-
-    [CliCommand<AterraEngineArgs>("run")]
-    public void Run(AterraEngineArgs args) {
-        var engine = CreateEngine(args);
-        engine.Run();
+    public static void Main(string[] args) {
+        var argsParser = new CliArgsParser.CliArgsParser();
+        
+        CommandAtlasArray.ForEach(a => argsParser.RegisterFromCliAtlas(a));
+            
+        argsParser.TryParseMultiple(args);
     }
 }

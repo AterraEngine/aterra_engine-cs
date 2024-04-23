@@ -4,16 +4,17 @@
 
 using System.Xml.Serialization;
 using AterraCore.Common;
-using AterraEngine.Core.Startup.EngineConfig.Dto.Xml;
+using AterraCore.Config.Xml;
 
-namespace AterraEngine.Core.Startup.EngineConfig.Dto;
+namespace AterraCore.Config.StartupConfig;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [XmlRoot("EngineConfig")]
 public class EngineConfigDto {
-    [XmlElement("Version")] public required SemanticVersion Version { get; set; }
+    [XmlElement("Version")] 
+    public required SemanticVersionDto Version { get; set; }
 
     [XmlArray("Plugins")]
     [XmlArrayItem("Plugin", typeof(PluginConfigDto))]
@@ -21,14 +22,16 @@ public class EngineConfigDto {
     
     [XmlElement("Raylib")]
     public required RaylibConfigDto RaylibConfig { get; set; }
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public static EngineConfigDto CreateEmpty() {
-        return new EngineConfigDto {
+    public static EngineConfigDto CreateEmptyConfigDto() =>
+        new() {
             Version = new SemanticVersion(0, 0, 0),
-            Plugins = [], 
+            Plugins = [
+                
+            ], 
             RaylibConfig = new RaylibConfigDto { 
                 Window = new RaylibWindowElementDto {
                     Screen = new DimensionElementDto {
@@ -36,11 +39,9 @@ public class EngineConfigDto {
                         Width = 100
                     },
                     IconPath = string.Empty,
-                    Title = string.Empty
+                    Title = ""
                 }
             }
         };
-    }
-    
 }
 

@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
+using AterraCore.Common;
 using AterraEngine.Contracts.Core.Assets;
 using Serilog;
 
@@ -22,8 +23,8 @@ public class AssetAtlas : IAssetAtlas {
     private readonly AssetDictionary _undefined = new();
     private readonly AssetDictionary _ecsComponents = new();
 
-    private readonly ConcurrentDictionary<AssetId, AssetType> _assetToTypes = new();
-    private readonly Dictionary<AssetType, AssetDictionary> _funcs = new();
+    private readonly ConcurrentDictionary<AssetId, AssetInstanceType> _assetToTypes = new();
+    private readonly Dictionary<AssetInstanceType, AssetDictionary> _funcs = new();
     
     // -----------------------------------------------------------------------------------------------------------------
     // Constructor
@@ -31,17 +32,17 @@ public class AssetAtlas : IAssetAtlas {
     public AssetAtlas(ILogger logger) {
         _logger = logger;
         
-        _funcs[AssetType.Undefined] =       _undefined;
-        _funcs[AssetType.ECSComponent] =    _ecsComponents;
+        _funcs[AssetInstanceType.Undefined] =       _undefined;
+        _funcs[AssetInstanceType.ECSComponent] =    _ecsComponents;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public bool TryGetAsset(AssetId assetId, [NotNullWhen(true)] out IAsset? asset) {
-        AssetType assetType = _assetToTypes.GetValueOrDefault(assetId, AssetType.Undefined);
+        AssetInstanceType assetType = _assetToTypes.GetValueOrDefault(assetId, AssetInstanceType.Undefined);
 
-        if (assetType is AssetType.Undefined) {
+        if (assetType is AssetInstanceType.Undefined) {
             _logger.Warning("AssetId {assetId} could not be mapped to a predefined sub-atlas", assetId);
             // should not return here, as this is simply some information?
         }
@@ -71,7 +72,7 @@ public class AssetAtlas : IAssetAtlas {
         return true;
     }
 
-    public IReadOnlyDictionary<AssetId, IAsset> GetAllFromType(AssetType assetType) {
+    public IReadOnlyDictionary<AssetId, IAsset> GetAllFromType(AssetInstanceType assetType) {
         return _funcs[assetType].AsReadOnly();
     }
 

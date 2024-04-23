@@ -1,13 +1,21 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraEngine.Contracts.Core.Startup.Config;
+namespace AterraCore.Extensions;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IEngineConfigParser<T> {
+public static class StringExtensions {
+    public static bool IsNotNullOrEmpty(this string? str) {
+        return !string.IsNullOrEmpty(str);
+    }
+
+    public static bool IsEmpty(this string[] arr) {
+        return arr.Length == 0;
+    }
     
-    public bool TryDeserializeFromFile(string filePath, out T? engineConfig);
-    public bool TrySerializeToFile(T engineConfig, string filePath);
+    public static bool IsEmpty(this IEnumerable<string> arr) {
+        return !arr.Any();
+    }
 }

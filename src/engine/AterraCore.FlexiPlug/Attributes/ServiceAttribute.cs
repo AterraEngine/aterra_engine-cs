@@ -1,20 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.Core.Assets;
-using AterraEngine.Core.Assets;
-using AterraEngine.Lib.ECS.Dtos.Entities;
-using AterraEngine.Lib.ECS.Entities;
-using Serilog;
 
-namespace Workfloor.Data.Assets;
+namespace AterraCore.FlexiPlug.Attributes;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Asset<Actor2DDto>(16, AssetType.Actor)]
-public class DuckyAsset(IAssetAtlas assetAtlas, ILogger logger) : Actor2D(assetAtlas, logger) {
-    public override void PopulateFromDto(Actor2DDto assetDto) {
-        base.PopulateFromDto(assetDto);
-    }
+[AttributeUsage(AttributeTargets.Class)]
+public class ServiceAttribute(Type typeInterface) : Attribute {
+    public readonly Type Interface = typeInterface;
 }

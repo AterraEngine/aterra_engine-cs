@@ -1,14 +1,16 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+
 using System.Text;
 using System.Xml;
+using System.Xml.Schema;
 using System.Xml.Serialization;
+using AterraCore.Common;
 using AterraCore.Contracts.StartupConfig;
-using AterraEngine.Core.Startup.EngineConfig.Dto;
 using Serilog;
 
-namespace AterraEngine.Core.Startup.EngineConfig;
+namespace AterraCore.Config.StartupConfig;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
@@ -16,7 +18,7 @@ namespace AterraEngine.Core.Startup.EngineConfig;
 /// <inheritdoc/>
 public class EngineConfigParser<T>(ILogger logger):IEngineConfigParser<T> where T : EngineConfigDto {
     private readonly XmlSerializer _serializer = new(typeof(T), "urn:aterra-engine:engine-config");
-    private readonly XmlReaderSettings _readerSettings = new();
+    private readonly XmlReaderSettings _readerSettings = DefineReaderSettings(logger);
     private readonly XmlWriterSettings _writerSettings = new() {
         Indent = true,
         Encoding = Encoding.UTF32,
@@ -24,27 +26,40 @@ public class EngineConfigParser<T>(ILogger logger):IEngineConfigParser<T> where 
     };
     
     // -----------------------------------------------------------------------------------------------------------------
-    // Constructor
-    // -----------------------------------------------------------------------------------------------------------------
-    // public EngineConfigParser() {
-    //     // Reader Settings
-    //     // _readerSettings.Schemas.Add("urn:aterra-engine:engine-config", "xsd/engine_config.xsd");
-    //     // _readerSettings.ValidationType = ValidationType.Schema;
-    //     
-    //     // Write Settings
-    //     _writerSettings.Indent = true;
-    //     _writerSettings.Encoding = Encoding.UTF32;
-    //     _writerSettings.OmitXmlDeclaration = false;
-    // }
-    
-    // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
+    private static XmlReaderSettings DefineReaderSettings(ILogger logger) {
+        var schemas = new XmlSchemaSet();
+        schemas.Add("urn:aterra-engine:engine-config", XmlReader.Create(Paths.XsdEngineConfigDto));
+
+        var settings = new XmlReaderSettings {
+            ValidationType = ValidationType.Schema,
+            ValidationFlags = XmlSchemaValidationFlags.ProcessInlineSchema 
+                              | XmlSchemaValidationFlags.ProcessSchemaLocation
+                              | XmlSchemaValidationFlags.ReportValidationWarnings,
+            Schemas = schemas
+        };
+
+        settings.ValidationEventHandler += (sender, args) => {
+            switch (args) {
+                case { Severity: XmlSeverityType.Warning }:
+                    logger.Warning(args.Message);
+                    break;
+                case { Severity: XmlSeverityType.Error }:
+                    logger.Error(args.Message);
+                    break;
+            }
+        };
+
+        return settings;
+    }
+    
     public bool TryDeserializeFromFile(string filePath, out T? engineConfig) {
         // Default to null
         engineConfig = default;
         try {
             if (!File.Exists(filePath)) {
+                logger.Warning("No file found at {FilePath}", filePath);
                 return false;
             }
             

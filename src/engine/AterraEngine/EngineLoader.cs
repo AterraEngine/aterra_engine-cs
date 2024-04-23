@@ -7,8 +7,8 @@ using AterraCore.Contracts.Nexities.Assets;
 using AterraCore.DI;
 using AterraCore.Nexities.Assets;
 using AterraCore.Common;
+using AterraCore.Config.StartupConfig;
 using AterraCore.Loggers;
-using AterraEngine.Core.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
@@ -24,8 +24,14 @@ public class EngineLoader {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
+    private EngineConfigDto GetEngineConfig() {
+        var engineConfigFactory = new EngineConfigFactory<EngineConfigDto>(_startupLogger);
+        engineConfigFactory.TryLoadConfigFile(Paths.StartupConfig, out EngineConfigDto? configDto);
+        return configDto ?? EngineConfigDto.CreateEmptyConfigDto();
+    }
+    
     public IEngine Start() {
-        
+        EngineConfigDto configDto = GetEngineConfig();
         
         var engineServiceBuilder = new EngineServiceBuilder(_startupLogger);
         
