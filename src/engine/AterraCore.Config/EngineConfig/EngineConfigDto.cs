@@ -1,13 +1,11 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
-using System.Text;
 using System.Xml.Serialization;
 using AterraCore.Common;
 using AterraCore.Config.Xml;
 
-namespace AterraCore.Config.StartupConfig;
+namespace AterraCore.Config.EngineConfig;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

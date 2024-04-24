@@ -7,7 +7,7 @@ using AterraCore.Contracts.Nexities.Assets;
 using AterraCore.DI;
 using AterraCore.Nexities.Assets;
 using AterraCore.Common;
-using AterraCore.Config.StartupConfig;
+using AterraCore.Config.EngineConfig;
 using AterraCore.Config.Xml;
 using AterraCore.FlexiPlug;
 using AterraCore.Loggers;

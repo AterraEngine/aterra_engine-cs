@@ -19,7 +19,6 @@ namespace AterraCore.FlexiPlug;
 public class ExternalPluginImporter(ILogger logger, string zipPath) : IDisposable {
     private readonly PluginConfigParser<PluginConfigDto> _pluginConfigParser = new(logger);
     private readonly ZipArchive _archive = ZipFile.OpenRead(zipPath);
-    private readonly string _zipPath = zipPath;
 
     // -----------------------------------------------------------------------------------------------------------------
     // Disposable
@@ -37,12 +36,12 @@ public class ExternalPluginImporter(ILogger logger, string zipPath) : IDisposabl
         
         using var memoryStream = new MemoryStream();
         if (!TryGetFileBytesFromZip( Paths.PluginConfigPath, out byte[]? bytes)) {
-            logger.Warning("Could not extract {path} from {zip}", Paths.PluginConfigPath, _zipPath);
+            logger.Warning("Could not extract {path} from {zip}", Paths.PluginConfigPath, zipPath);
             return false;
         }
 
         if (!_pluginConfigParser.TrySerializeFromBytes(bytes, out pluginConfig)) {
-            logger.Warning("Failed to deserialize plugin config from {path} in {zip}", Paths.PluginConfigPath, _zipPath);
+            logger.Warning("Failed to deserialize plugin config from {path} in {zip}", Paths.PluginConfigPath, zipPath);
             return false;
         }
         
@@ -55,16 +54,16 @@ public class ExternalPluginImporter(ILogger logger, string zipPath) : IDisposabl
         
         try {
             if (!TryGetFileBytesFromZip(filePath.Replace("\\", "/"), out byte[]? assemblyBytes)) {
-                logger.Warning("Could not get bytes for assembly file of {assemblyNameInZip} from {zipPath}", filePath, _zipPath);
+                logger.Warning("Could not get bytes for assembly file of {assemblyNameInZip} from {zipPath}", filePath, zipPath);
                 return false;  
             }
             
             assembly = Assembly.Load(assemblyBytes);
-            logger.Information("Assembly file of {assemblyNameInZip} from {zipPath} successfully loaded", filePath, _zipPath);
+            logger.Information("Assembly file of {assemblyNameInZip} from {zipPath} successfully loaded", filePath, zipPath);
             return true;
         }
         catch (Exception e) {
-            logger.Warning("Failed to load assembly {assemblyNameInZip} from {zipPath}, {e}", filePath, _zipPath, e);
+            logger.Warning("Failed to load assembly {assemblyNameInZip} from {zipPath}, {e}", filePath, zipPath, e);
             return false;
         }
     }
@@ -74,7 +73,7 @@ public class ExternalPluginImporter(ILogger logger, string zipPath) : IDisposabl
         
         ZipArchiveEntry? fileEntry = _archive.GetEntry(fileNameInZip);
         if (fileEntry == null) {
-            logger.Warning("File of {fileNameInZip} could not be found in {zipPath}", fileNameInZip, _zipPath);
+            logger.Warning("File of {fileNameInZip} could not be found in {zipPath}", fileNameInZip, zipPath);
             return false;
         }
         
@@ -91,7 +90,7 @@ public class ExternalPluginImporter(ILogger logger, string zipPath) : IDisposabl
             fileNames.AddRange(Enumerable.OfType<ZipArchiveEntry>(_archive.Entries).Select(entry => entry.FullName));
         }
         catch(Exception e) {
-            logger.Warning("Failed to retrieve file names from {zipPath}, {e}", _zipPath, e);
+            logger.Warning("Failed to retrieve file names from {zipPath}, {e}", zipPath, e);
         }
         return fileNames;
     }

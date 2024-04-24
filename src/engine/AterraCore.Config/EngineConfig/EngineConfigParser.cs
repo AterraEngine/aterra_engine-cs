@@ -6,7 +6,7 @@ using AterraCore.Common;
 using AterraCore.Config.Xml;
 using Serilog;
 
-namespace AterraCore.Config.StartupConfig;
+namespace AterraCore.Config.EngineConfig;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

@@ -70,6 +70,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductionTools", "tools\Pr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraCore.Config", "src\engine\AterraCore.Config\AterraCore.Config.csproj", "{DEC812B9-9820-45C7-8E60-C04960BA877E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nexities.Lib", "src\engine\Nexities.Lib\Nexities.Lib.csproj", "{EBCD6FF6-78AF-4438-B197-F57BA29D1338}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -107,6 +109,7 @@ Global
 		{ADD34288-B521-4096-BB82-6A7DE6A6F091} = {33266E3A-881A-4D88-BFF4-D9D48CB9E0FC}
 		{03B7CFD0-D4DF-42C8-AE79-D972ACF42FB1} = {7F9BAB80-307A-42F7-BE48-1E3CCF737EF9}
 		{DEC812B9-9820-45C7-8E60-C04960BA877E} = {F86D197F-7641-46CE-A43D-CFF48F84B9E6}
+		{EBCD6FF6-78AF-4438-B197-F57BA29D1338} = {62ADC2B9-AB4C-4E7A-AADC-FD92209A4398}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{9C8CA02A-28DA-410A-8ADA-A39B3F6A227B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -197,5 +200,9 @@ Global
 		{DEC812B9-9820-45C7-8E60-C04960BA877E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DEC812B9-9820-45C7-8E60-C04960BA877E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DEC812B9-9820-45C7-8E60-C04960BA877E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBCD6FF6-78AF-4438-B197-F57BA29D1338}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBCD6FF6-78AF-4438-B197-F57BA29D1338}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBCD6FF6-78AF-4438-B197-F57BA29D1338}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBCD6FF6-78AF-4438-B197-F57BA29D1338}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
