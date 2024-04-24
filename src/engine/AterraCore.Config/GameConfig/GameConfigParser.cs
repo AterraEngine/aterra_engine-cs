@@ -14,6 +14,6 @@ namespace AterraCore.Config.GameConfig;
 // ---------------------------------------------------------------------------------------------------------------------
 /// <inheritdoc/>
 public class GameConfigParser<T>(ILogger logger) :
-    ConfigXmlParser<T>(logger, "urn:aterra-engine:game-config", Paths.XsdEngineConfigDto)  
+    ConfigXmlParser<T>(logger, "urn:aterra-engine:game-config", Paths.Xsd.XsdGameConfigDto)  
     where T : GameConfigDto, IConfigDto<T>, new() {
 }

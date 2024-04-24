@@ -65,7 +65,7 @@ public class PluginLoader(ILogger logger) {
             
             // Extract assembly(s)
             // ToDo import more than one assembly
-            pluginData.Dlls = pluginConfigDto.Dlls.Select(f => Path.Combine(Paths.PluginDlls, f)).ToArray();
+            pluginData.Dlls = pluginConfigDto.Dlls.Select(f => Path.Combine(Paths.Plugins.PluginBinFolder, f)).ToArray();
             if (!pluginImporter.TryGetPluginAssembly(pluginData.Dlls[0], out Assembly? assembly)) {
                 logger.Warning("Could not load plugin assembly for {filepath}", pluginData.FilePath);
                 pluginData.Validity = PluginValidity.Invalid;

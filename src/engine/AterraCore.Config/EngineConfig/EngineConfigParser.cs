@@ -14,6 +14,6 @@ namespace AterraCore.Config.EngineConfig;
 // ---------------------------------------------------------------------------------------------------------------------
 /// <inheritdoc/>
 public class EngineConfigParser<T>(ILogger logger) :
-    ConfigXmlParser<T>(logger, "urn:aterra-engine:engine-config", Paths.XsdEngineConfigDto)
+    ConfigXmlParser<T>(logger, "urn:aterra-engine:engine-config", Paths.Xsd.XsdEngineConfigDto)
     where T : EngineConfigDto, IConfigDto<T>, new();
 

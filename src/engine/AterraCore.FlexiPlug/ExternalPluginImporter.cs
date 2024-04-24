@@ -35,13 +35,13 @@ public class ExternalPluginImporter(ILogger logger, string zipPath) : IDisposabl
         pluginConfig = null;
         
         using var memoryStream = new MemoryStream();
-        if (!TryGetFileBytesFromZip( Paths.PluginConfigPath, out byte[]? bytes)) {
-            logger.Warning("Could not extract {path} from {zip}", Paths.PluginConfigPath, zipPath);
+        if (!TryGetFileBytesFromZip( Paths.Plugins.PluginConfig, out byte[]? bytes)) {
+            logger.Warning("Could not extract {path} from {zip}", Paths.Plugins.PluginConfig, zipPath);
             return false;
         }
 
         if (!_pluginConfigParser.TrySerializeFromBytes(bytes, out pluginConfig)) {
-            logger.Warning("Failed to deserialize plugin config from {path} in {zip}", Paths.PluginConfigPath, zipPath);
+            logger.Warning("Failed to deserialize plugin config from {path} in {zip}", Paths.Plugins.PluginConfig, zipPath);
             return false;
         }
         
@@ -53,7 +53,10 @@ public class ExternalPluginImporter(ILogger logger, string zipPath) : IDisposabl
         assembly = null;
         
         try {
-            if (!TryGetFileBytesFromZip(filePath.Replace("\\", "/"), out byte[]? assemblyBytes)) {
+            // I have no clue why I need to do this ...
+            string filePathFix = filePath.Replace("\\", "/");
+            
+            if (!TryGetFileBytesFromZip(filePathFix, out byte[]? assemblyBytes)) {
                 logger.Warning("Could not get bytes for assembly file of {assemblyNameInZip} from {zipPath}", filePath, zipPath);
                 return false;  
             }

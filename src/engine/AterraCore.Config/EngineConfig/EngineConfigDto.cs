@@ -28,7 +28,7 @@ public class EngineConfigDto : IConfigDto<EngineConfigDto> {
     public EngineConfigDto PopulateAsEmpty() {
         EngineVersion = SemanticVersion.Zero;
         PluginData = new PluginDataDto {
-            RootFolder = "plugins",
+            RootFolder = Paths.Plugins.Folder,
             Plugins = []
         };
         RaylibConfig = new RaylibConfigDto {

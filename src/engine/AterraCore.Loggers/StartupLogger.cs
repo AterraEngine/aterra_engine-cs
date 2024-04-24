@@ -26,7 +26,7 @@ public static class StartupLogger {
             // Using Async Sink to write logs asynchronously 
             // to avoid any performance issues during gameplay
             .WriteTo.Async(lc => lc.SQLite(
-                Paths.StartupLog
+                Paths.Logs.StartupLog
             ))
             
             .WriteTo.Async(lc => lc.Console())

@@ -23,7 +23,7 @@ public static class EngineLogger {
             // Using Async Sink to write logs asynchronously 
             // to avoid any performance issues during gameplay
             .WriteTo.Async(lc => lc.SQLite(
-                Paths.EngineLog
+                Paths.Logs.EngineLog
             ))
             
             .WriteTo.Async(lc => lc.Console())
