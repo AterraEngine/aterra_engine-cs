@@ -2,18 +2,19 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
+using System.Reflection;
 using AterraCore.Common;
+using AterraCore.Contracts.Config.PluginConfig;
 
 namespace AterraCore.Contracts.FlexiPlug.Plugin;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Support Code
 // ---------------------------------------------------------------------------------------------------------------------
-public struct ServiceData(Type InstanceType, Type ServiceType) {
-    public Type InstanceType { get; } = InstanceType;
-    public Type ServiceType { get; } = ServiceType;
+public struct ServiceData(Type instanceType, Type serviceType) {
+    public Type InstanceType { get; } = instanceType;
+    public Type ServiceType { get; } = serviceType;
 }
-
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
@@ -21,11 +22,18 @@ public struct ServiceData(Type InstanceType, Type ServiceType) {
 public interface IPluginData {
     public PluginId Id { get; }
     public string FilePath { get; }
+    public string ReadableName { get; }
+    
+    public IPluginConfigDto? Data { get; }
+    
     public PluginValidity Validity { get; set; }
+    public List<Assembly> Assemblies { get; }
+    public IEnumerable<Type> Types { get; }
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public IEnumerable<Type> GetAssetTypes();
     public IEnumerable<ServiceData> GetServices();
+    public void IngestFromPluginConfigDto(IPluginConfigDto pluginConfigDto);
 }

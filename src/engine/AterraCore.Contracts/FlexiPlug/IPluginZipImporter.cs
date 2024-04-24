@@ -1,18 +1,17 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 
-using AterraCore.Common;
-using AterraCore.Contracts.Config;
-using Serilog;
-
-namespace AterraCore.Config.GameConfig;
+namespace AterraCore.Contracts.FlexiPlug;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-/// <inheritdoc/>
-public class GameConfigParser<T>(ILogger logger) :
-    ConfigXmlParser<T>(logger, "urn:aterra-engine:game-config", Paths.Xsd.XsdGameConfigDto)  
-    where T : GameConfigDto, IConfigDto<T>, new() {
+
+public interface IPluginZipImporter<T> {
+    bool TryGetPluginConfig([NotNullWhen(true)] out T? pluginConfig);
+    bool TryGetPluginAssembly(string filePath, [NotNullWhen(true)] out Assembly? assembly);
+    List<string> GetFileNamesInZip();
 }

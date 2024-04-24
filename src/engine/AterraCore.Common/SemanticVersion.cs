@@ -9,6 +9,15 @@ using System.Xml.Serialization;
 namespace AterraCore.Common;
 
 // ---------------------------------------------------------------------------------------------------------------------
+// Support Code
+// ---------------------------------------------------------------------------------------------------------------------
+public interface ISemanticVersion {
+    public int Major { get; set; }
+    public int Minor { get; set; }
+    public int Patch { get; set; }
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 /// <summary>
@@ -20,7 +29,7 @@ namespace AterraCore.Common;
 /// The Minor version number is incremented when new, backwards-compatible features are added.
 /// The Patch version number is incremented when backwards-compatible fixes are made.
 /// </remarks>
-public struct SemanticVersion : IXmlSerializable, IComparable<SemanticVersion>, IEquatable<SemanticVersion> {
+public struct SemanticVersion : IXmlSerializable, IComparable<SemanticVersion>, IEquatable<SemanticVersion>, ISemanticVersion {
     public int Major { get; set; }
     public int Minor { get; set; }
     public int Patch { get; set; }

@@ -7,10 +7,10 @@ using System.Text;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
-using AterraCore.Contracts.Config.Xml;
+using AterraCore.Contracts.Config;
 using Serilog;
 
-namespace AterraCore.Config.Xml;
+namespace AterraCore.Config;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

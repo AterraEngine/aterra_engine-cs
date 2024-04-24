@@ -4,7 +4,8 @@
 using System.Xml.Serialization;
 using AterraCore.Common;
 using AterraCore.Config.Xml;
-using AterraCore.Contracts.Config.Xml;
+using AterraCore.Contracts.Config;
+using AterraCore.Contracts.Config.PluginConfig;
 
 namespace AterraCore.Config.PluginConfig;
 
@@ -12,7 +13,7 @@ namespace AterraCore.Config.PluginConfig;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [XmlRoot("PluginConfig")]
-public class PluginConfigDto : IConfigDto<PluginConfigDto> {
+public class PluginConfigDto : IConfigDto<PluginConfigDto>, IPluginConfigDto {
     [XmlElement("Name")] 
     public string ReadableName { get; set; } = null!;
     
@@ -21,19 +22,30 @@ public class PluginConfigDto : IConfigDto<PluginConfigDto> {
 
     
     [XmlElement("PluginVersion")] 
-    public SemanticVersionDto PluginVersion { get; set; } = null!;
-    
+    public SemanticVersion PluginVersion {
+        get => _pluginVersion;
+        set => _pluginVersion = value;
+    }
+    private SemanticVersionDto _pluginVersion = null!;
+
     [XmlElement("GameVersion")] 
-    public SemanticVersionDto GameVersion { get; set; } = null!;
+    public SemanticVersion GameVersion {
+        get => _gameVersion;
+        set => _gameVersion = value;
+    }
+    private SemanticVersionDto _gameVersion = null!;
 
     [XmlArray("Dlls")]
     [XmlArrayItem("Dll", typeof(string))]
-    public string[] Dlls { get; set; } = null!;
+    public List<string> Dlls { get; set; } = null!;
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public PluginConfigDto PopulateAsEmpty() {
+        ReadableName = string.Empty;
+        Author = string.Empty;
+        PluginVersion = SemanticVersion.Zero;
         GameVersion = SemanticVersion.Zero;
         Dlls = [];
 

@@ -12,6 +12,9 @@
 
     <ItemGroup>
       <Folder Include="AtlasHub\" />
+      <Folder Include="Config\EngineConfig\" />
+      <Folder Include="Config\GameConfig\" />
+      <Folder Include="Config\Xml\" />
       <Folder Include="Loggers\" />
       <Folder Include="Nexities\Systems\" />
     </ItemGroup>

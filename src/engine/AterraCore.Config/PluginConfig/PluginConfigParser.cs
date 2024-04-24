@@ -3,8 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using AterraCore.Common;
-using AterraCore.Config.Xml;
-using AterraCore.Contracts.Config.Xml;
+using AterraCore.Contracts.Config;
 using Serilog;
 
 namespace AterraCore.Config.PluginConfig;

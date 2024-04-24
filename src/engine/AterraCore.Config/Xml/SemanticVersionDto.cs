@@ -11,7 +11,7 @@ namespace AterraCore.Config.Xml;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public class SemanticVersionDto {
+public class SemanticVersionDto : ISemanticVersion {
     [XmlAttribute] public int Major { get; set; }
     [XmlAttribute] public int Minor { get; set; }
     [XmlAttribute] public int Patch { get; set; }

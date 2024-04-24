@@ -7,6 +7,7 @@ using System.IO.Compression;
 using System.Reflection;
 using AterraCore.Common;
 using AterraCore.Config.PluginConfig;
+using AterraCore.Contracts.FlexiPlug;
 using Serilog;
 
 namespace AterraCore.FlexiPlug;
@@ -15,8 +16,7 @@ namespace AterraCore.FlexiPlug;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-// TODO make this clas usable on a per plugin basis so we can keep reusing the same ZipArchive
-public class ExternalPluginImporter(ILogger logger, string zipPath) : IDisposable {
+public class PluginZipImporter(ILogger logger, string zipPath) : IPluginZipImporter<PluginConfigDto>, IDisposable {
     private readonly PluginConfigParser<PluginConfigDto> _pluginConfigParser = new(logger);
     private readonly ZipArchive _archive = ZipFile.OpenRead(zipPath);
 

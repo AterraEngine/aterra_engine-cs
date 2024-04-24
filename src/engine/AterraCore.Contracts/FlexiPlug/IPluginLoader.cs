@@ -2,15 +2,18 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using System.Diagnostics.CodeAnalysis;
+using AterraCore.Contracts.FlexiPlug.Plugin;
 
-namespace AterraCore.Contracts.Config.Xml;
+namespace AterraCore.Contracts.FlexiPlug;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IConfigXmlParser<T> {
-    public bool TryDeserializeFromFile(string filePath, [NotNullWhen(true)] out T? engineConfig);
-    public bool TrySerializeToFile(T engineConfig, string filePath);
-    public bool TrySerializeFromBytes(byte[] bytes, [NotNullWhen(true)] out T? config);
+public interface IPluginLoader {
+    public LinkedList<IPluginData> Plugins { get; }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    public bool TryParseAllPlugins(IEnumerable<string> filePaths);
 }
