@@ -20,8 +20,7 @@ public delegate IPluginData ZipImportCallback(IPluginData pluginData, IPluginZip
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class PluginLoader(ILogger logger) : IPluginLoader {
-    private LinkedList<IPluginData> _plugins = [];
-    public LinkedList<IPluginData> Plugins => _plugins;
+    public LinkedList<IPluginData> Plugins { get; private set; } = [];
 
     private ushort _pluginIdCounter;
     private ushort PluginIdCounter {
@@ -40,7 +39,7 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     private IPluginData CreateNew(string filepath) {
-        IPluginData pluginData = _plugins.AddLast(new PluginData(PluginIdCounter++, filepath)).Value;
+        IPluginData pluginData = Plugins.AddLast(new PluginData(PluginIdCounter++, filepath)).Value;
         logger.Information("New pluginId of {id} registered for {filepath} ", pluginData.Id, pluginData.ReadableName);
         return pluginData;
     }
@@ -164,10 +163,10 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         return pluginData;
     }
 
-    // private IPluginData DebugGetAllFiles(IPluginData pluginData, IPluginZipImporter<PluginConfigDto> zipImporter) {
-    //     logger.Debug("ALL FILES : {files}",zipImporter.GetFileNamesInZip());
-    //     return pluginData;
-    // }
+    private IPluginData DebugGetAllFiles(IPluginData pluginData, IPluginZipImporter<PluginConfigDto> zipImporter) {
+        logger.Debug("ALL FILES : {files}",zipImporter.GetFileNamesInZip());
+        return pluginData;
+    }
     
     // -----------------------------------------------------------------------------------------------------------------
     // Public Methods
@@ -177,7 +176,9 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         IPluginData[] plugins = paths
             .Select(CreateNew)
             .Select(CheckExists)
+            // ZipImporter is disposed after this select statement is completed
             .Select(pluginData => WithZipImporter(pluginData, [
+                DebugGetAllFiles, // Todo remove this in production
                 GetConfigData,
                 CheckEngineCompatibility,
                 ImportDlls
@@ -192,7 +193,7 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         // Warn This is dirty, but will work for now.
         if (plugins.Length != paths.Length) {
             logger.Warning("Some plugins did not get validated correctly, trimming plugin list");
-            _plugins = new LinkedList<IPluginData>(_plugins.Where(p => p.Validity == PluginValidity.Valid));
+            Plugins = new LinkedList<IPluginData>(Plugins.Where(p => p.Validity == PluginValidity.Valid));
             logger.Warning("Plugin list trimmed to to a total of {i} ", Plugins.Count);
         }
         
