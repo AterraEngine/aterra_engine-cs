@@ -193,7 +193,10 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         // Warn This is dirty, but will work for now.
         if (plugins.Length != paths.Length) {
             logger.Warning("Some plugins did not get validated correctly, trimming plugin list");
-            Plugins = new LinkedList<IPluginData>(Plugins.Where(p => p.Validity == PluginValidity.Valid));
+            Plugins
+                .Where(p => p.Validity == PluginValidity.Valid)
+                .ToList()
+                .ForEach(p => Plugins.Remove(p));
             logger.Warning("Plugin list trimmed to to a total of {i} ", Plugins.Count);
         }
         
