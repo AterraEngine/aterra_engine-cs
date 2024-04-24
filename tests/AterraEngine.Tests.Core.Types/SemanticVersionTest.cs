@@ -61,5 +61,48 @@ public class SemanticVersionTest {
         Assert.Equal(minor, semanticVersion.Minor);
         Assert.Equal(patch, semanticVersion.Patch);
     }
+    
+    // Test for equality (==)
+    [Theory]
+    [InlineData(1, 1, 1, 1,1,1)]
+    public void TestEqualityOperator(int majorA, int minorA, int patchA, int majorB, int minorB, int patchB) {
+        SemanticVersion semanticVersionA = new(majorA, minorA, patchA);
+        SemanticVersion semanticVersionB = new(majorB, minorB, patchB);
+        
+        Assert.True(semanticVersionA == semanticVersionB);
+    }
+    
+    // Test for equality (!=)
+    [Theory]
+    [InlineData(1, 1, 1, 0,0,0)]
+    [InlineData(1, 1, 1, 0,1,0)]
+    [InlineData(1, 1, 1, 0,0,1)]
+    public void TestInEqualityOperator(int majorA, int minorA, int patchA, int majorB, int minorB, int patchB) {
+        SemanticVersion semanticVersionA = new(majorA, minorA, patchA);
+        SemanticVersion semanticVersionB = new(majorB, minorB, patchB);
+        
+        Assert.True(semanticVersionA != semanticVersionB);
+    }
 
+    // Test for less than (<)
+    [Theory]
+    [InlineData(1, 0, 0, 2, 0, 0)]
+    [InlineData(2, 1, 0, 2, 2, 0)]
+    [InlineData(2, 2, 1, 2, 2, 2)]
+    public void TestLessThanOperator(int majorA, int minorA, int patchA, int majorB, int minorB, int patchB) {
+        var versionA = new SemanticVersion(majorA, minorA, patchA);
+        var versionB = new SemanticVersion(majorB, minorB, patchB);
+        Assert.True(versionA < versionB);
+    }
+
+    // Test for greater than (>)
+    [Theory]
+    [InlineData(2, 0, 0, 1, 0, 0)]
+    [InlineData(2, 2, 0, 2, 1, 0)]
+    [InlineData(2, 2, 2, 2, 2, 1)]
+    public void TestGreaterThanOperator(int majorA, int minorA, int patchA, int majorB, int minorB, int patchB) {
+        var versionA = new SemanticVersion(majorA, minorA, patchA);
+        var versionB = new SemanticVersion(majorB, minorB, patchB);
+        Assert.True(versionA > versionB);
+    }
 }

@@ -20,7 +20,7 @@ namespace AterraCore.Common;
 /// The Minor version number is incremented when new, backwards-compatible features are added.
 /// The Patch version number is incremented when backwards-compatible fixes are made.
 /// </remarks>
-public struct SemanticVersion : IXmlSerializable{
+public struct SemanticVersion : IXmlSerializable, IComparable<SemanticVersion>, IEquatable<SemanticVersion> {
     public int Major { get; set; }
     public int Minor { get; set; }
     public int Patch { get; set; }
@@ -104,4 +104,24 @@ public struct SemanticVersion : IXmlSerializable{
     public bool Equals(SemanticVersion other) {
         return Major == other.Major && Minor == other.Minor && Patch == other.Patch;
     }
+    public override bool Equals(object? obj) => obj is SemanticVersion version && Equals(version);
+    
+    public int CompareTo(SemanticVersion other) {
+        if (Major != other.Major) {
+            return Major.CompareTo(other.Major);
+        }
+
+        if (Minor != other.Minor) {
+            return Minor.CompareTo(other.Minor);
+        }
+
+        return Patch.CompareTo(other.Patch);
+    }
+    public override int GetHashCode() => (Major, Minor, Patch).GetHashCode();
+    
+    // Overriding operators
+    public static bool operator >(SemanticVersion left, SemanticVersion right) => left.CompareTo(right) > 0;
+    public static bool operator <(SemanticVersion left, SemanticVersion right) => left.CompareTo(right) < 0;
+    public static bool operator ==(SemanticVersion left, SemanticVersion right) => left.Equals(right);
+    public static bool operator !=(SemanticVersion left, SemanticVersion right) => !left.Equals(right);
 }

@@ -14,7 +14,7 @@ namespace AterraCore.Config.PluginConfig;
 [XmlRoot("PluginConfig")]
 public class PluginConfigDto {
     [XmlElement("EngineVersion")] 
-    public required SemanticVersionDto EngineVersion { get; set; }
+    public required SemanticVersionDto GameVersion { get; set; }
     
     [XmlArray("Dlls")]
     [XmlArrayItem("Dll", typeof(string))] 
@@ -25,7 +25,7 @@ public class PluginConfigDto {
     // -----------------------------------------------------------------------------------------------------------------
     public static PluginConfigDto CreateEmptyConfigDto() => 
         new() {
-            EngineVersion = SemanticVersion.Zero,
+            GameVersion = SemanticVersion.Zero,
             Dlls = []
         };
 }

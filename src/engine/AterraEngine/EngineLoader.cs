@@ -39,7 +39,7 @@ public class EngineLoader {
     public IEngine Start() {
         EngineConfigDto configDto = GetEngineConfig();
         _startupLogger.Information("Config loaded with the following data:");
-        _startupLogger.Information("Engine Version : {Version}", configDto.Version);
+        _startupLogger.Information("Engine Version : {Version}", configDto.EngineVersion);
         _startupLogger.Information("Plugins - Root Folder : {Version}", configDto.PluginData.RootFolder);
         _startupLogger.Information("Plugins - Plugins : {Version}", configDto.PluginData.Plugins.Select(r => r.FilePath));
         

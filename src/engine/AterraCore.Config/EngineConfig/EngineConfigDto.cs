@@ -13,7 +13,7 @@ namespace AterraCore.Config.EngineConfig;
 [XmlRoot("EngineConfig")]
 public class EngineConfigDto {
     [XmlElement("Version")] 
-    public required SemanticVersionDto Version { get; set; }
+    public required SemanticVersionDto EngineVersion { get; set; }
     
     [XmlElement("PluginData")]
     public required PluginDataDto PluginData { get; set; }
@@ -26,7 +26,7 @@ public class EngineConfigDto {
     // -----------------------------------------------------------------------------------------------------------------
     public static EngineConfigDto CreateEmptyConfigDto() =>
         new() {
-            Version = new SemanticVersion(0, 0, 0),
+            EngineVersion = new SemanticVersion(0, 0, 0),
             PluginData = new PluginDataDto {
                 RootFolder = "plugins",
                 Plugins = []
