@@ -4,7 +4,6 @@
 
 using AterraCore.Common;
 using Serilog;
-using Serilog.Formatting.Json;
 
 namespace AterraCore.Loggers;
 

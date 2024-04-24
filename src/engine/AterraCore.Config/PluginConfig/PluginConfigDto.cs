@@ -1,10 +1,10 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
 using System.Xml.Serialization;
 using AterraCore.Common;
 using AterraCore.Config.Xml;
+using AterraCore.Contracts.Config.Xml;
 
 namespace AterraCore.Config.PluginConfig;
 
@@ -12,20 +12,21 @@ namespace AterraCore.Config.PluginConfig;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [XmlRoot("PluginConfig")]
-public class PluginConfigDto {
+public class PluginConfigDto : IConfigDto<PluginConfigDto> {
     [XmlElement("EngineVersion")] 
-    public required SemanticVersionDto GameVersion { get; set; }
-    
+    public SemanticVersionDto GameVersion { get; set; } = null!;
+
     [XmlArray("Dlls")]
-    [XmlArrayItem("Dll", typeof(string))] 
-    public required string[] Dlls { get; set; }
+    [XmlArrayItem("Dll", typeof(string))]
+    public string[] Dlls { get; set; } = null!;
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public static PluginConfigDto CreateEmptyConfigDto() => 
-        new() {
-            GameVersion = SemanticVersion.Zero,
-            Dlls = []
-        };
+    public PluginConfigDto PopulateAsEmpty() {
+        GameVersion = SemanticVersion.Zero;
+        Dlls = [];
+
+        return this;
+    }
 }

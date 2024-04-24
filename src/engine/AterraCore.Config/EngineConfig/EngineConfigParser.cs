@@ -4,6 +4,7 @@
 
 using AterraCore.Common;
 using AterraCore.Config.Xml;
+using AterraCore.Contracts.Config.Xml;
 using Serilog;
 
 namespace AterraCore.Config.EngineConfig;
@@ -13,5 +14,6 @@ namespace AterraCore.Config.EngineConfig;
 // ---------------------------------------------------------------------------------------------------------------------
 /// <inheritdoc/>
 public class EngineConfigParser<T>(ILogger logger) :
-    ConfigXmlParser<T>(logger, "urn:aterra-engine:engine-config", Paths.XsdEngineConfigDto);
+    ConfigXmlParser<T>(logger, "urn:aterra-engine:engine-config", Paths.XsdEngineConfigDto)
+    where T : EngineConfigDto, IConfigDto<T>, new();
 

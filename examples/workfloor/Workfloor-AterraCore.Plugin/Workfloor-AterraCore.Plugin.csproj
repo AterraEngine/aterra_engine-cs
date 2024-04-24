@@ -23,6 +23,7 @@
         <Content Include="..\..\..\src\xsd\*.xsd">
             <Link>xsd\%(Filename)%(Extension)</Link>
         </Content>
+        <Content Remove="..\..\..\src\xsd\**" />
     </ItemGroup>
 
     <ItemGroup>

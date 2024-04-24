@@ -4,7 +4,6 @@
 
 using System.Reflection;
 using AterraCore.Common;
-using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug.Plugin;
 using AterraCore.Contracts.Nexities.Assets;
 using AterraCore.FlexiPlug.Attributes;

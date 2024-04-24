@@ -4,7 +4,6 @@
 using System.Numerics;
 using AterraEngine.Contracts.Lib.ECS.Components;
 using AterraEngine.Core.ECSFramework;
-using AterraEngine.Core.Assets;
 using AterraEngine.Lib.ECS.Dtos.Components;
 using Serilog;
 

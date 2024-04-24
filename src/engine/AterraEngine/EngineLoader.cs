@@ -8,7 +8,6 @@ using AterraCore.DI;
 using AterraCore.Nexities.Assets;
 using AterraCore.Common;
 using AterraCore.Config.EngineConfig;
-using AterraCore.Config.Xml;
 using AterraCore.FlexiPlug;
 using AterraCore.Loggers;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,18 +20,19 @@ namespace AterraEngine;
 // ---------------------------------------------------------------------------------------------------------------------
 
 public class EngineLoader {
-    private ILogger _startupLogger = StartupLogger.CreateLogger();
+    private readonly ILogger _startupLogger = StartupLogger.CreateLogger();
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     private EngineConfigDto GetEngineConfig() {
-        var engineConfigFactory = new EngineConfigFactory<EngineConfigDto>(_startupLogger);
-        if (!engineConfigFactory.TryLoadConfigFile(Paths.StartupConfig, out EngineConfigDto? configDto)) {
-            _startupLogger.Error("Engine config ile could not be parsed");
-            return EngineConfigDto.CreateEmptyConfigDto();
+        var engineConfigParser = new EngineConfigParser<EngineConfigDto>(_startupLogger);
+        if (!engineConfigParser.TryDeserializeFromFile(Paths.StartupConfig, out EngineConfigDto? configDto)) {
+            _startupLogger.Error("Engine config file could not be parsed");
+            return new EngineConfigDto().PopulateAsEmpty();
         }
-
+        
+        _startupLogger.Information("Engine config file parsed");
         return configDto;
     }
     
@@ -63,14 +63,15 @@ public class EngineLoader {
         if(!pluginLoader.TryParseAllPlugins(filePaths)){
             _startupLogger.Error("Failed to load plugins. Exiting...");
             Environment.Exit(-1);
-        };
+        }
+        
         // configDto.PluginData.Plugins
         //     .Select(data => new {
         //         Data = data, 
         //         Found = pluginDlls.Contains(data.FilePath),
         //         AssemblyFilePath = pluginDlls
         //     })
-            // .Where(data => );
+        // .Where(data => );
         
         // After plugins have been loaded
         //      - Finish up with assigning the Static Services (services which may not be overriden)

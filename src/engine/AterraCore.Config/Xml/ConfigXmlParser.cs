@@ -7,8 +7,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
-using AterraCore.Common;
-using AterraCore.Contracts.StartupConfig;
+using AterraCore.Contracts.Config.Xml;
 using Serilog;
 
 namespace AterraCore.Config.Xml;
@@ -17,7 +16,9 @@ namespace AterraCore.Config.Xml;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public abstract class ConfigXmlParser<T>(ILogger logger, string nameSpace, string xsdPath) : IConfigXmlParser<T> {
+public abstract class ConfigXmlParser<T>(ILogger logger, string nameSpace, string xsdPath) 
+    : IConfigXmlParser<T> 
+    where T : IConfigDto<T>, new() {
     private readonly string NameSpace = nameSpace;
     private readonly XmlSerializer _serializer = new(typeof(T), nameSpace);
     private readonly XmlReaderSettings _readerSettings = DefineReaderSettings(logger, nameSpace, xsdPath);
@@ -30,6 +31,8 @@ public abstract class ConfigXmlParser<T>(ILogger logger, string nameSpace, strin
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
+    public T CreateEmptyDto() => new T().PopulateAsEmpty();
+    
     private static XmlReaderSettings DefineReaderSettings(ILogger logger, string nameSpace, string xsdPath) {
         var schemas = new XmlSchemaSet();
         schemas.Add(nameSpace, XmlReader.Create(xsdPath));

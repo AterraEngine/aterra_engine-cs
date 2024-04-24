@@ -4,6 +4,7 @@
 using System.Xml.Serialization;
 using AterraCore.Common;
 using AterraCore.Config.Xml;
+using AterraCore.Contracts.Config.Xml;
 
 namespace AterraCore.Config.EngineConfig;
 
@@ -11,36 +12,37 @@ namespace AterraCore.Config.EngineConfig;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [XmlRoot("EngineConfig")]
-public class EngineConfigDto {
+public class EngineConfigDto : IConfigDto<EngineConfigDto> {
     [XmlElement("Version")] 
-    public required SemanticVersionDto EngineVersion { get; set; }
+    public SemanticVersionDto EngineVersion { get; set; } = null!;
     
     [XmlElement("PluginData")]
-    public required PluginDataDto PluginData { get; set; }
+    public PluginDataDto PluginData { get; set; } = null!;
     
     [XmlElement("Raylib")]
-    public required RaylibConfigDto RaylibConfig { get; set; }
+    public RaylibConfigDto RaylibConfig { get; set; } = null!;
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public static EngineConfigDto CreateEmptyConfigDto() =>
-        new() {
-            EngineVersion = new SemanticVersion(0, 0, 0),
-            PluginData = new PluginDataDto {
-                RootFolder = "plugins",
-                Plugins = []
-            }, 
-            RaylibConfig = new RaylibConfigDto { 
-                Window = new RaylibWindowElementDto {
-                    Screen = new DimensionElementDto {
-                        Height = 100, 
-                        Width = 100
-                    },
-                    IconPath = string.Empty,
-                    Title = ""
-                }
+    public EngineConfigDto PopulateAsEmpty() {
+        EngineVersion = SemanticVersion.Zero;
+        PluginData = new PluginDataDto {
+            RootFolder = "plugins",
+            Plugins = []
+        };
+        RaylibConfig = new RaylibConfigDto {
+            Window = new RaylibWindowElementDto {
+                Screen = new DimensionElementDto {
+                    Height = 100,
+                    Width = 100
+                },
+                IconPath = string.Empty,
+                Title = ""
             }
         };
+            
+        return this;
+    }
 }
 
