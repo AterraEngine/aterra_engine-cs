@@ -3,13 +3,14 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 
 namespace AterraCore.Contracts.DI;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Support Code
 // ---------------------------------------------------------------------------------------------------------------------
-public delegate void StaticService(IServiceCollection serviceCollection);
+public delegate void StaticService(IServiceCollection serviceCollection, ILogger logger);
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

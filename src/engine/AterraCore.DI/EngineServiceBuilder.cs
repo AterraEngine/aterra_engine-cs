@@ -18,13 +18,13 @@ public class EngineServiceBuilder(ILogger logger) : IEngineServiceBuilder {
     // -----------------------------------------------------------------------------------------------------------------
     public void AssignDefaultServices(IEnumerable<StaticService> services) {
         foreach (StaticService service in services) {
-            service(ServiceCollection);
+            service(ServiceCollection, logger);
         }
     }
     
     public void AssignStaticServices(IEnumerable<StaticService> services) {
         foreach (StaticService service in services) {
-            service(ServiceCollection);
+            service(ServiceCollection, logger);
         }
     }
 

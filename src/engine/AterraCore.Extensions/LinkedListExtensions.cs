@@ -1,17 +1,23 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Numerics;
-using AterraEngine.Contracts.Core;
-using AterraEngine.Contracts.Core.ECSFramework.Events;
-namespace AterraEngine.Core;
+using AterraCore.Common;
+using AterraCore.Contracts.FlexiPlug.Plugin;
+
+namespace AterraCore.Extensions;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class WorldSpace2D(IEventManager eventManager) : IWorldSpace2D {
-    public Vector2 WorldToScreenSpace { get; set; } = Vector2.One;
 
-    
-    
+public static class LinkedListExtensions {
+    public static LinkedListNode<IPluginData>? NextValid(this LinkedListNode<IPluginData> node) {
+        ArgumentNullException.ThrowIfNull(node);
+
+        LinkedListNode<IPluginData>? next = node.Next;
+        while (next != null && next.Value.Validity == PluginValidity.Invalid) {
+            next = next.Next;
+        }
+        return next;
+    }
 }

@@ -47,38 +47,32 @@ public class EngineLoader {
         
         // Services which may be overriden
         engineServiceBuilder.AssignDefaultServices([
-            sc => sc.AddSingleton(EngineLogger.CreateLogger()),
+            (sc,_ ) => sc.AddSingleton(EngineLogger.CreateLogger()),
         ]);
         
         _startupLogger.Information("Assigned Default services");
         
-        string[] filePaths = configDto.PluginData.Plugins
-            .Select(p => Path.Join(configDto.PluginData.RootFolder, p.FilePath))
-            .ToArray();
+        // string[] filePaths = configDto.PluginData.Plugins
+        //     .Select(p => Path.Join(configDto.PluginData.RootFolder, p.FilePath))
+        //     .ToArray();
 
+        string[] filePaths = Directory.GetFiles(Paths.Plugins.Folder);
+        
         _startupLogger.Information("All plugin file paths: {paths}", filePaths);
         
         // Load plugins
         var pluginLoader = new PluginLoader(_startupLogger);
         if(!pluginLoader.TryParseAllPlugins(filePaths)){
             _startupLogger.Error("Failed to load plugins. Exiting...");
-            Environment.Exit(-1);
+            Environment.Exit((int)ExitCodes.PluginLoadFail);
         }
-        
-        // configDto.PluginData.Plugins
-        //     .Select(data => new {
-        //         Data = data, 
-        //         Found = pluginDlls.Contains(data.FilePath),
-        //         AssemblyFilePath = pluginDlls
-        //     })
-        // .Where(data => );
         
         // After plugins have been loaded
         //      - Finish up with assigning the Static Services (services which may not be overriden)
         //      - Build the actual EngineServices
         engineServiceBuilder.AssignStaticServices([
-            sc => sc.AddSingleton<IAssetAtlas, AssetAtlas>(),
-            sc => sc.AddSingleton<IEngine, Engine>()
+            (sc, _) => sc.AddSingleton<IAssetAtlas, AssetAtlas>(),
+            (sc, _) => sc.AddSingleton<IEngine, Engine>()
         ]);
         _startupLogger.Information("Assigned Static services");
 

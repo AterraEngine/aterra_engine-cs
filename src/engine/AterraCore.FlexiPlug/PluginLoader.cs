@@ -1,8 +1,6 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
-using System.Diagnostics;
 using System.Reflection;
 using AterraCore.Common;
 using AterraCore.Config.PluginConfig;
@@ -22,7 +20,7 @@ public delegate IPluginData ZipImportCallback(IPluginData pluginData, IPluginZip
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class PluginLoader(ILogger logger) : IPluginLoader {
-    private readonly LinkedList<IPluginData> _plugins = [];
+    private LinkedList<IPluginData> _plugins { get; set; } = [];
     public LinkedList<IPluginData> Plugins => _plugins;
 
     private ushort _pluginIdCounter;
@@ -49,7 +47,7 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
     
     private IPluginData CheckExists(IPluginData pluginData) {
         // Quick Exit
-        if (Filter(pluginData)) return pluginData;
+        if (IsInvalid(pluginData)) return pluginData;
         
         if (!File.Exists(pluginData.FilePath) ){
             logger.Warning("Plugin did not exist at {filepath}", pluginData.ReadableName);
@@ -61,7 +59,7 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
 
     private IPluginData WithZipImporter(IPluginData pluginData, IEnumerable<ZipImportCallback> callbacks ) {
         // Quick Exit
-        if (Filter(pluginData)) return pluginData;
+        if (IsInvalid(pluginData)) return pluginData;
         
         using var zipImporter = new PluginZipImporter(logger, pluginData.FilePath);
         logger.Information("Assigned new Zip Importer to {plugin}", pluginData.ReadableName);
@@ -75,7 +73,7 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
 
     private IPluginData GetConfigData(IPluginData pluginData, IPluginZipImporter<PluginConfigDto> zipImporter) {
         // Quick Exit
-        if (Filter(pluginData)) return pluginData;
+        if (IsInvalid(pluginData)) return pluginData;
         
         if (!zipImporter.TryGetPluginConfig(out PluginConfigDto? pluginConfigDto)) {
             logger.Warning("Could not extract a valid PluginConfigDto from the plugin {plugin}", pluginData.ReadableName);
@@ -91,7 +89,7 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
     
     private IPluginData CheckEngineCompatibility(IPluginData pluginData, IPluginZipImporter<PluginConfigDto> zipImporter) {
         // Quick Exit
-        if (Filter(pluginData)) return pluginData;
+        if (IsInvalid(pluginData)) return pluginData;
         
         // TODO CHECK FOR ENGINE COMPATIBILITY
         logger.Warning("Skipping engine compatibility check");
@@ -100,7 +98,7 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
 
     private IPluginData ImportDlls(IPluginData pluginData, IPluginZipImporter<PluginConfigDto> zipImporter) {
         // Quick Exit
-        if (Filter(pluginData)) return pluginData;
+        if (IsInvalid(pluginData)) return pluginData;
         if (pluginData.Data == null) return pluginData; // Shouldn't happen because we import the data up in the chain
         
         // Extract assembly(s)
@@ -132,18 +130,18 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         return pluginData;
     }
     
-    private static bool Filter(IPluginData pluginData) => pluginData.Validity == PluginValidity.Invalid;
+    private static bool IsInvalid(IPluginData pluginData) => pluginData.Validity == PluginValidity.Invalid;
 
     private IPluginData Validate(IPluginData pluginData) {
         // Quick Exit
-        if (Filter(pluginData)) return pluginData;
+        if (IsInvalid(pluginData)) return pluginData;
         
         // Todo add more validation steps
         if (pluginData.Validity == PluginValidity.Untested) pluginData.Validity = PluginValidity.Valid;
         return pluginData;
     }
 
-    private bool CheckValidity(IPluginData pluginData) {
+    private IPluginData CheckValidity(IPluginData pluginData) {
         // Check validity of all and log accordingly
         bool validity = _plugins.All(p => p.Validity == PluginValidity.Valid);
         if (validity) {
@@ -157,7 +155,7 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
             );
         }
 
-        return validity;
+        return pluginData;
     }
 
     private IPluginData DebugGetAllFiles(IPluginData pluginData, IPluginZipImporter<PluginConfigDto> zipImporter) {
@@ -169,19 +167,28 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
     // Public Methods
     // -----------------------------------------------------------------------------------------------------------------
     public bool TryParseAllPlugins(IEnumerable<string> filePaths) {
-        IEnumerable<bool> result = filePaths
+        IEnumerable<IPluginData> plugins = filePaths
             .Select(CreateNew)
             .Select(CheckExists)
             .Select(pluginData => WithZipImporter(pluginData, [
                 GetConfigData,
                 CheckEngineCompatibility,
-                DebugGetAllFiles,
                 ImportDlls
             ]))
             .Select(Validate)
             .Select(CheckValidity)
-        ;
+            
+            // Filter those plugins which did not get validated correctly
+            .Where(p => !IsInvalid(p));
         
-        return result.All(b => b);
+        IEnumerable<IPluginData> pluginDatas = plugins as IPluginData[] ?? plugins.ToArray();
+        
+        if (pluginDatas.Count() != Plugins.Count) {
+            logger.Warning("Some plugins did not get validated correctly, trimming invalid");
+            _plugins = new LinkedList<IPluginData>(pluginDatas.Where(IsInvalid));
+        }
+        
+        return Plugins.Count != 0;
+        
     }
 }
