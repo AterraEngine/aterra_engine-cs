@@ -11,7 +11,7 @@ namespace AterraCore.Contracts.FlexiPlug.Plugin;
 // ---------------------------------------------------------------------------------------------------------------------
 // Support Code
 // ---------------------------------------------------------------------------------------------------------------------
-public struct ServiceData(Type instanceType, Type serviceType) {
+public readonly struct ServiceData(Type instanceType, Type serviceType) {
     public Type InstanceType { get; } = instanceType;
     public Type ServiceType { get; } = serviceType;
 }
