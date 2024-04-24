@@ -13,9 +13,9 @@ namespace AterraCore.Common;
 public static class Paths {
     public static class Logs {
         public const string Folder = "logs";
-        private const string _startupLog = "log-startup.db";
+        private const string _startupLog = "log_startup-.log";
         public static readonly string StartupLog = Path.Combine(Folder, _startupLog);
-        private const string _engineLog = "log-engine.db";
+        private const string _engineLog = "log_engine-.log";
         public static readonly string EngineLog = Path.Combine(Folder, _engineLog);
     }
     

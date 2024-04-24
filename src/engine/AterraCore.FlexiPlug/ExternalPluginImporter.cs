@@ -45,6 +45,7 @@ public class ExternalPluginImporter(ILogger logger, string zipPath) : IDisposabl
             return false;
         }
         
+        logger.Information("Plugin Config found within {zip}", zipPath);
         return true;
         
     }
@@ -90,7 +91,7 @@ public class ExternalPluginImporter(ILogger logger, string zipPath) : IDisposabl
     public List<string> GetFileNamesInZip() {
         var fileNames = new List<string>();
         try {
-            fileNames.AddRange(Enumerable.OfType<ZipArchiveEntry>(_archive.Entries).Select(entry => entry.FullName));
+            fileNames.AddRange(_archive.Entries.Select(entry => entry.FullName));
         }
         catch(Exception e) {
             logger.Warning("Failed to retrieve file names from {zipPath}, {e}", zipPath, e);

@@ -4,6 +4,7 @@
 
 using AterraCore.Common;
 using Serilog;
+using Serilog.Formatting.Compact;
 
 namespace AterraCore.Loggers;
 
@@ -22,11 +23,15 @@ public static class StartupLogger {
             .Enrich.WithProperty("Application", "AterraEngine")
             .Enrich.WithProperty("Stage", "Engine")
             .Enrich.WithProperty("MachineName", Environment.MachineName)
+            .Enrich.WithThreadId()
+            .Enrich.WithMemoryUsage()
                 
             // Using Async Sink to write logs asynchronously 
             // to avoid any performance issues during gameplay
-            .WriteTo.Async(lc => lc.SQLite(
-                Paths.Logs.StartupLog
+            .WriteTo.Async(lc => lc.File(
+                formatter: new CompactJsonFormatter(), 
+                path: Paths.Logs.StartupLog,
+                rollingInterval: RollingInterval.Day
             ))
             
             .WriteTo.Async(lc => lc.Console())

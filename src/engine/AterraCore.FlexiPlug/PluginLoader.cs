@@ -58,7 +58,7 @@ public class PluginLoader(ILogger logger) {
                 pluginData.Validity = PluginValidity.Invalid;
                 continue;
             }
-            logger.Information("Plugin Config correct found for {filepath}", pluginData.FilePath);
+            logger.Information("Plugin Config correctly found for {Name} by {Author}", pluginConfigDto.ReadableName, pluginConfigDto.Author);
 
             // TODO CHECK FOR ENGINE COMPATIBILITY
             logger.Warning("Skipping engine compatibility check");
