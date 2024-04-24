@@ -20,12 +20,18 @@ namespace AterraEngine;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public class EngineLoader(Assembly? currentAssembly) {
+public class EngineLoader {
     private readonly ILogger _startupLogger = StartupLogger.CreateLogger();
+    private Assembly? _currentAssembly;
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
+    public EngineLoader InjectCurrentAssemblyAsPlugin() {
+        _currentAssembly = Assembly.GetEntryAssembly();
+        return this;
+    }
+    
     private EngineConfigDto GetEngineConfig() {
         var engineConfigParser = new EngineConfigParser<EngineConfigDto>(_startupLogger);
         if (!engineConfigParser.TryDeserializeFromFile(Paths.StartupConfig, out EngineConfigDto? configDto)) {
@@ -65,6 +71,11 @@ public class EngineLoader(Assembly? currentAssembly) {
         
         // Load plugins
         var pluginLoader = new PluginLoader(_startupLogger);
+        if (_currentAssembly != null) {
+            pluginLoader.InjectCurrentAssemblyAsPlugin(_currentAssembly);
+            _startupLogger.Information("Current Assembly is inserted as Plugin");
+        }
+        
         if(!pluginLoader.TryParseAllPlugins(filePaths)){
             _startupLogger.Error("Failed to load plugins. Exiting...");
             Environment.Exit((int)ExitCodes.PluginLoadFail);

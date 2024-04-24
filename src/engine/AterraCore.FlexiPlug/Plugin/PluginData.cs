@@ -18,8 +18,9 @@ public class PluginData(int id, string filepath) : IPluginData {
     public PluginId Id { get; } = new(id);
     public string FilePath { get; } = filepath;
     public string ReadableName => Data?.ReadableName ?? FilePath;
+    public bool IsProcessed { get; set; }
 
-    public IPluginConfigDto<ISemanticVersion>? Data { get; private set; }
+    public IPluginConfigDto<ISemanticVersion>? Data { get; set; }
 
     private PluginValidity _validity = PluginValidity.Untested;
     public PluginValidity Validity {

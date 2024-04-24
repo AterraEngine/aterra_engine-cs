@@ -13,7 +13,9 @@ namespace Workfloor_AterraCore;
 
 public static class Program {
     public static void Main(string[] args) {
-        IEngine engine = new EngineLoader().Start();
+        IEngine engine = new EngineLoader()
+            .InjectCurrentAssemblyAsPlugin()
+            .Start();
         engine.Run();
     }
 }

@@ -23,8 +23,9 @@ public interface IPluginData {
     public PluginId Id { get; }
     public string FilePath { get; }
     public string ReadableName { get; }
+    public bool IsProcessed { get; set; }
     
-    public IPluginConfigDto<ISemanticVersion>? Data { get; }
+    public IPluginConfigDto<ISemanticVersion>? Data { get; set; }
     
     public PluginValidity Validity { get; set; }
     public List<Assembly> Assemblies { get; }
