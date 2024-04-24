@@ -13,27 +13,18 @@ namespace AterraCore.Config.PluginConfig;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [XmlRoot("PluginConfig")]
-public class PluginConfigDto : IConfigDto<PluginConfigDto>, IPluginConfigDto {
+public class PluginConfigDto : IConfigDto<PluginConfigDto>, IPluginConfigDto<SemanticVersionDto> {
     [XmlElement("Name")] 
     public string ReadableName { get; set; } = null!;
     
     [XmlElement("Author")] 
     public string? Author { get; set; }
 
+    [XmlElement("PluginVersion")]
+    public SemanticVersionDto PluginVersion { get; set; } = null!;
     
-    [XmlElement("PluginVersion")] 
-    public SemanticVersion PluginVersion {
-        get => _pluginVersion;
-        set => _pluginVersion = value;
-    }
-    private SemanticVersionDto _pluginVersion = null!;
-
-    [XmlElement("GameVersion")] 
-    public SemanticVersion GameVersion {
-        get => _gameVersion;
-        set => _gameVersion = value;
-    }
-    private SemanticVersionDto _gameVersion = null!;
+    [XmlElement("GameVersion")]
+    public SemanticVersionDto GameVersion { get; set; } = null!;
 
     [XmlArray("Dlls")]
     [XmlArrayItem("Dll", typeof(string))]

@@ -19,7 +19,7 @@ public class PluginData(int id, string filepath) : IPluginData {
     public string FilePath { get; } = filepath;
     public string ReadableName => Data?.ReadableName ?? FilePath;
 
-    public IPluginConfigDto? Data { get; private set; }
+    public IPluginConfigDto<ISemanticVersion>? Data { get; private set; }
 
     private PluginValidity _validity = PluginValidity.Untested;
     public PluginValidity Validity {
@@ -37,7 +37,7 @@ public class PluginData(int id, string filepath) : IPluginData {
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public IEnumerable<Type> GetAssetTypes() {
-        return _types!
+        return Types
             .Where(t => 
                 typeof(IAsset).IsAssignableFrom(t) 
                 && t is { IsInterface: false, IsAbstract: false }
@@ -45,13 +45,13 @@ public class PluginData(int id, string filepath) : IPluginData {
     }
 
     public IEnumerable<ServiceData> GetServices() {
-        return _types!
+        return Types
             .Select(t => new { Type = t, Attribute = t.GetCustomAttribute<ServiceAttribute>() }) // this way we only get the attribute once
             .Where(t => t.Attribute != null)
             .Select(t => new ServiceData(t.Attribute?.Interface!, t.Type));
     }
 
-    public void IngestFromPluginConfigDto(IPluginConfigDto pluginConfigDto) {
+    public void IngestFromPluginConfigDto(IPluginConfigDto<ISemanticVersion> pluginConfigDto) {
         Data = pluginConfigDto;
     }
 }

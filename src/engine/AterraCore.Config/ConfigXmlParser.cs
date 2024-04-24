@@ -107,7 +107,7 @@ public abstract class ConfigXmlParser<T>(ILogger logger, string nameSpace, strin
         }
 
         catch (Exception e) {
-            logger.Warning("Memory stream could not parse into a {t}, {e}", typeof(T), e);
+            logger.Warning(e,"Memory stream could not parse into a {t}", typeof(T));
             return false;
         }
     }

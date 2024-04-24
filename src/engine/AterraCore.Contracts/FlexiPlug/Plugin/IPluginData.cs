@@ -24,7 +24,7 @@ public interface IPluginData {
     public string FilePath { get; }
     public string ReadableName { get; }
     
-    public IPluginConfigDto? Data { get; }
+    public IPluginConfigDto<ISemanticVersion>? Data { get; }
     
     public PluginValidity Validity { get; set; }
     public List<Assembly> Assemblies { get; }
@@ -35,5 +35,5 @@ public interface IPluginData {
     // -----------------------------------------------------------------------------------------------------------------
     public IEnumerable<Type> GetAssetTypes();
     public IEnumerable<ServiceData> GetServices();
-    public void IngestFromPluginConfigDto(IPluginConfigDto pluginConfigDto);
+    public void IngestFromPluginConfigDto(IPluginConfigDto<ISemanticVersion> pluginConfigDto);
 }

@@ -28,7 +28,9 @@ public static class EngineLogger {
                 rollingInterval: RollingInterval.Day
             ))
             
-            .WriteTo.Async(lc => lc.Console())
+            .WriteTo.Async(lc => lc.Console(
+                outputTemplate:"[{Timestamp:HH:mm:ss.fff} {Level:u3}] {Message:lj}{NewLine}{Exception}"
+                ))
             
             .CreateLogger();
     

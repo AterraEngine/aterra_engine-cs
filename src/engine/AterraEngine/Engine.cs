@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using AterraCore.Contracts;
+using Serilog;
 
 namespace AterraEngine;
 
@@ -10,6 +11,8 @@ namespace AterraEngine;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public class Engine : IEngine {
-    
+public class Engine(ILogger logger) : IEngine {
+    public void Run() {
+        logger.Information("Entered AterraEngine");
+    }
 }

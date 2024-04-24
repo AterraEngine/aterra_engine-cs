@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
+using System.Reflection;
 using AterraCore.Contracts;
 using AterraCore.Contracts.Nexities.Assets;
 using AterraCore.DI;
@@ -19,7 +20,7 @@ namespace AterraEngine;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public class EngineLoader {
+public class EngineLoader(Assembly? currentAssembly) {
     private readonly ILogger _startupLogger = StartupLogger.CreateLogger();
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -37,6 +38,8 @@ public class EngineLoader {
     }
     
     public IEngine Start() {
+        _startupLogger.Information("--- Starting Startup sequence ---");
+        
         EngineConfigDto configDto = GetEngineConfig();
         _startupLogger.Information("Config loaded with the following data:");
         _startupLogger.Information("Engine Version : {Version}", configDto.EngineVersion);
@@ -47,16 +50,16 @@ public class EngineLoader {
         
         // Services which may be overriden
         engineServiceBuilder.AssignDefaultServices([
-            (sc,_ ) => sc.AddSingleton(EngineLogger.CreateLogger()),
+            sc => sc.AddSingleton(EngineLogger.CreateLogger()),
         ]);
         
         _startupLogger.Information("Assigned Default services");
         
-        // string[] filePaths = configDto.PluginData.Plugins
-        //     .Select(p => Path.Join(configDto.PluginData.RootFolder, p.FilePath))
-        //     .ToArray();
+        string[] filePaths = configDto.PluginData.Plugins
+        .Select(p => Path.Join(configDto.PluginData.RootFolder, p.FilePath))
+        .ToArray();
 
-        string[] filePaths = Directory.GetFiles(Paths.Plugins.Folder);
+        // string[] filePaths = Directory.GetFiles(Paths.Plugins.Folder);
         
         _startupLogger.Information("All plugin file paths: {paths}", filePaths);
         
@@ -66,24 +69,33 @@ public class EngineLoader {
             _startupLogger.Error("Failed to load plugins. Exiting...");
             Environment.Exit((int)ExitCodes.PluginLoadFail);
         }
+
+        pluginLoader.Plugins
+            .SelectMany(p => p.GetServices())
+            .ToList()
+            .ForEach(s => engineServiceBuilder.ServiceCollection.AddSingleton(s.InstanceType, s.ServiceType));
         
         // After plugins have been loaded
         //      - Finish up with assigning the Static Services (services which may not be overriden)
         //      - Build the actual EngineServices
         engineServiceBuilder.AssignStaticServices([
-            (sc, _) => sc.AddSingleton<IAssetAtlas, AssetAtlas>(),
-            (sc, _) => sc.AddSingleton<IEngine, Engine>()
+            sc => sc.AddSingleton<IAssetAtlas, AssetAtlas>(),
+            sc => sc.AddSingleton<IEngine, Engine>()
         ]);
         _startupLogger.Information("Assigned Static services");
 
         engineServiceBuilder.FinishBuilding();
-        _startupLogger.Information("Dependency Container Built");
         
         // After this point all plugin data should be assigned
         
         // After this point the actual engine should start churning
         // Warn Quick and dirty for now
-        return EngineServices.GetService<IEngine>();
+        var engine = EngineServices.GetService<IEngine>();
+        _startupLogger.Information("Engine instance created");
+
+        
+        _startupLogger.Information("--- Startup sequence complete ---");
+        return engine;
 
     }
 }

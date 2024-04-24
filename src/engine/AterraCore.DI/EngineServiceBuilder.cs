@@ -18,13 +18,13 @@ public class EngineServiceBuilder(ILogger logger) : IEngineServiceBuilder {
     // -----------------------------------------------------------------------------------------------------------------
     public void AssignDefaultServices(IEnumerable<StaticService> services) {
         foreach (StaticService service in services) {
-            service(ServiceCollection, logger);
+            service(ServiceCollection);
         }
     }
     
     public void AssignStaticServices(IEnumerable<StaticService> services) {
         foreach (StaticService service in services) {
-            service(ServiceCollection, logger);
+            service(ServiceCollection);
         }
     }
 
@@ -32,5 +32,6 @@ public class EngineServiceBuilder(ILogger logger) : IEngineServiceBuilder {
         // END of factory,
         //      build all services
         EngineServices.BuildServiceProvider(ServiceCollection);
+        logger.Information("Dependency Container Built");
     }
 }
