@@ -26,6 +26,10 @@
         <Content Remove="..\..\..\src\xsd\**" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Services\" />
+    </ItemGroup>
+
     <Target Name="PackingToZip" AfterTargets="Build">
         <!-- Delete the existing zip file if it exists -->
         <!--    Else it is going to cause issues for the Wip down below -->

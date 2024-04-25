@@ -15,9 +15,9 @@ namespace AterraCore.Config.PluginConfig;
 public class PluginConfigDto : IConfigDto<PluginConfigDto>, IPluginConfigDto {
     [XmlElement("Name")] 
     public string ReadableName { get; set; } = null!;
-    
-    [XmlElement("Author")] 
-    public string? Author { get; set; }
+
+    [XmlElement("Author")]
+    public string Author { get; set; } = string.Empty;
 
     [XmlElement("PluginVersion")]
     public SemanticVersion PluginVersion { get; set; }
@@ -34,7 +34,7 @@ public class PluginConfigDto : IConfigDto<PluginConfigDto>, IPluginConfigDto {
     // -----------------------------------------------------------------------------------------------------------------
     public PluginConfigDto PopulateAsEmpty() {
         ReadableName = string.Empty;
-        Author = string.Empty;
+        Author = "Unknown";
         PluginVersion = SemanticVersion.Zero;
         GameVersion = SemanticVersion.Zero;
         Dlls = [];

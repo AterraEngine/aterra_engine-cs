@@ -51,7 +51,14 @@ public class EngineLoader {
         _startupLogger.Information("Engine Version : {Version}", configDto.EngineVersion);
         _startupLogger.Information("Game Version : {Version}", configDto.GameVersion);
         _startupLogger.Information("Plugins - Root Folder : {Version}", configDto.PluginData.RootFolder);
-        _startupLogger.Information("Plugins - Plugins : {Version}", configDto.PluginData.Plugins.Select(r => r.FilePath));
+        _startupLogger.Information("Plugins - Load Order : (Ids are not final)") ;
+        configDto.PluginData.Plugins
+            .Select((r, i) => new {
+                r.FilePath,
+                Id=new PluginId(i).ToString()
+            })
+            .ToList()
+            .ForEach((o) => _startupLogger.Information("- {id} : {FilePath}", o.Id, o.FilePath ));
         
         var engineServiceBuilder = new EngineServiceBuilder(_startupLogger);
         
@@ -73,7 +80,7 @@ public class EngineLoader {
         // Load plugins
         var pluginLoader = new PluginLoader(configDto.GameVersion, _startupLogger);
         if (_currentAssembly != null) {
-            pluginLoader.InjectCurrentAssemblyAsPlugin(_currentAssembly);
+            pluginLoader.InjectAssemblyAsPlugin(_currentAssembly);
             _startupLogger.Information("Current Assembly is inserted as Plugin");
         }
         

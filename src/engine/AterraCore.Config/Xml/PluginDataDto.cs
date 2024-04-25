@@ -15,7 +15,7 @@ public class PluginDataDto {
     [XmlElement("RootFolder")]
     public required string RootFolder { get; set; }
     
-    [XmlArray("Plugins")]
+    [XmlArray("LoadOrder")]
     [XmlArrayItem("Plugin", typeof(PluginRecordDto))]
     public required List<PluginRecordDto> Plugins { get; set; }
 

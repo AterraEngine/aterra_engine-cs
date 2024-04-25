@@ -21,7 +21,6 @@ public delegate IPluginData ZipImportCallback(IPluginData pluginData, IPluginZip
 // ---------------------------------------------------------------------------------------------------------------------
 public class PluginLoader(SemanticVersion gameVersion, ILogger logger) : IPluginLoader {
     public LinkedList<IPluginData> Plugins { get; private set; } = [];
-    private SemanticVersion _requiredGameVersion = gameVersion;
 
     private ushort _pluginIdCounter;
     private ushort PluginIdCounter {
@@ -101,15 +100,14 @@ public class PluginLoader(SemanticVersion gameVersion, ILogger logger) : IPlugin
         // Quick Exit
         if (IsSkipable(pluginData)) return pluginData;
 
-        if ((pluginData.Data?.GameVersion ?? SemanticVersion.Max) > _requiredGameVersion) {
+        // TODO add more checks
+        if ((pluginData.Data?.GameVersion ?? SemanticVersion.Max) > gameVersion) {
             logger.Warning("{Plugin} had an incompatible game version of {PluginGameVersion}, compared to the current {GameVersion}", 
-                pluginData.ReadableName, pluginData.Data?.GameVersion, _requiredGameVersion
+                pluginData.ReadableName, pluginData.Data?.GameVersion, gameVersion
             );
             return SetInvalid(pluginData);
         }
         
-        // TODO CHECK FOR ENGINE COMPATIBILITY
-        logger.Warning("Skipping engine compatibility check");
         return pluginData;
     }
 
@@ -223,11 +221,15 @@ public class PluginLoader(SemanticVersion gameVersion, ILogger logger) : IPlugin
         return Plugins.Count != 0;
     }
 
-    public void InjectCurrentAssemblyAsPlugin(Assembly assembly) {
+    public void InjectAssemblyAsPlugin(Assembly assembly) {
+        // A very special case where the dev wants to assign the current assembly as a plugin
+        //      Useful if you don't want to have another project if you just have a single plugin 
+        
         IPluginData pluginData = CreateNew(assembly.Location);
         pluginData.Assemblies.Add(assembly);
         pluginData.Data = new PluginConfigDto {
-            ReadableName = "Starting Assembly"
+            ReadableName = "Starting Assembly",
+            Author = "Unknown"
         };
         pluginData.Validity = PluginValidity.Valid;
         pluginData.IsProcessed = true;
