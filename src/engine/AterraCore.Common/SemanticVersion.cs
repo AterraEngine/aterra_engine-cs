@@ -29,12 +29,12 @@ public interface ISemanticVersion {
 /// The Minor version number is incremented when new, backwards-compatible features are added.
 /// The Patch version number is incremented when backwards-compatible fixes are made.
 /// </remarks>
-public struct SemanticVersion : IComparable<SemanticVersion>, IEquatable<SemanticVersion>, ISemanticVersion {
+public partial struct SemanticVersion : IXmlSerializable, IComparable<SemanticVersion>, IEquatable<SemanticVersion>, ISemanticVersion {
     [XmlAttribute] public int Major { get; set; }
     [XmlAttribute] public int Minor { get; set; }
     [XmlAttribute] public int Patch { get; set; }
     
-    private static readonly Regex _regex = new(@"^(\d+)\.(\d+)\.(\d+)$");
+    private static readonly Regex Regex = MyRegex();
     
     // -----------------------------------------------------------------------------------------------------------------
     // Constructors
@@ -71,7 +71,7 @@ public struct SemanticVersion : IComparable<SemanticVersion>, IEquatable<Semanti
     /// <param name="version">The version string in the format 'Major.Minor.Patch'.</param>
     /// <exception cref="ArgumentException">Thrown when the version string is in an invalid format.</exception>
     private void ParseFromString(string version) {
-        Match match = _regex.Match(version);
+        Match match = Regex.Match(version);
         if (!match.Success) {
             throw new ArgumentException("Invalid version format. Expected format: 'Major.Minor.Patch'");
         }
@@ -134,4 +134,7 @@ public struct SemanticVersion : IComparable<SemanticVersion>, IEquatable<Semanti
     public static bool operator <(SemanticVersion left, SemanticVersion right) => left.CompareTo(right) < 0;
     public static bool operator ==(SemanticVersion left, SemanticVersion right) => left.Equals(right);
     public static bool operator !=(SemanticVersion left, SemanticVersion right) => !left.Equals(right);
+
+    [GeneratedRegex(@"^(\d+)\.(\d+)\.(\d+)$")]
+    private static partial Regex MyRegex();
 }
