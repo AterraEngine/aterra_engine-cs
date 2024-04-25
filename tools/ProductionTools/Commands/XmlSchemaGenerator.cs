@@ -7,7 +7,6 @@ using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 using AterraCore.Config.EngineConfig;
-using AterraCore.Config.GameConfig;
 using AterraCore.Config.PluginConfig;
 using CliArgsParser;
 using CliArgsParser.Attributes;
@@ -32,9 +31,8 @@ public class ArgsOptions : ParameterOptions {
 // ---------------------------------------------------------------------------------------------------------------------
 public class XmlSchemaGenerator : CliCommandAtlas {
     private readonly Dictionary<string, Type> _dictionary = new() {
-        {"engine-config", typeof(EngineConfigDto) },
-        {"plugin-config", typeof(PluginConfigDto) },
-        {"game-config",   typeof(GameConfigDto) },
+        { "engine-config", typeof(EngineConfigDto) },
+        { "plugin-config", typeof(PluginConfigDto) },
     };
     
     // -----------------------------------------------------------------------------------------------------------------

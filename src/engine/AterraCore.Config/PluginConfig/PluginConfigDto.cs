@@ -22,7 +22,7 @@ public class PluginConfigDto : IConfigDto<PluginConfigDto>, IPluginConfigDto {
     [XmlElement("PluginVersion")]
     public SemanticVersion PluginVersion { get; set; }
     
-    [XmlElement("GameVersion")]
+    [XmlElement("ExpectedGameVersion")]
     public SemanticVersion GameVersion { get; set; }
 
     [XmlArray("Dlls")]

@@ -16,7 +16,7 @@ public class EngineConfigDto : IConfigDto<EngineConfigDto> {
     [XmlElement("EngineVersion")] 
     public SemanticVersion EngineVersion { get; set; }
     
-    [XmlElement("GameVersion")] 
+    [XmlElement("GameVersion")]
     public SemanticVersion GameVersion { get; set; }
     
     [XmlElement("PluginData")]
@@ -30,7 +30,6 @@ public class EngineConfigDto : IConfigDto<EngineConfigDto> {
     // -----------------------------------------------------------------------------------------------------------------
     public EngineConfigDto PopulateAsEmpty() {
         EngineVersion = SemanticVersion.Max; // Warn remove this in production
-        GameVersion = SemanticVersion.Max;
         PluginData = new PluginDataDto {
             RootFolder = Paths.Plugins.Folder,
             Plugins = []
