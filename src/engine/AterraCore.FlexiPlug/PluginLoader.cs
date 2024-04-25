@@ -19,8 +19,9 @@ public delegate IPluginData ZipImportCallback(IPluginData pluginData, IPluginZip
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class PluginLoader(ILogger logger) : IPluginLoader {
+public class PluginLoader(SemanticVersion gameVersion, ILogger logger) : IPluginLoader {
     public LinkedList<IPluginData> Plugins { get; private set; } = [];
+    private SemanticVersion _requiredGameVersion = gameVersion;
 
     private ushort _pluginIdCounter;
     private ushort PluginIdCounter {
@@ -44,9 +45,9 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         try {
             pluginData = Plugins.AddLast(new PluginData(PluginIdCounter++, filepath)).Value;
         }
-        catch (OverflowException e) {
-            logger.Error(e, "PluginIdCounter for {Plugin} overflowed", filepath);
-            throw; // one of the few actual exceptions which should occur during startup
+        catch (Exception e) {
+            logger.Error(e, "Unexpected exception when creating a new plugin {Plugin}: {Exception}", filepath, e.Message);
+            throw;
         }
         
         logger.Information("New pluginId of {id} registered for {filepath} ", pluginData.Id, pluginData.ReadableName);
@@ -99,6 +100,13 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
     private IPluginData CheckEngineCompatibility(IPluginData pluginData, IPluginZipImporter<PluginConfigDto> zipImporter) {
         // Quick Exit
         if (IsSkipable(pluginData)) return pluginData;
+
+        if ((pluginData.Data?.GameVersion ?? SemanticVersion.Max) > _requiredGameVersion) {
+            logger.Warning("{Plugin} had an incompatible game version of {PluginGameVersion}, compared to the current {GameVersion}", 
+                pluginData.ReadableName, pluginData.Data?.GameVersion, _requiredGameVersion
+            );
+            return SetInvalid(pluginData);
+        }
         
         // TODO CHECK FOR ENGINE COMPATIBILITY
         logger.Warning("Skipping engine compatibility check");
@@ -134,8 +142,9 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         return pluginData;
     }
     
-    private static IPluginData SetInvalid(IPluginData pluginData) {
+    private IPluginData SetInvalid(IPluginData pluginData) {
         pluginData.Validity = PluginValidity.Invalid;
+        logger.Error("{Plugin} set to Invalid", pluginData.ReadableName);
         return pluginData;
     }
     

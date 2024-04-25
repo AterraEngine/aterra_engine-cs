@@ -23,6 +23,8 @@ public static class Paths {
         public const string Folder = "plugins";
         public const string PluginConfig = "plugin-config.xml";
         public const string PluginBinFolder = "bin";
+        public const string PluginAssetsFolder = "assets";
+        public const string PluginResourcesFolder = "res";
     }
 
     public static class Xsd {
@@ -35,5 +37,6 @@ public static class Paths {
         public static readonly string XsdGameConfigDto = Path.Combine(Folder, _xsdGameConfigDto);
     }
     
-    public const string StartupConfig = "engine-config.xml";
+    public const string ConfigEngine = "engine-config.xml";
+    public const string ConfigGame = "game-config.xml";
 }

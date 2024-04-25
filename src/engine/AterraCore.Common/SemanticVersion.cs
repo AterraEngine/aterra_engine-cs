@@ -29,11 +29,11 @@ public interface ISemanticVersion {
 /// The Minor version number is incremented when new, backwards-compatible features are added.
 /// The Patch version number is incremented when backwards-compatible fixes are made.
 /// </remarks>
-public struct SemanticVersion : IXmlSerializable, IComparable<SemanticVersion>, IEquatable<SemanticVersion>, ISemanticVersion {
-    public int Major { get; set; }
-    public int Minor { get; set; }
-    public int Patch { get; set; }
-
+public struct SemanticVersion : IComparable<SemanticVersion>, IEquatable<SemanticVersion>, ISemanticVersion {
+    [XmlAttribute] public int Major { get; set; }
+    [XmlAttribute] public int Minor { get; set; }
+    [XmlAttribute] public int Patch { get; set; }
+    
     private static readonly Regex _regex = new(@"^(\d+)\.(\d+)\.(\d+)$");
     
     // -----------------------------------------------------------------------------------------------------------------
@@ -60,6 +60,7 @@ public struct SemanticVersion : IXmlSerializable, IComparable<SemanticVersion>, 
     }
 
     public static SemanticVersion Zero => new(0, 0, 0);
+    public static SemanticVersion Max => new(int.MaxValue, int.MaxValue, int.MaxValue);
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
@@ -97,7 +98,7 @@ public struct SemanticVersion : IXmlSerializable, IComparable<SemanticVersion>, 
     public XmlSchema? GetSchema() {
         return null;
     }
-
+    
     public void ReadXml(XmlReader reader) {
         ArgumentNullException.ThrowIfNull(reader);
         ParseFromString( reader.ReadElementContentAsString());

@@ -10,10 +10,10 @@ namespace AterraCore.Contracts.Config.PluginConfig;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public interface IPluginConfigDto<out T> where T : ISemanticVersion{
+public interface IPluginConfigDto{
     string ReadableName { get; set; }
     string? Author { get; set; }
-    T PluginVersion { get; }
-    T GameVersion { get; }
+    SemanticVersion PluginVersion { get; }
+    SemanticVersion GameVersion { get; }
     List<string> Dlls { get; set; }
 }

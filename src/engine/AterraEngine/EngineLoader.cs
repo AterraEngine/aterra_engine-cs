@@ -34,7 +34,7 @@ public class EngineLoader {
     
     private EngineConfigDto GetEngineConfig() {
         var engineConfigParser = new EngineConfigParser<EngineConfigDto>(_startupLogger);
-        if (!engineConfigParser.TryDeserializeFromFile(Paths.StartupConfig, out EngineConfigDto? configDto)) {
+        if (!engineConfigParser.TryDeserializeFromFile(Paths.ConfigEngine, out EngineConfigDto? configDto)) {
             _startupLogger.Error("Engine config file could not be parsed");
             return new EngineConfigDto().PopulateAsEmpty();
         }
@@ -49,6 +49,7 @@ public class EngineLoader {
         EngineConfigDto configDto = GetEngineConfig();
         _startupLogger.Information("Config loaded with the following data:");
         _startupLogger.Information("Engine Version : {Version}", configDto.EngineVersion);
+        _startupLogger.Information("Game Version : {Version}", configDto.GameVersion);
         _startupLogger.Information("Plugins - Root Folder : {Version}", configDto.PluginData.RootFolder);
         _startupLogger.Information("Plugins - Plugins : {Version}", configDto.PluginData.Plugins.Select(r => r.FilePath));
         
@@ -70,7 +71,7 @@ public class EngineLoader {
         _startupLogger.Information("All plugin file paths: {paths}", filePaths);
         
         // Load plugins
-        var pluginLoader = new PluginLoader(_startupLogger);
+        var pluginLoader = new PluginLoader(configDto.GameVersion, _startupLogger);
         if (_currentAssembly != null) {
             pluginLoader.InjectCurrentAssemblyAsPlugin(_currentAssembly);
             _startupLogger.Information("Current Assembly is inserted as Plugin");

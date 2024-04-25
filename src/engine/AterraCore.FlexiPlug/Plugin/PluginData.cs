@@ -20,7 +20,7 @@ public class PluginData(int id, string filepath) : IPluginData {
     public string ReadableName => Data?.ReadableName ?? FilePath;
     public bool IsProcessed { get; set; }
 
-    public IPluginConfigDto<ISemanticVersion>? Data { get; set; }
+    public IPluginConfigDto? Data { get; set; }
 
     private PluginValidity _validity = PluginValidity.Untested;
     public PluginValidity Validity {
@@ -52,7 +52,7 @@ public class PluginData(int id, string filepath) : IPluginData {
             .Select(t => new ServiceData(t.Attribute?.Interface!, t.Type));
     }
 
-    public void IngestFromPluginConfigDto(IPluginConfigDto<ISemanticVersion> pluginConfigDto) {
+    public void IngestFromPluginConfigDto(IPluginConfigDto pluginConfigDto) {
         Data = pluginConfigDto;
     }
 }

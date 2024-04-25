@@ -13,8 +13,11 @@ namespace AterraCore.Config.EngineConfig;
 // ---------------------------------------------------------------------------------------------------------------------
 [XmlRoot("EngineConfig")]
 public class EngineConfigDto : IConfigDto<EngineConfigDto> {
-    [XmlElement("Version")] 
-    public SemanticVersionDto EngineVersion { get; set; } = null!;
+    [XmlElement("EngineVersion")] 
+    public SemanticVersion EngineVersion { get; set; }
+    
+    [XmlElement("GameVersion")] 
+    public SemanticVersion GameVersion { get; set; }
     
     [XmlElement("PluginData")]
     public PluginDataDto PluginData { get; set; } = null!;
@@ -26,7 +29,8 @@ public class EngineConfigDto : IConfigDto<EngineConfigDto> {
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public EngineConfigDto PopulateAsEmpty() {
-        EngineVersion = SemanticVersion.Zero;
+        EngineVersion = SemanticVersion.Max; // Warn remove this in production
+        GameVersion = SemanticVersion.Max;
         PluginData = new PluginDataDto {
             RootFolder = Paths.Plugins.Folder,
             Plugins = []

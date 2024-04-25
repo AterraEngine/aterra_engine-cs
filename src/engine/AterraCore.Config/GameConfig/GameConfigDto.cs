@@ -16,8 +16,10 @@ namespace AterraCore.Config.GameConfig;
 [XmlRoot("EngineConfig")]
 public class GameConfigDto : IConfigDto<GameConfigDto> {
     [XmlElement("Version")] 
-    public SemanticVersionDto GameVersion { get; set; } = null!;
-    public SemanticVersionDto EngineVersion { get; set; } = null!;
+    public SemanticVersion GameVersion { get; set; }
+    
+    [XmlElement("EngineVersion")] 
+    public SemanticVersion EngineVersion { get; set; }
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
