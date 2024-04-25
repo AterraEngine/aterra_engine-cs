@@ -39,7 +39,16 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     private IPluginData CreateNew(string filepath) {
-        IPluginData pluginData = Plugins.AddLast(new PluginData(PluginIdCounter++, filepath)).Value;
+        IPluginData pluginData;
+        
+        try {
+            pluginData = Plugins.AddLast(new PluginData(PluginIdCounter++, filepath)).Value;
+        }
+        catch (OverflowException e) {
+            logger.Error(e, "PluginIdCounter for {Plugin} overflowed", filepath);
+            throw; // one of the few actual exceptions which should occur during startup
+        }
+        
         logger.Information("New pluginId of {id} registered for {filepath} ", pluginData.Id, pluginData.ReadableName);
         return pluginData;
     }
@@ -63,6 +72,7 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         using var zipImporter = new PluginZipImporter(logger, pluginData.FilePath);
         logger.Information("Assigned new Zip Importer to {plugin}", pluginData.ReadableName);
         
+        // Use the callbacks like this so zipImport gets disposed off correctly when they are all done
         foreach (ZipImportCallback callback in callbacks) {
             callback(pluginData, zipImporter);
         }
@@ -133,9 +143,9 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         pluginData.Validity == PluginValidity.Invalid
         || pluginData.IsProcessed;
 
-    private IPluginData Validate(IPluginData pluginData) {
+    private void Validate(IPluginData pluginData) {
         // Quick Exit
-        if (IsSkipable(pluginData)) return pluginData;
+        if (IsSkipable(pluginData)) return;
         
         // Todo add more validation steps
         if (pluginData.Data != null && pluginData.Assemblies.Count != pluginData.Data.Dlls.Count) {
@@ -145,22 +155,10 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
 
         if (pluginData.Validity == PluginValidity.Untested) {
             pluginData.Validity = PluginValidity.Valid;
+            logger.Information("Plugin {plugin} has been validated correctly", pluginData.ReadableName);
         }
 
         pluginData.IsProcessed = true;
-        
-        return pluginData;
-    }
-
-    private IPluginData CheckValidity(IPluginData pluginData) {
-        // Check validity and log accordingly
-        if (pluginData.Validity == PluginValidity.Valid) {
-            logger.Information("Plugin {plugin} has been validated correctly", pluginData.ReadableName);
-        } else {
-            logger.Error("Plugin {plugin} has been validated correctly", pluginData.ReadableName);
-        }
-
-        return pluginData;
     }
 
     private IPluginData DebugGetAllFiles(IPluginData pluginData, IPluginZipImporter<PluginConfigDto> zipImporter) {
@@ -168,12 +166,34 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         return pluginData;
     }
     
+    private void TrimFaultyPlugins(int originalLength) {
+        // Warn This is dirty, but will work for now.
+        IEnumerable<IPluginData> plugins = Plugins.Where(p => p.Validity == PluginValidity.Valid);
+        
+        // Need to check if there is an entry assembly assigned as a plugin as well
+        IPluginData? entryAssemblyPlugin = Plugins.FirstOrDefault(p => p?.FilePath == Assembly.GetEntryAssembly()?.Location, null);
+        int offset = entryAssemblyPlugin != null ? 1 : 0; // else if check won't work as expected if there is a entry assembly as plugin.
+        
+        if (plugins.Count() == originalLength  + offset) {
+            logger.Information("All plugins validated correctly");
+            return;
+        }
+        
+        logger.Warning("Some plugins did not get validated correctly, trimming plugin list");
+        Plugins
+            .Where(p => p.Validity == PluginValidity.Valid)
+            .ToList()
+            .ForEach(p => Plugins.Remove(p));
+        logger.Warning("Plugin list trimmed to to a total of {i} ", Plugins.Count);
+    }
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Public Methods
     // -----------------------------------------------------------------------------------------------------------------
     public bool TryParseAllPlugins(IEnumerable<string> filePaths) {
         string[] paths = filePaths.ToArray();
-        IPluginData[] plugins = paths
+        paths
+            .ToList()
             .Select(CreateNew)
             .Select(CheckExists)
             // ZipImporter is disposed after this select statement is completed
@@ -183,24 +203,14 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
                 CheckEngineCompatibility,
                 ImportDlls
             ]))
-            .Select(Validate)
-            .Select(CheckValidity)
             
-            // Filter those plugins which did not get validated correctly
-            .Where(p => p.Validity == PluginValidity.Valid)
-            .ToArray();
+            // End of the line
+            .ToList()
+            .ForEach(Validate);
         
-        // Warn This is dirty, but will work for now.
-        if (plugins.Length != paths.Length) {
-            logger.Warning("Some plugins did not get validated correctly, trimming plugin list");
-            Plugins
-                .Where(p => p.Validity == PluginValidity.Valid)
-                .ToList()
-                .ForEach(p => Plugins.Remove(p));
-            logger.Warning("Plugin list trimmed to to a total of {i} ", Plugins.Count);
-        }
+        TrimFaultyPlugins(paths.Length);
         
-        logger.Information("{i} Plugins have been loaded", Plugins.Count);
+        logger.Information("{Count} Plugins have been loaded", Plugins.Count);
         return Plugins.Count != 0;
     }
 
