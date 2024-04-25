@@ -2,8 +2,6 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Text.RegularExpressions;
-using System.Xml;
-using System.Xml.Schema;
 using System.Xml.Serialization;
 
 namespace AterraCore.Common;
@@ -29,10 +27,17 @@ public interface ISemanticVersion {
 /// The Minor version number is incremented when new, backwards-compatible features are added.
 /// The Patch version number is incremented when backwards-compatible fixes are made.
 /// </remarks>
-public partial struct SemanticVersion : IXmlSerializable, IComparable<SemanticVersion>, IEquatable<SemanticVersion>, ISemanticVersion {
-    [XmlAttribute] public int Major { get; set; }
-    [XmlAttribute] public int Minor { get; set; }
-    [XmlAttribute] public int Patch { get; set; }
+public partial struct SemanticVersion : IComparable<SemanticVersion>, IEquatable<SemanticVersion>, ISemanticVersion {
+    [XmlIgnore] public int Major { get; set; }
+    [XmlIgnore] public int Minor { get; set; }
+    [XmlIgnore] public int Patch { get; set; }
+    [XmlIgnore] public string? Addendum { get; set; }
+    
+    [XmlAttribute("value")]
+    public string Value {
+        get => ToString();
+        set => ParseFromString(value);
+    }
     
     private static readonly Regex Regex = MyRegex();
     
@@ -79,7 +84,7 @@ public partial struct SemanticVersion : IXmlSerializable, IComparable<SemanticVe
         Major = int.Parse(match.Groups[1].Value);
         Minor = int.Parse(match.Groups[2].Value);
         Patch = int.Parse(match.Groups[3].Value);
-        
+        Addendum = match.Groups[4].Success ? match.Groups[4].Value : null;
     }
 
     /// <summary>
@@ -89,24 +94,10 @@ public partial struct SemanticVersion : IXmlSerializable, IComparable<SemanticVe
     /// A string that represents the current object. The string format is "{Major}.{Minor}.{Patch}".
     /// </returns>
     public override string ToString() {
-        return $"{Major}.{Minor}.{Patch}";
+        return Addendum != null 
+            ? $"{Major}.{Minor}.{Patch}-{Addendum}" 
+            : $"{Major}.{Minor}.{Patch}";
     }
-    
-    // -----------------------------------------------------------------------------------------------------------------
-    // XML Parser elements
-    // -----------------------------------------------------------------------------------------------------------------
-    public XmlSchema? GetSchema() {
-        return null;
-    }
-    
-    public void ReadXml(XmlReader reader) {
-        ArgumentNullException.ThrowIfNull(reader);
-        ParseFromString( reader.ReadElementContentAsString());
-    }
-    public void WriteXml(XmlWriter writer) {
-        writer.WriteString(ToString());
-    }
-    
     
     // -----------------------------------------------------------------------------------------------------------------
     // Comparisons
@@ -125,9 +116,21 @@ public partial struct SemanticVersion : IXmlSerializable, IComparable<SemanticVe
             return Minor.CompareTo(other.Minor);
         }
 
-        return Patch.CompareTo(other.Patch);
+        if (Patch != other.Patch) {
+            return Patch.CompareTo(other.Patch);
+        }
+
+        if (Addendum == null && other.Addendum != null) {
+            return -1;
+        }
+    
+        if (Addendum != null && other.Addendum == null) {
+            return 1;
+        }
+
+        return 0;
     }
-    public override int GetHashCode() => (Major, Minor, Patch).GetHashCode();
+    public override int GetHashCode() => (Major, Minor, Patch, Addendum).GetHashCode();
     
     // Overriding operators
     public static bool operator >(SemanticVersion left, SemanticVersion right) => left.CompareTo(right) > 0;
@@ -135,6 +138,6 @@ public partial struct SemanticVersion : IXmlSerializable, IComparable<SemanticVe
     public static bool operator ==(SemanticVersion left, SemanticVersion right) => left.Equals(right);
     public static bool operator !=(SemanticVersion left, SemanticVersion right) => !left.Equals(right);
 
-    [GeneratedRegex(@"^(\d+)\.(\d+)\.(\d+)$")]
+    [GeneratedRegex(@"^(\d+)\.(\d+)\.(\d+)(?:\-(\w*))?$")]
     private static partial Regex MyRegex();
 }

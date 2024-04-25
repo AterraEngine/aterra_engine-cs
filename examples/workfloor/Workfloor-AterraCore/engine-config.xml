@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <EngineConfig xmlns="urn:aterra-engine:engine-config">
-    <EngineVersion Major="1000" Minor="0" Patch="0"/>
-    <GameVersion Major="1000" Minor="0" Patch="0"/>
+    <EngineVersion value="0.0.0"/>
+    <GameVersion value="0.0.0"/>
     <PluginData>
         <RootFolder>plugins</RootFolder>
         <Plugins>

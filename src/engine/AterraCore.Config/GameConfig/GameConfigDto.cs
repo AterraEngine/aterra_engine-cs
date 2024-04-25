@@ -4,7 +4,6 @@
 
 using System.Xml.Serialization;
 using AterraCore.Common;
-using AterraCore.Config.Xml;
 using AterraCore.Contracts.Config;
 
 namespace AterraCore.Config.GameConfig;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <EngineConfig xmlns="urn:aterra-engine:game-config">
-    <Version Major="1000" Minor="0" Patch="0"/>
-    <EngineVersion Major="1000" Minor="0" Patch="0"/>
+    <Version value="0.0.0"/>
+    <EngineVersion value="0.0.0"/>
 </EngineConfig>

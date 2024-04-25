@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginConfig xmlns="urn:aterra-engine:plugin-config">
     <Name>Workfloor Experiments</Name>
-    <Author>AuthorName</Author>  <!-- Assuming an author -->
-    <PluginVersion Major="1" Minor="0" Patch="0"/>
-    <GameVersion Major="0" Minor="0" Patch="0"/>
+    <Author>Andreas Sas</Author> 
+    <PluginVersion value="0.0.0"/>
+    <GameVersion value="0.0.0"/>
     <Dlls>
         <Dll>Workfloor-AterraCore.Plugin.dll</Dll>
     </Dlls>

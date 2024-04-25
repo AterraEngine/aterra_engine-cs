@@ -3,7 +3,6 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using Microsoft.Extensions.DependencyInjection;
-using Serilog;
 
 namespace AterraCore.Contracts.DI;
 
