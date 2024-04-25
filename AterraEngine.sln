@@ -26,7 +26,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraCore.Nexities", "src\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Workfloor-AterraCore", "examples\workfloor\Workfloor-AterraCore\Workfloor-AterraCore.csproj", "{7CB45061-2E42-4EB8-94E1-6840E5F53EAA}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AterraCore", "AterraCore", "{4ABC7FE4-0B0C-4500-A3DF-874274B3F70D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Live", "Live", "{4ABC7FE4-0B0C-4500-A3DF-874274B3F70D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AterraCore", "AterraCore", "{F86D197F-7641-46CE-A43D-CFF48F84B9E6}"
 EndProject
