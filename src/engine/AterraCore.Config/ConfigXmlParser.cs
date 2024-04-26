@@ -31,8 +31,6 @@ public abstract class ConfigXmlParser<T>(ILogger logger, string nameSpace, strin
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public T CreateEmptyDto() => new T().PopulateAsEmpty();
-    
     private static XmlReaderSettings DefineReaderSettings(ILogger logger, string nameSpace, string xsdPath) {
         var schemas = new XmlSchemaSet();
         schemas.Add(nameSpace, XmlReader.Create(xsdPath));
@@ -111,5 +109,4 @@ public abstract class ConfigXmlParser<T>(ILogger logger, string nameSpace, strin
             return false;
         }
     }
-    
 }

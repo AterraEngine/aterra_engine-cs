@@ -29,12 +29,10 @@ public static class Paths {
 
     public static class Xsd {
         public const string Folder = "xsd";
-        private const string _xsdEngineConfigDto = "EngineConfigDto.xsd";
+        private const string _xsdEngineConfigDto = "engine-config.xsd";
         public static readonly string XsdEngineConfigDto = Path.Combine(Folder, _xsdEngineConfigDto);
-        private const string _xsdPluginConfigDto = "PluginConfigDto.xsd";
+        private const string _xsdPluginConfigDto = "plugin-config.xsd";
         public static readonly string XsdPluginConfigDto = Path.Combine(Folder, _xsdPluginConfigDto);
-        private const string _xsdGameConfigDto = "GameConfigDto.xsd";
-        public static readonly string XsdGameConfigDto = Path.Combine(Folder, _xsdGameConfigDto);
     }
     
     public const string ConfigEngine = "engine-config.xml";

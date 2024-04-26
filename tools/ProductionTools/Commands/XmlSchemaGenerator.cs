@@ -6,11 +6,14 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
+using AterraCore.Config;
 using AterraCore.Config.EngineConfig;
 using AterraCore.Config.PluginConfig;
+using AterraCore.Contracts.Config;
 using CliArgsParser;
 using CliArgsParser.Attributes;
 using JetBrains.Annotations;
+using Serilog.Core;
 
 namespace ProductionTools.Commands;
 
@@ -30,35 +33,11 @@ public class ArgsOptions : ParameterOptions {
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class XmlSchemaGenerator : CliCommandAtlas {
+    private readonly IXsdGenerator _xsdGenerator = new XsdGenerator();
     private readonly Dictionary<string, Type> _dictionary = new() {
         { "engine-config", typeof(EngineConfigDto) },
         { "plugin-config", typeof(PluginConfigDto) },
     };
-    
-    // -----------------------------------------------------------------------------------------------------------------
-    // Methods
-    // -----------------------------------------------------------------------------------------------------------------
-    private static void GenerateXsd(Type type, ArgsOptions argsOptions) {
-        var importer = new XmlReflectionImporter(null, $"urn:aterra-engine:{argsOptions.ClassName.ToLowerInvariant()}");
-        var schemas = new XmlSchemas();
-        var exporter = new XmlSchemaExporter(schemas);
-        
-        XmlTypeMapping map = importer.ImportTypeMapping(type);
-        exporter.ExportTypeMapping(map);
-
-        var settings = new XmlWriterSettings {
-            Indent = argsOptions.Prettify,
-            Encoding = Encoding.UTF32,
-        };
-        
-        string outputFileName = Path.Combine(
-            argsOptions.OutputFolder ?? string.Empty, 
-            argsOptions.OutputFile ?? $"{type.Name}.xsd"
-        );
-        
-        using var writer = XmlWriter.Create(outputFileName, settings);
-        schemas[0].Write(writer);
-    }
     
     // -----------------------------------------------------------------------------------------------------------------
     // Commands
@@ -66,9 +45,20 @@ public class XmlSchemaGenerator : CliCommandAtlas {
     [CliCommand<ArgsOptions>("generate-xmlschema")]
     [UsedImplicitly]
     public void GenerateXmlSchemaEngineConfig(ArgsOptions argsOptions) {
-        if (!_dictionary.TryGetValue(argsOptions.ClassName.ToLowerInvariant(), out Type? type)) {
+        string className = argsOptions.ClassName.ToLowerInvariant();
+        
+        if (!_dictionary.TryGetValue(className, out Type? type)) {
             Console.WriteLine("No match found for the provided ClassName. Check the ClassName and try again.");
         }
-        GenerateXsd(type!, argsOptions);
+        
+        _xsdGenerator.GenerateXsd(
+            type!,
+            $"urn:aterra-engine:{className}",
+            argsOptions.Prettify,
+            Path.Combine(
+                argsOptions.OutputFolder ?? string.Empty, 
+                argsOptions.OutputFile ?? $"{className}.xsd"
+            )
+        );
     }
 }

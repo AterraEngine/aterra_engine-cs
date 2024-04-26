@@ -23,6 +23,10 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="xsd\" />
+    </ItemGroup>
     
     <Target Name="AddingPlugins" AfterTargets="Build">
 
