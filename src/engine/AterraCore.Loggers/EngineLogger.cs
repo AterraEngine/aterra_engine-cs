@@ -11,15 +11,14 @@ namespace AterraCore.Loggers;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public static class EngineLogger {
-    public static ILogger CreateLogger() {
+    public static LoggerConfiguration CreateConfiguration() {
         return new LoggerConfiguration()
-            .MinimumLevel.Debug() 
-            
-            .DefaultEnrich("Startup")
+            .MinimumLevel.Debug()
+
+            .DefaultEnrich("Engine")
             .DefaultSinkFile(Paths.Logs.EngineLog)
-            .DefaultSinkConsole()
-            
-            .CreateLogger();
-    
+            .DefaultSinkConsole();
     }
+    
+    public static ILogger CreateLogger() => CreateConfiguration().CreateLogger();
 }
