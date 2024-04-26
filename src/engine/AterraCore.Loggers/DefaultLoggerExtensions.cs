@@ -15,7 +15,7 @@ namespace AterraCore.Loggers;
 // ---------------------------------------------------------------------------------------------------------------------
 
 public static class DefaultLoggerExtensions {
-    private const string OutputTemplate = "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}";
+    private const string OutputTemplate = "[{Timestamp:HH:mm:ss.fff} {Level:u3}] {Message:lj}{NewLine}{Exception}";
 
     private static readonly AnsiConsoleTheme Theme = new(
         new Dictionary<ConsoleThemeStyle, string> {
@@ -38,6 +38,7 @@ public static class DefaultLoggerExtensions {
             [ConsoleThemeStyle.LevelError] = AsFore("white") + AsBack("rose"), 
             [ConsoleThemeStyle.LevelFatal] = AsFore("white") + AsBack("maroon")
         });
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Extensions
     // -----------------------------------------------------------------------------------------------------------------
@@ -51,7 +52,7 @@ public static class DefaultLoggerExtensions {
             .Enrich.WithMemoryUsage();
     }
     
-    public static LoggerConfiguration DefaultSinkFile(this LoggerConfiguration lc, string filePath) {
+    public static LoggerConfiguration AsyncSinkFile(this LoggerConfiguration lc, string filePath) {
         return lc
             // Using Async Sink to write logs asynchronously 
             // to avoid any performance issues during gameplay
@@ -63,6 +64,13 @@ public static class DefaultLoggerExtensions {
     }
     
     public static LoggerConfiguration DefaultSinkConsole(this LoggerConfiguration lc) {
+        return lc.WriteTo.Console(
+            theme: Theme,
+            outputTemplate: OutputTemplate
+        );
+    }
+    
+    public static LoggerConfiguration AsyncSinkConsole(this LoggerConfiguration lc) {
         return lc
             // Using Async Sink to write logs asynchronously 
             // to avoid any performance issues during gameplay

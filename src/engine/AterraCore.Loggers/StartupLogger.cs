@@ -20,8 +20,8 @@ public static class StartupLogger {
             .MinimumLevel.Debug()
 
             .DefaultEnrich("Startups")
-            .DefaultSinkFile(Paths.Logs.StartupLog)
-            .DefaultSinkConsole();
+            .AsyncSinkFile(Paths.Logs.StartupLog)
+            .AsyncSinkConsole();
     }
     
     public static ILogger CreateLogger() => CreateConfiguration().CreateLogger();

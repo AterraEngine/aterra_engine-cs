@@ -26,7 +26,7 @@ public class TestConsoleTheme : CliCommandAtlas {
         // using Logger logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
         using Logger logger = new LoggerConfiguration()
             .MinimumLevel.Verbose()
-            .DefaultSinkConsole()
+            .DefaultSinkConsole() // Using the normal version of the Sink Console, else the empty lines get processed earlier.
             .CreateLogger();
         
         // Log messages with different levels and variable types
@@ -46,11 +46,12 @@ public class TestConsoleTheme : CliCommandAtlas {
         logger.Information("Boolean value: {BooleanValue}", true);
         logger.Information("Object value: {@ObjectValue}", new { Name = "John", Age = 30 });
         logger.Information("null value: {@ObjectValue}", [null]);
+        logger.Information("list value: {@ObjectValue}", new List<string>{ "a", "b", "c"});
         
         Console.WriteLine();
         
         // Log messages with structured properties
-        logger.Information("Structured log message: {Property1} {Property2}", "Value1", "Value2");
+        logger.Information("Structured log message: {Property1} & {Property2}", "Value1", "Value2");
         
         Console.WriteLine();
         
