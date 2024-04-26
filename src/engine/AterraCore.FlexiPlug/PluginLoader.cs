@@ -173,15 +173,11 @@ public class PluginLoader(SemanticVersion gameVersion, ILogger logger) : IPlugin
         return pluginData;
     }
     
-    private void TrimFaultyPlugins(int originalLength) {
+    private void TrimFaultyPlugins() {
         // Warn This is dirty, but will work for now.
-        IEnumerable<IPluginData> plugins = Plugins.Where(p => p.Validity == PluginValidity.Valid);
+        IEnumerable<IPluginData> validPlugins = Plugins.Where(p => p.Validity == PluginValidity.Valid);
         
-        // Need to check if there is an entry assembly assigned as a plugin as well
-        IPluginData? entryAssemblyPlugin = Plugins.FirstOrDefault(p => p?.FilePath == Assembly.GetEntryAssembly()?.Location, null);
-        int offset = entryAssemblyPlugin != null ? 1 : 0; // else if check won't work as expected if there is a entry assembly as plugin.
-        
-        if (plugins.Count() == originalLength  + offset) {
+        if (validPlugins.Count() == Plugins.Count) {
             logger.Information("All plugins validated correctly");
             return;
         }
@@ -215,7 +211,7 @@ public class PluginLoader(SemanticVersion gameVersion, ILogger logger) : IPlugin
             .ToList()
             .ForEach(Validate);
         
-        TrimFaultyPlugins(paths.Length);
+        TrimFaultyPlugins();
         
         logger.Information("{Count} Plugins have been loaded", Plugins.Count);
         return Plugins.Count != 0;

@@ -82,4 +82,8 @@ public static class AnsiColor {
     /// <param name="text">The text to apply the underline format to.</param>
     /// <returns>The text with the underline format applied.</returns>
     public static string Under(string colorName, string? text) => $"{AnsiCodes.RgbUnderlineColor(_tryGetColor(colorName))}{text}{AnsiCodes.ResetGraphicsModes}";
+
+    public static string AsFore(string colorName) => $"{AnsiCodes.RgbForegroundColor(_tryGetColor(colorName))}";
+    public static string AsBack(string colorName) => $"{AnsiCodes.RgbBackgroundColor(_tryGetColor(colorName))}";
+    public static string AsUnder(string colorName) => $"{AnsiCodes.RgbUnderlineColor(_tryGetColor(colorName))}";
 }

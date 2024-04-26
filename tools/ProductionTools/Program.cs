@@ -13,7 +13,8 @@ namespace ProductionTools;
 
 public static class Program {
     private static readonly List<ICliCommandAtlas> CommandAtlasArray = [
-        new XmlSchemaGenerator()
+        new XmlSchemaGenerator(),
+        new TestConsoleTheme()
     ];
     
     // -----------------------------------------------------------------------------------------------------------------
