@@ -19,7 +19,6 @@ namespace AterraCore.Config;
 public abstract class ConfigXmlParser<T>(ILogger logger, string nameSpace, string xsdPath) 
     : IConfigXmlParser<T> 
     where T : IConfigDto<T>, new() {
-    private readonly string NameSpace = nameSpace;
     private readonly XmlSerializer _serializer = new(typeof(T), nameSpace);
     private readonly XmlReaderSettings _readerSettings = DefineReaderSettings(logger, nameSpace, xsdPath);
     private readonly XmlWriterSettings _writerSettings = new() {
@@ -43,7 +42,7 @@ public abstract class ConfigXmlParser<T>(ILogger logger, string nameSpace, strin
             Schemas = schemas
         };
 
-        settings.ValidationEventHandler += (sender, args) => {
+        settings.ValidationEventHandler += (_, args) => {
             switch (args) {
                 case { Severity: XmlSeverityType.Warning }:
                     logger.Warning(args.Message);
@@ -71,7 +70,6 @@ public abstract class ConfigXmlParser<T>(ILogger logger, string nameSpace, strin
             config = (T)_serializer.Deserialize(xmlReader)!;
             
             return true;
-
         }
         catch (Exception e) {
             // Handle other exceptions

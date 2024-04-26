@@ -2,8 +2,12 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
+using AterraCore.Loggers;
+using CliArgsParser;
 using CliArgsParser.Contracts;
 using ProductionTools.Commands;
+using Serilog;
+using Serilog.Core;
 
 namespace ProductionTools;
 
@@ -12,18 +16,23 @@ namespace ProductionTools;
 // ---------------------------------------------------------------------------------------------------------------------
 
 public static class Program {
-    private static readonly List<ICliCommandAtlas> CommandAtlasArray = [
-        new XmlSchemaGenerator(),
-        new TestConsoleTheme()
-    ];
-    
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public static void Main(string[] args) {
+        using Logger logger = new LoggerConfiguration()
+            .MinimumLevel.Verbose()
+            .DefaultSinkConsole() // Using the normal version of the Sink Console, else the empty lines get processed earlier.
+            .CreateLogger();
+        
+        List<CliCommandAtlas> commandAtlasArray = [
+            new XmlSchemaGenerator(logger),
+            new TestConsoleTheme(logger)
+        ];
+        
         var argsParser = new CliArgsParser.CliArgsParser();
         
-        CommandAtlasArray.ForEach(a => argsParser.RegisterFromCliAtlas(a));
+        commandAtlasArray.ForEach(a => argsParser.RegisterFromCliAtlas(a));
             
         argsParser.TryParseMultiple(args);
     }

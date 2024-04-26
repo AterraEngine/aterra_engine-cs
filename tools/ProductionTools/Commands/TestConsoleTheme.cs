@@ -16,19 +16,13 @@ namespace ProductionTools.Commands;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public class TestConsoleTheme : CliCommandAtlas {
+public class TestConsoleTheme(ILogger logger) : CliCommandAtlas {
     // -----------------------------------------------------------------------------------------------------------------
     // Commands
     // -----------------------------------------------------------------------------------------------------------------
     [CliCommand<NoArgs>("console-theme-test")]
     [UsedImplicitly]
     public void GenerateXmlSchemaEngineConfig() {
-        // using Logger logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
-        using Logger logger = new LoggerConfiguration()
-            .MinimumLevel.Verbose()
-            .DefaultSinkConsole() // Using the normal version of the Sink Console, else the empty lines get processed earlier.
-            .CreateLogger();
-        
         // Log messages with different levels and variable types
         logger.Verbose("This is a verbose message");
         logger.Debug("This is a debug message");
@@ -46,7 +40,12 @@ public class TestConsoleTheme : CliCommandAtlas {
         logger.Information("Boolean value: {BooleanValue}", true);
         logger.Information("Object value: {@ObjectValue}", new { Name = "John", Age = 30 });
         logger.Information("null value: {@ObjectValue}", [null]);
-        logger.Information("list value: {@ObjectValue}", new List<string>{ "a", "b", "c"});
+        logger.Information("list value: {ObjectValue}", new List<string>{ "a", "b", "c"});
+        
+        logger.Information("Type name value: {Object}", nameof(CliCommandAtlas));
+        logger.Information("Type fullname value: {Object}", typeof(CliCommandAtlas).FullName);
+        
+        logger.Information("Incorrect value: {ObjectValue}", null);
         
         Console.WriteLine();
         

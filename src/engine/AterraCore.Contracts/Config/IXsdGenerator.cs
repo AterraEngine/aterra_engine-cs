@@ -8,6 +8,5 @@ namespace AterraCore.Contracts.Config;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IXsdGenerator {
-    public void GenerateXsd(Type type, string nameSpace, bool prettify, string outputPath);
-    public void GenerateXsd<T>(string nameSpace, bool prettify, string outputPath);
+    public void GenerateXsd(string nameSpace, bool prettify, string outputPath);
 }

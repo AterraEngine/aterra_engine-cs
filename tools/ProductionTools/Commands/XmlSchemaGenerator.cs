@@ -3,9 +3,6 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using System.Diagnostics.CodeAnalysis;
-using System.Text;
-using System.Xml;
-using System.Xml.Serialization;
 using AterraCore.Config;
 using AterraCore.Config.EngineConfig;
 using AterraCore.Config.PluginConfig;
@@ -13,7 +10,7 @@ using AterraCore.Contracts.Config;
 using CliArgsParser;
 using CliArgsParser.Attributes;
 using JetBrains.Annotations;
-using Serilog.Core;
+using Serilog;
 
 namespace ProductionTools.Commands;
 
@@ -27,16 +24,16 @@ public class ArgsOptions : ParameterOptions {
     [ArgValue('p', "prettify")] public bool Prettify { get; set; } = true;
     [ArgValue('o', "output")] public string? OutputFile { get; set; }
     [ArgValue('f', "folder")] public string? OutputFolder { get; set; }
+    [ArgValue('n', "namespace-prefix")] public string NamespacePrefix { get; set; } = "aterra-engine";
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class XmlSchemaGenerator : CliCommandAtlas {
-    private readonly IXsdGenerator _xsdGenerator = new XsdGenerator();
-    private readonly Dictionary<string, Type> _dictionary = new() {
-        { "engine-config", typeof(EngineConfigDto) },
-        { "plugin-config", typeof(PluginConfigDto) },
+public class XmlSchemaGenerator(ILogger logger) : CliCommandAtlas {
+    private readonly Dictionary<string, IXsdGenerator> _dictionary = new() {
+        { "engine-config", new XsdGenerator<EngineConfigDto>(logger) },
+        { "plugin-config", new XsdGenerator<PluginConfigDto>(logger) },
     };
     
     // -----------------------------------------------------------------------------------------------------------------
@@ -47,18 +44,24 @@ public class XmlSchemaGenerator : CliCommandAtlas {
     public void GenerateXmlSchemaEngineConfig(ArgsOptions argsOptions) {
         string className = argsOptions.ClassName.ToLowerInvariant();
         
-        if (!_dictionary.TryGetValue(className, out Type? type)) {
-            Console.WriteLine("No match found for the provided ClassName. Check the ClassName and try again.");
+        if (!_dictionary.TryGetValue(className, out IXsdGenerator? xsdGenerator)) {
+            logger.Warning("No match found for the provided ClassName: {ClassName}. Check the ClassName and try again.", className);
+            return;
         }
         
-        _xsdGenerator.GenerateXsd(
-            type!,
-            $"urn:aterra-engine:{className}",
+        string outputPath = Path.Combine(
+            argsOptions.OutputFolder ?? string.Empty, 
+            argsOptions.OutputFile ?? $"{className}.xsd");
+
+        logger.Information("Generating XML Schema for {ClassName} with output path {Path}.",
+            className, outputPath);
+        
+        xsdGenerator.GenerateXsd(
+            $"urn:{argsOptions.NamespacePrefix}:{className}",
             argsOptions.Prettify,
-            Path.Combine(
-                argsOptions.OutputFolder ?? string.Empty, 
-                argsOptions.OutputFile ?? $"{className}.xsd"
-            )
+            outputPath
         );
+
+        logger.Information("XML Schema generated successfully");
     }
 }
