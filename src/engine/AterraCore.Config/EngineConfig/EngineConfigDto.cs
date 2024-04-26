@@ -5,6 +5,7 @@ using System.Xml.Serialization;
 using AterraCore.Common;
 using AterraCore.Config.Xml;
 using AterraCore.Contracts.Config;
+using Serilog;
 
 namespace AterraCore.Config.EngineConfig;
 
@@ -46,6 +47,27 @@ public class EngineConfigDto : IConfigDto<EngineConfigDto> {
         };
             
         return this;
+    }
+
+    public void OutputToLog(ILogger logger) {
+        
+        logger.Verbose("- Engine Config loaded with the following data:");
+        
+        logger.Information("Engine version: {EngineVersion}", EngineVersion);
+        logger.Information("Game version: {GameVersion}", GameVersion);
+        
+        logger.Information("Plugin RootFolder: {Folder}", PluginData.RootFolder);
+        logger.Information("Plugin Plugins: {Folder}", PluginData.Plugins);
+        logger.Information("Raylib config: {RaylibConfig}", RaylibConfig);
+        
+        logger.Information("Plugins - Load Order : (Ids are not final)") ;
+        PluginData.Plugins
+            .Select((r, i) => new {
+                r.FilePath,
+                Id=new PluginId(i).ToString()
+            })
+            .ToList()
+            .ForEach((o) => logger.Information("- {id} : {FilePath}", o.Id, o.FilePath ));
     }
 }
 

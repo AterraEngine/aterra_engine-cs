@@ -2,13 +2,11 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using AterraCore.Loggers;
 using CliArgsParser;
 using CliArgsParser.Attributes;
 using CliArgsParser.Commands;
 using JetBrains.Annotations;
 using Serilog;
-using Serilog.Core;
 
 namespace ProductionTools.Commands;
 

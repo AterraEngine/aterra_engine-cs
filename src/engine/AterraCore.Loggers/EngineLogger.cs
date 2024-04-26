@@ -3,7 +3,6 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common;
 using Serilog;
-using Serilog.Formatting.Compact;
 
 namespace AterraCore.Loggers;
 
@@ -13,7 +12,7 @@ namespace AterraCore.Loggers;
 public static class EngineLogger {
     public static LoggerConfiguration CreateConfiguration() {
         return new LoggerConfiguration()
-            .MinimumLevel.Debug()
+            .MinimumLevel.Verbose()
 
             .DefaultEnrich("Engine")
             .AsyncSinkFile(Paths.Logs.EngineLog)

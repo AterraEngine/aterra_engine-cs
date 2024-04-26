@@ -4,7 +4,6 @@
 
 using AterraCore.Common;
 using Serilog;
-using Serilog.Formatting.Compact;
 
 namespace AterraCore.Loggers;
 
@@ -17,9 +16,9 @@ namespace AterraCore.Loggers;
 public static class StartupLogger {
     public static LoggerConfiguration CreateConfiguration() {
         return new LoggerConfiguration()
-            .MinimumLevel.Debug()
+            .MinimumLevel.Verbose()
 
-            .DefaultEnrich("Startups")
+            .DefaultEnrich("Startup")
             .AsyncSinkFile(Paths.Logs.StartupLog)
             .AsyncSinkConsole();
     }

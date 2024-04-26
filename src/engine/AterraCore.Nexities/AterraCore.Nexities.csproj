@@ -12,4 +12,8 @@
       <ProjectReference Include="..\AterraCore.Extensions\AterraCore.Extensions.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Systems\" />
+    </ItemGroup>
+
 </Project>

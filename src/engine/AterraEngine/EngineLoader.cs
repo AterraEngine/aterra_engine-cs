@@ -47,18 +47,7 @@ public class EngineLoader {
         _startupLogger.Information("--- Starting Startup sequence ---");
         
         EngineConfigDto configDto = GetEngineConfig();
-        _startupLogger.Information("Config loaded with the following data:");
-        _startupLogger.Information("Engine Version : {Version}", configDto.EngineVersion);
-        _startupLogger.Information("Game Version : {Version}", configDto.GameVersion);
-        _startupLogger.Information("Plugins - Root Folder : {Version}", configDto.PluginData.RootFolder);
-        _startupLogger.Information("Plugins - Load Order : (Ids are not final)") ;
-        configDto.PluginData.Plugins
-            .Select((r, i) => new {
-                r.FilePath,
-                Id=new PluginId(i).ToString()
-            })
-            .ToList()
-            .ForEach((o) => _startupLogger.Information("- {id} : {FilePath}", o.Id, o.FilePath ));
+        configDto.OutputToLog(_startupLogger);
         
         var engineServiceBuilder = new EngineServiceBuilder(_startupLogger);
         

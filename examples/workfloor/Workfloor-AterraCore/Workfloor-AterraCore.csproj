@@ -5,7 +5,7 @@
         <TargetFramework>net8.0</TargetFramework>
         <RootNamespace>Workfloor_AterraCore</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
+        <Nullable>enable</Nullable>        
     </PropertyGroup>
 
     <ItemGroup>
@@ -22,10 +22,6 @@
             <Link>xsd\%(Filename)%(Extension)</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="xsd\" />
     </ItemGroup>
     
     <Target Name="AddingPlugins" AfterTargets="Build">

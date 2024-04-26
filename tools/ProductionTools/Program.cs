@@ -4,7 +4,6 @@
 
 using AterraCore.Loggers;
 using CliArgsParser;
-using CliArgsParser.Contracts;
 using ProductionTools.Commands;
 using Serilog;
 using Serilog.Core;
