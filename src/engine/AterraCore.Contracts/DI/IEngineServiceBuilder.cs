@@ -15,8 +15,6 @@ public interface IEngineServiceBuilder {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void AssignDefaultServices(IEnumerable<ServiceDescriptor> services);
-    public void AssignStaticServices(IEnumerable<ServiceDescriptor> services);
-    public void AssignServicesFromPlugins(IEnumerable<ServiceDescriptor> services);
+    public void AssignServiceDescriptors(IEnumerable<ServiceDescriptor> services);
     public void FinishBuilding();
 }

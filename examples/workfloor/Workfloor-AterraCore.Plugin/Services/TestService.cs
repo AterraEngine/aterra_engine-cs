@@ -2,17 +2,16 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using JetBrains.Annotations;
-using Microsoft.Extensions.DependencyInjection;
+using AterraCore.FlexiPlug.Attributes;
 
-namespace AterraCore.FlexiPlug.Attributes;
+namespace Workfloor_AterraCore.Plugin.Services;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[AttributeUsage(AttributeTargets.Class)]
-[UsedImplicitly]
-public class ServiceAttribute(Type typeInterface, ServiceLifetime serviceLifetime = ServiceLifetime.Singleton) : Attribute {
-    public readonly Type Interface = typeInterface;
-    public readonly ServiceLifetime Lifetime = serviceLifetime;
+public interface ITestService;
+
+[Service(typeof(ITestService))]
+public class TestService{
+    
 }

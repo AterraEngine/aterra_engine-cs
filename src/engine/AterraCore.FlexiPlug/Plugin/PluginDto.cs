@@ -43,7 +43,11 @@ public class PluginDto(int id, string filepath) : IPluginDto {
         return Types
             .Select(t => new { Type = t, Attribute = t.GetCustomAttribute<ServiceAttribute>() }) // this way we only get the attribute once
             .Where(t => t.Attribute != null)
-            .Select(t => new ServiceDescriptor(t.Attribute?.Interface!, t.Type));
+            .Select(t => new ServiceDescriptor(
+                serviceType:t.Attribute?.Interface!, 
+                implementationType:t.Type, 
+                lifetime:(ServiceLifetime)t.Attribute?.Lifetime! // WHY THE HELL DOES THIS NEED TO BE CAST???
+            ));
     }
 
     public void IngestFromPluginConfigDto(IPluginConfigDto pluginConfigDto) {

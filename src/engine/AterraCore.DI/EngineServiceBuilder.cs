@@ -16,22 +16,14 @@ public class EngineServiceBuilder(ILogger logger) : IEngineServiceBuilder {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void AssignDefaultServices(IEnumerable<ServiceDescriptor> services) {
+    public void AssignServiceDescriptors(IEnumerable<ServiceDescriptor> services) {
         foreach (ServiceDescriptor serviceDescriptor in services) {
             ServiceCollection.Add(serviceDescriptor);
-        }
-    }
-    
-    public void AssignStaticServices(IEnumerable<ServiceDescriptor> services) {
-        foreach (ServiceDescriptor serviceDescriptor in services) {
-            ServiceCollection.Add(serviceDescriptor);
-        }
-    }
-
-
-    public void AssignServicesFromPlugins(IEnumerable<ServiceDescriptor> services) {
-        foreach (ServiceDescriptor serviceDescriptor in services) {
-            ServiceCollection.Add(serviceDescriptor);
+            logger.Information(
+                "Type {Type} assigned to {Imp}", 
+                serviceDescriptor.ServiceType, 
+                serviceDescriptor.ImplementationType
+            );
         }
     }
     

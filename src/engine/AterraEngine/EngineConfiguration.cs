@@ -55,7 +55,7 @@ public class EngineConfiguration(ILogger? logger = null) {
     
     public EngineConfiguration AssignDefaultServices() {
         // Services which may be overriden
-        _engineServiceBuilder.AssignDefaultServices([
+        _engineServiceBuilder.AssignServiceDescriptors([
             NewServiceDescriptor<ILogger>(EngineLogger.CreateLogger())
         ]);
         
@@ -68,7 +68,7 @@ public class EngineConfiguration(ILogger? logger = null) {
         // TODO make a check though the _engineConfigFlag to see if everything has been setup already
         
         // services which may not be overriden
-        _engineServiceBuilder.AssignStaticServices([
+        _engineServiceBuilder.AssignServiceDescriptors([
             NewServiceDescriptor<IAssetAtlas, AssetAtlas>(ServiceLifetime.Singleton),
             NewServiceDescriptor<IEngine, Engine>(ServiceLifetime.Singleton),
             NewServiceDescriptor<IPluginAtlas, PluginAtlas>(ServiceLifetime.Singleton),
@@ -124,7 +124,7 @@ public class EngineConfiguration(ILogger? logger = null) {
         _pluginLoader.Plugins
             .Select(p => p.GetServices())
             .ToList()
-            .ForEach(_engineServiceBuilder.AssignServicesFromPlugins);
+            .ForEach(_engineServiceBuilder.AssignServiceDescriptors);
 
 
         _logger.Information("Assigned Services from Plugins");
