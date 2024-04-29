@@ -11,7 +11,7 @@ namespace AterraCore.Nexities.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[AttributeUsage(AttributeTargets.Class)]
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
 public class ComponentAttribute(
     string partialId, 
     AssetInstanceType instanceType = AssetInstanceType.Multiple,

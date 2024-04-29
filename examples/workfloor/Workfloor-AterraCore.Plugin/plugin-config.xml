@@ -7,4 +7,14 @@
     <Dlls>
         <Dll>Workfloor-AterraCore.Plugin.dll</Dll>
     </Dlls>
+    
+<!--    <Requirements>-->
+<!--        <Dlls>-->
+<!--            <Dll name="async.dll"/>-->
+<!--        </Dlls>-->
+<!--        <Plugins>-->
+<!--            <Plugin name="Plugin.0" v="0.0.11"/>-->
+<!--        </Plugins>-->
+<!--    </Requirements>-->
+<!--            -->
 </PluginConfig>
