@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Reflection;
 using AterraCore.Common;
+using AterraCore.Common.FlexiPlug;
 using AterraCore.Config.PluginConfig;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug.Plugin;
@@ -231,5 +232,16 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         pluginData.IsProcessed = true;
         
         logger.Information("Current Assembly has been assigned as a Plugin with ID {id}", pluginData.Id);
+    }
+
+    public LinkedList<IPlugin> ExportToPlugins() {
+        return new LinkedList<IPlugin>(
+            Plugins.Select(p => new Plugin.Plugin {
+                Id = p.Id,
+                ReadableName = p.ReadableName,
+                Assemblies = p.Assemblies,
+                Types = p.Types
+            })
+        );
     }
 }

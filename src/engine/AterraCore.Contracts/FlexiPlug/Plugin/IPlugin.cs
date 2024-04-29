@@ -2,6 +2,8 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
+using AterraCore.Contracts.Nexities.Assets;
+
 namespace AterraCore.Contracts.FlexiPlug.Plugin;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -9,11 +11,8 @@ namespace AterraCore.Contracts.FlexiPlug.Plugin;
 // ---------------------------------------------------------------------------------------------------------------------
 
 public interface IPlugin : IPluginBase{
-    
-    public IEnumerable<Type> Types { get; }
-
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public IEnumerable<Type> GetAssetTypes();
+    public IEnumerable<KeyValuePair<Type, IEnumerable<AbstractAssetAttribute>>> AssetTypes { get; }
 }

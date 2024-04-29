@@ -2,6 +2,8 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
+using AterraCore.Common.FlexiPlug;
+using AterraCore.Common.Nexities;
 using JetBrains.Annotations;
 
 namespace AterraEngine.Tests.Core.Types;

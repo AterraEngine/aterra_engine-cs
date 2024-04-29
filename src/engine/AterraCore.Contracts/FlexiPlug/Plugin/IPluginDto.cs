@@ -4,6 +4,7 @@
 
 using System.Reflection;
 using AterraCore.Common;
+using AterraCore.Common.FlexiPlug;
 using AterraCore.Contracts.Config.PluginConfig;
 using Microsoft.Extensions.DependencyInjection;
 

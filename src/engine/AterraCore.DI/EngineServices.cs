@@ -1,6 +1,9 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+
+using AterraCore.Contracts;
+using AterraCore.Contracts.FlexiPlug;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
@@ -38,4 +41,6 @@ public static class EngineServices {
     // Default Services Quick access
     // -----------------------------------------------------------------------------------------------------------------
     public static ILogger GetLogger() => GetService<ILogger>();
+    public static IEngine GetEngine() => GetService<IEngine>();
+    public static IPluginAtlas GetPluginAtlas() => GetService<IPluginAtlas>();
 }

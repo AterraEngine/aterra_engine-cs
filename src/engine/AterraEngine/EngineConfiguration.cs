@@ -154,7 +154,14 @@ public class EngineConfiguration(ILogger? logger = null) {
             throw new Exception();
         }
         
-        var engine = EngineServices.GetService<IEngine>();
+        // Populate Plugin Atlas with plugin list
+        //      Is a singleton anyway, so doesn't matter when we assign this data
+        IPluginAtlas pluginAtlas = EngineServices.GetPluginAtlas();
+        pluginAtlas.ImportPlugins(_pluginLoader.ExportToPlugins());
+        
+        // Create the Actual Engine
+        //  Should be the last step
+        IEngine engine = EngineServices.GetEngine();
         _logger.Information("Engine instance created of type: {Type}", engine.GetType().FullName);
         return engine;
     }

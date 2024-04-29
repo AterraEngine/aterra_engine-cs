@@ -4,6 +4,7 @@
 
 using AterraCore.Contracts.Nexities.Assets;
 using AterraCore.Common;
+using AterraCore.Common.Nexities;
 
 namespace AterraCore.Nexities.Assets;
 
@@ -16,9 +17,9 @@ public class AssetAttribute(
     AssetInstanceType instanceType,
     CoreTags coreTags
     
-) : Attribute, IAssetAttribute {
+) : AbstractAssetAttribute {
     
-    public PartialAssetId PartialAssetId { get; } = new(partialId);
-    public AssetInstanceType InstanceType { get; } = instanceType;
-    public CoreTags CoreTags { get; } = coreTags | CoreTags.Asset;
+    public override PartialAssetId PartialAssetId { get; } = new(partialId);
+    public override AssetInstanceType InstanceType { get; } = instanceType;
+    public override CoreTags CoreTags { get; } = coreTags | CoreTags.Asset;
 }

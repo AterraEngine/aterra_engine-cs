@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Xml.Serialization;
 using AterraCore.Common;
+using AterraCore.Common.FlexiPlug;
 using AterraCore.Config.Xml;
 using AterraCore.Contracts.Config;
 using Serilog;

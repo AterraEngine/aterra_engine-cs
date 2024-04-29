@@ -18,4 +18,6 @@ public interface IPluginLoader {
     // -----------------------------------------------------------------------------------------------------------------
     public bool TryParseAllPlugins(IEnumerable<string> filePaths);
     public void InjectAssemblyAsPlugin(Assembly assembly);
+
+    public LinkedList<IPlugin> ExportToPlugins();
 }

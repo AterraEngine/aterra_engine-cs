@@ -4,6 +4,7 @@
 
 using AterraCore.Nexities.Assets;
 using AterraCore.Common;
+using AterraCore.Common.Nexities;
 
 namespace AterraCore.Nexities.Entities;
 
@@ -14,7 +15,7 @@ namespace AterraCore.Nexities.Entities;
 public class EntityAttribute(
     string partialId, 
     AssetInstanceType instanceType = AssetInstanceType.Multiple,
-    CoreTags coreTags = CoreTags.None
+    CoreTags coreTags = CoreTags.Entity
 ) : AssetAttribute(
     partialId, 
     instanceType, 
