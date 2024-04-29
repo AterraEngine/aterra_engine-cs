@@ -50,7 +50,7 @@ public class PluginZipImporter(ILogger logger, string zipPath) : IPluginZipImpor
         
     }
 
-    public bool TryGetPluginAssembly(string filePath, [NotNullWhen(true)] out Assembly? assembly) {
+    public bool TryGetDllAssembly(string filePath, [NotNullWhen(true)] out Assembly? assembly) {
         assembly = null;
         
         try {

@@ -69,7 +69,7 @@
                       DestinationFile="$(OutDir)\package\$(MSBuildProjectName).zip" />
 
         <!-- Optionally, delete temp directory -->
-<!--        <RemoveDir Directories="$(OutDir)\temp" />-->
+        <RemoveDir Directories="$(OutDir)\temp" />
     </Target>
 
 </Project>

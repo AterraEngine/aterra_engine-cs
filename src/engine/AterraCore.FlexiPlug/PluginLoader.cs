@@ -14,13 +14,13 @@ namespace AterraCore.FlexiPlug;
 // ---------------------------------------------------------------------------------------------------------------------
 // Support Code
 // ---------------------------------------------------------------------------------------------------------------------
-public delegate IPluginData ZipImportCallback(IPluginData pluginData, IPluginZipImporter<PluginConfigDto> zipImporter);
+public delegate IPluginDto ZipImportCallback(IPluginDto pluginData, IPluginZipImporter<PluginConfigDto> zipImporter);
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class PluginLoader(SemanticVersion gameVersion, ILogger logger) : IPluginLoader {
-    public LinkedList<IPluginData> Plugins { get; private set; } = [];
+public class PluginLoader(ILogger logger) : IPluginLoader {
+    public LinkedList<IPluginDto> Plugins { get; } = [];
 
     private ushort _pluginIdCounter;
     private ushort PluginIdCounter {
@@ -38,11 +38,11 @@ public class PluginLoader(SemanticVersion gameVersion, ILogger logger) : IPlugin
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    private IPluginData CreateNew(string filepath) {
-        IPluginData pluginData;
+    private IPluginDto CreateNew(string filepath) {
+        IPluginDto pluginData;
         
         try {
-            pluginData = Plugins.AddLast(new PluginData(PluginIdCounter++, filepath)).Value;
+            pluginData = Plugins.AddLast(new PluginDto(PluginIdCounter++, filepath)).Value;
         }
         catch (Exception e) {
             logger.Error(e, "Unexpected exception when creating a new plugin {Plugin}: {Exception}", filepath, e.Message);
@@ -53,7 +53,7 @@ public class PluginLoader(SemanticVersion gameVersion, ILogger logger) : IPlugin
         return pluginData;
     }
     
-    private IPluginData CheckExists(IPluginData pluginData) {
+    private IPluginDto CheckExists(IPluginDto pluginData) {
         // Quick Exit
         if (IsSkipable(pluginData)) return pluginData;
         
@@ -65,7 +65,7 @@ public class PluginLoader(SemanticVersion gameVersion, ILogger logger) : IPlugin
         return pluginData;
     }
 
-    private IPluginData WithZipImporter(IPluginData pluginData, IEnumerable<ZipImportCallback> callbacks ) {
+    private IPluginDto WithZipImporter(IPluginDto pluginData, IEnumerable<ZipImportCallback> callbacks ) {
         // Quick Exit
         if (IsSkipable(pluginData)) return pluginData;
         
@@ -80,7 +80,7 @@ public class PluginLoader(SemanticVersion gameVersion, ILogger logger) : IPlugin
         return pluginData;
     }
 
-    private IPluginData GetConfigData(IPluginData pluginData, IPluginZipImporter<PluginConfigDto> zipImporter) {
+    private IPluginDto GetConfigData(IPluginDto pluginData, IPluginZipImporter<PluginConfigDto> zipImporter) {
         // Quick Exit
         if (IsSkipable(pluginData)) return pluginData;
         
@@ -96,22 +96,22 @@ public class PluginLoader(SemanticVersion gameVersion, ILogger logger) : IPlugin
         return pluginData;
     }
     
-    private IPluginData CheckEngineCompatibility(IPluginData pluginData, IPluginZipImporter<PluginConfigDto> zipImporter) {
+    private IPluginDto CheckEngineCompatibility(IPluginDto pluginData, IPluginZipImporter<PluginConfigDto> zipImporter) {
         // Quick Exit
         if (IsSkipable(pluginData)) return pluginData;
 
         // TODO add more checks
-        if ((pluginData.Data?.GameVersion ?? SemanticVersion.Max) > gameVersion) {
-            logger.Warning("{Plugin} had an incompatible game version of {PluginGameVersion}, compared to the current {GameVersion}", 
-                pluginData.ReadableName, pluginData.Data?.GameVersion, gameVersion
-            );
-            return SetInvalid(pluginData);
-        }
+        // if ((pluginData.Data?.GameVersion ?? SemanticVersion.Max) > gameVersion) {
+        //     logger.Warning("{Plugin} had an incompatible game version of {PluginGameVersion}, compared to the current {GameVersion}", 
+        //         pluginData.ReadableName, pluginData.Data?.GameVersion, gameVersion
+        //     );
+        //     return SetInvalid(pluginData);
+        // }
         
         return pluginData;
     }
 
-    private IPluginData ImportDlls(IPluginData pluginData, IPluginZipImporter<PluginConfigDto> zipImporter) {
+    private IPluginDto ImportDlls(IPluginDto pluginData, IPluginZipImporter<PluginConfigDto> zipImporter) {
         // Quick Exit
         if (IsSkipable(pluginData)) return pluginData;
         if (pluginData.Data == null) return pluginData; // Shouldn't happen because we import the data up in the chain
@@ -124,7 +124,7 @@ public class PluginLoader(SemanticVersion gameVersion, ILogger logger) : IPlugin
         
         pluginData.Assemblies.AddRange(pluginData.Data!.Dlls
             .Select(dll => {
-                if (!zipImporter.TryGetPluginAssembly(dll, out Assembly? assembly)) {
+                if (!zipImporter.TryGetDllAssembly(dll, out Assembly? assembly)) {
                     logger.Warning("Could not load plugin assembly for {filepath}", pluginData.ReadableName);
                     SetInvalid(pluginData);
                     return assembly;
@@ -140,17 +140,17 @@ public class PluginLoader(SemanticVersion gameVersion, ILogger logger) : IPlugin
         return pluginData;
     }
     
-    private IPluginData SetInvalid(IPluginData pluginData) {
+    private IPluginDto SetInvalid(IPluginDto pluginData) {
         pluginData.Validity = PluginValidity.Invalid;
         logger.Error("{Plugin} set to Invalid", pluginData.ReadableName);
         return pluginData;
     }
     
-    private static bool IsSkipable(IPluginData pluginData) => 
+    private static bool IsSkipable(IPluginDto pluginData) => 
         pluginData.Validity == PluginValidity.Invalid
         || pluginData.IsProcessed;
 
-    private void Validate(IPluginData pluginData) {
+    private void Validate(IPluginDto pluginData) {
         // Quick Exit
         if (IsSkipable(pluginData)) return;
         
@@ -168,14 +168,14 @@ public class PluginLoader(SemanticVersion gameVersion, ILogger logger) : IPlugin
         pluginData.IsProcessed = true;
     }
 
-    private IPluginData DebugGetAllFiles(IPluginData pluginData, IPluginZipImporter<PluginConfigDto> zipImporter) {
+    private IPluginDto DebugGetAllFiles(IPluginDto pluginData, IPluginZipImporter<PluginConfigDto> zipImporter) {
         logger.Debug("ALL FILES : {files}",zipImporter.GetFileNamesInZip());
         return pluginData;
     }
     
     private void TrimFaultyPlugins() {
         // Warn This is dirty, but will work for now.
-        IEnumerable<IPluginData> validPlugins = Plugins.Where(p => p.Validity == PluginValidity.Valid);
+        IEnumerable<IPluginDto> validPlugins = Plugins.Where(p => p.Validity == PluginValidity.Valid);
         
         if (validPlugins.Count() == Plugins.Count) {
             logger.Information("All plugins validated correctly");
@@ -221,7 +221,7 @@ public class PluginLoader(SemanticVersion gameVersion, ILogger logger) : IPlugin
         // A very special case where the dev wants to assign the current assembly as a plugin
         //      Useful if you don't want to have another project if you just have a single plugin 
         
-        IPluginData pluginData = CreateNew(assembly.Location);
+        IPluginDto pluginData = CreateNew(assembly.Location);
         pluginData.Assemblies.Add(assembly);
         pluginData.Data = new PluginConfigDto {
             ReadableName = "Starting Assembly",

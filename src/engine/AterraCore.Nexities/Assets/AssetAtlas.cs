@@ -27,7 +27,7 @@ public class AssetAtlas(ILogger logger) : IAssetAtlas {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public bool TryAssignAsset(Type assetType, IPluginData pluginData, IAssetAttribute assetAttribute, [NotNullWhen(true)] out AssetId? assetId) {
+    public bool TryAssignAsset(Type assetType, IPluginDto pluginData, IAssetAttribute assetAttribute, [NotNullWhen(true)] out AssetId? assetId) {
         assetId = null;
 
         var newAssetId = new AssetId(pluginData.Id, assetAttribute.PartialAssetId);

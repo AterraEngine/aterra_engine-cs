@@ -3,19 +3,32 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using System.Reflection;
+using AterraCore.Common;
 using AterraCore.Contracts.FlexiPlug.Plugin;
+using AterraCore.Contracts.Nexities.Assets;
 
-namespace AterraCore.Contracts.FlexiPlug;
+namespace AterraCore.FlexiPlug.Plugin;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IPluginLoader {
-    public LinkedList<IPluginDto> Plugins { get; }
 
+public class Plugin : IPlugin {
+    public PluginId Id { get; }
+    public string ReadableName { get; }
+    public List<Assembly> Assemblies { get; }
+    
+    private IEnumerable<Type>? _types;
+    public IEnumerable<Type> Types => _types ??= Assemblies.SelectMany(assembly => assembly.GetTypes());
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public bool TryParseAllPlugins(IEnumerable<string> filePaths);
-    public void InjectAssemblyAsPlugin(Assembly assembly);
+    public IEnumerable<Type> GetAssetTypes() {
+        return Types
+            .Where(t => 
+                typeof(IAsset).IsAssignableFrom(t) 
+                && t is { IsInterface: false, IsAbstract: false }
+        );
+    }
 }

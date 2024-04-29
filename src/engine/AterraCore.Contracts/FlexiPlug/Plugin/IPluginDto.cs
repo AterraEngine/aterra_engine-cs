@@ -5,36 +5,22 @@
 using System.Reflection;
 using AterraCore.Common;
 using AterraCore.Contracts.Config.PluginConfig;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AterraCore.Contracts.FlexiPlug.Plugin;
 
 // ---------------------------------------------------------------------------------------------------------------------
-// Support Code
-// ---------------------------------------------------------------------------------------------------------------------
-public readonly struct ServiceData(Type instanceType, Type serviceType) {
-    public Type InstanceType { get; } = instanceType;
-    public Type ServiceType { get; } = serviceType;
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IPluginData {
-    public PluginId Id { get; }
+public interface IPluginDto : IPluginBase {
     public string FilePath { get; }
-    public string ReadableName { get; }
     public bool IsProcessed { get; set; }
-    
     public IPluginConfigDto? Data { get; set; }
-    
     public PluginValidity Validity { get; set; }
-    public List<Assembly> Assemblies { get; }
-    public IEnumerable<Type> Types { get; }
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public IEnumerable<Type> GetAssetTypes();
-    public IEnumerable<ServiceData> GetServices();
+    public IEnumerable<ServiceDescriptor> GetServices();
     public void IngestFromPluginConfigDto(IPluginConfigDto pluginConfigDto);
 }

@@ -13,6 +13,6 @@ namespace AterraCore.Contracts.Nexities.Assets;
 // ---------------------------------------------------------------------------------------------------------------------
 
 public interface IAssetAtlas {
-    public bool TryAssignAsset(Type assetType, IPluginData pluginData, IAssetAttribute assetAttribute, [NotNullWhen(true)] out AssetId? assetId);
+    public bool TryAssignAsset(Type assetType, IPluginDto pluginData, IAssetAttribute assetAttribute, [NotNullWhen(true)] out AssetId? assetId);
     public IEnumerable<AssetId> GetAllAssetsOfCoreTag(CoreTags coreTag);
 }

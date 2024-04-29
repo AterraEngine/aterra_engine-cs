@@ -12,6 +12,6 @@ namespace AterraCore.Contracts.FlexiPlug;
 
 public interface IPluginZipImporter<T> {
     bool TryGetPluginConfig([NotNullWhen(true)] out T? pluginConfig);
-    bool TryGetPluginAssembly(string filePath, [NotNullWhen(true)] out Assembly? assembly);
+    bool TryGetDllAssembly(string filePath, [NotNullWhen(true)] out Assembly? assembly);
     List<string> GetFileNamesInZip();
 }

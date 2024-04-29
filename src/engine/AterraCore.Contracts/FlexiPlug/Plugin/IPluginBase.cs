@@ -1,12 +1,18 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraCore.Contracts;
+
+using System.Reflection;
+using AterraCore.Common;
+
+namespace AterraCore.Contracts.FlexiPlug.Plugin;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public interface IEngine {
-    public void Run();
+public interface IPluginBase {
+    public PluginId Id { get; }
+    public string ReadableName { get; }
+    public List<Assembly> Assemblies { get; }
 }

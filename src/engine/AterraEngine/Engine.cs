@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using AterraCore.Contracts;
+using AterraCore.Contracts.FlexiPlug;
 using Serilog;
 
 namespace AterraEngine;
@@ -11,7 +12,10 @@ namespace AterraEngine;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public class Engine(ILogger logger) : IEngine {
+public class Engine(ILogger logger, IPluginAtlas pluginAtlas) : IEngine {
+    // -----------------------------------------------------------------------------------------------------------------
+    // Methods
+    // -----------------------------------------------------------------------------------------------------------------
     public void Run() {
         logger.Information("Entered AterraEngine");
     }

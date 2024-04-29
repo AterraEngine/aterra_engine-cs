@@ -1,23 +1,20 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common;
-using AterraCore.Contracts.FlexiPlug.Plugin;
+
+using System.ComponentModel.Design.Serialization;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AterraCore.Extensions;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
-public static class LinkedListExtensions {
-    public static LinkedListNode<IPluginDto>? NextValid(this LinkedListNode<IPluginDto> node) {
-        ArgumentNullException.ThrowIfNull(node);
-
-        LinkedListNode<IPluginDto>? next = node.Next;
-        while (next != null && next.Value.Validity == PluginValidity.Invalid) {
-            next = next.Next;
-        }
-        return next;
+public static class ServiceDescriptorExtension {
+    public static ServiceDescriptor NewServiceDescriptor<T1, T2>(ServiceLifetime lifetime) where T2 : T1 {
+        return new ServiceDescriptor(typeof(T1), typeof(T2), lifetime);
+    }
+    public static ServiceDescriptor NewServiceDescriptor<T1>(object instance){
+        return new ServiceDescriptor(typeof(T1), instance);
     }
 }

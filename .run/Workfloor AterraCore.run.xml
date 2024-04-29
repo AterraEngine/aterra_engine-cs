@@ -8,7 +8,8 @@
     <option name="USE_MONO" value="0" />
     <option name="RUNTIME_ARGUMENTS" value="" />
     <method v="2">
-      <option name="Build Solution" enabled="true" />
+      <option name="Build" default="false" projectName="AterraEngine" projectPath="$PROJECT_DIR$/src/engine/AterraEngine/AterraEngine.csproj" />
+      <option name="Build" default="false" projectName="Workfloor-AterraCore" projectPath="$PROJECT_DIR$/examples/Workfloor/Workfloor-AterraCore/Workfloor-AterraCore.csproj" />
     </method>
   </configuration>
 </component>

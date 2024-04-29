@@ -7,11 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 namespace AterraCore.Contracts.DI;
 
 // ---------------------------------------------------------------------------------------------------------------------
-// Support Code
-// ---------------------------------------------------------------------------------------------------------------------
-public delegate void StaticService(IServiceCollection serviceCollection);
-
-// ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IEngineServiceBuilder {
@@ -20,7 +15,8 @@ public interface IEngineServiceBuilder {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void AssignDefaultServices(IEnumerable<StaticService> services);
-    public void AssignStaticServices(IEnumerable<StaticService> services);
+    public void AssignDefaultServices(IEnumerable<ServiceDescriptor> services);
+    public void AssignStaticServices(IEnumerable<ServiceDescriptor> services);
+    public void AssignServicesFromPlugins(IEnumerable<ServiceDescriptor> services);
     public void FinishBuilding();
 }

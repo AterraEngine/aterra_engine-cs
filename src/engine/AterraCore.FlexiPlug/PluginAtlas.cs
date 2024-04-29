@@ -1,12 +1,17 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraCore.Contracts;
+
+using AterraCore.Contracts.FlexiPlug;
+using AterraCore.Contracts.FlexiPlug.Plugin;
+using Serilog;
+
+namespace AterraCore.FlexiPlug;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public interface IEngine {
-    public void Run();
+public class PluginAtlas(ILogger logger) : IPluginAtlas {
+    public LinkedList<IPluginDto> Plugins { get; } = [];
 }
