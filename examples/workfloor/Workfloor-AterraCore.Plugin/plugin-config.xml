@@ -4,17 +4,8 @@
     <Author>Andreas Sas</Author> 
     <PluginVersion value="0.0.0"/>
     <ExpectedGameVersion value="0.0.0"/>
-    <Dlls>
-        <Dll>Workfloor-AterraCore.Plugin.dll</Dll>
-    </Dlls>
+    <Bins>
+        <Bin file="Workfloor-AterraCore.Plugin.dll"/>
+    </Bins>
     
-<!--    <Requirements>-->
-<!--        <Dlls>-->
-<!--            <Dll name="async.dll"/>-->
-<!--        </Dlls>-->
-<!--        <Plugins>-->
-<!--            <Plugin name="Plugin.0" v="0.0.11"/>-->
-<!--        </Plugins>-->
-<!--    </Requirements>-->
-<!--            -->
 </PluginConfig>

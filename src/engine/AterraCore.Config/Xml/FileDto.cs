@@ -1,18 +1,20 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
+
+using System.Xml.Serialization;
 using AterraCore.Contracts.Config.Xml;
 
-namespace AterraCore.Contracts.FlexiPlug;
+namespace AterraCore.Config.Xml;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public interface IPluginZipImporter<T> {
-    bool TryGetPluginConfig([NotNullWhen(true)] out T? pluginConfig);
-    bool TryGetDllAssembly(IFileDto binDto, [NotNullWhen(true)] out Assembly? assembly);
-    List<string> GetFileNamesInZip();
+public class FileDto : IFileDto {
+    [XmlAttribute("file")] 
+    public required string FileNameInternal { get; set; }
+
+    [XmlIgnore]
+    public string FilePath { get; set; } = null!;
 }

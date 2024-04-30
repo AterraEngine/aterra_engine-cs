@@ -34,7 +34,7 @@
         <!-- Create directories needed -->
         <MakeDir Directories="$(OutDir)\temp" />
         <MakeDir Directories="$(OutDir)\temp\bin" />
-        <MakeDir Directories="$(OutDir)\temp\assets" />
+        <MakeDir Directories="$(OutDir)\temp\res" />
         <MakeDir Directories="$(OutDir)\package" />
 
         <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->

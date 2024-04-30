@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using AterraCore.Common;
+using AterraCore.Contracts.Config.Xml;
 
 namespace AterraCore.Contracts.Config.PluginConfig;
 
@@ -15,5 +16,5 @@ public interface IPluginConfigDto{
     string Author { get; set; }
     SemanticVersion PluginVersion { get; }
     SemanticVersion GameVersion { get; }
-    List<string> Dlls { get; set; }
+    IEnumerable<IFileDto> Dlls { get; }
 }

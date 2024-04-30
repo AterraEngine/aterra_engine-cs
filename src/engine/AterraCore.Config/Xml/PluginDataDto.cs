@@ -4,6 +4,7 @@
 
 using System.Text;
 using System.Xml.Serialization;
+using AterraCore.Extensions;
 
 namespace AterraCore.Config.Xml;
 
@@ -12,12 +13,12 @@ namespace AterraCore.Config.Xml;
 // ---------------------------------------------------------------------------------------------------------------------
 
 public class PluginDataDto {
-    [XmlElement("RootFolder")]
+    [XmlAttribute("root")]
     public required string RootFolder { get; set; }
     
     [XmlArray("LoadOrder")]
-    [XmlArrayItem("Plugin", typeof(PluginRecordDto))]
-    public required List<PluginRecordDto> Plugins { get; set; }
+    [XmlArrayItem("Plugin", typeof(FileDto))]
+    public required FileDto[] Plugins { get; set; } 
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
@@ -25,8 +26,8 @@ public class PluginDataDto {
     public override string ToString() {
         var txt = new StringBuilder();
         txt.Append($"RootFolder : {RootFolder} ");
-        txt.Append($"Plugins : ");
-        Plugins.ForEach(p => txt.Append($"{p} ,"));
+        txt.Append("Plugins : ");
+        Plugins.IterateOver(p => txt.Append($"{p} ,"));
         return txt.ToString();
     }
 }

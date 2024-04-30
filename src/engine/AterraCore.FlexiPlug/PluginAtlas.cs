@@ -23,7 +23,7 @@ public class PluginAtlas(ILogger logger) : IPluginAtlas {
     // Constructor or population Methods
     // -----------------------------------------------------------------------------------------------------------------
     public void ImportPlugins(LinkedList<IPlugin> plugins) => Plugins = plugins;
-    public void InvalidateAllCaches() => Plugins.ForEach(plugin => plugin.InvalidateCaches());
+    public void InvalidateAllCaches() => Plugins.IterateOver(plugin => plugin.InvalidateCaches());
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods

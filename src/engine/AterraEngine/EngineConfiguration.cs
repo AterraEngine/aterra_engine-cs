@@ -11,6 +11,7 @@ using AterraCore.Common;
 using AterraCore.Config.EngineConfig;
 using AterraCore.Contracts.DI;
 using AterraCore.Contracts.FlexiPlug;
+using AterraCore.Extensions;
 using AterraCore.FlexiPlug;
 using AterraCore.Loggers;
 using Microsoft.Extensions.DependencyInjection;
@@ -100,9 +101,10 @@ public class EngineConfiguration(ILogger? logger = null) {
     public EngineConfiguration ImportPlugins() {
         // TODO make a check though the _engineConfigFlag to see if everything has been setup already
         
-        string[] filePaths = EngineConfigDto.PluginData.Plugins
-            .Select(p => Path.Join(EngineConfigDto.PluginData.RootFolder, p.FilePath))
-            .ToArray();
+        EngineConfigDto.PluginData.Plugins
+            .IterateOver(p => p.FilePath = Path.Join(EngineConfigDto.PluginData.RootFolder, p.FileNameInternal));
+
+        string[] filePaths = EngineConfigDto.PluginData.Plugins.Select(p => p.FilePath).ToArray();
         
         _logger.Information("All plugin file paths: {paths}", filePaths);
         
@@ -123,10 +125,8 @@ public class EngineConfiguration(ILogger? logger = null) {
         
         _pluginLoader.Plugins
             .Select(p => p.GetServices())
-            .ToList()
-            .ForEach(_engineServiceBuilder.AssignServiceDescriptors);
-
-
+            .IterateOver(_engineServiceBuilder.AssignServiceDescriptors);
+        
         _logger.Information("Assigned Services from Plugins");
         _engineConfigFlag |= EngineConfigFlags.ImportedPluginServices;
         return this;

@@ -24,7 +24,7 @@ public static class DefaultLoggerExtensions {
             
             [ConsoleThemeStyle.Invalid] = AsFore("gold"),
             [ConsoleThemeStyle.Null] = AsFore("coral"), 
-            [ConsoleThemeStyle.Name] = AsFore("aqua"), 
+            [ConsoleThemeStyle.Name] = AsFore("slategray"), 
             [ConsoleThemeStyle.String] = AsFore("aqua"), 
             [ConsoleThemeStyle.Number] = AsFore("mediumpurple"),
             [ConsoleThemeStyle.Boolean] = AsFore("coral"),  

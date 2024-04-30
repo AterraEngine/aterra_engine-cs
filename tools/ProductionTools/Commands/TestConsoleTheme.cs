@@ -40,8 +40,7 @@ public class TestConsoleTheme(ILogger logger) : CliCommandAtlas {
         logger.Information("null value: {@ObjectValue}", [null]);
         logger.Information("list value: {ObjectValue}", new List<string>{ "a", "b", "c"});
         
-        logger.Information("Type name value: {Object}", nameof(CliCommandAtlas));
-        logger.Information("Type fullname value: {Object}", typeof(CliCommandAtlas).FullName);
+        logger.Information("Type name value: {Object}", typeof(CliCommandAtlas));
         
         logger.Information("Incorrect value: {ObjectValue}", null);
         

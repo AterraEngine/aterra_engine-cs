@@ -3,8 +3,10 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Xml.Serialization;
 using AterraCore.Common;
+using AterraCore.Config.Xml;
 using AterraCore.Contracts.Config;
 using AterraCore.Contracts.Config.PluginConfig;
+using AterraCore.Contracts.Config.Xml;
 
 namespace AterraCore.Config.PluginConfig;
 
@@ -25,10 +27,13 @@ public class PluginConfigDto : IConfigDto<PluginConfigDto>, IPluginConfigDto {
     [XmlElement("ExpectedGameVersion")]
     public SemanticVersion GameVersion { get; set; }
 
-    [XmlArray("Dlls")]
-    [XmlArrayItem("Dll", typeof(string))]
-    public List<string> Dlls { get; set; } = null!;
+    [XmlArray("Bins")]
+    [XmlArrayItem("Bin", typeof(FileDto))]
+    public FileDto[] BinDtos { get; set; } = []; 
+    [XmlIgnore] public IEnumerable<IFileDto> Dlls => BinDtos;
 
+    // TODO add requirements? (either other plugins, or specific DLL's?)
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -37,7 +42,7 @@ public class PluginConfigDto : IConfigDto<PluginConfigDto>, IPluginConfigDto {
         Author = "Unknown";
         PluginVersion = SemanticVersion.Zero;
         GameVersion = SemanticVersion.Zero;
-        Dlls = [];
+        BinDtos = [];
 
         return this;
     }

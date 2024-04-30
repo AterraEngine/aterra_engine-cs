@@ -7,6 +7,7 @@ using AterraCore.Common.FlexiPlug;
 using AterraCore.Config.PluginConfig;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug.Plugin;
+using AterraCore.Extensions;
 using AterraCore.FlexiPlug.Plugin;
 using Serilog;
 
@@ -39,7 +40,7 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    private IPluginDto CreateNew(string filepath) {
+    private IPluginDto CreateNewPluginDto(string filepath) {
         IPluginDto pluginData;
         
         try {
@@ -55,8 +56,6 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
     }
     
     private IPluginDto CheckExists(IPluginDto pluginData) {
-        // Quick Exit
-        if (IsSkipable(pluginData)) return pluginData;
         
         if (!File.Exists(pluginData.FilePath) ){
             logger.Warning("Plugin did not exist at {filepath}", pluginData.ReadableName);
@@ -66,15 +65,22 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         return pluginData;
     }
 
+    private IPluginDto CheckNotDuplicate(IPluginDto pluginData) {
+
+        if (Plugins.All(p => p.FilePath != pluginData.FilePath)) return pluginData;
+        
+        logger.Warning("Duplicate plugin found at {filepath}", pluginData.ReadableName);
+        return SetInvalid(pluginData);
+    }
+
     private IPluginDto WithZipImporter(IPluginDto pluginData, IEnumerable<ZipImportCallback> callbacks ) {
-        // Quick Exit
-        if (IsSkipable(pluginData)) return pluginData;
         
         using var zipImporter = new PluginZipImporter(logger, pluginData.FilePath);
         logger.Information("Assigned new Zip Importer to {plugin}", pluginData.ReadableName);
         
         // Use the callbacks like this so zipImport gets disposed off correctly when they are all done
         foreach (ZipImportCallback callback in callbacks) {
+            if (IsSkipable(pluginData)) continue;
             callback(pluginData, zipImporter);
         }
 
@@ -82,50 +88,50 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
     }
 
     private IPluginDto GetConfigData(IPluginDto pluginData, IPluginZipImporter<PluginConfigDto> zipImporter) {
-        // Quick Exit
-        if (IsSkipable(pluginData)) return pluginData;
         
         if (!zipImporter.TryGetPluginConfig(out PluginConfigDto? pluginConfigDto)) {
             logger.Warning("Could not extract a valid PluginConfigDto from the plugin {plugin}", pluginData.ReadableName);
-            return SetInvalid(pluginData);
+            SetInvalid(pluginData);
+            return pluginData;
         }
 
         pluginData.IngestFromPluginConfigDto(pluginConfigDto);
         logger.Information("Assigned plugin config of {path} to {name}", pluginData.FilePath, pluginData.ReadableName);
         logger.Information("Plugin {Name} made by {Author}", pluginData.ReadableName, pluginData.Data?.Author);
-
+        
         return pluginData;
     }
     
     private IPluginDto CheckEngineCompatibility(IPluginDto pluginData, IPluginZipImporter<PluginConfigDto> zipImporter) {
-        // Quick Exit
-        if (IsSkipable(pluginData)) return pluginData;
-
         // TODO add more checks
         // if ((pluginData.Data?.GameVersion ?? SemanticVersion.Max) > gameVersion) {
         //     logger.Warning("{Plugin} had an incompatible game version of {PluginGameVersion}, compared to the current {GameVersion}", 
         //         pluginData.ReadableName, pluginData.Data?.GameVersion, gameVersion
         //     );
-        //     return SetInvalid(pluginData);
+        //     SetInvalid(pluginData);
+        //     return;
         // }
-        
         return pluginData;
     }
 
     private IPluginDto ImportDlls(IPluginDto pluginData, IPluginZipImporter<PluginConfigDto> zipImporter) {
-        // Quick Exit
-        if (IsSkipable(pluginData)) return pluginData;
-        if (pluginData.Data == null) return pluginData; // Shouldn't happen because we import the data up in the chain
+        if (pluginData.Data == null) return SetInvalid(pluginData); // Shouldn't happen because we import the data up in the chain
         
         // Extract assembly(s)
-        pluginData.Data.Dlls = pluginData.Data.Dlls.Select(f => Path.Combine(Paths.Plugins.PluginBinFolder, f).Replace("\\", "/")).ToList();
-        logger.Information("Found the following DLLs for {filepath} : {dlls}", pluginData.ReadableName, pluginData.Data?.Dlls);
+        pluginData.Data.Dlls
+            .IterateOver(binDto => binDto.FilePath = Path
+                .Combine(Paths.Plugins.PluginBinFolder, binDto.FileNameInternal)
+                .Replace("\\", "/"));
+        
+        logger.Information("Found the following DLLs for {filepath} : {@dlls}", pluginData.ReadableName, pluginData.Data?.Dlls.Select(bin => bin.FileNameInternal));
 
-        if ((pluginData.Data?.Dlls.Count ?? 0) == 0) return SetInvalid(pluginData);
+        if ((pluginData.Data?.Dlls.Count() ?? 0) == 0) {
+            return SetInvalid(pluginData);
+        }
         
         pluginData.Assemblies.AddRange(pluginData.Data!.Dlls
-            .Select(dll => {
-                if (!zipImporter.TryGetDllAssembly(dll, out Assembly? assembly)) {
+            .Select(binDto => {
+                if (!zipImporter.TryGetDllAssembly(binDto, out Assembly? assembly)) {
                     logger.Warning("Could not load plugin assembly for {filepath}", pluginData.ReadableName);
                     SetInvalid(pluginData);
                     return assembly;
@@ -137,26 +143,24 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
             .Where(assembly => assembly != null)
             .Select(assembly => assembly!) 
         );
-        
+
         return pluginData;
     }
     
     private IPluginDto SetInvalid(IPluginDto pluginData) {
         pluginData.Validity = PluginValidity.Invalid;
         logger.Error("{Plugin} set to Invalid", pluginData.ReadableName);
+
         return pluginData;
     }
     
     private static bool IsSkipable(IPluginDto pluginData) => 
-        pluginData.Validity == PluginValidity.Invalid
-        || pluginData.IsProcessed;
+        pluginData.Validity == PluginValidity.Invalid || pluginData.IsProcessed;
 
-    private void Validate(IPluginDto pluginData) {
-        // Quick Exit
-        if (IsSkipable(pluginData)) return;
+    private IPluginDto Validate(IPluginDto pluginData) {
         
         // Todo add more validation steps
-        if (pluginData.Data != null && pluginData.Assemblies.Count != pluginData.Data.Dlls.Count) {
+        if (pluginData.Data != null && pluginData.Assemblies.Count != pluginData.Data.Dlls.Count()) {
             pluginData.Validity = PluginValidity.Invalid;
             logger.Warning("Amount of assigned DLL's didnt correspond with the loaded assemblies in {plugin}", pluginData.ReadableName);
         }
@@ -167,6 +171,7 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         }
 
         pluginData.IsProcessed = true;
+        return pluginData;
     }
 
     private IPluginDto DebugGetAllFiles(IPluginDto pluginData, IPluginZipImporter<PluginConfigDto> zipImporter) {
@@ -184,10 +189,12 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         }
         
         logger.Warning("Some plugins did not get validated correctly, trimming plugin list");
+        
         Plugins
-            .Where(p => p.Validity == PluginValidity.Valid)
-            .ToList()
+            .Where(p => p.Validity != PluginValidity.Valid)
+            .ToList() // Can't use the Extensions's ForEach because we are removing certain data
             .ForEach(p => Plugins.Remove(p));
+        
         logger.Warning("Plugin list trimmed to to a total of {i} ", Plugins.Count);
     }
     
@@ -195,22 +202,21 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
     // Public Methods
     // -----------------------------------------------------------------------------------------------------------------
     public bool TryParseAllPlugins(IEnumerable<string> filePaths) {
-        string[] paths = filePaths.ToArray();
-        paths
-            .ToList()
-            .Select(CreateNew)
-            .Select(CheckExists)
+        filePaths
+            .Select(CreateNewPluginDto)
+            .Select(CheckExists).Where(IsSkipable)
+            .Select(CheckNotDuplicate).Where(IsSkipable)
             // ZipImporter is disposed after this select statement is completed
             .Select(pluginData => WithZipImporter(pluginData, [
-                DebugGetAllFiles, // Todo remove this in production
+                DebugGetAllFiles,
                 GetConfigData,
                 CheckEngineCompatibility,
                 ImportDlls
             ]))
             
             // End of the line
-            .ToList()
-            .ForEach(Validate);
+            .Where(IsSkipable)
+            .IterateOver(Validate);
         
         TrimFaultyPlugins();
         
@@ -222,10 +228,10 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         // A very special case where the dev wants to assign the current assembly as a plugin
         //      Useful if you don't want to have another project if you just have a single plugin 
         
-        IPluginDto pluginData = CreateNew(assembly.Location);
+        IPluginDto pluginData = CreateNewPluginDto(assembly.Location);
         pluginData.Assemblies.Add(assembly);
         pluginData.Data = new PluginConfigDto {
-            ReadableName = "Starting Assembly",
+            ReadableName = "Manually loaded Assembly",
             Author = "Unknown"
         };
         pluginData.Validity = PluginValidity.Valid;

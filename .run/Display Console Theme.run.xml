@@ -14,7 +14,8 @@
     <option name="PROJECT_KIND" value="DotNetCore" />
     <option name="PROJECT_TFM" value="net8.0" />
     <method v="2">
-      <option name="Build" />
+      <option name="Build" default="false" projectName="AterraCore.Loggers" projectPath="$PROJECT_DIR$/src/engine/AterraCore.Loggers/AterraCore.Loggers.csproj" />
+      <option name="Build" projectName="Selected project" />
     </method>
   </configuration>
 </component>

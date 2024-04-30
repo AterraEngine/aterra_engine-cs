@@ -7,6 +7,7 @@ using System.IO.Compression;
 using System.Reflection;
 using AterraCore.Common;
 using AterraCore.Config.PluginConfig;
+using AterraCore.Contracts.Config.Xml;
 using AterraCore.Contracts.FlexiPlug;
 using Serilog;
 
@@ -50,24 +51,24 @@ public class PluginZipImporter(ILogger logger, string zipPath) : IPluginZipImpor
         
     }
 
-    public bool TryGetDllAssembly(string filePath, [NotNullWhen(true)] out Assembly? assembly) {
+    public bool TryGetDllAssembly(IFileDto binDto, [NotNullWhen(true)] out Assembly? assembly) {
         assembly = null;
         
         try {
             // I have no clue why I need to do this ...
-            string filePathFix = filePath.Replace("\\", "/");
+            string filePathFix = binDto.FilePath.Replace("\\", "/");
             
             if (!TryGetFileBytesFromZip(filePathFix, out byte[]? assemblyBytes)) {
-                logger.Warning("Could not get bytes for assembly file of {assemblyNameInZip} from {zipPath}", filePath, zipPath);
+                logger.Warning("Could not get bytes for assembly file of {assemblyNameInZip} from {zipPath}", binDto.FilePath, zipPath);
                 return false;  
             }
             
             assembly = Assembly.Load(assemblyBytes);
-            logger.Information("Assembly file of {assemblyNameInZip} from {zipPath} successfully loaded", filePath, zipPath);
+            logger.Information("Assembly file of {assemblyNameInZip} from {zipPath} successfully loaded", binDto.FilePath, zipPath);
             return true;
         }
         catch (Exception e) {
-            logger.Warning("Failed to load assembly {assemblyNameInZip} from {zipPath}, {e}", filePath, zipPath, e);
+            logger.Warning("Failed to load assembly {assemblyNameInZip} from {zipPath}, {e}", binDto.FilePath, zipPath, e);
             return false;
         }
     }

@@ -1,11 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+
+using System.Text;
 using System.Xml.Serialization;
 using AterraCore.Common;
 using AterraCore.Common.FlexiPlug;
 using AterraCore.Config.Xml;
 using AterraCore.Contracts.Config;
+using AterraCore.Extensions;
+using AterraCore.Loggers;
 using Serilog;
 
 namespace AterraCore.Config.EngineConfig;
@@ -49,26 +53,25 @@ public class EngineConfigDto : IConfigDto<EngineConfigDto> {
             
         return this;
     }
-
+    
     public void OutputToLog(ILogger logger) {
         
-        logger.Verbose("- Engine Config loaded with the following data:");
+        ValuedStringBuilder valuedBuilder = new ValuedStringBuilder()
+            .AppendLine("Engine Config loaded with the following data:")
+            .AppendLineValued("- Engine version: ", EngineVersion)
+            .AppendLineValued("- Game: ", GameVersion)
+            .AppendLineValued("- Plugin RootFolder: ", PluginData.RootFolder)
+            .AppendLineValued("- Plugin Plugins: ", PluginData.Plugins)
+            .AppendLineValued("- Raylib config: ", RaylibConfig)
+            .AppendLine()
+            
+            .AppendLine("Plugins - Load Order : (Ids are not final)");
         
-        logger.Information("Engine version: {EngineVersion}", EngineVersion);
-        logger.Information("Game version: {GameVersion}", GameVersion);
-        
-        logger.Information("Plugin RootFolder: {Folder}", PluginData.RootFolder);
-        logger.Information("Plugin Plugins: {Folder}", PluginData.Plugins);
-        logger.Information("Raylib config: {RaylibConfig}", RaylibConfig);
-        
-        logger.Information("Plugins - Load Order : (Ids are not final)") ;
         PluginData.Plugins
-            .Select((r, i) => new {
-                r.FilePath,
-                Id=new PluginId(i).ToString()
-            })
-            .ToList()
-            .ForEach((o) => logger.Information("- {id} : {FilePath}", o.Id, o.FilePath ));
+            .Select((r, i) => new { r.FileNameInternal, Id=new PluginId(i).ToString() })
+            .IterateOver(box => valuedBuilder.AppendLineValued($"- id_{box.Id} : ", box.FileNameInternal));
+        
+        logger.Information(valuedBuilder.ToString(), valuedBuilder.ValuesToArray());
     }
 }
 

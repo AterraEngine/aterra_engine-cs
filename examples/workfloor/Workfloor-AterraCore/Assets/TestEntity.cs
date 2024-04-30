@@ -1,18 +1,18 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
-using AterraCore.Contracts.Config.Xml;
 
-namespace AterraCore.Contracts.FlexiPlug;
+using AterraCore.Contracts.Nexities.Assets;
+using AterraCore.Nexities.Attributes;
+using AterraCore.Nexities.Entities;
+using JetBrains.Annotations;
+
+namespace Workfloor_AterraCore.Assets;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
-public interface IPluginZipImporter<T> {
-    bool TryGetPluginConfig([NotNullWhen(true)] out T? pluginConfig);
-    bool TryGetDllAssembly(IFileDto binDto, [NotNullWhen(true)] out Assembly? assembly);
-    List<string> GetFileNamesInZip();
-}
+[Entity("1")]
+[UsesComponent<TestComponent>]
+[UsedImplicitly]
+public class TestEntity(IAssetDto assetDto) : Entity<IAssetDto>(assetDto);

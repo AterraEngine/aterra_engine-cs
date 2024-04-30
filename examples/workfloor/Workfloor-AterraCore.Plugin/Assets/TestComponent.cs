@@ -15,8 +15,3 @@ namespace Workfloor_AterraCore.Plugin.Assets;
 [UsedImplicitly]
 [AssetTag("customTag")]
 public class TestComponent(IAssetDto assetDto) : Component<IAssetDto>(assetDto);
-
-[Component("0")]
-[UsedImplicitly]
-[AssetTag("customTag")]
-public class TestComponent1(IAssetDto assetDto) : Component<IAssetDto>(assetDto);
