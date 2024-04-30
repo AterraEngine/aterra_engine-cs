@@ -11,7 +11,6 @@ using AterraCore.Extensions;
 using AterraCore.FlexiPlug.Plugin;
 using AterraCore.Loggers;
 using Serilog;
-using Serilog.Core;
 
 namespace AterraCore.FlexiPlug;
 
@@ -25,6 +24,8 @@ public delegate IPluginDto ZipImportCallback(IPluginDto pluginData, IPluginZipIm
 // ---------------------------------------------------------------------------------------------------------------------
 public class PluginLoader(ILogger logger) : IPluginLoader {
     public LinkedList<IPluginDto> Plugins { get; } = [];
+    private HashSet<string> _knownHashes = new();
+
 
     private ushort _pluginIdCounter;
     private ushort PluginIdCounter {
@@ -66,12 +67,16 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         return pluginData;
     }
 
-    private IPluginDto CheckNotDuplicate(IPluginDto pluginData) {
-
-        if (Plugins.All(p => p.Id == pluginData.Id || p.FilePath != pluginData.FilePath)) return pluginData;
+    private IPluginDto CheckForDuplicates(IPluginDto pluginData, IPluginZipImporter<PluginConfigDto> zipImporter) {
+        pluginData.CheckSum = zipImporter.CheckSum;
         
-        logger.Warning("Duplicate plugin found at {filepath}", pluginData.ReadableName);
-        return SetInvalid(pluginData);
+        if (!_knownHashes.Add(pluginData.CheckSum)) {
+            logger.Warning("Duplicate plugin found at {filepath}", pluginData.ReadableName);
+            return SetInvalid(pluginData);
+        }
+
+        logger.Debug("No Duplicate Plugins found");
+        return pluginData;
     }
 
     private IPluginDto WithZipImporter(IPluginDto pluginData, IEnumerable<ZipImportCallback> callbacks ) {
@@ -79,9 +84,11 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         using var zipImporter = new PluginZipImporter(logger, pluginData.FilePath);
         logger.Information("Assigned new Zip Importer to {plugin}", pluginData.ReadableName);
         
+        // Check for duplicates here
+        //      Easier here because we can use the ZipImporter to confirm hashes.
         // Use the callbacks like this so zipImport gets disposed off correctly when they are all done
         foreach (ZipImportCallback callback in callbacks) {
-            if (IsSkipable(pluginData)) continue;
+            if (IsSkipable(pluginData)) return pluginData;
             callback(pluginData, zipImporter);
         }
 
@@ -219,9 +226,10 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         filePaths
             .Select(CreateNewPluginDto)
             .Select(CheckExists).WhereNot(IsSkipable)
-            .Select(CheckNotDuplicate).WhereNot(IsSkipable)
+            
             // ZipImporter is disposed after this select statement is completed
             .Select(pluginData => WithZipImporter(pluginData, [
+                CheckForDuplicates,
                 DebugGetAllFiles,
                 GetConfigData,
                 CheckEngineCompatibility,

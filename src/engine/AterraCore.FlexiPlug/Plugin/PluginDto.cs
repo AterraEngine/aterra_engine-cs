@@ -29,6 +29,7 @@ public class PluginDto(int id, string filepath) : IPluginDto {
         get => _validity;
         set => _validity = _validity != PluginValidity.Invalid ?  value : _validity ; // Once invalid, always invalid
     }
+    public string? CheckSum { get; set; } = null;
     
     private IEnumerable<Type>? _types;
     public IEnumerable<Type> Types {

@@ -5,6 +5,9 @@
 using System.Diagnostics.CodeAnalysis;
 using System.IO.Compression;
 using System.Reflection;
+using System.Runtime.InteropServices.ComTypes;
+using System.Security.Cryptography;
+using System.Text;
 using AterraCore.Common;
 using AterraCore.Config.PluginConfig;
 using AterraCore.Contracts.Config.Xml;
@@ -20,6 +23,8 @@ namespace AterraCore.FlexiPlug;
 public class PluginZipImporter(ILogger logger, string zipPath) : IPluginZipImporter<PluginConfigDto>, IDisposable {
     private readonly PluginConfigParser<PluginConfigDto> _pluginConfigParser = new(logger);
     private readonly ZipArchive _archive = ZipFile.OpenRead(zipPath);
+    private string? _checkSum;
+    public string CheckSum => _checkSum ??= ComputeSha256Hash();
 
     // -----------------------------------------------------------------------------------------------------------------
     // Disposable
@@ -98,5 +103,18 @@ public class PluginZipImporter(ILogger logger, string zipPath) : IPluginZipImpor
             logger.Warning("Failed to retrieve file names from {zipPath}, {e}", zipPath, e);
         }
         return fileNames;
+    }
+
+    private string ComputeSha256Hash() {
+        using var mySha256 = SHA256.Create();
+        using FileStream stream = File.OpenRead(zipPath);
+        stream.Position = 0;
+        byte[] hashBytes = mySha256.ComputeHash(stream);
+        var builder = new StringBuilder();
+        foreach (byte b in hashBytes) {
+            builder.Append(b.ToString("x2"));
+        }
+
+        return builder.ToString();
     }
 }

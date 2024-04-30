@@ -5,15 +5,15 @@
     <PluginData root="plugins">
         <LoadOrder>
             <Plugin file="Workfloor-AterraCore.Plugin.zip"/>
-<!--            <Plugin file="Workfloor-AterraCore.Plugin.zip"/>-->
-<!--            <Plugin file="Workfloor-AterraCore.Plugin.zip"/>-->
-<!--            <Plugin file="Workfloor-AterraCore.Plugin.zip"/>-->
-<!--            <Plugin file="Workfloor-AterraCore.Plugin.zip"/>-->
-<!--            <Plugin file="Workfloor-AterraCore.Plugin.zip"/>-->
-<!--            <Plugin file="Workfloor-AterraCore.Plugin.zip"/>-->
-<!--            <Plugin file="Workfloor-AterraCore.Plugin.zip"/>-->
-<!--            <Plugin file="Workfloor-AterraCore.Plugin.zip"/>-->
-<!--            <Plugin file="Workfloor-AterraCore.Plugin.zip"/>-->
+            <Plugin file="Workfloor-AterraCore.Plugin.zip"/>
+            <Plugin file="Workfloor-AterraCore.Plugin.zip"/>
+            <Plugin file="Workfloor-AterraCore.Plugin.zip"/>
+            <Plugin file="Workfloor-AterraCore.Plugin.zip"/>
+            <Plugin file="Workfloor-AterraCore.Plugin.zip"/>
+            <Plugin file="Workfloor-AterraCore.Plugin.zip"/>
+            <Plugin file="Workfloor-AterraCore.Plugin.zip"/>
+            <Plugin file="Workfloor-AterraCore.Plugin.zip"/>
+            <Plugin file="Workfloor-AterraCore.Plugin.zip"/>
         </LoadOrder>
     </PluginData>
 </EngineConfig>

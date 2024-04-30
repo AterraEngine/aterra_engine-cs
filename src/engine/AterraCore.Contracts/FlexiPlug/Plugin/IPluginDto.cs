@@ -16,6 +16,7 @@ public interface IPluginDto : IPluginBase {
     public bool IsProcessed { get; set; }
     public IPluginConfigDto? Data { get; set; }
     public PluginValidity Validity { get; set; }
+    public string? CheckSum { get; set; }
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
