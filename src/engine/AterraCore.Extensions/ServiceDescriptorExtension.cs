@@ -2,7 +2,6 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using System.ComponentModel.Design.Serialization;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AterraCore.Extensions;

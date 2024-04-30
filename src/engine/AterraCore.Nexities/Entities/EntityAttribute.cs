@@ -3,7 +3,6 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using AterraCore.Nexities.Assets;
-using AterraCore.Common;
 using AterraCore.Common.Nexities;
 
 namespace AterraCore.Nexities.Entities;

@@ -1,17 +1,16 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+
 using AterraCore.Contracts.Nexities.Assets;
-using AterraCore.Common.Nexities;
 
-namespace AterraCore.Nexities.Assets;
+namespace AterraCore.Contracts.FlexiPlug.Plugin;
 
 // ---------------------------------------------------------------------------------------------------------------------
-// Codeee
+// Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class Asset<T>(T assetDto) : IAsset where T : IAssetDto {
-
-    public Guid Guid { get; } = new();
-    public AssetId AssetId { get; } = assetDto.AssetId;
-
-}
+public record AssetTypeRecord(
+    Type Type,
+    AbstractAssetAttribute AssetAttribute,
+    IEnumerable<AbstractAssetTagAttribute> AssetTagAttributes
+);

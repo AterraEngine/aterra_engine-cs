@@ -10,6 +10,7 @@
       <ProjectReference Include="..\AterraCore.Config\AterraCore.Config.csproj" />
       <ProjectReference Include="..\AterraCore.Contracts\AterraCore.Contracts.csproj" />
       <ProjectReference Include="..\AterraCore.Common\AterraCore.Common.csproj" />
+      <ProjectReference Include="..\AterraCore.Extensions\AterraCore.Extensions.csproj" />
     </ItemGroup>
 
     <ItemGroup>

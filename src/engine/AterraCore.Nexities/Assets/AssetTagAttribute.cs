@@ -1,17 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+
 using AterraCore.Contracts.Nexities.Assets;
-using AterraCore.Common.Nexities;
 
 namespace AterraCore.Nexities.Assets;
 
 // ---------------------------------------------------------------------------------------------------------------------
-// Codeee
+// Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class Asset<T>(T assetDto) : IAsset where T : IAssetDto {
-
-    public Guid Guid { get; } = new();
-    public AssetId AssetId { get; } = assetDto.AssetId;
-
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+public class AssetTagAttribute(params string[]? tags) : AbstractAssetTagAttribute {
+    public override string[] Tags { get; } = tags?.ToArray() ?? [];
 }

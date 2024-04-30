@@ -1,17 +1,23 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Nexities.Assets;
-using AterraCore.Common.Nexities;
 
-namespace AterraCore.Nexities.Assets;
+namespace AterraCore.Extensions;
 
 // ---------------------------------------------------------------------------------------------------------------------
-// Codeee
+// Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class Asset<T>(T assetDto) : IAsset where T : IAssetDto {
 
-    public Guid Guid { get; } = new();
-    public AssetId AssetId { get; } = assetDto.AssetId;
-
+public static class LinqExtensions {
+    public static void ForEach<T>(this T[] array, Action<T> action) where T : notnull {
+        foreach (T t in array) {
+            action(t);
+        }
+    }
+    
+    public static void ForEach<T>(this LinkedList<T> linkedList, Action<T> action) where T : notnull {
+        foreach (T t in linkedList) {
+            action(t);
+        }
+    }
 }

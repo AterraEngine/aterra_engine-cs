@@ -3,11 +3,9 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using System.Reflection;
-using AterraCore.Common;
 using AterraCore.Common.FlexiPlug;
 using AterraCore.Contracts.Config.PluginConfig;
 using AterraCore.Contracts.FlexiPlug.Plugin;
-using AterraCore.Contracts.Nexities.Assets;
 using AterraCore.FlexiPlug.Attributes;
 using Microsoft.Extensions.DependencyInjection;
 

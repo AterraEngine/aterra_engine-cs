@@ -3,7 +3,6 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using System.Reflection;
-using AterraCore.Common;
 using AterraCore.Common.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug.Plugin;
 using AterraCore.Contracts.Nexities.Assets;
@@ -21,17 +20,23 @@ public class Plugin : IPlugin {
     
     public IEnumerable<Type> Types { get; init; } // DON'T invalidate this !!!
 
-    private Dictionary<Type, IEnumerable<AbstractAssetAttribute>>? _cacheTypeToAbstractAssetAttribute;
-    public IEnumerable<KeyValuePair<Type, IEnumerable<AbstractAssetAttribute>>> AssetTypes {
+    private Dictionary<Type, AssetTypeRecord>? _assetTypeRecords;
+    public IEnumerable<AssetTypeRecord> AssetTypes {
         get {
-            return _cacheTypeToAbstractAssetAttribute ??= Types
+            return (_assetTypeRecords ??= Types
                 .Where(t =>
                     typeof(IAsset).IsAssignableFrom(t)
                     && t is { IsInterface: false, IsAbstract: false }
                 )
-                .SelectMany(t => t.GetCustomAttributes<AbstractAssetAttribute>())
-                .GroupBy(a => a.GetType())
-                .ToDictionary(g => g.Key, g => g.AsEnumerable());
+                .Select(t => new {Type=t, AssetAttibute=t.GetCustomAttribute<AbstractAssetAttribute>()})
+                .Where(box => box.AssetAttibute != null)
+                .Select(box => new AssetTypeRecord(
+                    Type: box.Type,
+                    AssetAttribute: box.AssetAttibute!, // We check in the where LINQ
+                    AssetTagAttributes: box.Type.GetCustomAttributes<AbstractAssetTagAttribute>()
+                ))
+                .ToDictionary(record => record.Type, record => record)
+            ).Values;
         }
     }
 
@@ -39,6 +44,6 @@ public class Plugin : IPlugin {
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public void InvalidateCaches() {
-        _cacheTypeToAbstractAssetAttribute = null;
+        _assetTypeRecords = null;
     }
 }

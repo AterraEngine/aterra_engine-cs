@@ -28,4 +28,21 @@ public static class ConcurrentDictionaryExtensions {
 
         return dictionary;
     }
+
+    /// <summary>
+    /// Tries to add or update a value in the ConcurrentDictionary.
+    /// </summary>
+    /// <typeparam name="TKey">The type of the keys in the dictionary.</typeparam>
+    /// <typeparam name="TValue">The type of the values in the dictionary.</typeparam>
+    /// <param name="dictionary">The ConcurrentDictionary to add or update the value in.</param>
+    /// <param name="key">The key to add or update the value for.</param>
+    /// <param name="value">The value to add or update.</param>
+    /// <returns>True if the value is added or updated successfully; otherwise, false.</returns>
+    public static bool TryAddOrUpdate<TKey, TValue>(this ConcurrentDictionary<TKey, ConcurrentBag<TValue>> dictionary, TKey key, TValue value) where TKey : notnull {
+        if (!dictionary.TryGetValue(key, out ConcurrentBag<TValue>? existingBag)) {
+            return dictionary.TryAdd(key, [value]);
+        }
+        existingBag.Add(value);
+        return true;
+    }
 }

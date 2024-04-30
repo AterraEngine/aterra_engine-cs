@@ -4,12 +4,10 @@
 
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
-using AterraCore.Contracts.Nexities.Assets;
-using AterraCore.Common;
 using AterraCore.Common.FlexiPlug;
+using AterraCore.Contracts.Nexities.Assets;
 using AterraCore.Common.Nexities;
 using AterraCore.Contracts.FlexiPlug;
-using AterraCore.Contracts.FlexiPlug.Plugin;
 using AterraCore.Extensions;
 using JetBrains.Annotations;
 using Serilog;
@@ -23,7 +21,8 @@ namespace AterraCore.Nexities.Assets;
 [UsedImplicitly]
 public class AssetAtlas(ILogger logger, IPluginAtlas pluginAtlas) : IAssetAtlas {
     private ConcurrentDictionary<AssetInstanceType, HashSet<AssetId>> _mapTypeToAssetId = new ConcurrentDictionary<AssetInstanceType, HashSet<AssetId>>().PopulateWithEmpties();
-    private ConcurrentDictionary<AssetId, Type> _assetsMultiple = new();
+    private ConcurrentDictionary<AssetId, Type> _assets = new();
+    
     private ConcurrentDictionary<CoreTags, ConcurrentBag<AssetId>> _coreTagedAssets = new ConcurrentDictionary<CoreTags, ConcurrentBag<AssetId>>().PopulateWithEmpties();
     private ConcurrentDictionary<string, ConcurrentBag<AssetId>> _stringTagedAssets = new();
 
@@ -34,33 +33,39 @@ public class AssetAtlas(ILogger logger, IPluginAtlas pluginAtlas) : IAssetAtlas 
         assetId = null;
 
         var newAssetId = new AssetId(registration.PluginId, registration.PartialAssetId);
-        logger.Information(
-            "Assigning asset {AssetId} of Type {AssetTypeName} to plugin {PluginId}", 
-            newAssetId, registration.Type.FullName, registration.Type
-        );
-        
+
         // Assigns the asset to the dict
-        if (!_assetsMultiple.TryAdd(newAssetId, registration.Type)) {
+        if (!_assets.TryAdd(newAssetId, registration.Type)) {
             logger.Warning(
                 "Asset with ID: {AssetId} already exists with type {ExistingAssetType}. Cannot assign a new asset with the same ID.",
-                newAssetId, _assetsMultiple[newAssetId].FullName
+                newAssetId, _assets[newAssetId].FullName
             );
             return false;
         }
         
-        assetId = newAssetId;
-        
         // After Everything is said and done with the assigning, start assigning the Core tags and string tags
-        foreach (CoreTags tag in Enum.GetValues(typeof(CoreTags))) {
+        List<string> tagsList = [];
+        
+        foreach (CoreTags tag in Enum.GetValuesAsUnderlyingType<CoreTags>()) {
             if (!registration.CoreTags.HasFlag(tag)) continue;
-            
             _coreTagedAssets[tag].Add(newAssetId);
-            logger.Information(
-                "Asset with Id: {AssetId} is assigned as a '{TagName}'",
-                assetId, tag.ToString()
-            );
+            tagsList.Add(tag.ToString());
+        }
+
+        foreach (string stringTag in registration.StringTags) {
+            if(!_stringTagedAssets.TryAddOrUpdate(stringTag, newAssetId)){
+                logger.Warning("String Tag of {tag} could not be assigned to {assetId}", stringTag, newAssetId);
+                continue;
+            }
+            tagsList.Add(stringTag);
         }
         
+        logger.Information(
+            "Assigned asset {AssetId} of Type {AssetTypeName} to plugin {PluginId} as a '{@tags}", 
+            newAssetId, registration.Type.FullName, registration.Type, tagsList
+        );
+
+        assetId = newAssetId;
         return true;
     }
     
@@ -70,16 +75,36 @@ public class AssetAtlas(ILogger logger, IPluginAtlas pluginAtlas) : IAssetAtlas 
             .SelectMany(tag => _coreTagedAssets[tag])
             .ToArray();
 
-    public IEnumerable<AssetId> GetAllAssetsOfStringTag(string coreTag) => 
-        _stringTagedAssets.TryGetValue(coreTag, out ConcurrentBag<AssetId>? bag) ? bag : [];
+    public IEnumerable<AssetId> GetAllAssetsOfStringTag(string stringTag) => 
+        _stringTagedAssets.TryGetValue(stringTag, out ConcurrentBag<AssetId>? bag) ? bag : [];
 
+
+    public IEnumerable<AssetId> GetAllAssetsOfPlugin(PluginId pluginId) =>
+        _assets.Where(pair => pair.Key.PluginId == pluginId).Select(pair => pair.Key);
+    
+    public bool TryGetType(AssetId assetId, [NotNullWhen(true)] out Type? type) {
+        return _assets.TryGetValue(assetId, out type);
+    }
+     
+    public bool TryGetAssetId(Type type, [NotNullWhen(true)] out AssetId? assetId) {
+        assetId = null;
+        
+        try {
+            KeyValuePair<AssetId, Type> pair = _assets.First(pair => pair.Value == type);
+            assetId = pair.Key;
+            return true;
+        }
+        catch (Exception e) when (e is ArgumentNullException or InvalidOperationException){
+            logger.Warning("Type {Type} is not linked to an AssetId", type);
+            return false;
+        }
+    }
 
     public void TryImportAssetsFromPlugins() {
         foreach (AssetRegistration assetRegistration in pluginAtlas.GetAssetRegistrations()) {
-            if (!TryAssignAsset(assetRegistration, out AssetId? assetId)) {
+            if (!TryAssignAsset(assetRegistration, out AssetId? _)) {
                 logger.Warning("Type {Type} could not be assigned as an asset", assetRegistration.Type);
             }
-            logger.Information("Type {Type} assigned to AssetId {Id}", assetRegistration.Type, assetId);
         }
     }
 }
