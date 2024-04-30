@@ -20,7 +20,7 @@ namespace AterraCore.Nexities.Assets;
 
 [UsedImplicitly]
 public class AssetAtlas(ILogger logger, IPluginAtlas pluginAtlas) : IAssetAtlas {
-    private ConcurrentDictionary<AssetInstanceType, HashSet<AssetId>> _mapTypeToAssetId = new ConcurrentDictionary<AssetInstanceType, HashSet<AssetId>>().PopulateWithEmpties();
+    private ConcurrentDictionary<AssetInstanceType, ConcurrentBag<AssetId>> _assetIntanceTypeMap = new ConcurrentDictionary<AssetInstanceType, ConcurrentBag<AssetId>>().PopulateWithEmpties();
     private ConcurrentDictionary<AssetId, Type> _assets = new();
     
     private ConcurrentDictionary<CoreTags, ConcurrentBag<AssetId>> _coreTagedAssets = new ConcurrentDictionary<CoreTags, ConcurrentBag<AssetId>>().PopulateWithEmpties();
@@ -43,17 +43,23 @@ public class AssetAtlas(ILogger logger, IPluginAtlas pluginAtlas) : IAssetAtlas 
             return false;
         }
         
+        // Assign to the instance type
+        if (!_assetIntanceTypeMap.TryAddToBagOrCreateBag(registration.InstanceType, newAssetId)) {
+            // This shouldn't happen
+            logger.Error("Asset {AssetId} could not be be mapped to an InstanceType", newAssetId);
+        }
+        
         // After Everything is said and done with the assigning, start assigning the Core tags and string tags
         List<string> tagsList = [];
         
         foreach (CoreTags tag in Enum.GetValuesAsUnderlyingType<CoreTags>()) {
             if (!registration.CoreTags.HasFlag(tag)) continue;
-            _coreTagedAssets[tag].Add(newAssetId);
+            _coreTagedAssets.TryAddToBagOrCreateBag(tag, newAssetId);
             tagsList.Add(tag.ToString());
         }
 
         foreach (string stringTag in registration.StringTags) {
-            if(!_stringTagedAssets.TryAddOrUpdate(stringTag, newAssetId)){
+            if(!_stringTagedAssets.TryAddToBagOrCreateBag(stringTag, newAssetId)){
                 logger.Warning("String Tag of {tag} could not be assigned to {assetId}", stringTag, newAssetId);
                 continue;
             }
@@ -77,7 +83,6 @@ public class AssetAtlas(ILogger logger, IPluginAtlas pluginAtlas) : IAssetAtlas 
 
     public IEnumerable<AssetId> GetAllAssetsOfStringTag(string stringTag) => 
         _stringTagedAssets.TryGetValue(stringTag, out ConcurrentBag<AssetId>? bag) ? bag : [];
-
 
     public IEnumerable<AssetId> GetAllAssetsOfPlugin(PluginId pluginId) =>
         _assets.Where(pair => pair.Key.PluginId == pluginId).Select(pair => pair.Key);

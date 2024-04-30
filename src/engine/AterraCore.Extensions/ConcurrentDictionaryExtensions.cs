@@ -38,7 +38,7 @@ public static class ConcurrentDictionaryExtensions {
     /// <param name="key">The key to add or update the value for.</param>
     /// <param name="value">The value to add or update.</param>
     /// <returns>True if the value is added or updated successfully; otherwise, false.</returns>
-    public static bool TryAddOrUpdate<TKey, TValue>(this ConcurrentDictionary<TKey, ConcurrentBag<TValue>> dictionary, TKey key, TValue value) where TKey : notnull {
+    public static bool TryAddToBagOrCreateBag<TKey, TValue>(this ConcurrentDictionary<TKey, ConcurrentBag<TValue>> dictionary, TKey key, TValue value) where TKey : notnull {
         if (!dictionary.TryGetValue(key, out ConcurrentBag<TValue>? existingBag)) {
             return dictionary.TryAdd(key, [value]);
         }

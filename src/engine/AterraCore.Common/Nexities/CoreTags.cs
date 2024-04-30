@@ -9,7 +9,9 @@ namespace AterraCore.Common.Nexities;
 // ---------------------------------------------------------------------------------------------------------------------
 [Flags]
 public enum CoreTags {
+    // NO UNDEFINED
     Asset     = 1 <<  0,
     Component = 1 <<  1,
     Entity    = 1 <<  2,
+    System    = 1 <<  3,
 }
