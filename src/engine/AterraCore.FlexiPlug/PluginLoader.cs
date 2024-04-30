@@ -9,7 +9,9 @@ using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug.Plugin;
 using AterraCore.Extensions;
 using AterraCore.FlexiPlug.Plugin;
+using AterraCore.Loggers;
 using Serilog;
+using Serilog.Core;
 
 namespace AterraCore.FlexiPlug;
 
@@ -56,7 +58,6 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
     }
     
     private IPluginDto CheckExists(IPluginDto pluginData) {
-        
         if (!File.Exists(pluginData.FilePath) ){
             logger.Warning("Plugin did not exist at {filepath}", pluginData.ReadableName);
             return SetInvalid(pluginData);
@@ -67,7 +68,7 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
 
     private IPluginDto CheckNotDuplicate(IPluginDto pluginData) {
 
-        if (Plugins.All(p => p.FilePath != pluginData.FilePath)) return pluginData;
+        if (Plugins.All(p => p.Id == pluginData.Id || p.FilePath != pluginData.FilePath)) return pluginData;
         
         logger.Warning("Duplicate plugin found at {filepath}", pluginData.ReadableName);
         return SetInvalid(pluginData);
@@ -88,7 +89,6 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
     }
 
     private IPluginDto GetConfigData(IPluginDto pluginData, IPluginZipImporter<PluginConfigDto> zipImporter) {
-        
         if (!zipImporter.TryGetPluginConfig(out PluginConfigDto? pluginConfigDto)) {
             logger.Warning("Could not extract a valid PluginConfigDto from the plugin {plugin}", pluginData.ReadableName);
             SetInvalid(pluginData);
@@ -154,8 +154,15 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         return pluginData;
     }
     
-    private static bool IsSkipable(IPluginDto pluginData) => 
-        pluginData.Validity == PluginValidity.Invalid || pluginData.IsProcessed;
+    private bool IsSkipable(IPluginDto pluginData) {
+        bool result = pluginData.IsProcessed 
+                      || ( pluginData.Validity != PluginValidity.Untested 
+                           && pluginData.Validity == PluginValidity.Invalid);
+        if (result) {
+            logger.Warning("Skipping {name}", pluginData.ReadableName);
+        }
+        return result;
+    }
 
     private IPluginDto Validate(IPluginDto pluginData) {
         
@@ -178,11 +185,18 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         logger.Debug("ALL FILES : {files}",zipImporter.GetFileNamesInZip());
         return pluginData;
     }
+
+    private void DebugPrintAllPlugins() {
+        var valuedBuilder = new ValuedStringBuilder();
+        
+        Plugins.IterateOver(pluginData => valuedBuilder.AppendLineValued("-plugin ", true, new {pluginData.FilePath, pluginData.Validity}));
+        
+        logger.Debug(valuedBuilder.ToString(), valuedBuilder.ValuesToArray());
+    }
+    
     
     private void TrimFaultyPlugins() {
-        // Warn This is dirty, but will work for now.
-        IEnumerable<IPluginDto> validPlugins = Plugins.Where(p => p.Validity == PluginValidity.Valid);
-        
+        IEnumerable<IPluginDto> validPlugins = Plugins.Where(p => p.Validity == PluginValidity.Valid).ToArray();
         if (validPlugins.Count() == Plugins.Count) {
             logger.Information("All plugins validated correctly");
             return;
@@ -204,20 +218,21 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
     public bool TryParseAllPlugins(IEnumerable<string> filePaths) {
         filePaths
             .Select(CreateNewPluginDto)
-            .Select(CheckExists).Where(IsSkipable)
-            .Select(CheckNotDuplicate).Where(IsSkipable)
+            .Select(CheckExists).WhereNot(IsSkipable)
+            .Select(CheckNotDuplicate).WhereNot(IsSkipable)
             // ZipImporter is disposed after this select statement is completed
             .Select(pluginData => WithZipImporter(pluginData, [
                 DebugGetAllFiles,
                 GetConfigData,
                 CheckEngineCompatibility,
                 ImportDlls
-            ]))
+            ])).WhereNot(IsSkipable)
             
             // End of the line
-            .Where(IsSkipable)
+            .WhereNot(IsSkipable)
             .IterateOver(Validate);
-        
+
+        DebugPrintAllPlugins();
         TrimFaultyPlugins();
         
         logger.Information("{Count} Plugins have been loaded", Plugins.Count);

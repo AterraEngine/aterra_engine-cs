@@ -78,4 +78,14 @@ public static class DefaultLoggerExtensions {
                 outputTemplate: OutputTemplate
             ));
     }
+    
+    public static LoggerConfiguration SinkConsole(this LoggerConfiguration lc) {
+        return lc
+            // Using Async Sink to write logs asynchronously 
+            // to avoid any performance issues during gameplay
+            .WriteTo.Console(
+                theme: Theme,
+                outputTemplate: OutputTemplate
+            );
+    }
 }

@@ -26,4 +26,7 @@ public static class LinqExtensions {
             action(t);
         }
     }
+    public static IEnumerable<T> WhereNot<T>(this IEnumerable<T> array, Func<T,bool> action) where T : notnull {
+        return array.Where(a => !action(a));
+    }
 }

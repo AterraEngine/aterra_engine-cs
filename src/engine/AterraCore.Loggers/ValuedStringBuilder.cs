@@ -18,22 +18,32 @@ public class ValuedStringBuilder {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    private void Valued(string text, object?[] objects) {
+    private void Valued(string text, bool destruct, object?[] objects) {
+        string at = destruct ? "@": "";
+        
         _stringBuilder.Append(text);
-        _stringBuilder.AppendJoin(" ", objects.Select((_, i) => $"{{args{_propertyValues.Count + i}}}"));
+        _stringBuilder.AppendJoin(" ", objects.Select((_, i) => $"{{{at}args{_propertyValues.Count + i}}}"));
         
         _propertyValues.AddRange(objects);
     }
     
-    public ValuedStringBuilder AppendLineValued(string text, params object?[] objects) {
+    public ValuedStringBuilder AppendLineValued(string text, bool destruct, params object?[] objects) {
         _stringBuilder.AppendLine();
-        Valued(text, objects);
+        Valued(text,destruct, objects);
+        return this;
+    }
+    
+    public ValuedStringBuilder AppendLineValued(string text, params object?[] objects) {
+        return AppendLineValued(text, false, objects);
+    }
+    
+    public ValuedStringBuilder AppendValued(string text, bool destruct, params object?[] objects) {
+        Valued(text,destruct, objects);
         return this;
     }
     
     public ValuedStringBuilder AppendValued(string text, params object?[] objects) {
-        Valued(text, objects);
-        return this;
+        return AppendValued(text, false, objects);
     }
 
 

@@ -16,7 +16,8 @@ public static class EngineLogger {
 
             .DefaultEnrich("Engine")
             .AsyncSinkFile(Paths.Logs.EngineLog)
-            .AsyncSinkConsole();
+            .SinkConsole();
+            // .AsyncSinkConsole();
     }
     
     public static ILogger CreateLogger() => CreateConfiguration().CreateLogger();
