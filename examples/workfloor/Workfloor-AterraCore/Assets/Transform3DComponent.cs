@@ -1,8 +1,9 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Nexities.Attributes;
-using AterraCore.Nexities.Entities;
+using System.Numerics;
+using AterraCore.Nexities.Assets;
+using AterraCore.Nexities.Components;
 using JetBrains.Annotations;
 
 namespace Workfloor_AterraCore.Assets;
@@ -10,8 +11,11 @@ namespace Workfloor_AterraCore.Assets;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Entity("1")]
+[Component("2")]
+[AssetTag("data")]
 [UsedImplicitly]
-public class TestEntity(Transform2DComponent transform) : Entity(transform), IHasTransformComponent {
-    public Transform2DComponent Transform { get; } = transform;
+public class Transform3DComponent : Component {
+    public Vector3 Translation { get; set; } = Vector3.Zero;
+    public Vector3 Scale { get; set; } = Vector3.One;
+    public Vector3 Rotation { get; set; } = Vector3.Zero;
 }

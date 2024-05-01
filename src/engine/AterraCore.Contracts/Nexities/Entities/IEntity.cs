@@ -11,7 +11,7 @@ namespace AterraCore.Contracts.Nexities.Entities;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public interface IEntity : IAsset {
+public interface IEntity : IAssetInstance {
     public HashSet<Guid> ComponentIds { get; }
     public IComponent[] GetComponents();
 }

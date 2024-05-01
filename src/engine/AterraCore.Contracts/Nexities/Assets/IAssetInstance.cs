@@ -9,7 +9,6 @@ namespace AterraCore.Contracts.Nexities.Assets;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IAsset {
+public interface IAssetInstance {
     public Guid Guid { get; }
-    public AssetId AssetId { get; }
 }

@@ -2,27 +2,32 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
+using System.Collections.Concurrent;
+using AterraCore.Common.Nexities;
 using AterraCore.Contracts.Nexities.Assets;
-using AterraCore.Contracts.Nexities.Components;
-using AterraCore.Nexities.Assets;
+using JetBrains.Annotations;
+using Serilog;
 
-namespace AterraCore.Nexities.Entities;
+namespace AterraCore.Nexities.Assets;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
+[UsedImplicitly]
+public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas) : IAssetInstanceAtlas {
+    private ConcurrentDictionary<Guid, IAssetInstance> _assetInstances = new();
 
-public abstract class Entity(params IComponent?[]? components) : AssetInstance, IComponent {
-    public HashSet<Guid> ComponentIds { get; } =
-        components?
-            .Where(comp => comp != null)
-            .Select(comp => comp!.Guid)
-            .ToHashSet() ?? [];
-    
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public IComponent[] GetComponents() {
-        throw new NotImplementedException();
+    public bool TryCreateInstance(AssetId assetId, out IAssetInstance? instance) {
+        instance = null;
+        if (!assetAtlas.TryGetType(assetId, out Type? type)) {
+            logger.Warning("Asset Id {id} could not be matched to a Type", assetId );
+            return false;
+        }
+        
+
+        return true;
     }
 }

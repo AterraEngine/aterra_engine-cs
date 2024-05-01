@@ -1,15 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Nexities.Assets;
-using AterraCore.Common.Nexities;
 
-namespace AterraCore.Nexities.Assets;
+namespace AterraCore.Contracts.Nexities.Assets;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class Asset<T>(T assetDto) : IAsset where T : IAssetDto {
-    public Guid Guid { get; } = new();
-    public AssetId AssetId { get; } = assetDto.AssetId; // TODO check if this is needed
+
+public interface IAssetInstanceAtlas {
+    
 }

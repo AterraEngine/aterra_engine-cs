@@ -1,17 +1,14 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Nexities.Attributes;
-using AterraCore.Nexities.Entities;
-using JetBrains.Annotations;
+using AterraCore.Contracts.Nexities.Assets;
+using AterraCore.Common.Nexities;
 
-namespace Workfloor_AterraCore.Assets;
+namespace AterraCore.Nexities.Assets;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Entity("1")]
-[UsedImplicitly]
-public class TestEntity(Transform2DComponent transform) : Entity(transform), IHasTransformComponent {
-    public Transform2DComponent Transform { get; } = transform;
+public class AssetInstance : IAssetInstance  {
+    public Guid Guid { get; } = new();
 }

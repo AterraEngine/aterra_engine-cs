@@ -1,17 +1,22 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Nexities.Attributes;
-using AterraCore.Nexities.Entities;
-using JetBrains.Annotations;
 
-namespace Workfloor_AterraCore.Assets;
+using AterraCore.Common.Nexities;
+using AterraCore.Nexities.Assets;
+
+namespace AterraCore.Nexities.Systems;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Entity("1")]
-[UsedImplicitly]
-public class TestEntity(Transform2DComponent transform) : Entity(transform), IHasTransformComponent {
-    public Transform2DComponent Transform { get; } = transform;
-}
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+public class SystemAttribute(
+    string partialId, 
+    AssetInstanceType instanceType = AssetInstanceType.Singleton,
+    CoreTags coreTags = CoreTags.System
+) : AssetAttribute(
+    partialId, 
+    instanceType, 
+    coreTags | CoreTags.System
+);

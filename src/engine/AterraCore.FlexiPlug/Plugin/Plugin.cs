@@ -25,7 +25,7 @@ public class Plugin : IPlugin {
         get {
             return (_assetTypeRecords ??= Types
                 .Where(t =>
-                    typeof(IAsset).IsAssignableFrom(t)
+                    typeof(IAssetInstance).IsAssignableFrom(t)
                     && t is { IsInterface: false, IsAbstract: false }
                 )
                 .Select(t => new {Type=t, AssetAttibute=t.GetCustomAttribute<AbstractAssetAttribute>()})

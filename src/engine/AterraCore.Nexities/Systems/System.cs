@@ -2,17 +2,21 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using AterraCore.Contracts.Nexities.Assets;
-using AterraCore.Nexities.Assets;
-using AterraCore.Nexities.Components;
-using JetBrains.Annotations;
+using AterraCore.Contracts.Nexities.Entities;
+using AterraCore.Nexities.Entities;
 
-namespace Workfloor_AterraCore.Assets;
+namespace AterraCore.Nexities.Systems;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[UsedImplicitly]
-[Component("0")]
-[AssetTag("customTag")]
-public class TestComponent(IAssetDto assetDto) : Component<IAssetDto>(assetDto);
+
+public abstract class System {
+    public Type[]? ComponentTypes = [];
+
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    public abstract void ProcessEntity(IEntity entity);
+}

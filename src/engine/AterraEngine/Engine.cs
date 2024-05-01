@@ -35,9 +35,9 @@ public class Engine(ILogger logger, IPluginAtlas pluginAtlas, IAssetAtlas assetA
         
         assetAtlas.TryImportAssetsFromPlugins();
 
-        Task.Run(() => {
-            Task.Delay(5000, cts.Token);
-            cts.Cancel();
-        }, cts.Token);
+        // Task.Run(() => {
+        //     Task.Delay(5000, cts.Token);
+        //     cts.Cancel();
+        // }, cts.Token);
     }
 }

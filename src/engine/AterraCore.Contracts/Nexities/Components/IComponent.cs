@@ -10,5 +10,5 @@ namespace AterraCore.Contracts.Nexities.Components;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public interface IComponent : IAsset {
+public interface IComponent : IAssetInstance {
 }
