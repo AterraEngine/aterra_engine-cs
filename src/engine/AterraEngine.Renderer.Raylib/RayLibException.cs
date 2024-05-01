@@ -1,17 +1,11 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Nexities.Assets;
-using AterraCore.Nexities.Assets;
-using AterraCore.Nexities.Components;
-using JetBrains.Annotations;
 
-namespace Workfloor_AterraCore.Plugin.Assets;
+namespace AterraEngine.Renderer.Raylib;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Component("0")]
-[AssetTag("customTag")]
-[UsedImplicitly]
-public class TestComponent(IAssetDto assetDto) : Component<IAssetDto>(assetDto);
+
+public class RayLibException : Exception;

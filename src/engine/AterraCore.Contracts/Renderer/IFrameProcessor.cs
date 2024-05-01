@@ -1,17 +1,14 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Nexities.Assets;
-using AterraCore.Nexities.Assets;
-using AterraCore.Nexities.Components;
-using JetBrains.Annotations;
 
-namespace Workfloor_AterraCore.Plugin.Assets;
+namespace AterraCore.Contracts.Renderer;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Component("0")]
-[AssetTag("customTag")]
-[UsedImplicitly]
-public class TestComponent(IAssetDto assetDto) : Component<IAssetDto>(assetDto);
+
+public interface IFrameProcessor {
+    public void PostInit();
+    public void DrawFrame();
+}

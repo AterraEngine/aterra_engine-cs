@@ -11,9 +11,11 @@ using AterraCore.Common;
 using AterraCore.Config.EngineConfig;
 using AterraCore.Contracts.DI;
 using AterraCore.Contracts.FlexiPlug;
+using AterraCore.Contracts.Renderer;
 using AterraCore.Extensions;
 using AterraCore.FlexiPlug;
 using AterraCore.Loggers;
+using AterraEngine.Renderer.Raylib;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using static AterraCore.Extensions.ServiceDescriptorExtension;
@@ -43,7 +45,7 @@ public class EngineConfiguration(ILogger? logger = null) {
     // -----------------------------------------------------------------------------------------------------------------
     public EngineConfiguration ImportAssemblyAsPlugin(Assembly? assembly) {
         // TODO use the pluginLoader to assign the plugin.
-        if (assembly is not null) {
+        if (assembly is null) {
             _engineConfigFlag |= EngineConfigFlags.PluginLoadOrderUnstable;
             _logger.Warning("Assembly could not be assigned as a Plugin");
             return this;
@@ -56,7 +58,9 @@ public class EngineConfiguration(ILogger? logger = null) {
     public EngineConfiguration AssignDefaultServices() {
         // Services which may be overriden
         _engineServiceBuilder.AssignServiceDescriptors([
-            NewServiceDescriptor<ILogger>(EngineLogger.CreateLogger())
+            NewServiceDescriptor<ILogger>(EngineLogger.CreateLogger()),
+            NewServiceDescriptor<IFrameProcessor, FrameProcessor>(ServiceLifetime.Singleton),
+            NewServiceDescriptor<IMainWindow, MainWindow>(ServiceLifetime.Singleton)
         ]);
         
         _logger.Information("Assigned Default Services correctly");

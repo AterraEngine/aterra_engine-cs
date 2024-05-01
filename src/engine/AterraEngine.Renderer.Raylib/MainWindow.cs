@@ -1,17 +1,25 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Nexities.Assets;
-using AterraCore.Nexities.Assets;
-using AterraCore.Nexities.Components;
-using JetBrains.Annotations;
 
-namespace Workfloor_AterraCore.Plugin.Assets;
+using AterraCore.Contracts.Renderer;
+
+namespace AterraEngine.Renderer.Raylib;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Component("0")]
-[AssetTag("customTag")]
-[UsedImplicitly]
-public class TestComponent(IAssetDto assetDto) : Component<IAssetDto>(assetDto);
+
+public class MainWindow : IMainWindow{
+    public int Width { get; } = 800;
+    public int Height { get; } = 400;
+    public string Name { get; } = "AterraEngine - Test";
+
+    public bool IsInitialised { get; private set; }
+
+    public void Init() {
+        InitWindow(Width, Height, Name);
+
+        IsInitialised = true;
+    }
+}

@@ -1,17 +1,20 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Nexities.Assets;
-using AterraCore.Nexities.Assets;
-using AterraCore.Nexities.Components;
-using JetBrains.Annotations;
 
-namespace Workfloor_AterraCore.Plugin.Assets;
+using AterraCore.Contracts.Threading;
+
+namespace AterraEngine.Threading;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Component("0")]
-[AssetTag("customTag")]
-[UsedImplicitly]
-public class TestComponent(IAssetDto assetDto) : Component<IAssetDto>(assetDto);
+
+public abstract class AbstractThread : IThread{
+    public CancellationToken CancellationToken { get; internal set; }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    public abstract void Run();
+}
