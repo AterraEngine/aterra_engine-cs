@@ -43,14 +43,13 @@ public class EngineConfiguration(ILogger? logger = null) {
     // -----------------------------------------------------------------------------------------------------------------
     public EngineConfiguration ImportAssemblyAsPlugin(Assembly? assembly) {
         // TODO use the pluginLoader to assign the plugin.
-        if (assembly is null) {
+        if (assembly is not null) {
+            _engineConfigFlag |= EngineConfigFlags.PluginLoadOrderUnstable;
             _logger.Warning("Assembly could not be assigned as a Plugin");
             return this;
         }
         
         _pluginLoader.InjectAssemblyAsPlugin(assembly);
-        
-        _logger.Information("Assigned Assembly as a Plugin");
         return this;
     }
     
@@ -101,10 +100,10 @@ public class EngineConfiguration(ILogger? logger = null) {
     public EngineConfiguration ImportPlugins() {
         // TODO make a check though the _engineConfigFlag to see if everything has been setup already
         
-        EngineConfigDto.PluginData.Plugins
+        EngineConfigDto.PluginData.LoadOrder.Plugins
             .IterateOver(p => p.FilePath = Path.Join(EngineConfigDto.PluginData.RootFolder, p.FileNameInternal));
 
-        string[] filePaths = EngineConfigDto.PluginData.Plugins.Select(p => p.FilePath).ToArray();
+        string[] filePaths = EngineConfigDto.PluginData.LoadOrder.Plugins.Select(p => p.FilePath).ToArray();
         
         _logger.Information("All plugin file paths: {paths}", filePaths);
         
@@ -152,6 +151,11 @@ public class EngineConfiguration(ILogger? logger = null) {
         if (_engineConfigFlag == EngineConfigFlags.UnConfigured) {
             // TODO throw proper error
             throw new Exception();
+        }
+
+        if (_engineConfigFlag.HasFlag(EngineConfigFlags.PluginLoadOrderUnstable) 
+            && EngineConfigDto.PluginData.LoadOrder.BreakOnUnstable) {
+            _logger.ThrowFatal<ArgumentException>("Engine could not be created -> Load Order was Unstable & configuration.BreakOnUnstable was set to {bool}", EngineConfigDto.PluginData.LoadOrder.BreakOnUnstable);
         }
         
         // Populate Plugin Atlas with plugin list

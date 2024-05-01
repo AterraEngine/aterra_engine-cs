@@ -13,7 +13,7 @@ namespace AterraCore.Loggers;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public static class DefaultLoggerExtensions {
+public static class LoggerConfigurationExtensions {
     private const string OutputTemplate = "[{Timestamp:HH:mm:ss.fff} {Level:u3}] {Message:lj}{NewLine}{Exception}";
 
     private static readonly AnsiConsoleTheme Theme = new(

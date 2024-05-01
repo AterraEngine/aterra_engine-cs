@@ -2,17 +2,18 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-namespace AterraCore.Common;
+using System.Xml.Serialization;
+
+namespace AterraCore.Config.Xml;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public enum ExitCodes {
-    Success = 0,
-    GeneralError = 1,
-    InvalidInput = 2,
-    
-    PluginLoadFail = 3,
-    PluginIdsExhausted =4,
+public class LoadOrderDto {
+    [XmlAttribute("breakOnUnstable")]
+    public bool BreakOnUnstable { get; set; }
+
+    [XmlElement("plugin")]
+    public required FileDto[] Plugins { get; set; } 
 }

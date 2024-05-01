@@ -8,6 +8,7 @@
     <option name="USE_MONO" value="0" />
     <option name="RUNTIME_ARGUMENTS" value="" />
     <method v="2">
+      <option name="Build" default="false" projectName="Workfloor-AterraCore.Plugin" projectPath="$PROJECT_DIR$/examples/Workfloor/Workfloor-AterraCore.Plugin/Workfloor-AterraCore.Plugin.csproj" />
       <option name="Build Solution" enabled="true" />
     </method>
   </configuration>

@@ -19,6 +19,8 @@ public class PluginDto(int id, string filepath) : IPluginDto {
     public PluginId Id { get; } = new(id);
     public string FilePath { get; } = filepath;
     public string ReadableName => Data?.ReadableName ?? FilePath;
+    private string? _readableId;
+    public string ReadableId => _readableId ??= $"Plugin.{Id}";
     public List<Assembly> Assemblies { get; } = [];
     
     // Other

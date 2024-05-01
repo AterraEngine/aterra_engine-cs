@@ -7,28 +7,31 @@ using AterraCore.Config.Xml;
 using AterraCore.Contracts.Config;
 using AterraCore.Contracts.Config.PluginConfig;
 using AterraCore.Contracts.Config.Xml;
+using AterraCore.Extensions;
+using AterraCore.Loggers.Helpers;
+using Serilog;
 
 namespace AterraCore.Config.PluginConfig;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[XmlRoot("PluginConfig")]
+[XmlRoot("pluginConfig")]
 public class PluginConfigDto : IConfigDto<PluginConfigDto>, IPluginConfigDto {
-    [XmlElement("Name")] 
+    [XmlElement("name")] 
     public string ReadableName { get; set; } = null!;
 
-    [XmlElement("Author")]
+    [XmlElement("author")]
     public string Author { get; set; } = string.Empty;
 
-    [XmlElement("PluginVersion")]
+    [XmlElement("pluginVersion")]
     public SemanticVersion PluginVersion { get; set; }
     
-    [XmlElement("ExpectedGameVersion")]
+    [XmlElement("expectedGameVersion")]
     public SemanticVersion GameVersion { get; set; }
 
-    [XmlArray("Bins")]
-    [XmlArrayItem("Bin", typeof(FileDto))]
+    [XmlArray("bins")]
+    [XmlArrayItem("bin", typeof(FileDto))]
     public FileDto[] BinDtos { get; set; } = []; 
     [XmlIgnore] public IEnumerable<IFileDto> Dlls => BinDtos;
 
@@ -45,5 +48,23 @@ public class PluginConfigDto : IConfigDto<PluginConfigDto>, IPluginConfigDto {
         BinDtos = [];
 
         return this;
+    }
+    
+    public void OutputToLog(ILogger logger) {
+        
+        ValuedStringBuilder valuedBuilder = new ValuedStringBuilder()
+            .AppendLine("Plugin Config loaded with the following data:")
+            .AppendLineValued("- Name: ", ReadableName)
+            .AppendLineValued("- Author: ", Author)
+            .AppendLineValued("- Plugin Version: ", PluginVersion)
+            .AppendLineValued("- Expected Game Version: ", GameVersion)
+            .AppendLine()
+            
+            .AppendLine("Bins:");
+        
+        BinDtos
+            .IterateOver(bin => valuedBuilder.AppendLineValued("- Bin : ", bin.FileNameInternal));
+        
+        logger.Debug(valuedBuilder.ToString(), valuedBuilder.ValuesToArray());
     }
 }

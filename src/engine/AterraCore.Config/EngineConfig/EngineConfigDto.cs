@@ -2,14 +2,13 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using System.Text;
 using System.Xml.Serialization;
 using AterraCore.Common;
 using AterraCore.Common.FlexiPlug;
 using AterraCore.Config.Xml;
 using AterraCore.Contracts.Config;
 using AterraCore.Extensions;
-using AterraCore.Loggers;
+using AterraCore.Loggers.Helpers;
 using Serilog;
 
 namespace AterraCore.Config.EngineConfig;
@@ -17,18 +16,18 @@ namespace AterraCore.Config.EngineConfig;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[XmlRoot("EngineConfig")]
+[XmlRoot("engineConfig")]
 public class EngineConfigDto : IConfigDto<EngineConfigDto> {
-    [XmlElement("EngineVersion")] 
+    [XmlElement("engineVersion")] 
     public SemanticVersion EngineVersion { get; set; }
     
-    [XmlElement("GameVersion")]
+    [XmlElement("gameVersion")]
     public SemanticVersion GameVersion { get; set; }
     
-    [XmlElement("PluginData")]
+    [XmlElement("pluginData")]
     public PluginDataDto PluginData { get; set; } = null!;
     
-    [XmlElement("Raylib")]
+    [XmlElement("raylib")]
     public RaylibConfigDto RaylibConfig { get; set; } = null!;
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -38,7 +37,10 @@ public class EngineConfigDto : IConfigDto<EngineConfigDto> {
         EngineVersion = SemanticVersion.Max; // Warn remove this in production
         PluginData = new PluginDataDto {
             RootFolder = Paths.Plugins.Folder,
-            Plugins = []
+            LoadOrder = new LoadOrderDto {
+                BreakOnUnstable = false,
+                Plugins = []
+            }
         };
         RaylibConfig = new RaylibConfigDto {
             Window = new RaylibWindowElementDto {
@@ -61,13 +63,13 @@ public class EngineConfigDto : IConfigDto<EngineConfigDto> {
             .AppendLineValued("- Engine version: ", EngineVersion)
             .AppendLineValued("- Game: ", GameVersion)
             .AppendLineValued("- Plugin RootFolder: ", PluginData.RootFolder)
-            .AppendLineValued("- Plugin Plugins: ", PluginData.Plugins)
+            .AppendLineValued("- Plugin Plugins: ", PluginData.LoadOrder.Plugins.ToList())
             .AppendLineValued("- Raylib config: ", RaylibConfig)
             .AppendLine()
             
             .AppendLine("Plugins - Load Order : (Ids are not final)");
         
-        PluginData.Plugins
+        PluginData.LoadOrder.Plugins
             .Select((r, i) => new { r.FileNameInternal, Id=new PluginId(i).ToString() })
             .IterateOver(box => valuedBuilder.AppendLineValued($"- id_{box.Id} : ", box.FileNameInternal));
         

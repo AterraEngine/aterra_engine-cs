@@ -27,7 +27,7 @@
     <Target Name="AddingPlugins" AfterTargets="Build">
 
         <!-- Create output directories -->
-        <MakeDir Directories="$(OutDir)\plugins" />
+        <MakeDir Directories="$(OutDir)plugins" />
 
         <!-- Define list of plugin files -->
         <ItemGroup>

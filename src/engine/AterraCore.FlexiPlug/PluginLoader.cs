@@ -9,7 +9,7 @@ using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug.Plugin;
 using AterraCore.Extensions;
 using AterraCore.FlexiPlug.Plugin;
-using AterraCore.Loggers;
+using AterraCore.Loggers.Helpers;
 using Serilog;
 
 namespace AterraCore.FlexiPlug;
@@ -33,8 +33,7 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         set {
             if (value == ushort.MaxValue) {
                 var maxId = ushort.MaxValue.ToString("X");
-                logger.Fatal("Max Plugin Id of {maxId} is exhausted",maxId);
-                throw new OverflowException($"Max Plugin Id of {maxId} is exhausted");
+                logger.ExitFatal(ExitCodes.PluginIdsExhausted, "Max Plugin Id of {maxId} is exhausted",maxId);
             }
             _pluginIdCounter = value;
         }
@@ -44,26 +43,19 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     private IPluginDto CreateNewPluginDto(string filepath) {
-        IPluginDto pluginData;
+        // PluginCounter exits out of engine as soon as the max PluginId is exhausted
+        IPluginDto pluginData = Plugins.AddLast(new PluginDto(PluginIdCounter++, filepath)).Value;
         
-        try {
-            pluginData = Plugins.AddLast(new PluginDto(PluginIdCounter++, filepath)).Value;
-        }
-        catch (Exception e) {
-            logger.Error(e, "Unexpected exception when creating a new plugin {Plugin}: {Exception}", filepath, e.Message);
-            throw;
-        }
-        
-        logger.Information("New pluginId of {id} registered for {filepath} ", pluginData.Id, pluginData.ReadableName);
+        logger.Debug("{Id} : Assigned to {Name}", pluginData.ReadableId, pluginData.ReadableName);
         return pluginData;
     }
     
     private IPluginDto CheckExists(IPluginDto pluginData) {
         if (!File.Exists(pluginData.FilePath) ){
-            logger.Warning("Plugin did not exist at {filepath}", pluginData.ReadableName);
+            logger.Warning("{Id} : No Zip Found", pluginData.ReadableId);
             return SetInvalid(pluginData);
         }
-        logger.Information("Plugin Zip found at {filepath}", pluginData.ReadableName);
+        logger.Debug("{Id} : Found Zip", pluginData.ReadableId);
         return pluginData;
     }
 
@@ -71,18 +63,18 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         pluginData.CheckSum = zipImporter.CheckSum;
         
         if (!_knownHashes.Add(pluginData.CheckSum)) {
-            logger.Warning("Duplicate plugin found at {filepath}", pluginData.ReadableName);
+            logger.Warning("{Id} : Can't assign, duplicate found", pluginData.ReadableId);
             return SetInvalid(pluginData);
         }
 
-        logger.Debug("No Duplicate Plugins found");
+        logger.Debug("{Id} : Not a duplicate", pluginData.ReadableId);
         return pluginData;
     }
 
     private IPluginDto WithZipImporter(IPluginDto pluginData, IEnumerable<ZipImportCallback> callbacks ) {
         
         using var zipImporter = new PluginZipImporter(logger, pluginData.FilePath);
-        logger.Information("Assigned new Zip Importer to {plugin}", pluginData.ReadableName);
+        logger.Debug("{Id} : Assigned Zip Importer", pluginData.ReadableId);
         
         // Check for duplicates here
         //      Easier here because we can use the ZipImporter to confirm hashes.
@@ -97,14 +89,13 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
 
     private IPluginDto GetConfigData(IPluginDto pluginData, IPluginZipImporter<PluginConfigDto> zipImporter) {
         if (!zipImporter.TryGetPluginConfig(out PluginConfigDto? pluginConfigDto)) {
-            logger.Warning("Could not extract a valid PluginConfigDto from the plugin {plugin}", pluginData.ReadableName);
+            logger.Warning("{Id} : No valid PluginConfig found. Usually means that the plugin-config.xml was incorrect", pluginData.ReadableId);
             SetInvalid(pluginData);
             return pluginData;
         }
 
         pluginData.IngestFromPluginConfigDto(pluginConfigDto);
-        logger.Information("Assigned plugin config of {path} to {name}", pluginData.FilePath, pluginData.ReadableName);
-        logger.Information("Plugin {Name} made by {Author}", pluginData.ReadableName, pluginData.Data?.Author);
+        logger.Debug("{Id} : Valid PluginConfig found", pluginData.ReadableId);
         
         return pluginData;
     }
@@ -130,7 +121,7 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
                 .Combine(Paths.Plugins.PluginBinFolder, binDto.FileNameInternal)
                 .Replace("\\", "/"));
         
-        logger.Information("Found the following DLLs for {filepath} : {@dlls}", pluginData.ReadableName, pluginData.Data?.Dlls.Select(bin => bin.FileNameInternal));
+        logger.Debug("{Id} : Following DLLs defined {@dlls}", pluginData.ReadableId, pluginData.Data?.Dlls.Select(bin => bin.FileNameInternal));
 
         if ((pluginData.Data?.Dlls.Count() ?? 0) == 0) {
             return SetInvalid(pluginData);
@@ -139,12 +130,12 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         pluginData.Assemblies.AddRange(pluginData.Data!.Dlls
             .Select(binDto => {
                 if (!zipImporter.TryGetDllAssembly(binDto, out Assembly? assembly)) {
-                    logger.Warning("Could not load plugin assembly for {filepath}", pluginData.ReadableName);
+                    logger.Warning("{Id} : Assembly could not be loaded from {Path}", pluginData.ReadableId, binDto.FilePath);
                     SetInvalid(pluginData);
                     return assembly;
                 }
 
-                logger.Information("Found assembly for {filepath} as {assembly}", pluginData.FilePath, assembly.FullName);
+                logger.Debug("{Id} : Assembly {assembly} loaded", pluginData.ReadableId, assembly.FullName);
                 return assembly;
             })
             .Where(assembly => assembly != null)
@@ -156,32 +147,28 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
     
     private IPluginDto SetInvalid(IPluginDto pluginData) {
         pluginData.Validity = PluginValidity.Invalid;
-        logger.Error("{Plugin} set to Invalid", pluginData.ReadableName);
+        logger.Error("{Id} : Set to Invalid", pluginData.ReadableId);
 
         return pluginData;
     }
     
-    private bool IsSkipable(IPluginDto pluginData) {
-        bool result = pluginData.IsProcessed 
-                      || ( pluginData.Validity != PluginValidity.Untested 
-                           && pluginData.Validity == PluginValidity.Invalid);
-        if (result) {
-            logger.Warning("Skipping {name}", pluginData.ReadableName);
-        }
-        return result;
+    private static bool IsSkipable(IPluginDto pluginData) {
+        return pluginData.IsProcessed 
+            || ( pluginData.Validity != PluginValidity.Untested 
+                 && pluginData.Validity == PluginValidity.Invalid);
     }
 
     private IPluginDto Validate(IPluginDto pluginData) {
-        
+            
         // Todo add more validation steps
         if (pluginData.Data != null && pluginData.Assemblies.Count != pluginData.Data.Dlls.Count()) {
             pluginData.Validity = PluginValidity.Invalid;
-            logger.Warning("Amount of assigned DLL's didnt correspond with the loaded assemblies in {plugin}", pluginData.ReadableName);
+            logger.Warning("{Id} : Amount of assigned DLL's didnt correspond with its loaded assemblies", pluginData.ReadableId);
         }
 
         if (pluginData.Validity == PluginValidity.Untested) {
             pluginData.Validity = PluginValidity.Valid;
-            logger.Information("Plugin {plugin} has been validated correctly", pluginData.ReadableName);
+            logger.Debug("{Id} : Validated correctly", pluginData.ReadableId);
         }
 
         pluginData.IsProcessed = true;
@@ -196,7 +183,9 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
     private void DebugPrintAllPlugins() {
         var valuedBuilder = new ValuedStringBuilder();
         
-        Plugins.IterateOver(pluginData => valuedBuilder.AppendLineValued("-plugin ", true, new {pluginData.FilePath, pluginData.Validity}));
+        Plugins.IterateOver(pluginData => valuedBuilder.AppendLineValued(
+            "-plugin ", true, new {pluginData.FilePath, pluginData.Validity})
+        );
         
         logger.Debug(valuedBuilder.ToString(), valuedBuilder.ValuesToArray());
     }
@@ -205,18 +194,18 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
     private void TrimFaultyPlugins() {
         IEnumerable<IPluginDto> validPlugins = Plugins.Where(p => p.Validity == PluginValidity.Valid).ToArray();
         if (validPlugins.Count() == Plugins.Count) {
-            logger.Information("All plugins validated correctly");
+            logger.Debug("Plugins validated correctly");
             return;
         }
         
-        logger.Warning("Some plugins did not get validated correctly, trimming plugin list");
+        logger.Warning("Plugins did not get validated correctly, trimming plugin list");
         
         Plugins
             .Where(p => p.Validity != PluginValidity.Valid)
             .ToList() // Can't use the Extensions's ForEach because we are removing certain data
             .ForEach(p => Plugins.Remove(p));
         
-        logger.Warning("Plugin list trimmed to to a total of {i} ", Plugins.Count);
+        logger.Warning("Plugins list trimmed to to a total of {i} ", Plugins.Count);
     }
     
     // -----------------------------------------------------------------------------------------------------------------
@@ -243,7 +232,7 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         DebugPrintAllPlugins();
         TrimFaultyPlugins();
         
-        logger.Information("{Count} Plugins have been loaded", Plugins.Count);
+        logger.Information("Total Plugins loaded : {Count}", Plugins.Count);
         return Plugins.Count != 0;
     }
 
@@ -260,7 +249,7 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         pluginData.Validity = PluginValidity.Valid;
         pluginData.IsProcessed = true;
         
-        logger.Information("Current Assembly has been assigned as a Plugin with ID {id}", pluginData.Id);
+        logger.Debug("{Id} : Custom Assembly assigned ", pluginData.ReadableId);
     }
 
     public LinkedList<IPlugin> ExportToPlugins() {

@@ -15,11 +15,10 @@ namespace AterraCore.Config.Xml;
 public class PluginDataDto {
     [XmlAttribute("root")]
     public required string RootFolder { get; set; }
-    
-    [XmlArray("LoadOrder")]
-    [XmlArrayItem("Plugin", typeof(FileDto))]
-    public required FileDto[] Plugins { get; set; } 
 
+    [XmlElement("loadOrder")] 
+    public required LoadOrderDto LoadOrder { get; set; }
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -27,7 +26,7 @@ public class PluginDataDto {
         var txt = new StringBuilder();
         txt.Append($"RootFolder : {RootFolder} ");
         txt.Append("Plugins : ");
-        Plugins.IterateOver(p => txt.Append($"{p} ,"));
+        LoadOrder.Plugins.IterateOver(p => txt.Append($"{p} ,"));
         return txt.ToString();
     }
 }

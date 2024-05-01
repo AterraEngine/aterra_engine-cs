@@ -1,19 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<EngineConfig xmlns="urn:aterra-engine:engine-config">
-    <EngineVersion value="0.0.0"/>
-    <GameVersion value="0.0.0"/>
-    <PluginData root="plugins">
-        <LoadOrder>
-            <Plugin file="Workfloor-AterraCore.Plugin.zip"/>
-            <Plugin file="Workfloor-AterraCore.Plugin.zip"/>
-            <Plugin file="Workfloor-AterraCore.Plugin.zip"/>
-            <Plugin file="Workfloor-AterraCore.Plugin.zip"/>
-            <Plugin file="Workfloor-AterraCore.Plugin.zip"/>
-            <Plugin file="Workfloor-AterraCore.Plugin.zip"/>
-            <Plugin file="Workfloor-AterraCore.Plugin.zip"/>
-            <Plugin file="Workfloor-AterraCore.Plugin.zip"/>
-            <Plugin file="Workfloor-AterraCore.Plugin.zip"/>
-            <Plugin file="Workfloor-AterraCore.Plugin.zip"/>
-        </LoadOrder>
-    </PluginData>
-</EngineConfig>
+<engineConfig xmlns="urn:aterra-engine:engine-config">
+    <engineVersion value="0.0.0"/>
+    <gameVersion value="0.0.0"/>
+    <pluginData root="plugins">
+        <loadOrder breakOnUnstable="true">
+            <plugin file="Workfloor-AterraCore.Plugin.zip"/>
+        </loadOrder>
+    </pluginData>
+</engineConfig>

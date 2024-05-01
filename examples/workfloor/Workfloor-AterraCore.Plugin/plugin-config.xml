@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PluginConfig xmlns="urn:aterra-engine:plugin-config">
-    <Name>Workfloor Experiments</Name>
-    <Author>Andreas Sas</Author> 
-    <PluginVersion value="0.0.0"/>
-    <ExpectedGameVersion value="0.0.0"/>
-    <Bins>
-        <Bin file="Workfloor-AterraCore.Plugin.dll"/>
-    </Bins>
+<pluginConfig xmlns="urn:aterra-engine:plugin-config">
+    <name>Workfloor Experiments</name>
+    <author>Andreas Sas</author> 
+    <pluginVersion value="0.0.0"/>
+    <expectedGameVersion value="0.0.0"/>
+    <bins>
+        <bin file="Workfloor-AterraCore.Plugin.dll"/>
+    </bins>
     
-</PluginConfig>
+</pluginConfig>

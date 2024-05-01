@@ -4,7 +4,7 @@
 
 using System.Text;
 
-namespace AterraCore.Loggers;
+namespace AterraCore.Loggers.Helpers;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
@@ -12,9 +12,8 @@ namespace AterraCore.Loggers;
 
 public class ValuedStringBuilder {
     private readonly StringBuilder _stringBuilder = new();
-    private readonly List<object?> _propertyValues = new();
-
-
+    private readonly List<object?> _propertyValues = [];
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
