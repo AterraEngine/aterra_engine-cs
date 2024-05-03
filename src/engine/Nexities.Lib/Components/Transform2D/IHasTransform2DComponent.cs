@@ -1,14 +1,14 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Nexities.Entities;
 
-using AterraCore.Contracts.Nexities.Assets;
-using Microsoft.Extensions.ObjectPool;
-
-namespace AterraCore.Contracts.Nexities.Components;
+namespace Nexities.Lib.Components.Transform2D;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public interface IComponent : IAssetInstance;
+public interface IHasTransform2DComponent {
+    public ITransform2DComponent Transform2D { get; }
+}

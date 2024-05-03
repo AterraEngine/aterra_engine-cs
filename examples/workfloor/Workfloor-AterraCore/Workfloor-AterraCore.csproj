@@ -9,12 +9,21 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\..\tools\AterraEngine.Analyzers\AterraEngine.Analyzers\AterraEngine.Analyzers.csproj">
+            <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+            <OutputItemType>Analyzer</OutputItemType>
+        </ProjectReference>
+    </ItemGroup>
+
+    <ItemGroup>
       <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
+      <PackageReference Include="Microsoft.Extensions.ObjectPool.DependencyInjection" Version="8.4.0" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\src\engine\AterraEngine\AterraEngine.csproj" />
+      <ProjectReference Include="..\..\..\src\engine\Nexities.Lib\Nexities.Lib.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -22,6 +31,10 @@
             <Link>xsd\%(Filename)%(Extension)</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Assets\" />
     </ItemGroup>
     
     <Target Name="AddingPlugins" AfterTargets="Build">

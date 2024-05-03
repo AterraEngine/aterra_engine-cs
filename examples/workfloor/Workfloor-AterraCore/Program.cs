@@ -6,6 +6,8 @@ using System.Reflection;
 using AterraCore.Common;
 using AterraCore.Contracts;
 using AterraEngine;
+using Microsoft.Extensions.DependencyInjection;
+using Nexities.Lib.Components.Transform2D;
 
 namespace Workfloor_AterraCore;
 
@@ -18,6 +20,13 @@ public static class Program {
         IEngine engine = new EngineConfiguration()
             .ImportEngineConfig(Paths.ConfigEngine)
             .AssignDefaultServices()
+            .AddCustomServices(
+                new ServiceDescriptor(
+                    typeof(ITransform2DComponent), 
+                    _ => new Transform2DComponent(), 
+                    ServiceLifetime.Transient 
+                )    
+            )
             
             .ImportAssemblyAsPlugin(Assembly.GetEntryAssembly())
             .ImportPlugins()

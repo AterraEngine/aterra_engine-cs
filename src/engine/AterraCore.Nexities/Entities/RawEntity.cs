@@ -12,4 +12,15 @@ namespace AterraCore.Nexities.Entities;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class Entity(params IComponent[]? components) : RawEntity<IComponent>(components);
+
+public abstract class RawEntity<T>(params T[]? components) : AssetInstance, IRawEntity<T> where T : IComponent {
+    protected readonly ConcurrentBag<T> ComponentsCache = new(components ?? []);
+    public HashSet<Guid> ComponentIds => ComponentsCache
+        .Select(comp => comp.Guid)
+        .ToHashSet();
+
+// -----------------------------------------------------------------------------------------------------------------
+// Methods
+// -----------------------------------------------------------------------------------------------------------------
+    public IEnumerable<T> GetComponents() => ComponentsCache.AsEnumerable();
+}

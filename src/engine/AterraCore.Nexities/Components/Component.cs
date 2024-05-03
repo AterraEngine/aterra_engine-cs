@@ -9,6 +9,4 @@ namespace AterraCore.Nexities.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class Component : AssetInstance, IComponent  {
-    
-}
+public abstract class Component : AssetInstance, IComponent;

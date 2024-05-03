@@ -6,9 +6,10 @@ using AterraCore.Common.FlexiPlug;
 using AterraCore.Common.Nexities;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug.Plugin;
-using Serilog;
-
+using JetBrains.Annotations;
+using Microsoft.Build.Framework;
 using static AterraCore.Extensions.LinqExtensions;
+using ILogger = Serilog.ILogger;
 
 namespace AterraCore.FlexiPlug;
 
@@ -16,6 +17,7 @@ namespace AterraCore.FlexiPlug;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
+[UsedImplicitly]
 public class PluginAtlas(ILogger logger) : IPluginAtlas {
     public LinkedList<IPlugin> Plugins { get; private set; } = [];
 

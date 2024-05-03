@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" />
+      <PackageReference Include="Microsoft.Extensions.ObjectPool.DependencyInjection" Version="8.4.0" />
     </ItemGroup>
 
 </Project>

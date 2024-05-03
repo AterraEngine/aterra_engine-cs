@@ -1,17 +1,12 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Nexities.Attributes;
-using AterraCore.Nexities.Entities;
-using JetBrains.Annotations;
+using AterraCore.Contracts.Nexities.Components;
+using Microsoft.Extensions.ObjectPool;
 
-namespace Workfloor_AterraCore.Assets;
+namespace AterraCore.Contracts.Nexities.Entities;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Entity("1")]
-[UsedImplicitly]
-public class TestEntity(Transform2DComponent transform) : Entity(transform), IHasTransformComponent {
-    public Transform2DComponent Transform { get; } = transform;
-}
+public interface IPooledEntity : IRawEntity<IPooledComponent>, IResettable;

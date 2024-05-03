@@ -1,14 +1,17 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using System.Numerics;
+using AterraCore.Contracts.Nexities.Components;
 
-using AterraCore.Contracts.Nexities.Assets;
-using Microsoft.Extensions.ObjectPool;
-
-namespace AterraCore.Contracts.Nexities.Components;
+namespace Nexities.Lib.Components.Transform2D;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public interface IComponent : IAssetInstance;
+public interface ITransform2DComponent : IComponent {
+    public Vector2 Translation { get; set; }
+    public Vector2 Scale { get; set; }
+    public Vector2 Rotation { get; set; }
+}

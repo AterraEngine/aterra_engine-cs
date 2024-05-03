@@ -15,6 +15,7 @@
 
     <ItemGroup>
       <PackageReference Include="Microsoft.Build" Version="17.9.5" />
+      <PackageReference Include="Microsoft.Extensions.ObjectPool.DependencyInjection" Version="8.4.0" />
     </ItemGroup>
 
 </Project>

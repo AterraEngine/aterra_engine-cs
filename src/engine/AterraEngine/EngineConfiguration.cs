@@ -82,6 +82,11 @@ public class EngineConfiguration(ILogger? logger = null) {
         _engineConfigFlag |= EngineConfigFlags.AssignedStaticServices;
         return this;
     }
+
+    public EngineConfiguration AddCustomServices(params ServiceDescriptor[] serviceDescriptor) {
+        _engineServiceBuilder.AssignServiceDescriptors(serviceDescriptor);
+        return this;
+    }
     
     public EngineConfiguration ImportEngineConfig(string filePath, bool outputToLog = true) {
         // TODO make a check though the _engineConfigFlag to see if everything has been setup already

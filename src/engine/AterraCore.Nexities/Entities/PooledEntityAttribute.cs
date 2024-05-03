@@ -2,13 +2,20 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using AterraCore.Contracts.Nexities.Assets;
-using Microsoft.Extensions.ObjectPool;
+using AterraCore.Common.Nexities;
+using AterraCore.Nexities.Assets;
 
-namespace AterraCore.Contracts.Nexities.Components;
+namespace AterraCore.Nexities.Entities;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
-public interface IComponent : IAssetInstance;
+[AttributeUsage(AttributeTargets.Class)]
+public class PooledEntityAttribute(
+    string partialId, 
+    CoreTags coreTags = CoreTags.Entity
+) : AssetAttribute(
+    partialId, 
+    AssetInstanceType.Pooled, 
+    coreTags | CoreTags.Entity
+);

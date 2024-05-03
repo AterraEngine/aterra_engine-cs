@@ -54,6 +54,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Renderer", "Renderer", "{99
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Renderer.Raylib", "src\engine\AterraEngine.Renderer.Raylib\AterraEngine.Renderer.Raylib.csproj", "{184AAE91-D1CE-4111-BDDD-AF653541FE9E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Analyzers", "tools\Analyzers\AterraEngine.Analyzers\AterraEngine.Analyzers.csproj", "{F24E2D2C-CF57-4245-864D-881FC2184C1E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Analyzers", "Analyzers", "{CC5AA276-B4F9-4567-9D76-D0A581D5EF8D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Analyzers.Sample", "tools\Analyzers\AterraEngine.Analyzers.Sample\AterraEngine.Analyzers.Sample.csproj", "{61AD6544-5817-4586-97FE-FF9970E486EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Analyzers.Tests", "tools\Analyzers\AterraEngine.Analyzers.Tests\AterraEngine.Analyzers.Tests.csproj", "{99647BEB-6EC6-44CB-B500-87F374F80AA8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +91,10 @@ Global
 		{ADD34288-B521-4096-BB82-6A7DE6A6F091} = {F86D197F-7641-46CE-A43D-CFF48F84B9E6}
 		{99514BBD-B2EF-4196-8CE7-0630245DF782} = {A333282A-D689-4ADD-9610-827C9E468020}
 		{184AAE91-D1CE-4111-BDDD-AF653541FE9E} = {99514BBD-B2EF-4196-8CE7-0630245DF782}
+		{CC5AA276-B4F9-4567-9D76-D0A581D5EF8D} = {7F9BAB80-307A-42F7-BE48-1E3CCF737EF9}
+		{F24E2D2C-CF57-4245-864D-881FC2184C1E} = {CC5AA276-B4F9-4567-9D76-D0A581D5EF8D}
+		{61AD6544-5817-4586-97FE-FF9970E486EE} = {CC5AA276-B4F9-4567-9D76-D0A581D5EF8D}
+		{99647BEB-6EC6-44CB-B500-87F374F80AA8} = {CC5AA276-B4F9-4567-9D76-D0A581D5EF8D}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{9C8CA02A-28DA-410A-8ADA-A39B3F6A227B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -149,5 +161,17 @@ Global
 		{184AAE91-D1CE-4111-BDDD-AF653541FE9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{184AAE91-D1CE-4111-BDDD-AF653541FE9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{184AAE91-D1CE-4111-BDDD-AF653541FE9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F24E2D2C-CF57-4245-864D-881FC2184C1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F24E2D2C-CF57-4245-864D-881FC2184C1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F24E2D2C-CF57-4245-864D-881FC2184C1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F24E2D2C-CF57-4245-864D-881FC2184C1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61AD6544-5817-4586-97FE-FF9970E486EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61AD6544-5817-4586-97FE-FF9970E486EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61AD6544-5817-4586-97FE-FF9970E486EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61AD6544-5817-4586-97FE-FF9970E486EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99647BEB-6EC6-44CB-B500-87F374F80AA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99647BEB-6EC6-44CB-B500-87F374F80AA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99647BEB-6EC6-44CB-B500-87F374F80AA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99647BEB-6EC6-44CB-B500-87F374F80AA8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
