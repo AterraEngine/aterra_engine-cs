@@ -1,10 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
-using CliArgsParser;
 using CliArgsParser.Attributes;
-using CliArgsParser.Commands;
 using JetBrains.Annotations;
 using Serilog;
 
@@ -13,12 +10,12 @@ namespace ProductionTools.Commands;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
-public class TestConsoleTheme(ILogger logger) : CliCommandAtlas {
+[CommandAtlas]
+public class TestConsoleTheme(ILogger logger) {
     // -----------------------------------------------------------------------------------------------------------------
     // Commands
     // -----------------------------------------------------------------------------------------------------------------
-    [CliCommand<NoArgs>("console-theme-test")]
+    [Command("console-theme-test")]
     [UsedImplicitly]
     public void GenerateXmlSchemaEngineConfig() {
         // Log messages with different levels and variable types
@@ -40,7 +37,7 @@ public class TestConsoleTheme(ILogger logger) : CliCommandAtlas {
         logger.Information("null value: {@ObjectValue}", [null]);
         logger.Information("list value: {ObjectValue}", new List<string>{ "a", "b", "c"});
         
-        logger.Information("Type name value: {Object}", typeof(CliCommandAtlas));
+        logger.Information("Type name value: {Object}", typeof(TestConsoleTheme));
         
         logger.Information("Incorrect value: {ObjectValue}", null);
         

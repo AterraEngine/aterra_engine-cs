@@ -11,6 +11,7 @@
 
         <RootNamespace>AterraEngine.Analyzers</RootNamespace>
         <AssemblyName>AterraEngine.Analyzers</AssemblyName>
+        <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     </PropertyGroup>
     
     <ItemGroup>

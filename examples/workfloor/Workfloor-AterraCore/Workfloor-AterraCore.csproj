@@ -5,7 +5,8 @@
         <TargetFramework>net8.0</TargetFramework>
         <RootNamespace>Workfloor_AterraCore</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>        
+        <Nullable>enable</Nullable>
+        <RuntimeIdentifier>win-x64</RuntimeIdentifier>    
     </PropertyGroup>
 
     <ItemGroup>

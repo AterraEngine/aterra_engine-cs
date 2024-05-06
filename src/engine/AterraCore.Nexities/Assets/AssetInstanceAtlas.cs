@@ -5,6 +5,7 @@
 using System.Collections.Concurrent;
 using AterraCore.Common.Nexities;
 using AterraCore.Contracts.Nexities.Assets;
+using AterraCore.DI;
 using JetBrains.Annotations;
 using Serilog;
 
@@ -26,8 +27,8 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas) : IAsset
             logger.Warning("Asset Id {id} could not be matched to a Type", assetId );
             return false;
         }
-        
 
+        instance = EngineServices.CreateWithServices<IAssetInstance>(type);
         return true;
     }
 }

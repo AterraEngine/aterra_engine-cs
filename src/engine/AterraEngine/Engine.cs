@@ -2,7 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using System.Runtime.CompilerServices;
+using AterraCore.Common.Nexities;
 using AterraCore.Contracts;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.Nexities.Assets;
@@ -16,12 +16,19 @@ namespace AterraEngine;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public class Engine(ILogger logger, IPluginAtlas pluginAtlas, IAssetAtlas assetAtlas) : IEngine {
+public class Engine(ILogger logger, IAssetAtlas assetAtlas, IPluginAtlas pluginAtlas) : IEngine {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public void Run() {
         logger.Information("Entered AterraEngine");
+        
+        foreach (AssetRegistration assetRegistration in pluginAtlas.GetAssetRegistrations()) {
+            if (!assetAtlas.TryAssignAsset(assetRegistration, out AssetId? _)) {
+                logger.Warning("Type {Type} could not be assigned as an asset", assetRegistration.Type);
+            }
+        }
+        
         
         // TODO create window etc...
 
@@ -33,8 +40,6 @@ public class Engine(ILogger logger, IPluginAtlas pluginAtlas, IAssetAtlas assetA
         var renderThread = new Thread(renderThreadProcessor.Run);
         renderThread.Start();
         
-        assetAtlas.TryImportAssetsFromPlugins();
-
         // Task.Run(() => {
         //     Task.Delay(5000, cts.Token);
         //     cts.Cancel();

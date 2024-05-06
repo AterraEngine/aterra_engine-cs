@@ -12,7 +12,7 @@ namespace Nexities.Lib.Components.Transform3D;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Component("2")]
+[Component<ITransform3DComponent>("AC000001")]
 [AssetTag("data")]
 [UsedImplicitly]
 public class Transform3DComponent : Component, ITransform3DComponent {

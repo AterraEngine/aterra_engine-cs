@@ -5,10 +5,14 @@
         <RootNamespace>Workfloor_AterraCore.Plugin</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     </PropertyGroup>
 
     <ItemGroup>
-        <Analyzer Include="..\..\..\tools\AterraEngine.Analyzers\AterraEngine.Analyzers\bin\Debug\net8.0\AterraEngine.Analyzers.dll"/>
+        <ProjectReference Include="..\..\..\tools\AterraEngine.Analyzers\AterraEngine.Analyzers\AterraEngine.Analyzers.csproj">
+            <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+            <OutputItemType>Analyzer</OutputItemType>
+        </ProjectReference>
     </ItemGroup>
 
 

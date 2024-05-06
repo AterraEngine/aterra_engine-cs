@@ -4,6 +4,7 @@
 
 using AterraCore.Loggers;
 using CliArgsParser;
+using CliArgsParser.Contracts;
 using ProductionTools.Commands;
 using Serilog;
 using Serilog.Core;
@@ -18,21 +19,22 @@ public static class Program {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public static void Main(string[] args) {
-        using Logger logger = new LoggerConfiguration()
+    private static async Task MainAsync(string[] args) {
+        await using Logger logger = new LoggerConfiguration()
             .MinimumLevel.Verbose()
             .DefaultSinkConsole() // Using the normal version of the Sink Console, else the empty lines get processed earlier.
             .CreateLogger();
-        
-        List<CliCommandAtlas> commandAtlasArray = [
-            new XmlSchemaGenerator(logger),
-            new TestConsoleTheme(logger)
-        ];
-        
-        var argsParser = new CliArgsParser.CliArgsParser();
-        
-        commandAtlasArray.ForEach(a => argsParser.RegisterFromCliAtlas(a));
-            
-        argsParser.TryParseMultiple(args);
+
+        IParser parser = new ParserConfiguration()
+            .SetLogger(logger)
+            .RegisterAtlas(new XmlSchemaGenerator(logger))
+            .RegisterAtlas(new TestConsoleTheme(logger))
+            .CreateArgsParser();
+
+        await parser.TryParseAsync(string.Join(' ', args));
+    }
+    
+    public static void Main(string[] args) {
+        MainAsync(args).GetAwaiter().GetResult();
     }
 }

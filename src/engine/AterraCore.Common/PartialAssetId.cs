@@ -12,7 +12,7 @@ public readonly partial struct PartialAssetId(uint value) : IComparable<PartialA
     private static Regex _regex = MyRegex(); 
     
     // PartialAssetId is basically just a fancy ushort
-    public uint Value { get; } = value; // which means the max plugin ID will be `FFFFFFFF`
+    public uint Value { get; } = value; // which means the max partial ID will be `FFFFFFFF`
 
     // -----------------------------------------------------------------------------------------------------------------
     // Constructors

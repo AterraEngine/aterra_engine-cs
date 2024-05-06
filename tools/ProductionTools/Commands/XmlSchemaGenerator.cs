@@ -7,8 +7,8 @@ using AterraCore.Config;
 using AterraCore.Config.EngineConfig;
 using AterraCore.Config.PluginConfig;
 using AterraCore.Contracts.Config;
-using CliArgsParser;
 using CliArgsParser.Attributes;
+using CliArgsParser.Contracts;
 using JetBrains.Annotations;
 using Serilog;
 
@@ -19,18 +19,19 @@ namespace ProductionTools.Commands;
 // ---------------------------------------------------------------------------------------------------------------------
 [SuppressMessage("ReSharper", "AutoPropertyCanBeMadeGetOnly.Global")]
 [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
-public class ArgsOptions : ParameterOptions {
-    [ArgValue('c', "classname")] public string ClassName { get; set; } = null!;
-    [ArgValue('p', "prettify")] public bool Prettify { get; set; } = true;
-    [ArgValue('o', "output")] public string? OutputFile { get; set; }
-    [ArgValue('f', "folder")] public string? OutputFolder { get; set; }
-    [ArgValue('n', "namespace-prefix")] public string NamespacePrefix { get; set; } = "aterra-engine";
+public class ArgsOptions : IParameters {
+    [AutoArgValue("classname")] public string ClassName { get; set; } = null!;
+    [AutoArgFlag("prettify")]public bool Prettify { get; set; } = true;
+    [AutoArgValue("output")] public string? OutputFile { get; set; }
+    [AutoArgValue("folder")] public string? OutputFolder { get; set; }
+    [AutoArgValue("namespace-prefix")] public string NamespacePrefix { get; set; } = "aterra-engine";
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class XmlSchemaGenerator(ILogger logger) : CliCommandAtlas {
+[CommandAtlas]
+public class XmlSchemaGenerator(ILogger logger) {
     private readonly Dictionary<string, IXsdGenerator> _dictionary = new() {
         { "engine-config", new XsdGenerator<EngineConfigDto>(logger) },
         { "plugin-config", new XsdGenerator<PluginConfigDto>(logger) },
@@ -39,7 +40,7 @@ public class XmlSchemaGenerator(ILogger logger) : CliCommandAtlas {
     // -----------------------------------------------------------------------------------------------------------------
     // Commands
     // -----------------------------------------------------------------------------------------------------------------
-    [CliCommand<ArgsOptions>("generate-xmlschema")]
+    [Command<ArgsOptions>("generate-xmlschema")]
     [UsedImplicitly]
     public void GenerateXmlSchemaEngineConfig(ArgsOptions argsOptions) {
         string className = argsOptions.ClassName.ToLowerInvariant();
