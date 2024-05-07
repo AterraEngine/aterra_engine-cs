@@ -4,10 +4,10 @@
 using System.Reflection;
 using AterraCore.Common;
 using AterraCore.Common.FlexiPlug;
-using AterraCore.Config.PluginConfig;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug.Plugin;
-using AterraCore.Extensions;
+using AterraCore.FlexiPlug.Config;
+using Extensions;
 using AterraCore.FlexiPlug.Plugin;
 using AterraCore.Loggers.Helpers;
 using Serilog;
@@ -17,20 +17,20 @@ namespace AterraCore.FlexiPlug;
 // ---------------------------------------------------------------------------------------------------------------------
 // Support Code
 // ---------------------------------------------------------------------------------------------------------------------
-public delegate IPluginDto ZipImportCallback(IPluginDto pluginData, IPluginZipImporter<PluginConfigDto> zipImporter);
+public delegate IPluginDto ZipImportCallback(IPluginDto pluginData, IPluginZipImporter<PluginConfigXml> zipImporter);
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class PluginLoader(ILogger logger) : IPluginLoader {
     public LinkedList<IPluginDto> Plugins { get; } = [];
-    private HashSet<string> _knownHashes = new();
-
-
+    private readonly HashSet<string> _knownHashes = [];
+    
     private ushort _pluginIdCounter;
     private ushort PluginIdCounter {
         get => _pluginIdCounter;
         set {
+            // Basically means that the last usable plugin is `FFFE`
             if (value == ushort.MaxValue) {
                 var maxId = ushort.MaxValue.ToString("X");
                 logger.ExitFatal(ExitCodes.PluginIdsExhausted, "Max Plugin Id of {maxId} is exhausted",maxId);
@@ -59,7 +59,7 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         return pluginData;
     }
 
-    private IPluginDto CheckForDuplicates(IPluginDto pluginData, IPluginZipImporter<PluginConfigDto> zipImporter) {
+    private IPluginDto CheckForDuplicates(IPluginDto pluginData, IPluginZipImporter<PluginConfigXml> zipImporter) {
         pluginData.CheckSum = zipImporter.CheckSum;
         
         if (!_knownHashes.Add(pluginData.CheckSum)) {
@@ -87,8 +87,8 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         return pluginData;
     }
 
-    private IPluginDto GetConfigData(IPluginDto pluginData, IPluginZipImporter<PluginConfigDto> zipImporter) {
-        if (!zipImporter.TryGetPluginConfig(out PluginConfigDto? pluginConfigDto)) {
+    private IPluginDto GetConfigData(IPluginDto pluginData, IPluginZipImporter<PluginConfigXml> zipImporter) {
+        if (!zipImporter.TryGetPluginConfig(out PluginConfigXml? pluginConfigDto)) {
             logger.Warning("{Id} : No valid PluginConfig found. Usually means that the plugin-config.xml was incorrect", pluginData.ReadableId);
             SetInvalid(pluginData);
             return pluginData;
@@ -100,7 +100,7 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         return pluginData;
     }
     
-    private IPluginDto CheckEngineCompatibility(IPluginDto pluginData, IPluginZipImporter<PluginConfigDto> zipImporter) {
+    private IPluginDto CheckEngineCompatibility(IPluginDto pluginData, IPluginZipImporter<PluginConfigXml> zipImporter) {
         // TODO add more checks
         // if ((pluginData.Data?.GameVersion ?? SemanticVersion.Max) > gameVersion) {
         //     logger.Warning("{Plugin} had an incompatible game version of {PluginGameVersion}, compared to the current {GameVersion}", 
@@ -112,7 +112,7 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         return pluginData;
     }
 
-    private IPluginDto ImportDlls(IPluginDto pluginData, IPluginZipImporter<PluginConfigDto> zipImporter) {
+    private IPluginDto ImportDlls(IPluginDto pluginData, IPluginZipImporter<PluginConfigXml> zipImporter) {
         if (pluginData.Data == null) return SetInvalid(pluginData); // Shouldn't happen because we import the data up in the chain
         
         // Extract assembly(s)
@@ -175,7 +175,7 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         return pluginData;
     }
 
-    private IPluginDto DebugGetAllFiles(IPluginDto pluginData, IPluginZipImporter<PluginConfigDto> zipImporter) {
+    private IPluginDto DebugGetAllFiles(IPluginDto pluginData, IPluginZipImporter<PluginConfigXml> zipImporter) {
         logger.Debug("ALL FILES : {files}",zipImporter.GetFileNamesInZip());
         return pluginData;
     }
@@ -202,8 +202,7 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         
         Plugins
             .Where(p => p.Validity != PluginValidity.Valid)
-            .ToList() // Can't use the Extensions's ForEach because we are removing certain data
-            .ForEach(p => Plugins.Remove(p));
+            .IterateOver(p => Plugins.Remove(p));
         
         logger.Warning("Plugins list trimmed to to a total of {i} ", Plugins.Count);
     }
@@ -242,7 +241,7 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         
         IPluginDto pluginData = CreateNewPluginDto(assembly.Location);
         pluginData.Assemblies.Add(assembly);
-        pluginData.Data = new PluginConfigDto {
+        pluginData.Data = new PluginConfigXml {
             ReadableName = "Manually loaded Assembly",
             Author = "Unknown"
         };

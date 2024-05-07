@@ -3,7 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using AterraCore.Contracts.Config.Xml;
+using Xml.Elements;
 
 namespace AterraCore.Contracts.FlexiPlug;
 

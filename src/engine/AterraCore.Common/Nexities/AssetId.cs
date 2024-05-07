@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using System.Text.RegularExpressions;
+using AterraCore.Common.FlexiPlug;
 
 namespace AterraCore.Common.Nexities;
 
@@ -12,29 +13,29 @@ namespace AterraCore.Common.Nexities;
 public readonly partial struct AssetId : IComparable<AssetId>, IEqualityComparer<AssetId> {
     private static readonly Regex Regex = MyRegex();
     
-    public FlexiPlug.PluginId PluginId { get; }
+    public PluginId PluginId { get; }
     public PartialAssetId Id { get; } 
 
     // -----------------------------------------------------------------------------------------------------------------
     // Constructors
     // -----------------------------------------------------------------------------------------------------------------
-    public AssetId(FlexiPlug.PluginId pluginId, PartialAssetId partialId) {
+    public AssetId(PluginId pluginId, PartialAssetId partialId) {
         PluginId = pluginId;
         Id = partialId;
     }
     
     public AssetId(string pluginId, PartialAssetId partialId) {
-        PluginId = new FlexiPlug.PluginId(pluginId);
+        PluginId = new PluginId(pluginId);
         Id = partialId;
     }
     
-    public AssetId(FlexiPlug.PluginId pluginId, string partialId) {
+    public AssetId(PluginId pluginId, string partialId) {
         PluginId = pluginId;
         Id = new PartialAssetId(partialId);
     }
     
     public AssetId(string pluginId, string partialId) {
-        PluginId = new FlexiPlug.PluginId(pluginId);
+        PluginId = new PluginId(pluginId);
         Id = new PartialAssetId(partialId);
     }
     
@@ -52,7 +53,7 @@ public readonly partial struct AssetId : IComparable<AssetId>, IEqualityComparer
         }
         
         // because of the internal tag, we can immediately cast to an Uint here, and bypass another regex check
-        PluginId = new FlexiPlug.PluginId(FlexiPlug.PluginId.CastToUshort(match.Groups[1].Value));
+        PluginId = new PluginId(PluginId.CastToUshort(match.Groups[1].Value));
         Id = new PartialAssetId(PartialAssetId.CastToUint(match.Groups[2].Value));
     }
     

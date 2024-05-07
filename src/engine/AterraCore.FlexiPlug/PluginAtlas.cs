@@ -7,7 +7,7 @@ using AterraCore.Common.Nexities;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug.Plugin;
 using JetBrains.Annotations;
-using static AterraCore.Extensions.LinqExtensions;
+using static Extensions.LinqExtensions;
 
 namespace AterraCore.FlexiPlug;
 

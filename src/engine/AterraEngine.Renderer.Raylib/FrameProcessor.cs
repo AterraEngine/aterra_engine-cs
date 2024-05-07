@@ -3,7 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using AterraCore.Contracts.Renderer;
-using AterraCore.Extensions;
+using Extensions;
 using JetBrains.Annotations;
 using Serilog;
 

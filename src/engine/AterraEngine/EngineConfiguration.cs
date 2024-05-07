@@ -8,19 +8,19 @@ using AterraCore.Contracts.Nexities.Assets;
 using AterraCore.DI;
 using AterraCore.Nexities.Assets;
 using AterraCore.Common;
-using AterraCore.Config.EngineConfig;
-using AterraCore.Contracts.DI;
+using AterraCore.Common.Config;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug.Plugin;
 using AterraCore.Contracts.Renderer;
-using AterraCore.Extensions;
 using AterraCore.FlexiPlug;
-using AterraCore.FlexiPlug.Plugin;
 using AterraCore.Loggers;
+using AterraEngine.Config;
 using AterraEngine.Renderer.Raylib;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using static AterraCore.Extensions.ServiceDescriptorExtension;
+using Extensions;
+using Xml;
+using static Extensions.ServiceDescriptorExtension;
 
 namespace AterraEngine;
 
@@ -30,12 +30,13 @@ namespace AterraEngine;
 
 public class EngineConfiguration(ILogger? logger = null) {
     private readonly ILogger _logger = SetLogger(logger);
+    private readonly ConfigXmlParser<EngineConfigXml> _configXmlParser = new(SetLogger(logger), XmlNameSpaces.ConfigEngine, Paths.Xsd.XsdEngineConfigDto);
     private readonly PluginLoader _pluginLoader = new(SetLogger(logger));
     private readonly EngineServiceBuilder _engineServiceBuilder = new(SetLogger(logger));
     
-    private EngineConfigDto? _engineConfigDto;
-    public EngineConfigDto EngineConfigDto {
-        get => _engineConfigDto ??= new EngineConfigDto().PopulateAsEmpty();
+    private EngineConfigXml? _engineConfigDto;
+    public EngineConfigXml EngineConfigDto {
+        get => _engineConfigDto ??= new EngineConfigXml().PopulateAsEmpty();
         set => _engineConfigDto = value;
     }
     
@@ -95,8 +96,7 @@ public class EngineConfiguration(ILogger? logger = null) {
         // TODO make a check though the _engineConfigFlag to see if everything has been setup already
         
         // services which may not be overriden
-        var engineConfigParser = new EngineConfigParser<EngineConfigDto>(_logger);
-        if (!engineConfigParser.TryDeserializeFromFile(filePath, out EngineConfigDto? configDto)) {
+        if (!_configXmlParser.TryDeserializeFromFile(filePath, out EngineConfigXml? configDto)) {
             _logger.Error("Engine config file could not be parsed");
             return this; //the _configDto will be null, so setter of EngineConfigDto will populate as empty
         }
@@ -158,7 +158,7 @@ public class EngineConfiguration(ILogger? logger = null) {
         _engineServiceBuilder.FinishBuilding();
         
         _logger.Information("DI Container built");
-        _engineConfigFlag |= EngineConfigFlags.DIContainerBuilt;
+        _engineConfigFlag |= EngineConfigFlags.DiContainerBuilt;
         return this;
         
     }

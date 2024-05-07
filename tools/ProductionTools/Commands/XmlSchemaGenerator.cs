@@ -1,16 +1,16 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
 using System.Diagnostics.CodeAnalysis;
-using AterraCore.Config;
-using AterraCore.Config.EngineConfig;
-using AterraCore.Config.PluginConfig;
-using AterraCore.Contracts.Config;
+using AterraCore.Common.Config;
+using AterraCore.FlexiPlug.Config;
+using AterraEngine.Config;
 using CliArgsParser.Attributes;
 using CliArgsParser.Contracts;
 using JetBrains.Annotations;
 using Serilog;
+using Xml;
+using Xml.Contracts;
 
 namespace ProductionTools.Commands;
 
@@ -24,17 +24,22 @@ public class ArgsOptions : IParameters {
     [AutoArgFlag("prettify")]public bool Prettify { get; set; } = true;
     [AutoArgValue("output")] public string? OutputFile { get; set; }
     [AutoArgValue("folder")] public string? OutputFolder { get; set; }
-    [AutoArgValue("namespace-prefix")] public string NamespacePrefix { get; set; } = "aterra-engine";
 }
+
+
+public record XsdGeneratorRecord(
+    IXsdGenerator Generator,
+    string NameSpace
+);
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [CommandAtlas]
 public class XmlSchemaGenerator(ILogger logger) {
-    private readonly Dictionary<string, IXsdGenerator> _dictionary = new() {
-        { "engine-config", new XsdGenerator<EngineConfigDto>(logger) },
-        { "plugin-config", new XsdGenerator<PluginConfigDto>(logger) },
+    private readonly Dictionary<string, XsdGeneratorRecord> _dictionary = new() {
+        { "engine-config", new XsdGeneratorRecord(new XsdGenerator<EngineConfigXml>(logger), XmlNameSpaces.ConfigEngine) },
+        { "plugin-config", new XsdGeneratorRecord(new XsdGenerator<PluginConfigXml>(logger), XmlNameSpaces.ConfigPlugin) },
     };
     
     // -----------------------------------------------------------------------------------------------------------------
@@ -45,7 +50,7 @@ public class XmlSchemaGenerator(ILogger logger) {
     public void GenerateXmlSchemaEngineConfig(ArgsOptions argsOptions) {
         string className = argsOptions.ClassName.ToLowerInvariant();
         
-        if (!_dictionary.TryGetValue(className, out IXsdGenerator? xsdGenerator)) {
+        if (!_dictionary.TryGetValue(className, out XsdGeneratorRecord? record)) {
             logger.Warning("No match found for the provided ClassName: {ClassName}. Check the ClassName and try again.", className);
             return;
         }
@@ -57,8 +62,8 @@ public class XmlSchemaGenerator(ILogger logger) {
         logger.Information("Generating XML Schema for {ClassName} with output path {Path}.",
             className, outputPath);
         
-        xsdGenerator.GenerateXsd(
-            $"urn:{argsOptions.NamespacePrefix}:{className}",
+        record.Generator.GenerateXsd(
+            record.NameSpace,
             argsOptions.Prettify,
             outputPath
         );

@@ -13,7 +13,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\AterraCore.Contracts\AterraCore.Contracts.csproj" />
-      <ProjectReference Include="..\AterraCore.Extensions\AterraCore.Extensions.csproj" />
+      <ProjectReference Include="..\Extensions\Extensions.csproj" />
     </ItemGroup>
 
     <ItemGroup>

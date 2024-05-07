@@ -2,22 +2,23 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-namespace AterraCore.Common;
+using AterraCore.Common.FlexiPlug;
+using AterraCore.Contracts.FlexiPlug.Plugin;
+
+namespace Extensions;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Flags]
-public enum EngineConfigFlags : ulong{
-    UnConfigured = 0ul,
-    AssignedDefaultServices = 1ul << 0,
-    AssignedStaticServices =  1ul << 1,
-    ImportedEngineConfigDto = 1ul << 2,
-    ImportedPlugins =         1ul << 3,
-    ImportedPluginServices =  1ul << 4,
-    DiContainerBuilt =        1ul << 5,
-    
-    
-    // Configuration Issues?
-    PluginLoadOrderUnstable = 1ul << 48,
+
+public static class LinkedListExtensions {
+    public static LinkedListNode<IPluginDto>? NextValid(this LinkedListNode<IPluginDto> node) {
+        ArgumentNullException.ThrowIfNull(node);
+
+        LinkedListNode<IPluginDto>? next = node.Next;
+        while (next is { Value.Validity: PluginValidity.Invalid }) {
+            next = next.Next;
+        }
+        return next;
+    }
 }

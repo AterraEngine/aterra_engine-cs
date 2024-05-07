@@ -2,22 +2,19 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-namespace AterraCore.Common;
+using AterraCore.Common;
+using Xml.Elements;
+
+namespace AterraCore.Contracts.FlexiPlug.Config;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Flags]
-public enum EngineConfigFlags : ulong{
-    UnConfigured = 0ul,
-    AssignedDefaultServices = 1ul << 0,
-    AssignedStaticServices =  1ul << 1,
-    ImportedEngineConfigDto = 1ul << 2,
-    ImportedPlugins =         1ul << 3,
-    ImportedPluginServices =  1ul << 4,
-    DiContainerBuilt =        1ul << 5,
-    
-    
-    // Configuration Issues?
-    PluginLoadOrderUnstable = 1ul << 48,
+
+public interface IPluginConfigDto{
+    string ReadableName { get; set; }
+    string Author { get; set; }
+    SemanticVersion PluginVersion { get; }
+    SemanticVersion GameVersion { get; }
+    IEnumerable<IFileDto> Dlls { get; }
 }

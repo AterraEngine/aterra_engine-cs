@@ -9,7 +9,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\engine\AterraCore.Config\AterraCore.Config.csproj" />
       <ProjectReference Include="..\..\src\engine\AterraEngine\AterraEngine.csproj" />
     </ItemGroup>
 

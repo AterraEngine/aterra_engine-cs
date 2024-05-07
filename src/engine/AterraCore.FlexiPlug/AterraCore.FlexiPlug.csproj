@@ -8,10 +8,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\AterraCore.Config\AterraCore.Config.csproj" />
+      <ProjectReference Include="..\..\lib\Xml\Xml.csproj" />
       <ProjectReference Include="..\AterraCore.Contracts\AterraCore.Contracts.csproj" />
       <ProjectReference Include="..\AterraCore.Common\AterraCore.Common.csproj" />
-      <ProjectReference Include="..\AterraCore.Extensions\AterraCore.Extensions.csproj" />
+      <ProjectReference Include="..\Extensions\Extensions.csproj" />
       <ProjectReference Include="..\AterraCore.Nexities\AterraCore.Nexities.csproj" />
     </ItemGroup>
 
@@ -20,4 +20,7 @@
       <PackageReference Include="Microsoft.Extensions.ObjectPool.DependencyInjection" Version="8.4.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Config\Elements\" />
+    </ItemGroup>
 </Project>

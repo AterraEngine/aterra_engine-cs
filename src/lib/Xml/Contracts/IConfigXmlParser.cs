@@ -2,22 +2,16 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-namespace AterraCore.Common;
+using System.Diagnostics.CodeAnalysis;
+
+namespace Xml.Contracts;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Flags]
-public enum EngineConfigFlags : ulong{
-    UnConfigured = 0ul,
-    AssignedDefaultServices = 1ul << 0,
-    AssignedStaticServices =  1ul << 1,
-    ImportedEngineConfigDto = 1ul << 2,
-    ImportedPlugins =         1ul << 3,
-    ImportedPluginServices =  1ul << 4,
-    DiContainerBuilt =        1ul << 5,
-    
-    
-    // Configuration Issues?
-    PluginLoadOrderUnstable = 1ul << 48,
+public interface IConfigXmlParser<T> {
+    public bool TryDeserializeFromFile(string filePath, [NotNullWhen(true)] out T? engineConfig);
+    public bool TrySerializeToFile(T engineConfig, string filePath);
+    public bool TrySerializeFromBytes(byte[] bytes,
+        [NotNullWhen(true)] out T? config);
 }

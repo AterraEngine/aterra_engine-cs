@@ -7,7 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 using AterraCore.Common.FlexiPlug;
 using AterraCore.Contracts.Nexities.Assets;
 using AterraCore.Common.Nexities;
-using AterraCore.Extensions;
+using Extensions;
 using JetBrains.Annotations;
 using Serilog;
 

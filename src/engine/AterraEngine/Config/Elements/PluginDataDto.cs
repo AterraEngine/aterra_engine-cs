@@ -2,29 +2,32 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using AterraCore.Common.FlexiPlug;
-using AterraCore.Contracts.FlexiPlug.Config;
-using Microsoft.Extensions.DependencyInjection;
+using System.Text;
+using System.Xml.Serialization;
+using Extensions;
+using Xml.Elements;
 
-namespace AterraCore.Contracts.FlexiPlug.Plugin;
+namespace AterraEngine.Config.Elements;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IPluginDto : IPluginBase {
-    public string FilePath { get; }
-    public bool IsProcessed { get; set; }
-    public IPluginConfigDto? Data { get; set; }
-    public PluginValidity Validity { get; set; }
-    public string? CheckSum { get; set; }
-    public string ReadableId { get; }
-    
+
+public class PluginDataDto {
+    [XmlAttribute("root")]
+    public required string RootFolder { get; set; }
+
+    [XmlElement("loadOrder")] 
+    public required LoadOrderDto LoadOrder { get; set; }
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public IEnumerable<ServiceDescriptor> GetServices();
-    public IEnumerable<ServiceDescriptor> GetNexitiesComponents();
-    public IEnumerable<ServiceDescriptor> GetNexitiesEntities();
-    public void IngestFromPluginConfigDto(IPluginConfigDto pluginConfigDto);
+    public override string ToString() {
+        var txt = new StringBuilder();
+        txt.Append($"RootFolder : {RootFolder} ");
+        txt.Append("Plugins : ");
+        LoadOrder.Plugins.IterateOver(p => txt.Append($"{p} ,"));
+        return txt.ToString();
+    }
 }

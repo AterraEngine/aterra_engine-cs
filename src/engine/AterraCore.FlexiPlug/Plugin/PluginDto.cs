@@ -5,7 +5,7 @@
 using System.Reflection;
 using AterraCore.Common.FlexiPlug;
 using AterraCore.Common.Nexities;
-using AterraCore.Contracts.Config.PluginConfig;
+using AterraCore.Contracts.FlexiPlug.Config;
 using AterraCore.Contracts.FlexiPlug.Plugin;
 using AterraCore.FlexiPlug.Attributes;
 using AterraCore.Nexities.Components;

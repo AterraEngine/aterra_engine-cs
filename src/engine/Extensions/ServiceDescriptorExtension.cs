@@ -2,22 +2,18 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-namespace AterraCore.Common;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace Extensions;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Flags]
-public enum EngineConfigFlags : ulong{
-    UnConfigured = 0ul,
-    AssignedDefaultServices = 1ul << 0,
-    AssignedStaticServices =  1ul << 1,
-    ImportedEngineConfigDto = 1ul << 2,
-    ImportedPlugins =         1ul << 3,
-    ImportedPluginServices =  1ul << 4,
-    DiContainerBuilt =        1ul << 5,
-    
-    
-    // Configuration Issues?
-    PluginLoadOrderUnstable = 1ul << 48,
+public static class ServiceDescriptorExtension {
+    public static ServiceDescriptor NewServiceDescriptor<T1, T2>(ServiceLifetime lifetime) where T2 : T1 {
+        return new ServiceDescriptor(typeof(T1), typeof(T2), lifetime);
+    }
+    public static ServiceDescriptor NewServiceDescriptor<T1>(object instance){
+        return new ServiceDescriptor(typeof(T1), instance);
+    }
 }

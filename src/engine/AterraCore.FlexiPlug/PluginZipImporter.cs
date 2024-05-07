@@ -8,19 +8,20 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using AterraCore.Common;
-using AterraCore.Config.PluginConfig;
-using AterraCore.Contracts.Config.Xml;
+using AterraCore.Common.Config;
 using AterraCore.Contracts.FlexiPlug;
+using AterraCore.FlexiPlug.Config;
 using Serilog;
+using Xml;
+using Xml.Elements;
 
 namespace AterraCore.FlexiPlug;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
-public class PluginZipImporter(ILogger logger, string zipPath) : IPluginZipImporter<PluginConfigDto>, IDisposable {
-    private readonly PluginConfigParser<PluginConfigDto> _pluginConfigParser = new(logger);
+public class PluginZipImporter(ILogger logger, string zipPath) : IPluginZipImporter<PluginConfigXml>, IDisposable {
+    private readonly ConfigXmlParser<PluginConfigXml> _pluginConfigParser = new(logger, XmlNameSpaces.ConfigPlugin, Paths.Xsd.XsdPluginConfigDto);
     private readonly ZipArchive _archive = ZipFile.OpenRead(zipPath);
     private string? _checkSum;
     public string CheckSum => _checkSum ??= ComputeSha256Hash();
@@ -36,7 +37,7 @@ public class PluginZipImporter(ILogger logger, string zipPath) : IPluginZipImpor
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public bool TryGetPluginConfig([NotNullWhen(true)] out PluginConfigDto? pluginConfig) {
+    public bool TryGetPluginConfig([NotNullWhen(true)] out PluginConfigXml? pluginConfig) {
         pluginConfig = null;
         
         using var memoryStream = new MemoryStream();

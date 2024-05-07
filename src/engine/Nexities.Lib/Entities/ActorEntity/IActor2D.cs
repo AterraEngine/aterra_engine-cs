@@ -2,7 +2,6 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using AterraCore.Contracts.Nexities.Components;
 using AterraCore.Contracts.Nexities.Components.AssetTree;
 using AterraCore.Contracts.Nexities.Entities;
 using Nexities.Lib.Components.Sprite2D;

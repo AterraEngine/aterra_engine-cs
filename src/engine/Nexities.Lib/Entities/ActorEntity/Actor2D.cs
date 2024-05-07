@@ -3,9 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using AterraCore.Common.Nexities;
-using AterraCore.Contracts.Nexities.Components;
 using AterraCore.Contracts.Nexities.Components.AssetTree;
-using AterraCore.Nexities.Components;
 using AterraCore.Nexities.Entities;
 using JetBrains.Annotations;
 using Nexities.Lib.Components.Sprite2D;

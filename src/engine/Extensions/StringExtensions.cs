@@ -1,23 +1,21 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
-namespace AterraCore.Common;
+namespace Extensions;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Flags]
-public enum EngineConfigFlags : ulong{
-    UnConfigured = 0ul,
-    AssignedDefaultServices = 1ul << 0,
-    AssignedStaticServices =  1ul << 1,
-    ImportedEngineConfigDto = 1ul << 2,
-    ImportedPlugins =         1ul << 3,
-    ImportedPluginServices =  1ul << 4,
-    DiContainerBuilt =        1ul << 5,
+public static class StringExtensions {
+    public static bool IsNotNullOrEmpty(this string? str) {
+        return !string.IsNullOrEmpty(str);
+    }
+
+    public static bool IsEmpty(this string[] arr) {
+        return arr.Length == 0;
+    }
     
-    
-    // Configuration Issues?
-    PluginLoadOrderUnstable = 1ul << 48,
+    public static bool IsEmpty(this IEnumerable<string> arr) {
+        return !arr.Any();
+    }
 }
