@@ -19,6 +19,4 @@ public interface IAssetAtlas {
     
     public bool TryGetType(AssetId assetId, [NotNullWhen(true)] out Type? type);
     public bool TryGetAssetId(Type type, [NotNullWhen(true)] out AssetId? assetId);
-    
-    public void TryImportAssetsFromPlugins();
 }

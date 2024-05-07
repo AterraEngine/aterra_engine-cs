@@ -6,7 +6,6 @@ using System.Reflection;
 using AterraCore.Common;
 using AterraCore.Contracts;
 using AterraEngine;
-using Microsoft.Extensions.DependencyInjection;
 using Nexities.Lib.Components.Transform2D;
 
 namespace Workfloor_AterraCore;
@@ -20,21 +19,14 @@ public static class Program {
         IEngine engine = new EngineConfiguration()
             .ImportEngineConfig(Paths.ConfigEngine)
             .AssignDefaultServices()
-            .AddCustomServices(
-                new ServiceDescriptor(
-                    typeof(ITransform2DComponent), 
-                    _ => new Transform2DComponent(), 
-                    ServiceLifetime.Transient 
-                )    
-            )
-            
             .ImportAssemblyAsPlugin(Assembly.GetEntryAssembly())
+            .ImportAssemblyAsPlugin(Assembly.GetAssembly(typeof(Transform2D)))
             .ImportPlugins()
             
             // Manipulate services from plugins
             .PluginsAssignServices()
             
-            // Assign Static Services & build DI container
+            // Assign Static Systems & build DI container
             .AssignStaticServices()
             .AssignDependencyInjectionContainer()
             

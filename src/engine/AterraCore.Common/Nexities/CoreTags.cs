@@ -8,10 +8,13 @@ namespace AterraCore.Common.Nexities;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [Flags]
-public enum CoreTags {
+public enum CoreTags : ulong {
     // NO UNDEFINED
-    Asset     = 1 <<  0,
-    Component = 1 <<  1,
-    Entity    = 1 <<  2,
-    System    = 1 <<  3,
+    Asset           = 1 << 00,
+    Component       = 1 << 01,
+    Entity          = 1 << 02,
+    System          = 1 << 03,
+    
+    RenderSystem    = 1 << 04, 
+    LogicSystem     = 1 << 05,
 }

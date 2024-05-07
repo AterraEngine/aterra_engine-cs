@@ -3,15 +3,18 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using AterraCore.Contracts.Nexities.Assets;
-using AterraCore.Contracts.Nexities.Components;
 
-namespace AterraCore.Contracts.Nexities.Entities;
+namespace AterraCore.Contracts.Nexities.Components.AssetTree;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public interface IRawEntity<out T> : IAssetInstance where T : IComponent {
-    public HashSet<Guid> ComponentIds { get; }
-    public IEnumerable<T> GetComponents();
-}
+public interface IAssetTree: IComponent {
+    public IEnumerable<IAssetInstance> Nodes { get; }
+
+    public IEnumerable<T> OfType<T>() where T : IAssetInstance;
+    public IEnumerable<T> OfTypeReverse<T>() where T : IAssetInstance;
+    public IEnumerable<T> OfTypeMany<T>() where T : IAssetInstance;
+    public IEnumerable<T> OfTypeManyReverse<T>() where T : IAssetInstance;
+} 

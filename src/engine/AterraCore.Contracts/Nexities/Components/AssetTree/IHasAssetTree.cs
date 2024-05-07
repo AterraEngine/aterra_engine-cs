@@ -1,14 +1,12 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Nexities.Entities;
 
-namespace Nexities.Lib.Components.Transform2D;
+namespace AterraCore.Contracts.Nexities.Components.AssetTree;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
-public interface IHasTransform2DComponent {
-    public ITransform2DComponent Transform2D { get; }
+public interface IHasAssetTree {
+    public IAssetTree ChildEntities { get; }
 }

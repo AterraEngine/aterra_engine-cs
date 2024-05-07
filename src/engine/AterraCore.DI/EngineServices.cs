@@ -38,7 +38,7 @@ public static class EngineServices {
     }
     
     // -----------------------------------------------------------------------------------------------------------------
-    // Default Services Quick access
+    // Default Systems Quick access
     // -----------------------------------------------------------------------------------------------------------------
     public static ILogger GetLogger() => GetService<ILogger>();
     public static IEngine GetEngine() => GetService<IEngine>();

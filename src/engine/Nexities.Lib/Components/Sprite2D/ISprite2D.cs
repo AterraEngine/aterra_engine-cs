@@ -2,12 +2,13 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using Microsoft.Extensions.ObjectPool;
+using AterraCore.Contracts.Nexities.Components;
 
-namespace AterraCore.Contracts.Nexities.Components;
+namespace Nexities.Lib.Components.Sprite2D;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public interface IPooledComponent : IComponent, IResettable;
+public interface ISprite2D : IComponent {
+}

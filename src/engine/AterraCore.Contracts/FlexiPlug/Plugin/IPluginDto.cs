@@ -24,5 +24,7 @@ public interface IPluginDto : IPluginBase {
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public IEnumerable<ServiceDescriptor> GetServices();
+    public IEnumerable<ServiceDescriptor> GetNexitiesComponents();
+    public IEnumerable<ServiceDescriptor> GetNexitiesEntities();
     public void IngestFromPluginConfigDto(IPluginConfigDto pluginConfigDto);
 }

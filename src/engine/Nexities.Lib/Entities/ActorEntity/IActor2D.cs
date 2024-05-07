@@ -2,16 +2,20 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using System.Numerics;
+using AterraCore.Contracts.Nexities.Components;
+using AterraCore.Contracts.Nexities.Components.AssetTree;
+using AterraCore.Contracts.Nexities.Entities;
+using Nexities.Lib.Components.Sprite2D;
+using Nexities.Lib.Components.Transform2D;
 
-namespace Nexities.Lib.Components.Transform3D;
+namespace Nexities.Lib.Entities.ActorEntity;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public interface ITransform3DComponent {
-    public Vector3 Translation { get; set; }
-    public Vector3 Scale { get; set; }
-    public Vector3 Rotation { get; set; }
-}
+public interface IActor2D : INexitiesEntity, 
+    IHasTransform2D, 
+    IHasSprite2D,
+    IHasAssetTree
+;

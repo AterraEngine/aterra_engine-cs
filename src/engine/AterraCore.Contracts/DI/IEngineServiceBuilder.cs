@@ -15,6 +15,7 @@ public interface IEngineServiceBuilder {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void AssignServiceDescriptors(IEnumerable<ServiceDescriptor> services);
+    public void AssignFromServiceDescriptors(IEnumerable<ServiceDescriptor> services);
+    public void AssignFromServiceDescriptor(ServiceDescriptor serviceDescriptor);
     public void FinishBuilding();
 }

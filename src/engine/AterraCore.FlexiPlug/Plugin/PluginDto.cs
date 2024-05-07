@@ -4,9 +4,12 @@
 
 using System.Reflection;
 using AterraCore.Common.FlexiPlug;
+using AterraCore.Common.Nexities;
 using AterraCore.Contracts.Config.PluginConfig;
 using AterraCore.Contracts.FlexiPlug.Plugin;
 using AterraCore.FlexiPlug.Attributes;
+using AterraCore.Nexities.Components;
+using AterraCore.Nexities.Entities;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AterraCore.FlexiPlug.Plugin;
@@ -34,21 +37,50 @@ public class PluginDto(int id, string filepath) : IPluginDto {
     public string? CheckSum { get; set; } = null;
     
     private IEnumerable<Type>? _types;
-    public IEnumerable<Type> Types {
-        get { return _types ??= Assemblies.SelectMany(assembly => assembly.GetTypes()); }
-    }
+    public IEnumerable<Type> Types => _types ??= Assemblies.SelectMany(assembly => assembly.GetTypes()); 
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public IEnumerable<ServiceDescriptor> GetServices() {
         return Types
-            .Select(t => new { Type = t, Attribute = t.GetCustomAttribute<ServiceAttribute>() }) // this way we only get the attribute once
+            .Select(t => new { Type = t, Attribute = t.GetCustomAttribute<NexitiesSystemAttribute>(false) }) // this way we only get the attribute once
             .Where(t => t.Attribute != null)
             .Select(t => new ServiceDescriptor(
-                serviceType:t.Attribute?.Interface!, 
+                serviceType:t.Attribute?.Interface ?? t.Type, 
                 implementationType:t.Type, 
                 lifetime:(ServiceLifetime)t.Attribute?.Lifetime! // WHY THE HELL DOES THIS NEED TO BE CAST???
+            ));
+    }
+    
+    public IEnumerable<ServiceDescriptor> GetNexitiesComponents() {
+        return Types
+            .Select(t => new { Type = t, Attribute = t.GetCustomAttribute<ComponentAttribute>(false) }) // this way we only get the attribute once
+            .Where(t => t.Attribute != null)
+            .Select(t => new ServiceDescriptor(
+                serviceType:t.Attribute?.Interface ?? t.Type, 
+                implementationType:t.Type, 
+                lifetime: t.Attribute?.InstanceType switch {
+                    AssetInstanceType.Singleton => ServiceLifetime.Singleton,
+                    AssetInstanceType.Multiple => ServiceLifetime.Transient,
+                    // (AssetInstanceType.Pooled) => ServiceLifetime.Pooled
+                    _ => ServiceLifetime.Transient
+                }
+            ));
+    }
+    
+    public IEnumerable<ServiceDescriptor> GetNexitiesEntities() {
+        return Types
+            .Select(t => new { Type = t, Attribute = t.GetCustomAttribute<EntityAttribute>(false) }) // this way we only get the attribute once
+            .Where(t => t.Attribute != null)
+            .Select(t => new ServiceDescriptor(
+                serviceType:t.Attribute?.Interface ?? t.Type, 
+                implementationType:t.Type, 
+                lifetime: t.Attribute?.InstanceType switch {
+                    AssetInstanceType.Singleton => ServiceLifetime.Singleton,
+                    AssetInstanceType.Multiple => ServiceLifetime.Transient,
+                    _ => ServiceLifetime.Transient
+                }
             ));
     }
 

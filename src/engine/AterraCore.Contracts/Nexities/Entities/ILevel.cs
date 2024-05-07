@@ -1,8 +1,8 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
 using AterraCore.Contracts.Nexities.Components;
+using AterraCore.Contracts.Nexities.Components.AssetTree;
 
 namespace AterraCore.Contracts.Nexities.Entities;
 
@@ -10,4 +10,4 @@ namespace AterraCore.Contracts.Nexities.Entities;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public interface IEntity : IRawEntity<IComponent>;
+public interface ILevel : IHasAssetTree;

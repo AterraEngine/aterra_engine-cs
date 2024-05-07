@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.DI;
+using AterraCore.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
@@ -16,17 +17,16 @@ public class EngineServiceBuilder(ILogger logger) : IEngineServiceBuilder {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void AssignServiceDescriptors(IEnumerable<ServiceDescriptor> services) {
-        foreach (ServiceDescriptor serviceDescriptor in services) {
-            ServiceCollection.Add(serviceDescriptor);
-            logger.Information(
-                "Type {Type} assigned to {Imp}", 
-                serviceDescriptor.ServiceType, 
-                serviceDescriptor.ImplementationType
-            );
-        }
+    public void AssignFromServiceDescriptor(ServiceDescriptor serviceDescriptor) {
+        ServiceCollection.Add(serviceDescriptor);
+        logger.Information(
+            "Type {Type} assigned to {Imp}", 
+            serviceDescriptor.ServiceType, 
+            serviceDescriptor.ImplementationType
+        );
     }
-    
+    public void AssignFromServiceDescriptors(IEnumerable<ServiceDescriptor> services) => services.IterateOver(AssignFromServiceDescriptor);
+
     public void FinishBuilding() {
         // END of factory,
         //      build all services

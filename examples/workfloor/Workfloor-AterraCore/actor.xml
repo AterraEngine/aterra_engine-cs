@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Data>
+    <IActord2D id="0000-0000-0001">
+        <Transform2D>
+            <Translation x="" y=""/>
+            <Scale x="" y=""/>
+            <Rotation x="" y=""/>
+        </Transform2D>
+        <Sprite2D/>
+        <ChildEntities/>
+    </IActord2D>
+    
+    <IActord2D id="0000-0000-0000">
+        <Transform2D>
+            <Translation x="" y=""/>
+            <Scale x="" y=""/>
+            <Rotation x="" y=""/>
+        </Transform2D>
+        <Sprite2D/>
+        <ChildEntities>
+            <IAsset id="0000-0000-0001"/>
+            <IAsset id="0000-0000-0001"/>
+            <IAsset id="0000-0000-0001"/>
+        </ChildEntities>
+    </IActord2D>
+</Data>
+
+
+

@@ -2,12 +2,12 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-namespace Nexities.Lib.Components.Transform3D;
+namespace Nexities.Lib.Components.Sprite2D;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public interface IHasTransform2DComponent {
-    public ITransform3DComponent Transform3D { get; }
+public interface IHasSprite2D {
+    public ISprite2D Sprite2D { get; }
 }

@@ -15,10 +15,10 @@ namespace AterraCore.FlexiPlug.Plugin;
 
 public class Plugin : IPlugin {
     public PluginId Id { get; init; }
-    public string ReadableName { get; init; }
-    public List<Assembly> Assemblies { get; init; }
-    
-    public IEnumerable<Type> Types { get; init; } // DON'T invalidate this !!!
+    public string ReadableName { get; init; } = "UNDEFINED";
+    public List<Assembly> Assemblies { get; init; } = [];
+
+    public IEnumerable<Type> Types { get; init; } = []; // DON'T invalidate this !!!
 
     private Dictionary<Type, AssetTypeRecord>? _assetTypeRecords;
     public IEnumerable<AssetTypeRecord> AssetTypes {
@@ -28,7 +28,7 @@ public class Plugin : IPlugin {
                     typeof(IAssetInstance).IsAssignableFrom(t)
                     && t is { IsInterface: false, IsAbstract: false }
                 )
-                .Select(t => new {Type=t, AssetAttibute=t.GetCustomAttribute<AbstractAssetAttribute>()})
+                .Select(t => new {Type=t, AssetAttibute=t.GetCustomAttribute<AbstractAssetAttribute>(false)})
                 .Where(box => box.AssetAttibute != null)
                 .Select(box => new AssetTypeRecord(
                     Type: box.Type,

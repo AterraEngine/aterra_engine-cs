@@ -11,9 +11,11 @@ using AterraCore.Common;
 using AterraCore.Config.EngineConfig;
 using AterraCore.Contracts.DI;
 using AterraCore.Contracts.FlexiPlug;
+using AterraCore.Contracts.FlexiPlug.Plugin;
 using AterraCore.Contracts.Renderer;
 using AterraCore.Extensions;
 using AterraCore.FlexiPlug;
+using AterraCore.FlexiPlug.Plugin;
 using AterraCore.Loggers;
 using AterraEngine.Renderer.Raylib;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,8 +30,9 @@ namespace AterraEngine;
 
 public class EngineConfiguration(ILogger? logger = null) {
     private readonly ILogger _logger = SetLogger(logger);
-    private readonly IPluginLoader _pluginLoader = new PluginLoader(SetLogger(logger));
-    private readonly IEngineServiceBuilder _engineServiceBuilder = new EngineServiceBuilder(SetLogger(logger));
+    private readonly PluginLoader _pluginLoader = new(SetLogger(logger));
+    private readonly EngineServiceBuilder _engineServiceBuilder = new(SetLogger(logger));
+    
     private EngineConfigDto? _engineConfigDto;
     public EngineConfigDto EngineConfigDto {
         get => _engineConfigDto ??= new EngineConfigDto().PopulateAsEmpty();
@@ -56,14 +59,14 @@ public class EngineConfiguration(ILogger? logger = null) {
     }
     
     public EngineConfiguration AssignDefaultServices() {
-        // Services which may be overriden
-        _engineServiceBuilder.AssignServiceDescriptors([
+        // Systems which may be overriden
+        _engineServiceBuilder.AssignFromServiceDescriptors([
             NewServiceDescriptor<ILogger>(EngineLogger.CreateLogger()),
             NewServiceDescriptor<IFrameProcessor, FrameProcessor>(ServiceLifetime.Singleton),
             NewServiceDescriptor<IMainWindow, MainWindow>(ServiceLifetime.Singleton)
         ]);
         
-        _logger.Information("Assigned Default Services correctly");
+        _logger.Information("Assigned Default Systems correctly");
         _engineConfigFlag |= EngineConfigFlags.AssignedDefaultServices;
         return this;
     }
@@ -72,19 +75,19 @@ public class EngineConfiguration(ILogger? logger = null) {
         // TODO make a check though the _engineConfigFlag to see if everything has been setup already
         
         // services which may not be overriden
-        _engineServiceBuilder.AssignServiceDescriptors([
+        _engineServiceBuilder.AssignFromServiceDescriptors([
             NewServiceDescriptor<IAssetAtlas, AssetAtlas>(ServiceLifetime.Singleton),
             NewServiceDescriptor<IEngine, Engine>(ServiceLifetime.Singleton),
             NewServiceDescriptor<IPluginAtlas, PluginAtlas>(ServiceLifetime.Singleton),
         ]);
         
-        _logger.Information("Assigned Static Services correctly");
+        _logger.Information("Assigned Static Systems correctly");
         _engineConfigFlag |= EngineConfigFlags.AssignedStaticServices;
         return this;
     }
 
     public EngineConfiguration AddCustomServices(params ServiceDescriptor[] serviceDescriptor) {
-        _engineServiceBuilder.AssignServiceDescriptors(serviceDescriptor);
+        _engineServiceBuilder.AssignFromServiceDescriptors(serviceDescriptor);
         return this;
     }
     
@@ -132,10 +135,14 @@ public class EngineConfiguration(ILogger? logger = null) {
         // TODO make a check though the _engineConfigFlag to see if everything has been setup already
         
         _pluginLoader.Plugins
-            .Select(p => p.GetServices())
-            .IterateOver(_engineServiceBuilder.AssignServiceDescriptors);
+            .SelectMany<IPluginDto, ServiceDescriptor>(p => 
+                p.GetServices()
+                    .Concat(p.GetNexitiesComponents())
+                    .Concat(p.GetNexitiesEntities())
+            )
+            .IterateOver(_engineServiceBuilder.AssignFromServiceDescriptor);
         
-        _logger.Information("Assigned Services from Plugins");
+        _logger.Information("Assigned Systems from Plugins");
         _engineConfigFlag |= EngineConfigFlags.ImportedPluginServices;
         return this;
     }
@@ -144,8 +151,8 @@ public class EngineConfiguration(ILogger? logger = null) {
         // TODO make a check though the _engineConfigFlag to see if everything has been setup already
         if (!_engineConfigFlag.HasFlag(EngineConfigFlags.AssignedDefaultServices 
                                        | EngineConfigFlags.AssignedStaticServices)) {
-            _logger.Error("No Default- or Static Engine Services were assigned");
-            throw new InvalidOperationException("No Default or Static Engine Services were assigned");
+            _logger.Error("No Default- or Static Engine Systems were assigned");
+            throw new InvalidOperationException("No Default or Static Engine Systems were assigned");
         }
 
         _engineServiceBuilder.FinishBuilding();

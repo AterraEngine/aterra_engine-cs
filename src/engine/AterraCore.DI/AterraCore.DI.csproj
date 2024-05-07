@@ -16,6 +16,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\AterraCore.Contracts\AterraCore.Contracts.csproj" />
+      <ProjectReference Include="..\AterraCore.Extensions\AterraCore.Extensions.csproj" />
       <ProjectReference Include="..\AterraCore.Loggers\AterraCore.Loggers.csproj" />
     </ItemGroup>
 

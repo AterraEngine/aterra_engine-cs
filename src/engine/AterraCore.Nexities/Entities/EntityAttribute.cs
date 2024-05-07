@@ -14,17 +14,18 @@ namespace AterraCore.Nexities.Entities;
 public class EntityAttribute(
     string partialId,
     AssetInstanceType instanceType = AssetInstanceType.Multiple,
-    CoreTags coreTags = CoreTags.Entity
+    CoreTags coreTags = CoreTags.Entity,
+    Type? @interface = null
 ) : AssetAttribute(
     partialId,
-    CheckNotPooled(instanceType),
+    instanceType,
     coreTags | CoreTags.Entity
 ) {
-    private static AssetInstanceType CheckNotPooled(AssetInstanceType instanceType) {
-        if (instanceType == AssetInstanceType.Pooled) {
-            throw new ArgumentException("A Entity cannot be a pooled Asset. Use a 'PooledEntity' instead");
-        }
-
-        return instanceType;
-    }
+    public Type? Interface { get; } = @interface;
 }
+
+public class EntityAttribute<TInterface>(
+    string partialId,
+    AssetInstanceType instanceType = AssetInstanceType.Multiple,
+    CoreTags coreTags = CoreTags.Entity
+) : EntityAttribute(partialId, instanceType, coreTags, typeof(TInterface));

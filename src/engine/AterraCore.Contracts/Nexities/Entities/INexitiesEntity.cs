@@ -2,11 +2,14 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
+using AterraCore.Contracts.Nexities.Assets;
 using AterraCore.Contracts.Nexities.Components;
 
-namespace AterraCore.Nexities.Entities;
+namespace AterraCore.Contracts.Nexities.Entities;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class Entity(params IComponent[]? components) : RawEntity<IComponent>(components);
+public interface INexitiesEntity :IAssetInstance {
+    public IEnumerable<IComponent> Components { get; }
+}

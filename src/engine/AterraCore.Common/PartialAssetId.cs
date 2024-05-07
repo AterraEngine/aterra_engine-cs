@@ -34,10 +34,17 @@ public readonly partial struct PartialAssetId(uint value) : IComparable<PartialA
     }
 
     internal static uint CastToUint(string value) {
-        if (!_regex.IsMatch(value))
-            throw new ArgumentException("Invalid input format.", nameof(value));
-        
-        return uint.Parse(value, NumberStyles.HexNumber);
+        Match match = _regex.Match(value);
+        if (match.Groups[3].Success) {
+            return uint.Parse(match.Groups[3].Value, NumberStyles.HexNumber);
+        }
+
+        if (match.Groups[1].Success && match.Groups[2].Success) {
+            var txt = $"{match.Groups[1].Value}{match.Groups[2].Value}";
+            return uint.Parse(txt, NumberStyles.HexNumber);
+        }
+
+        throw new ArgumentException("Invalid input format.", nameof(value));
     }
     
     private static uint CastToUint(int input) {
@@ -47,7 +54,7 @@ public readonly partial struct PartialAssetId(uint value) : IComparable<PartialA
         return (uint)input;
     }
     
-    [GeneratedRegex("^[0-9a-fA-F]{1,8}$")]
+    [GeneratedRegex("(?:^([0-9a-fA-F]{4})-([0-9a-fA-F]{4})$)|^([0-9a-fA-F]{1,8})$")]
     private static partial Regex MyRegex();
     
     // -----------------------------------------------------------------------------------------------------------------

@@ -12,11 +12,21 @@ namespace AterraCore.Nexities.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
 public class ComponentAttribute(
-    string partialId, 
+    string partialId,
     AssetInstanceType instanceType = AssetInstanceType.Multiple,
-    CoreTags coreTags = CoreTags.Component
-) : AssetAttribute(
-    partialId, 
+    CoreTags coreTags = CoreTags.Component,
+    Type? @interface = null) : AssetAttribute(
+    partialId,
     instanceType,
     coreTags | CoreTags.Component
-);
+) {
+    public Type? Interface { get; } = @interface;
+}
+
+public class ComponentAttribute<TInterface>(
+    string partialId,
+    AssetInstanceType instanceType = AssetInstanceType.Multiple,
+    CoreTags coreTags = CoreTags.Component
+) : ComponentAttribute(partialId,
+    instanceType,
+    coreTags, typeof(TInterface));

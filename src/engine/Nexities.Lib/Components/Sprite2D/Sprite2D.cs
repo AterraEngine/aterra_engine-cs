@@ -2,16 +2,13 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using AterraCore.FlexiPlug.Attributes;
+using AterraCore.Nexities.Components;
 
-namespace Workfloor_AterraCore.Plugin.Services;
+namespace Nexities.Lib.Components.Sprite2D;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ITestService;
-
-[Service(typeof(ITestService))]
-public class TestService{
-    
+[Component<ISprite2D>("AC000002")]
+public class Sprite2D : NexitiesComponent, ISprite2D {
 }

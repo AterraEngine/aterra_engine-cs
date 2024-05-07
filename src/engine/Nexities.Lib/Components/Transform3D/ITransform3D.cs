@@ -1,16 +1,16 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using System.Numerics;
+using AterraCore.Contracts.Nexities.Components;
 
-using AterraCore.Common.Nexities;
-using AterraCore.Contracts.Nexities.Assets;
-
-namespace AterraCore.Nexities.Assets;
+namespace Nexities.Lib.Components.Transform3D;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class AssetInstance : IAssetInstance  {
-    public Guid Guid { get; } = new();
-    // internal AssetId? _AssetId { get; set; } // Add this for live debugging
+public interface ITransform3D : IComponent {
+    public Vector3 Translation { get; set; }
+    public Vector3 Scale { get; set; }
+    public Vector3 Rotation { get; set; }
 }

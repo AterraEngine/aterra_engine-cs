@@ -2,20 +2,16 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using AterraCore.Contracts.Nexities.Entities;
+using AterraCore.FlexiPlug.Attributes;
 
-namespace AterraCore.Nexities.Systems;
+namespace Workfloor_AterraCore.Plugin.Systems;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
+public interface ITestService;
 
-public abstract class System {
-    public Type[]? ComponentTypes = [];
-
-
-    // -----------------------------------------------------------------------------------------------------------------
-    // Methods
-    // -----------------------------------------------------------------------------------------------------------------
-    public abstract void ProcessEntity(IEntity entity);
+[NexitiesSystem<ITestService>]
+public class TestService{
+    
 }

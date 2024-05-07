@@ -34,6 +34,7 @@ public class PartialAssetIdTest {
     [Theory]
     [InlineData("7593F98A", 1972631946u)]
     [InlineData("12345678", 305419896u)]
+    [InlineData("1234-5678", 305419896u)]
     public void CastToUint_ValidString_CorrectConversion(string input, uint expected) {
         var output = new PartialAssetId(input);
         Assert.Equal(expected, output.Value);
@@ -63,7 +64,9 @@ public class PartialAssetIdTest {
   
     [Theory]
     [InlineData("0000000A", "0000000A", true)]
+    [InlineData("0000-000A", "0000-000A", true)]
     [InlineData("0000000A", "0000000B", false)]
+    [InlineData("0000-000A", "0000-000B", false)]
     public void PartialAssetIdEqualTest(string x, string y, bool expected) {
         var a = new PartialAssetId(x);
         var b = new PartialAssetId(y);
@@ -74,8 +77,11 @@ public class PartialAssetIdTest {
 
     [Theory]
     [InlineData("0000000A", "000000FF", -1)]
+    [InlineData("0000-000A", "0000-00FF", -1)]
     [InlineData("00000100", "000000FF", 1)]
+    [InlineData("0000-0100", "0000-00FF", 1)]
     [InlineData("0000000A", "0000000A", 0)]
+    [InlineData("0000-000A", "0000-000A", 0)]
     public void ComparableTest(string a, string b, int expected) {
         var pa = new PartialAssetId(a);
         var pb = new PartialAssetId(b);
@@ -84,7 +90,9 @@ public class PartialAssetIdTest {
 
     [Theory]
     [InlineData("0000000A", "0000000A", true)]
+    [InlineData("0000-000A", "0000-000A", true)]
     [InlineData("0000000A", "0000000B", false)]
+    [InlineData("0000-000A", "0000-000B", false)]
     public void GetHashCodeTest(string a, string b, bool shouldEqual) {
         var pa = new PartialAssetId(a);
         var pb = new PartialAssetId(b); 

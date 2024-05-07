@@ -39,13 +39,15 @@
     </ItemGroup>
     
     <Target Name="AddingPlugins" AfterTargets="Build">
+        
 
         <!-- Create output directories -->
+        <RemoveDir Directories="$(OutDir)plugins" />
         <MakeDir Directories="$(OutDir)plugins" />
 
         <!-- Define list of plugin files -->
         <ItemGroup>
-            <PluginFiles Include="..\..\..\examples\workfloor\Workfloor-AterraCore.Plugin\bin\Debug\net8.0\package\Workfloor-AterraCore.Plugin.zip"/>
+            <PluginFiles Include="..\..\..\examples\workfloor\Workfloor-AterraCore.Plugin\bin\Debug\net8.0\win-x64\package\Workfloor-AterraCore.Plugin.zip"/>
         </ItemGroup>
 
         <!-- Copy plugins to output directory -->
