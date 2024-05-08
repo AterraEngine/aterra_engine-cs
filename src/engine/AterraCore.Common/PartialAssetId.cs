@@ -1,6 +1,8 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text.RegularExpressions;
 namespace AterraCore.Common;
@@ -33,18 +35,41 @@ public readonly partial struct PartialAssetId(uint value) : IComparable<PartialA
             stringValue.AsSpan(4, 4));
     }
 
+    public static bool TryParse(int value, [NotNullWhen(true)] out PartialAssetId? partialAssetId) {
+        try {
+            partialAssetId = new PartialAssetId(value);
+            return true;
+        }
+        // Eh, not the best, but will do for now
+        catch {
+            partialAssetId = null;
+            return false;
+        }
+    }
+    public static bool TryParse(string value, [NotNullWhen(true)] out PartialAssetId? partialAssetId) {
+        try {
+            partialAssetId = new PartialAssetId(value);
+            return true;
+        }
+        // Eh, not the best, but will do for now
+        catch {
+            partialAssetId = null;
+            return false;
+        }
+    }
+    
     internal static uint CastToUint(string value) {
         Match match = _regex.Match(value);
         if (match.Groups[3].Success) {
             return uint.Parse(match.Groups[3].Value, NumberStyles.HexNumber);
         }
 
-        if (match.Groups[1].Success && match.Groups[2].Success) {
-            var txt = $"{match.Groups[1].Value}{match.Groups[2].Value}";
-            return uint.Parse(txt, NumberStyles.HexNumber);
-        }
+        if (!match.Groups[1].Success || !match.Groups[2].Success)
+            throw new ArgumentException("Invalid input format.", nameof(value));
+        
+        var txt = $"{match.Groups[1].Value}{match.Groups[2].Value}";
+        return uint.Parse(txt.PadLeft(8), NumberStyles.HexNumber);
 
-        throw new ArgumentException("Invalid input format.", nameof(value));
     }
     
     private static uint CastToUint(int input) {
@@ -54,7 +79,7 @@ public readonly partial struct PartialAssetId(uint value) : IComparable<PartialA
         return (uint)input;
     }
     
-    [GeneratedRegex("(?:^([0-9a-fA-F]{4})-([0-9a-fA-F]{4})$)|^([0-9a-fA-F]{1,8})$")]
+    [GeneratedRegex("(?:^([0-9a-fA-F]{1,4})-([0-9a-fA-F]{4})$)|^([0-9a-fA-F]{1,8})$")]
     private static partial Regex MyRegex();
     
     // -----------------------------------------------------------------------------------------------------------------

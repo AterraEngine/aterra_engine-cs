@@ -50,7 +50,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nexities.Lib", "src\engine\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Renderer", "Renderer", "{99514BBD-B2EF-4196-8CE7-0630245DF782}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Renderer.Raylib", "src\engine\AterraEngine.Renderer.Raylib\AterraEngine.Renderer.Raylib.csproj", "{184AAE91-D1CE-4111-BDDD-AF653541FE9E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Renderer.RaylibCs", "src\engine\AterraEngine.Renderer.RaylibCs\AterraEngine.Renderer.RaylibCs.csproj", "{184AAE91-D1CE-4111-BDDD-AF653541FE9E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Analyzers", "tools\Analyzers\AterraEngine.Analyzers\AterraEngine.Analyzers.csproj", "{F24E2D2C-CF57-4245-864D-881FC2184C1E}"
 EndProject

@@ -250,15 +250,4 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         
         logger.Debug("{Id} : Custom Assembly assigned ", pluginData.ReadableId);
     }
-
-    public LinkedList<IPlugin> ExportToPlugins() {
-        return new LinkedList<IPlugin>(
-            Plugins.Select(p => new Plugin.Plugin {
-                Id = p.Id,
-                ReadableName = p.ReadableName,
-                Assemblies = p.Assemblies,
-                Types = p.Types
-            })
-        );
-    }
 }

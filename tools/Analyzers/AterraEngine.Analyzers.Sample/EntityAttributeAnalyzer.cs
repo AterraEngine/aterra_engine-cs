@@ -6,8 +6,8 @@ using AterraCore.Nexities.Entities;
 
 namespace AterraEngine.Analyzer.Sample;
 
-// [Entity("1", AssetInstanceType.Pooled)]
-// public class TestEntity : Entity;
+// [PooledEntity("1", AssetInstanceType.Pooled))]
+// public class TestEntity : NexitiesEntity;
 
 [Entity<TestEntity2>("1", AssetInstanceType.Singleton)]
 public class TestEntity2 : NexitiesEntity;

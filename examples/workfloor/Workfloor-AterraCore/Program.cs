@@ -5,7 +5,11 @@
 using System.Reflection;
 using AterraCore.Common;
 using AterraCore.Contracts;
+using AterraCore.Loggers;
 using AterraEngine;
+using AterraEngine.Configuration;
+using AterraEngine.Renderer.RaylibCs;
+using Microsoft.Extensions.DependencyInjection;
 using Nexities.Lib.Components.Transform2D;
 
 namespace Workfloor_AterraCore;
@@ -17,18 +21,25 @@ namespace Workfloor_AterraCore;
 public static class Program {
     public static void Main(string[] args) {
         IEngine engine = new EngineConfiguration()
+            .SetStartupLogger(StartupLogger.CreateLogger())
+            .SetEngineLogger(EngineLogger.CreateLogger())
+            .AddCustomServices(new ServiceDescriptor(typeof(RaylibLogger), typeof(RaylibLogger), ServiceLifetime.Singleton))
+
             .ImportEngineConfig(Paths.ConfigEngine)
+            
+            // Assigns services which may be overriden by plugins
             .AssignDefaultServices()
-            .ImportAssemblyAsPlugin(Assembly.GetEntryAssembly())
-            .ImportAssemblyAsPlugin(Assembly.GetAssembly(typeof(Transform2D)))
-            .ImportPlugins()
             
-            // Manipulate services from plugins
-            .PluginsAssignServices()
+            .WithPluginConfiguration(pc => pc
+                .ImportAssemblies(Assembly.GetEntryAssembly(), Assembly.GetAssembly(typeof(Transform2D)))
+                .ImportPlugins()
+                .AssignServices()
+                .CreatePluginList()
+            )
             
-            // Assign Static Systems & build DI container
+            // Assigns services which CAN NOT be overriden by plugins
             .AssignStaticServices()
-            .AssignDependencyInjectionContainer()
+            .BuildDependencyInjectionContainer()
             
             // Actually create the engine instance
             .CreateEngine();

@@ -4,7 +4,8 @@
     <gameVersion value="0.0.0"/>
     <pluginData root="plugins">
         <loadOrder breakOnUnstable="true">
-            <plugin file="Workfloor-AterraCore.Plugin.zip"/>
+            <file file="Workfloor-AterraCore.Plugin.zip"/>
+            <file file="Workfloor-AterraCore.Plugin.zip"/>
         </loadOrder>
     </pluginData>
 </engineConfig>

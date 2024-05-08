@@ -14,7 +14,7 @@
       <ProjectReference Include="..\AterraCore.FlexiPlug\AterraCore.FlexiPlug.csproj" />
       <ProjectReference Include="..\AterraCore.Nexities\AterraCore.Nexities.csproj" />
       <ProjectReference Include="..\AterraCore.Common\AterraCore.Common.csproj" />
-      <ProjectReference Include="..\AterraEngine.Renderer.Raylib\AterraEngine.Renderer.Raylib.csproj" />
+      <ProjectReference Include="..\AterraEngine.Renderer.RaylibCs\AterraEngine.Renderer.RaylibCs.csproj" />
     </ItemGroup>
 
     <ItemGroup>

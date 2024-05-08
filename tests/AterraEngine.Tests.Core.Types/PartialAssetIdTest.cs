@@ -25,6 +25,13 @@ public class PartialAssetIdTest {
     }
 
     [Theory]
+    [InlineData("INVALID_FORMAT", false)]
+    public void TryParse(string input, bool result) {
+        Assert.Equal(result, PartialAssetId.TryParse(input, out PartialAssetId? output));
+        if (result) Assert.NotNull(output);
+    }
+
+    [Theory]
     [InlineData("INVALID_FORMAT")]
     [InlineData("XYZ123")]
     public void CastToUint_InvalidString_ThrowsArgumentException(string input) {
@@ -35,6 +42,11 @@ public class PartialAssetIdTest {
     [InlineData("7593F98A", 1972631946u)]
     [InlineData("12345678", 305419896u)]
     [InlineData("1234-5678", 305419896u)]
+    [InlineData("0000-162E", 5678u)]
+    [InlineData("000-162E", 5678u)]
+    [InlineData("00-162E", 5678u)]
+    [InlineData("0-162E", 5678u)]
+    [InlineData("162E", 5678u)]
     public void CastToUint_ValidString_CorrectConversion(string input, uint expected) {
         var output = new PartialAssetId(input);
         Assert.Equal(expected, output.Value);

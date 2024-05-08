@@ -17,6 +17,8 @@ public static class Paths {
         public static readonly string StartupLog = Path.Combine(Folder, _startupLog);
         private const string _engineLog = "log_engine-.log";
         public static readonly string EngineLog = Path.Combine(Folder, _engineLog);
+        private const string _rendererLog = "log_renderer-.log";
+        public static readonly string RendererLog = Path.Combine(Folder, _rendererLog);
     }
     
     public static class Plugins {

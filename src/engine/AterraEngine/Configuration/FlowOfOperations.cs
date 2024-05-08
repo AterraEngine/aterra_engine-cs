@@ -2,10 +2,18 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-namespace AterraEngine.Renderer.Raylib;
+namespace AterraEngine.Configuration;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public class RayLibException : Exception;
+public enum FlowOfOperations : ulong {
+    UnConfigured = 0ul,
+    AssignedDefaultServices,
+    AssignedStaticServices ,
+    ImportedEngineConfigDto,
+    ImportedPlugins,
+    ImportedPluginServices,
+    DiContainerBuilt,
+}

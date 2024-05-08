@@ -7,7 +7,7 @@ using Extensions;
 using JetBrains.Annotations;
 using Serilog;
 
-namespace AterraEngine.Renderer.Raylib;
+namespace AterraEngine.Renderer.RaylibCs;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

@@ -1,79 +1,86 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
-using System.Reflection;
-using AterraCore.Contracts;
-using AterraCore.Contracts.Nexities.Assets;
-using AterraCore.DI;
-using AterraCore.Nexities.Assets;
 using AterraCore.Common;
 using AterraCore.Common.Config;
+using AterraCore.Contracts;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug.Plugin;
+using AterraCore.Contracts.Nexities.Assets;
 using AterraCore.Contracts.Renderer;
+using AterraCore.DI;
 using AterraCore.FlexiPlug;
-using AterraCore.Loggers;
+using AterraCore.Nexities.Assets;
 using AterraEngine.Config;
-using AterraEngine.Renderer.Raylib;
+using AterraEngine.Renderer.RaylibCs;
+using Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using Extensions;
+using Serilog.Core;
 using Xml;
+using static AterraEngine.Configuration.ConfigurationWarnings;
+using static AterraEngine.Configuration.FlowOfOperations;
 using static Extensions.ServiceDescriptorExtension;
 
-namespace AterraEngine;
+namespace AterraEngine.Configuration;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public class EngineConfiguration(ILogger? logger = null) {
-    private readonly ILogger _logger = SetLogger(logger);
-    private readonly ConfigXmlParser<EngineConfigXml> _configXmlParser = new(SetLogger(logger), XmlNameSpaces.ConfigEngine, Paths.Xsd.XsdEngineConfigDto);
-    private readonly PluginLoader _pluginLoader = new(SetLogger(logger));
-    private readonly EngineServiceBuilder _engineServiceBuilder = new(SetLogger(logger));
+public class EngineConfiguration {
+    private ILogger _logger = Logger.None;
+    private readonly EngineServiceBuilder _engineServiceBuilder = new(Logger.None);
     
     private EngineConfigXml? _engineConfigDto;
     public EngineConfigXml EngineConfigDto {
         get => _engineConfigDto ??= new EngineConfigXml().PopulateAsEmpty();
         set => _engineConfigDto = value;
     }
+    private ServiceDescriptor _engineLoggerDescriptor = NewServiceDescriptor<ILogger>(Logger.None);
     
-    private EngineConfigFlags _engineConfigFlag = EngineConfigFlags.UnConfigured;
-
-    private static ILogger SetLogger(ILogger? logger) => logger ?? StartupLogger.CreateLogger();
+    private ConfigurationWarnings _configurationWarnings = Nominal;
+    private FlowOfOperations _flow = UnConfigured;
+    
+    private LinkedList<IPlugin>? _plugins;
+    // TODO separate EngineConfigFlags into "flow of operations" & "errors"
 
     // -----------------------------------------------------------------------------------------------------------------
     // Configuration Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public EngineConfiguration ImportAssemblyAsPlugin(Assembly? assembly) {
-        // TODO use the pluginLoader to assign the plugin.
-        if (assembly is null) {
-            _engineConfigFlag |= EngineConfigFlags.PluginLoadOrderUnstable;
-            _logger.Warning("Assembly could not be assigned as a Plugin");
-            return this;
-        }
-        
-        _pluginLoader.InjectAssemblyAsPlugin(assembly);
+    public EngineConfiguration SetStartupLogger(ILogger logger) {
+        _logger = logger;
+        _engineServiceBuilder.Logger = _logger;
+        return this;
+    }
+
+    public EngineConfiguration SetEngineLogger(ILogger logger) {
+        _engineLoggerDescriptor = NewServiceDescriptor<ILogger>(logger);
         return this;
     }
     
     public EngineConfiguration AssignDefaultServices() {
+        if (_flow > AssignedDefaultServices) {
+            // TODO write exception
+            _configurationWarnings |= FlowOfOperationsNotRespected;
+        }
         // Systems which may be overriden
         _engineServiceBuilder.AssignFromServiceDescriptors([
-            NewServiceDescriptor<ILogger>(EngineLogger.CreateLogger()),
+            _engineLoggerDescriptor,
             NewServiceDescriptor<IFrameProcessor, FrameProcessor>(ServiceLifetime.Singleton),
             NewServiceDescriptor<IMainWindow, MainWindow>(ServiceLifetime.Singleton)
         ]);
         
         _logger.Information("Assigned Default Systems correctly");
-        _engineConfigFlag |= EngineConfigFlags.AssignedDefaultServices;
+        _flow = AssignedStaticServices;
         return this;
     }
     
     public EngineConfiguration AssignStaticServices() {
-        // TODO make a check though the _engineConfigFlag to see if everything has been setup already
+        if (_flow > AssignedStaticServices) {
+            // TODO write exception
+            _configurationWarnings |= FlowOfOperationsNotRespected;
+        }
         
         // services which may not be overriden
         _engineServiceBuilder.AssignFromServiceDescriptors([
@@ -83,7 +90,7 @@ public class EngineConfiguration(ILogger? logger = null) {
         ]);
         
         _logger.Information("Assigned Static Systems correctly");
-        _engineConfigFlag |= EngineConfigFlags.AssignedStaticServices;
+        _flow = AssignedStaticServices;
         return this;
     }
 
@@ -93,10 +100,13 @@ public class EngineConfiguration(ILogger? logger = null) {
     }
     
     public EngineConfiguration ImportEngineConfig(string filePath, bool outputToLog = true) {
-        // TODO make a check though the _engineConfigFlag to see if everything has been setup already
+        if (_flow > ImportedEngineConfigDto) {
+            // TODO write exception
+            _configurationWarnings |= FlowOfOperationsNotRespected;
+        }
         
-        // services which may not be overriden
-        if (!_configXmlParser.TryDeserializeFromFile(filePath, out EngineConfigXml? configDto)) {
+        ConfigXmlParser<EngineConfigXml> configXmlParser = new(_logger, XmlNameSpaces.ConfigEngine, Paths.Xsd.XsdEngineConfigDto);
+        if (!configXmlParser.TryDeserializeFromFile(filePath, out EngineConfigXml? configDto)) {
             _logger.Error("Engine config file could not be parsed");
             return this; //the _configDto will be null, so setter of EngineConfigDto will populate as empty
         }
@@ -105,79 +115,72 @@ public class EngineConfiguration(ILogger? logger = null) {
         if (outputToLog) EngineConfigDto.OutputToLog(_logger);
 
         _logger.Information("Imported Engine Config correctly");
-        _engineConfigFlag |= EngineConfigFlags.ImportedEngineConfigDto;
+        _flow = ImportedEngineConfigDto;
         return this;
     }
 
-    public EngineConfiguration ImportPlugins() {
-        // TODO make a check though the _engineConfigFlag to see if everything has been setup already
+    public EngineConfiguration WithPluginConfiguration(Func<PluginConfiguration, LinkedList<IPlugin>> callback) {
+        if (_flow > ImportedPlugins) {
+            _configurationWarnings |= FlowOfOperationsNotRespected;
+        }
         
         EngineConfigDto.PluginData.LoadOrder.Plugins
             .IterateOver(p => p.FilePath = Path.Join(EngineConfigDto.PluginData.RootFolder, p.FileNameInternal));
-
         string[] filePaths = EngineConfigDto.PluginData.LoadOrder.Plugins.Select(p => p.FilePath).ToArray();
-        
         _logger.Information("All plugin file paths: {paths}", filePaths);
+
+        var pluginConfiguration = new PluginConfiguration(_logger, filePaths, _engineServiceBuilder);
+        _plugins = callback(pluginConfiguration);
         
-        if(!_pluginLoader.TryParseAllPlugins(filePaths)){
-            _engineConfigFlag |= EngineConfigFlags.PluginLoadOrderUnstable;
-            _logger.Warning("Failed to load all plugins correctly.");
-        }
-        else {
-            _logger.Information("Plugins successfully loaded.");
+        // TODO review if this if structure is logical
+        if (_plugins is not null && pluginConfiguration.ConfigurationWarnings.IsNotNominal()) {
+            // TODO plugins were loaded, but something went wrong during setup 
+            _configurationWarnings |= pluginConfiguration.ConfigurationWarnings;
         }
 
-        _engineConfigFlag |= EngineConfigFlags.ImportedPlugins;
+        if (_plugins is null) {
+            // TODO everything went correctly, but no plugins were loaded, aka none were defined?
+            _configurationWarnings |= NoPluginsDefined;
+        }
+
+        _flow = ImportedPlugins;
         return this;
     }
 
-    public EngineConfiguration PluginsAssignServices() {
+    public EngineConfiguration BuildDependencyInjectionContainer() {
         // TODO make a check though the _engineConfigFlag to see if everything has been setup already
-        
-        _pluginLoader.Plugins
-            .SelectMany<IPluginDto, ServiceDescriptor>(p => 
-                p.GetServices()
-                    .Concat(p.GetNexitiesComponents())
-                    .Concat(p.GetNexitiesEntities())
-            )
-            .IterateOver(_engineServiceBuilder.AssignFromServiceDescriptor);
-        
-        _logger.Information("Assigned Systems from Plugins");
-        _engineConfigFlag |= EngineConfigFlags.ImportedPluginServices;
-        return this;
-    }
-
-    public EngineConfiguration AssignDependencyInjectionContainer() {
-        // TODO make a check though the _engineConfigFlag to see if everything has been setup already
-        if (!_engineConfigFlag.HasFlag(EngineConfigFlags.AssignedDefaultServices 
-                                       | EngineConfigFlags.AssignedStaticServices)) {
-            _logger.Error("No Default- or Static Engine Systems were assigned");
+        if (_flow < AssignedStaticServices) {
+            _configurationWarnings |= FlowOfOperationsNotRespected;
+            
+            _logger.Error("No Static Engine Systems were assigned");
             throw new InvalidOperationException("No Default or Static Engine Systems were assigned");
         }
 
         _engineServiceBuilder.FinishBuilding();
         
         _logger.Information("DI Container built");
-        _engineConfigFlag |= EngineConfigFlags.DiContainerBuilt;
+        _flow = DiContainerBuilt;
         return this;
         
     }
 
     public IEngine CreateEngine() {
-        if (_engineConfigFlag == EngineConfigFlags.UnConfigured) {
-            // TODO throw proper error
-            throw new Exception();
+        if (_flow == UnConfigured) {
+            _logger.ThrowFatal<InvalidOperationException>("Engine was not correctly configured");
         }
 
-        if (_engineConfigFlag.HasFlag(EngineConfigFlags.PluginLoadOrderUnstable) 
-            && EngineConfigDto.PluginData.LoadOrder.BreakOnUnstable) {
+        if (_configurationWarnings.HasFlag(PluginLoadOrderUnstable) ) {
             _logger.ThrowFatal<ArgumentException>("Engine could not be created -> Load Order was Unstable & configuration.BreakOnUnstable was set to {bool}", EngineConfigDto.PluginData.LoadOrder.BreakOnUnstable);
+        }
+
+        if (_configurationWarnings.HasFlag(NoPluginsDefined) || _plugins is null) {
+            _logger.ThrowFatal<InvalidOperationException>("No Plugins were defined");
         }
         
         // Populate Plugin Atlas with plugin list
         //      Is a singleton anyway, so doesn't matter when we assign this data
         IPluginAtlas pluginAtlas = EngineServices.GetPluginAtlas();
-        pluginAtlas.ImportPlugins(_pluginLoader.ExportToPlugins());
+        pluginAtlas.ImportPlugins(_plugins);
         
         // Create the Actual Engine
         //  Should be the last step
