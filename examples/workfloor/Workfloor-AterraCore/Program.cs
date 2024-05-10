@@ -21,11 +21,10 @@ namespace Workfloor_AterraCore;
 public static class Program {
     public static void Main(string[] args) {
         IEngine engine = new EngineConfiguration()
-            .SetStartupLogger(StartupLogger.CreateLogger())
-            .SetEngineLogger(EngineLogger.CreateLogger())
-            .AddCustomServices(new ServiceDescriptor(typeof(RaylibLogger), typeof(RaylibLogger), ServiceLifetime.Singleton))
-
             .ImportEngineConfig(Paths.ConfigEngine)
+            
+            .SetEngineLogger(EngineLogger.CreateLogger)
+            .AddCustomServices(new ServiceDescriptor(typeof(RaylibLogger), typeof(RaylibLogger), ServiceLifetime.Singleton))
             
             // Assigns services which may be overriden by plugins
             .AssignDefaultServices()

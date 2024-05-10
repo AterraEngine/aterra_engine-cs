@@ -28,8 +28,8 @@ public class FrameProcessor(ILogger logger, IMainWindow mainWindow) : IFrameProc
     public void DrawFrame() {
         BeginDrawing();
         ClearBackground(Color.White);
+        
 
-        DrawText("Hello, world!", 12, 12, 20, Color.Black);
 
         EndDrawing();
     }

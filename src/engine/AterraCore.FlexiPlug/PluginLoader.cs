@@ -46,7 +46,7 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         // PluginCounter exits out of engine as soon as the max PluginId is exhausted
         IPluginDto pluginData = Plugins.AddLast(new PluginDto(PluginIdCounter++, filepath)).Value;
         
-        logger.Debug("{Id} : Assigned to {Name}", pluginData.ReadableId, pluginData.ReadableName);
+        logger.Information("{Id} : Assigned to {Name}", pluginData.ReadableId, pluginData.ReadableName);
         return pluginData;
     }
     
@@ -191,11 +191,11 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
     }
     
     
-    private void TrimFaultyPlugins() {
+    private bool TrimFaultyPlugins() {
         IEnumerable<IPluginDto> validPlugins = Plugins.Where(p => p.Validity == PluginValidity.Valid).ToArray();
         if (validPlugins.Count() == Plugins.Count) {
             logger.Debug("Plugins validated correctly");
-            return;
+            return true;
         }
         
         logger.Warning("Plugins did not get validated correctly, trimming plugin list");
@@ -205,6 +205,7 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
             .IterateOver(p => Plugins.Remove(p));
         
         logger.Warning("Plugins list trimmed to to a total of {i} ", Plugins.Count);
+        return false;
     }
     
     // -----------------------------------------------------------------------------------------------------------------
@@ -229,10 +230,10 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
             .IterateOver(Validate);
 
         DebugPrintAllPlugins();
-        TrimFaultyPlugins();
+        bool trimmedFaulty = TrimFaultyPlugins();
         
         logger.Information("Total Plugins loaded : {Count}", Plugins.Count);
-        return Plugins.Count != 0;
+        return trimmedFaulty && Plugins.Count != 0;
     }
 
     public void InjectAssemblyAsPlugin(Assembly assembly) {

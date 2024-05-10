@@ -30,4 +30,13 @@
     <data name="AE0001CodeFixTitle" xml:space="preserve">
         <value>Use an EntityPooled Attribute</value>
     </data>
+    <data name="AE0002Title" xml:space="preserve">
+        <value>Duplicate Partial Id</value>
+    </data>
+    <data name="AE0002Description" xml:space="preserve">
+        <value />
+    </data>
+    <data name="AE0002MessageFormat" xml:space="preserve">
+        <value>Duplicate PartialId '{0}' found at locations {1}</value>
+    </data>
 </root>

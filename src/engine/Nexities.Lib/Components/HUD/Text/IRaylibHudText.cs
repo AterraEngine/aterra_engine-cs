@@ -1,23 +1,20 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common;
-using Serilog;
 
-namespace AterraCore.Loggers;
+using AterraCore.Common;
+using AterraCore.Contracts.Nexities.Components;
+using Raylib_cs;
+
+namespace Nexities.Lib.Components.HUD.Text;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public static class EngineLogger {
-    public static LoggerConfiguration CreateConfiguration(bool asyncConsole) {
-        return new LoggerConfiguration()
-            .MinimumLevel.Verbose()
-            
-            .DefaultEnrich("Engine")
-            .AsyncSinkFile(Paths.Logs.EngineLog)
-            .SetConsole(asyncConsole);
-    }
-    
-    public static ILogger CreateLogger(bool asyncConsole) => CreateConfiguration(asyncConsole).CreateLogger();
+
+public interface IRaylibHudText : IComponent {
+    public string Text { get; set; }
+    public Vector2Int Pos { get; set; }
+    public int FontSize { get; set; }
+    public Color Color { get; set; }
 }

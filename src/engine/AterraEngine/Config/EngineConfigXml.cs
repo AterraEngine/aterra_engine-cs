@@ -19,17 +19,15 @@ namespace AterraEngine.Config;
 // ---------------------------------------------------------------------------------------------------------------------
 [XmlRoot("engineConfig")]
 public class EngineConfigXml : IConfigDto<EngineConfigXml> {
-    [XmlElement("engineVersion")] 
-    public SemanticVersion EngineVersion { get; set; }
+    [XmlElement("engineVersion")] public SemanticVersion EngineVersion { get; set; }
     
-    [XmlElement("gameVersion")] 
-    public SemanticVersion GameVersion { get; set; }
+    [XmlElement("gameVersion")] public SemanticVersion GameVersion { get; set; }
     
-    [XmlElement("pluginData")] 
-    public PluginDataDto PluginData { get; set; } = null!;
+    [XmlElement("pluginData")] public PluginDataDto PluginData { get; set; } = null!;
     
-    [XmlElement("raylib")] 
-    public RaylibConfigDto RaylibConfig { get; set; } = null!;
+    [XmlElement("raylib")] public RaylibConfigDto RaylibConfig { get; set; } = null!;
+
+    [XmlElement("logging")] public LoggingDto Logging { get; set; } = null!;
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
@@ -53,7 +51,10 @@ public class EngineConfigXml : IConfigDto<EngineConfigXml> {
                 Title = ""
             }
         };
-            
+        Logging = new LoggingDto {
+            UseAsyncConsole = false
+        };
+
         return this;
     }
     

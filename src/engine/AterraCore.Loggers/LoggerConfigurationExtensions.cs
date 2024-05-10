@@ -88,4 +88,8 @@ public static class LoggerConfigurationExtensions {
                 outputTemplate: OutputTemplate
             );
     }
+
+    public static LoggerConfiguration SetConsole(this LoggerConfiguration lc, bool allowAsync) {
+        return allowAsync ? lc.AsyncSinkConsole() : lc.SinkConsole();
+    }
 }

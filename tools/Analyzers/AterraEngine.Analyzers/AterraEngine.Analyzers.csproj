@@ -21,6 +21,7 @@
         </PackageReference>
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.3.0"/>
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.3.0"/>
+        <PackageReference Include="Microsoft.NET.ILLink.Tasks" Version="8.0.4" />
     </ItemGroup>
 
     <ItemGroup>
@@ -36,5 +37,14 @@
             <AutoGen>True</AutoGen>
             <DependentUpon>Resources.resx</DependentUpon>
         </Compile>
-    </ItemGroup>    
+    </ItemGroup>
+
+    <Target AfterTargets="_LinkDuringPublish" Name="ILMerge">
+        <ItemGroup>
+            <_PublishAssemblies Include="@(ResolvedFileToPublish->WithMetadataValue('AssetType', 'runtime'))" />
+        </ItemGroup>
+        <ILLink AssemblyPaths="@(_PublishAssemblies->'%(RootDir)%(Directory)')"
+                RootAssemblyNames="$(AssemblyName)"
+                OutputDirectory="$(PublishDir)" />
+    </Target>
 </Project>

@@ -14,15 +14,19 @@ namespace AterraCore.Loggers;
 // A "special" logger to be used before the service collection is built
 //      Don't use this after the startup procedure has ended.
 public static class StartupLogger {
-    public static LoggerConfiguration CreateConfiguration() {
+    private static ILogger? LoggerCache { get; set; }
+    
+    // -----------------------------------------------------------------------------------------------------------------
+    // Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    public static LoggerConfiguration CreateConfiguration(bool asyncConsole) {
         return new LoggerConfiguration()
             .MinimumLevel.Verbose()
 
             .DefaultEnrich("Startup")
             .AsyncSinkFile(Paths.Logs.StartupLog)
-            .SinkConsole();
-            // .AsyncSinkConsole();
+            .SetConsole(asyncConsole);
     }
     
-    public static ILogger CreateLogger() => CreateConfiguration().CreateLogger();
+    public static ILogger CreateLogger(bool asyncConsole) => LoggerCache ??= CreateConfiguration(asyncConsole).CreateLogger();
 }

@@ -5,7 +5,7 @@
 using System.Numerics;
 using AterraCore.Common.Nexities;
 using AterraCore.Nexities.Systems;
-using Nexities.Lib.Entities.ActorEntity;
+using Nexities.Lib.Entities.Actor;
 using Serilog;
 
 namespace Nexities.Lib.Systems;
@@ -13,8 +13,7 @@ namespace Nexities.Lib.Systems;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
-[System("AF000000", AssetInstanceType.Singleton, CoreTags.RenderSystem)]
+[System("AF00-0000", AssetInstanceType.Singleton, CoreTags.RenderSystem)]
 public class Render2D(ILogger logger) : NexitiesSystem<IActor2D> {
     
     // -----------------------------------------------------------------------------------------------------------------

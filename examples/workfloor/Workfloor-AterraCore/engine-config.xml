@@ -5,7 +5,7 @@
     <pluginData root="plugins">
         <loadOrder breakOnUnstable="true">
             <file file="Workfloor-AterraCore.Plugin.zip"/>
-            <file file="Workfloor-AterraCore.Plugin.zip"/>
         </loadOrder>
     </pluginData>
+    <logging async-console="true"/>
 </engineConfig>

@@ -94,5 +94,32 @@ namespace AterraEngine.Analyzers {
                 return ResourceManager.GetString("AE0001Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string AE0002Description {
+            get {
+                return ResourceManager.GetString("AE0002Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duplicate PartialId &apos;{0}&apos; found at locations {1}.
+        /// </summary>
+        internal static string AE0002MessageFormat {
+            get {
+                return ResourceManager.GetString("AE0002MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duplicate Partial Id.
+        /// </summary>
+        internal static string AE0002Title {
+            get {
+                return ResourceManager.GetString("AE0002Title", resourceCulture);
+            }
+        }
     }
 }

@@ -10,6 +10,7 @@ using AterraCore.Contracts.Nexities.Assets;
 using AterraCore.Contracts.Renderer;
 using AterraCore.DI;
 using AterraCore.FlexiPlug;
+using AterraCore.Loggers;
 using AterraCore.Nexities.Assets;
 using AterraEngine.Config;
 using AterraEngine.Renderer.RaylibCs;
@@ -28,16 +29,21 @@ namespace AterraEngine.Configuration;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public class EngineConfiguration {
-    private ILogger _logger = Logger.None;
-    private readonly EngineServiceBuilder _engineServiceBuilder = new(Logger.None);
+public class EngineConfiguration(ILogger? logger = null) {
+    private readonly ILogger _logger = GetStartupLogger(logger);
+    private readonly EngineServiceBuilder _engineServiceBuilder = new(GetStartupLogger(logger));
     
     private EngineConfigXml? _engineConfigDto;
     public EngineConfigXml EngineConfigDto {
         get => _engineConfigDto ??= new EngineConfigXml().PopulateAsEmpty();
         set => _engineConfigDto = value;
     }
-    private ServiceDescriptor _engineLoggerDescriptor = NewServiceDescriptor<ILogger>(Logger.None);
+
+    private ServiceDescriptor? _serviceDescriptorCache;
+    public ServiceDescriptor EngineLoggerDescriptor {
+        get => _serviceDescriptorCache ??= NewServiceDescriptor<ILogger>(Logger.None);
+        set => _serviceDescriptorCache = value;
+    }
     
     private ConfigurationWarnings _configurationWarnings = Nominal;
     private FlowOfOperations _flow = UnConfigured;
@@ -45,17 +51,14 @@ public class EngineConfiguration {
     private LinkedList<IPlugin>? _plugins;
     // TODO separate EngineConfigFlags into "flow of operations" & "errors"
 
+    private static ILogger GetStartupLogger(ILogger? logger) => logger ?? StartupLogger.CreateLogger(false);
+
     // -----------------------------------------------------------------------------------------------------------------
     // Configuration Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public EngineConfiguration SetStartupLogger(ILogger logger) {
-        _logger = logger;
-        _engineServiceBuilder.Logger = _logger;
-        return this;
-    }
 
-    public EngineConfiguration SetEngineLogger(ILogger logger) {
-        _engineLoggerDescriptor = NewServiceDescriptor<ILogger>(logger);
+    public EngineConfiguration SetEngineLogger(Func<bool, ILogger> loggerCallback) {
+        EngineLoggerDescriptor = NewServiceDescriptor<ILogger>(loggerCallback(EngineConfigDto.Logging.UseAsyncConsole));
         return this;
     }
     
@@ -66,7 +69,7 @@ public class EngineConfiguration {
         }
         // Systems which may be overriden
         _engineServiceBuilder.AssignFromServiceDescriptors([
-            _engineLoggerDescriptor,
+            EngineLoggerDescriptor,
             NewServiceDescriptor<IFrameProcessor, FrameProcessor>(ServiceLifetime.Singleton),
             NewServiceDescriptor<IMainWindow, MainWindow>(ServiceLifetime.Singleton)
         ]);
@@ -169,7 +172,7 @@ public class EngineConfiguration {
             _logger.ThrowFatal<InvalidOperationException>("Engine was not correctly configured");
         }
 
-        if (_configurationWarnings.HasFlag(PluginLoadOrderUnstable) ) {
+        if (_configurationWarnings.HasFlag(PluginLoadOrderUnstable) && EngineConfigDto.PluginData.LoadOrder.BreakOnUnstable) {
             _logger.ThrowFatal<ArgumentException>("Engine could not be created -> Load Order was Unstable & configuration.BreakOnUnstable was set to {bool}", EngineConfigDto.PluginData.LoadOrder.BreakOnUnstable);
         }
 

@@ -11,19 +11,20 @@ namespace AterraEngine.Renderer.RaylibCs;
 // ---------------------------------------------------------------------------------------------------------------------
 
 public class MainWindow(RaylibLogger raylibLogger) : IMainWindow{
-    public int Width { get; } = 800;
-    public int Height { get; } = 400;
-    public string Name { get; } = "AterraEngine - Test";
+    private static int Width => 800;
+    private static int Height => 400;
+    private static string Name => "AterraEngine - Test";
 
     public bool IsInitialised { get; private set; }
 
     public void Init() {
         unsafe {
-            SetTraceLogCallback(raylibLogger.GetPointer());
+            // Necessary to write Raylib logs with Serilog
+            SetTraceLogCallback(RaylibLogger.GetPointer());
         }
         
         InitWindow(Width, Height, Name);
-
+        
         IsInitialised = true;
     }
 }
