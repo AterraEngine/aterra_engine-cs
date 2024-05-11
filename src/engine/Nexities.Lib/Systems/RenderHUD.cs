@@ -19,18 +19,24 @@ namespace Nexities.Lib.Systems;
 [System("AF00-0001", AssetInstanceType.Singleton, CoreTags.RenderSystem)]
 public class RenderHUD(ILogger logger) : NexitiesSystem<IHud> {
     protected override void ProcessEntity(IHud entity) {
-        entity.ChildEntities.OfTypeManyReverse<IHudElement>()
-            .Select(element => new {element.HudComponent.Type,Component = element.HudComponent})
-            .IterateOver(box => {
-                switch (box.Type) {
-                    case HudType.Text : {
-                        if (box.Component is RaylibHudText text) 
-                            Raylib.DrawText(text.Text, text.Pos.X, text.Pos.Y, text.FontSize, text.Color);
+        entity.ChildEntities
+            .OfTypeManyReverse<IHudElement>()
+            .IterateOver(element => {
+                switch (element.HudComponent.Type) {
+                    case HudType.Text when element.HudComponent is RaylibHudText text : {
+                        Raylib.DrawText(text.Text, text.Pos.X, text.Pos.Y, text.FontSize, text.Color);
                         break;
                     }
+
+                    case HudType.TextPro: {
+                        break;
+                    }
+                    
+                    case HudType.Texture:{
+                        break;
+                    }
+                    
                     case HudType.Empty:
-                    case HudType.TextPro:
-                    case HudType.Texture:
                     default: {
                         break;
                     }
