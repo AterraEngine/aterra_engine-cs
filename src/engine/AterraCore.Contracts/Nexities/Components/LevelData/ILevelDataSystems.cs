@@ -2,15 +2,14 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using System.Diagnostics.CodeAnalysis;
-using AterraCore.Common.Nexities;
+using AterraCore.Contracts.Nexities.Systems;
 
-namespace AterraCore.Contracts.Nexities.Assets;
+namespace AterraCore.Contracts.Nexities.Components.LevelData;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public interface IAssetInstanceAtlas {
-    public bool TryCreateInstance<T>(AssetId assetId, [NotNullWhen(true)] out T? instance) where T : IAssetInstance;
+public interface ILevelDataSystems: IComponent {
+    public INexitiesSystem[] LoadedSystems { get; }
 }

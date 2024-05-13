@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 using AterraCore.Common.Nexities;
 using AterraCore.Contracts.Nexities.Assets;
 using AterraCore.DI;
@@ -21,14 +22,14 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas) : IAsset
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public bool TryCreateInstance(AssetId assetId, out IAssetInstance? instance) {
-        instance = null;
+    public bool TryCreateInstance<T>(AssetId assetId, [NotNullWhen(true)] out T? instance) where T : IAssetInstance {
+        instance = default;
         if (!assetAtlas.TryGetType(assetId, out Type? type)) {
             logger.Warning("Asset Id {id} could not be matched to a Type", assetId );
             return false;
         }
 
-        instance = EngineServices.CreateWithServices<IAssetInstance>(type);
+        instance = EngineServices.CreateWithServices<T>(type);
         return true;
     }
 }

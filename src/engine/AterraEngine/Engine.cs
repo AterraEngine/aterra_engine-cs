@@ -6,8 +6,11 @@ using AterraCore.Common.Nexities;
 using AterraCore.Contracts;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.Nexities.Assets;
+using AterraCore.Contracts.Nexities.Levels;
+using AterraCore.Contracts.Nexities.Worlds;
 using AterraCore.DI;
 using AterraEngine.Threading;
+using JetBrains.Annotations;
 using Serilog;
 
 namespace AterraEngine;
@@ -15,11 +18,17 @@ namespace AterraEngine;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
-public class Engine(ILogger logger, IAssetAtlas assetAtlas, IPluginAtlas pluginAtlas) : IEngine {
+[UsedImplicitly]
+public class Engine(ILogger logger, IAssetAtlas assetAtlas, IAssetInstanceAtlas instanceAtlas, IPluginAtlas pluginAtlas, IWorld world) : IEngine {
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
+    public bool TryAssignStartingLevel(AssetId assetId) {
+        return instanceAtlas.TryCreateInstance(assetId, out ILevel? level)
+               && world.TryLoadLevel(level);
+    }
+
     public void Run() {
         logger.Information("Entered AterraEngine");
         
@@ -28,7 +37,6 @@ public class Engine(ILogger logger, IAssetAtlas assetAtlas, IPluginAtlas pluginA
                 logger.Warning("Type {Type} could not be assigned as an asset", assetRegistration.Type);
             }
         }
-        
         
         // TODO create window etc...
 

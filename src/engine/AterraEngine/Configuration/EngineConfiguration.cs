@@ -7,11 +7,13 @@ using AterraCore.Contracts;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug.Plugin;
 using AterraCore.Contracts.Nexities.Assets;
+using AterraCore.Contracts.Nexities.Worlds;
 using AterraCore.Contracts.Renderer;
 using AterraCore.DI;
 using AterraCore.FlexiPlug;
 using AterraCore.Loggers;
 using AterraCore.Nexities.Assets;
+using AterraCore.Nexities.Worlds;
 using AterraEngine.Config;
 using AterraEngine.Renderer.RaylibCs;
 using Extensions;
@@ -90,6 +92,7 @@ public class EngineConfiguration(ILogger? logger = null) {
             NewServiceDescriptor<IAssetAtlas, AssetAtlas>(ServiceLifetime.Singleton),
             NewServiceDescriptor<IEngine, Engine>(ServiceLifetime.Singleton),
             NewServiceDescriptor<IPluginAtlas, PluginAtlas>(ServiceLifetime.Singleton),
+            NewServiceDescriptor<IWorld, World>(ServiceLifetime.Singleton),
         ]);
         
         _logger.Information("Assigned Static Systems correctly");

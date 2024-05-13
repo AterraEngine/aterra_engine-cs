@@ -2,20 +2,19 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using AterraCore.Contracts.Nexities.Components.AssetTree;
-using AterraCore.Contracts.Nexities.Components.LevelData;
 using AterraCore.Contracts.Nexities.Levels;
-using AterraCore.Nexities.Entities;
-using JetBrains.Annotations;
 
-namespace Nexities.Lib.Entities.Level;
+namespace AterraCore.Contracts.Nexities.Worlds;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[UsedImplicitly]
-[Entity<ILevel>("AE000001")]
-public class Level(IAssetTree childEntities, ILevelDataSystems levelDataSystems) : NexitiesEntity(childEntities), ILevel {
-    public IAssetTree ChildEntities => childEntities;
-    public ILevelDataSystems Systems => levelDataSystems;
+
+public interface IWorld {
+    public ILevel? LoadedLevel { get; }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    public bool TryLoadLevel(ILevel level);
 }
