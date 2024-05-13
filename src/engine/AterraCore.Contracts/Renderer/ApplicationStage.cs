@@ -8,6 +8,11 @@ namespace AterraCore.Contracts.Renderer;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public interface IFrameProcessor {
-    public void DrawFrame();
+public enum ApplicationStage : ushort {
+    Undefined, // This shouldn't be used, other than as an ultimate fallback
+    StartupScreen,
+    LoadingScreen,
+    TransferScreen,
+    MainMenu,
+    Level,
 }

@@ -25,6 +25,12 @@ public static class LoggerExtensions {
     [MessageTemplateFormatMethod("messageTemplate")]
     public static void ThrowFatal<TException>(this ILogger logger, string messageTemplate, params object?[]? propertyValues) where TException : Exception, new() {
         var exception = (TException)Activator.CreateInstance(typeof(TException), messageTemplate)!;
+        ThrowFatal(logger, exception, messageTemplate, propertyValues);
+    }
+    
+    [DoesNotReturn]
+    [MessageTemplateFormatMethod("messageTemplate")]
+    public static void ThrowFatal<TException>(this ILogger logger, TException exception, string messageTemplate, params object?[]? propertyValues) where TException : Exception {
         logger.Fatal(exception, messageTemplate, propertyValues);
         throw exception;
     }

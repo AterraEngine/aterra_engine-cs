@@ -2,12 +2,14 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-namespace AterraCore.Contracts.Renderer;
+using AterraCore.Contracts.Renderer;
+
+namespace AterraCore.Contracts.Threading;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public interface IFrameProcessor {
-    public void DrawFrame();
+public interface IApplicationStageChangeEventArgs {
+    ApplicationStage ChangeToApplicationStage { get; }
 }

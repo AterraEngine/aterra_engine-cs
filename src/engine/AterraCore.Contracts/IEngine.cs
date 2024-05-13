@@ -1,9 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
 using AterraCore.Common.Nexities;
-using AterraCore.Contracts.Nexities.Worlds;
 
 namespace AterraCore.Contracts;
 
@@ -14,6 +12,8 @@ namespace AterraCore.Contracts;
 public interface IEngine {
 
     public bool TryAssignStartingLevel(AssetId assetId);
+    public IEngine SubscribeToEvents();
+    public IEngine SpawnRenderThread();
     
-    public void Run();
+    public Task Run();
 }

@@ -14,17 +14,11 @@ namespace AterraEngine.Renderer.RaylibCs;
 // ---------------------------------------------------------------------------------------------------------------------
 
 [UsedImplicitly]
-public class FrameProcessor(ILogger logger, IMainWindow mainWindow) : IFrameProcessor{
+public class FrameProcessor(ILogger logger) : IFrameProcessor{
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void PostInit() {
-        if (!mainWindow.IsInitialised) {
-            logger.ThrowFatal<RayLibException>("Main Window not initialised");
-        }
-    }
-
     public void DrawFrame() {
         BeginDrawing();
         ClearBackground(Color.White);

@@ -6,7 +6,6 @@ using System.Reflection;
 using AterraCore.Common;
 using AterraCore.Contracts;
 using AterraCore.Loggers;
-using AterraEngine;
 using AterraEngine.Configuration;
 using AterraEngine.Renderer.RaylibCs;
 using Microsoft.Extensions.DependencyInjection;
@@ -42,7 +41,14 @@ public static class Program {
             
             // Actually create the engine instance
             .CreateEngine();
+
+        engine
+            .SubscribeToEvents()
+            .SpawnRenderThread()
+        ;
         
-        engine.Run();
+        // Actually startup the engine
+        Task.Run(engine.Run).GetAwaiter().GetResult();
+
     }
 }

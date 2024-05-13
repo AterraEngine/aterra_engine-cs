@@ -12,21 +12,25 @@ namespace AterraEngine.Threading;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
-public class RenderThreadProcessor(ILogger logger, IMainWindow mainWindow, IFrameProcessor frameProcessor) : AbstractThread {
+public class RenderThreadProcessor(ILogger logger, IMainWindow mainWindow, IApplicationStageManager applicationStageManager, RenderThreadEvents renderThreadEvents) : AbstractThread {
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public override void Run() {
         mainWindow.Init();
-        frameProcessor.PostInit();
-
+        
+        // Signal back that the opengl context has been created 
+        renderThreadEvents.InvokeOpenGlContextCreated();
+        
         while (!Raylib.WindowShouldClose()) {
             if (CancellationToken.IsCancellationRequested) break;
-            frameProcessor.DrawFrame();
+            applicationStageManager.GetCurrentFrameProcessor().DrawFrame();
         }
-        
+
         // Cancellation requested;
         logger.Information("Render Thread Closing");
         Raylib.CloseWindow();
+        
     }
 }

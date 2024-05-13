@@ -16,6 +16,7 @@ using AterraCore.Nexities.Assets;
 using AterraCore.Nexities.Worlds;
 using AterraEngine.Config;
 using AterraEngine.Renderer.RaylibCs;
+using AterraEngine.Threading;
 using Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -90,9 +91,12 @@ public class EngineConfiguration(ILogger? logger = null) {
         // services which may not be overriden
         _engineServiceBuilder.AssignFromServiceDescriptors([
             NewServiceDescriptor<IAssetAtlas, AssetAtlas>(ServiceLifetime.Singleton),
+            NewServiceDescriptor<IAssetInstanceAtlas, AssetInstanceAtlas>(ServiceLifetime.Singleton),
             NewServiceDescriptor<IEngine, Engine>(ServiceLifetime.Singleton),
             NewServiceDescriptor<IPluginAtlas, PluginAtlas>(ServiceLifetime.Singleton),
             NewServiceDescriptor<IWorld, World>(ServiceLifetime.Singleton),
+            NewServiceDescriptor<RenderThreadEvents, RenderThreadEvents>(ServiceLifetime.Singleton),
+            NewServiceDescriptor<IApplicationStageManager, ApplicationStageManager>(ServiceLifetime.Singleton),
         ]);
         
         _logger.Information("Assigned Static Systems correctly");
