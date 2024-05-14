@@ -85,8 +85,7 @@ public class Engine(
             }
         }
         
-        
-        // renderThreadEvents.InvokeApplicationStageChange(ApplicationStage.MainMenu);
+        renderThreadEvents.InvokeApplicationStageChange(ApplicationStage.Level);
         
         // TODO create window etc...
        

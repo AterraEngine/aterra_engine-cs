@@ -2,23 +2,29 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using AterraCore.Common.Nexities;
-using AterraCore.Contracts.Nexities.Components.AssetTree;
-using AterraCore.Nexities.Entities;
-using JetBrains.Annotations;
+using CliArgsParser.Attributes;
+using Nexities.Lib.Components.AssetTree;
 using Nexities.Lib.Components.Sprite2D;
 using Nexities.Lib.Components.Transform2D;
+using Nexities.Lib.Entities.Actor;
+using Serilog;
+using System.Resources;
 
-namespace Nexities.Lib.Entities.Actor;
+namespace ProductionTools.Commands;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Serializable]
-[UsedImplicitly]
-[Entity<IActor2D>("AE000000")]
-public class Actor2D(ITransform2D transform2D, ISprite2D sprite2D, IAssetTree childEntities) : NexitiesEntity(transform2D, sprite2D, childEntities), IActor2D {
-    public ITransform2D Transform2D => transform2D;
-    public ISprite2D Sprite2D => sprite2D;
-    public IAssetTree ChildEntities => childEntities;
+[CommandAtlas]
+public class ResxTest(ILogger logger) {
+    [Command("test-resx")]
+    public void TestResxCallback() {
+        var actor = new Actor2D(
+            new Transform2D(),
+            new Sprite2D(),
+            new AssetTree()
+        );
+
+        var resx = new ResourceManager("TestResx.resx", typeof(TestResx).Assembly);
+    }
 }

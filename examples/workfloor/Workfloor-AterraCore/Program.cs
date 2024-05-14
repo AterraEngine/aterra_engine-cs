@@ -5,6 +5,7 @@
 using System.Reflection;
 using AterraCore.Common;
 using AterraCore.Contracts;
+using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Loggers;
 using AterraEngine.Configuration;
 using AterraEngine.Renderer.RaylibCs;
@@ -21,15 +22,19 @@ public static class Program {
     public static void Main(string[] args) {
         IEngine engine = new EngineConfiguration()
             .ImportEngineConfig(Paths.ConfigEngine)
-            
+
             .SetEngineLogger(EngineLogger.CreateLogger)
-            .AddCustomServices(new ServiceDescriptor(typeof(RaylibLogger), typeof(RaylibLogger), ServiceLifetime.Singleton))
-            
+            .AddCustomServices(new ServiceDescriptor(typeof(RaylibLogger), typeof(RaylibLogger),
+                ServiceLifetime.Singleton))
+
             // Assigns services which may be overriden by plugins
             .AssignDefaultServices()
-            
+
             .WithPluginConfiguration(pc => pc
-                .ImportAssemblies(Assembly.GetEntryAssembly(), Assembly.GetAssembly(typeof(Transform2D)))
+                .ImportAssemblies(
+                    new BareAssemblyPlugin(Assembly.GetEntryAssembly()!, "Workfloor-AterraCore", "AndreasSas"),
+                    new BareAssemblyPlugin(Assembly.GetAssembly(typeof(Transform2D))!, "NexitiesLib", "AndreasSas")
+                )
                 .ImportPlugins()
                 .AssignServices()
                 .CreatePluginList()

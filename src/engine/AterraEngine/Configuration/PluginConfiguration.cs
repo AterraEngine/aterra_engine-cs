@@ -6,6 +6,7 @@ using System.Reflection;
 using AterraCore.Common;
 using AterraCore.Common.Config;
 using AterraCore.Contracts.DI;
+using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug.Plugin;
 using AterraCore.FlexiPlug;
 using AterraCore.FlexiPlug.Plugin;
@@ -28,14 +29,8 @@ public class PluginConfiguration(ILogger logger, IEnumerable<string> filePaths, 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public PluginConfiguration ImportAssemblies(params Assembly?[] assemblies) {
-        foreach (Assembly? assembly in assemblies) {
-            if (assembly is null) {
-                ConfigurationWarnings |= ConfigurationWarnings.PluginLoadOrderUnstable | ConfigurationWarnings.UnstableAssembly;
-                logger.Warning("Assembly could not be assigned as a Plugin");
-                continue;
-            }
-        
+    public PluginConfiguration ImportAssemblies(params BareAssemblyPlugin[] assemblies) {
+        foreach (BareAssemblyPlugin assembly in assemblies) {
             _pluginLoader.InjectAssemblyAsPlugin(assembly);
         }
         return this;

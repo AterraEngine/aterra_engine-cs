@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
+using System.Diagnostics.CodeAnalysis;
 using AterraCore.Common.FlexiPlug;
 using AterraCore.Common.Nexities;
 using AterraCore.Contracts.FlexiPlug;
@@ -21,6 +22,11 @@ public class PluginAtlas : IPluginAtlas {
 
     private int? _totalAssetCountCache;
     public int TotalAssetCount => _totalAssetCountCache ??= Plugins.SelectMany(p => p.AssetTypes).Count();
+    
+    private IReadOnlyDictionary<string, IPlugin>? _pluginsByReadableNamesCache ;
+    public IReadOnlyDictionary<string, IPlugin> PluginsByReadableNames => _pluginsByReadableNamesCache ??= Plugins
+        .Select(p => (p.ReadableName, p))
+        .ToDictionary().AsReadOnly();
 
     // -----------------------------------------------------------------------------------------------------------------
     // Constructor or population Methods
@@ -58,5 +64,9 @@ public class PluginAtlas : IPluginAtlas {
 
     public IEnumerable<AssetRegistration> GetComponentRegistrations(int? pluginId=null) {
         return GetAssetRegistrations(pluginId, CoreTags.Component);
+    }
+
+    private bool TryGetPluginByReadableName(string readableName, [NotNullWhen(true)] out IPlugin? plugin) {
+        return PluginsByReadableNames.TryGetValue(readableName, out plugin);
     }
 }
