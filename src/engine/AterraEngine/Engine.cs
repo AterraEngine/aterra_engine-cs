@@ -74,18 +74,22 @@ public class Engine(
             await HandleFatalExceptionGracefully();
         }
         
+        renderThreadEvents.InvokeApplicationStageChange(ApplicationStage.StartupScreen);
+        
         foreach (AssetRegistration assetRegistration in pluginAtlas.GetAssetRegistrations()) {
             
-            await Task.Delay(5000);
+            await Task.Delay(500); // WARN THIS IS FOR TESTING ONLY
             
             if (!assetAtlas.TryAssignAsset(assetRegistration, out AssetId? _)) {
                 logger.Warning("Type {Type} could not be assigned as an asset", assetRegistration.Type);
             }
         }
         
-        // TODO create window etc...
-
         
+        // renderThreadEvents.InvokeApplicationStageChange(ApplicationStage.MainMenu);
+        
+        // TODO create window etc...
+       
         // Task.Run(() => {
         //     Task.Delay(5000, cts.Token);
         //     _ctsRenderThread.Cancel();

@@ -16,6 +16,7 @@ using AterraCore.Nexities.Assets;
 using AterraCore.Nexities.Worlds;
 using AterraEngine.Config;
 using AterraEngine.Renderer.RaylibCs;
+using AterraEngine.Renderer.RaylibCs.FrameProcessors;
 using AterraEngine.Threading;
 using Extensions;
 using Microsoft.Extensions.DependencyInjection;
@@ -73,7 +74,7 @@ public class EngineConfiguration(ILogger? logger = null) {
         // Systems which may be overriden
         _engineServiceBuilder.AssignFromServiceDescriptors([
             EngineLoggerDescriptor,
-            NewServiceDescriptor<IFrameProcessor, FrameProcessor>(ServiceLifetime.Singleton),
+            // NewServiceDescriptor<IFrameProcessor, AbstractRaylibFrameProcessor>(ServiceLifetime.Singleton),
             NewServiceDescriptor<IMainWindow, MainWindow>(ServiceLifetime.Singleton)
         ]);
         

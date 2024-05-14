@@ -12,6 +12,7 @@ namespace AterraCore.Contracts.FlexiPlug;
 // ---------------------------------------------------------------------------------------------------------------------
 
 public interface IPluginAtlas {
+    public int TotalAssetCount { get; }
 
     // -----------------------------------------------------------------------------------------------------------------
     // Constructor or population Methods

@@ -3,28 +3,29 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using AterraCore.Contracts.Renderer;
-using Extensions;
 using JetBrains.Annotations;
-using Serilog;
 
-namespace AterraEngine.Renderer.RaylibCs;
+namespace AterraEngine.Renderer.RaylibCs.FrameProcessors;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
 [UsedImplicitly]
-public class FrameProcessor(ILogger logger) : IFrameProcessor{
-
+public abstract class AbstractRaylibFrameProcessor : IFrameProcessor {
+    protected virtual Color ClearColor { get; set; } = Color.Black;
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void DrawFrame() {
+    public virtual void DrawFrame() {
         BeginDrawing();
-        ClearBackground(Color.White);
-        
-
-
+            ClearBackground(ClearColor);
+            DrawUi();
         EndDrawing();
     }
+
+    protected virtual void DrawUi() {}
+    protected virtual void Draw2D() {}
+    protected virtual void Draw3D() {}
 }

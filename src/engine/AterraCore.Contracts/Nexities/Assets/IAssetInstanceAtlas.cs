@@ -12,5 +12,10 @@ namespace AterraCore.Contracts.Nexities.Assets;
 // ---------------------------------------------------------------------------------------------------------------------
 
 public interface IAssetInstanceAtlas {
+    public int TotalCount { get; }
+    
+    // -----------------------------------------------------------------------------------------------------------------
+    // Methods
+    // -----------------------------------------------------------------------------------------------------------------
     public bool TryCreateInstance<T>(AssetId assetId, [NotNullWhen(true)] out T? instance) where T : IAssetInstance;
 }

@@ -23,12 +23,15 @@ public class ApplicationStageManager : IApplicationStageManager {
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public IFrameProcessor GetCurrentFrameProcessor() {
-        return _cachedFrameProcessor ??= _frameProcessors[_currentApplicationStage];
+        if(!_frameProcessors.TryGetValue(_currentApplicationStage, out IFrameProcessor? frameProcessor)) {
+            frameProcessor = _frameProcessors[ApplicationStage.Undefined];
+        }
+        return _cachedFrameProcessor ??= frameProcessor;
     }
 
     public void ReceiveStageChange(object? _, IApplicationStageChangeEventArgs eventArgs) {
         _currentApplicationStage = eventArgs.ChangeToApplicationStage;
-        _cachedFrameProcessor = _frameProcessors[_currentApplicationStage];
+        _cachedFrameProcessor = null;
     }
 
     public bool TryRegisterStage(ApplicationStage stage, IFrameProcessor frameProcessor) {

@@ -24,7 +24,9 @@ public class AssetAtlas(ILogger logger) : IAssetAtlas {
     
     private ConcurrentDictionary<CoreTags, ConcurrentBag<AssetId>> _coreTagedAssets = new ConcurrentDictionary<CoreTags, ConcurrentBag<AssetId>>().PopulateWithEmpties();
     private ConcurrentDictionary<string, ConcurrentBag<AssetId>> _stringTagedAssets = new();
-
+    
+    public int TotalCount => _assets.Count;
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------

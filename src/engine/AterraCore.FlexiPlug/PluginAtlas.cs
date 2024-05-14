@@ -19,6 +19,9 @@ namespace AterraCore.FlexiPlug;
 public class PluginAtlas : IPluginAtlas {
     public LinkedList<IPlugin> Plugins { get; private set; } = [];
 
+    private int? _totalAssetCountCache;
+    public int TotalAssetCount => _totalAssetCountCache ??= Plugins.SelectMany(p => p.AssetTypes).Count();
+
     // -----------------------------------------------------------------------------------------------------------------
     // Constructor or population Methods
     // -----------------------------------------------------------------------------------------------------------------
