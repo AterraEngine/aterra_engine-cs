@@ -1,16 +1,16 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Nexities.Assets;
-
-namespace AterraCore.Nexities.Assets;
-
-using SaveFileSystems.NamedValues.PreMade;
+namespace AterraCore.Contracts.SaveFileSystem.NamedValues;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class AssetInstance : IAssetInstance  {
-    [NamedValueGuid("Guid")]
-    public Guid Guid { get; } = new();
+
+public enum NamedValueConvertors : ulong {
+    ToString,
+    ToVector2,
+    ToVector3,
+    ToGuid,
 }
+ 

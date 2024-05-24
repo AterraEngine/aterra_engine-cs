@@ -16,7 +16,6 @@ using AterraCore.Nexities.Assets;
 using AterraCore.Nexities.Worlds;
 using AterraEngine.Config;
 using AterraEngine.Renderer.RaylibCs;
-using AterraEngine.Renderer.RaylibCs.FrameProcessors;
 using AterraEngine.Threading;
 using Extensions;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,8 +26,11 @@ using static AterraEngine.Configuration.ConfigurationWarnings;
 using static AterraEngine.Configuration.FlowOfOperations;
 using static Extensions.ServiceDescriptorExtension;
 
-namespace AterraEngine.Configuration;
+using AterraCore.Contracts.SaveFileSystem.NamedValues;
+using AterraCore.Nexities.SaveFileSystems.NamedValues;
 
+
+namespace AterraEngine.Configuration;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -75,7 +77,8 @@ public class EngineConfiguration(ILogger? logger = null) {
         _engineServiceBuilder.AssignFromServiceDescriptors([
             EngineLoggerDescriptor,
             // NewServiceDescriptor<IFrameProcessor, AbstractRaylibFrameProcessor>(ServiceLifetime.Singleton),
-            NewServiceDescriptor<IMainWindow, MainWindow>(ServiceLifetime.Singleton)
+            NewServiceDescriptor<IMainWindow, MainWindow>(ServiceLifetime.Singleton),
+            NewServiceDescriptor<INamedValueConverter, NamedValueConverter>(ServiceLifetime.Singleton)
         ]);
         
         _logger.Information("Assigned Default Systems correctly");

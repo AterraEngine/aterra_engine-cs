@@ -61,6 +61,8 @@ public class PartialAssetIdTest {
     [Theory]
     [InlineData(1234u, "000004D2")]
     [InlineData(5678u, "0000162E")]
+    [InlineData(1234u, "0000-04D2")]
+    [InlineData(5678u, "0000-162E")]
     public void ToStringMethod_CorrectFormat(uint input, string expected) {
         var testInstance = new PartialAssetId(input);
         Assert.Equal(expected, testInstance.ToString());

@@ -1,16 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Nexities.Assets;
-
-namespace AterraCore.Nexities.Assets;
-
-using SaveFileSystems.NamedValues.PreMade;
+namespace AterraCore.Contracts.SaveFileSystem.NamedValues;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class AssetInstance : IAssetInstance  {
-    [NamedValueGuid("Guid")]
-    public Guid Guid { get; } = new();
+
+public interface INamedValueAttribute {
+    string? Name { get; }
+    NamedValueConvertors Convertor { get; }
 }
