@@ -4,7 +4,6 @@
 
 using System.Diagnostics.CodeAnalysis;
 using AterraCore.Common.Nexities;
-
 namespace AterraCore.Contracts.Nexities.Assets;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -13,7 +12,7 @@ namespace AterraCore.Contracts.Nexities.Assets;
 
 public interface IAssetInstanceAtlas {
     public int TotalCount { get; }
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------

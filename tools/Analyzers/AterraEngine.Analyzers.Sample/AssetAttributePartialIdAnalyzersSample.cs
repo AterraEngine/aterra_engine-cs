@@ -7,7 +7,6 @@
 using AterraCore.Common.Nexities;
 using AterraCore.Nexities.Assets;
 using AterraCore.Nexities.Entities;
-
 namespace AterraEngine.Analyzer.Sample;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -24,5 +23,3 @@ public class TestEntity6 : NexitiesEntity;
 
 [Asset("5", AssetInstanceType.Singleton, CoreTags.Asset)]
 public class TestEntaity4 : NexitiesEntity;
-
-

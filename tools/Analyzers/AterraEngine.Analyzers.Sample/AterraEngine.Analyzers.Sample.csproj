@@ -8,8 +8,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\src\engine\AterraCore.Nexities\AterraCore.Nexities.csproj" />
-        <ProjectReference Include="..\..\..\src\engine\Extensions\Extensions.csproj" />
+        <ProjectReference Include="..\..\..\src\engine\AterraCore.Nexities\AterraCore.Nexities.csproj"/>
+        <ProjectReference Include="..\..\..\src\engine\Extensions\Extensions.csproj"/>
         <ProjectReference Include="..\AterraEngine.Analyzers\AterraEngine.Analyzers.csproj"
                           OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
     </ItemGroup>

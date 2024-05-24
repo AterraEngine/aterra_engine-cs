@@ -8,6 +8,6 @@ namespace AterraCore.Nexities.Components;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public abstract class PooledComponent : NexitiesComponent{
+public abstract class PooledComponent : NexitiesComponent {
     public abstract bool TryReset();
 }

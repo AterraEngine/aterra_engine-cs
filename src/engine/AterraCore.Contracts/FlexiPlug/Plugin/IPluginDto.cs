@@ -5,7 +5,6 @@
 using AterraCore.Common.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug.Config;
 using Microsoft.Extensions.DependencyInjection;
-
 namespace AterraCore.Contracts.FlexiPlug.Plugin;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -18,8 +17,8 @@ public interface IPluginDto : IPluginBase {
     public PluginValidity Validity { get; set; }
     public string? CheckSum { get; set; }
     public string ReadableId { get; }
-    
-    
+
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------

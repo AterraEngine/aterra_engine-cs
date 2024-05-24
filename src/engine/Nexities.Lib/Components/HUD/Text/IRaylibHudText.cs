@@ -5,7 +5,6 @@
 using AterraCore.Common;
 using AterraCore.Contracts.Nexities.Components;
 using Raylib_cs;
-
 namespace Nexities.Lib.Components.HUD.Text;
 
 // ---------------------------------------------------------------------------------------------------------------------

@@ -9,5 +9,4 @@ namespace Workfloor_AterraCore.Plugin.Assets;
 // ---------------------------------------------------------------------------------------------------------------------
 
 public class TestSystem {
-    
 }

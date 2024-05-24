@@ -11,7 +11,7 @@ public enum HudType {
     Empty,
     Text, // IRaylibHudText
     TextPro,
-    Texture,
+    Texture
 }
 
 public interface IHudComponent {

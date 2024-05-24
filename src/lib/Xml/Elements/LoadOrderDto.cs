@@ -3,7 +3,6 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using System.Xml.Serialization;
-
 namespace Xml.Elements;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -15,5 +14,5 @@ public class LoadOrderDto {
     public bool BreakOnUnstable { get; set; }
 
     [XmlElement("file")]
-    public required FileDto[] Plugins { get; set; } 
+    public required FileDto[] Plugins { get; set; }
 }

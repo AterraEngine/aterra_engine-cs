@@ -9,8 +9,7 @@ namespace AterraCore.Nexities.Attributes;
 // ---------------------------------------------------------------------------------------------------------------------
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
 public class CustomTagsAttribute : Attribute {
-    public string[] CustomTags { get; private set; } 
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Constructors
     // -----------------------------------------------------------------------------------------------------------------
@@ -21,4 +20,5 @@ public class CustomTagsAttribute : Attribute {
     public CustomTagsAttribute(params Enum[] customTags) {
         CustomTags = customTags.Select(tag => tag.ToString().ToLowerInvariant()).ToArray();
     }
+    public string[] CustomTags { get; private set; }
 }

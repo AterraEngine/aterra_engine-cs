@@ -10,7 +10,6 @@ using Nexities.Lib.Components.HUD.Text;
 using Nexities.Lib.Entities.HUD;
 using Raylib_cs;
 using Serilog;
-
 namespace Nexities.Lib.Systems;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -23,7 +22,7 @@ public class RenderHUD(ILogger logger) : NexitiesSystem<IHud> {
             .OfTypeManyReverse<IHudElement>()
             .IterateOver(element => {
                 switch (element.HudComponent.Type) {
-                    case HudType.Text when element.HudComponent is RaylibHudText text : {
+                    case HudType.Text when element.HudComponent is RaylibHudText text: {
                         Raylib.DrawText(text.Text, text.Pos.X, text.Pos.Y, text.FontSize, text.Color);
                         break;
                     }
@@ -31,11 +30,11 @@ public class RenderHUD(ILogger logger) : NexitiesSystem<IHud> {
                     case HudType.TextPro: {
                         break;
                     }
-                    
-                    case HudType.Texture:{
+
+                    case HudType.Texture: {
                         break;
                     }
-                    
+
                     case HudType.Empty:
                     default: {
                         break;

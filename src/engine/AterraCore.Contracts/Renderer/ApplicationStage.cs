@@ -13,5 +13,5 @@ public enum ApplicationStage : ushort {
     StartupScreen,
     MainMenu,
     LoadingScreen,
-    Level,
+    Level
 }

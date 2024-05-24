@@ -12,7 +12,7 @@ public enum ExitCodes {
     Success = 0,
     GeneralError = 1,
     InvalidInput = 2,
-    
+
     PluginLoadFail = 3,
-    PluginIdsExhausted =4,
+    PluginIdsExhausted = 4
 }

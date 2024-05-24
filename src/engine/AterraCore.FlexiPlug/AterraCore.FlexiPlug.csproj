@@ -8,19 +8,19 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\lib\Xml\Xml.csproj" />
-      <ProjectReference Include="..\AterraCore.Contracts\AterraCore.Contracts.csproj" />
-      <ProjectReference Include="..\AterraCore.Common\AterraCore.Common.csproj" />
-      <ProjectReference Include="..\Extensions\Extensions.csproj" />
-      <ProjectReference Include="..\AterraCore.Nexities\AterraCore.Nexities.csproj" />
+        <ProjectReference Include="..\..\lib\Xml\Xml.csproj"/>
+        <ProjectReference Include="..\AterraCore.Contracts\AterraCore.Contracts.csproj"/>
+        <ProjectReference Include="..\AterraCore.Common\AterraCore.Common.csproj"/>
+        <ProjectReference Include="..\Extensions\Extensions.csproj"/>
+        <ProjectReference Include="..\AterraCore.Nexities\AterraCore.Nexities.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.Build" Version="17.9.5" />
-      <PackageReference Include="Microsoft.Extensions.ObjectPool.DependencyInjection" Version="8.4.0" />
+        <PackageReference Include="Microsoft.Build" Version="17.9.5"/>
+        <PackageReference Include="Microsoft.Extensions.ObjectPool.DependencyInjection" Version="8.4.0"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Config\Elements\" />
+        <Folder Include="Config\Elements\"/>
     </ItemGroup>
 </Project>

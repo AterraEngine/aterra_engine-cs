@@ -9,7 +9,7 @@ namespace AterraCore.Contracts.Renderer;
 // ---------------------------------------------------------------------------------------------------------------------
 
 public interface IMainWindow {
-    public bool IsInitialised {get;}
+    public bool IsInitialised { get; }
 
     public void Init();
 }

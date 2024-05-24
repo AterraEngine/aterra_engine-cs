@@ -11,6 +11,5 @@ public enum NamedValueConvertors : ulong {
     ToString,
     ToVector2,
     ToVector3,
-    ToGuid,
+    ToGuid
 }
- 

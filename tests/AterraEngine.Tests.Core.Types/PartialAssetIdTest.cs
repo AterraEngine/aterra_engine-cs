@@ -2,7 +2,6 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using JetBrains.Annotations;
-
 namespace AterraEngine.Tests.Core.Types;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -67,7 +66,7 @@ public class PartialAssetIdTest {
         var testInstance = new PartialAssetId(input);
         Assert.Equal(expected, testInstance.ToString());
     }
-    
+
     [Theory]
     [InlineData(1234u, "0000-04D2")]
     [InlineData(5678u, "0000-162E")]
@@ -75,7 +74,7 @@ public class PartialAssetIdTest {
         var testInstance = new PartialAssetId(input);
         Assert.Equal(expected, testInstance.ToStringReadable());
     }
-  
+
     [Theory]
     [InlineData("0000000A", "0000000A", true)]
     [InlineData("0000-000A", "0000-000A", true)]
@@ -109,9 +108,9 @@ public class PartialAssetIdTest {
     [InlineData("0000-000A", "0000-000B", false)]
     public void GetHashCodeTest(string a, string b, bool shouldEqual) {
         var pa = new PartialAssetId(a);
-        var pb = new PartialAssetId(b); 
+        var pb = new PartialAssetId(b);
 
         if (shouldEqual) Assert.Equal(pa.GetHashCode(), pb.GetHashCode());
-        else Assert.NotEqual(pa.GetHashCode(), pb.GetHashCode()); 
+        else Assert.NotEqual(pa.GetHashCode(), pb.GetHashCode());
     }
 }

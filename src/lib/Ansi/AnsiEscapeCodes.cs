@@ -7,7 +7,7 @@ namespace Ansi;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 /// <summary>
-/// A utility class containing ANSI escape codes for terminal control.
+///     A utility class containing ANSI escape codes for terminal control.
 /// </summary>
 public static class AnsiEscapeCodes {
     public const string EscapeCtrl = "^[";

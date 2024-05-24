@@ -11,9 +11,9 @@ namespace AterraEngine.Configuration;
 public enum FlowOfOperations : ulong {
     UnConfigured = 0ul,
     AssignedDefaultServices,
-    AssignedStaticServices ,
+    AssignedStaticServices,
     ImportedEngineConfigDto,
     ImportedPlugins,
     ImportedPluginServices,
-    DiContainerBuilt,
+    DiContainerBuilt
 }

@@ -7,7 +7,6 @@ using System.Xml;
 using System.Xml.Serialization;
 using Serilog;
 using Xml.Contracts;
-
 namespace Xml;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -15,38 +14,38 @@ namespace Xml;
 // ---------------------------------------------------------------------------------------------------------------------
 public class XsdGenerator<T>(ILogger logger) : IXsdGenerator {
     private readonly Type _type = typeof(T);
-    
+
     public void GenerateXsd(string nameSpace, bool prettify, string outputPath) {
-        
+
         logger.Information("Generating XML Schema (XSD) for object type: {Name}.", _type.FullName);
-        
+
         var importer = new XmlReflectionImporter(null, nameSpace);
         var schemas = new XmlSchemas();
         var exporter = new XmlSchemaExporter(schemas);
-        
+
         try {
             logger.Debug("Importing type mapping...");
             XmlTypeMapping map = importer.ImportTypeMapping(_type);
-            
+
             logger.Debug("Exporting type mapping...");
             exporter.ExportTypeMapping(map);
 
             logger.Debug("Writing XML...");
             using var writer = XmlWriter.Create(
-                outputPath, 
+                outputPath,
                 new XmlWriterSettings {
                     Indent = prettify,
-                    Encoding = Encoding.UTF32,
+                    Encoding = Encoding.UTF32
                 }
             );
 
             schemas[0].Write(writer);
             logger.Information("XML Schema (XSD) generated successfully at {Path}.", outputPath);
         }
-        catch(Exception ex) {
-            logger.Error(ex,"An error occurred while generating XML Schema (XSD): {Message}", ex.Message);
+        catch (Exception ex) {
+            logger.Error(ex, "An error occurred while generating XML Schema (XSD): {Message}", ex.Message);
         }
 
-        
+
     }
 }

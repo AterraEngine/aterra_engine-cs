@@ -18,15 +18,15 @@ namespace AterraCore.FlexiPlug;
 
 [UsedImplicitly]
 public class PluginAtlas : IPluginAtlas {
-    public LinkedList<IPlugin> Plugins { get; private set; } = [];
+
+    private IReadOnlyDictionary<string, IPlugin>? _pluginsByReadableNamesCache;
 
     private int? _totalAssetCountCache;
-    public int TotalAssetCount => _totalAssetCountCache ??= Plugins.SelectMany(p => p.AssetTypes).Count();
-    
-    private IReadOnlyDictionary<string, IPlugin>? _pluginsByReadableNamesCache ;
+    public LinkedList<IPlugin> Plugins { get; private set; } = [];
     public IReadOnlyDictionary<string, IPlugin> PluginsByReadableNames => _pluginsByReadableNamesCache ??= Plugins
         .Select(p => (p.ReadableName, p))
         .ToDictionary().AsReadOnly();
+    public int TotalAssetCount => _totalAssetCountCache ??= Plugins.SelectMany(p => p.AssetTypes).Count();
 
     // -----------------------------------------------------------------------------------------------------------------
     // Constructor or population Methods
@@ -37,17 +37,17 @@ public class PluginAtlas : IPluginAtlas {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public IEnumerable<AssetRegistration> GetAssetRegistrations(int? pluginId=null, CoreTags filter = CoreTags.Asset) {
+    public IEnumerable<AssetRegistration> GetAssetRegistrations(int? pluginId = null, CoreTags filter = CoreTags.Asset) {
         // GIven this is only done once (during project startup), caching this seems a bit unnecessary.
-        
+
         return Plugins
             // Filter down to only the plugin we need
             .Where(p => pluginId == null || p.Id == new PluginId((int)pluginId))
-            .Select(p => new {PluginId=p.Id, Pairs=p.AssetTypes})
+            .Select(p => new { PluginId = p.Id, Pairs = p.AssetTypes })
             .SelectMany(box => box.Pairs
                 // Filter down to which Asset Tag we want
                 .Where(record => record.AssetAttribute.CoreTags.HasFlag(filter))
-                .Select( record => new AssetRegistration {
+                .Select(record => new AssetRegistration {
                     PluginId = box.PluginId,
                     PartialAssetId = record.AssetAttribute.PartialAssetId,
                     InstanceType = record.AssetAttribute.InstanceType,
@@ -58,15 +58,9 @@ public class PluginAtlas : IPluginAtlas {
             );
     }
 
-    public IEnumerable<AssetRegistration> GetEntityRegistrations(int? pluginId=null) {
-        return GetAssetRegistrations(pluginId, CoreTags.Entity);
-    }
+    public IEnumerable<AssetRegistration> GetEntityRegistrations(int? pluginId = null) => GetAssetRegistrations(pluginId, CoreTags.Entity);
 
-    public IEnumerable<AssetRegistration> GetComponentRegistrations(int? pluginId=null) {
-        return GetAssetRegistrations(pluginId, CoreTags.Component);
-    }
+    public IEnumerable<AssetRegistration> GetComponentRegistrations(int? pluginId = null) => GetAssetRegistrations(pluginId, CoreTags.Component);
 
-    private bool TryGetPluginByReadableName(string readableName, [NotNullWhen(true)] out IPlugin? plugin) {
-        return PluginsByReadableNames.TryGetValue(readableName, out plugin);
-    }
+    private bool TryGetPluginByReadableName(string readableName, [NotNullWhen(true)] out IPlugin? plugin) => PluginsByReadableNames.TryGetValue(readableName, out plugin);
 }

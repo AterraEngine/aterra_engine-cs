@@ -5,7 +5,6 @@
 using AterraCore.Common.FlexiPlug;
 using AterraCore.Common.Nexities;
 using JetBrains.Annotations;
-
 namespace AterraEngine.Tests.Core.Types;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -53,7 +52,7 @@ public class AssetIdTest {
         Assert.Equal(TestPluginId, assetId.PluginId);
         Assert.Equal(TestPartialAssetId, assetId.Id);
     }
-    
+
     [Fact]
     public void Equals_ReturnsExpectedResults() {
         var assetId1 = new AssetId(TestPluginId, TestPartialAssetId);

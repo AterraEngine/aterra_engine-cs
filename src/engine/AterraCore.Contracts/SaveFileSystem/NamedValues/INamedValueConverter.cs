@@ -19,5 +19,4 @@ public interface INamedValueConverter {
     public bool TryRegisterProcess(ulong convertorId, Delegate callback, bool overwrite);
     public Delegate GetProcessor(NamedValueConvertors convertor);
     public Delegate GetProcessor(ulong convertor);
-
 }

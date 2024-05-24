@@ -4,7 +4,6 @@
 
 using AterraCore.Contracts.Renderer;
 using JetBrains.Annotations;
-
 namespace AterraEngine.Renderer.RaylibCs.FrameProcessors;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -14,14 +13,14 @@ namespace AterraEngine.Renderer.RaylibCs.FrameProcessors;
 [UsedImplicitly]
 public abstract class AbstractRaylibFrameProcessor : IFrameProcessor {
     protected virtual Color ClearColor { get; set; } = Color.Black;
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public virtual void DrawFrame() {
         BeginDrawing();
-            ClearBackground(ClearColor);
-            DrawUi();
+        ClearBackground(ClearColor);
+        DrawUi();
         EndDrawing();
     }
 

@@ -9,52 +9,22 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 using Serilog;
 using Xml.Contracts;
-
 namespace Xml;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class ConfigXmlParser<T>(ILogger logger, string nameSpace, string xsdPath) 
-    : IConfigXmlParser<T> 
+public class ConfigXmlParser<T>(ILogger logger, string nameSpace, string xsdPath)
+    : IConfigXmlParser<T>
     where T : IConfigDto<T>, new() {
-    private readonly XmlSerializer _serializer = new(typeof(T), nameSpace);
     private readonly XmlReaderSettings _readerSettings = DefineReaderSettings(logger, nameSpace, xsdPath);
+    private readonly XmlSerializer _serializer = new(typeof(T), nameSpace);
     private readonly XmlWriterSettings _writerSettings = new() {
         Indent = true,
         Encoding = Encoding.UTF8,
-        OmitXmlDeclaration = false,
+        OmitXmlDeclaration = false
     };
 
-    // -----------------------------------------------------------------------------------------------------------------
-    // Methods
-    // -----------------------------------------------------------------------------------------------------------------
-    private static XmlReaderSettings DefineReaderSettings(ILogger logger, string nameSpace, string xsdPath) {
-        var schemas = new XmlSchemaSet();
-        schemas.Add(nameSpace, XmlReader.Create(xsdPath));
-        
-        var settings = new XmlReaderSettings {
-            ValidationType = ValidationType.Schema,
-            ValidationFlags = XmlSchemaValidationFlags.ProcessInlineSchema 
-                              | XmlSchemaValidationFlags.ProcessSchemaLocation
-                              | XmlSchemaValidationFlags.ReportValidationWarnings,
-            Schemas = schemas
-        };
-
-        settings.ValidationEventHandler += (_, args) => {
-            switch (args) {
-                case { Severity: XmlSeverityType.Warning }:
-                    logger.Warning(args.Message);
-                    break;
-                case { Severity: XmlSeverityType.Error }:
-                    logger.Error(args.Message);
-                    break;
-            }
-        };
-
-        return settings;
-    }
-    
     public bool TryDeserializeFromFile(string filePath, [NotNullWhen(true)] out T? config) {
         // Default to null
         config = default;
@@ -63,11 +33,11 @@ public class ConfigXmlParser<T>(ILogger logger, string nameSpace, string xsdPath
                 logger.Warning("No file found at {FilePath}", filePath);
                 return false;
             }
-            
+
             using var reader = new StreamReader(filePath);
             using var xmlReader = XmlReader.Create(reader, _readerSettings);
             config = (T)_serializer.Deserialize(xmlReader)!;
-            
+
             return true;
         }
         catch (Exception e) {
@@ -89,7 +59,7 @@ public class ConfigXmlParser<T>(ILogger logger, string nameSpace, string xsdPath
             Console.WriteLine($"An unexpected error occurred: {e.Message}");
             return false;
         }
-        
+
     }
 
     public bool TrySerializeFromBytes(byte[] bytes, [NotNullWhen(true)] out T? config) {
@@ -102,8 +72,37 @@ public class ConfigXmlParser<T>(ILogger logger, string nameSpace, string xsdPath
         }
 
         catch (Exception e) {
-            logger.Warning(e,"Memory stream could not parse into a {t}", typeof(T));
+            logger.Warning(e, "Memory stream could not parse into a {t}", typeof(T));
             return false;
         }
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    private static XmlReaderSettings DefineReaderSettings(ILogger logger, string nameSpace, string xsdPath) {
+        var schemas = new XmlSchemaSet();
+        schemas.Add(nameSpace, XmlReader.Create(xsdPath));
+
+        var settings = new XmlReaderSettings {
+            ValidationType = ValidationType.Schema,
+            ValidationFlags = XmlSchemaValidationFlags.ProcessInlineSchema
+                              | XmlSchemaValidationFlags.ProcessSchemaLocation
+                              | XmlSchemaValidationFlags.ReportValidationWarnings,
+            Schemas = schemas
+        };
+
+        settings.ValidationEventHandler += (_, args) => {
+            switch (args) {
+                case { Severity: XmlSeverityType.Warning }:
+                    logger.Warning(args.Message);
+                    break;
+                case { Severity: XmlSeverityType.Error }:
+                    logger.Error(args.Message);
+                    break;
+            }
+        };
+
+        return settings;
     }
 }

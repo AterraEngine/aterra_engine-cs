@@ -4,7 +4,6 @@
 using CliArgsParser.Attributes;
 using JetBrains.Annotations;
 using Serilog;
-
 namespace ProductionTools.Commands;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -27,7 +26,7 @@ public class TestConsoleTheme(ILogger logger) {
         logger.Fatal("This is a fatal message");
 
         Console.WriteLine();
-        
+
         // Log messages with various variable types
         logger.Information("Integer value: {IntegerValue}", 42);
         logger.Information("Float value: {FloatValue}", 3.14);
@@ -35,19 +34,19 @@ public class TestConsoleTheme(ILogger logger) {
         logger.Information("Boolean value: {BooleanValue}", true);
         logger.Information("Object value: {@ObjectValue}", new { Name = "John", Age = 30 });
         logger.Information("null value: {@ObjectValue}", [null]);
-        logger.Information("list value: {ObjectValue}", new List<string>{ "a", "b", "c"});
-        
+        logger.Information("list value: {ObjectValue}", new List<string> { "a", "b", "c" });
+
         logger.Information("Type name value: {Object}", typeof(TestConsoleTheme));
-        
+
         logger.Information("Incorrect value: {ObjectValue}", null);
-        
+
         Console.WriteLine();
-        
+
         // Log messages with structured properties
         logger.Information("Structured log message: {Property1} & {Property2}", "Value1", "Value2");
-        
+
         Console.WriteLine();
-        
+
         // Log an exception
         try {
             throw new InvalidOperationException("An example exception occurred");
@@ -55,6 +54,6 @@ public class TestConsoleTheme(ILogger logger) {
         catch (Exception ex) {
             logger.Error(ex, "An exception occurred");
         }
-        
+
     }
 }

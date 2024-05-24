@@ -3,7 +3,6 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using System.Xml.Serialization;
-
 namespace Xml.Elements;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -13,7 +12,7 @@ namespace Xml.Elements;
 public class NamedValueDto {
     [XmlAttribute("name")]
     public required string Name { get; set; }
-    
+
     [XmlAttribute("value")]
     public required string Value { get; set; }
 }

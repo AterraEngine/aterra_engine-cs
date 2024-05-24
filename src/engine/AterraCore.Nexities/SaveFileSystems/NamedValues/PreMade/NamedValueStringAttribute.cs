@@ -3,10 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 namespace AterraCore.Nexities.SaveFileSystems.NamedValues.PreMade;
 
-using Contracts.SaveFileSystem.NamedValues;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class NamedValueStringAttribute(string? name = null) : NamedValueAttribute(name, NamedValueConvertors.ToString);
-
+public class NamedValueStringAttribute(string? name = null) : NamedValueAttribute(name);

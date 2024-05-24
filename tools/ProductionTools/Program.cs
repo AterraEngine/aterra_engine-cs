@@ -8,7 +8,6 @@ using CliArgsParser.Contracts;
 using ProductionTools.Commands;
 using Serilog;
 using Serilog.Core;
-
 namespace ProductionTools;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -33,7 +32,7 @@ public static class Program {
 
         await parser.TryParseAsync(string.Join(' ', args));
     }
-    
+
     public static void Main(string[] args) {
         MainAsync(args).GetAwaiter().GetResult();
     }

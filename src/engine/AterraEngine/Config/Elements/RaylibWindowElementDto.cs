@@ -4,7 +4,6 @@
 
 using System.Xml.Serialization;
 using Xml.Elements;
-
 namespace AterraEngine.Config.Elements;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -12,6 +11,6 @@ namespace AterraEngine.Config.Elements;
 // ---------------------------------------------------------------------------------------------------------------------
 public class RaylibWindowElementDto {
     [XmlElement("screen")] public required DimensionElementDto Screen { get; set; }
-    [XmlElement("icon-path")]   public required string IconPath { get; set; }
-    [XmlElement("title")]  public required string Title { get; set; }
+    [XmlElement("icon-path")] public required string IconPath { get; set; }
+    [XmlElement("title")] public required string Title { get; set; }
 }

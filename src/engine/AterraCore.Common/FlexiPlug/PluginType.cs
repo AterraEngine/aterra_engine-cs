@@ -10,5 +10,5 @@ namespace AterraCore.Common.FlexiPlug;
 public enum PluginType {
     CsProj,
     ZipJson,
-    ZipXml,
+    ZipXml
 }

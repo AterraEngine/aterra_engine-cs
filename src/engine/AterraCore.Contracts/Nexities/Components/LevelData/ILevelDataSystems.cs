@@ -3,13 +3,12 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using AterraCore.Contracts.Nexities.Systems;
-
 namespace AterraCore.Contracts.Nexities.Components.LevelData;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public interface ILevelDataSystems: IComponent {
+public interface ILevelDataSystems : IComponent {
     public INexitiesSystem[] LoadedSystems { get; }
 }

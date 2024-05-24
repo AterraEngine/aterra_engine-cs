@@ -5,12 +5,11 @@
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using AterraCore.Common.FlexiPlug;
-using AterraCore.Contracts.Nexities.Assets;
 using AterraCore.Common.Nexities;
+using AterraCore.Contracts.Nexities.Assets;
 using Extensions;
 using JetBrains.Annotations;
 using Serilog;
-
 namespace AterraCore.Nexities.Assets;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -19,14 +18,14 @@ namespace AterraCore.Nexities.Assets;
 
 [UsedImplicitly]
 public class AssetAtlas(ILogger logger) : IAssetAtlas {
-    private ConcurrentDictionary<AssetInstanceType, ConcurrentBag<AssetId>> _assetIntanceTypeMap = new ConcurrentDictionary<AssetInstanceType, ConcurrentBag<AssetId>>().PopulateWithEmpties();
-    private ConcurrentDictionary<AssetId, AssetRecord> _assets = new();
-    
-    private ConcurrentDictionary<CoreTags, ConcurrentBag<AssetId>> _coreTagedAssets = new ConcurrentDictionary<CoreTags, ConcurrentBag<AssetId>>().PopulateWithEmpties();
-    private ConcurrentDictionary<string, ConcurrentBag<AssetId>> _stringTagedAssets = new();
-    
+    private readonly ConcurrentDictionary<AssetInstanceType, ConcurrentBag<AssetId>> _assetIntanceTypeMap = new ConcurrentDictionary<AssetInstanceType, ConcurrentBag<AssetId>>().PopulateWithEmpties();
+    private readonly ConcurrentDictionary<AssetId, AssetRecord> _assets = new();
+
+    private readonly ConcurrentDictionary<CoreTags, ConcurrentBag<AssetId>> _coreTagedAssets = new ConcurrentDictionary<CoreTags, ConcurrentBag<AssetId>>().PopulateWithEmpties();
+    private readonly ConcurrentDictionary<string, ConcurrentBag<AssetId>> _stringTagedAssets = new();
+
     public int TotalCount => _assets.Count;
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -44,16 +43,16 @@ public class AssetAtlas(ILogger logger) : IAssetAtlas {
             );
             return false;
         }
-        
+
         // Assign to the instance type
         if (!_assetIntanceTypeMap.TryAddToBagOrCreateBag(registration.InstanceType, newAssetId)) {
             // This shouldn't happen
             logger.Error("Asset {AssetId} could not be be mapped to an InstanceType", newAssetId);
         }
-        
+
         // After Everything is said and done with the assigning, start assigning the Core tags and string tags
         List<string> tagsList = [];
-        
+
         foreach (CoreTags tag in Enum.GetValuesAsUnderlyingType<CoreTags>()) {
             if (!registration.CoreTags.HasFlag(tag)) continue;
             _coreTagedAssets.TryAddToBagOrCreateBag(tag, newAssetId);
@@ -61,34 +60,34 @@ public class AssetAtlas(ILogger logger) : IAssetAtlas {
         }
 
         foreach (string stringTag in registration.StringTags) {
-            if(!_stringTagedAssets.TryAddToBagOrCreateBag(stringTag, newAssetId)){
+            if (!_stringTagedAssets.TryAddToBagOrCreateBag(stringTag, newAssetId)) {
                 logger.Warning("String Tag of {tag} could not be assigned to {assetId}", stringTag, newAssetId);
                 continue;
             }
             tagsList.Add(stringTag);
         }
-        
+
         logger.Information(
-            "Assigned asset {AssetId} of Type {AssetTypeName} to plugin {PluginId} as a '{@tags}", 
+            "Assigned asset {AssetId} of Type {AssetTypeName} to plugin {PluginId} as a '{@tags}",
             newAssetId, registration.Type.FullName, registration.Type, tagsList
         );
 
         assetId = newAssetId;
         return true;
     }
-    
+
     public IEnumerable<AssetId> GetAllAssetsOfCoreTag(CoreTags coreTag) =>
         Enum.GetValues<CoreTags>()
             .Where(tag => coreTag.HasFlag(tag))
             .SelectMany(tag => _coreTagedAssets[tag])
             .ToArray();
 
-    public IEnumerable<AssetId> GetAllAssetsOfStringTag(string stringTag) => 
+    public IEnumerable<AssetId> GetAllAssetsOfStringTag(string stringTag) =>
         _stringTagedAssets.TryGetValue(stringTag, out ConcurrentBag<AssetId>? bag) ? bag : [];
 
     public IEnumerable<AssetId> GetAllAssetsOfPlugin(PluginId pluginId) =>
         _assets.Where(pair => pair.Key.PluginId == pluginId).Select(pair => pair.Key);
-    
+
     public bool TryGetType(AssetId assetId, [NotNullWhen(true)] out Type? type) {
         type = default;
         if (!_assets.TryGetValue(assetId, out AssetRecord? record)) {
@@ -98,16 +97,16 @@ public class AssetAtlas(ILogger logger) : IAssetAtlas {
         type = record.Type;
         return true;
     }
-     
+
     public bool TryGetAssetId(Type type, [NotNullWhen(true)] out AssetId? assetId) {
         assetId = null;
-        
+
         try {
             KeyValuePair<AssetId, AssetRecord> pair = _assets.First(pair => pair.Value.Type == type);
             assetId = pair.Key;
             return true;
         }
-        catch (Exception e) when (e is ArgumentNullException or InvalidOperationException){
+        catch (Exception e) when (e is ArgumentNullException or InvalidOperationException) {
             logger.Warning("Type {Type} is not linked to an AssetId", type);
             return false;
         }

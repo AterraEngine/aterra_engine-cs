@@ -11,7 +11,6 @@ using Extensions;
 using Serilog;
 using Xml.Contracts;
 using Xml.Elements;
-
 namespace AterraEngine.Config;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -20,11 +19,11 @@ namespace AterraEngine.Config;
 [XmlRoot("engineConfig")]
 public class EngineConfigXml : IConfigDto<EngineConfigXml> {
     [XmlElement("engineVersion")] public SemanticVersion EngineVersion { get; set; }
-    
+
     [XmlElement("gameVersion")] public SemanticVersion GameVersion { get; set; }
-    
+
     [XmlElement("pluginData")] public PluginDataDto PluginData { get; set; } = null!;
-    
+
     [XmlElement("raylib")] public RaylibConfigDto RaylibConfig { get; set; } = null!;
 
     [XmlElement("logging")] public LoggingDto Logging { get; set; } = null!;
@@ -57,9 +56,9 @@ public class EngineConfigXml : IConfigDto<EngineConfigXml> {
 
         return this;
     }
-    
+
     public void OutputToLog(ILogger logger) {
-        
+
         ValuedStringBuilder valuedBuilder = new ValuedStringBuilder()
             .AppendLine("Engine Config loaded with the following data:")
             .AppendLineValued("- Engine version: ", EngineVersion)
@@ -68,14 +67,12 @@ public class EngineConfigXml : IConfigDto<EngineConfigXml> {
             .AppendLineValued("- Plugin Plugins: ", PluginData.LoadOrder.Plugins.ToList())
             .AppendLineValued("- Raylib config: ", RaylibConfig)
             .AppendLine()
-            
             .AppendLine("Plugins - Load Order : (Ids are not final)");
-        
+
         PluginData.LoadOrder.Plugins
-            .Select((r, i) => new { r.FileNameInternal, Id=new PluginId(i).ToString() })
+            .Select((r, i) => new { r.FileNameInternal, Id = new PluginId(i).ToString() })
             .IterateOver(box => valuedBuilder.AppendLineValued($"- id_{box.Id} : ", box.FileNameInternal));
-        
+
         logger.Information(valuedBuilder.ToString(), valuedBuilder.ValuesToArray());
     }
 }
-

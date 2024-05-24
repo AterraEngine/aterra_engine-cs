@@ -7,7 +7,6 @@ using AterraCore.Common.Nexities;
 using AterraCore.Nexities.Systems;
 using Nexities.Lib.Entities.Actor;
 using Serilog;
-
 namespace Nexities.Lib.Systems;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -15,7 +14,7 @@ namespace Nexities.Lib.Systems;
 // ---------------------------------------------------------------------------------------------------------------------
 [System("AF00-0000", AssetInstanceType.Singleton, CoreTags.RenderSystem)]
 public class Render2D(ILogger logger) : NexitiesSystem<IActor2D> {
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -28,10 +27,10 @@ public class Render2D(ILogger logger) : NexitiesSystem<IActor2D> {
 
             // Print(translation, scale, rotation, childEntity.Sprite2D.Guid);
         }
-        
-        
-        logger.Warning("Render2D entity {@e} : {rot} {trans} {scale} ", 
-            entity, 
+
+
+        logger.Warning("Render2D entity {@e} : {rot} {trans} {scale} ",
+            entity,
             entity.Transform2D.Rotation,
             entity.Transform2D.Translation,
             entity.Transform2D.Scale

@@ -6,7 +6,7 @@
         <RootNamespace>Workfloor_AterraCore</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <RuntimeIdentifier>win-x64</RuntimeIdentifier>    
+        <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     </PropertyGroup>
 
     <ItemGroup>
@@ -17,14 +17,14 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
-      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
-      <PackageReference Include="Microsoft.Extensions.ObjectPool.DependencyInjection" Version="8.4.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1"/>
+        <PackageReference Include="Microsoft.Extensions.ObjectPool.DependencyInjection" Version="8.4.0"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\src\engine\AterraEngine\AterraEngine.csproj" />
-      <ProjectReference Include="..\..\..\src\engine\Nexities.Lib\Nexities.Lib.csproj" />
+        <ProjectReference Include="..\..\..\src\engine\AterraEngine\AterraEngine.csproj"/>
+        <ProjectReference Include="..\..\..\src\engine\Nexities.Lib\Nexities.Lib.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -35,15 +35,15 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Assets\" />
+        <Folder Include="Assets\"/>
     </ItemGroup>
-    
+
     <Target Name="AddingPlugins" AfterTargets="Build">
-        
+
 
         <!-- Create output directories -->
-        <RemoveDir Directories="$(OutDir)plugins" />
-        <MakeDir Directories="$(OutDir)plugins" />
+        <RemoveDir Directories="$(OutDir)plugins"/>
+        <MakeDir Directories="$(OutDir)plugins"/>
 
         <!-- Define list of plugin files -->
         <ItemGroup>
@@ -60,7 +60,7 @@
 
         <!-- Copy config files to output directory -->
         <Copy SourceFiles="@(ConfigFiles)" DestinationFiles="@(ConfigFiles->'$(OutDir)\%(Filename)%(Extension)')"/>
-    
+
     </Target>
 
 </Project>

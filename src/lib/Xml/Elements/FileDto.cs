@@ -3,22 +3,21 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using System.Xml.Serialization;
-
 namespace Xml.Elements;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Support Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IFileDto {
-    public string FileNameInternal { get;}
-    public string FilePath { get; set;}
+    public string FileNameInternal { get; }
+    public string FilePath { get; set; }
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class FileDto : IFileDto {
-    [XmlAttribute("file")] 
+    [XmlAttribute("file")]
     public required string FileNameInternal { get; set; }
 
     [XmlIgnore]

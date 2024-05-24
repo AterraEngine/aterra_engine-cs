@@ -13,7 +13,7 @@ namespace Nexities.Lib.Entities.HUD;
 // ---------------------------------------------------------------------------------------------------------------------
 
 public class HudElementRaylibText(IAssetTree childEntities, IRaylibHudText hudComponent) : NexitiesEntity(childEntities, hudComponent), IHudElement {
-    public IAssetTree ChildEntities => childEntities;
     public IRaylibHudText TextComponent => hudComponent;
+    public IAssetTree ChildEntities => childEntities;
     public IHudComponent HudComponent => (IHudComponent)TextComponent;
 }

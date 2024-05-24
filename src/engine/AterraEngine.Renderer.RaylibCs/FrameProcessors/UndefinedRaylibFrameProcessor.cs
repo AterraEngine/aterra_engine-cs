@@ -2,9 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using AterraCore.Contracts.Nexities.Assets;
 using JetBrains.Annotations;
-
 namespace AterraEngine.Renderer.RaylibCs.FrameProcessors;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -13,7 +11,7 @@ namespace AterraEngine.Renderer.RaylibCs.FrameProcessors;
 
 [UsedImplicitly]
 public class UndefinedRaylibFrameProcessor : AbstractRaylibFrameProcessor {
-    protected override Color ClearColor { get; set; } = new(0,0,0,0);
+    protected override Color ClearColor { get; set; } = new(0, 0, 0, 0);
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods

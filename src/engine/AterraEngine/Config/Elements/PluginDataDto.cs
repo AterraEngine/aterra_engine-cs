@@ -6,7 +6,6 @@ using System.Text;
 using System.Xml.Serialization;
 using Extensions;
 using Xml.Elements;
-
 namespace AterraEngine.Config.Elements;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -17,9 +16,9 @@ public class PluginDataDto {
     [XmlAttribute("root")]
     public required string RootFolder { get; set; }
 
-    [XmlElement("loadOrder")] 
+    [XmlElement("loadOrder")]
     public required LoadOrderDto LoadOrder { get; set; }
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------

@@ -4,7 +4,6 @@
 
 using System.Xml.Serialization;
 using AterraCore.Nexities.Assets.InstanceDto.Elements;
-
 namespace AterraCore.Nexities.Assets.InstanceDto;
 
 // ---------------------------------------------------------------------------------------------------------------------

@@ -7,7 +7,6 @@ using AterraCore.Contracts.Nexities.Components.LevelData;
 using AterraCore.Contracts.Nexities.Levels;
 using AterraCore.Nexities.Entities;
 using JetBrains.Annotations;
-
 namespace Nexities.Lib.Entities.Level;
 
 // ---------------------------------------------------------------------------------------------------------------------

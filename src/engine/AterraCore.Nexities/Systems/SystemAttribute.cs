@@ -4,7 +4,6 @@
 
 using AterraCore.Common.Nexities;
 using AterraCore.Nexities.Assets;
-
 namespace AterraCore.Nexities.Systems;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -12,11 +11,11 @@ namespace AterraCore.Nexities.Systems;
 // ---------------------------------------------------------------------------------------------------------------------
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
 public class SystemAttribute(
-    string partialId, 
+    string partialId,
     AssetInstanceType instanceType = AssetInstanceType.Singleton,
     CoreTags coreTags = CoreTags.System
 ) : AssetAttribute(
-    partialId, 
-    instanceType, 
+    partialId,
+    instanceType,
     coreTags | CoreTags.System
 );

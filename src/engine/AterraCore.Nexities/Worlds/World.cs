@@ -4,7 +4,6 @@
 
 using AterraCore.Contracts.Nexities.Levels;
 using AterraCore.Contracts.Nexities.Worlds;
-
 namespace AterraCore.Nexities.Worlds;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -18,5 +17,4 @@ public class World : IWorld {
         LoadedLevel = level;
         return true;
     }
-    
 }

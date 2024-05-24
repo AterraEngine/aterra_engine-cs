@@ -3,7 +3,6 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.Nexities.Assets;
 using AterraCore.Contracts.Nexities.Levels;
-
 namespace AterraCore.Nexities.Systems;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -11,7 +10,7 @@ namespace AterraCore.Nexities.Systems;
 // ---------------------------------------------------------------------------------------------------------------------
 public abstract class NexitiesSystem<TEntity> where TEntity : IAssetInstance {
     public Type ProcessableEntityType = typeof(TEntity);
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -22,6 +21,6 @@ public abstract class NexitiesSystem<TEntity> where TEntity : IAssetInstance {
             ProcessEntity(instance);
         }
     }
-    
+
     protected abstract void ProcessEntity(TEntity entity);
 }

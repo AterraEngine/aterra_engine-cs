@@ -6,8 +6,8 @@ using AterraCore.Contracts.Nexities.Assets;
 using AterraCore.Contracts.Nexities.Components.AssetTree;
 using AterraCore.Nexities.Components;
 using JetBrains.Annotations;
-
 namespace Nexities.Lib.Components.AssetTree;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -23,15 +23,15 @@ public class AssetTree : NexitiesComponent, IAssetTree {
     public IEnumerable<T> OfType<T>() where T : IAssetInstance => _nodes.OfType<T>();
     public IEnumerable<T> OfTypeReverse<T>() where T : IAssetInstance => _nodes.OfType<T>().Reverse();
 
-    public IEnumerable<T> OfTypeMany<T>() where T : IAssetInstance { 
+    public IEnumerable<T> OfTypeMany<T>() where T : IAssetInstance {
         // Has to implement IHasAssetTree
         //      Without this interface, the OfTypeMany wouldn't make sense as we need to pull a flat list from all entities
 
         foreach (T child in _nodes.OfType<T>()) {
             yield return child;
-            
+
             if (child is not IHasAssetTree entities) continue;
-            
+
             foreach (T subChild in entities.ChildEntities.OfTypeMany<T>()) {
                 yield return subChild;
             }
@@ -42,11 +42,11 @@ public class AssetTree : NexitiesComponent, IAssetTree {
         // Retrieves the last child in the nested layout first
         foreach (T child in _nodes.OfType<T>().Reverse()) {
             if (child is not IHasAssetTree entities) continue;
-            
+
             foreach (T subChild in entities.ChildEntities.OfTypeManyReverse<T>()) {
                 yield return subChild;
             }
-            
+
             yield return child;
         }
     }

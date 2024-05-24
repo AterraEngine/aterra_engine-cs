@@ -3,7 +3,6 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using AterraCore.FlexiPlug.Attributes;
-
 namespace Workfloor_AterraCore.Plugin.Systems;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -12,6 +11,5 @@ namespace Workfloor_AterraCore.Plugin.Systems;
 public interface ITestService;
 
 [NexitiesSystem<ITestService>]
-public class TestService{
-    
+public class TestService {
 }

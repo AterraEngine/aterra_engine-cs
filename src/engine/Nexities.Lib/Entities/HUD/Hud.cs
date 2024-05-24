@@ -5,7 +5,6 @@
 using AterraCore.Contracts.Nexities.Components.AssetTree;
 using AterraCore.Nexities.Entities;
 using JetBrains.Annotations;
-
 namespace Nexities.Lib.Entities.HUD;
 
 // ---------------------------------------------------------------------------------------------------------------------

@@ -8,6 +8,6 @@ namespace AterraCore.Contracts.Nexities.Assets;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public abstract class AbstractAssetTagAttribute  : Attribute{
+public abstract class AbstractAssetTagAttribute : Attribute {
     public abstract string[] Tags { get; }
 }

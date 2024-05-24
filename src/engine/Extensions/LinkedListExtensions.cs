@@ -4,7 +4,6 @@
 
 using AterraCore.Common.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug.Plugin;
-
 namespace Extensions;
 
 // ---------------------------------------------------------------------------------------------------------------------

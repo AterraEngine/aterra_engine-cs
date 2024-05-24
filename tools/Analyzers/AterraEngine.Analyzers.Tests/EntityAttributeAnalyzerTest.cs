@@ -15,14 +15,14 @@ public class EntityAttributeAnalyzerTest {
     [Theory]
     [InlineData(@"public class MyEntity { }")]
     [InlineData(@"using AterraCore.Nexities.Entities; using AterraCore.Common; [EntityAttribute(AssetInstanceType.Singleton)] public class MyEntity { }")]
-    public async Task  Test_AnalyzeSymbol_NoTrigger(string code) {
+    public async Task Test_AnalyzeSymbol_NoTrigger(string code) {
         // Define the expected DiagnosticResult pointing to the actual location in the code
         // DiagnosticResult expected = Verifier.Diagnostic(EntityAttributeAnalyzer.DiagnosticId);
-        
+
         // Assert the expected and actual results using the static VerifyAnalyzerAsync method
         await Verifier.VerifyAnalyzerAsync(code);
     }
-    
+
     [Theory]
     [InlineData(@"using AterraCore.Nexities.Entities; using AterraCore.Common; [EntityAttribute(AssetInstanceType.Pooled)] public class MyEntity { }", 1, 30)]
     public async Task Test_AnalyzeSymbol_WithAttribute_InstanceTypePooled(string code, int line, int column) {
