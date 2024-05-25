@@ -8,10 +8,11 @@ using AterraCore.Common.Nexities;
 using AterraCore.Contracts.FlexiPlug.Config;
 using AterraCore.Contracts.FlexiPlug.Plugin;
 using AterraCore.FlexiPlug.Attributes;
-using AterraCore.Nexities.Components;
-using AterraCore.Nexities.Entities;
 using Microsoft.Extensions.DependencyInjection;
 namespace AterraCore.FlexiPlug.Plugin;
+
+using Nexities.Data.Components;
+using Nexities.Data.Entities;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

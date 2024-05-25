@@ -5,8 +5,10 @@
 using System.Reflection;
 using AterraCore.Common.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug.Plugin;
-using AterraCore.Contracts.Nexities.Assets;
+
 namespace AterraCore.FlexiPlug.Plugin;
+
+using Contracts.Nexities.Data.Assets;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

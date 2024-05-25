@@ -4,10 +4,11 @@
 
 using System.Numerics;
 using AterraCore.Contracts.FlexiPlug;
-using AterraCore.Contracts.Nexities.Assets;
 using JetBrains.Annotations;
 using Serilog;
 namespace AterraEngine.Renderer.RaylibCs.FrameProcessors;
+
+using AterraCore.Contracts.Nexities.Data.Assets;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

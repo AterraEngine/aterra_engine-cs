@@ -13,6 +13,8 @@ using Xml;
 using Xml.Contracts;
 namespace ProductionTools.Commands;
 
+using AterraCore.Nexities.DataParsing.FileElements;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Support Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -37,7 +39,8 @@ public record XsdGeneratorRecord(
 public class XmlSchemaGenerator(ILogger logger) {
     private readonly Dictionary<string, XsdGeneratorRecord> _dictionary = new() {
         { "engine-config", new XsdGeneratorRecord(new XsdGenerator<EngineConfigXml>(logger), XmlNameSpaces.ConfigEngine) },
-        { "plugin-config", new XsdGeneratorRecord(new XsdGenerator<PluginConfigXml>(logger), XmlNameSpaces.ConfigPlugin) }
+        { "plugin-config", new XsdGeneratorRecord(new XsdGenerator<PluginConfigXml>(logger), XmlNameSpaces.ConfigPlugin) },
+        { "asset-data", new XsdGeneratorRecord(new XsdGenerator<AssetDataXml>(logger), XmlNameSpaces.AssetData) },
     };
 
     // -----------------------------------------------------------------------------------------------------------------

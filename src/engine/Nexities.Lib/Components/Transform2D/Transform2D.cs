@@ -2,9 +2,11 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Numerics;
-using AterraCore.Nexities.Components;
-using AterraCore.Nexities.SaveFileSystems.NamedValues.PreMade;
+
 namespace Nexities.Lib.Components.Transform2D;
+
+using AterraCore.Nexities.Data.Components;
+using AterraCore.Nexities.DataParsing.NamedValues.PreMade;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

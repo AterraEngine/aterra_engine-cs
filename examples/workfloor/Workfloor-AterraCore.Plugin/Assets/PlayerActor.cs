@@ -3,10 +3,11 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using AterraCore.Common.Nexities;
-using AterraCore.Nexities.Components;
 using JetBrains.Annotations;
 using Nexities.Lib.Components.Sprite2D;
 namespace Workfloor_AterraCore.Plugin.Assets;
+
+using AterraCore.Nexities.Data.Components;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

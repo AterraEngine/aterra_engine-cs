@@ -2,8 +2,10 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Numerics;
-using AterraCore.Contracts.Nexities.Components;
+
 namespace Nexities.Lib.Components.Transform2D;
+
+using AterraCore.Contracts.Nexities.Data.Components;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

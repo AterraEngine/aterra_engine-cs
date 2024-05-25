@@ -2,11 +2,12 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using AterraCore.Contracts.Nexities.Assets;
-using AterraCore.Contracts.Nexities.Components.AssetTree;
-using AterraCore.Nexities.Components;
 using JetBrains.Annotations;
 namespace Nexities.Lib.Components.AssetTree;
+
+using AterraCore.Contracts.Nexities.Data.Assets;
+using AterraCore.Contracts.Nexities.Data.Components.AssetTree;
+using AterraCore.Nexities.Data.Components;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

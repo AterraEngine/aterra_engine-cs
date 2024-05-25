@@ -2,12 +2,13 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using AterraCore.Contracts.Nexities.Components.AssetTree;
-using AterraCore.Nexities.Entities;
 using JetBrains.Annotations;
 using Nexities.Lib.Components.Sprite2D;
 using Nexities.Lib.Components.Transform2D;
 namespace Nexities.Lib.Entities.Actor;
+
+using AterraCore.Contracts.Nexities.Data.Components.AssetTree;
+using AterraCore.Nexities.Data.Entities;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

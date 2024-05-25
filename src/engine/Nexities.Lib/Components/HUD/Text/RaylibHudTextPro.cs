@@ -3,11 +3,12 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using System.Numerics;
-using AterraCore.Contracts.Nexities.Components.AssetTree;
-using AterraCore.Nexities.Components;
 using JetBrains.Annotations;
 using Raylib_cs;
 namespace Nexities.Lib.Components.HUD.Text;
+
+using AterraCore.Contracts.Nexities.Data.Components.AssetTree;
+using AterraCore.Nexities.Data.Components;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

@@ -3,7 +3,6 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using AterraCore.Common.Nexities;
-using AterraCore.Nexities.Systems;
 using Extensions;
 using Nexities.Lib.Components.HUD;
 using Nexities.Lib.Components.HUD.Text;
@@ -11,6 +10,8 @@ using Nexities.Lib.Entities.HUD;
 using Raylib_cs;
 using Serilog;
 namespace Nexities.Lib.Systems;
+
+using AterraCore.Nexities.Data.Systems;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

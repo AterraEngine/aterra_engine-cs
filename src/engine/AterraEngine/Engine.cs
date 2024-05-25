@@ -6,9 +6,6 @@ using AterraCore.Common;
 using AterraCore.Common.Nexities;
 using AterraCore.Contracts;
 using AterraCore.Contracts.FlexiPlug;
-using AterraCore.Contracts.Nexities.Assets;
-using AterraCore.Contracts.Nexities.Levels;
-using AterraCore.Contracts.Nexities.Worlds;
 using AterraCore.Contracts.Renderer;
 using AterraCore.DI;
 using AterraEngine.Threading;
@@ -16,6 +13,10 @@ using Extensions;
 using JetBrains.Annotations;
 using Serilog;
 namespace AterraEngine;
+
+using AterraCore.Contracts.Nexities.Data.Assets;
+using AterraCore.Contracts.Nexities.Data.Levels;
+using AterraCore.Contracts.Nexities.Data.Worlds;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

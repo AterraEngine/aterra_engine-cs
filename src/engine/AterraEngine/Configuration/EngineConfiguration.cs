@@ -6,16 +6,10 @@ using AterraCore.Common.Config;
 using AterraCore.Contracts;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug.Plugin;
-using AterraCore.Contracts.Nexities.Assets;
-using AterraCore.Contracts.Nexities.Worlds;
 using AterraCore.Contracts.Renderer;
-using AterraCore.Contracts.SaveFileSystem.NamedValues;
 using AterraCore.DI;
 using AterraCore.FlexiPlug;
 using AterraCore.Loggers;
-using AterraCore.Nexities.Assets;
-using AterraCore.Nexities.SaveFileSystems.NamedValues;
-using AterraCore.Nexities.Worlds;
 using AterraEngine.Config;
 using AterraEngine.Renderer.RaylibCs;
 using AterraEngine.Threading;
@@ -30,6 +24,14 @@ using static Extensions.ServiceDescriptorExtension;
 
 
 namespace AterraEngine.Configuration;
+
+using AterraCore.Contracts.Nexities.Data.Assets;
+using AterraCore.Contracts.Nexities.Data.Worlds;
+using AterraCore.Contracts.Nexities.DataParsing.NamedValues;
+using AterraCore.Nexities.Data.Assets;
+using AterraCore.Nexities.Data.Worlds;
+using AterraCore.Nexities.DataParsing.NamedValues;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------

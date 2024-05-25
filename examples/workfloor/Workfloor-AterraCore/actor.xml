@@ -1,25 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<Data>
+<AssetData xmlns="urn:aterra-engine:asset-data">
     <requirements>
-        <plugin readableName="NexitiesLib" refid="0000"/>
+        <plugin readableName="NexitiesLib" refId="0000"/>
     </requirements>
 
     <assets>
         <asset assetId="0000:AE00-0000" guid="530d1c21-36eb-44ba-867e-1dc40e813b86">
             <component assetId="0000:AC00-0000">
-                <Value name="Translation" value="1;0"/>
-                <Value name="Scale" value="1;1"/>
-                <Value name="Rotation" value="0;0"/>
+                <value name="Translation" value="1;0"/>
+                <value name="Scale" value="1;1"/>
+                <value name="Rotation" value="0;0"/>
             </component>
         </asset>
 
         <!--    Because of the assetId we can retrieve the type needed    -->
         <asset assetId="0000:AE00-0000" guid="ba6a6a6a-69bd-4d81-9cc0-fe74d6a1cdf0">
             <component assetId="0000:AC00-0000">
-                <Value name="Translation" value="1;0"/>
-                <Value name="Scale" value="1;1"/>
-                <Value name="Rotation" value="0;0"/>
+                <value name="Translation" value="1;0"/>
+                <value name="Scale" value="1;1"/>
+                <value name="Rotation" value="0;0"/>
+            </component>
+            <component assetId="0000:AC00-0000">
+                <value name="Translation" value="1;0"/>
+                <value name="Scale" value="1;1"/>
+                <value name="Rotation" value="0;0"/>
             </component>
 
             <assetTree>
@@ -27,17 +32,8 @@
             </assetTree>
         </asset>
 
-        <asset assetId="0000:AF00-0000">
-            <component assetId="">
-                <Value name="Systems" value="0000:AB00-0000;0000:AB00-0001"/>
-            </component>
-            <assetTree>
-                <instance guid="ba6a6a6a-69bd-4d81-9cc0-fe74d6a1cdf0"/>
-            </assetTree>
-        </asset>
-
     </assets>
-</Data>
+</AssetData>
 
 
 

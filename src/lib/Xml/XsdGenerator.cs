@@ -4,7 +4,6 @@
 
 using System.Text;
 using System.Xml;
-using System.Xml.Serialization;
 using Serilog;
 using Xml.Contracts;
 namespace Xml;

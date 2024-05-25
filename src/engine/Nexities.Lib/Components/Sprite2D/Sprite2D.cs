@@ -2,8 +2,9 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using AterraCore.Nexities.Components;
 namespace Nexities.Lib.Components.Sprite2D;
+
+using AterraCore.Nexities.Data.Components;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

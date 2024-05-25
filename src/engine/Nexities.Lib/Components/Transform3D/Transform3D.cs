@@ -3,10 +3,11 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using System.Numerics;
-using AterraCore.Nexities.Assets;
-using AterraCore.Nexities.Components;
 using JetBrains.Annotations;
 namespace Nexities.Lib.Components.Transform3D;
+
+using AterraCore.Nexities.Data.Assets;
+using AterraCore.Nexities.Data.Components;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
