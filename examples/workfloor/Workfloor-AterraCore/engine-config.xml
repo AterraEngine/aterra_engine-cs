@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<engineConfig xmlns="urn:aterra-engine:engine-config">
+    <engineVersion value="0.0.0"/>
+    <gameVersion value="0.0.0"/>
+    <pluginData root="plugins">
+        <loadOrder breakOnUnstable="true">
+            <file file="Workfloor-AterraCore.Plugin.zip"/>
+        </loadOrder>
+    </pluginData>
+    <logging async-console="true"/>
+</engineConfig>

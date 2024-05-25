@@ -1,0 +1,86 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <RootNamespace>Workfloor_AterraCore.Plugin</RootNamespace>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\tools\AterraEngine.Analyzers\AterraEngine.Analyzers\AterraEngine.Analyzers.csproj">
+            <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+            <OutputItemType>Analyzer</OutputItemType>
+        </ProjectReference>
+    </ItemGroup>
+
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\src\engine\AterraCore.Contracts\AterraCore.Contracts.csproj"/>
+        <ProjectReference Include="..\..\..\src\engine\AterraCore.FlexiPlug\AterraCore.FlexiPlug.csproj"/>
+        <ProjectReference Include="..\..\..\src\engine\AterraCore.Nexities\AterraCore.Nexities.csproj"/>
+        <ProjectReference Include="..\..\..\src\engine\AterraEngine\AterraEngine.csproj"/>
+        <ProjectReference Include="..\..\..\src\engine\Nexities.Lib\Nexities.Lib.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1"/>
+        <PackageReference Include="Microsoft.Extensions.ObjectPool.DependencyInjection" Version="8.4.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="..\..\..\src\xsd\*.xsd">
+            <Link>xsd\%(Filename)%(Extension)</Link>
+        </Content>
+        <Content Remove="..\..\..\src\xsd\**"/>
+    </ItemGroup>
+
+    <Target Name="PackingToZip" AfterTargets="Build">
+        <!-- Delete the existing zip file if it exists -->
+        <!--    Else it is going to cause issues for the Wip down below -->
+        <Delete Files="$(OutDir)\package\$(MSBuildProjectName).zip" ContinueOnError="true"/>
+
+        <!-- Create directories needed -->
+        <MakeDir Directories="$(OutDir)\temp"/>
+        <MakeDir Directories="$(OutDir)\temp\bin"/>
+        <MakeDir Directories="$(OutDir)\temp\res"/>
+        <MakeDir Directories="$(OutDir)\package"/>
+
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+        <!-- Copy necessary files to temp directory -->
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+        <!-- Bin - dll files -->
+        <ItemGroup>
+            <!-- Default dll of the project -->
+            <DllFiles Include="$(OutDir)\$(MSBuildProjectName).dll"/>
+            <!-- Add more dlls when needed -->
+
+        </ItemGroup>
+        <Copy SourceFiles="@(DllFiles)" DestinationFiles="@(DllFiles->'$(OutDir)\temp\bin\%(Filename)%(Extension)')"/>
+
+        <!-- Assets - xml markup files of instances of assets -->
+        <ItemGroup>
+            <!-- <AssetFiles Include="$(OutDir)\___.xml"/>-->
+        </ItemGroup>
+        <Copy SourceFiles="@(AssetFiles)" DestinationFiles="@(AssetFiles->'$(OutDir)\temp\assets\%(Filename)%(Extension)')"/>
+
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+        <ItemGroup>
+            <ConfigFiles Include="plugin-config.xml"/>
+        </ItemGroup>
+        <!-- Copy config files to output directory -->
+        <Copy SourceFiles="@(ConfigFiles)" DestinationFiles="@(ConfigFiles->'$(OutDir)\temp\%(Filename)%(Extension)')"/>
+
+        <!-- Zip temp directory contents -->
+        <ZipDirectory SourceDirectory="$(OutDir)\temp"
+                      DestinationFile="$(OutDir)\package\$(MSBuildProjectName).zip"/>
+
+        <!-- Optionally, delete temp directory -->
+        <RemoveDir Directories="$(OutDir)\temp"/>
+    </Target>
+
+</Project>

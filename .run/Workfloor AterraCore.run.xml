@@ -1,0 +1,17 @@
+﻿<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Workfloor AterraCore" type="RunExe" factoryName=".NET Executable">
+    <option name="EXE_PATH" value="$PROJECT_DIR$/examples/workfloor/Workfloor-AterraCore/bin/Debug/net8.0/win-x64/Workfloor-AterraCore.exe" />
+    <option name="PROGRAM_PARAMETERS" value="" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/examples/workfloor/Workfloor-AterraCore/bin/Debug/net8.0/win-x64" />
+    <option name="PASS_PARENT_ENVS" value="1" />
+    <option name="USE_EXTERNAL_CONSOLE" value="0" />
+    <option name="USE_MONO" value="0" />
+    <option name="RUNTIME_ARGUMENTS" value="" />
+    <method v="2">
+      <option name="Build" default="false" projectName="AterraEngine" projectPath="$PROJECT_DIR$/src/Engine/AterraEngine/AterraEngine.csproj" />
+      <option name="Build" default="false" projectName="Nexities.Lib" projectPath="$PROJECT_DIR$/src/Engine/Nexities.Lib/Nexities.Lib.csproj" />
+      <option name="Build" default="false" projectName="Workfloor-AterraCore.Plugin" projectPath="$PROJECT_DIR$/examples/Workfloor/Workfloor-AterraCore.Plugin/Workfloor-AterraCore.Plugin.csproj" />
+      <option name="Build" default="false" projectName="Workfloor-AterraCore" projectPath="$PROJECT_DIR$/examples/Workfloor/Workfloor-AterraCore/Workfloor-AterraCore.csproj" />
+    </method>
+  </configuration>
+</component>

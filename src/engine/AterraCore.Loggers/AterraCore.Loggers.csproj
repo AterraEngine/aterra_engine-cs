@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="8.0.4"/>
+        <PackageReference Include="Microsoft.Extensions.ObjectPool.DependencyInjection" Version="8.4.0"/>
+        <PackageReference Include="Serilog" Version="3.1.1"/>
+        <PackageReference Include="Serilog.Enrichers.Memory" Version="1.0.4"/>
+        <PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0"/>
+        <PackageReference Include="Serilog.Formatting.Compact" Version="2.0.1-dev-00969"/>
+        <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0"/>
+        <PackageReference Include="Serilog.Sinks.Console" Version="5.1.0-dev-00943"/>
+        <PackageReference Include="Serilog.Sinks.Console.LogThemes" Version="0.3.0"/>
+        <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0"/>
+        <PackageReference Include="Serilog.Sinks.File" Version="5.0.1-dev-00972"/>
+        <PackageReference Include="Serilog.Sinks.SQLite" Version="6.0.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\lib\Ansi\Ansi.csproj"/>
+        <ProjectReference Include="..\AterraCore.Common\AterraCore.Common.csproj"/>
+    </ItemGroup>
+
+</Project>
