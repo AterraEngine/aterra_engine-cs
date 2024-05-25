@@ -21,6 +21,7 @@
                 <value name="Scale" value="1;1"/>
                 <value name="Rotation" value="0;0"/>
             </component>
+<!--            TODO CHANGE THIS INTO SPRITE COMPONENT-->
             <component assetId="0000:AC00-0000">
                 <value name="Translation" value="1;0"/>
                 <value name="Scale" value="1;1"/>

@@ -4,7 +4,7 @@
 
 namespace AterraCore.Nexities.Assets;
 
-using AterraCore.Common.FlexiPlug;
+using Common.FlexiPlug;
 using AterraCore.Common.Nexities;
 using AterraCore.Contracts.Nexities.Data.Assets;
 using Extensions;
@@ -103,6 +103,10 @@ public class AssetAtlas(ILogger logger) : IAssetAtlas {
 
     public IEnumerable<AssetId> GetAllAssetsOfPlugin(PluginId pluginId) =>
         _assetsById.Where(pair => pair.Key.PluginId == pluginId).Select(pair => pair.Key);
+    
+    public bool TryGetRegistration(AssetId assetId, out AssetRegistration registration) {
+        return _assetsById.TryGetValue(assetId, out registration);
+    }
 
     public bool TryGetType(AssetId assetId, [NotNullWhen(true)] out Type? type) {
         type = default;

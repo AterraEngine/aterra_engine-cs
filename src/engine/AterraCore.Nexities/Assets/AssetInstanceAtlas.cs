@@ -1,17 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
 namespace AterraCore.Nexities.Assets;
 
 using AterraCore.Common.Nexities;
 using AterraCore.Contracts.Nexities.Data.Assets;
-using AterraCore.DI;
+using DI;
 using JetBrains.Annotations;
 using Serilog;
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -24,16 +22,24 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas) : IAsset
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public bool TryCreateInstance<T>(AssetId assetId, [NotNullWhen(true)] out T? instance) where T : IAssetInstance {
+    public bool TryCreateInstance<T>(AssetId assetId, [NotNullWhen(true)] out T? instance, Guid? predefinedGuid = null) where T : IAssetInstance {
         instance = default;
-        if (!assetAtlas.TryGetType(assetId, out Type? type)) {
+        if (!assetAtlas.TryGetRegistration(assetId, out AssetRegistration registration)) {
             logger.Warning("Asset Id {id} could not be matched to a Type", assetId);
             return false;
         }
 
-        instance = EngineServices.CreateWithServices<T>(type);
+        // Will work for Entities which have DI injected components,
+        //      because all components have their interface mapped to their assetId
+        // Will work for others as well
+        instance = EngineServices.CreateWithServices<T>(registration.InterfaceType ?? registration.Type);
         instance.AssetId = assetId;
-        return true;
+        
+        // Update the generated
+        instance.Guid = predefinedGuid ?? new Guid();
+        
+        // Finally add the instance
+        return  _assetInstances.TryAdd(instance.Guid, instance);
     }
 
     public bool TryGetInstance<T>(Guid instanceId, [NotNullWhen(true)] out T? instance) where T : IAssetInstance {

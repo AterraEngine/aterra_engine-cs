@@ -33,7 +33,7 @@ public static class ComponentDi {
 
         if (!assetAtlas.TryGetAssetId<T>(out AssetId assetId)) throw new InvalidOperationException();
         if (!instanceAtlas.TryCreateInstance(assetId, out T? instance)) throw new InvalidOperationException();
-        return instance;
         
+        return instance;
     }
 }
