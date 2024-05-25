@@ -28,9 +28,10 @@ namespace AterraEngine.Configuration;
 using AterraCore.Contracts.Nexities.Data.Assets;
 using AterraCore.Contracts.Nexities.Data.Worlds;
 using AterraCore.Contracts.Nexities.DataParsing.NamedValues;
-using AterraCore.Nexities.Data.Assets;
-using AterraCore.Nexities.Data.Worlds;
-using AterraCore.Nexities.DataParsing.NamedValues;
+using AterraCore.Nexities.Assets;
+using AterraCore.Nexities.Lib.Components;
+using AterraCore.Nexities.Parsers.NamedValues;
+using AterraCore.Nexities.Worlds;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
@@ -81,6 +82,7 @@ public class EngineConfiguration(ILogger? logger = null) {
             NewServiceDescriptor<IMainWindow, MainWindow>(ServiceLifetime.Singleton),
             NewServiceDescriptor<INamedValueConverter, NamedValueConverter>(ServiceLifetime.Singleton)
         ]);
+        _engineServiceBuilder.ServiceCollection.AddComponentFactories();
 
         _logger.Information("Assigned Default Systems correctly");
         _flow = AssignedStaticServices;

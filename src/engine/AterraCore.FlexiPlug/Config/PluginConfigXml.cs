@@ -17,7 +17,19 @@ namespace AterraCore.FlexiPlug.Config;
 // ---------------------------------------------------------------------------------------------------------------------
 [XmlRoot("pluginConfig")]
 public class PluginConfigXml : IConfigDto<PluginConfigXml>, IPluginConfigDto {
+    [XmlElement("name")]
+    public string ReadableName { get; set; } = null!;
 
+    [XmlElement("author")]
+    public string Author { get; set; } = string.Empty;
+
+    [XmlElement("pluginVersion")]
+    public SemanticVersion PluginVersion { get; set; }
+
+    [XmlElement("expectedGameVersion")]
+    public SemanticVersion GameVersion { get; set; }
+    [XmlIgnore] public IEnumerable<IFileDto> Dlls => BinDtos;
+    
     [XmlArray("bins")]
     [XmlArrayItem("bin", typeof(FileDto))]
     public FileDto[] BinDtos { get; set; } = [];
@@ -36,18 +48,6 @@ public class PluginConfigXml : IConfigDto<PluginConfigXml>, IPluginConfigDto {
 
         return this;
     }
-    [XmlElement("name")]
-    public string ReadableName { get; set; } = null!;
-
-    [XmlElement("author")]
-    public string Author { get; set; } = string.Empty;
-
-    [XmlElement("pluginVersion")]
-    public SemanticVersion PluginVersion { get; set; }
-
-    [XmlElement("expectedGameVersion")]
-    public SemanticVersion GameVersion { get; set; }
-    [XmlIgnore] public IEnumerable<IFileDto> Dlls => BinDtos;
 
     public void OutputToLog(ILogger logger) {
 

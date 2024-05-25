@@ -21,7 +21,7 @@
         <ProjectReference Include="..\..\..\src\engine\AterraCore.FlexiPlug\AterraCore.FlexiPlug.csproj"/>
         <ProjectReference Include="..\..\..\src\engine\AterraCore.Nexities\AterraCore.Nexities.csproj"/>
         <ProjectReference Include="..\..\..\src\engine\AterraEngine\AterraEngine.csproj"/>
-        <ProjectReference Include="..\..\..\src\engine\Nexities.Lib\Nexities.Lib.csproj"/>
+        <ProjectReference Include="..\..\..\src\engine\AterraCore.Nexities.Lib\AterraCore.Nexities.Lib.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -35,6 +35,12 @@
             <Link>xsd\%(Filename)%(Extension)</Link>
         </Content>
         <Content Remove="..\..\..\src\xsd\**"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="Data\*.xml">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 
     <Target Name="PackingToZip" AfterTargets="Build">
@@ -63,7 +69,7 @@
 
         <!-- Assets - xml markup files of instances of assets -->
         <ItemGroup>
-            <!-- <AssetFiles Include="$(OutDir)\___.xml"/>-->
+             <AssetFiles Include="$(OutDir)Data\actor.xml"/>
         </ItemGroup>
         <Copy SourceFiles="@(AssetFiles)" DestinationFiles="@(AssetFiles->'$(OutDir)\temp\assets\%(Filename)%(Extension)')"/>
 
@@ -80,7 +86,7 @@
                       DestinationFile="$(OutDir)\package\$(MSBuildProjectName).zip"/>
 
         <!-- Optionally, delete temp directory -->
-        <RemoveDir Directories="$(OutDir)\temp"/>
+<!--        <RemoveDir Directories="$(OutDir)\temp"/>-->
     </Target>
 
 </Project>

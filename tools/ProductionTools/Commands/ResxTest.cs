@@ -4,10 +4,10 @@
 
 using System.Resources;
 using CliArgsParser.Attributes;
-using Nexities.Lib.Components.AssetTree;
-using Nexities.Lib.Components.Sprite2D;
-using Nexities.Lib.Components.Transform2D;
-using Nexities.Lib.Entities.Actor;
+using AterraCore.Nexities.Lib.Components.AssetTree;
+using AterraCore.Nexities.Lib.Components.Sprite2D;
+using AterraCore.Nexities.Lib.Components.Transform2D;
+using AterraCore.Nexities.Lib.Entities.Actor;
 using Serilog;
 namespace ProductionTools.Commands;
 

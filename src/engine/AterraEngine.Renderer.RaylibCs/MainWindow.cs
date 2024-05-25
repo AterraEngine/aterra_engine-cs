@@ -7,11 +7,14 @@ using AterraCore.DI;
 using AterraEngine.Renderer.RaylibCs.FrameProcessors;
 namespace AterraEngine.Renderer.RaylibCs;
 
+using JetBrains.Annotations;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public class MainWindow(RaylibLogger raylibLogger, IApplicationStageManager applicationStageManager) : IMainWindow {
+[UsedImplicitly]
+public class MainWindow(IApplicationStageManager applicationStageManager) : IMainWindow {
     private static int Width => 800;
     private static int Height => 400;
     private static string Name => "AterraEngine - Test";

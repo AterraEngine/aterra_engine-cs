@@ -15,7 +15,7 @@ using AterraCore.Contracts.Nexities.Data.Assets;
 // ---------------------------------------------------------------------------------------------------------------------
 
 [UsedImplicitly]
-public class StartupRaylibFrameProcessor(IAssetAtlas assetAtlas, IPluginAtlas pluginAtlas, ILogger logger) : AbstractRaylibFrameProcessor {
+public class StartupRaylibFrameProcessor(IAssetAtlas assetAtlas, IPluginAtlas pluginAtlas) : AbstractRaylibFrameProcessor {
     protected override Color ClearColor { get; set; } = new(0, 0, 0, 0);
 
     // -----------------------------------------------------------------------------------------------------------------

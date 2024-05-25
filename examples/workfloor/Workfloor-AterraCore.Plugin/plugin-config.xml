@@ -7,5 +7,4 @@
     <bins>
         <bin file="Workfloor-AterraCore.Plugin.dll"/>
     </bins>
-
 </pluginConfig>

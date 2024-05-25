@@ -8,20 +8,20 @@ using AterraCore.Common.Nexities;
 
 namespace AterraEngine.Analyzer.Sample;
 
-using AterraCore.Nexities.Data.Assets;
-using AterraCore.Nexities.Data.Entities;
+using AterraCore.Nexities.Assets;
+using AterraCore.Nexities.Entities;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Asset("1", AssetInstanceType.Singleton, CoreTags.Asset)]
+[Asset("1", ServiceLifetimeType.Singleton, CoreTags.Asset)]
 public class TestEntity3 : NexitiesEntity;
 
-[Asset("2", AssetInstanceType.Singleton, CoreTags.Asset)]
+[Asset("2", ServiceLifetimeType.Singleton, CoreTags.Asset)]
 public class TestEntity4 : NexitiesEntity;
 
-[Asset("3", AssetInstanceType.Singleton, CoreTags.Asset)]
+[Asset("3", ServiceLifetimeType.Singleton, CoreTags.Asset)]
 public class TestEntity6 : NexitiesEntity;
 
-[Asset("5", AssetInstanceType.Singleton, CoreTags.Asset)]
+[Asset("5", ServiceLifetimeType.Singleton, CoreTags.Asset)]
 public class TestEntaity4 : NexitiesEntity;

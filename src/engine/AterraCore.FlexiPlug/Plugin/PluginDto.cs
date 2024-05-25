@@ -11,8 +11,8 @@ using AterraCore.FlexiPlug.Attributes;
 using Microsoft.Extensions.DependencyInjection;
 namespace AterraCore.FlexiPlug.Plugin;
 
-using Nexities.Data.Components;
-using Nexities.Data.Entities;
+using Nexities.Components;
+using Nexities.Entities;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
@@ -58,11 +58,11 @@ public class PluginDto(int id, string filepath) : IPluginDto {
             .Select(t => new { Type = t, Attribute = t.GetCustomAttribute<ComponentAttribute>(false) }) // this way we only get the attribute once
             .Where(t => t.Attribute != null)
             .Select(t => new ServiceDescriptor(
-                t.Attribute?.Interface ?? t.Type,
+                t.Attribute?.InterfaceType ?? t.Type,
                 t.Type,
-                t.Attribute?.InstanceType switch {
-                    AssetInstanceType.Singleton => ServiceLifetime.Singleton,
-                    AssetInstanceType.Multiple => ServiceLifetime.Transient,
+                t.Attribute?.ServiceLifetime switch {
+                    ServiceLifetimeType.Singleton => ServiceLifetime.Singleton,
+                    ServiceLifetimeType.Multiple => ServiceLifetime.Transient,
                     // (AssetInstanceType.Pooled) => ServiceLifetime.Pooled
                     _ => ServiceLifetime.Transient
                 }
@@ -76,9 +76,9 @@ public class PluginDto(int id, string filepath) : IPluginDto {
             .Select(t => new ServiceDescriptor(
                 t.Attribute?.Interface ?? t.Type,
                 t.Type,
-                t.Attribute?.InstanceType switch {
-                    AssetInstanceType.Singleton => ServiceLifetime.Singleton,
-                    AssetInstanceType.Multiple => ServiceLifetime.Transient,
+                t.Attribute?.ServiceLifetime switch {
+                    ServiceLifetimeType.Singleton => ServiceLifetime.Singleton,
+                    ServiceLifetimeType.Multiple => ServiceLifetime.Transient,
                     _ => ServiceLifetime.Transient
                 }
             ));

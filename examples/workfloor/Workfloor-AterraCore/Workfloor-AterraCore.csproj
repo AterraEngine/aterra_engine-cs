@@ -24,7 +24,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\..\src\engine\AterraEngine\AterraEngine.csproj"/>
-        <ProjectReference Include="..\..\..\src\engine\Nexities.Lib\Nexities.Lib.csproj"/>
+        <ProjectReference Include="..\..\..\src\engine\AterraCore.Nexities.Lib\AterraCore.Nexities.Lib.csproj" />
     </ItemGroup>
 
     <ItemGroup>

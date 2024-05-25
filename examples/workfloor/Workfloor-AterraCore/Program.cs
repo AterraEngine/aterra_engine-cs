@@ -10,7 +10,7 @@ using AterraCore.Loggers;
 using AterraEngine.Configuration;
 using AterraEngine.Renderer.RaylibCs;
 using Microsoft.Extensions.DependencyInjection;
-using Nexities.Lib.Components.Transform2D;
+using AterraCore.Nexities.Lib.Components.Transform2D;
 namespace Workfloor_AterraCore;
 
 // ---------------------------------------------------------------------------------------------------------------------

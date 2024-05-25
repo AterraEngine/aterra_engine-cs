@@ -15,10 +15,11 @@ public struct AssetRegistration {
 
     // Actual type of class
     public Type Type { get; init; }
+    public Type? InterfaceType { get; init; }
 
     // Data from AbstractAssetAttribute
     public PartialAssetId PartialAssetId { get; init; }
-    public AssetInstanceType InstanceType { get; init; }
+    public ServiceLifetimeType ServiceLifetime { get; init; }
     public CoreTags CoreTags { get; init; }
 
     // Data from AbstractAssetTagAttribute

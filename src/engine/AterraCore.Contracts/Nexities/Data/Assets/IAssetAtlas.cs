@@ -20,5 +20,7 @@ public interface IAssetAtlas {
     public IEnumerable<AssetId> GetAllAssetsOfPlugin(PluginId pluginId);
 
     public bool TryGetType(AssetId assetId, [NotNullWhen(true)] out Type? type);
-    public bool TryGetAssetId(Type type, [NotNullWhen(true)] out AssetId? assetId);
+    public bool TryGetAssetId(Type type, [NotNullWhen(true)] out AssetId assetId);
+    public bool TryGetAssetId<T>([NotNullWhen(true)] out AssetId assetId);
+    public bool TryGetInterfaceType(AssetId assetId, out Type? type);
 }
