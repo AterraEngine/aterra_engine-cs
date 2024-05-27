@@ -54,5 +54,5 @@ public struct ByteVector3(int x, int y, int z) {
     /// <returns>
     ///     A string representation of the RGB values in the format "rgb(X,Y,Z)".
     /// </returns>
-    public string ToRGBString() => $"rgb({X},{Y},{Z})";
+    public string ToRgbString() => $"rgb({X},{Y},{Z})";
 }

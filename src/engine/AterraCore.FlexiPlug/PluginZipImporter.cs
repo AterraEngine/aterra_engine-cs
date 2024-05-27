@@ -7,14 +7,14 @@ using System.IO.Compression;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
-using AterraCore.Common;
-using AterraCore.Common.Config;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.FlexiPlug.Config;
 using Serilog;
 using Xml;
 using Xml.Elements;
 namespace AterraCore.FlexiPlug;
+
+using Common.Data;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

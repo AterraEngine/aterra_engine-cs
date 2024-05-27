@@ -4,7 +4,7 @@
 
 namespace AterraCore.Nexities.Assets.InstanceDto.Elements;
 
-using AterraCore.Common.FlexiPlug;
+using Common.Types.FlexiPlug;
 using System.Xml.Serialization;
 
 // ---------------------------------------------------------------------------------------------------------------------

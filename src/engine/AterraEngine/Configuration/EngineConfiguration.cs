@@ -1,8 +1,6 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common;
-using AterraCore.Common.Config;
 using AterraCore.Contracts;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug.Plugin;
@@ -25,6 +23,7 @@ using static Extensions.ServiceDescriptorExtension;
 
 namespace AterraEngine.Configuration;
 
+using AterraCore.Common.Data;
 using AterraCore.Contracts.Nexities.Data.Assets;
 using AterraCore.Contracts.Nexities.Data.Worlds;
 using AterraCore.Contracts.Nexities.DataParsing.NamedValues;

@@ -2,15 +2,16 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
+namespace AterraCore.Common.Types.FlexiPlug;
+
 using System.Globalization;
 using System.Text.RegularExpressions;
-namespace AterraCore.Common.FlexiPlug;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public readonly partial struct PluginId(ushort value) : IComparable<PluginId>, IEqualityComparer<PluginId> {
-    private static readonly Regex _regex = MyRegex();
+    private static readonly Regex Regex = MyRegex();
 
     // PluginId is basically just a fancy ushort
     public ushort Value { get; } = value; // which means the max plugin ID will be `FFFF`
@@ -29,7 +30,7 @@ public readonly partial struct PluginId(ushort value) : IComparable<PluginId>, I
     public string ToStringReadable() => ToString();
 
     internal static ushort CastToUshort(string value) {
-        if (!_regex.IsMatch(value)) {
+        if (!Regex.IsMatch(value)) {
             throw new ArgumentException("Invalid input format.", nameof(value));
         }
         return CastToUshort(int.Parse(value, NumberStyles.HexNumber));

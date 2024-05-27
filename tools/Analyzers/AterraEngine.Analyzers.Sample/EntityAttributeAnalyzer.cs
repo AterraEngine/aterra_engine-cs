@@ -1,10 +1,9 @@
 ﻿// ReSharper disable UnusedType.Global
 // ReSharper disable UnusedMember.Global
 
-using AterraCore.Common.Nexities;
-
 namespace AterraEngine.Analyzer.Sample;
 
+using AterraCore.Common.Types.Nexities;
 using AterraCore.Nexities.Entities;
 
 // [Entity("1", AssetInstanceType.Pooled))]

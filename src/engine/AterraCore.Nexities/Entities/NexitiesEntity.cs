@@ -7,7 +7,7 @@ namespace AterraCore.Nexities.Entities;
 using Assets;
 using AterraCore.Contracts.Nexities.Data.Components;
 using AterraCore.Contracts.Nexities.Data.Entities;
-using Common.Nexities;
+using Common.Types.Nexities;
 using System.Collections.Concurrent;
 
 // ---------------------------------------------------------------------------------------------------------------------

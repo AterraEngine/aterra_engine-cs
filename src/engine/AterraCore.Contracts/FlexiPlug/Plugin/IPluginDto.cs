@@ -2,10 +2,11 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using AterraCore.Common.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug.Config;
 using Microsoft.Extensions.DependencyInjection;
 namespace AterraCore.Contracts.FlexiPlug.Plugin;
+
+using Common.Types.FlexiPlug;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

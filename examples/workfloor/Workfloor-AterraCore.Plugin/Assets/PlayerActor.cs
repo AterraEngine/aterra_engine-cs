@@ -2,11 +2,11 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using AterraCore.Common.Nexities;
 using JetBrains.Annotations;
 using AterraCore.Nexities.Lib.Components.Sprite2D;
 namespace Workfloor_AterraCore.Plugin.Assets;
 
+using AterraCore.Common.Types.Nexities;
 using AterraCore.Nexities.Components;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -15,7 +15,7 @@ using AterraCore.Nexities.Components;
 [Component("A", ServiceLifetimeType.Singleton)] // Services.AddSingleton<PlayerSprite>()
 [UsedImplicitly]
 public class PlayerSprite : Sprite2D {
-    public string data = "bla-bla";
+    public string Data = "bla-bla";
 }
 //
 // [Entity("1")]

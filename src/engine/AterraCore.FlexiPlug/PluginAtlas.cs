@@ -3,14 +3,15 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using System.Diagnostics.CodeAnalysis;
-using AterraCore.Common.FlexiPlug;
-using AterraCore.Common.Nexities;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug.Plugin;
 using JetBrains.Annotations;
 using static Extensions.LinqExtensions;
 
 namespace AterraCore.FlexiPlug;
+
+using Common.Types.FlexiPlug;
+using Common.Types.Nexities;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

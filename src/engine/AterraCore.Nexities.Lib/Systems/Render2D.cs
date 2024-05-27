@@ -3,11 +3,10 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using System.Numerics;
-using AterraCore.Common.Nexities;
-using AterraCore.Nexities.Lib.Entities.Actor;
 using Serilog;
 namespace AterraCore.Nexities.Lib.Systems;
 
+using Common.Types.Nexities;
 using Entities.Actor;
 using Nexities.Systems;
 

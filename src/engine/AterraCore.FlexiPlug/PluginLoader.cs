@@ -2,8 +2,6 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Reflection;
-using AterraCore.Common;
-using AterraCore.Common.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug.Plugin;
 using AterraCore.FlexiPlug.Config;
@@ -12,6 +10,9 @@ using AterraCore.Loggers.Helpers;
 using Extensions;
 using Serilog;
 namespace AterraCore.FlexiPlug;
+
+using Common.Data;
+using Common.Types.FlexiPlug;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Support Code

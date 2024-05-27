@@ -3,14 +3,14 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using System.Reflection;
-using AterraCore.Common.FlexiPlug;
-using AterraCore.Common.Nexities;
 using AterraCore.Contracts.FlexiPlug.Config;
 using AterraCore.Contracts.FlexiPlug.Plugin;
 using AterraCore.FlexiPlug.Attributes;
 using Microsoft.Extensions.DependencyInjection;
 namespace AterraCore.FlexiPlug.Plugin;
 
+using Common.Types.FlexiPlug;
+using Common.Types.Nexities;
 using Nexities.Components;
 using Nexities.Entities;
 

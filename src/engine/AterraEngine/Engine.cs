@@ -2,8 +2,6 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using AterraCore.Common;
-using AterraCore.Common.Nexities;
 using AterraCore.Contracts;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.Renderer;
@@ -14,6 +12,8 @@ using JetBrains.Annotations;
 using Serilog;
 namespace AterraEngine;
 
+using AterraCore.Common.Data;
+using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Data.Assets;
 using AterraCore.Contracts.Nexities.Data.Levels;
 using AterraCore.Contracts.Nexities.Data.Worlds;

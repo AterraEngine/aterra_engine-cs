@@ -4,9 +4,8 @@
 
 namespace AterraCore.Nexities.Assets;
 
-using AterraCore.Common;
-using AterraCore.Common.Nexities;
 using AterraCore.Contracts.Nexities.Data.Assets;
+using Common.Types.Nexities;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

@@ -2,16 +2,17 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
+namespace AterraCore.Common.Types.Nexities;
+
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text.RegularExpressions;
-namespace AterraCore.Common;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public readonly partial struct PartialAssetId(uint value) : IComparable<PartialAssetId>, IEqualityComparer<PartialAssetId> {
-    private static readonly Regex _regex = MyRegex();
+    private static readonly Regex Regex = MyRegex();
 
     // PartialAssetId is basically just a fancy ushort
     public uint Value { get; } = value; // which means the max partial ID will be `FFFFFFFF`
@@ -59,7 +60,7 @@ public readonly partial struct PartialAssetId(uint value) : IComparable<PartialA
     }
 
     internal static uint CastToUint(string value) {
-        Match match = _regex.Match(value);
+        Match match = Regex.Match(value);
         if (match.Groups[3].Success) {
             return uint.Parse(match.Groups[3].Value, NumberStyles.HexNumber);
         }

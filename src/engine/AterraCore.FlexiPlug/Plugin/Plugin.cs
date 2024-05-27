@@ -3,11 +3,11 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using System.Reflection;
-using AterraCore.Common.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug.Plugin;
 
 namespace AterraCore.FlexiPlug.Plugin;
 
+using Common.Types.FlexiPlug;
 using Contracts.Nexities.Data.Assets;
 
 // ---------------------------------------------------------------------------------------------------------------------

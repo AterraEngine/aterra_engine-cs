@@ -2,7 +2,6 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Diagnostics.CodeAnalysis;
-using AterraCore.Common.Config;
 using AterraCore.FlexiPlug.Config;
 using AterraEngine.Config;
 using CliArgsParser.Attributes;
@@ -13,6 +12,7 @@ using Xml;
 using Xml.Contracts;
 namespace ProductionTools.Commands;
 
+using AterraCore.Common.Data;
 using AterraCore.Nexities.Parsers.FileElements;
 
 // ---------------------------------------------------------------------------------------------------------------------

@@ -3,8 +3,10 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using System.Reflection;
-using AterraCore.Common.FlexiPlug;
+
 namespace AterraCore.Contracts.FlexiPlug.Plugin;
+
+using Common.Types.FlexiPlug;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

@@ -4,9 +4,9 @@
 
 namespace AterraCore.Nexities.Assets;
 
-using Common.FlexiPlug;
-using AterraCore.Common.Nexities;
 using AterraCore.Contracts.Nexities.Data.Assets;
+using Common.Types.FlexiPlug;
+using Common.Types.Nexities;
 using Extensions;
 using JetBrains.Annotations;
 using Serilog;

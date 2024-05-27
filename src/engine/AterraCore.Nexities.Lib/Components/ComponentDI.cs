@@ -3,7 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 namespace AterraCore.Nexities.Lib.Components;
 
-using Common.Nexities;
+using Common.Types.Nexities;
 using Contracts.Nexities.Data.Assets;
 using Contracts.Nexities.Data.Components.AssetTree;
 using HUD.Text;

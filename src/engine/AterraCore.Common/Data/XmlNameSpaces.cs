@@ -2,13 +2,14 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-namespace AterraCore.Common;
+namespace AterraCore.Common.Data;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public struct Vector2Int(int x = 0, int y = 0) {
-    public int X { get; set; } = x;
-    public int Y { get; set; } = y;
+public static class XmlNameSpaces {
+    public const string ConfigPlugin = "urn:aterra-engine:plugin-config";
+    public const string ConfigEngine = "urn:aterra-engine:engine-config";
+    public const string AssetData    = "urn:aterra-engine:asset-data";
 }

@@ -3,8 +3,8 @@
 // ---------------------------------------------------------------------------------------------------------------------
 namespace AterraCore.Contracts.Nexities.Data.Assets;
 
-using AterraCore.Common.FlexiPlug;
-using AterraCore.Common.Nexities;
+using Common.Types.FlexiPlug;
+using Common.Types.Nexities;
 using System.Diagnostics.CodeAnalysis;
 
 // ---------------------------------------------------------------------------------------------------------------------

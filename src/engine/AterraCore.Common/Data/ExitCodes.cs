@@ -2,13 +2,17 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-namespace AterraCore.Common;
+namespace AterraCore.Common.Data;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public enum ServiceType {
-    Singleton,
-    Instanced,
-    Pooled
+
+public enum ExitCodes {
+    Success = 0,
+    GeneralError = 1,
+    InvalidInput = 2,
+
+    PluginLoadFail = 3,
+    PluginIdsExhausted = 4
 }

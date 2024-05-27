@@ -5,7 +5,7 @@
 namespace AterraCore.Nexities.Components;
 
 using Assets;
-using AterraCore.Common.Nexities;
+using Common.Types.Nexities;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

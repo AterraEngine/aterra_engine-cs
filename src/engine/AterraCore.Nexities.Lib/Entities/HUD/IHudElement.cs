@@ -2,7 +2,6 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using AterraCore.Nexities.Lib.Components.HUD;
 namespace AterraCore.Nexities.Lib.Entities.HUD;
 
 using AterraCore.Contracts.Nexities.Data.Components.AssetTree;

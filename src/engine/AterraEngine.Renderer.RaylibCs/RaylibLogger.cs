@@ -3,11 +3,12 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using AterraCore.Common;
 using AterraCore.Loggers;
 using Serilog;
 using Serilog.Core;
 namespace AterraEngine.Renderer.RaylibCs;
+
+using AterraCore.Common.Data;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

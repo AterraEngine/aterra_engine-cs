@@ -15,7 +15,7 @@ namespace AterraEngine.Analyzers;
 // ---------------------------------------------------------------------------------------------------------------------
 public record CacheKey(string AssemblyName, string PartialId);
 
-public record CacheValue(List<Location> locations, string PartialId);
+public record CacheValue(List<Location> Locations, string PartialId);
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
