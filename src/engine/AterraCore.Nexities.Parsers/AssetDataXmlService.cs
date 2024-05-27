@@ -103,6 +103,7 @@ public class AssetDataXmlService(
                     continue;
                 }
 
+                // TODO make this not happen here
                 var namedValueProperties = foundComponent
                     .GetType()
                     .GetProperties()
