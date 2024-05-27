@@ -61,8 +61,9 @@ public class PluginAtlas : IPluginAtlas {
     }
 
     public IEnumerable<AssetRegistration> GetEntityRegistrations(int? pluginId = null) => GetAssetRegistrations(pluginId, CoreTags.Entity);
-
+    
+    // Todo add the registration of Named Values here as well
     public IEnumerable<AssetRegistration> GetComponentRegistrations(int? pluginId = null) => GetAssetRegistrations(pluginId, CoreTags.Component);
 
-    private bool TryGetPluginByReadableName(string readableName, [NotNullWhen(true)] out IPlugin? plugin) => PluginsByReadableNames.TryGetValue(readableName, out plugin);
+    public bool TryGetPluginByReadableName(string readableName, [NotNullWhen(true)] out IPlugin? plugin) => PluginsByReadableNames.TryGetValue(readableName, out plugin);
 }

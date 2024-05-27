@@ -10,4 +10,4 @@ using Xml;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class AssetDataXmlParser(ILogger logger, string nameSpace, string xsdPath) : ConfigXmlParser<AssetDataXml>(logger, nameSpace, xsdPath);
+public class AssetDataXmlParser(ILogger logger, string nameSpace, string xsdPath) : XmlParser<AssetDataXml>(logger, nameSpace, xsdPath);

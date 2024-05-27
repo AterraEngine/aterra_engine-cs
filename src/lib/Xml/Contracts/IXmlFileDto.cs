@@ -8,6 +8,6 @@ namespace Xml.Contracts;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public interface IConfigDto<out T> {
+public interface IXmlFileDto<out T> {
     T PopulateAsEmpty();
 }

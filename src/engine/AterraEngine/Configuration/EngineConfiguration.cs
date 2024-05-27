@@ -26,9 +26,11 @@ namespace AterraEngine.Configuration;
 using AterraCore.Common.Data;
 using AterraCore.Contracts.Nexities.Data.Assets;
 using AterraCore.Contracts.Nexities.Data.Worlds;
+using AterraCore.Contracts.Nexities.DataParsing;
 using AterraCore.Contracts.Nexities.DataParsing.NamedValues;
 using AterraCore.Nexities.Assets;
 using AterraCore.Nexities.Lib.Components;
+using AterraCore.Nexities.Parsers;
 using AterraCore.Nexities.Parsers.NamedValues;
 using AterraCore.Nexities.Worlds;
 
@@ -102,7 +104,8 @@ public class EngineConfiguration(ILogger? logger = null) {
             NewServiceDescriptor<IPluginAtlas, PluginAtlas>(ServiceLifetime.Singleton),
             NewServiceDescriptor<IWorld, World>(ServiceLifetime.Singleton),
             NewServiceDescriptor<RenderThreadEvents, RenderThreadEvents>(ServiceLifetime.Singleton),
-            NewServiceDescriptor<IApplicationStageManager, ApplicationStageManager>(ServiceLifetime.Singleton)
+            NewServiceDescriptor<IApplicationStageManager, ApplicationStageManager>(ServiceLifetime.Singleton),
+            NewServiceDescriptor<IAssetDataXmlService, AssetDataXmlService>(ServiceLifetime.Singleton),
         ]);
 
         _logger.Information("Assigned Static Systems correctly");
@@ -121,7 +124,7 @@ public class EngineConfiguration(ILogger? logger = null) {
             _configurationWarnings |= FlowOfOperationsNotRespected;
         }
 
-        ConfigXmlParser<EngineConfigXml> configXmlParser = new(_logger, XmlNameSpaces.ConfigEngine, Paths.Xsd.XsdEngineConfigDto);
+        XmlParser<EngineConfigXml> configXmlParser = new(_logger, XmlNameSpaces.ConfigEngine, Paths.Xsd.XsdEngineConfigDto);
         if (!configXmlParser.TryDeserializeFromFile(filePath, out EngineConfigXml? configDto)) {
             _logger.Error("Engine config file could not be parsed");
             return this; //the _configDto will be null, so setter of EngineConfigDto will populate as empty

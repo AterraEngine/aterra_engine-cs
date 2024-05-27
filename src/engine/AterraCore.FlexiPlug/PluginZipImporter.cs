@@ -21,7 +21,7 @@ using Common.Data;
 // ---------------------------------------------------------------------------------------------------------------------
 public class PluginZipImporter(ILogger logger, string zipPath) : IPluginZipImporter<PluginConfigXml>, IDisposable {
     private readonly ZipArchive _archive = ZipFile.OpenRead(zipPath);
-    private readonly ConfigXmlParser<PluginConfigXml> _pluginConfigParser = new(logger, XmlNameSpaces.ConfigPlugin, Paths.Xsd.XsdPluginConfigDto);
+    private readonly XmlParser<PluginConfigXml> _pluginConfigParser = new(logger, XmlNameSpaces.ConfigPlugin, Paths.Xsd.XsdPluginConfigDto);
     private string? _checkSum;
 
     // -----------------------------------------------------------------------------------------------------------------

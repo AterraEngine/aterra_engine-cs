@@ -36,25 +36,25 @@ public readonly partial struct PartialAssetId(uint value) : IComparable<PartialA
             stringValue.AsSpan(4, 4));
     }
 
-    public static bool TryParse(int value, [NotNullWhen(true)] out PartialAssetId? partialAssetId) {
+    public static bool TryParse(int value, out PartialAssetId partialAssetId) {
         try {
             partialAssetId = new PartialAssetId(value);
             return true;
         }
         // Eh, not the best, but will do for now
         catch {
-            partialAssetId = null;
+            partialAssetId = default;
             return false;
         }
     }
-    public static bool TryParse(string value, [NotNullWhen(true)] out PartialAssetId? partialAssetId) {
+    public static bool TryParse(string value, out PartialAssetId partialAssetId) {
         try {
             partialAssetId = new PartialAssetId(value);
             return true;
         }
         // Eh, not the best, but will do for now
         catch {
-            partialAssetId = null;
+            partialAssetId = default;
             return false;
         }
     }

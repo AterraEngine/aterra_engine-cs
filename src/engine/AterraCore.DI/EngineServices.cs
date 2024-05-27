@@ -29,8 +29,8 @@ public static class EngineServices {
         }
     }
 
+    public static T CreateWithServices<T>() => CreateWithServices<T>(typeof(T));
     public static T CreateWithServices<T>(Type objectType) => (T)ActivatorUtilities.CreateInstance(ServiceProvider, objectType);
-    public static T CreateWithServices<T>() => (T)ActivatorUtilities.CreateInstance(ServiceProvider, typeof(T));
 
     // -----------------------------------------------------------------------------------------------------------------
     // Default Systems Quick access

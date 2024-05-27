@@ -27,9 +27,10 @@ public class PartialAssetIdTest {
 
     [Theory]
     [InlineData("INVALID_FORMAT", false)]
+    [InlineData("7593F98A", true)]
     public void TryParse(string input, bool result) {
-        Assert.Equal(result, PartialAssetId.TryParse(input, out PartialAssetId? output));
-        if (result) Assert.NotNull(output);
+        Assert.Equal(result, PartialAssetId.TryParse(input, out PartialAssetId output));
+        if (result) Assert.NotEqual(output, default);
     }
 
     [Theory]

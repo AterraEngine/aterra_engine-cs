@@ -17,7 +17,7 @@ using Common.Types;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [XmlRoot("pluginConfig")]
-public class PluginConfigXml : IConfigDto<PluginConfigXml>, IPluginConfigDto {
+public class PluginConfigXml : IXmlFileDto<PluginConfigXml>, IPluginConfigDto {
     [XmlElement("name")]
     public string ReadableName { get; set; } = null!;
 

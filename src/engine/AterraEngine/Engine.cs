@@ -17,6 +17,7 @@ using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Data.Assets;
 using AterraCore.Contracts.Nexities.Data.Levels;
 using AterraCore.Contracts.Nexities.Data.Worlds;
+using AterraCore.Contracts.Nexities.DataParsing;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
@@ -29,7 +30,8 @@ public class Engine(
     IPluginAtlas pluginAtlas,
     IWorld world,
     RenderThreadEvents renderThreadEvents,
-    IApplicationStageManager applicationStageManager
+    IApplicationStageManager applicationStageManager,
+    IAssetDataXmlService assetDataXmlService
 ) : IEngine {
     private readonly CancellationTokenSource _ctsRenderThread = new();
     private readonly TaskCompletionSource<bool> _openGlContextCreated = new();
@@ -72,9 +74,6 @@ public class Engine(
         renderThreadEvents.InvokeApplicationStageChange(ApplicationStage.StartupScreen);
 
         foreach (AssetRegistration assetRegistration in pluginAtlas.GetAssetRegistrations()) {
-
-            await Task.Delay(500); // WARN THIS IS FOR TESTING ONLY
-
             if (!assetAtlas.TryAssignAsset(assetRegistration, out AssetId? _)) {
                 logger.Warning("Type {Type} could not be assigned as an asset", assetRegistration.Type);
             }

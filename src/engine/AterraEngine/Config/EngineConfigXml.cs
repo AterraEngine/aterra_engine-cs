@@ -19,7 +19,7 @@ using AterraCore.Common.Types.FlexiPlug;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [XmlRoot("engineConfig")]
-public class EngineConfigXml : IConfigDto<EngineConfigXml> {
+public class EngineConfigXml : IXmlFileDto<EngineConfigXml> {
     [XmlElement("engineVersion")] public SemanticVersion EngineVersion { get; set; }
 
     [XmlElement("gameVersion")] public SemanticVersion GameVersion { get; set; }

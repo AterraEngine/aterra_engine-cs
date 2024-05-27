@@ -12,9 +12,8 @@ namespace Xml;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class ConfigXmlParser<T>(ILogger logger, string nameSpace, string xsdPath)
-    : IConfigXmlParser<T>
-    where T : IConfigDto<T>, new() {
+public class XmlParser<T>(ILogger logger, string nameSpace, string xsdPath) : IConfigXmlParser<T> where T : IXmlFileDto<T>, new() {
+    
     private readonly XmlReaderSettings _readerSettings = DefineReaderSettings(logger, nameSpace, xsdPath);
     private readonly XmlSerializer _serializer = new(typeof(T), nameSpace);
     private readonly XmlWriterSettings _writerSettings = new() {
@@ -23,6 +22,38 @@ public class ConfigXmlParser<T>(ILogger logger, string nameSpace, string xsdPath
         OmitXmlDeclaration = false
     };
 
+    // -----------------------------------------------------------------------------------------------------------------
+    // Helper Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    private static XmlReaderSettings DefineReaderSettings(ILogger logger, string nameSpace, string xsdPath) {
+        var schemas = new XmlSchemaSet();
+        schemas.Add(nameSpace, XmlReader.Create(xsdPath));
+
+        var settings = new XmlReaderSettings {
+            ValidationType = ValidationType.Schema,
+            ValidationFlags = XmlSchemaValidationFlags.ProcessInlineSchema
+                              | XmlSchemaValidationFlags.ProcessSchemaLocation
+                              | XmlSchemaValidationFlags.ReportValidationWarnings,
+            Schemas = schemas
+        };
+
+        settings.ValidationEventHandler += (_, args) => {
+            switch (args) {
+                case { Severity: XmlSeverityType.Warning }:
+                    logger.Warning(args.Message);
+                    break;
+                case { Severity: XmlSeverityType.Error }:
+                    logger.Error(args.Message);
+                    break;
+            }
+        };
+
+        return settings;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Serialize / Deserialize Methods
+    // -----------------------------------------------------------------------------------------------------------------
     public bool TryDeserializeFromFile(string filePath, [NotNullWhen(true)] out T? config) {
         // Default to null
         config = default;
@@ -73,34 +104,5 @@ public class ConfigXmlParser<T>(ILogger logger, string nameSpace, string xsdPath
             logger.Warning(e, "Memory stream could not parse into a {t}", typeof(T));
             return false;
         }
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-    // Methods
-    // -----------------------------------------------------------------------------------------------------------------
-    private static XmlReaderSettings DefineReaderSettings(ILogger logger, string nameSpace, string xsdPath) {
-        var schemas = new XmlSchemaSet();
-        schemas.Add(nameSpace, XmlReader.Create(xsdPath));
-
-        var settings = new XmlReaderSettings {
-            ValidationType = ValidationType.Schema,
-            ValidationFlags = XmlSchemaValidationFlags.ProcessInlineSchema
-                              | XmlSchemaValidationFlags.ProcessSchemaLocation
-                              | XmlSchemaValidationFlags.ReportValidationWarnings,
-            Schemas = schemas
-        };
-
-        settings.ValidationEventHandler += (_, args) => {
-            switch (args) {
-                case { Severity: XmlSeverityType.Warning }:
-                    logger.Warning(args.Message);
-                    break;
-                case { Severity: XmlSeverityType.Error }:
-                    logger.Error(args.Message);
-                    break;
-            }
-        };
-
-        return settings;
     }
 }

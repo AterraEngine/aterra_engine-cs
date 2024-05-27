@@ -19,9 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Nexities\DataParsing\" />
       <Folder Include="Nexities\Data\" />
-      <Folder Include="SaveFileSystem\" />
     </ItemGroup>
 
 </Project>

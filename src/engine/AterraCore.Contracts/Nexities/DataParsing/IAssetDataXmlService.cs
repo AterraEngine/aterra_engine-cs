@@ -1,18 +1,12 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraCore.Nexities.Parsers.FileElements;
-
-using System.Xml.Serialization;
+namespace AterraCore.Contracts.Nexities.DataParsing;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public class PluginDto {
-    [XmlAttribute("readableName")]
-    public string? ReadableName { get; set; }
- 
-    [XmlAttribute("refId")]
-    public string? InternalRefId { get; set; }
+public interface IAssetDataXmlService {
+    public bool TryLoadInstancesFromFile(string filePath);
 }
