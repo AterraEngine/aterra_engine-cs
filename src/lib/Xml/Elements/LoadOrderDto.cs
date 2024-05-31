@@ -10,8 +10,8 @@ namespace Xml.Elements;
 
 public class LoadOrderDto {
     [XmlAttribute("breakOnUnstable")]
-    public bool BreakOnUnstable { get; set; }
-
+    public bool BreakOnUnstable { get; set; } = true;
+    
     [XmlElement("file")]
-    public required FileDto[] Plugins { get; set; }
+    public FileDto[] Plugins { get; set; } = [];
 }

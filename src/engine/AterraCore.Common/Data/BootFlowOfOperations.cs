@@ -1,19 +1,21 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
-using Xml.Elements;
-
-namespace AterraCore.Contracts.FlexiPlug;
+namespace AterraCore.Common.Data;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public interface IPluginZipImporter<T> {
-    string CheckSum { get; }
-    bool TryGetPluginConfig([NotNullWhen(true)] out T? pluginConfig);
-    bool TryGetDllAssembly(FileDto binDto, [NotNullWhen(true)] out Assembly? assembly);
-    List<string> GetFileNamesInZip();
+public enum BootFlowOfOperations : ulong {
+    UnConfigured = 0ul,
+    AssignedFlexiPlugConfiguration,
+    AssignedNexitiesConfiguration,
+    
+    ImportedEngineConfigDto,
+    
+    AssignedDefaultServices,
+    AssignedStaticServices,
+    
+    DiContainerBuilt
 }

@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Types.Nexities;
+using AterraCore.Contracts.Boot.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug.Plugin;
 using System.Diagnostics.CodeAnalysis;
 
@@ -17,7 +18,7 @@ public interface IPluginAtlas {
     // -----------------------------------------------------------------------------------------------------------------
     // Constructor or population Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void ImportPlugins(LinkedList<IPluginRecord> plugins);
+    public void ImportLoadedPluginDtos(IEnumerable<ILoadedPluginDto> plugins);
     public void InvalidateAllCaches();
 
     // -----------------------------------------------------------------------------------------------------------------

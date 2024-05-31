@@ -10,6 +10,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\..\src\engine\AterraCore.Boot.FlexiPlug\AterraCore.Boot.FlexiPlug.csproj" />
+        <ProjectReference Include="..\..\..\src\engine\AterraCore.Boot.Nexities\AterraCore.Boot.Nexities.csproj" />
         <ProjectReference Include="..\..\..\src\engine\AterraCore.Boot\AterraCore.Boot.csproj" />
         <ProjectReference Include="..\..\..\tools\AterraEngine.Analyzers\AterraEngine.Analyzers\AterraEngine.Analyzers.csproj">
             <ReferenceOutputAssembly>false</ReferenceOutputAssembly>

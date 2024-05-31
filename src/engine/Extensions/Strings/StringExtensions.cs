@@ -1,19 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
-using Xml.Elements;
-
-namespace AterraCore.Contracts.FlexiPlug;
+namespace Extensions.Strings;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
+public static class StringExtensions {
+    public static bool IsNotNullOrEmpty(this string? str) => !string.IsNullOrEmpty(str);
 
-public interface IPluginZipImporter<T> {
-    string CheckSum { get; }
-    bool TryGetPluginConfig([NotNullWhen(true)] out T? pluginConfig);
-    bool TryGetDllAssembly(FileDto binDto, [NotNullWhen(true)] out Assembly? assembly);
-    List<string> GetFileNamesInZip();
+    public static bool IsEmpty(this string[] arr) => arr.Length == 0;
+
+    public static bool IsEmpty(this IEnumerable<string> arr) => !arr.Any();
 }

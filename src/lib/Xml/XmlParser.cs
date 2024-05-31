@@ -13,7 +13,7 @@ namespace Xml;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class XmlParser<T>(ILogger logger, string nameSpace, string xsdPath) : IConfigXmlParser<T> where T : IXmlFileDto<T>, new() {
+public class XmlParser<T>(ILogger logger, string nameSpace, string xsdPath) : IConfigXmlParser<T> where T : new() {
 
     private readonly XmlReaderSettings _readerSettings = DefineReaderSettings(logger, nameSpace, xsdPath);
     private readonly XmlSerializer _serializer = new(typeof(T), nameSpace);

@@ -95,6 +95,6 @@ public class Engine(
     private async Task HandleFatalExceptionGracefully() {
         await _ctsRenderThread.CancelAsync();
 
-        logger.ExitFatal(ExitCodes.GeneralError, "Fatally Crashing gracefully");
+        logger.ExitFatal((int)ExitCodes.GeneralError, "Fatally Crashing gracefully");
     }
 }

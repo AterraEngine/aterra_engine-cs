@@ -2,19 +2,33 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using AterraCore.Contracts.Boot.FlexiPlug;
+using AterraCore.Common.Data;
+using Extensions;
+using System.Text;
+using System.Xml.Serialization;
+using Xml.Elements;
 
-namespace AterraCore.Contracts.FlexiPlug;
+namespace AterraCore.Common.ConfigFiles.EngineConfig.Elements;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IPluginLoader {
-    public LinkedList<ILoadedPluginDto> Plugins { get; }
+
+public class PluginDataDto {
+    [XmlAttribute("root")]
+    public string RootFolder { get; set; } = Paths.Plugins.Folder;
+
+    [XmlElement("loadOrder")]
+    public LoadOrderDto LoadOrder { get; set; } = new();
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public bool TryParseAllPlugins(IEnumerable<string> filePaths);
-    public void InjectAssemblyAsPlugin(BareAssemblyPlugin manuallyImportedAssembly);
+    public override string ToString() {
+        var txt = new StringBuilder();
+        txt.Append($"RootFolder : {RootFolder} ");
+        txt.Append("Plugins : ");
+        LoadOrder.Plugins.IterateOver(p => txt.Append($"{p} ,"));
+        return txt.ToString();
+    }
 }

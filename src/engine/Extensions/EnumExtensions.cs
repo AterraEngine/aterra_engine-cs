@@ -1,19 +1,14 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
-using Xml.Elements;
-
-namespace AterraCore.Contracts.FlexiPlug;
+namespace Extensions;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public interface IPluginZipImporter<T> {
-    string CheckSum { get; }
-    bool TryGetPluginConfig([NotNullWhen(true)] out T? pluginConfig);
-    bool TryGetDllAssembly(FileDto binDto, [NotNullWhen(true)] out Assembly? assembly);
-    List<string> GetFileNamesInZip();
+public static class EnumExtensions {
+    public static IEnumerable<T> GetFlaggedValues<T>(this T flagEnum) where T : struct, Enum {
+        return Enum.GetValues<T>().Where(f => flagEnum.HasFlag(f));
+    }
 }

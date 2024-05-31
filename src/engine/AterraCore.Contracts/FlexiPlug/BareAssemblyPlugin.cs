@@ -14,4 +14,4 @@ public record BareAssemblyPlugin(
     Assembly Assembly,
     string ReadableName,
     string Author
-    );
+);

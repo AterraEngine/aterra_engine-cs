@@ -5,20 +5,9 @@
 namespace Xml.Elements;
 
 // ---------------------------------------------------------------------------------------------------------------------
-// Support Code
-// ---------------------------------------------------------------------------------------------------------------------
-public interface IFileDto {
-    public string FileNameInternal { get; }
-    public string FilePath { get; set; }
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class FileDto : IFileDto {
+public class FileDto {
     [XmlAttribute("file")]
-    public required string FileNameInternal { get; set; }
-
-    [XmlIgnore]
-    public string FilePath { get; set; } = null!;
+    public required string FilePath { get; set; }
 }

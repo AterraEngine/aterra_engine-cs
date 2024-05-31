@@ -4,6 +4,7 @@
 
 using AterraCore.Common.Types.FlexiPlug;
 using AterraCore.Common.Types.Nexities;
+using AterraCore.Contracts.Boot.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug.Plugin;
 using JetBrains.Annotations;
@@ -31,7 +32,14 @@ public class PluginAtlas : IPluginAtlas {
     // -----------------------------------------------------------------------------------------------------------------
     // Constructor or population Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void ImportPlugins(LinkedList<IPluginRecord> plugins) => Plugins = plugins;
+    public void ImportLoadedPluginDtos(IEnumerable<ILoadedPluginDto> plugins) => Plugins = new LinkedList<IPluginRecord>(
+    plugins.Select(
+        dto => new PluginRecord {
+            Id = dto.Id,
+            ReadableName = dto.ReadableName,
+            Types = dto.Types
+        }
+    ));
     public void InvalidateAllCaches() => Plugins.IterateOver(plugin => plugin.InvalidateCaches());
 
     // -----------------------------------------------------------------------------------------------------------------

@@ -1,19 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
-using Xml.Elements;
 
-namespace AterraCore.Contracts.FlexiPlug;
+using System.Xml.Serialization;
+
+namespace AterraCore.Common.ConfigFiles.EngineConfig.Elements;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public interface IPluginZipImporter<T> {
-    string CheckSum { get; }
-    bool TryGetPluginConfig([NotNullWhen(true)] out T? pluginConfig);
-    bool TryGetDllAssembly(FileDto binDto, [NotNullWhen(true)] out Assembly? assembly);
-    List<string> GetFileNamesInZip();
+public class LoggingDto {
+    [XmlAttribute("async-console")] public bool UseAsyncConsole { get; set; }
 }

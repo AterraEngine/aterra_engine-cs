@@ -14,8 +14,11 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\lib\Xml\Xml.csproj"/>
+        <ProjectReference Include="..\AterraCore.Boot.FlexiPlug\AterraCore.Boot.FlexiPlug.csproj" />
+        <ProjectReference Include="..\AterraCore.Boot.Nexities\AterraCore.Boot.Nexities.csproj" />
         <ProjectReference Include="..\AterraCore.DI\AterraCore.DI.csproj" />
         <ProjectReference Include="..\AterraCore.Loggers\AterraCore.Loggers.csproj"/>
+        <ProjectReference Include="..\AterraEngine\AterraEngine.csproj" />
         <ProjectReference Include="..\Extensions\Extensions.csproj"/>
     </ItemGroup>
 

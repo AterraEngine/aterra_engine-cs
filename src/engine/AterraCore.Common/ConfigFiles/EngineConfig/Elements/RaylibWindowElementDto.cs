@@ -1,19 +1,17 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
+
+using System.Xml.Serialization;
 using Xml.Elements;
 
-namespace AterraCore.Contracts.FlexiPlug;
+namespace AterraCore.Common.ConfigFiles.EngineConfig.Elements;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
-public interface IPluginZipImporter<T> {
-    string CheckSum { get; }
-    bool TryGetPluginConfig([NotNullWhen(true)] out T? pluginConfig);
-    bool TryGetDllAssembly(FileDto binDto, [NotNullWhen(true)] out Assembly? assembly);
-    List<string> GetFileNamesInZip();
+public class RaylibWindowElementDto {
+    [XmlElement("screen")] public DimensionElementDto Screen { get; set; } = new();
+    [XmlElement("icon-path")] public string? IconPath { get; set; }
+    [XmlElement("title")] public string Title { get; set; } = "Aterra Engine";
 }

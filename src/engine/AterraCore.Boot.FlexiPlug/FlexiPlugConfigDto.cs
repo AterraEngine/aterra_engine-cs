@@ -1,20 +1,14 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
 using AterraCore.Contracts.Boot.FlexiPlug;
 
-namespace AterraCore.Contracts.FlexiPlug;
+namespace AterraCore.Boot.FlexiPlug;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IPluginLoader {
-    public LinkedList<ILoadedPluginDto> Plugins { get; }
 
-    // -----------------------------------------------------------------------------------------------------------------
-    // Methods
-    // -----------------------------------------------------------------------------------------------------------------
-    public bool TryParseAllPlugins(IEnumerable<string> filePaths);
-    public void InjectAssemblyAsPlugin(BareAssemblyPlugin manuallyImportedAssembly);
+public class FlexiPlugConfigDto : IFlexiPlugConfigDto {
+    public IEnumerable<string> PluginFilePaths { get; init; } = [];
 }

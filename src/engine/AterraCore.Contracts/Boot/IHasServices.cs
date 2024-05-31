@@ -1,19 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
-using Xml.Elements;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace AterraCore.Contracts.FlexiPlug;
+namespace AterraCore.Contracts.Boot;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public interface IPluginZipImporter<T> {
-    string CheckSum { get; }
-    bool TryGetPluginConfig([NotNullWhen(true)] out T? pluginConfig);
-    bool TryGetDllAssembly(FileDto binDto, [NotNullWhen(true)] out Assembly? assembly);
-    List<string> GetFileNamesInZip();
+public interface IHasServices {
+    public IEnumerable<ServiceDescriptor> DefineDefaultServices();
+    public IEnumerable<ServiceDescriptor> DefineStaticServices();
 }

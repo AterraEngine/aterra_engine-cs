@@ -1,20 +1,19 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.ConfigFiles.EngineConfig;
 
-using AterraCore.Contracts.Boot.FlexiPlug;
-
-namespace AterraCore.Contracts.FlexiPlug;
+namespace AterraCore.Contracts.Boot;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IPluginLoader {
-    public LinkedList<ILoadedPluginDto> Plugins { get; }
-
+public interface IHasConfigFactory<out T> {
+    public T ConfigDto { get; }
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public bool TryParseAllPlugins(IEnumerable<string> filePaths);
-    public void InjectAssemblyAsPlugin(BareAssemblyPlugin manuallyImportedAssembly);
+    public T ExtractDataFromConfig(EngineConfigXml source);
+    public void StoreDataFromConfig(EngineConfigXml source);
 }

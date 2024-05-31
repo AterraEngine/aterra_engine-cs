@@ -1,7 +1,6 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Data;
 using Serilog;
 using Serilog.Core;
 using System.Diagnostics.CodeAnalysis;
@@ -36,8 +35,8 @@ public static class LoggerExtensions {
 
     [DoesNotReturn]
     [MessageTemplateFormatMethod("messageTemplate")]
-    public static void ExitFatal(this ILogger logger, ExitCodes exitCode, string messageTemplate, params object?[]? propertyValues) {
+    public static void ExitFatal(this ILogger logger, int exitCode, string messageTemplate, params object?[]? propertyValues) {
         logger.Fatal(messageTemplate, propertyValues);
-        Environment.Exit((int)exitCode);
+        Environment.Exit(exitCode);
     }
 }

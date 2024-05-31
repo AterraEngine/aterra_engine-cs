@@ -7,12 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Folder Include="PluginConfig\Elements\"/>
-    </ItemGroup>
-
-    <ItemGroup>
         <ProjectReference Include="..\..\lib\Xml\Xml.csproj"/>
         <ProjectReference Include="..\AterraCore.Contracts\AterraCore.Contracts.csproj"/>
+        <ProjectReference Include="..\AterraCore.FlexiPlug\AterraCore.FlexiPlug.csproj" />
         <ProjectReference Include="..\AterraCore.Loggers\AterraCore.Loggers.csproj"/>
         <ProjectReference Include="..\Extensions\Extensions.csproj"/>
     </ItemGroup>
