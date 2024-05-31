@@ -2,10 +2,10 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-namespace AterraCore.Common.Types.FlexiPlug;
-
 using System.Globalization;
 using System.Text.RegularExpressions;
+
+namespace AterraCore.Common.Types.FlexiPlug;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
@@ -14,12 +14,12 @@ public readonly partial struct PluginId(ushort value) : IComparable<PluginId>, I
     private static readonly Regex Regex = MyRegex();
 
     // PluginId is basically just a fancy ushort
-    public ushort Value { get; } = value; // which means the max plugin ID will be `FFFF`
+    public ushort Value { get; } = value;// which means the max plugin ID will be `FFFF`
 
     // -----------------------------------------------------------------------------------------------------------------
     // Constructors
     // -----------------------------------------------------------------------------------------------------------------
-    public PluginId() : this(0) {} // Create an empty
+    public PluginId() : this(0) {}// Create an empty
     public PluginId(int value) : this(CastToUshort(value)) {}
     public PluginId(string value) : this(CastToUshort(value)) {}
 

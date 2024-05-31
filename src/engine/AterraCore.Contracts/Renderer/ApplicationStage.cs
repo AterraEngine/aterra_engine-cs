@@ -9,7 +9,7 @@ namespace AterraCore.Contracts.Renderer;
 // ---------------------------------------------------------------------------------------------------------------------
 
 public enum ApplicationStage : ushort {
-    Undefined, // This shouldn't be used, other than as an ultimate fallback
+    Undefined,// This shouldn't be used, other than as an ultimate fallback
     StartupScreen,
     MainMenu,
     LoadingScreen,

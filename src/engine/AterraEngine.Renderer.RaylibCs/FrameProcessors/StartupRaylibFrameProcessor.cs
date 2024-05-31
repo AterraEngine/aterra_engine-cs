@@ -2,13 +2,12 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using System.Numerics;
 using AterraCore.Contracts.FlexiPlug;
+using AterraCore.Contracts.Nexities.Data.Assets;
 using JetBrains.Annotations;
+using System.Numerics;
 
 namespace AterraEngine.Renderer.RaylibCs.FrameProcessors;
-
-using AterraCore.Contracts.Nexities.Data.Assets;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
@@ -32,20 +31,20 @@ public class StartupRaylibFrameProcessor(IAssetAtlas assetAtlas, IPluginAtlas pl
         // logger.Information("{a},{b}, {c}", screenWidth, screenHeight, new Vector2(screenWidth / 2, 0)); 
 
         DrawRectanglePro(
-            new Rectangle(
-                new Vector2(screenWidth / 2 - barMaxWidth / 2, 5 * (screenHeight / 10) - barHeight),
-                new Vector2(barMaxWidth, barHeight)),
-            Vector2.Zero,
-            0,
-            Color.Red);
+        new Rectangle(
+        new Vector2(screenWidth / 2 - barMaxWidth / 2, 5 * (screenHeight / 10) - barHeight),
+        new Vector2(barMaxWidth, barHeight)),
+        Vector2.Zero,
+        0,
+        Color.Red);
 
         DrawRectanglePro(
-            new Rectangle(
-                new Vector2(screenWidth / 2 - barMaxWidth / 2, 5 * (screenHeight / 10) - barHeight),
-                new Vector2(progress, barHeight)),
-            Vector2.Zero,
-            0,
-            Color.Yellow);
+        new Rectangle(
+        new Vector2(screenWidth / 2 - barMaxWidth / 2, 5 * (screenHeight / 10) - barHeight),
+        new Vector2(progress, barHeight)),
+        Vector2.Zero,
+        0,
+        Color.Yellow);
 
         // DrawRectangleLines(0, 0, (int)maxWidth, 10, Color.Yellow);
         // DrawRectangle(0, 0, (int)progress, 10, Color.White);

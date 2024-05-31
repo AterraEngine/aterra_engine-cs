@@ -5,6 +5,7 @@ using AterraCore.Contracts.DI;
 using Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+
 namespace AterraCore.DI;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -20,9 +21,9 @@ public class EngineServiceBuilder(ILogger logger) : IEngineServiceBuilder {
     public void AssignFromServiceDescriptor(ServiceDescriptor serviceDescriptor) {
         ServiceCollection.Add(serviceDescriptor);
         Logger.Information(
-            "Type {Type} assigned to {Imp}",
-            serviceDescriptor.ServiceType,
-            serviceDescriptor.ImplementationType
+        "Type {Type} assigned to {Imp}",
+        serviceDescriptor.ServiceType,
+        serviceDescriptor.ImplementationType
         );
     }
     public void AssignFromServiceDescriptors(IEnumerable<ServiceDescriptor> services) =>

@@ -1,14 +1,18 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
-using System.Xml.Serialization;
-namespace AterraEngine.Config.Elements;
+namespace AterraCore.Common.Data;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
+[Flags]
+public enum ConfigurationWarnings : ulong {
+    Nominal = 0ul,
 
-public class LoggingDto {
-    [XmlAttribute("async-console")] public bool UseAsyncConsole { get; set; }
+    PluginLoadOrderUnstable = 1ul << 0,
+    UnstableAssembly = 1ul << 1,
+    UnstablePlugin = 1ul << 2,
+    FlowOfOperationsNotRespected = 1ul << 3,
+    NoPluginsDefined = 1ul << 4
 }

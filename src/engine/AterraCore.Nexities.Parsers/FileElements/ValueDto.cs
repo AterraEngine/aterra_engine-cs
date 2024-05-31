@@ -1,9 +1,9 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraCore.Nexities.Parsers.FileElements;
-
 using System.Xml.Serialization;
+
+namespace AterraCore.Nexities.Parsers.FileElements;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
@@ -12,7 +12,7 @@ using System.Xml.Serialization;
 public class ValueDto {
     [XmlAttribute("name")]
     public string? Name { get; set; }
-    
+
     [XmlAttribute("value")]
     public string? Value { get; set; }
 }

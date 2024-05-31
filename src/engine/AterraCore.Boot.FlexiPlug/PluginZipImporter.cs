@@ -2,19 +2,19 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
+using AterraCore.Boot.FlexiPlug.PluginConfig;
+using AterraCore.Common.Data;
+using AterraCore.Contracts.FlexiPlug;
+using Serilog;
 using System.Diagnostics.CodeAnalysis;
 using System.IO.Compression;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
-using AterraCore.Contracts.FlexiPlug;
-using AterraCore.FlexiPlug.Config;
-using Serilog;
 using Xml;
 using Xml.Elements;
-namespace AterraCore.FlexiPlug;
 
-using Common.Data;
+namespace AterraCore.Boot.FlexiPlug;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

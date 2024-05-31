@@ -2,10 +2,10 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-namespace AterraCore.Nexities.Assets.InstanceDto.Elements;
-
-using Common.Types.FlexiPlug;
+using AterraCore.Common.Types.FlexiPlug;
 using System.Xml.Serialization;
+
+namespace AterraCore.Nexities.Assets.InstanceDto.Elements;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

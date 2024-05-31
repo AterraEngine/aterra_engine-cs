@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using System.Reflection;
+
 namespace AterraCore.Contracts.FlexiPlug;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -13,4 +14,4 @@ public record BareAssemblyPlugin(
     Assembly Assembly,
     string ReadableName,
     string Author
-);
+    );

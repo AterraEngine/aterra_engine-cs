@@ -1,12 +1,12 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Diagnostics.CodeAnalysis;
+using AterraCore.Common.Data;
 using Serilog;
 using Serilog.Core;
-namespace Extensions;
+using System.Diagnostics.CodeAnalysis;
 
-using AterraCore.Common.Data;
+namespace Extensions;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

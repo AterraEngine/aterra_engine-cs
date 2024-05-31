@@ -2,16 +2,15 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
+using AterraCore.Common.Types.Nexities;
+using AterraCore.Nexities.Lib.Components.HUD;
+using AterraCore.Nexities.Lib.Components.HUD.Text;
+using AterraCore.Nexities.Lib.Entities.HUD;
+using AterraCore.Nexities.Systems;
 using Extensions;
 using Raylib_cs;
 
 namespace AterraCore.Nexities.Lib.Systems;
-
-using Common.Types.Nexities;
-using Components.HUD;
-using Components.HUD.Text;
-using Entities.HUD;
-using Nexities.Systems;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

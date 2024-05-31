@@ -1,16 +1,16 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraCore.Nexities.Lib.Components;
-
-using Common.Types.Nexities;
-using Contracts.Nexities.Data.Assets;
-using Contracts.Nexities.Data.Components.AssetTree;
-using HUD.Text;
+using AterraCore.Common.Types.Nexities;
+using AterraCore.Contracts.Nexities.Data.Assets;
+using AterraCore.Contracts.Nexities.Data.Components.AssetTree;
+using AterraCore.Nexities.Lib.Components.HUD.Text;
+using AterraCore.Nexities.Lib.Components.Sprite2D;
+using AterraCore.Nexities.Lib.Components.Transform2D;
+using AterraCore.Nexities.Lib.Components.Transform3D;
 using Microsoft.Extensions.DependencyInjection;
-using Sprite2D;
-using Transform2D;
-using Transform3D;
+
+namespace AterraCore.Nexities.Lib.Components;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
@@ -23,7 +23,7 @@ public static class ComponentDi {
         serviceCollection.AddTransient(GetRequiredAssetInstance<IAssetTree>);
         serviceCollection.AddTransient(GetRequiredAssetInstance<IRaylibHudText>);
         serviceCollection.AddTransient(GetRequiredAssetInstance<ISprite2D>);
-        
+
         return serviceCollection;
     }
 
@@ -33,7 +33,7 @@ public static class ComponentDi {
 
         if (!assetAtlas.TryGetAssetId<T>(out AssetId assetId)) throw new InvalidOperationException();
         if (!instanceAtlas.TryCreateInstance(assetId, out T? instance)) throw new InvalidOperationException();
-        
+
         return instance;
     }
 }

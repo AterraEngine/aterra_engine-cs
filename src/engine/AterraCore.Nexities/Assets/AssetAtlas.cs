@@ -2,16 +2,16 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-namespace AterraCore.Nexities.Assets;
-
+using AterraCore.Common.Types.FlexiPlug;
+using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Data.Assets;
-using Common.Types.FlexiPlug;
-using Common.Types.Nexities;
 using Extensions;
 using JetBrains.Annotations;
 using Serilog;
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
+
+namespace AterraCore.Nexities.Assets;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
@@ -19,9 +19,9 @@ using System.Diagnostics.CodeAnalysis;
 
 [UsedImplicitly]
 public class AssetAtlas(ILogger logger) : IAssetAtlas {
-    private readonly ConcurrentDictionary<ServiceLifetimeType, ConcurrentBag<AssetId>> _assetServiceLifetimeMap = new ConcurrentDictionary<ServiceLifetimeType, ConcurrentBag<AssetId>>().PopulateWithEmpties();
     private readonly ConcurrentDictionary<AssetId, AssetRegistration> _assetsById = new();
     private readonly ConcurrentDictionary<Type, AssetId> _assetsByType = new();
+    private readonly ConcurrentDictionary<ServiceLifetimeType, ConcurrentBag<AssetId>> _assetServiceLifetimeMap = new ConcurrentDictionary<ServiceLifetimeType, ConcurrentBag<AssetId>>().PopulateWithEmpties();
 
     private readonly ConcurrentDictionary<CoreTags, ConcurrentBag<AssetId>> _coreTaggedAssets = new ConcurrentDictionary<CoreTags, ConcurrentBag<AssetId>>().PopulateWithEmpties();
     private readonly ConcurrentDictionary<string, ConcurrentBag<AssetId>> _stringTaggedAssets = new();
@@ -39,8 +39,8 @@ public class AssetAtlas(ILogger logger) : IAssetAtlas {
         // Assigns the asset to the dict
         if (!_assetsById.TryAdd(newAssetId, registration)) {
             logger.Warning(
-                "Asset with ID: {AssetId} already exists with type {ExistingAssetType}. Cannot assign a new asset with the same ID.",
-                newAssetId, _assetsById[newAssetId].Type.FullName
+            "Asset with ID: {AssetId} already exists with type {ExistingAssetType}. Cannot assign a new asset with the same ID.",
+            newAssetId, _assetsById[newAssetId].Type.FullName
             );
             return false;
         }
@@ -51,7 +51,7 @@ public class AssetAtlas(ILogger logger) : IAssetAtlas {
             );
             return false;
         }
-        
+
         if (registration.InterfaceType is not null && !_assetsByType.TryAdd(registration.InterfaceType, newAssetId)) {
             logger.Warning(
             "Asset with ID: {AssetId} Cannot assign a new asset because it's interface {interface} is already assigned to another asset.",
@@ -84,8 +84,8 @@ public class AssetAtlas(ILogger logger) : IAssetAtlas {
         }
 
         logger.Information(
-            "Assigned asset {AssetId} of Type {AssetTypeName} to plugin {PluginId} as a '{@tags}",
-            newAssetId, registration.Type.FullName, registration.Type, tagsList
+        "Assigned asset {AssetId} of Type {AssetTypeName} to plugin {PluginId} as a '{@tags}",
+        newAssetId, registration.Type.FullName, registration.Type, tagsList
         );
 
         assetId = newAssetId;
@@ -103,10 +103,8 @@ public class AssetAtlas(ILogger logger) : IAssetAtlas {
 
     public IEnumerable<AssetId> GetAllAssetsOfPlugin(PluginId pluginId) =>
         _assetsById.Where(pair => pair.Key.PluginId == pluginId).Select(pair => pair.Key);
-    
-    public bool TryGetRegistration(AssetId assetId, out AssetRegistration registration) {
-        return _assetsById.TryGetValue(assetId, out registration);
-    }
+
+    public bool TryGetRegistration(AssetId assetId, out AssetRegistration registration) => _assetsById.TryGetValue(assetId, out registration);
 
     public bool TryGetType(AssetId assetId, [NotNullWhen(true)] out Type? type) {
         type = default;
@@ -128,7 +126,5 @@ public class AssetAtlas(ILogger logger) : IAssetAtlas {
     }
 
     public bool TryGetAssetId<T>(out AssetId assetId) => TryGetAssetId(typeof(T), out assetId);
-    public bool TryGetAssetId(Type type, out AssetId assetId) {
-        return _assetsByType.TryGetValue(type, out assetId);
-    }
+    public bool TryGetAssetId(Type type, out AssetId assetId) => _assetsByType.TryGetValue(type, out assetId);
 }

@@ -2,15 +2,14 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
+using AterraCore.Common.Data;
 using AterraCore.Contracts.DI;
 using AterraCore.Contracts.FlexiPlug;
-using AterraCore.Contracts.FlexiPlug.Plugin;
-using AterraCore.FlexiPlug;
-using AterraCore.FlexiPlug.Plugin;
 using Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-namespace AterraEngine.Configuration;
+
+namespace AterraCore.Boot.FlexiPlug;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
@@ -34,12 +33,14 @@ public class PluginConfiguration(ILogger logger, IEnumerable<string> filePaths, 
         if (!_pluginLoader.TryParseAllPlugins(filePaths)) {
             ConfigurationWarnings |= ConfigurationWarnings.PluginLoadOrderUnstable | ConfigurationWarnings.UnstablePlugin;
             logger.Warning("Failed to load all plugins correctly.");
-        } else {
+        }
+        else {
             logger.Information("Plugins successfully loaded.");
         }
 
         return this;
     }
+
     public PluginConfiguration AssignServices() {
         // TODO make a check though the _engineConfigFlag to see if everything has been setup already
 
@@ -57,12 +58,12 @@ public class PluginConfiguration(ILogger logger, IEnumerable<string> filePaths, 
 
     public LinkedList<IPlugin> CreatePluginList() {
         return new LinkedList<IPlugin>(
-            _pluginLoader.Plugins.Select(p => new Plugin {
-                Id = p.Id,
-                ReadableName = p.ReadableName,
-                Assemblies = p.Assemblies,
-                Types = p.Types
-            })
+        _pluginLoader.Plugins.Select(p => new Plugin {
+            Id = p.Id,
+            ReadableName = p.ReadableName,
+            Assemblies = p.Assemblies,
+            Types = p.Types
+        })
         );
     }
 }

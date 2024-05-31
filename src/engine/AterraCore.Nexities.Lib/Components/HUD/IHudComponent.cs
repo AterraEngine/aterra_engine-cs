@@ -9,7 +9,7 @@ namespace AterraCore.Nexities.Lib.Components.HUD;
 // ---------------------------------------------------------------------------------------------------------------------
 public enum HudType {
     Empty,
-    Text, // IRaylibHudText
+    Text,// IRaylibHudText
     TextPro,
     Texture
 }

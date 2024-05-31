@@ -1,38 +1,28 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Boot.EngineConfig;
+using AterraCore.Common.Data;
 using AterraCore.Contracts;
 using AterraCore.Contracts.FlexiPlug;
-using AterraCore.Contracts.FlexiPlug.Plugin;
+using AterraCore.Contracts.FlexiPlug.Boot;
+using AterraCore.Contracts.Nexities.Data.Assets;
+using AterraCore.Contracts.Nexities.Data.Worlds;
+using AterraCore.Contracts.Nexities.DataParsing;
+using AterraCore.Contracts.Nexities.DataParsing.NamedValues;
 using AterraCore.Contracts.Renderer;
 using AterraCore.DI;
-using AterraCore.FlexiPlug;
 using AterraCore.Loggers;
-using AterraEngine.Config;
-using AterraEngine.Renderer.RaylibCs;
-using AterraEngine.Threading;
 using Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Core;
 using Xml;
-using static AterraEngine.Configuration.ConfigurationWarnings;
-using static AterraEngine.Configuration.FlowOfOperations;
+using static AterraCore.Boot.FlowOfOperations;
+using static AterraCore.Common.Data.ConfigurationWarnings;
 using static Extensions.ServiceDescriptorExtension;
 
-
-namespace AterraEngine.Configuration;
-
-using AterraCore.Common.Data;
-using AterraCore.Contracts.Nexities.Data.Assets;
-using AterraCore.Contracts.Nexities.Data.Worlds;
-using AterraCore.Contracts.Nexities.DataParsing;
-using AterraCore.Contracts.Nexities.DataParsing.NamedValues;
-using AterraCore.Nexities.Assets;
-using AterraCore.Nexities.Lib.Components;
-using AterraCore.Nexities.Parsers;
-using AterraCore.Nexities.Parsers.NamedValues;
-using AterraCore.Nexities.Worlds;
+namespace AterraCore.Boot;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
@@ -47,13 +37,15 @@ public class EngineConfiguration(ILogger? logger = null) {
     private EngineConfigXml? _engineConfigDto;
     private FlowOfOperations _flow = UnConfigured;
 
-    private LinkedList<IPlugin>? _plugins;
+    private LinkedList<ILoadedPluginDto>? _plugins;
 
     private ServiceDescriptor? _serviceDescriptorCache;
+
     public EngineConfigXml EngineConfigDto {
         get => _engineConfigDto ??= new EngineConfigXml().PopulateAsEmpty();
         set => _engineConfigDto = value;
     }
+
     public ServiceDescriptor EngineLoggerDescriptor {
         get => _serviceDescriptorCache ??= NewServiceDescriptor<ILogger>(Logger.None);
         set => _serviceDescriptorCache = value;
@@ -105,7 +97,7 @@ public class EngineConfiguration(ILogger? logger = null) {
             NewServiceDescriptor<IWorld, World>(ServiceLifetime.Singleton),
             NewServiceDescriptor<RenderThreadEvents, RenderThreadEvents>(ServiceLifetime.Singleton),
             NewServiceDescriptor<IApplicationStageManager, ApplicationStageManager>(ServiceLifetime.Singleton),
-            NewServiceDescriptor<IAssetDataXmlService, AssetDataXmlService>(ServiceLifetime.Singleton),
+            NewServiceDescriptor<IAssetDataXmlService, AssetDataXmlService>(ServiceLifetime.Singleton)
         ]);
 
         _logger.Information("Assigned Static Systems correctly");
@@ -127,7 +119,7 @@ public class EngineConfiguration(ILogger? logger = null) {
         XmlParser<EngineConfigXml> configXmlParser = new(_logger, XmlNameSpaces.ConfigEngine, Paths.Xsd.XsdEngineConfigDto);
         if (!configXmlParser.TryDeserializeFromFile(filePath, out EngineConfigXml? configDto)) {
             _logger.Error("Engine config file could not be parsed");
-            return this; //the _configDto will be null, so setter of EngineConfigDto will populate as empty
+            return this;//the _configDto will be null, so setter of EngineConfigDto will populate as empty
         }
 
         EngineConfigDto = configDto;

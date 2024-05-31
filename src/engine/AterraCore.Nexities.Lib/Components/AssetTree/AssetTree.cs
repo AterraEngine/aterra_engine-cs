@@ -2,12 +2,12 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using JetBrains.Annotations;
-namespace AterraCore.Nexities.Lib.Components.AssetTree;
-
 using AterraCore.Contracts.Nexities.Data.Assets;
 using AterraCore.Contracts.Nexities.Data.Components.AssetTree;
-using Nexities.Components;
+using AterraCore.Nexities.Components;
+using JetBrains.Annotations;
+
+namespace AterraCore.Nexities.Lib.Components.AssetTree;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
@@ -54,6 +54,6 @@ public class AssetTree : NexitiesComponent, IAssetTree {
 
     public bool TryAddNode(IAssetInstance assetInstance) {
         _nodes.AddLast(assetInstance);
-        return true; // This doesn't make sense, review this in the future
+        return true;// This doesn't make sense, review this in the future
     }
 }

@@ -2,9 +2,9 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-namespace AterraCore.Contracts.Nexities.Data.Worlds;
+using AterraCore.Contracts.Nexities.Data.Levels;
 
-using Levels;
+namespace AterraCore.Contracts.Nexities.Data.Worlds;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

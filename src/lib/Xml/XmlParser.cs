@@ -2,54 +2,27 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
+using Serilog;
 using System.Text;
 using System.Xml;
 using System.Xml.Schema;
-using Serilog;
 using Xml.Contracts;
+
 namespace Xml;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class XmlParser<T>(ILogger logger, string nameSpace, string xsdPath) : IConfigXmlParser<T> where T : IXmlFileDto<T>, new() {
-    
+
     private readonly XmlReaderSettings _readerSettings = DefineReaderSettings(logger, nameSpace, xsdPath);
     private readonly XmlSerializer _serializer = new(typeof(T), nameSpace);
+
     private readonly XmlWriterSettings _writerSettings = new() {
         Indent = true,
         Encoding = Encoding.UTF8,
         OmitXmlDeclaration = false
     };
-
-    // -----------------------------------------------------------------------------------------------------------------
-    // Helper Methods
-    // -----------------------------------------------------------------------------------------------------------------
-    private static XmlReaderSettings DefineReaderSettings(ILogger logger, string nameSpace, string xsdPath) {
-        var schemas = new XmlSchemaSet();
-        schemas.Add(nameSpace, XmlReader.Create(xsdPath));
-
-        var settings = new XmlReaderSettings {
-            ValidationType = ValidationType.Schema,
-            ValidationFlags = XmlSchemaValidationFlags.ProcessInlineSchema
-                              | XmlSchemaValidationFlags.ProcessSchemaLocation
-                              | XmlSchemaValidationFlags.ReportValidationWarnings,
-            Schemas = schemas
-        };
-
-        settings.ValidationEventHandler += (_, args) => {
-            switch (args) {
-                case { Severity: XmlSeverityType.Warning }:
-                    logger.Warning(args.Message);
-                    break;
-                case { Severity: XmlSeverityType.Error }:
-                    logger.Error(args.Message);
-                    break;
-            }
-        };
-
-        return settings;
-    }
 
     // -----------------------------------------------------------------------------------------------------------------
     // Serialize / Deserialize Methods
@@ -104,5 +77,34 @@ public class XmlParser<T>(ILogger logger, string nameSpace, string xsdPath) : IC
             logger.Warning(e, "Memory stream could not parse into a {t}", typeof(T));
             return false;
         }
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Helper Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    private static XmlReaderSettings DefineReaderSettings(ILogger logger, string nameSpace, string xsdPath) {
+        var schemas = new XmlSchemaSet();
+        schemas.Add(nameSpace, XmlReader.Create(xsdPath));
+
+        var settings = new XmlReaderSettings {
+            ValidationType = ValidationType.Schema,
+            ValidationFlags = XmlSchemaValidationFlags.ProcessInlineSchema
+                              | XmlSchemaValidationFlags.ProcessSchemaLocation
+                              | XmlSchemaValidationFlags.ReportValidationWarnings,
+            Schemas = schemas
+        };
+
+        settings.ValidationEventHandler += (_, args) => {
+            switch (args) {
+                case { Severity: XmlSeverityType.Warning }:
+                    logger.Warning(args.Message);
+                    break;
+                case { Severity: XmlSeverityType.Error }:
+                    logger.Error(args.Message);
+                    break;
+            }
+        };
+
+        return settings;
     }
 }

@@ -2,10 +2,10 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-namespace AterraCore.Nexities.Entities;
+using AterraCore.Common.Types.Nexities;
+using AterraCore.Nexities.Assets;
 
-using Assets;
-using Common.Types.Nexities;
+namespace AterraCore.Nexities.Entities;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
@@ -16,10 +16,10 @@ public class EntityAttribute(
     ServiceLifetimeType instanceType = ServiceLifetimeType.Multiple,
     CoreTags coreTags = CoreTags.Entity,
     Type? @interface = null
-) : AssetAttribute(
-    partialId,
-    instanceType,
-    coreTags | CoreTags.Entity
+    ) : AssetAttribute(
+partialId,
+instanceType,
+coreTags | CoreTags.Entity
 ) {
     public Type? Interface { get; } = @interface;
 }
@@ -28,4 +28,4 @@ public class EntityAttribute<TInterface>(
     string partialId,
     ServiceLifetimeType instanceType = ServiceLifetimeType.Multiple,
     CoreTags coreTags = CoreTags.Entity
-) : EntityAttribute(partialId, instanceType, coreTags, typeof(TInterface));
+    ) : EntityAttribute(partialId, instanceType, coreTags, typeof(TInterface));

@@ -2,10 +2,10 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-namespace AterraCore.Nexities.Systems;
+using AterraCore.Common.Types.Nexities;
+using AterraCore.Nexities.Assets;
 
-using Assets;
-using Common.Types.Nexities;
+namespace AterraCore.Nexities.Systems;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
@@ -15,8 +15,8 @@ public class SystemAttribute(
     string partialId,
     ServiceLifetimeType instanceType = ServiceLifetimeType.Singleton,
     CoreTags coreTags = CoreTags.System
-) : AssetAttribute(
-    partialId,
-    instanceType,
-    coreTags | CoreTags.System
+    ) : AssetAttribute(
+partialId,
+instanceType,
+coreTags | CoreTags.System
 );

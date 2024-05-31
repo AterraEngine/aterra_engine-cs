@@ -2,22 +2,22 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
+using AterraCore.Common.Data;
+using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts;
 using AterraCore.Contracts.FlexiPlug;
+using AterraCore.Contracts.Nexities.Data.Assets;
+using AterraCore.Contracts.Nexities.Data.Levels;
+using AterraCore.Contracts.Nexities.Data.Worlds;
+using AterraCore.Contracts.Nexities.DataParsing;
 using AterraCore.Contracts.Renderer;
 using AterraCore.DI;
 using AterraEngine.Threading;
 using Extensions;
 using JetBrains.Annotations;
 using Serilog;
-namespace AterraEngine;
 
-using AterraCore.Common.Data;
-using AterraCore.Common.Types.Nexities;
-using AterraCore.Contracts.Nexities.Data.Assets;
-using AterraCore.Contracts.Nexities.Data.Levels;
-using AterraCore.Contracts.Nexities.Data.Worlds;
-using AterraCore.Contracts.Nexities.DataParsing;
+namespace AterraEngine;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
@@ -32,7 +32,7 @@ public class Engine(
     RenderThreadEvents renderThreadEvents,
     IApplicationStageManager applicationStageManager,
     IAssetDataXmlService assetDataXmlService
-) : IEngine {
+    ) : IEngine {
     private readonly CancellationTokenSource _ctsRenderThread = new();
     private readonly TaskCompletionSource<bool> _openGlContextCreated = new();
 

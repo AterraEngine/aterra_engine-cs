@@ -2,10 +2,10 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-namespace AterraCore.Nexities.Components;
+using AterraCore.Common.Types.Nexities;
+using AterraCore.Nexities.Assets;
 
-using Assets;
-using Common.Types.Nexities;
+namespace AterraCore.Nexities.Components;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
@@ -16,18 +16,18 @@ public class ComponentAttribute(
     ServiceLifetimeType instanceType = ServiceLifetimeType.Multiple,
     CoreTags coreTags = CoreTags.Component,
     Type? @interface = null) : AssetAttribute(
-    partialId,
-    instanceType,
-    coreTags | CoreTags.Component,
-    interfaceType:@interface
+partialId,
+instanceType,
+coreTags | CoreTags.Component,
+@interface
 );
 
 public class ComponentAttribute<TInterface>(
     string partialId,
     ServiceLifetimeType instanceType = ServiceLifetimeType.Multiple,
     CoreTags coreTags = CoreTags.Component
-) : ComponentAttribute(partialId,
-    instanceType,
-    coreTags, 
-    @interface:typeof(TInterface)
-    );
+    ) : ComponentAttribute(partialId,
+instanceType,
+coreTags,
+typeof(TInterface)
+);

@@ -4,6 +4,7 @@
 
 using AterraCore.Contracts.Renderer;
 using JetBrains.Annotations;
+
 namespace AterraEngine.Renderer.RaylibCs.FrameProcessors;
 
 // ---------------------------------------------------------------------------------------------------------------------

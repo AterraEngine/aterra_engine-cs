@@ -5,9 +5,9 @@
 using AterraCore.Contracts.Renderer;
 using AterraCore.DI;
 using AterraEngine.Renderer.RaylibCs.FrameProcessors;
-namespace AterraEngine.Renderer.RaylibCs;
-
 using JetBrains.Annotations;
+
+namespace AterraEngine.Renderer.RaylibCs;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
@@ -27,20 +27,20 @@ public class MainWindow(IApplicationStageManager applicationStageManager) : IMai
             SetTraceLogCallback(RaylibLogger.GetPointer());
         }
         SetConfigFlags(ConfigFlags.ResizableWindow
-            // | ConfigFlags.UndecoratedWindow
-            // | ConfigFlags.MousePassthroughWindow
+        // | ConfigFlags.UndecoratedWindow
+        // | ConfigFlags.MousePassthroughWindow
         );
         InitWindow(Width, Height, Name);
-        SetWindowMonitor(1); // WArn dev stuff
+        SetWindowMonitor(1);// WArn dev stuff
 
         applicationStageManager.TryRegisterStage(
-            ApplicationStage.Undefined,
-            EngineServices.CreateWithServices<UndefinedRaylibFrameProcessor>()
+        ApplicationStage.Undefined,
+        EngineServices.CreateWithServices<UndefinedRaylibFrameProcessor>()
         );
 
         applicationStageManager.TryRegisterStage(
-            ApplicationStage.StartupScreen,
-            EngineServices.CreateWithServices<StartupRaylibFrameProcessor>()
+        ApplicationStage.StartupScreen,
+        EngineServices.CreateWithServices<StartupRaylibFrameProcessor>()
         );
 
         IsInitialised = true;

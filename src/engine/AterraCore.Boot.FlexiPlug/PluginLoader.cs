@@ -1,18 +1,16 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Reflection;
+using AterraCore.Boot.FlexiPlug.PluginConfig;
+using AterraCore.Common.Data;
+using AterraCore.Common.Types.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug;
-using AterraCore.Contracts.FlexiPlug.Plugin;
-using AterraCore.FlexiPlug.Config;
-using AterraCore.FlexiPlug.Plugin;
 using AterraCore.Loggers.Helpers;
 using Extensions;
 using Serilog;
-namespace AterraCore.FlexiPlug;
+using System.Reflection;
 
-using Common.Data;
-using Common.Types.FlexiPlug;
+namespace AterraCore.Boot.FlexiPlug;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Support Code
@@ -26,17 +24,19 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
     private readonly HashSet<string> _knownHashes = [];
 
     private ushort _pluginIdCounter;
+
     private ushort PluginIdCounter {
         get => _pluginIdCounter;
         set {
             // Basically means that the last usable plugin is `FFFE`
             if (value == ushort.MaxValue) {
-                var maxId = ushort.MaxValue.ToString("X");
+                string maxId = ushort.MaxValue.ToString("X");
                 logger.ExitFatal(ExitCodes.PluginIdsExhausted, "Max Plugin Id of {maxId} is exhausted", maxId);
             }
             _pluginIdCounter = value;
         }
     }
+
     public LinkedList<IPluginDto> Plugins { get; } = [];
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -156,7 +156,7 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         pluginData;
 
     private IPluginDto ImportDlls(IPluginDto pluginData, IPluginZipImporter<PluginConfigXml> zipImporter) {
-        if (pluginData.Data == null) return SetInvalid(pluginData); // Shouldn't happen because we import the data up in the chain
+        if (pluginData.Data == null) return SetInvalid(pluginData);// Shouldn't happen because we import the data up in the chain
 
         // Extract assembly(s)
         pluginData.Data.Dlls
@@ -226,7 +226,7 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         var valuedBuilder = new ValuedStringBuilder();
 
         Plugins.IterateOver(pluginData => valuedBuilder.AppendLineValued(
-            "-plugin ", true, new { pluginData.FilePath, pluginData.Validity })
+        "-plugin ", true, new { pluginData.FilePath, pluginData.Validity })
         );
 
         logger.Debug(valuedBuilder.ToString(), valuedBuilder.ValuesToArray());

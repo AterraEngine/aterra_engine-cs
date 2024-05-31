@@ -2,10 +2,10 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-namespace AterraCore.Nexities.Assets.InstanceDto;
-
-using Elements;
+using AterraCore.Nexities.Assets.InstanceDto.Elements;
 using System.Xml.Serialization;
+
+namespace AterraCore.Nexities.Assets.InstanceDto;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

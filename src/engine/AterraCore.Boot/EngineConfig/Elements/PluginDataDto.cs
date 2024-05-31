@@ -2,11 +2,12 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
+using Extensions;
 using System.Text;
 using System.Xml.Serialization;
-using Extensions;
 using Xml.Elements;
-namespace AterraEngine.Config.Elements;
+
+namespace AterraCore.Boot.EngineConfig.Elements;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

@@ -2,12 +2,12 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using System.Numerics;
+using AterraCore.Nexities.Assets;
+using AterraCore.Nexities.Components;
 using JetBrains.Annotations;
-namespace AterraCore.Nexities.Lib.Components.Transform3D;
+using System.Numerics;
 
-using Assets;
-using Nexities.Components;
+namespace AterraCore.Nexities.Lib.Components.Transform3D;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

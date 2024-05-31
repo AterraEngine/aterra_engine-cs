@@ -5,6 +5,7 @@
 using AterraCore.Contracts.Renderer;
 using AterraCore.Contracts.Threading;
 using JetBrains.Annotations;
+
 namespace AterraEngine.Threading;
 
 // ---------------------------------------------------------------------------------------------------------------------

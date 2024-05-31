@@ -2,12 +2,12 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
+using AterraCore.Nexities.Components;
 using JetBrains.Annotations;
 using Raylib_cs;
-namespace AterraCore.Nexities.Lib.Components.HUD.Text;
-
-using Nexities.Components;
 using System.Numerics;
+
+namespace AterraCore.Nexities.Lib.Components.HUD.Text;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

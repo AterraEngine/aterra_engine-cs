@@ -19,7 +19,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Nexities\Data\" />
+        <Folder Include="Boot\"/>
+        <Folder Include="Nexities\Data\"/>
     </ItemGroup>
 
 </Project>

@@ -1,11 +1,10 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Contracts.Nexities.Data.Components;
 using System.Numerics;
 
 namespace AterraCore.Nexities.Lib.Components.Transform3D;
-
-using AterraCore.Contracts.Nexities.Data.Components;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

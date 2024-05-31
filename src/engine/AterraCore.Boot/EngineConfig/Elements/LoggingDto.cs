@@ -2,17 +2,14 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-namespace AterraCore.Contracts.FlexiPlug.Plugin;
+using System.Xml.Serialization;
+
+namespace AterraCore.Boot.EngineConfig.Elements;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public interface IPlugin : IPluginBase {
-    // -----------------------------------------------------------------------------------------------------------------
-    // Methods
-    // -----------------------------------------------------------------------------------------------------------------
-    public IEnumerable<AssetTypeRecord> AssetTypes { get; }
-
-    public void InvalidateCaches();
+public class LoggingDto {
+    [XmlAttribute("async-console")] public bool UseAsyncConsole { get; set; }
 }

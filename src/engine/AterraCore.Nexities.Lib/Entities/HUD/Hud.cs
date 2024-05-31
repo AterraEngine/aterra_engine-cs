@@ -2,11 +2,11 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using JetBrains.Annotations;
-namespace AterraCore.Nexities.Lib.Entities.HUD;
-
 using AterraCore.Contracts.Nexities.Data.Components.AssetTree;
-using Nexities.Entities;
+using AterraCore.Nexities.Entities;
+using JetBrains.Annotations;
+
+namespace AterraCore.Nexities.Lib.Entities.HUD;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

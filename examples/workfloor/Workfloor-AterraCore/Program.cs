@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using AterraCore.Nexities.Lib.Components.Transform2D;
 namespace Workfloor_AterraCore;
 
+using AterraCore.Boot;
 using AterraCore.Common.Data;
 
 // ---------------------------------------------------------------------------------------------------------------------

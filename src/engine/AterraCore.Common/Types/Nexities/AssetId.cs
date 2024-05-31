@@ -2,10 +2,10 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-namespace AterraCore.Common.Types.Nexities;
-
-using FlexiPlug;
+using AterraCore.Common.Types.FlexiPlug;
 using System.Text.RegularExpressions;
+
+namespace AterraCore.Common.Types.Nexities;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

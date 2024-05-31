@@ -2,10 +2,10 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
+using AterraCore.Common.Types;
 using Xml.Elements;
-namespace AterraCore.Contracts.FlexiPlug.Config;
 
-using Common.Types;
+namespace AterraCore.Contracts.FlexiPlug.Config;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

@@ -1,9 +1,9 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraCore.Nexities.Parsers.NamedValues.PreMade;
+using AterraCore.Contracts.Nexities.DataParsing.NamedValues;
 
-using Contracts.Nexities.DataParsing.NamedValues;
+namespace AterraCore.Nexities.Parsers.NamedValues.PreMade;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

@@ -2,11 +2,10 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-namespace AterraCore.Common.Types.Nexities;
-
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text.RegularExpressions;
+
+namespace AterraCore.Common.Types.Nexities;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
@@ -15,12 +14,12 @@ public readonly partial struct PartialAssetId(uint value) : IComparable<PartialA
     private static readonly Regex Regex = MyRegex();
 
     // PartialAssetId is basically just a fancy ushort
-    public uint Value { get; } = value; // which means the max partial ID will be `FFFFFFFF`
+    public uint Value { get; } = value;// which means the max partial ID will be `FFFFFFFF`
 
     // -----------------------------------------------------------------------------------------------------------------
     // Constructors
     // -----------------------------------------------------------------------------------------------------------------
-    public PartialAssetId() : this(0) {} // Create an empty
+    public PartialAssetId() : this(0) {}// Create an empty
     public PartialAssetId(int value) : this(CastToUint(value)) {}
     public PartialAssetId(string value) : this(CastToUint(value)) {}
 
@@ -31,9 +30,9 @@ public readonly partial struct PartialAssetId(uint value) : IComparable<PartialA
     public string ToStringReadable() {
         string stringValue = ToString();
         return string.Concat(
-            stringValue.AsSpan(0, 4),
-            "-",
-            stringValue.AsSpan(4, 4));
+        stringValue.AsSpan(0, 4),
+        "-",
+        stringValue.AsSpan(4, 4));
     }
 
     public static bool TryParse(int value, out PartialAssetId partialAssetId) {
@@ -68,7 +67,7 @@ public readonly partial struct PartialAssetId(uint value) : IComparable<PartialA
         if (!match.Groups[1].Success || !match.Groups[2].Success)
             throw new ArgumentException("Invalid input format.", nameof(value));
 
-        var txt = $"{match.Groups[1].Value}{match.Groups[2].Value}";
+        string txt = $"{match.Groups[1].Value}{match.Groups[2].Value}";
         return uint.Parse(txt.PadLeft(8), NumberStyles.HexNumber);
 
     }

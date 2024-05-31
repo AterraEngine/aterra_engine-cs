@@ -2,9 +2,9 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-namespace AterraCore.Contracts.Nexities.Data.Assets;
+using AterraCore.Common.Types.Nexities;
 
-using Common.Types.Nexities;
+namespace AterraCore.Contracts.Nexities.Data.Assets;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

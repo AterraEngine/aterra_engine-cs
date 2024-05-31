@@ -1,12 +1,12 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraCore.Nexities.Parsers.NamedValues;
-
-using Contracts.Nexities.DataParsing.NamedValues;
+using AterraCore.Contracts.Nexities.DataParsing.NamedValues;
 using Extensions;
 using JetBrains.Annotations;
 using System.Numerics;
+
+namespace AterraCore.Nexities.Parsers.NamedValues;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

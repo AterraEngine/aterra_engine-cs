@@ -2,14 +2,15 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using AterraCore.Contracts.FlexiPlug.Plugin;
+using AterraCore.Contracts.FlexiPlug.Boot;
+
 namespace AterraCore.Contracts.FlexiPlug;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IPluginLoader {
-    public LinkedList<IPluginDto> Plugins { get; }
+    public LinkedList<ILoadedPluginDto> Plugins { get; }
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods

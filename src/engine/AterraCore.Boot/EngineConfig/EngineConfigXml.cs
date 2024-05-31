@@ -2,18 +2,17 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using System.Xml.Serialization;
+using AterraCore.Boot.EngineConfig.Elements;
+using AterraCore.Common;
+using AterraCore.Common.FlexiPlug;
 using AterraCore.Loggers.Helpers;
-using AterraEngine.Config.Elements;
 using Extensions;
 using Serilog;
+using System.Xml.Serialization;
 using Xml.Contracts;
 using Xml.Elements;
-namespace AterraEngine.Config;
 
-using AterraCore.Common.Data;
-using AterraCore.Common.Types;
-using AterraCore.Common.Types.FlexiPlug;
+namespace AterraCore.Boot.EngineConfig;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
@@ -34,7 +33,7 @@ public class EngineConfigXml : IXmlFileDto<EngineConfigXml> {
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public EngineConfigXml PopulateAsEmpty() {
-        EngineVersion = SemanticVersion.Max; // Warn remove this in production
+        EngineVersion = SemanticVersion.Max;// Warn remove this in production
         PluginData = new PluginDataDto {
             RootFolder = Paths.Plugins.Folder,
             LoadOrder = new LoadOrderDto {

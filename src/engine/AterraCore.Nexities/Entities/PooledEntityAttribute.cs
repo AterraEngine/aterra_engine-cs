@@ -2,10 +2,10 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-namespace AterraCore.Nexities.Entities;
+using AterraCore.Common.Types.Nexities;
+using AterraCore.Nexities.Assets;
 
-using Assets;
-using Common.Types.Nexities;
+namespace AterraCore.Nexities.Entities;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
@@ -14,8 +14,8 @@ using Common.Types.Nexities;
 public class PooledEntityAttribute(
     string partialId,
     CoreTags coreTags = CoreTags.Entity
-) : AssetAttribute(
-    partialId,
-    ServiceLifetimeType.Pooled,
-    coreTags | CoreTags.Entity
+    ) : AssetAttribute(
+partialId,
+ServiceLifetimeType.Pooled,
+coreTags | CoreTags.Entity
 );

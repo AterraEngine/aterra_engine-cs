@@ -2,22 +2,26 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using System.Xml.Serialization;
+using AterraCore.Common.Types;
 using AterraCore.Contracts.FlexiPlug.Config;
 using AterraCore.Loggers.Helpers;
 using Extensions;
 using Serilog;
+using System.Xml.Serialization;
 using Xml.Contracts;
 using Xml.Elements;
-namespace AterraCore.FlexiPlug.Config;
 
-using Common.Types;
+namespace AterraCore.Boot.FlexiPlug.PluginConfig;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [XmlRoot("pluginConfig")]
 public class PluginConfigXml : IXmlFileDto<PluginConfigXml>, IPluginConfigDto {
+
+    [XmlArray("bins")]
+    [XmlArrayItem("bin", typeof(FileDto))]
+    public FileDto[] BinDtos { get; set; } = [];
     [XmlElement("name")]
     public string ReadableName { get; set; } = null!;
 
@@ -30,10 +34,6 @@ public class PluginConfigXml : IXmlFileDto<PluginConfigXml>, IPluginConfigDto {
     [XmlElement("expectedGameVersion")]
     public SemanticVersion GameVersion { get; set; }
     [XmlIgnore] public IEnumerable<IFileDto> Dlls => BinDtos;
-    
-    [XmlArray("bins")]
-    [XmlArrayItem("bin", typeof(FileDto))]
-    public FileDto[] BinDtos { get; set; } = [];
 
     // TODO add requirements? (either other plugins, or specific DLL's?)
 

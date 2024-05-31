@@ -2,13 +2,13 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using System.Numerics;
+using AterraCore.Common.Types.Nexities;
+using AterraCore.Nexities.Lib.Entities.Actor;
+using AterraCore.Nexities.Systems;
 using Serilog;
-namespace AterraCore.Nexities.Lib.Systems;
+using System.Numerics;
 
-using Common.Types.Nexities;
-using Entities.Actor;
-using Nexities.Systems;
+namespace AterraCore.Nexities.Lib.Systems;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
@@ -31,10 +31,10 @@ public class Render2D(ILogger logger) : NexitiesSystem<IActor2D> {
 
 
         logger.Warning("Render2D entity {@e} : {rot} {trans} {scale} ",
-            entity,
-            entity.Transform2D.Rotation,
-            entity.Transform2D.Translation,
-            entity.Transform2D.Scale
+        entity,
+        entity.Transform2D.Rotation,
+        entity.Transform2D.Translation,
+        entity.Transform2D.Scale
         );
     }
 }

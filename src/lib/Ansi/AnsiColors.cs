@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Collections.ObjectModel;
+
 namespace Ansi;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -184,7 +185,7 @@ public static class AnsiColors {
     public static ByteVector3 GetColor(string colorName) =>
         Dictionary.TryGetValue(colorName, out ByteVector3 color)
             ? color
-            : ByteVector3.Zero; // Handle the case where the color name is not found (e.g., return a default color)
+            : ByteVector3.Zero;// Handle the case where the color name is not found (e.g., return a default color)
 
     /// <summary>
     ///     Tries to retrieve a color from the dictionary based on the specified color name.

@@ -2,13 +2,13 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using JetBrains.Annotations;
-namespace AterraCore.Nexities.Lib.Entities.Level;
-
 using AterraCore.Contracts.Nexities.Data.Components.AssetTree;
 using AterraCore.Contracts.Nexities.Data.Components.LevelData;
 using AterraCore.Contracts.Nexities.Data.Levels;
-using Nexities.Entities;
+using AterraCore.Nexities.Entities;
+using JetBrains.Annotations;
+
+namespace AterraCore.Nexities.Lib.Entities.Level;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

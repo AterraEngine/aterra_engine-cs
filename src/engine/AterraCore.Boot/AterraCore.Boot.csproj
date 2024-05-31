@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Reference Include="AterraCore.Common">
+            <HintPath>..\AterraCore.Common\bin\Debug\net8.0\AterraCore.Common.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\lib\Xml\Xml.csproj"/>
+        <ProjectReference Include="..\AterraCore.DI\AterraCore.DI.csproj" />
+        <ProjectReference Include="..\AterraCore.Loggers\AterraCore.Loggers.csproj"/>
+        <ProjectReference Include="..\Extensions\Extensions.csproj"/>
+    </ItemGroup>
+
+</Project>

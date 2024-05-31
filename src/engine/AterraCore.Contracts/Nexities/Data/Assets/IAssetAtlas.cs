@@ -1,11 +1,11 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraCore.Contracts.Nexities.Data.Assets;
-
-using Common.Types.FlexiPlug;
-using Common.Types.Nexities;
+using AterraCore.Common.Types.FlexiPlug;
+using AterraCore.Common.Types.Nexities;
 using System.Diagnostics.CodeAnalysis;
+
+namespace AterraCore.Contracts.Nexities.Data.Assets;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

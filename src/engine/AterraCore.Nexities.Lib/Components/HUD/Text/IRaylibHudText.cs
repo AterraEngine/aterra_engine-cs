@@ -2,11 +2,11 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using Raylib_cs;
-namespace AterraCore.Nexities.Lib.Components.HUD.Text;
-
 using AterraCore.Contracts.Nexities.Data.Components;
+using Raylib_cs;
 using System.Numerics;
+
+namespace AterraCore.Nexities.Lib.Components.HUD.Text;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

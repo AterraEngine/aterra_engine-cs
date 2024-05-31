@@ -1,14 +1,14 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
+using AterraCore.Common.Data;
 using AterraCore.Loggers;
 using Serilog;
 using Serilog.Core;
-namespace AterraEngine.Renderer.RaylibCs;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
-using AterraCore.Common.Data;
+namespace AterraEngine.Renderer.RaylibCs;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
@@ -25,7 +25,7 @@ public class RaylibLogger {
             .MinimumLevel.Verbose()
             .DefaultEnrich("Raylib")
             .AsyncSinkFile(Paths.Logs.RendererLog)
-            .SinkConsole(); // Allow async console as well?
+            .SinkConsole();// Allow async console as well?
 
     // .AsyncSinkConsole();
     // Extra Raylib stuff here
@@ -38,14 +38,14 @@ public class RaylibLogger {
 
         Action<string> callback = (TraceLogLevel)msgType switch {
             // Comments retrieved from Raylib-cs:Examples.Core.CustomLogging.cs
-            TraceLogLevel.All => _logger.Information,  // Display all logs
-            TraceLogLevel.Trace => _logger.Verbose,    // Trace logging, intended for internal use only
-            TraceLogLevel.Debug => _logger.Debug,      // Debug logging, used for internal debugging, it should be disabled on release builds
-            TraceLogLevel.Info => _logger.Information, // Info logging, used for program execution info
-            TraceLogLevel.Warning => _logger.Warning,  // Warning logging, used on recoverable failures
-            TraceLogLevel.Error => _logger.Error,      // Error logging, used on unrecoverable failures
-            TraceLogLevel.Fatal => _logger.Fatal,      // Fatal logging, used to abort program: exit(EXIT_FAILURE)
-            TraceLogLevel.None => _ => {},             // Disable logging
+            TraceLogLevel.All => _logger.Information,// Display all logs
+            TraceLogLevel.Trace => _logger.Verbose,// Trace logging, intended for internal use only
+            TraceLogLevel.Debug => _logger.Debug,// Debug logging, used for internal debugging, it should be disabled on release builds
+            TraceLogLevel.Info => _logger.Information,// Info logging, used for program execution info
+            TraceLogLevel.Warning => _logger.Warning,// Warning logging, used on recoverable failures
+            TraceLogLevel.Error => _logger.Error,// Error logging, used on unrecoverable failures
+            TraceLogLevel.Fatal => _logger.Fatal,// Fatal logging, used to abort program: exit(EXIT_FAILURE)
+            TraceLogLevel.None => _ => {},// Disable logging
             _ => msg => _logger.Error("Could not be mapped to a TraceLogLevel: {msgType} - {msg}", msgType, msg)
         };
 
