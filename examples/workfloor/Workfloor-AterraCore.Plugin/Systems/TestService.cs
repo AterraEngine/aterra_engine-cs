@@ -10,6 +10,6 @@ namespace Workfloor_AterraCore.Plugin.Systems;
 // ---------------------------------------------------------------------------------------------------------------------
 public interface ITestService;
 
-[NexitiesSystem<ITestService>]
+[InjectableService<ITestService>]
 public class TestService {
 }

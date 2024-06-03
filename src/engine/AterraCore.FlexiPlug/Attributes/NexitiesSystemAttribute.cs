@@ -12,9 +12,9 @@ namespace AterraCore.FlexiPlug.Attributes;
 // ---------------------------------------------------------------------------------------------------------------------
 [AttributeUsage(AttributeTargets.Class)]
 [UsedImplicitly]
-public class NexitiesSystemAttribute(Type typeInterface, ServiceLifetime serviceLifetime = ServiceLifetime.Singleton) : Attribute {
+public class InjectableServiceAttribute(Type typeInterface, ServiceLifetime serviceLifetime = ServiceLifetime.Singleton) : Attribute {
     public readonly Type Interface = typeInterface;
     public readonly ServiceLifetime Lifetime = serviceLifetime;
 }
 
-public class NexitiesSystemAttribute<T>(ServiceLifetime serviceLifetime = ServiceLifetime.Singleton) : NexitiesSystemAttribute(typeof(T), serviceLifetime);
+public class InjectableServiceAttribute<T>(ServiceLifetime serviceLifetime = ServiceLifetime.Singleton) : InjectableServiceAttribute(typeof(T), serviceLifetime);

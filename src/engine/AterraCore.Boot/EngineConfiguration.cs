@@ -73,19 +73,22 @@ public class EngineConfiguration(ILogger? logger = null) : IEngineConfiguration 
         return this;
     }
 
-    public IEngineConfiguration AssignDefaultServices(IEnumerable<ServiceDescriptor>? serviceDescriptors = null) {
+    public IEngineConfiguration AssignDefaultServices(params ServiceDescriptor[] serviceDescriptors) {
         if (Flow > AssignedDefaultServices) ConfigurationWarnings |= FlowOfOperationsNotRespected;
         
         // Systems which may be overriden
-        if (serviceDescriptors is not null) {
-            _engineServiceBuilder.AssignFromServiceDescriptors(serviceDescriptors.Concat([
-                NewServiceDescriptor<ILogger>(EngineLoggerCallback()), 
-                .. BootSequenceExtenders.SelectMany(extender => extender.ServicesDefault)
-            ]));
-        }
+        _engineServiceBuilder.AssignFromServiceDescriptors(serviceDescriptors.Concat([
+            NewServiceDescriptor<ILogger>(EngineLoggerCallback()), 
+            .. BootSequenceExtenders.SelectMany(extender => extender.ServicesDefault)
+        ]));
 
         StartupLog.Information("Assigned Default Systems correctly");
         Flow = AssignedStaticServices;
+        return this;
+    }
+
+    public IEngineConfiguration AssignExtraServices(params ServiceDescriptor[] serviceDescriptors) {
+        _engineServiceBuilder.AssignFromServiceDescriptors(serviceDescriptors);
         return this;
     }
 
@@ -102,16 +105,15 @@ public class EngineConfiguration(ILogger? logger = null) : IEngineConfiguration 
         return this;
     }
 
-    public IEngineConfiguration AssignStaticServices(IEnumerable<ServiceDescriptor>? serviceDescriptors = null) {
+    public IEngineConfiguration AssignStaticServices(params ServiceDescriptor[] serviceDescriptors) {
         if (Flow > AssignedStaticServices && Flow < RanSubConfigurations) ConfigurationWarnings |= FlowOfOperationsNotRespected;
 
         // services which may not be overriden
-        if (serviceDescriptors is not null) {
-            _engineServiceBuilder.AssignFromServiceDescriptors(serviceDescriptors.Concat([
-                NewServiceDescriptor<IEngine, Engine>(ServiceLifetime.Singleton),
-                .. BootSequenceExtenders.SelectMany(extender => extender.ServicesStatic)
-            ]));
-        }
+
+        _engineServiceBuilder.AssignFromServiceDescriptors(serviceDescriptors.Concat([
+             NewServiceDescriptor<IEngine, Engine>(ServiceLifetime.Singleton),
+             .. BootSequenceExtenders.SelectMany(extender => extender.ServicesStatic)
+         ]));
 
         StartupLog.Information("Assigned Static Systems correctly");
         Flow = AssignedStaticServices;

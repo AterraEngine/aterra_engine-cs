@@ -48,6 +48,11 @@ public class FlexiPlugConfiguration(ILogger logger) : IFlexiPlugConfiguration {
             return ConfigurationWarnings.PluginLoadOrderUnstable | ConfigurationWarnings.UnstablePlugin;
         } 
         
+        // Assign custom services
+        engineConfiguration.AssignExtraServices(
+            PluginLoader.Plugins.SelectMany(dto => dto.GetServices()).ToArray()
+        );
+        
         logger.Information("Plugins successfully loaded.");
         return ConfigurationWarnings.Nominal;
     }

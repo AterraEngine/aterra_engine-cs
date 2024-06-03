@@ -41,7 +41,7 @@ public class LoadedPluginDto(int id, string filepath) : ILoadedPluginDto {
     // -----------------------------------------------------------------------------------------------------------------
     public IEnumerable<ServiceDescriptor> GetServices() {
         return Types
-            .Select(t => new { Type = t, Attribute = t.GetCustomAttribute<NexitiesSystemAttribute>(false) })// this way we only get the attribute once
+            .Select(t => new { Type = t, Attribute = t.GetCustomAttribute<InjectableServiceAttribute>(false) })// this way we only get the attribute once
             .Where(t => t.Attribute != null)
             .Select(t => new ServiceDescriptor(
             t.Attribute?.Interface ?? t.Type,
