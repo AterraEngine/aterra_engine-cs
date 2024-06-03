@@ -1,13 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
-namespace AterraCore.Contracts.Boot.FlexiPlug.PluginDtos;
+namespace AterraCore.Common.Data;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public interface IPluginConfigDto {
-
+public static class AterraCoreLibraries {
+    public const string FlexiPlug = nameof(FlexiPlug);
+    public const string Nexities = nameof(Nexities);
 }

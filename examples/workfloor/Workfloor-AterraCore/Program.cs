@@ -2,7 +2,6 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using AterraCore.Boot.FlexiPlug;
 using AterraCore.Contracts;
 using AterraCore.Contracts.Renderer;
 using AterraEngine.Renderer.RaylibCs;
@@ -24,21 +23,10 @@ public static class Program {
             // Engine PluginDtos file also depends on the other configuration files
             .ImportEngineConfig(Paths.ConfigEngine)
             
-            // --- Run all data from the sub configurations ---
-            .WithSubConfiguration(configuration => configuration
-                // FlexiPlug
-                .ImportPlugins()
-                .AssignServices()
-            )
-            
-            // .WithSubConfiguration(configuration => configuration
-            //     // Nexities
-            // )
-            
             // --- Assign Services for the ServiceProvider ---
             // Assigns services which may be overriden by plugins
             .AssignDefaultServices([
-                NewServiceDescriptor<RaylibLogger>(ServiceLifetime.Singleton),
+                NewServiceDescriptor<RaylibLogger, RaylibLogger>(ServiceLifetime.Singleton),
                 NewServiceDescriptor<IMainWindow, MainWindow>(ServiceLifetime.Singleton)
             ])
             
@@ -49,7 +37,6 @@ public static class Program {
             
             // Finish building the DI container
             .BuildDependencyInjectionContainer()
-
             
             // --- Create Engine ---
             // Actually create the engine instance

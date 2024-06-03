@@ -7,14 +7,13 @@ using AterraCore.Common.ConfigFiles.EngineConfig;
 using AterraCore.Common.Data;
 using AterraCore.Contracts;
 using AterraCore.Contracts.Boot;
-using AterraCore.Contracts.Boot.FlexiPlug;
-using AterraCore.Contracts.Boot.Nexities;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.DI;
 using AterraEngine;
 using Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using Serilog.Core;
 using Xml;
 using static AterraCore.Common.Data.BootFlowOfOperations;
 using static AterraCore.Common.Data.ConfigurationWarnings;
@@ -50,8 +49,15 @@ public class EngineConfiguration(ILogger? logger = null) : IEngineConfiguration 
     private EngineConfigXml? _engineConfigDto;
     public EngineConfigXml EngineConfigDto => _engineConfigDto ??= new EngineConfigXml();
 
-    public IFlexiPlugConfiguration FlexiPlug { get; private set; } = new FlexiPlugConfiguration(GetStartupLogger(logger));
-    public INexitiesConfiguration Nexities { get; private set; } = new NexitiesConfiguration(GetStartupLogger(logger));
+    private FlexiPlugConfiguration FlexiPlugConfiguration { get; } = new(GetStartupLogger(logger));
+    private NexitiesConfiguration NexitiesConfiguration { get; } = new(GetStartupLogger(logger));
+
+    private IBootConfiguration[]? _bootConfigurationsCache;
+    private IBootConfiguration[] BootSequenceExtenders => _bootConfigurationsCache ??= [
+        FlexiPlugConfiguration,
+        NexitiesConfiguration
+    ];
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Private Helper Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -67,35 +73,14 @@ public class EngineConfiguration(ILogger? logger = null) : IEngineConfiguration 
         return this;
     }
 
-    public IEngineConfiguration SetFlexiPlugConfiguration(IFlexiPlugConfiguration configuration) {
-        FlexiPlug = configuration; 
-        Flow = AssignedFlexiPlugConfiguration;
-        return this;
-    }
-    public IEngineConfiguration SetNexitiesConfiguration(INexitiesConfiguration configuration) {
-        Nexities = configuration;
-        Flow = AssignedNexitiesConfiguration;
-        return this;
-    }
-    
-    public IEngineConfiguration WithSubConfiguration(Action<IFlexiPlugConfiguration> callback) {
-        callback(FlexiPlug);
-        return this;
-    }
-    public IEngineConfiguration WithSubConfiguration(Action<INexitiesConfiguration> callback) {
-        callback(Nexities);
-        return this;
-    }
-
     public IEngineConfiguration AssignDefaultServices(IEnumerable<ServiceDescriptor>? serviceDescriptors = null) {
         if (Flow > AssignedDefaultServices) ConfigurationWarnings |= FlowOfOperationsNotRespected;
         
         // Systems which may be overriden
         if (serviceDescriptors is not null) {
             _engineServiceBuilder.AssignFromServiceDescriptors(serviceDescriptors.Concat([
-                NewServiceDescriptor<ILogger>(EngineLoggerCallback), // ENGINE LOGGER
-                ..Nexities.DefineDefaultServices(),
-                ..FlexiPlug.DefineDefaultServices(),
+                NewServiceDescriptor<ILogger>(EngineLoggerCallback()), 
+                .. BootSequenceExtenders.SelectMany(extender => extender.ServicesDefault)
             ]));
         }
 
@@ -111,8 +96,7 @@ public class EngineConfiguration(ILogger? logger = null) : IEngineConfiguration 
         if (serviceDescriptors is not null) {
             _engineServiceBuilder.AssignFromServiceDescriptors(serviceDescriptors.Concat([
                 NewServiceDescriptor<IEngine, Engine>(ServiceLifetime.Singleton),
-                ..Nexities.DefineStaticServices(),
-                ..FlexiPlug.DefineStaticServices(),
+                .. BootSequenceExtenders.SelectMany(extender => extender.ServicesStatic)
             ]));
         }
 
@@ -130,11 +114,14 @@ public class EngineConfiguration(ILogger? logger = null) : IEngineConfiguration 
             return this;//the _configDto will be null, so setter of EngineConfigDto will populate as empty
         }
         
-        // Update the EngineConfigDto
+        // import the EngineConfigDto
         _engineConfigDto = configDto;
         if (outputToLog) EngineConfigDto.OutputToLog(StartupLog);
-        Nexities.ExtractDataFromConfig(_engineConfigDto);
-        FlexiPlug.ExtractDataFromConfig(_engineConfigDto);
+        
+        // 
+        BootSequenceExtenders.IterateOver(
+            extender => extender.ParseDataFromConfig(_engineConfigDto)
+        );
         
         StartupLog.Information("Imported Engine PluginDtos correctly");
         Flow = ImportedEngineConfigDto;
@@ -169,7 +156,7 @@ public class EngineConfiguration(ILogger? logger = null) : IEngineConfiguration 
         // Populate Plugin Atlas with plugin list
         //      Is a singleton anyway, so doesn't matter when we assign this data
         IPluginAtlas pluginAtlas = EngineServices.GetPluginAtlas();
-        pluginAtlas.ImportLoadedPluginDtos(FlexiPlug.LoadedPluginDtos);
+        pluginAtlas.ImportLoadedPluginDtos(FlexiPlugConfiguration.PluginLoader.Plugins);
 
         // Create the Actual Engine
         //  Should be the last step

@@ -74,7 +74,7 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
 
         ILoadedPluginDto pluginData = CreateNewPluginDto(manuallyImportedAssembly.Assembly.Location);
         pluginData.Assemblies.Add(manuallyImportedAssembly.Assembly);
-        pluginData.Data = new LoadedPluginDto() {
+        pluginData.Data = new PluginConfigXml {
             ReadableName = manuallyImportedAssembly.ReadableName,
             Author = manuallyImportedAssembly.Author
         };
@@ -162,10 +162,10 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         // Extract assembly(s)
         pluginData.Data.Dlls
             .IterateOver(binDto => binDto.FilePath = Path
-                .Combine(Paths.Plugins.PluginBinFolder, binDto.FileNameInternal)
+                .Combine(Paths.Plugins.PluginBinFolder, binDto.FilePath)
                 .Replace("\\", "/"));
 
-        logger.Debug("{Id} : Following DLLs defined {@dlls}", pluginData.ReadableId, pluginData.Data?.Dlls.Select(bin => bin.FileNameInternal));
+        logger.Debug("{Id} : Following DLLs defined {@dlls}", pluginData.ReadableId, pluginData.Data?.Dlls.Select(bin => bin.FilePath));
 
         if ((pluginData.Data?.Dlls.Count() ?? 0) == 0) {
             return SetInvalid(pluginData);

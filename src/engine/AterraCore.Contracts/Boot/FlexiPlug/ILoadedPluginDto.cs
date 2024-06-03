@@ -4,7 +4,6 @@
 
 using AterraCore.Common.ConfigFiles.PluginConfig;
 using AterraCore.Common.Types.FlexiPlug;
-using AterraCore.Contracts.Boot.FlexiPlug.PluginDtos;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -23,6 +22,8 @@ public interface ILoadedPluginDto {
     public string ReadableId { get; }
     public IEnumerable<Type> Types { get; }
     public string FilePath { get; }
+    
+    public PluginConfigXml? Data { get; set; }
 
 
     // -----------------------------------------------------------------------------------------------------------------

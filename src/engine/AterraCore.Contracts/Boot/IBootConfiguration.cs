@@ -1,6 +1,8 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.ConfigFiles.EngineConfig;
+using AterraCore.Common.Data;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AterraCore.Contracts.Boot;
@@ -9,7 +11,10 @@ namespace AterraCore.Contracts.Boot;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public interface IHasServices {
-    public IEnumerable<ServiceDescriptor> DefineDefaultServices();
-    public IEnumerable<ServiceDescriptor> DefineStaticServices();
+public interface IBootConfiguration {
+    public IEnumerable<ServiceDescriptor> ServicesDefault { get; }
+    public IEnumerable<ServiceDescriptor> ServicesStatic { get; }
+
+    public ConfigurationWarnings AsSubConfiguration(IEngineConfiguration engineConfiguration);
+    public void ParseDataFromConfig(EngineConfigXml engineConfigDto);
 }

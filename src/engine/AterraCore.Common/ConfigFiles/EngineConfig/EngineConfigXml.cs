@@ -32,15 +32,17 @@ public class EngineConfigXml {
             .AppendLine("Engine PluginDtos loaded with the following data:")
             .AppendLineValued("- Engine version: ", EngineVersion)
             .AppendLineValued("- Game: ", GameVersion)
-            .AppendLineValued("- Plugin RootFolder: ", PluginData.RootFolder)
-            .AppendLineValued("- Plugin Plugins: ", PluginData.LoadOrder.Plugins.ToList())
-            .AppendLineValued("- Raylib config: ", RaylibConfig)
+            .AppendLineValued("- Plugin RootFolder: ",destruct:true, PluginData.RootFolder)
+            .AppendLineValued("- Plugin Plugins: ",destruct:true, PluginData.LoadOrder.Plugins.ToList())
+            .AppendLineValued("- Raylib config: ",destruct:true, RaylibConfig)
             .AppendLine()
             .AppendLine("Plugins - Load Order : (Ids are not final)");
 
         PluginData.LoadOrder.Plugins
             .Select((r, i) => new { r.FilePath, Id = new PluginId(i).ToString() })
             .IterateOver(box => valuedBuilder.AppendLineValued($"- id_{box.Id} : ", box.FilePath));
+
+        valuedBuilder.AppendLine();
 
         logger.Information(valuedBuilder.ToString(), valuedBuilder.ValuesToArray());
     }

@@ -2,6 +2,8 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.ConfigFiles.EngineConfig;
+using AterraCore.Common.Data;
+using AterraCore.Contracts.Boot;
 using AterraCore.Contracts.Boot.Nexities;
 using AterraCore.Contracts.Nexities.Data.Assets;
 using AterraCore.Contracts.Nexities.Data.Worlds;
@@ -22,27 +24,26 @@ namespace AterraCore.Boot.Nexities;
 // ---------------------------------------------------------------------------------------------------------------------
 
 public class NexitiesConfiguration(ILogger logger) : INexitiesConfiguration {
-    public INexitiesConfigDto ConfigDto { get; private set; } = null!;
-    
-    // -----------------------------------------------------------------------------------------------------------------
-    // Services
-    // -----------------------------------------------------------------------------------------------------------------
-    public IEnumerable<ServiceDescriptor> DefineDefaultServices() => [
+    public IEnumerable<ServiceDescriptor> ServicesDefault { get; } = [
         NewServiceDescriptor<IWorld, World>(ServiceLifetime.Singleton),
     ];
-    
-    public IEnumerable<ServiceDescriptor> DefineStaticServices() => [
+    public IEnumerable<ServiceDescriptor> ServicesStatic { get; } = [
         NewServiceDescriptor<INamedValueConverter, NamedValueConverter>(ServiceLifetime.Singleton),
         NewServiceDescriptor<IAssetAtlas, AssetAtlas>(ServiceLifetime.Singleton),
         NewServiceDescriptor<IAssetInstanceAtlas, AssetInstanceAtlas>(ServiceLifetime.Singleton),
         NewServiceDescriptor<IAssetDataXmlService, AssetDataXmlService>(ServiceLifetime.Singleton)
     ];
+    
+    private NexitiesConfigDto? ConfigDto { get; set; }
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void StoreDataFromConfig(EngineConfigXml source) => ConfigDto = ExtractDataFromConfig(source);
-    public INexitiesConfigDto ExtractDataFromConfig(EngineConfigXml source) {
-        return new NexitiesConfigDto();
+    public ConfigurationWarnings AsSubConfiguration(IEngineConfiguration engineConfiguration) {
+        return ConfigurationWarnings.Nominal;
     }
 
+    public void ParseDataFromConfig(EngineConfigXml engineConfigDto) {
+        ConfigDto = new NexitiesConfigDto();
+    }
 }
