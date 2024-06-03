@@ -24,6 +24,7 @@ public interface IEngineConfiguration {
     public IEngineConfiguration SetEngineLogger(Func<ILogger> loggerCallback);
     
     public IEngineConfiguration AssignDefaultServices(IEnumerable<ServiceDescriptor> serviceDescriptors);
+    public IEngineConfiguration RunSubConfigurations();
     public IEngineConfiguration AssignStaticServices(IEnumerable<ServiceDescriptor> serviceDescriptors);
     public IEngineConfiguration ImportEngineConfig(string filePath, bool outputToLog = true);
     public IEngineConfiguration BuildDependencyInjectionContainer();

@@ -1,17 +1,18 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using System.Xml.Serialization;
 
-namespace Xml.Elements;
+namespace AterraCore.Common.ConfigFiles.EngineConfig.Elements;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public class LoadOrderDto {
-    [XmlAttribute("breakOnUnstable")]
-    public bool BreakOnUnstable { get; set; } = true;
+public class RootAssembly {
+    [XmlAttribute("author")]
+    public string Author { get; set; } = string.Empty;
     
-    [XmlElement("file")]
-    public FileDto[] Plugins { get; set; } = [];
+    [XmlAttribute("name")]
+    public string Name { get; set; } = string.Empty;
 }

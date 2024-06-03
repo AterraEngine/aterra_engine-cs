@@ -1,18 +1,25 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Boot.FlexiPlug;
+using System.Xml.Serialization;
+using Xml.Elements;
 
-namespace AterraCore.Boot.FlexiPlug;
+namespace AterraCore.Common.ConfigFiles.EngineConfig.Elements;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public class FlexiPlugConfigDto : IFlexiPlugConfigDto {
-    public bool IncludeRootAssembly { get; init; } = true;
-    public IEnumerable<string> PluginFilePaths { get; init; } = [];
+public class LoadOrderDto {
+    [XmlAttribute("breakOnUnstable")]
+    public bool BreakOnUnstable { get; set; } = true;
+
+    [XmlAttribute("includeRootAssembly")]
+    public bool IncludeRootAssembly { get; set; } = true;
+
+    [XmlElement("rootAssembly", IsNullable = true)]
+    public RootAssembly? RootAssembly { get; set; }
     
-    public string? RootAssemblyName {get; init; }
-    public string? RootAssemblyAuthor {get; init; }
+    [XmlElement("file")]
+    public FileDto[] Plugins { get; set; } = [];
 }

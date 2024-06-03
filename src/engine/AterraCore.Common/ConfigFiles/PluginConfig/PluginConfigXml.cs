@@ -16,10 +16,6 @@ namespace AterraCore.Common.ConfigFiles.PluginConfig;
 // ---------------------------------------------------------------------------------------------------------------------
 [XmlRoot("pluginConfig")]
 public class PluginConfigXml {
-
-    [XmlArray("bins")]
-    [XmlArrayItem("bin", typeof(FileDto))]
-    public FileDto[] BinDtos { get; set; } = [];
     [XmlElement("name")]
     public string ReadableName { get; set; } = null!;
 
@@ -33,6 +29,10 @@ public class PluginConfigXml {
     public SemanticVersion GameVersion { get; set; }
     [XmlIgnore] public IEnumerable<FileDto> Dlls => BinDtos;
 
+    [XmlArray("bins")]
+    [XmlArrayItem("bin", typeof(FileDto))]
+    public FileDto[] BinDtos { get; set; } = [];
+    
     // TODO add requirements? (either other plugins, or specific DLL's?)
 
     // -----------------------------------------------------------------------------------------------------------------

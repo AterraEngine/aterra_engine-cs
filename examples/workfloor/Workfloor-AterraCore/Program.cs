@@ -30,6 +30,9 @@ public static class Program {
                 NewServiceDescriptor<IMainWindow, MainWindow>(ServiceLifetime.Singleton)
             ])
             
+            // Run the logic needed by the sub configurations of Nexities, FlexiPlug, etc..
+            .RunSubConfigurations()
+            
             .AssignStaticServices([
                 NewServiceDescriptor<RenderThreadEvents, RenderThreadEvents>(ServiceLifetime.Singleton),
                 NewServiceDescriptor<IApplicationStageManager, ApplicationStageManager>(ServiceLifetime.Singleton),

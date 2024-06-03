@@ -89,8 +89,21 @@ public class EngineConfiguration(ILogger? logger = null) : IEngineConfiguration 
         return this;
     }
 
+    public IEngineConfiguration RunSubConfigurations() {
+        if (Flow > RanSubConfigurations) ConfigurationWarnings |= FlowOfOperationsNotRespected;
+
+        ConfigurationWarnings warnings = BootSequenceExtenders
+            .Select(extender => extender.AsSubConfiguration(this))
+            .Aggregate(Nominal, (warning, agg) => agg | warning);
+
+        if (warnings != Nominal) ConfigurationWarnings |= warnings;
+
+        Flow = RanSubConfigurations;
+        return this;
+    }
+
     public IEngineConfiguration AssignStaticServices(IEnumerable<ServiceDescriptor>? serviceDescriptors = null) {
-        if (Flow > AssignedStaticServices) ConfigurationWarnings |= FlowOfOperationsNotRespected;
+        if (Flow > AssignedStaticServices && Flow < RanSubConfigurations) ConfigurationWarnings |= FlowOfOperationsNotRespected;
 
         // services which may not be overriden
         if (serviceDescriptors is not null) {

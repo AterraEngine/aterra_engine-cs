@@ -33,13 +33,16 @@ public class EngineConfigXml {
             .AppendLineValued("- Engine version: ", EngineVersion)
             .AppendLineValued("- Game: ", GameVersion)
             .AppendLineValued("- Plugin RootFolder: ",destruct:true, PluginData.RootFolder)
-            .AppendLineValued("- Plugin Plugins: ",destruct:true, PluginData.LoadOrder.Plugins.ToList())
-            .AppendLineValued("- Raylib config: ",destruct:true, RaylibConfig)
             .AppendLine()
             .AppendLine("Plugins - Load Order : (Ids are not final)");
 
+        int offset = 0;
+        if (PluginData.LoadOrder.IncludeRootAssembly) {
+            valuedBuilder.AppendLineValued($"- id_{new PluginId(offset++).ToString()} : ", "ROOT-ASSEMBLY");
+        }
+        
         PluginData.LoadOrder.Plugins
-            .Select((r, i) => new { r.FilePath, Id = new PluginId(i).ToString() })
+            .Select((r, i) => new { r.FilePath, Id = new PluginId(i+offset).ToString() })
             .IterateOver(box => valuedBuilder.AppendLineValued($"- id_{box.Id} : ", box.FilePath));
 
         valuedBuilder.AppendLine();

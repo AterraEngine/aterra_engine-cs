@@ -30,5 +30,4 @@ public interface ILoadedPluginDto {
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public IEnumerable<ServiceDescriptor> GetServices();
-    public void IngestFromPluginConfig(PluginConfigXml pluginConfigXml);
 }

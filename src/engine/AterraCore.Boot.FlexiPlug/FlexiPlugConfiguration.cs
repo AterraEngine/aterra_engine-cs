@@ -10,6 +10,7 @@ using AterraCore.Contracts.FlexiPlug;
 using AterraCore.FlexiPlug;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using System.Reflection;
 using static Extensions.ServiceDescriptorExtension;
 
 namespace AterraCore.Boot.FlexiPlug;
@@ -36,6 +37,11 @@ public class FlexiPlugConfiguration(ILogger logger) : IFlexiPlugConfiguration {
             return ConfigurationWarnings.InvalidConfiguration;
         }
         
+        // Include root assembly as the primary plugin
+        if (ConfigDto is { IncludeRootAssembly: true, RootAssemblyName: not null, RootAssemblyAuthor: not null }) {
+            PluginLoader.InjectAssemblyAsPlugin(Assembly.GetEntryAssembly()!, ConfigDto.RootAssemblyAuthor, ConfigDto.RootAssemblyName);
+        }
+        
         // Parse all data from the plugins
         if (!PluginLoader.TryParseAllPlugins(ConfigDto.PluginFilePaths)) {
             logger.Warning("Failed to load all plugins correctly.");
@@ -50,7 +56,10 @@ public class FlexiPlugConfiguration(ILogger logger) : IFlexiPlugConfiguration {
         ConfigDto = new FlexiPlugConfigDto {
             PluginFilePaths = engineConfigDto.PluginData.LoadOrder.Plugins.Select(
                 p => Path.Combine(engineConfigDto.PluginData.RootFolder, p.FilePath)
-            )
+            ),
+            IncludeRootAssembly = engineConfigDto.PluginData.LoadOrder.IncludeRootAssembly,
+            RootAssemblyName = engineConfigDto.PluginData.LoadOrder.RootAssembly?.Name,
+            RootAssemblyAuthor = engineConfigDto.PluginData.LoadOrder.RootAssembly?.Author
         };
     }
 }

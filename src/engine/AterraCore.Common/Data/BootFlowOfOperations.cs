@@ -9,12 +9,12 @@ namespace AterraCore.Common.Data;
 
 public enum BootFlowOfOperations : ulong {
     UnConfigured = 0ul,
-    AssignedFlexiPlugConfiguration,
-    AssignedNexitiesConfiguration,
-    
     ImportedEngineConfigDto,
     
     AssignedDefaultServices,
+    
+    RanSubConfigurations,
+    
     AssignedStaticServices,
     
     DiContainerBuilt

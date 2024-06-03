@@ -4,7 +4,8 @@
     <gameVersion value="0.0.0"/>
     <breakOnFlowException>false</breakOnFlowException>
     <pluginData root="plugins">
-        <loadOrder breakOnUnstable="true">
+        <loadOrder breakOnUnstable="true" includeRootAssembly="true">
+            <rootAssembly name="AterraWorkfloor" author="AndreasSas"/>
             <file file="Workfloor-AterraCore.Plugin.zip"/>
         </loadOrder>
     </pluginData>

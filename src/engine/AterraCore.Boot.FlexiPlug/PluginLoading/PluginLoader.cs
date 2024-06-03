@@ -68,20 +68,21 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         return trimmedFaulty && Plugins.Count != 0;
     }
 
-    public void InjectAssemblyAsPlugin(BareAssemblyPlugin manuallyImportedAssembly) {
+    public void InjectAssemblyAsPlugin(Assembly assembly, string author, string name) {
         // A very special case where the dev wants to assign the current assembly as a plugin
         //      Useful if you don't want to have another project if you just have a single plugin 
 
-        ILoadedPluginDto pluginData = CreateNewPluginDto(manuallyImportedAssembly.Assembly.Location);
-        pluginData.Assemblies.Add(manuallyImportedAssembly.Assembly);
-        pluginData.Data = new PluginConfigXml {
-            ReadableName = manuallyImportedAssembly.ReadableName,
-            Author = manuallyImportedAssembly.Author
+        ILoadedPluginDto pluginDto = CreateNewPluginDto(assembly.Location);
+        pluginDto.Assemblies.Add(assembly);
+        
+        pluginDto.Data = new PluginConfigXml {
+            ReadableName = name,
+            Author = author
         };
-        pluginData.Validity = PluginValidity.Valid;
-        pluginData.IsProcessed = true;
+        pluginDto.Validity = PluginValidity.Valid;
+        pluginDto.IsProcessed = true;
 
-        logger.Debug("{Id} : Custom Assembly assigned ", pluginData.ReadableId);
+        logger.Debug("{Id} : Custom Assembly assigned ", pluginDto.ReadableId);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -139,7 +140,7 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
             return pluginData;
         }
 
-        pluginData.IngestFromPluginConfig(pluginConfigDto);
+        pluginData.Data = pluginConfigDto;
         logger.Debug("{Id} : Valid PluginConfig found", pluginData.ReadableId);
 
         return pluginData;

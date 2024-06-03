@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using AterraCore.Contracts.Boot.FlexiPlug;
+using System.Reflection;
 
 namespace AterraCore.Contracts.FlexiPlug;
 
@@ -16,5 +17,5 @@ public interface IPluginLoader {
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public bool TryParseAllPlugins(IEnumerable<string> filePaths);
-    public void InjectAssemblyAsPlugin(BareAssemblyPlugin manuallyImportedAssembly);
+    public void InjectAssemblyAsPlugin(Assembly assembly, string author, string name);
 }

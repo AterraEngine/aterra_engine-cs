@@ -49,8 +49,4 @@ public class LoadedPluginDto(int id, string filepath) : ILoadedPluginDto {
             (ServiceLifetime)t.Attribute?.Lifetime!// WHY THE HELL DOES THIS NEED TO BE CAST???
             ));
     }
-
-    public void IngestFromPluginConfig(PluginConfigXml pluginConfigDto) {
-        
-    }
 }
