@@ -12,13 +12,12 @@ namespace AterraCore.Nexities.Parsers.FileElements;
 [XmlRoot("AssetData")]
 public class AssetDataXml : IXmlFileDto<AssetDataXml> {
     [XmlArray("requirements")]
-    [XmlArrayItem("plugin")]
+    [XmlArrayItem("plugin", typeof(RequiredPluginDto))]
     public RequiredPluginDto[] RequiredPlugins { get; set; } = [];
 
     [XmlArray("assets")]
-    [XmlArrayItem("asset")]
+    [XmlArrayItem("asset", typeof(AssetDto))]
     public AssetDto[] Assets { get; set; } = [];
-
 
     // TODO add overwritable asset data so we can change data from other plugins 
 

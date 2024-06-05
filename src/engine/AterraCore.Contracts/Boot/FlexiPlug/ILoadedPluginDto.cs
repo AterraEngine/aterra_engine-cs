@@ -24,6 +24,7 @@ public interface ILoadedPluginDto {
     public string FilePath { get; }
     
     public PluginConfigXml? Data { get; set; }
+    public IEnumerable<string> InternalFilePaths { get; set; }
 
 
     // -----------------------------------------------------------------------------------------------------------------

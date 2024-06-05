@@ -27,10 +27,11 @@ public class LoadedPluginDto(int id, string filepath) : ILoadedPluginDto {
     private PluginValidity _validity = PluginValidity.Untested;
     public PluginValidity Validity {
         get => _validity;
-        set => _validity = _validity != PluginValidity.Invalid ? value : _validity;// Once invalid, always invalid
+        set => _validity = _validity != PluginValidity.Invalid ? value : _validity; // Once invalid, always invalid
     }
 
     public string? CheckSum { get; set; } = null;
+    public IEnumerable<string> InternalFilePaths { get; set; } = [];
     
     public List<Assembly> Assemblies { get; } = [];
     private IEnumerable<Type>? _types;

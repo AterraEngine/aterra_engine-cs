@@ -6,6 +6,20 @@
     </requirements>
 
     <assets>
+<!--        <level assetId="">-->
+<!--            <system assetId="a"/>-->
+<!--            <system assetId="b"/>-->
+<!--            <system assetId="c"/>-->
+<!--            <system assetId="d"/>-->
+<!--            <system assetId="e"/>-->
+<!--            -->
+<!--            <assetTree>-->
+<!--                <instance assetId="0000:AE00-0001" data="1;0:1;1:0;0"/>-->
+<!--                <instance assetId="0000:AE00-0000" data="1;0:1;1:0;0"/>-->
+<!--            </assetTree>-->
+<!--            -->
+<!--        </level>-->
+        
         <asset assetId="0000:AE00-0000" guid="530d1c21-36eb-44ba-867e-1dc40e813b86">
             <component assetId="0000:AC00-0000">
                 <value name="Translation" value="1;0"/>

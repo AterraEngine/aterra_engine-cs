@@ -65,7 +65,7 @@ public class AssetDataXmlService(
             }
 
             // Create the instance
-            if (!instanceAtlas.TryCreateInstance(assetId, out INexitiesEntity? instance, asset.DefinedGuid)) {
+            if (!instanceAtlas.TryCreateInstance(assetId, out INexitiesEntity? instance, asset.Guid)) {
                 logger.Warning("Asset could not be instantiated");
                 continue;
             }

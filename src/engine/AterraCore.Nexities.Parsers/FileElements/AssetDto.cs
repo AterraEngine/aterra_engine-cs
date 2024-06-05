@@ -11,11 +11,11 @@ namespace AterraCore.Nexities.Parsers.FileElements;
 
 public class AssetDto {
     [XmlAttribute("assetId")]
-    public string? RawAssetId { get; set; }
+    public string RawAssetId { get; set; } = string.Empty;
 
     [XmlAttribute("guid")]
-    private string? _guid { get; set; }
-    public Guid? DefinedGuid => Guid.TryParse(_guid, out Guid id) ? id : null;
+    public string RawGuid { get; set; } = string.Empty;
+    public Guid? Guid => System.Guid.TryParse(RawGuid, out Guid id) ? id : null;
 
     [XmlElement("component")]
     public ComponentDto[] Components { get; set; } = [];

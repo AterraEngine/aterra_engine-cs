@@ -74,7 +74,7 @@ public class Engine(
         renderThreadEvents.InvokeApplicationStageChange(ApplicationStage.StartupScreen);
 
         foreach (AssetRegistration assetRegistration in pluginAtlas.GetAssetRegistrations()) {
-            await Task.Delay(5000); 
+            await Task.Delay(1000); // TODO REMOVE DELAY
             if (!assetAtlas.TryAssignAsset(assetRegistration, out AssetId? _)) {
                 logger.Warning("Type {Type} could not be assigned as an asset", assetRegistration.Type);
             }

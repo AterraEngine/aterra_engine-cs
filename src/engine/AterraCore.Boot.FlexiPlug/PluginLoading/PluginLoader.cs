@@ -52,6 +52,7 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
             .Select(pluginData => WithZipImporter(pluginData, [
                 CheckForDuplicates,
                 DebugGetAllFiles,
+                SaveInternalFilePaths,
                 GetConfigData,
                 CheckEngineCompatibility,
                 ImportDlls
@@ -131,6 +132,10 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         }
 
         return pluginData;
+    }
+    private ILoadedPluginDto SaveInternalFilePaths(ILoadedPluginDto pluginDto, IPluginZipImporter<PluginConfigXml> zipImporter) {
+        pluginDto.InternalFilePaths = zipImporter.GetFileNamesInZip();
+        return pluginDto;
     }
 
     private ILoadedPluginDto GetConfigData(ILoadedPluginDto pluginData, IPluginZipImporter<PluginConfigXml> zipImporter) {

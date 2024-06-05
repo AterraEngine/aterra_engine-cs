@@ -29,6 +29,13 @@ public static class Program {
             .WithSubConfigurations(sc => {
                 sc.FlexiPlug
                     .CheckAndIncludeRootAssembly()
+                    // .WithPluginData(dto => {
+                    //     dto
+                    //         .checkIfExsits
+                    //         .withZipImporter(zipimporter => {
+                    //             
+                    //         })
+                    // })
                     .PreLoadPlugins()
                 ;
                 
