@@ -9,7 +9,7 @@ namespace AterraCore.Common.ConfigFiles.EngineConfig.Elements;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public class RootAssembly {
+public class RootAssemblyDto {
     [XmlAttribute("author")]
     public string Author { get; set; } = string.Empty;
     

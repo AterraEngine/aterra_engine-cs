@@ -6,9 +6,8 @@ namespace Extensions;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
 public static class EnumExtensions {
-    public static IEnumerable<T> GetFlaggedValues<T>(this T flagEnum) where T : struct, Enum {
+    public static IEnumerable<T> GetFlaggedAsValues<T>(this T flagEnum) where T : struct, Enum {
         return Enum.GetValues<T>().Where(f => flagEnum.HasFlag(f));
     }
 }

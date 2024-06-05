@@ -1,18 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Boot.FlexiPlug;
+using System.Xml.Serialization;
 
-namespace AterraCore.Boot.FlexiPlug;
+namespace AterraCore.Common.ConfigFiles.EngineConfig.Elements;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public class FlexiPlugConfigDto : IFlexiPlugConfigDto {
-    public bool IncludeRootAssembly { get; init; } = true;
-    public IEnumerable<string> PluginFilePaths { get; init; } = [];
-    
-    public string? RootAssemblyName {get; init; }
-    public string? RootAssemblyAuthor {get; init; }
+public class BootConfigDto {
+    [XmlElement("logging")] public BootLoggingDto Logging { get; set; } = new();
+    [XmlElement("expections")] public BootExceptionsDto Exceptions { get; set; } = new();
 }

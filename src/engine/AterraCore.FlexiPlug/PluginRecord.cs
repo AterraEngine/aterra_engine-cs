@@ -60,7 +60,7 @@ public class PluginRecord : IPluginRecord {
     //         }
     //         ));
     // }
-    //
+    
     // public IEnumerable<ServiceDescriptor> GetNexitiesEntities() {
     //     return Types
     //         .Select(t => new { Type = t, Attribute = t.GetCustomAttribute<EntityAttribute>(false) })// this way we only get the attribute once

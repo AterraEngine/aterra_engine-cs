@@ -8,9 +8,11 @@ using AterraCore.Contracts.Boot;
 using AterraCore.Contracts.Boot.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.FlexiPlug;
+using Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System.Reflection;
+using static AterraCore.Common.Data.ConfigurationWarnings;
 using static Extensions.ServiceDescriptorExtension;
 
 namespace AterraCore.Boot.FlexiPlug;
@@ -19,52 +21,52 @@ namespace AterraCore.Boot.FlexiPlug;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public class FlexiPlugConfiguration(ILogger logger) : IFlexiPlugConfiguration {
-    public IEnumerable<ServiceDescriptor> ServicesDefault { get; } = [];
-    public IEnumerable<ServiceDescriptor> ServicesStatic { get; } = [
+public class FlexiPlugConfiguration(ILogger logger, EngineConfigXml engineConfigDto) : IFlexiPlugConfiguration {
+    public LinkedList<ServiceDescriptor> ServicesDefault { get; } = [];
+    public LinkedList<ServiceDescriptor> ServicesStatic { get; } = new ([
         NewServiceDescriptor<IPluginAtlas, PluginAtlas>(ServiceLifetime.Singleton),
-    ];
+    ]);
     
     public IPluginLoader PluginLoader { get; } = new PluginLoader(logger);
-    
-    private FlexiPlugConfigDto? ConfigDto { get; set; }
+    public EngineConfigXml EngineConfig { get; set; } = engineConfigDto;
+
+    public ConfigurationWarnings Warnings { get; private set; } = Nominal;
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public ConfigurationWarnings AsSubConfiguration(IEngineConfiguration engineConfiguration) {
-        if (ConfigDto is null) {
-            return ConfigurationWarnings.InvalidConfiguration;
-        }
-        
+    public IFlexiPlugConfiguration CheckAndIncludeRootAssembly() {
         // Include root assembly as the primary plugin
-        if (ConfigDto is { IncludeRootAssembly: true, RootAssemblyName: not null, RootAssemblyAuthor: not null }) {
-            PluginLoader.InjectAssemblyAsPlugin(Assembly.GetEntryAssembly()!, ConfigDto.RootAssemblyAuthor, ConfigDto.RootAssemblyName);
-        }
+        if (EngineConfig.LoadOrder is not { IncludeRootAssembly: true, RootAssembly: not null }) return this;
         
-        // Parse all data from the plugins
-        if (!PluginLoader.TryParseAllPlugins(ConfigDto.PluginFilePaths)) {
-            logger.Warning("Failed to load all plugins correctly.");
-            return ConfigurationWarnings.PluginLoadOrderUnstable | ConfigurationWarnings.UnstablePlugin;
-        } 
-        
-        // Assign custom services
-        engineConfiguration.AssignExtraServices(
-            PluginLoader.Plugins.SelectMany(dto => dto.GetServices()).ToArray()
+        PluginLoader.InjectAssemblyAsPlugin(
+            Assembly.GetEntryAssembly()!, 
+            EngineConfig.LoadOrder.RootAssembly.Author, 
+            EngineConfig.LoadOrder.RootAssembly.Name
+        );
+        logger.Information("Assigned Root Assembly as plugin");
+        return this;
+    }
+
+    public IFlexiPlugConfiguration PreLoadPlugins() {
+        IEnumerable<string> filePaths = EngineConfig.LoadOrder.Plugins.Select(
+            p => Path.Combine(EngineConfig.LoadOrder.RootFolderRelative, p.FilePath)
         );
         
-        logger.Information("Plugins successfully loaded.");
-        return ConfigurationWarnings.Nominal;
+        if (PluginLoader.TryParseAllPlugins(filePaths)) return this;
+        
+        logger.Warning("Failed to load all plugins correctly.");
+        Warnings |= PluginLoadOrderUnstable | UnstablePlugin;
+
+        return this;
     }
     
-    public void ParseDataFromConfig(EngineConfigXml engineConfigDto) {
-        ConfigDto = new FlexiPlugConfigDto {
-            PluginFilePaths = engineConfigDto.PluginData.LoadOrder.Plugins.Select(
-                p => Path.Combine(engineConfigDto.PluginData.RootFolder, p.FilePath)
-            ),
-            IncludeRootAssembly = engineConfigDto.PluginData.LoadOrder.IncludeRootAssembly,
-            RootAssemblyName = engineConfigDto.PluginData.LoadOrder.RootAssembly?.Name,
-            RootAssemblyAuthor = engineConfigDto.PluginData.LoadOrder.RootAssembly?.Author
-        };
+    public ConfigurationWarnings AsSubConfiguration(IEngineConfiguration engineConfiguration) {
+        // Assign custom services
+        ServicesDefault.AddLastRepeated(PluginLoader.Plugins.SelectMany(dto => dto.GetServicesDefault()));
+        ServicesStatic.AddLastRepeated(PluginLoader.Plugins.SelectMany(dto => dto.GetServicesDefault()));
+        
+        logger.Information("Plugins successfully loaded.");
+        return Nominal;
     }
 }

@@ -29,5 +29,6 @@ public interface ILoadedPluginDto {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public IEnumerable<ServiceDescriptor> GetServices();
+    public IEnumerable<ServiceDescriptor> GetServicesDefault();
+    public IEnumerable<ServiceDescriptor> GetServicesStatic();
 }

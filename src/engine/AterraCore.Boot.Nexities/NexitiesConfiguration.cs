@@ -15,6 +15,7 @@ using AterraCore.Nexities.Parsers.NamedValues;
 using AterraCore.Nexities.Worlds;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using static AterraCore.Common.Data.ConfigurationWarnings;
 using static Extensions.ServiceDescriptorExtension;
 
 namespace AterraCore.Boot.Nexities;
@@ -23,27 +24,23 @@ namespace AterraCore.Boot.Nexities;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public class NexitiesConfiguration(ILogger logger) : INexitiesConfiguration {
-    public IEnumerable<ServiceDescriptor> ServicesDefault { get; } = [
+public class NexitiesConfiguration(ILogger logger, EngineConfigXml engineConfigDto) : INexitiesConfiguration {
+    public LinkedList<ServiceDescriptor> ServicesDefault { get; } = new([
         NewServiceDescriptor<IWorld, World>(ServiceLifetime.Singleton),
-    ];
-    public IEnumerable<ServiceDescriptor> ServicesStatic { get; } = [
+    ]);
+    
+    public LinkedList<ServiceDescriptor> ServicesStatic { get; } = new([
         NewServiceDescriptor<INamedValueConverter, NamedValueConverter>(ServiceLifetime.Singleton),
         NewServiceDescriptor<IAssetAtlas, AssetAtlas>(ServiceLifetime.Singleton),
         NewServiceDescriptor<IAssetInstanceAtlas, AssetInstanceAtlas>(ServiceLifetime.Singleton),
         NewServiceDescriptor<IAssetDataXmlService, AssetDataXmlService>(ServiceLifetime.Singleton)
-    ];
-    
-    private NexitiesConfigDto? ConfigDto { get; set; }
+    ]);
+
+    public EngineConfigXml EngineConfig { get; set; } = engineConfigDto;
+
+    public ConfigurationWarnings Warnings { get; private set; } = Nominal;
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public ConfigurationWarnings AsSubConfiguration(IEngineConfiguration engineConfiguration) {
-        return ConfigurationWarnings.Nominal;
-    }
-
-    public void ParseDataFromConfig(EngineConfigXml engineConfigDto) {
-        ConfigDto = new NexitiesConfigDto();
-    }
 }

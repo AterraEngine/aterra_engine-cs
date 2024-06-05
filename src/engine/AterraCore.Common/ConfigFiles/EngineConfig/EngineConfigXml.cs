@@ -18,10 +18,9 @@ namespace AterraCore.Common.ConfigFiles.EngineConfig;
 public class EngineConfigXml {
     [XmlElement("engineVersion")] public SemanticVersion EngineVersion { get; set; } = SemanticVersion.Zero;
     [XmlElement("gameVersion")] public SemanticVersion GameVersion { get; set; } = SemanticVersion.Zero;
-    [XmlElement("breakOnFlowException")] public bool BreakOnFlowException { get; set; } = true;
-    [XmlElement("pluginData")] public PluginDataDto PluginData { get; set; } = new();
+    [XmlElement("boot")] public BootConfigDto BootConfig { get; set; } = new();
+    [XmlElement("loadOrder")] public LoadOrderDto LoadOrder { get; set; } = new();
     [XmlElement("raylib")] public RaylibConfigDto RaylibConfig { get; set; } = new();
-    [XmlElement("logging")] public LoggingDto Logging { get; set; } = new();
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
@@ -32,16 +31,16 @@ public class EngineConfigXml {
             .AppendLine("Engine PluginDtos loaded with the following data:")
             .AppendLineValued("- Engine version: ", EngineVersion)
             .AppendLineValued("- Game: ", GameVersion)
-            .AppendLineValued("- Plugin RootFolder: ",destruct:true, PluginData.RootFolder)
+            .AppendLineValued("- Plugin RootFolder: ",destruct:true, LoadOrder.RootFolderRelative)
             .AppendLine()
             .AppendLine("Plugins - Load Order : (Ids are not final)");
 
         int offset = 0;
-        if (PluginData.LoadOrder.IncludeRootAssembly) {
+        if (LoadOrder.IncludeRootAssembly) {
             valuedBuilder.AppendLineValued($"- id_{new PluginId(offset++).ToString()} : ", "ROOT-ASSEMBLY");
         }
         
-        PluginData.LoadOrder.Plugins
+        LoadOrder.Plugins
             .Select((r, i) => new { r.FilePath, Id = new PluginId(i+offset).ToString() })
             .IterateOver(box => valuedBuilder.AppendLineValued($"- id_{box.Id} : ", box.FilePath));
 

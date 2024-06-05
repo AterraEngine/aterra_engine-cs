@@ -1,20 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.ConfigFiles.EngineConfig;
-using AterraCore.Common.Data;
-using Microsoft.Extensions.DependencyInjection;
+using System.Xml.Serialization;
 
-namespace AterraCore.Contracts.Boot;
+namespace AterraCore.Common.ConfigFiles.EngineConfig.Elements;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public interface IBootConfiguration {
-    public LinkedList<ServiceDescriptor> ServicesDefault { get; }
-    public LinkedList<ServiceDescriptor> ServicesStatic { get; }
-    public EngineConfigXml EngineConfig { get; set; }
-    
-    public ConfigurationWarnings Warnings { get; }
+public class BootExceptionsDto {
+    [XmlAttribute("breakOnFlowException")] public bool BreakOnFlowException { get; set; } = true;
+    [XmlAttribute("breakOnUnstableLoadOrder")] public bool BreakOnUnstableLoadOrder { get; set; } = true;
 }

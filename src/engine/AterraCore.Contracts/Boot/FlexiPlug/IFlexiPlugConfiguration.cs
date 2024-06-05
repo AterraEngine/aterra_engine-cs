@@ -1,6 +1,8 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.ConfigFiles.EngineConfig;
+using AterraCore.Common.Data;
 using AterraCore.Contracts.FlexiPlug;
 
 namespace AterraCore.Contracts.Boot.FlexiPlug;
@@ -10,5 +12,11 @@ namespace AterraCore.Contracts.Boot.FlexiPlug;
 // ---------------------------------------------------------------------------------------------------------------------
 
 public interface IFlexiPlugConfiguration : IBootConfiguration {
-    IPluginLoader PluginLoader { get; } 
+    public IPluginLoader PluginLoader { get; }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    public IFlexiPlugConfiguration CheckAndIncludeRootAssembly();
+    public IFlexiPlugConfiguration PreLoadPlugins();
 }

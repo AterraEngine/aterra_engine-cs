@@ -1,20 +1,17 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.ConfigFiles.EngineConfig;
-using AterraCore.Common.Data;
-using Microsoft.Extensions.DependencyInjection;
-
-namespace AterraCore.Contracts.Boot;
+namespace Extensions;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public interface IBootConfiguration {
-    public LinkedList<ServiceDescriptor> ServicesDefault { get; }
-    public LinkedList<ServiceDescriptor> ServicesStatic { get; }
-    public EngineConfigXml EngineConfig { get; set; }
-    
-    public ConfigurationWarnings Warnings { get; }
+public static class LinkedListExtensions {
+
+    public static void AddLastRepeated<T>(this LinkedList<T> linkedList, IEnumerable<T> source) {
+        foreach (T t in source) {
+            linkedList.AddLast(t);
+        }
+    }
 }

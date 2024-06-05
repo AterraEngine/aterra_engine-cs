@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.ConfigFiles.EngineConfig;
 using AterraCore.Common.Data;
+using AterraCore.Contracts.DI;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
@@ -12,24 +13,18 @@ namespace AterraCore.Contracts.Boot;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public interface IEngineConfiguration {
-    public ConfigurationWarnings ConfigurationWarnings { get; set; }
+public interface IEngineConfiguration : IBootConfiguration {
     public BootFlowOfOperations Flow { get; }
     public ILogger StartupLog { get; }
-    public EngineConfigXml EngineConfigDto { get; }
+    public Func<ILogger> EngineLoggerCallback { get; set; }
+    public IEngineServiceBuilder EngineServiceBuilder { get; }
+    public ISubConfigurations SubConfigurations { get; set; }
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public IEngineConfiguration SetEngineLogger(Func<ILogger> loggerCallback);
-    
-    public IEngineConfiguration AssignDefaultServices(params ServiceDescriptor[] serviceDescriptors);
-    public IEngineConfiguration AssignExtraServices(params ServiceDescriptor[] serviceDescriptors);
-    public IEngineConfiguration RunSubConfigurations();
-    public IEngineConfiguration AssignStaticServices(params ServiceDescriptor[] serviceDescriptors);
-    public IEngineConfiguration ImportEngineConfig(string filePath, bool outputToLog = true);
-    public IEngineConfiguration BuildDependencyInjectionContainer();
-    
+    public IEngineConfiguration UseDefaultEngine();
+    public IEngineConfiguration UseCustomEngine<T>() where T : IEngine;
     public IEngine CreateEngine();
 
 

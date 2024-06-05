@@ -1,15 +1,16 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Contracts.Boot.FlexiPlug;
+using AterraCore.Contracts.Boot.Nexities;
 
-using System.Xml.Serialization;
-
-namespace AterraCore.Common.ConfigFiles.EngineConfig.Elements;
+namespace AterraCore.Contracts.Boot;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public class LoggingDto {
-    [XmlAttribute("async-console")] public bool UseAsyncConsole { get; set; }
+public interface ISubConfigurations {
+    public IFlexiPlugConfiguration FlexiPlug { get; init; }
+    public INexitiesConfiguration Nexities { get; init; }
 }

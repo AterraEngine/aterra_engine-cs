@@ -1,20 +1,17 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.ConfigFiles.EngineConfig;
-using AterraCore.Common.Data;
-using Microsoft.Extensions.DependencyInjection;
+using AterraCore.Contracts.Boot;
+using AterraCore.Contracts.Boot.FlexiPlug;
+using AterraCore.Contracts.Boot.Nexities;
 
-namespace AterraCore.Contracts.Boot;
+namespace AterraCore.Boot;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public interface IBootConfiguration {
-    public LinkedList<ServiceDescriptor> ServicesDefault { get; }
-    public LinkedList<ServiceDescriptor> ServicesStatic { get; }
-    public EngineConfigXml EngineConfig { get; set; }
-    
-    public ConfigurationWarnings Warnings { get; }
-}
+public record SubConfigurations(
+    IFlexiPlugConfiguration FlexiPlug,
+    INexitiesConfiguration Nexities
+) : ISubConfigurations;

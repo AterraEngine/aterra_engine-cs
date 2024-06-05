@@ -8,6 +8,7 @@ using AterraEngine.Renderer.RaylibCs;
 using Microsoft.Extensions.DependencyInjection;
 using AterraEngine.Threading;
 using AterraCore.Boot;
+using AterraCore.Boot.Logic;
 using AterraCore.Common.Data;
 using static Extensions.ServiceDescriptorExtension;
 
@@ -20,20 +21,29 @@ namespace Workfloor_AterraCore;
 public static class Program {
     public static void Main(string[] args) {
         IEngine engine = new EngineConfiguration()
-            // Engine PluginDtos file also depends on the other configuration files
+            .UseDefaultEngine()
             .ImportEngineConfig(Paths.ConfigEngine)
+            
+            // --- Assign SubConfigurations ---
+            .AddSubConfigurations()
+            .WithSubConfigurations(sc => {
+                sc.FlexiPlug
+                    .CheckAndIncludeRootAssembly()
+                    .PreLoadPlugins()
+                ;
+                
+                // sc.Nexities
+                // ;
+            })
             
             // --- Assign Services for the ServiceProvider ---
             // Assigns services which may be overriden by plugins
-            .AssignDefaultServices([
+            .AddDefaultServices([
                 NewServiceDescriptor<RaylibLogger, RaylibLogger>(ServiceLifetime.Singleton),
                 NewServiceDescriptor<IMainWindow, MainWindow>(ServiceLifetime.Singleton)
             ])
             
-            // Run the logic needed by the sub configurations of Nexities, FlexiPlug, etc..
-            .RunSubConfigurations()
-            
-            .AssignStaticServices([
+            .AddStaticServices([
                 NewServiceDescriptor<RenderThreadEvents, RenderThreadEvents>(ServiceLifetime.Singleton),
                 NewServiceDescriptor<IApplicationStageManager, ApplicationStageManager>(ServiceLifetime.Singleton),
             ])
@@ -49,7 +59,7 @@ public static class Program {
         engine
             .SubscribeToEvents()
             .SpawnRenderThread()
-            ;
+        ;
 
         // Actually startup the engine
         Task.Run(engine.Run).GetAwaiter().GetResult();

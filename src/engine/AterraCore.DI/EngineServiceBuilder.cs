@@ -21,9 +21,9 @@ public class EngineServiceBuilder(ILogger logger) : IEngineServiceBuilder {
     public void AssignFromServiceDescriptor(ServiceDescriptor serviceDescriptor) {
         ServiceCollection.Add(serviceDescriptor);
         Logger.Information(
-        "Type {Type} assigned to {Imp}",
-        serviceDescriptor.ServiceType,
-        serviceDescriptor.ImplementationType
+            "EngineServiceBuilder: Type {Type} assigned to {Imp}",
+            serviceDescriptor.ServiceType,
+            serviceDescriptor.ImplementationType
         );
     }
     public void AssignFromServiceDescriptors(IEnumerable<ServiceDescriptor> services) =>

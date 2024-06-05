@@ -16,4 +16,6 @@ public enum ConfigurationWarnings : ulong {
     FlowOfOperationsNotRespected = 1ul << 3,
     NoPluginsDefined = 1ul << 4,
     InvalidConfiguration = 1ul << 5,
+    
+    
 }

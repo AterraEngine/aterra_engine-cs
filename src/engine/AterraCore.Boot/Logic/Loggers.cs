@@ -1,20 +1,18 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.ConfigFiles.EngineConfig;
-using AterraCore.Common.Data;
-using Microsoft.Extensions.DependencyInjection;
+using AterraCore.Contracts.Boot;
+using Serilog;
 
-namespace AterraCore.Contracts.Boot;
+namespace AterraCore.Boot.Logic;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public interface IBootConfiguration {
-    public LinkedList<ServiceDescriptor> ServicesDefault { get; }
-    public LinkedList<ServiceDescriptor> ServicesStatic { get; }
-    public EngineConfigXml EngineConfig { get; set; }
-    
-    public ConfigurationWarnings Warnings { get; }
+public static class Loggers {
+    public static IEngineConfiguration SetEngineLogger(this IEngineConfiguration configuration, Func<ILogger> loggerCallback) {
+        configuration.EngineLoggerCallback = loggerCallback;
+        return configuration;
+    }
 }

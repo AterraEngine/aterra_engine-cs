@@ -36,17 +36,28 @@ public class LoadedPluginDto(int id, string filepath) : ILoadedPluginDto {
     private IEnumerable<Type>? _types;
     public IEnumerable<Type> Types => _types ??= Assemblies.SelectMany(assembly => assembly.GetTypes());
 
+    private IEnumerable<(Type Type, InjectableServiceAttribute Attribute)>? _injectableServices;
+    private IEnumerable<(Type Type, InjectableServiceAttribute Attribute)> InjectableServices => _injectableServices ??= Types
+        .Select(t => (t,  t.GetCustomAttribute<InjectableServiceAttribute>(false)))// this way we only get the attribute once
+        .Where(t => t.Item2 != null)!
+    ;
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public IEnumerable<ServiceDescriptor> GetServices() {
-        return Types
-            .Select(t => new { Type = t, Attribute = t.GetCustomAttribute<InjectableServiceAttribute>(false) })// this way we only get the attribute once
-            .Where(t => t.Attribute != null)
-            .Select(t => new ServiceDescriptor(
-            t.Attribute?.Interface ?? t.Type,
+    public IEnumerable<ServiceDescriptor> GetServicesDefault() => InjectableServices
+        .Where(t => !t.Attribute.IsStatic)
+        .Select(t => new ServiceDescriptor(
+            t.Attribute.Interface,
             t.Type,
-            (ServiceLifetime)t.Attribute?.Lifetime!// WHY THE HELL DOES THIS NEED TO BE CAST???
-            ));
-    }
+            t.Attribute.Lifetime
+        ));
+    
+    public IEnumerable<ServiceDescriptor> GetServicesStatic() => InjectableServices
+        .Where(t => t.Attribute.IsStatic)
+        .Select(t => new ServiceDescriptor(
+            t.Attribute.Interface,
+            t.Type,
+            t.Attribute.Lifetime
+        ));
 }
