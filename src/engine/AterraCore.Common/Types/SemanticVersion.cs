@@ -32,13 +32,7 @@ public partial struct SemanticVersion : IComparable<SemanticVersion>, IEquatable
     [XmlIgnore] public int Minor { get; set; }
     [XmlIgnore] public int Patch { get; set; }
     [XmlIgnore] public string? Addendum { get; set; }
-
-    [XmlAttribute("value")]
-    public string Value {
-        get => ToString();
-        set => ParseFromString(value);
-    }
-
+    
     private static readonly Regex Regex = MyRegex();
 
     // -----------------------------------------------------------------------------------------------------------------

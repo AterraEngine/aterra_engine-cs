@@ -22,11 +22,14 @@ public class PluginConfigXml {
     [XmlElement("author")]
     public string Author { get; set; } = string.Empty;
 
-    [XmlElement("pluginVersion")]
-    public SemanticVersion PluginVersion { get; set; }
+    [XmlElement("pluginVersion")] public string PluginVersionValue { get; set; } = string.Empty;
+    [XmlIgnore] private SemanticVersion? _pluginVersionCache;
+    [XmlIgnore] public SemanticVersion PluginVersion =>_pluginVersionCache ??= new SemanticVersion(PluginVersionValue);
 
-    [XmlElement("expectedGameVersion")]
-    public SemanticVersion GameVersion { get; set; }
+    [XmlElement("expectedGameVersion")] public string GameVersionValue { get; set; } = string.Empty;
+    [XmlIgnore] private SemanticVersion? _gameVersionCache;
+    [XmlIgnore] public SemanticVersion GameVersion =>_gameVersionCache ??= new SemanticVersion(GameVersionValue);
+    
     [XmlIgnore] public IEnumerable<FileDto> Dlls => BinDtos;
 
     [XmlArray("bins")]
@@ -38,18 +41,8 @@ public class PluginConfigXml {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public PluginConfigXml PopulateAsEmpty() {
-        ReadableName = string.Empty;
-        Author = "Unknown";
-        PluginVersion = SemanticVersion.Zero;
-        GameVersion = SemanticVersion.Zero;
-        BinDtos = [];
-
-        return this;
-    }
-
     public void OutputToLog(ILogger logger) {
-
+        
         ValuedStringBuilder valuedBuilder = new ValuedStringBuilder()
             .AppendLine("Plugin PluginDtos loaded with the following data:")
             .AppendLineValued("- Name: ", ReadableName)

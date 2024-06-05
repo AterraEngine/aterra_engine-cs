@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <engineConfig xmlns="urn:aterra-engine:engine-config">
-    <engineVersion value="0.0.0"/>
-    <gameVersion value="0.0.0"/>
+    <engine version="0.0.0"/>
+    <game version="0.0.0"/>
     <boot>
         <logging async-console="false"/>
         <expections 

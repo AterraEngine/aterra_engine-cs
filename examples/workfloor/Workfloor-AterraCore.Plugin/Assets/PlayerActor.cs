@@ -17,6 +17,19 @@ using AterraCore.Nexities.Components;
 public class PlayerSprite : Sprite2D {
     public string Data = "bla-bla";
 }
+
+[Component("B", ServiceLifetimeType.Singleton)] // Services.AddSingleton<PlayerSprite>()
+[UsedImplicitly]
+public class aPlayerSprite : Sprite2D {
+    public string Data = "bla-bla";
+}
+
+[Component("C", ServiceLifetimeType.Singleton)] // Services.AddSingleton<PlayerSprite>()
+[UsedImplicitly]
+public class bPlayerSprite : Sprite2D {
+    public string Data = "bla-bla";
+}
+
 //
 // [Entity("1")]
 // [UsedImplicitly]
