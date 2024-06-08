@@ -6,8 +6,8 @@ using AterraCore.Common.Data;
 using AterraCore.Common.Types.FlexiPlug;
 using AterraCore.Contracts.Boot.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug;
-using Extensions;
-using Extensions.Strings;
+using CodeOfChaos.Extensions;
+using CodeOfChaos.Extensions.Serilog;
 using Serilog;
 using System.Reflection;
 

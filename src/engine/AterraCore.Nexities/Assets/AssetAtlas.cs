@@ -5,7 +5,7 @@
 using AterraCore.Common.Types.FlexiPlug;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Data.Assets;
-using Extensions;
+using CodeOfChaos.Extensions;
 using JetBrains.Annotations;
 using Serilog;
 using System.Collections.Concurrent;

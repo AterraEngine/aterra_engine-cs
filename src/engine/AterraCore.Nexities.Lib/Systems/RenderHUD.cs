@@ -7,7 +7,7 @@ using AterraCore.Nexities.Lib.Components.HUD;
 using AterraCore.Nexities.Lib.Components.HUD.Text;
 using AterraCore.Nexities.Lib.Entities.HUD;
 using AterraCore.Nexities.Systems;
-using Extensions;
+using CodeOfChaos.Extensions;
 using Raylib_cs;
 
 namespace AterraCore.Nexities.Lib.Systems;

@@ -7,9 +7,9 @@ using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Boot.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug.Plugin;
+using CodeOfChaos.Extensions;
 using JetBrains.Annotations;
 using System.Diagnostics.CodeAnalysis;
-using static Extensions.LinqExtensions;
 
 namespace AterraCore.FlexiPlug;
 

@@ -1,7 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using Extensions.Strings;
+using CodeOfChaos.Extensions;
 using System.Xml.Serialization;
 
 namespace AterraCore.Common.ConfigFiles.EngineConfig.Elements;

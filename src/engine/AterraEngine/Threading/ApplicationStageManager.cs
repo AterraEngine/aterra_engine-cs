@@ -4,7 +4,7 @@
 
 using AterraCore.Contracts.Renderer;
 using AterraCore.Contracts.Threading;
-using Extensions;
+using CodeOfChaos.Extensions;
 using JetBrains.Annotations;
 
 namespace AterraEngine.Threading;
@@ -34,5 +34,5 @@ public class ApplicationStageManager : IApplicationStageManager {
         _cachedFrameProcessor = null;
     }
 
-    public bool TryRegisterStage(ApplicationStage stage, IFrameProcessor frameProcessor) => _frameProcessors.TryAddOrUpdate(stage, frameProcessor);
+    public IDictionary<ApplicationStage, IFrameProcessor> TryRegisterStage(ApplicationStage stage, IFrameProcessor frameProcessor) => _frameProcessors.AddOrUpdate(stage, frameProcessor);
 }

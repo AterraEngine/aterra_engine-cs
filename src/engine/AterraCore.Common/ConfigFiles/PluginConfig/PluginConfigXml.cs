@@ -3,8 +3,8 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using AterraCore.Common.Types;
-using Extensions.Strings;
-using Extensions;
+using CodeOfChaos.Extensions;
+using CodeOfChaos.Extensions.Serilog;
 using Serilog;
 using System.Xml.Serialization;
 using Xml.Elements;

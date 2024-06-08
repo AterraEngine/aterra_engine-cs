@@ -4,7 +4,8 @@
 using AterraCore.Boot.FlexiPlug;
 using AterraCore.Boot.Nexities;
 using AterraCore.Contracts.Boot;
-using Extensions;
+using CodeOfChaos.Extensions;
+using CodeOfChaos.Extensions.Serilog;
 using Serilog;
 using static AterraCore.Common.Data.ConfigurationWarnings;
 

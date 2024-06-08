@@ -8,12 +8,12 @@ using AterraCore.Contracts.Boot;
 using AterraCore.Contracts.Boot.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.FlexiPlug;
-using Extensions;
+using CodeOfChaos.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System.Reflection;
 using static AterraCore.Common.Data.ConfigurationWarnings;
-using static Extensions.ServiceDescriptorExtension;
+using static CodeOfChaos.Extensions.DependencyInjection.ServiceDescriptorExtension;
 
 namespace AterraCore.Boot.FlexiPlug;
 

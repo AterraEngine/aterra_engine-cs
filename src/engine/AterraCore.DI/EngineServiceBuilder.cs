@@ -2,7 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.DI;
-using Extensions;
+using CodeOfChaos.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 

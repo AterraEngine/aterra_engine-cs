@@ -10,7 +10,7 @@ using AterraEngine.Threading;
 using AterraCore.Boot;
 using AterraCore.Boot.Logic;
 using AterraCore.Common.Data;
-using static Extensions.ServiceDescriptorExtension;
+using static CodeOfChaos.Extensions.DependencyInjection.ServiceDescriptorExtension;
 
 namespace Workfloor_AterraCore;
 

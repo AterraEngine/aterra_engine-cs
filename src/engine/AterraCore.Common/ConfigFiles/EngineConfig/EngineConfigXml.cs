@@ -3,8 +3,8 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.ConfigFiles.EngineConfig.Elements;
 using AterraCore.Common.Types.FlexiPlug;
-using Extensions.Strings;
-using Extensions;
+using CodeOfChaos.Extensions;
+using CodeOfChaos.Extensions.Serilog;
 using Serilog;
 using System.Xml.Serialization;
 

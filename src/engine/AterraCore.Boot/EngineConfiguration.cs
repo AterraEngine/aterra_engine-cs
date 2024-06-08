@@ -11,13 +11,13 @@ using AterraCore.Contracts.DI;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.DI;
 using AterraEngine;
-using Extensions;
+using CodeOfChaos.Extensions;
+using CodeOfChaos.Extensions.Serilog;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using Xml;
 using static AterraCore.Common.Data.BootFlowOfOperations;
 using static AterraCore.Common.Data.ConfigurationWarnings;
-using static Extensions.ServiceDescriptorExtension;
+using static CodeOfChaos.Extensions.DependencyInjection.ServiceDescriptorExtension;
 
 namespace AterraCore.Boot;
 

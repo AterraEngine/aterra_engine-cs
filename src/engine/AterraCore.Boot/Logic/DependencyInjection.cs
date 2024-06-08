@@ -2,10 +2,10 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.Boot;
-using Extensions;
+using CodeOfChaos.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using static Extensions.ServiceDescriptorExtension;
+using static CodeOfChaos.Extensions.DependencyInjection.ServiceDescriptorExtension;
 
 namespace AterraCore.Boot.Logic;
 

@@ -2,7 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Data;
-using Extensions;
+using CodeOfChaos.Extensions;
 using System.Text;
 using System.Xml.Serialization;
 using Xml.Elements;

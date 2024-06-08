@@ -3,7 +3,6 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.ConfigFiles.EngineConfig;
 using AterraCore.Common.Data;
-using AterraCore.Contracts.Boot;
 using AterraCore.Contracts.Boot.Nexities;
 using AterraCore.Contracts.Nexities.Data.Assets;
 using AterraCore.Contracts.Nexities.Data.Worlds;
@@ -16,7 +15,7 @@ using AterraCore.Nexities.Worlds;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using static AterraCore.Common.Data.ConfigurationWarnings;
-using static Extensions.ServiceDescriptorExtension;
+using static CodeOfChaos.Extensions.DependencyInjection.ServiceDescriptorExtension;
 
 namespace AterraCore.Boot.Nexities;
 

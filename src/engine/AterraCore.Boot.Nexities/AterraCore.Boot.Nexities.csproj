@@ -12,4 +12,10 @@
       <ProjectReference Include="..\AterraCore.Nexities\AterraCore.Nexities.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="CodeOfChaos.Extensions" Version="0.2.0" />
+      <PackageReference Include="CodeOfChaos.Extensions.DependencyInjection" Version="0.1.0" />
+      <PackageReference Include="CodeOfChaos.Extensions.Serilog" Version="0.2.0" />
+    </ItemGroup>
+
 </Project>

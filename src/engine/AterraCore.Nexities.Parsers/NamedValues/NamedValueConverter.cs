@@ -2,7 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.Nexities.DataParsing.NamedValues;
-using Extensions;
+using CodeOfChaos.Extensions;
 using JetBrains.Annotations;
 using System.Numerics;
 
@@ -24,10 +24,11 @@ public class NamedValueConverter : INamedValueConverter {
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public bool TryRegisterProcess(string convertorId, Delegate callback) => _map.TryAdd(convertorId, callback);
-    public bool TryRegisterProcess(string convertorId, Delegate callback, bool overwrite) =>
-        overwrite
-            ? _map.TryAddOrUpdate(convertorId, callback)
-            : _map.TryAdd(convertorId, callback);
+    public bool TryRegisterProcess(string convertorId, Delegate callback, bool overwrite) {
+        if (!overwrite) return _map.TryAdd(convertorId, callback);
+        _map.AddOrUpdate(convertorId, callback);
+        return true;
+    }
 
     public Delegate GetProcessor(string convertor) =>
         _map.TryGetValue(convertor, out Delegate? callback)

@@ -13,7 +13,8 @@ using AterraCore.Contracts.Nexities.DataParsing;
 using AterraCore.Contracts.Renderer;
 using AterraCore.DI;
 using AterraEngine.Threading;
-using Extensions;
+using CodeOfChaos.Extensions;
+using CodeOfChaos.Extensions.Serilog;
 using JetBrains.Annotations;
 using Serilog;
 
