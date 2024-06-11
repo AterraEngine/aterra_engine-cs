@@ -10,6 +10,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\..\src\engine\AterraCore.Boot.FlexiPlug\AterraCore.Boot.FlexiPlug.csproj" />
+        <ProjectReference Include="..\..\..\src\engine\AterraCore.Boot.Nexities\AterraCore.Boot.Nexities.csproj" />
+        <ProjectReference Include="..\..\..\src\engine\AterraCore.Boot\AterraCore.Boot.csproj" />
         <ProjectReference Include="..\..\..\tools\AterraEngine.Analyzers\AterraEngine.Analyzers\AterraEngine.Analyzers.csproj">
             <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
             <OutputItemType>Analyzer</OutputItemType>
@@ -17,14 +20,17 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="CodeOfChaos.Extensions" Version="0.2.0" />
+        <PackageReference Include="CodeOfChaos.Extensions.DependencyInjection" Version="0.1.0" />
+        <PackageReference Include="CodeOfChaos.Extensions.Serilog" Version="0.2.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1"/>
-        <PackageReference Include="Microsoft.Extensions.ObjectPool.DependencyInjection" Version="8.4.0"/>
+        <PackageReference Include="Microsoft.Extensions.ObjectPool.DependencyInjection" Version="8.5.0" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\..\..\src\engine\AterraEngine\AterraEngine.csproj"/>
-        <ProjectReference Include="..\..\..\src\engine\Nexities.Lib\Nexities.Lib.csproj"/>
+        <ProjectReference Include="..\..\..\src\engine\AterraCore.Nexities.Lib\AterraCore.Nexities.Lib.csproj" />
     </ItemGroup>
 
     <ItemGroup>

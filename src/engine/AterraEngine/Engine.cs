@@ -2,21 +2,23 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using AterraCore.Common;
-using AterraCore.Common.Nexities;
+using AterraCore.Common.Data;
+using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts;
 using AterraCore.Contracts.FlexiPlug;
-using AterraCore.Contracts.Renderer;
-using AterraCore.DI;
-using AterraEngine.Threading;
-using Extensions;
-using JetBrains.Annotations;
-using Serilog;
-namespace AterraEngine;
-
 using AterraCore.Contracts.Nexities.Data.Assets;
 using AterraCore.Contracts.Nexities.Data.Levels;
 using AterraCore.Contracts.Nexities.Data.Worlds;
+using AterraCore.Contracts.Nexities.DataParsing;
+using AterraCore.Contracts.Renderer;
+using AterraCore.DI;
+using AterraEngine.Threading;
+using CodeOfChaos.Extensions;
+using CodeOfChaos.Extensions.Serilog;
+using JetBrains.Annotations;
+using Serilog;
+
+namespace AterraEngine;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
@@ -29,8 +31,9 @@ public class Engine(
     IPluginAtlas pluginAtlas,
     IWorld world,
     RenderThreadEvents renderThreadEvents,
-    IApplicationStageManager applicationStageManager
-) : IEngine {
+    IApplicationStageManager applicationStageManager,
+    IAssetDataXmlService assetDataXmlService
+    ) : IEngine {
     private readonly CancellationTokenSource _ctsRenderThread = new();
     private readonly TaskCompletionSource<bool> _openGlContextCreated = new();
 
@@ -72,9 +75,7 @@ public class Engine(
         renderThreadEvents.InvokeApplicationStageChange(ApplicationStage.StartupScreen);
 
         foreach (AssetRegistration assetRegistration in pluginAtlas.GetAssetRegistrations()) {
-
-            await Task.Delay(500); // WARN THIS IS FOR TESTING ONLY
-
+            await Task.Delay(1000); // TODO REMOVE DELAY
             if (!assetAtlas.TryAssignAsset(assetRegistration, out AssetId? _)) {
                 logger.Warning("Type {Type} could not be assigned as an asset", assetRegistration.Type);
             }
@@ -96,6 +97,6 @@ public class Engine(
     private async Task HandleFatalExceptionGracefully() {
         await _ctsRenderThread.CancelAsync();
 
-        logger.ExitFatal(ExitCodes.GeneralError, "Fatally Crashing gracefully");
+        logger.ExitFatal((int)ExitCodes.GeneralError, "Fatally Crashing gracefully");
     }
 }

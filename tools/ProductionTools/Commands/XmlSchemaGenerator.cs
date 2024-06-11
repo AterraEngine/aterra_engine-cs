@@ -1,10 +1,9 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.ConfigFiles.EngineConfig;
+using AterraCore.Common.ConfigFiles.PluginConfig;
 using System.Diagnostics.CodeAnalysis;
-using AterraCore.Common.Config;
-using AterraCore.FlexiPlug.Config;
-using AterraEngine.Config;
 using CliArgsParser.Attributes;
 using CliArgsParser.Contracts;
 using JetBrains.Annotations;
@@ -13,7 +12,8 @@ using Xml;
 using Xml.Contracts;
 namespace ProductionTools.Commands;
 
-using AterraCore.Nexities.DataParsing.FileElements;
+using AterraCore.Common.Data;
+using AterraCore.Nexities.Parsers.FileElements;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Support Code

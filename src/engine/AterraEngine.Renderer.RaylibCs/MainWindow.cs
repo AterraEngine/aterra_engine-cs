@@ -5,13 +5,16 @@
 using AterraCore.Contracts.Renderer;
 using AterraCore.DI;
 using AterraEngine.Renderer.RaylibCs.FrameProcessors;
+using JetBrains.Annotations;
+
 namespace AterraEngine.Renderer.RaylibCs;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public class MainWindow(RaylibLogger raylibLogger, IApplicationStageManager applicationStageManager) : IMainWindow {
+[UsedImplicitly]
+public class MainWindow(IApplicationStageManager applicationStageManager) : IMainWindow {
     private static int Width => 800;
     private static int Height => 400;
     private static string Name => "AterraEngine - Test";
@@ -24,20 +27,20 @@ public class MainWindow(RaylibLogger raylibLogger, IApplicationStageManager appl
             SetTraceLogCallback(RaylibLogger.GetPointer());
         }
         SetConfigFlags(ConfigFlags.ResizableWindow
-            // | ConfigFlags.UndecoratedWindow
-            // | ConfigFlags.MousePassthroughWindow
+        // | ConfigFlags.UndecoratedWindow
+        // | ConfigFlags.MousePassthroughWindow
         );
         InitWindow(Width, Height, Name);
-        SetWindowMonitor(1); // WArn dev stuff
+        SetWindowMonitor(1);// WArn dev stuff
 
         applicationStageManager.TryRegisterStage(
-            ApplicationStage.Undefined,
-            EngineServices.CreateWithServices<UndefinedRaylibFrameProcessor>()
+        ApplicationStage.Undefined,
+        EngineServices.CreateWithServices<UndefinedRaylibFrameProcessor>()
         );
 
         applicationStageManager.TryRegisterStage(
-            ApplicationStage.StartupScreen,
-            EngineServices.CreateWithServices<StartupRaylibFrameProcessor>()
+        ApplicationStage.StartupScreen,
+        EngineServices.CreateWithServices<StartupRaylibFrameProcessor>()
         );
 
         IsInitialised = true;

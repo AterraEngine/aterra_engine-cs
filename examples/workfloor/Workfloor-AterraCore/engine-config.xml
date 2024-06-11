@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <engineConfig xmlns="urn:aterra-engine:engine-config">
-    <engineVersion value="0.0.0"/>
-    <gameVersion value="0.0.0"/>
-    <pluginData root="plugins">
-        <loadOrder breakOnUnstable="true">
-            <file file="Workfloor-AterraCore.Plugin.zip"/>
-        </loadOrder>
-    </pluginData>
-    <logging async-console="true"/>
+    <engine version="0.0.0"/>
+    <game version="0.0.0"/>
+    <boot>
+        <logging async-console="false"/>
+        <expections 
+            breakOnFlowException="true" 
+            breakOnUnstableLoadOrder="false"
+        />
+    </boot>
+    
+    <loadOrder relative-root-path="plugins" includeRootAssembly="false">
+        <rootAssembly name="AterraWorkfloor" author="AndreasSas"/>
+        <file file="Workfloor-AterraCore.Plugin.zip"/>
+    </loadOrder>
+    
 </engineConfig>

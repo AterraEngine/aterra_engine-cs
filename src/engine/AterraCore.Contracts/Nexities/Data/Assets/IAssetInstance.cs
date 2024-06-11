@@ -2,11 +2,14 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
+using AterraCore.Common.Types.Nexities;
+
 namespace AterraCore.Contracts.Nexities.Data.Assets;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IAssetInstance {
-    public Guid Guid { get; }
+    public Guid Guid { get; set; }
+    public AssetId? AssetId { get; set; }
 }

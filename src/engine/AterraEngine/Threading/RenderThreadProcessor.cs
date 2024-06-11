@@ -5,6 +5,7 @@ using AterraCore.Contracts.Renderer;
 using JetBrains.Annotations;
 using Raylib_cs;
 using Serilog;
+
 namespace AterraEngine.Threading;
 
 // ---------------------------------------------------------------------------------------------------------------------

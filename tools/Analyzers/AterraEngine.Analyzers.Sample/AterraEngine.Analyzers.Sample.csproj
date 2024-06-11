@@ -9,9 +9,14 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\..\src\engine\AterraCore.Nexities\AterraCore.Nexities.csproj"/>
-        <ProjectReference Include="..\..\..\src\engine\Extensions\Extensions.csproj"/>
         <ProjectReference Include="..\AterraEngine.Analyzers\AterraEngine.Analyzers.csproj"
                           OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="CodeOfChaos.Extensions" Version="0.2.0" />
+      <PackageReference Include="CodeOfChaos.Extensions.DependencyInjection" Version="0.1.0" />
+      <PackageReference Include="CodeOfChaos.Extensions.Serilog" Version="0.2.0" />
     </ItemGroup>
 
 </Project>

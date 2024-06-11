@@ -2,9 +2,9 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-namespace AterraCore.Contracts.Nexities.Data.Components.LevelData;
+using AterraCore.Contracts.Nexities.Data.Systems;
 
-using Systems;
+namespace AterraCore.Contracts.Nexities.Data.Components.LevelData;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

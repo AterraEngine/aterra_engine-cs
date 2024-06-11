@@ -1,9 +1,11 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
-using AterraCore.Common.Nexities;
+using AterraCore.Common.Types.Nexities;
+using AterraCore.Contracts.Boot.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug.Plugin;
+using System.Diagnostics.CodeAnalysis;
+
 namespace AterraCore.Contracts.FlexiPlug;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -16,7 +18,7 @@ public interface IPluginAtlas {
     // -----------------------------------------------------------------------------------------------------------------
     // Constructor or population Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void ImportPlugins(LinkedList<IPlugin> plugins);
+    public void ImportLoadedPluginDtos(IEnumerable<ILoadedPluginDto> plugins);
     public void InvalidateAllCaches();
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -25,4 +27,5 @@ public interface IPluginAtlas {
     public IEnumerable<AssetRegistration> GetAssetRegistrations(int? pluginId = null, CoreTags filter = CoreTags.Asset);
     public IEnumerable<AssetRegistration> GetEntityRegistrations(int? pluginId = null);
     public IEnumerable<AssetRegistration> GetComponentRegistrations(int? pluginId = null);
+    bool TryGetPluginByReadableName(string readableName, [NotNullWhen(true)] out IPluginRecord? plugin);
 }

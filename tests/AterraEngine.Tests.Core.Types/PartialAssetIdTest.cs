@@ -4,6 +4,8 @@
 using JetBrains.Annotations;
 namespace AterraEngine.Tests.Core.Types;
 
+using AterraCore.Common.Types.Nexities;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -25,9 +27,10 @@ public class PartialAssetIdTest {
 
     [Theory]
     [InlineData("INVALID_FORMAT", false)]
+    [InlineData("7593F98A", true)]
     public void TryParse(string input, bool result) {
-        Assert.Equal(result, PartialAssetId.TryParse(input, out PartialAssetId? output));
-        if (result) Assert.NotNull(output);
+        Assert.Equal(result, PartialAssetId.TryParse(input, out PartialAssetId output));
+        if (result) Assert.NotEqual(output, default);
     }
 
     [Theory]
@@ -60,8 +63,6 @@ public class PartialAssetIdTest {
     [Theory]
     [InlineData(1234u, "000004D2")]
     [InlineData(5678u, "0000162E")]
-    [InlineData(1234u, "0000-04D2")]
-    [InlineData(5678u, "0000-162E")]
     public void ToStringMethod_CorrectFormat(uint input, string expected) {
         var testInstance = new PartialAssetId(input);
         Assert.Equal(expected, testInstance.ToString());

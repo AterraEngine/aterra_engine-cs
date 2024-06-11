@@ -2,10 +2,9 @@
 <pluginConfig xmlns="urn:aterra-engine:plugin-config">
     <name>Workfloor Experiments</name>
     <author>Andreas Sas</author>
-    <pluginVersion value="0.0.0"/>
-    <expectedGameVersion value="0.0.0"/>
+    <pluginVersion>0.0.0</pluginVersion>
+    <expectedGameVersion>0.0.0</expectedGameVersion>
     <bins>
         <bin file="Workfloor-AterraCore.Plugin.dll"/>
     </bins>
-
 </pluginConfig>

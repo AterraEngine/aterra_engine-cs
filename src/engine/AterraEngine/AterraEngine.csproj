@@ -12,15 +12,20 @@
         <ProjectReference Include="..\AterraCore.Contracts\AterraCore.Contracts.csproj"/>
         <ProjectReference Include="..\AterraCore.DI\AterraCore.DI.csproj"/>
         <ProjectReference Include="..\AterraCore.FlexiPlug\AterraCore.FlexiPlug.csproj"/>
+        <ProjectReference Include="..\AterraCore.Nexities.Lib\AterraCore.Nexities.Lib.csproj"/>
+        <ProjectReference Include="..\AterraCore.Nexities.Parsers\AterraCore.Nexities.Parsers.csproj"/>
         <ProjectReference Include="..\AterraCore.Nexities\AterraCore.Nexities.csproj"/>
         <ProjectReference Include="..\AterraCore.Common\AterraCore.Common.csproj"/>
         <ProjectReference Include="..\AterraEngine.Renderer.RaylibCs\AterraEngine.Renderer.RaylibCs.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="CodeOfChaos.Extensions" Version="0.2.0" />
+        <PackageReference Include="CodeOfChaos.Extensions.DependencyInjection" Version="0.1.0" />
+        <PackageReference Include="CodeOfChaos.Extensions.Serilog" Version="0.2.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1"/>
-        <PackageReference Include="Microsoft.Extensions.ObjectPool.DependencyInjection" Version="8.4.0"/>
+        <PackageReference Include="Microsoft.Extensions.ObjectPool.DependencyInjection" Version="8.5.0" />
     </ItemGroup>
 
 </Project>

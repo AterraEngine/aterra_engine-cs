@@ -2,11 +2,11 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-namespace AterraCore.Contracts.Nexities.Data.Levels;
+using AterraCore.Contracts.Nexities.Data.Components.AssetTree;
+using AterraCore.Contracts.Nexities.Data.Components.LevelData;
+using AterraCore.Contracts.Nexities.Data.Entities;
 
-using Components.AssetTree;
-using Components.LevelData;
-using Entities;
+namespace AterraCore.Contracts.Nexities.Data.Levels;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
