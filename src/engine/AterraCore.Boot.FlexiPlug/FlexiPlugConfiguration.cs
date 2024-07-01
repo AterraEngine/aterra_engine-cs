@@ -37,12 +37,13 @@ public class FlexiPlugConfiguration(ILogger logger, EngineConfigXml engineConfig
     // -----------------------------------------------------------------------------------------------------------------
     public IFlexiPlugConfiguration CheckAndIncludeRootAssembly() {
         // Include root assembly as the primary plugin
-        if (EngineConfig.LoadOrder is not { IncludeRootAssembly: true, RootAssembly: not null }) return this;
+        if (EngineConfig.LoadOrder is not { RootAssembly: {} rootAssembly}) return this;
+        // if (rootNameSpace.IsNotNullOrEmpty()) return this;
         
         PluginLoader.InjectAssemblyAsPlugin(
             Assembly.GetEntryAssembly()!, 
-            EngineConfig.LoadOrder.RootAssembly.Author, 
-            EngineConfig.LoadOrder.RootAssembly.Name
+            rootAssembly.Author, 
+            rootAssembly.NameSpace
         );
         logger.Information("Assigned Root Assembly as plugin");
         return this;

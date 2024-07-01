@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <pluginConfig xmlns="urn:aterra-engine:plugin-config">
-    <name>Workfloor Experiments</name>
+    <nameSpace>WorkfloorAterraEngine</nameSpace>
+    <nameReadable>Workfloor Experiments</nameReadable>
     <author>Andreas Sas</author>
     <pluginVersion>0.0.0</pluginVersion>
     <expectedGameVersion>0.0.0</expectedGameVersion>

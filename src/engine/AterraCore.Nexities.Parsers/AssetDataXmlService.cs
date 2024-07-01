@@ -40,21 +40,21 @@ public class AssetDataXmlService(
         }
 
         // Think of how we can cache this
-        Dictionary<string, PluginId> pluginMap = assetData.RequiredPlugins
+        Dictionary<string, string> pluginMap = assetData.RequiredPlugins
             .Where(dto => dto.ReadableName is not null)
             .Select(dto => {
                 bool result = pluginAtlas.TryGetPluginByReadableName(dto.ReadableName!, out IPluginRecord? plugin);
                 return new {
                     Dto = dto,
                     IsKnown = result,
-                    PluginId = plugin?.Id
+                    plugin?.NameSpace
                 };
             })
             .Where(box => box.IsKnown)
             .ToDictionary(
-            // Because IsKnown value already marks if the plugins could be mapped 
-            keySelector: box => box.Dto.InternalRefId!,
-            elementSelector: box => (PluginId)box.PluginId!
+                // Because IsKnown value already marks if the plugins could be mapped 
+                keySelector: box => box.Dto.InternalRefId!,
+                elementSelector: box => box.NameSpace!
             );
 
         foreach (AssetDto asset in assetData.Assets) {
@@ -121,20 +121,20 @@ public class AssetDataXmlService(
     // -----------------------------------------------------------------------------------------------------------------
     // Helper Methods
     // -----------------------------------------------------------------------------------------------------------------
-    private bool TryGetAssetId(Dictionary<string, PluginId> pluginMap, string rawAssetId, out AssetId assetId) {
+    private bool TryGetAssetId(Dictionary<string, string> pluginMap, string rawAssetId, out AssetId assetId) {
         assetId = default;
 
         string[] split = rawAssetId.Split(":");
         if (split.Length != 2) return false;
-        if (!pluginMap.TryGetValue(split[0], out PluginId pluginId)) return false;
-        if (!PartialAssetId.TryParse(split[1], out PartialAssetId partialAssetId)) return false;
+        if (!pluginMap.TryGetValue(split[0], out string? pluginId)) return false;
 
-        assetId = new AssetId(pluginId, partialAssetId);
+        assetId = new AssetId(pluginId);
         return true;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public bool TryParse(string filePath, [NotNullWhen(true)] out AssetDataXml? assetData) => Parser.TryDeserializeFromFile(filePath, out assetData);
+    public bool TryParse(string filePath, [NotNullWhen(true)] out AssetDataXml? assetData) => 
+        Parser.TryDeserializeFromFile(filePath, out assetData);
 }

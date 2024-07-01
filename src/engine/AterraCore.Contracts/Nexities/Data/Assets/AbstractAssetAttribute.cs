@@ -11,7 +11,7 @@ namespace AterraCore.Contracts.Nexities.Data.Assets;
 // ---------------------------------------------------------------------------------------------------------------------
 
 public abstract class AbstractAssetAttribute : Attribute {
-    public abstract PartialAssetId PartialAssetId { get; }
+    public abstract AssetId AssetId { get; }
     public abstract ServiceLifetimeType ServiceLifetime { get; }
     public abstract CoreTags CoreTags { get; }
     public abstract Type? InterfaceType { get; }

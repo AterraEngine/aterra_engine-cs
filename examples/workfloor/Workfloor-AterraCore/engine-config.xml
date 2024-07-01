@@ -10,9 +10,9 @@
         />
     </boot>
     
-    <loadOrder relative-root-path="plugins" includeRootAssembly="false">
-        <rootAssembly name="AterraWorkfloor" author="AndreasSas"/>
-        <file file="Workfloor-AterraCore.Plugin.zip"/>
+    <loadOrder relative-root-path="plugins">
+        <rootAssembly author="Andreas Sas" nameSpace="AterraWorkfloor"/>
+        <plugin file="Workfloor-AterraCore.Plugin.zip"/>
     </loadOrder>
     
 </engineConfig>

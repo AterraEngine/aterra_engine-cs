@@ -13,13 +13,12 @@ namespace AterraCore.Contracts.Boot.FlexiPlug;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface ILoadedPluginDto {
-    public PluginId Id { get; }
-    public string ReadableName { get; }
+    public string NameSpace{ get; }
+    public string NameReadable { get; }
     public List<Assembly> Assemblies { get; }
     public bool IsProcessed { get; set; }
     public PluginValidity Validity { get; set; }
     public string? CheckSum { get; set; }
-    public string ReadableId { get; }
     public IEnumerable<Type> Types { get; }
     public string FilePath { get; }
     

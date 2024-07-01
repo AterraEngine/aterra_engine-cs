@@ -1,10 +1,9 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
-using AterraCore.Common.Types.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug.Plugin;
 using AterraCore.Contracts.Nexities.Data.Assets;
+using CodeOfChaos.Extensions;
 using System.Reflection;
 
 namespace AterraCore.FlexiPlug;
@@ -14,9 +13,12 @@ namespace AterraCore.FlexiPlug;
 // ---------------------------------------------------------------------------------------------------------------------
 
 public class PluginRecord : IPluginRecord {
-
-    public PluginId Id { get; init; }
-    public string ReadableName { get; init; } = "UNDEFINED";
+    public required string NameSpace { get; init; }
+    private readonly string? _nameReadableCache; 
+    public string NameReadable {
+        get => (_nameReadableCache.IsNotNullOrEmpty() ? _nameReadableCache : NameReadable) ?? NameSpace;
+        init => _nameReadableCache = value;
+    }
 
     public IEnumerable<Type> Types { get; init; } = [];// DON'T invalidate this !!!
 

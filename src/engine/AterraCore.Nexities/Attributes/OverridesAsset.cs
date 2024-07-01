@@ -9,5 +9,5 @@ namespace AterraCore.Nexities.Attributes;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [AttributeUsage(AttributeTargets.Class)]
-sealed class OverridesAssetAttribute(string PluginReadableName, PartialAssetId assetId) : Attribute;
+sealed class OverridesAssetAttribute(string PluginReadableName, AssetId assetId) : Attribute;
 

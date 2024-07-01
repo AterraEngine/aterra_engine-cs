@@ -17,13 +17,10 @@ public class LoadOrderDto {
     [XmlAttribute("relative-root-path")]
     public string RootFolderRelative { get; set; } = Paths.Plugins.Folder;
     
-    [XmlAttribute("includeRootAssembly")]
-    public bool IncludeRootAssembly { get; set; } = true;
-
     [XmlElement("rootAssembly", IsNullable = true)]
     public RootAssemblyDto? RootAssembly { get; set; }
     
-    [XmlElement("file")]
+    [XmlElement("plugin")]
     public FileDto[] Plugins { get; set; } = [];
     
     // -----------------------------------------------------------------------------------------------------------------

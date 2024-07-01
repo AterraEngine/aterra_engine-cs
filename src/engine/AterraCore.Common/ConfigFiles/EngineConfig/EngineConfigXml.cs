@@ -35,12 +35,12 @@ public class EngineConfigXml {
             .AppendLine("Plugins - Load Order : (Ids are not final)");
 
         int offset = 0;
-        if (LoadOrder.IncludeRootAssembly) {
-            valuedBuilder.AppendLineValued($"- id_{new PluginId(offset++).ToString()} : ", "ROOT-ASSEMBLY");
+        if (LoadOrder.RootAssembly is not null) {
+            valuedBuilder.AppendLineValued($"- id_{offset++} : ", $"ROOT-ASSEMBLY => {LoadOrder.RootAssembly.NameSpace}");
         }
         
         LoadOrder.Plugins
-            .Select((r, i) => new { r.FilePath, Id = new PluginId(i+offset).ToString() })
+            .Select((r, i) => new { r.FilePath, Id = offset})
             .IterateOver(box => valuedBuilder.AppendLineValued($"- id_{box.Id} : ", box.FilePath));
 
         valuedBuilder.AppendLine();

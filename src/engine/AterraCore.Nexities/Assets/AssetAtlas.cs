@@ -28,13 +28,12 @@ public class AssetAtlas(ILogger logger) : IAssetAtlas {
 
     public int TotalCount => _assetsById.Count;
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------------------- ----
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public bool TryAssignAsset(AssetRegistration registration, [NotNullWhen(true)] out AssetId? assetId) {
         assetId = null;
-
-        var newAssetId = new AssetId(registration.PluginId, registration.PartialAssetId);
+        var newAssetId = new AssetId(registration.AssetId);
 
         // Assigns the asset to the dict
         if (!_assetsById.TryAdd(newAssetId, registration)) {
@@ -101,8 +100,9 @@ public class AssetAtlas(ILogger logger) : IAssetAtlas {
     public IEnumerable<AssetId> GetAllAssetsOfStringTag(string stringTag) =>
         _stringTaggedAssets.TryGetValue(stringTag, out ConcurrentBag<AssetId>? bag) ? bag : [];
 
-    public IEnumerable<AssetId> GetAllAssetsOfPlugin(PluginId pluginId) =>
-        _assetsById.Where(pair => pair.Key.PluginId == pluginId).Select(pair => pair.Key);
+    public IEnumerable<AssetId> GetAllAssetsOfPlugin(string pluginId) => _assetsById
+        .Where(pair => pair.Key.PluginNameSpace.Equals(pluginId, StringComparison.InvariantCultureIgnoreCase))
+        .Select(pair => pair.Key);
 
     public bool TryGetRegistration(AssetId assetId, out AssetRegistration registration) => _assetsById.TryGetValue(assetId, out registration);
 
