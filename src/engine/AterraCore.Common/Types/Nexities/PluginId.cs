@@ -15,9 +15,9 @@ namespace AterraCore.Common.Types.Nexities;
 public readonly struct PluginId : 
     IEqualityOperators<PluginId, PluginId, bool>,
     IEqualityOperators<PluginId, string, bool>,
-    IEquatable<PluginId>
+    IEquatable<PluginId> 
 {
-    public string Value { get; init; }
+    public string Value { get; init; } = string.Empty;
     
     // -----------------------------------------------------------------------------------------------------------------
     // Constructors
@@ -57,8 +57,17 @@ public readonly struct PluginId :
     public static bool operator ==(PluginId left, PluginId right) => left.Equals(right);
     public static bool operator !=(PluginId left, PluginId right) => !left.Equals(right);
     
-    public static bool operator ==(PluginId left, string? right) => right.IsNotNullOrEmpty() && left.Equals(new PluginId(right!));
-    public static bool operator !=(PluginId left, string? right) => !right.IsNotNullOrEmpty() && !left.Equals(new PluginId(right!));
+    public static bool operator ==(PluginId left, string? right) => 
+        right.IsNotNullOrEmpty() 
+        && TryCreateNew(right!, out PluginId? output)
+        && left.Equals(output)
+    ;
+
+    public static bool operator !=(PluginId left, string? right) => 
+        !right.IsNotNullOrEmpty() 
+        && !TryCreateNew(right!, out PluginId? output)
+        && !left.Equals(output)
+    ;
 
     public static AssetId operator |(PluginId left, AssetName right) => new(left, right);
     

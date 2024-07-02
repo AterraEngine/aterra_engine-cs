@@ -16,9 +16,9 @@ namespace AterraCore.Common.Types.Nexities;
 public struct AssetName : 
     IEqualityOperators<AssetName, AssetName, bool>,
     IEqualityOperators<AssetName, string, bool>,
-    IEquatable<AssetName>
+    IEquatable<AssetName> 
 {
-    public IEnumerable<string> Values { get; init; }
+    public IEnumerable<string> Values { get; init; } = [];
     public string Value => string.Join('/', Values);
     
     // -----------------------------------------------------------------------------------------------------------------
@@ -67,8 +67,16 @@ public struct AssetName :
     public static bool operator ==(AssetName left, AssetName right) => left.Equals(right);
     public static bool operator !=(AssetName left, AssetName right) => !left.Equals(right);
     
-    public static bool operator ==(AssetName left, string? right) => right.IsNotNullOrEmpty() && left.Equals(new AssetName(right!));
-    public static bool operator !=(AssetName left, string? right) => !right.IsNotNullOrEmpty() && !left.Equals(new AssetName(right!));
+    public static bool operator ==(AssetName left, string? right) => 
+        right.IsNotNullOrEmpty() 
+        && TryCreateNew(right!, out AssetName? output) 
+        && left.Equals(output)
+    ;
+    public static bool operator !=(AssetName left, string? right) => 
+        !right.IsNotNullOrEmpty() 
+        && !TryCreateNew(right!, out AssetName? output) 
+        && !left.Equals(output)
+    ;
     
     public override bool Equals(object? obj) => obj is AssetName other && Equals(other);
     public bool Equals(AssetName other) => Values

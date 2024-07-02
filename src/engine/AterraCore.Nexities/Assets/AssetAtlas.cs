@@ -1,8 +1,6 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
-using AterraCore.Common.Types.FlexiPlug;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Data.Assets;
 using CodeOfChaos.Extensions;
@@ -101,7 +99,7 @@ public class AssetAtlas(ILogger logger) : IAssetAtlas {
         _stringTaggedAssets.TryGetValue(stringTag, out ConcurrentBag<AssetId>? bag) ? bag : [];
 
     public IEnumerable<AssetId> GetAllAssetsOfPlugin(string pluginId) => _assetsById
-        .Where(pair => pair.Key.PluginId.Equals(pluginId, StringComparison.InvariantCultureIgnoreCase))
+        .Where(pair => pair.Key.PluginId == pluginId)
         .Select(pair => pair.Key);
 
     public bool TryGetRegistration(AssetId assetId, out AssetRegistration registration) => _assetsById.TryGetValue(assetId, out registration);
