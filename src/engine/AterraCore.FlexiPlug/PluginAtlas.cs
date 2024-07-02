@@ -54,7 +54,7 @@ public class PluginAtlas : IPluginAtlas {
                 // Filter down to which Asset Tag we want
                 .Where(record => record.AssetAttribute.CoreTags.HasFlag(filter))
                 .Select(record => new AssetRegistration {
-                    AssetId = p.NameSpace,
+                    AssetId = record.AssetAttribute.AssetId,
                     ServiceLifetime = record.AssetAttribute.ServiceLifetime,
                     InterfaceType = record.AssetAttribute.InterfaceType,
                     CoreTags = record.AssetAttribute.CoreTags,

@@ -31,36 +31,35 @@ public class AssetAtlas(ILogger logger) : IAssetAtlas {
     // -----------------------------------------------------------------------------------------------------------------
     public bool TryAssignAsset(AssetRegistration registration, [NotNullWhen(true)] out AssetId? assetId) {
         assetId = null;
-        var newAssetId = new AssetId(registration.AssetId);
 
         // Assigns the asset to the dict
-        if (!_assetsById.TryAdd(newAssetId, registration)) {
+        if (!_assetsById.TryAdd(registration.AssetId, registration)) {
             logger.Warning(
             "Asset with ID: {AssetId} already exists with type {ExistingAssetType}. Cannot assign a new asset with the same ID.",
-            newAssetId, _assetsById[newAssetId].Type.FullName
+            registration.AssetId, _assetsById[registration.AssetId].Type.FullName
             );
             return false;
         }
-        if (!_assetsByType.TryAdd(registration.Type, newAssetId)) {
+        if (!_assetsByType.TryAdd(registration.Type, registration.AssetId)) {
             logger.Warning(
             "Asset with ID: {AssetId} Cannot assign a new asset because it's {Type} is already assigned to another asset.",
-            newAssetId, registration.Type.FullName
+            registration.AssetId, registration.Type.FullName
             );
             return false;
         }
 
-        if (registration.InterfaceType is not null && !_assetsByType.TryAdd(registration.InterfaceType, newAssetId)) {
+        if (registration.InterfaceType is not null && !_assetsByType.TryAdd(registration.InterfaceType, registration.AssetId)) {
             logger.Warning(
             "Asset with ID: {AssetId} Cannot assign a new asset because it's interface {interface} is already assigned to another asset.",
-            newAssetId, registration.InterfaceType.FullName
+            registration.AssetId, registration.InterfaceType.FullName
             );
             return false;
         }
 
         // Assign to the instance type
-        if (!_assetServiceLifetimeMap.TryAddToBagOrCreateBag(registration.ServiceLifetime, newAssetId)) {
+        if (!_assetServiceLifetimeMap.TryAddToBagOrCreateBag(registration.ServiceLifetime, registration.AssetId)) {
             // This shouldn't happen
-            logger.Error("Asset {AssetId} could not be be mapped to an InstanceType", newAssetId);
+            logger.Error("Asset {AssetId} could not be be mapped to an InstanceType", registration.AssetId);
         }
 
         // After Everything is said and done with the assigning, start assigning the Core tags and string tags
@@ -68,13 +67,13 @@ public class AssetAtlas(ILogger logger) : IAssetAtlas {
 
         foreach (CoreTags tag in Enum.GetValuesAsUnderlyingType<CoreTags>()) {
             if (!registration.CoreTags.HasFlag(tag)) continue;
-            _coreTaggedAssets.TryAddToBagOrCreateBag(tag, newAssetId);
+            _coreTaggedAssets.TryAddToBagOrCreateBag(tag, registration.AssetId);
             tagsList.Add(tag.ToString());
         }
 
         foreach (string stringTag in registration.StringTags) {
-            if (!_stringTaggedAssets.TryAddToBagOrCreateBag(stringTag, newAssetId)) {
-                logger.Warning("String Tag of {tag} could not be assigned to {assetId}", stringTag, newAssetId);
+            if (!_stringTaggedAssets.TryAddToBagOrCreateBag(stringTag, registration.AssetId)) {
+                logger.Warning("String Tag of {tag} could not be assigned to {assetId}", stringTag, registration.AssetId);
                 continue;
             }
             tagsList.Add(stringTag);
@@ -82,10 +81,10 @@ public class AssetAtlas(ILogger logger) : IAssetAtlas {
 
         logger.Information(
         "Assigned asset {AssetId} of Type {AssetTypeName} to plugin {PluginId} as a '{@tags}",
-        newAssetId, registration.Type.FullName, registration.Type, tagsList
+        registration.AssetId, registration.Type.FullName, registration.Type, tagsList
         );
 
-        assetId = newAssetId;
+        assetId = registration.AssetId;
         return true;
     }
 
