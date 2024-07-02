@@ -69,7 +69,7 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         return trimmedFaulty && Plugins.Count != 0;
     }
 
-    public void InjectAssemblyAsPlugin(Assembly assembly, string author, string name) {
+    public void InjectAssemblyAsPlugin(Assembly assembly, IInjectableAssemblyData dto) {
         // A very special case where the dev wants to assign the current assembly as a plugin
         //      Useful if you don't want to have another project if you just have a single plugin 
 
@@ -77,8 +77,9 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
         pluginDto.Assemblies.Add(assembly);
         
         pluginDto.Data = new PluginConfigXml {
-            NameReadable = name,
-            Author = author
+            NameReadable = dto.NameReadable ?? dto.NameSpace,
+            NameSpace = dto.NameSpace,
+            Author = dto.Author ?? string.Empty
         };
         pluginDto.Validity = PluginValidity.Valid;
         pluginDto.IsProcessed = true;

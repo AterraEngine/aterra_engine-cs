@@ -11,7 +11,7 @@
     </boot>
     
     <loadOrder relative-root-path="plugins">
-        <rootAssembly author="Andreas Sas" nameSpace="AterraWorkfloor"/>
+        <rootAssembly author="Andreas Sas" nameSpace="AterraWorkfloor" nameReadable="Aterra Workfloor"/>
         <plugin file="Workfloor-AterraCore.Plugin.zip"/>
     </loadOrder>
     

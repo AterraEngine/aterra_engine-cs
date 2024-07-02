@@ -101,7 +101,7 @@ public class AssetAtlas(ILogger logger) : IAssetAtlas {
         _stringTaggedAssets.TryGetValue(stringTag, out ConcurrentBag<AssetId>? bag) ? bag : [];
 
     public IEnumerable<AssetId> GetAllAssetsOfPlugin(string pluginId) => _assetsById
-        .Where(pair => pair.Key.PluginNameSpace.Equals(pluginId, StringComparison.InvariantCultureIgnoreCase))
+        .Where(pair => pair.Key.PluginId.Equals(pluginId, StringComparison.InvariantCultureIgnoreCase))
         .Select(pair => pair.Key);
 
     public bool TryGetRegistration(AssetId assetId, out AssetRegistration registration) => _assetsById.TryGetValue(assetId, out registration);

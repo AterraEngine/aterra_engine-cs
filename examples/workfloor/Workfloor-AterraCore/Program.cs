@@ -17,7 +17,6 @@ namespace Workfloor_AterraCore;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
 public static class Program {
     public static void Main(string[] args) {
         IEngine engine = new EngineConfiguration()

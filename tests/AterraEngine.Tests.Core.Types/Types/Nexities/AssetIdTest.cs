@@ -22,8 +22,8 @@ public class AssetIdTest {
     [InlineData("PLUGINNAME:FOLDER_ANOTHER/ITEM", "PLUGINNAME", new[] { "FOLDER_ANOTHER", "ITEM" })]
     public void AssetId_Creation_Test(string fullAssetId, string pluginName, string[] namespaces) {
         var assetIdRegex = new AssetId(fullAssetId);
-        Assert.Equal(pluginName, assetIdRegex.PluginNameSpace);
-        Assert.Equal(namespaces, assetIdRegex.InternalName);
+        Assert.Equal(pluginName,assetIdRegex.PluginId.Value);
+        Assert.Equal(namespaces,assetIdRegex.AssetName.Values);
     }
     
     [Theory]
@@ -32,6 +32,8 @@ public class AssetIdTest {
     [InlineData("pluginName:folder_")]
     [InlineData("pluginName:")]
     [InlineData("pluginName/folder/")]
+    [InlineData("pluginName_:alpha")]
+    [InlineData("pluginName-:alpha")]
     public void AssetId_CreateThrows_Test(string input) {
         Assert.Throws<ArgumentException>(() => new AssetId(input));
     }
@@ -42,6 +44,8 @@ public class AssetIdTest {
     [InlineData("pluginName:folder_")]
     [InlineData("pluginName:")]
     [InlineData("pluginName/folder/")]
+    [InlineData("pluginName_:alpha")]
+    [InlineData("pluginName-:alpha")]
     public void AssetId_CreateFails_Test(string input) {
         Assert.False(AssetId.TryCreateNew(input, out AssetId? output));
         Assert.Null(output);
@@ -64,5 +68,16 @@ public class AssetIdTest {
         var assetB = new AssetId(b);
         
         Assert.NotEqual(assetA, assetB);
+    }
+    
+    
+    [Theory]
+    [InlineData("pluginName:folder/item", "pluginName", "folder/item" )]
+    public void AssetId_Union_Test(string result, string pluginId, string assetName) {
+        var left = new PluginId(pluginId);
+        var right = new AssetName(assetName);
+        AssetId newAsset = left | right;
+        
+        Assert.Equal(result, newAsset.ToString());
     }
 }

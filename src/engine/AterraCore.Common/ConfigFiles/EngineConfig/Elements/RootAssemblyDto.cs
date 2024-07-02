@@ -15,4 +15,7 @@ public class RootAssemblyDto {
     
     [XmlAttribute("nameSpace")]
     public string NameSpace { get; set; } = string.Empty;
+    
+    [XmlAttribute("nameReadable")]
+    public string NameReadable { get; set; } = string.Empty;
 }

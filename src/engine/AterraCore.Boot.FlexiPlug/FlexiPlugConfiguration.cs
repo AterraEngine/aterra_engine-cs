@@ -41,9 +41,13 @@ public class FlexiPlugConfiguration(ILogger logger, EngineConfigXml engineConfig
         // if (rootNameSpace.IsNotNullOrEmpty()) return this;
         
         PluginLoader.InjectAssemblyAsPlugin(
-            Assembly.GetEntryAssembly()!, 
-            rootAssembly.Author, 
-            rootAssembly.NameSpace
+            Assembly.GetEntryAssembly()!,
+            new InjectableAssemblyData (
+                rootAssembly.NameSpace ,
+                rootAssembly.NameReadable,
+                rootAssembly.Author
+            )
+
         );
         logger.Information("Assigned Root Assembly as plugin");
         return this;
