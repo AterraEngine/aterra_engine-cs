@@ -10,6 +10,7 @@ using AterraCore.Contracts.Boot;
 using AterraCore.Contracts.DI;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.DI;
+using AterraCore.Loggers;
 using AterraEngine;
 using CodeOfChaos.Extensions;
 using CodeOfChaos.Extensions.Serilog;
@@ -81,7 +82,7 @@ public class EngineConfiguration(ILogger? logger = null) : IEngineConfiguration 
     // -----------------------------------------------------------------------------------------------------------------
 
     // If the logger is already defined by the program.cs which creates the engine, use that one else use the standard
-    private static ILogger GetStartupLogger(ILogger? logger) => logger ?? Loggers.StartupLogger.CreateLogger(false);
+    private static ILogger GetStartupLogger(ILogger? logger) => logger ?? Loggers.StartupLogger.CreateLogger(false).ForStartupContext();
     private bool EngineNotPresentAsStaticService() => ServicesStatic.FirstOrDefault(descriptor => descriptor.ServiceType == typeof(IEngine)) != null;
 
     // -----------------------------------------------------------------------------------------------------------------

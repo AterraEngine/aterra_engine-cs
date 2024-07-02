@@ -30,9 +30,6 @@ public static class Program {
                     .CheckAndIncludeRootAssembly() 
                     .PreLoadPlugins()
                 ;
-                
-                // sc.Nexities
-                // ;
             })
             
             // --- Assign Services for the ServiceProvider ---
