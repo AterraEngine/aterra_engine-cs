@@ -12,19 +12,19 @@ using AterraCore.Nexities.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Component("A", ServiceLifetimeType.Singleton)] // Services.AddSingleton<PlayerSprite>()
+[Component("WorkfloorAterraEngine:PlayerSprite", ServiceLifetimeType.Singleton)] // Services.AddSingleton<PlayerSprite>()
 [UsedImplicitly]
 public class PlayerSprite : Sprite2D {
     public string Data = "bla-bla";
 }
 
-[Component("B", ServiceLifetimeType.Singleton)] // Services.AddSingleton<PlayerSprite>()
+[Component("WorkfloorAterraEngine:PlayerSpriteA", ServiceLifetimeType.Singleton)] // Services.AddSingleton<PlayerSprite>()
 [UsedImplicitly]
 public class aPlayerSprite : Sprite2D {
     public string Data = "bla-bla";
 }
 
-[Component("C", ServiceLifetimeType.Singleton)] // Services.AddSingleton<PlayerSprite>()
+[Component("WorkfloorAterraEngine:PlayerSpriteB", ServiceLifetimeType.Singleton)] // Services.AddSingleton<PlayerSprite>()
 [UsedImplicitly]
 public class bPlayerSprite : Sprite2D {
     public string Data = "bla-bla";

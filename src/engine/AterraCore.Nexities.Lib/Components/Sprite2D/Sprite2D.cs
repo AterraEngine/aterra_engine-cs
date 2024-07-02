@@ -9,6 +9,6 @@ namespace AterraCore.Nexities.Lib.Components.Sprite2D;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Component<ISprite2D>("AC000002")]
+[Component<ISprite2D>("Nexities:Components/Sprite2D")]
 public class Sprite2D : NexitiesComponent, ISprite2D {
 }

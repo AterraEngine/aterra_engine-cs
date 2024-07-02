@@ -20,6 +20,8 @@ public class AssetIdTest {
     [InlineData("PLUGIN_NAME:FOLDER/ITEM", "PLUGIN_NAME", new[] { "FOLDER", "ITEM" })]
     [InlineData("PLUGIN_NAME:FOLDER_ANOTHER/ITEM", "PLUGIN_NAME", new[] { "FOLDER_ANOTHER", "ITEM" })]
     [InlineData("PLUGINNAME:FOLDER_ANOTHER/ITEM", "PLUGINNAME", new[] { "FOLDER_ANOTHER", "ITEM" })]
+    [InlineData("PLUGINNAME:FOLDER_ANOTHER.ITEM", "PLUGINNAME", new[] { "FOLDER_ANOTHER", "ITEM" })]
+    [InlineData("PluginName:Folder.Item", "PluginName", new[] { "Folder", "Item" })]
     public void AssetId_Creation_Test(string fullAssetId, string pluginName, string[] namespaces) {
         var assetIdRegex = new AssetId(fullAssetId);
         Assert.Equal(pluginName,assetIdRegex.PluginId.Value);
@@ -73,10 +75,10 @@ public class AssetIdTest {
     
     [Theory]
     [InlineData("pluginName:folder/item", "pluginName", "folder/item" )]
-    public void AssetId_Union_Test(string result, string pluginId, string assetName) {
+    public void AssetId_Plus_Test(string result, string pluginId, string assetName) {
         var left = new PluginId(pluginId);
         var right = new AssetName(assetName);
-        AssetId newAsset = left | right;
+        AssetId newAsset = left + right;
         
         Assert.Equal(result, newAsset.ToString());
     }

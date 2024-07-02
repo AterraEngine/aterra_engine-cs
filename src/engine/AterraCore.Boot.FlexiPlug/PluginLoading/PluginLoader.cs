@@ -24,17 +24,17 @@ public delegate ILoadedPluginDto ZipImportCallback(ILoadedPluginDto pluginData, 
 public class PluginLoader(ILogger logger) : IPluginLoader {
     private readonly HashSet<string> _knownHashes = [];
 
-    private ushort _pluginIdCounter;
+    private ulong _tempIdCounter;
 
-    private ushort PluginIdCounter {
-        get => _pluginIdCounter;
+    private ulong TempIdCounter {
+        get => _tempIdCounter;
         set {
             // Basically means that the last usable plugin is `FFFE`
-            if (value == ushort.MaxValue) {
-                string maxId = ushort.MaxValue.ToString("X");
+            if (value == ulong.MaxValue) {
+                string maxId = ulong.MaxValue.ToString("X");
                 logger.ExitFatal((int)ExitCodes.PluginIdsExhausted, "Max Plugin Id of {maxId} is exhausted", maxId);
             }
-            _pluginIdCounter = value;
+            _tempIdCounter = value;
         }
     }
 
@@ -92,7 +92,7 @@ public class PluginLoader(ILogger logger) : IPluginLoader {
     // -----------------------------------------------------------------------------------------------------------------
     private ILoadedPluginDto CreateNewPluginDto(string filepath) {
         // PluginCounter exits out of engine as soon as the max PluginId is exhausted
-        ILoadedPluginDto pluginData = Plugins.AddLast(new LoadedPluginDto(PluginIdCounter++, filepath)).Value;
+        ILoadedPluginDto pluginData = Plugins.AddLast(new LoadedPluginDto(TempIdCounter++, filepath)).Value;
 
         logger.Information("{Id} : Assigned to {Name}", pluginData.NameSpace, pluginData.NameReadable);
         return pluginData;

@@ -12,8 +12,7 @@ namespace AterraCore.Common.Types.Nexities;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
-public struct AssetName : 
+public readonly struct AssetName : 
     IEqualityOperators<AssetName, AssetName, bool>,
     IEqualityOperators<AssetName, string, bool>,
     IEquatable<AssetName> 
@@ -27,7 +26,7 @@ public struct AssetName :
     public AssetName(string value) {
         Match match = RegexLib.AssetName.Match(value);
         Values = match.Groups[1].Success
-            ? match.Groups[1].Value.Split('/')
+            ? match.Groups[1].Value.Split('.', '/')
             : throw new ArgumentException("Plugin Id could not be determined ")
         ;
     }
@@ -42,7 +41,7 @@ public struct AssetName :
     
     // Only supposed to be used by AssetId
     public AssetName(Group matchGroup) {
-        Values = matchGroup.Value.Split('/');
+        Values = matchGroup.Value.Split('.', '/');
     }
 
     // -----------------------------------------------------------------------------------------------------------------

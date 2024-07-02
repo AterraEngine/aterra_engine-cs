@@ -10,7 +10,7 @@ namespace AterraCore.Nexities.Lib.Components.Transform2D;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Component<ITransform2D>("AC000000")]
+[Component<ITransform2D>("Nexities:Components/Transform2D")]
 public class Transform2D : NexitiesComponent, ITransform2D {
 
     [NamedValueVector2("Translation")]

@@ -12,7 +12,7 @@ namespace AterraCore.Nexities.Lib.Components.HUD.Text;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Component<IRaylibHudText>("AC00-0005")]
+[Component<IRaylibHudText>("Nexities:Components/RaylibHubText")]
 [UsedImplicitly]
 public class RaylibHudText : NexitiesComponent, IHudComponent, IRaylibHudText {
     public HudType Type => HudType.Text;

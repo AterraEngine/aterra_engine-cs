@@ -12,7 +12,7 @@ namespace AterraCore.Nexities.Lib.Components.AssetTree;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Component<IAssetTree>("AC00-0003")]
+[Component<IAssetTree>("Nexities:Components/AssetTree")]
 [UsedImplicitly]
 public class AssetTree : NexitiesComponent, IAssetTree {
     private readonly LinkedList<IAssetInstance> _nodes = [];

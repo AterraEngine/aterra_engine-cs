@@ -12,12 +12,12 @@ namespace AterraCore.Nexities.Entities;
 // ---------------------------------------------------------------------------------------------------------------------
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
 public class EntityAttribute(
-    string partialId,
+    string assetId,
     ServiceLifetimeType instanceType = ServiceLifetimeType.Multiple,
     CoreTags coreTags = CoreTags.Entity,
     Type? @interface = null
     ) : AssetAttribute(
-partialId,
+assetId,
 instanceType,
 coreTags | CoreTags.Entity
 ) {

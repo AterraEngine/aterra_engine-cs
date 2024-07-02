@@ -13,11 +13,11 @@ namespace AterraCore.Boot.FlexiPlug.PluginLoading;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class LoadedPluginDto(int id, string filepath) : ILoadedPluginDto {
+public class LoadedPluginDto(ulong id, string filepath) : ILoadedPluginDto {
     public string FilePath { get; } = filepath;
-    private int LoadOrderId { get; } = id;
+    private ulong TempLoadOrderId { get; } = id;
     public string NameReadable => Data?.NameReadable ?? FilePath;
-    public string NameSpace => Data?.NameSpace ?? $"temp_{LoadOrderId}";
+    public string NameSpace => Data?.NameSpace ?? $"temp_{TempLoadOrderId}";
     
     public bool IsProcessed { get; set; }
     public PluginConfigXml? Data { get; set; }

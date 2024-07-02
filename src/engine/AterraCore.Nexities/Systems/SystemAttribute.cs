@@ -12,11 +12,11 @@ namespace AterraCore.Nexities.Systems;
 // ---------------------------------------------------------------------------------------------------------------------
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
 public class SystemAttribute(
-    string partialId,
+    string assetId,
     ServiceLifetimeType instanceType = ServiceLifetimeType.Singleton,
     CoreTags coreTags = CoreTags.System
     ) : AssetAttribute(
-partialId,
+assetId,
 instanceType,
 coreTags | CoreTags.System
 );

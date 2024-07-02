@@ -15,7 +15,7 @@ namespace AterraCore.Nexities.Lib.Systems;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[System("AF00-0001", ServiceLifetimeType.Singleton, CoreTags.RenderSystem)]
+[System("Nexities:Systems/RenderHud", ServiceLifetimeType.Singleton, CoreTags.RenderSystem)]
 public class RenderHud : NexitiesSystem<IHud> {
     protected override void ProcessEntity(IHud entity) {
         entity.ChildEntities
