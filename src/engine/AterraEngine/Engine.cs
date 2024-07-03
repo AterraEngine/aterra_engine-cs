@@ -87,8 +87,25 @@ public class Engine(
         if (instanceAtlas.TryCreateInstance(new AssetId("Nexities:Entities/Actor2D"), out Actor2D? instance)) {
             logger.Error("{Id}", instance.Guid);
             logger.Error("{AssetId}", instance.AssetId);
-            logger.Error("{Components}", instance.Components);
+            logger.Error("{Components}", instance.ComponentsArray);
         }
+        
+        Console.WriteLine() ;
+        Console.WriteLine() ;
+        Console.WriteLine() ;
+        Console.WriteLine() ;
+        Console.WriteLine() ;
+        Console.WriteLine() ;
+        Console.WriteLine() ;
+        Console.WriteLine() ;
+        Console.WriteLine() ;
+        Console.WriteLine() ;
+        Console.WriteLine() ;
+        Console.WriteLine() ;
+        Console.WriteLine() ;
+        Console.WriteLine() ;
+        Console.WriteLine() ;
+        Console.WriteLine() ;
 
         // Task.Run(() => {
         //     Task.Delay(5000, cts.Token);
