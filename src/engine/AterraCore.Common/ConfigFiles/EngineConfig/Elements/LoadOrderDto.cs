@@ -14,7 +14,7 @@ namespace AterraCore.Common.ConfigFiles.EngineConfig.Elements;
 // ---------------------------------------------------------------------------------------------------------------------
 
 public class LoadOrderDto {
-    [XmlAttribute("relative-root-path")]
+    [XmlAttribute("relativeRootPath")]
     public string RootFolderRelative { get; set; } = Paths.Plugins.Folder;
     
     [XmlElement("rootAssembly", IsNullable = true)]

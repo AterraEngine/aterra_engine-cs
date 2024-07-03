@@ -47,7 +47,6 @@ public class FlexiPlugConfiguration(ILogger logger, EngineConfigXml engineConfig
                 rootAssembly.NameReadable,
                 rootAssembly.Author
             )
-
         );
         logger.Information("Assigned Root Assembly as plugin");
         return this;

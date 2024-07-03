@@ -3,14 +3,14 @@
     <engine version="0.0.0"/>
     <game version="0.0.0"/>
     <boot>
-        <logging async-console="false"/>
+        <logging asyncConsole="false"/>
         <expections 
             breakOnFlowException="true" 
             breakOnUnstableLoadOrder="false"
         />
     </boot>
     
-    <loadOrder relative-root-path="plugins">
+    <loadOrder relativeRootPath="plugins">
         <rootAssembly author="Andreas Sas" nameSpace="AterraWorkfloor" nameReadable="Aterra Workfloor"/>
         <plugin file="Workfloor-AterraCore.Plugin.zip"/>
     </loadOrder>

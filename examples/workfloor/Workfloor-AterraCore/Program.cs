@@ -1,7 +1,6 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
 using AterraCore.Contracts;
 using AterraCore.Contracts.Renderer;
 using AterraEngine.Renderer.RaylibCs;
@@ -11,7 +10,6 @@ using AterraCore.Boot;
 using AterraCore.Boot.Logic;
 using AterraCore.Common.Data;
 using static CodeOfChaos.Extensions.DependencyInjection.ServiceDescriptorExtension;
-
 namespace Workfloor_AterraCore;
 
 // ---------------------------------------------------------------------------------------------------------------------
