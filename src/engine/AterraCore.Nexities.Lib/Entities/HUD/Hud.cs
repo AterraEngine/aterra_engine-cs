@@ -14,6 +14,6 @@ namespace AterraCore.Nexities.Lib.Entities.HUD;
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
 [Entity<IHud>("Nexities:Entities/Hud")]
-public class Hud(IAssetTree childEntities, params IComponent[] nestedComponents) : NexitiesEntity(nestedComponents:nestedComponents, childEntities), IHud {
+public class Hud(IAssetTree childEntities) : NexitiesEntity(childEntities), IHud {
     public IAssetTree ChildEntities => childEntities;
 }

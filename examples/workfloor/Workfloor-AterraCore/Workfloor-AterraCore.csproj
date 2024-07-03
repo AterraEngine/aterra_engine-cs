@@ -41,7 +41,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Assets\"/>
+        <Content Include="Assets\*.png">
+            <Link>assets\%(Filename)%(Extension)</Link>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 
     <Target Name="AddingPlugins" AfterTargets="Build">

@@ -12,7 +12,7 @@
         <PackageReference Include="CodeOfChaos.Extensions.Serilog" Version="0.2.0" />
         <PackageReference Include="JetBrains.Annotations" Version="2023.3.0"/>
         <PackageReference Include="Microsoft.Extensions.ObjectPool.DependencyInjection" Version="8.5.0" />
-        <PackageReference Include="Raylib-cs" Version="6.0.0"/>
+        <PackageReference Include="Raylib-cs" Version="6.1.1" />
     </ItemGroup>
 
     <ItemGroup>

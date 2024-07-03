@@ -14,8 +14,8 @@ namespace AterraCore.Nexities.Lib.Entities.HUD;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public class HudElementRaylibText(IAssetTree childEntities, IRaylibHudText hudComponent, params IComponent[] nestedComponents) :
-    NexitiesEntity(nestedComponents:nestedComponents, childEntities, hudComponent), 
+public class HudElementRaylibText(IAssetTree childEntities, IRaylibHudText hudComponent) :
+    NexitiesEntity(childEntities, hudComponent), 
     IHudElement 
 {
     public IRaylibHudText TextComponent => hudComponent;

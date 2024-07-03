@@ -20,7 +20,6 @@ public class AssetAtlas(ILogger logger) : IAssetAtlas {
     
     private readonly ConcurrentDictionary<AssetId, AssetRegistration> _assetsById = new();
     private readonly ConcurrentDictionary<Type, AssetId> _assetsByType = new();
-    private readonly ConcurrentDictionary<ServiceLifetimeType, ConcurrentBag<AssetId>> _assetServiceLifetimeMap = new ConcurrentDictionary<ServiceLifetimeType, ConcurrentBag<AssetId>>().PopulateWithEmpties();
 
     private readonly ConcurrentDictionary<CoreTags, ConcurrentBag<AssetId>> _coreTaggedAssets = new ConcurrentDictionary<CoreTags, ConcurrentBag<AssetId>>().PopulateWithEmpties();
     private readonly ConcurrentDictionary<string, ConcurrentBag<AssetId>> _stringTaggedAssets = new();
@@ -56,12 +55,6 @@ public class AssetAtlas(ILogger logger) : IAssetAtlas {
             Logger.Information("Asset {AssetId} linked to the interface of {Type}", registration.AssetId, interfaceType.FullName);
         }
 
-        // Assign to the instance type
-        if (!_assetServiceLifetimeMap.TryAddToBagOrCreateBag(registration.ServiceLifetime, registration.AssetId)) {
-            // This shouldn't happen
-            Logger.Error("Asset {AssetId} could not be be mapped to an InstanceType", registration.AssetId);
-        }
-
         // After Everything is said and done with the assigning, start assigning the Core tags and string tags
         foreach (CoreTags tag in Enum.GetValuesAsUnderlyingType<CoreTags>()) {
             if (!registration.CoreTags.HasFlag(tag)) continue;
@@ -75,7 +68,7 @@ public class AssetAtlas(ILogger logger) : IAssetAtlas {
         }
         
         // Assign overloads
-        foreach (AssetId overridableAssetId in registration.OverwritableAssetIds) {
+        foreach (AssetId overridableAssetId in registration.OverridableAssetIds) {
             if (!_assetsById.TryGetValue(overridableAssetId, out AssetRegistration comparisonValue )) continue;
             if (!_assetsById.TryUpdate(overridableAssetId, registration, comparisonValue)) continue;
           

@@ -9,5 +9,5 @@ using AterraCore.Nexities.Entities;
 // [Entity("1", AssetInstanceType.Pooled))]
 // public class TestEntity : NexitiesEntity;
 
-[Entity<TestEntity2>("4", ServiceLifetimeType.Singleton)]
+[Entity<TestEntity2>("4")]
 public class TestEntity2 : NexitiesEntity;

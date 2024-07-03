@@ -16,7 +16,7 @@ namespace AterraCore.Nexities.Lib.Entities.Level;
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
 [Entity<ILevel>("Nexities:Entities/Level")]
-public class Level(IAssetTree childEntities, ILevelDataSystems levelDataSystems, params IComponent[] nestedComponents ) : NexitiesEntity(nestedComponents:nestedComponents, childEntities), ILevel {
+public class Level(IAssetTree childEntities, ILevelDataSystems levelDataSystems) : NexitiesEntity(childEntities), ILevel {
     public IAssetTree ChildEntities => childEntities;
     public ILevelDataSystems Systems => levelDataSystems;
 }

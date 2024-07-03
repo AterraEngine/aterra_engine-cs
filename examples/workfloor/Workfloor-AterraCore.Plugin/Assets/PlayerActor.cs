@@ -17,23 +17,13 @@ namespace Workfloor_AterraCore.Plugin.Assets;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ITransform2DNew : ITransform2D {
-    public string Data { get; }
-}
-
-public interface IActor2DNew : IActor2D;
-
-[Component<ITransform2D, ITransform2DNew>("WorkfloorAterraEngine:Transform2DNew")]
+[Entity("WorkfloorAterraCore:Entities/Ducky")]
 [UsedImplicitly]
-public class Transform2DNew : Transform2D, ITransform2DNew {
-    public string Data => "bla-bla";
-}
-
-[Entity<IActor2D, IActor2DNew>("NexitiesDebug:Entities/Actor2D")]
-[OverridesAssetId("Nexities:Entities/Actor2D")]
-[UsedImplicitly]
-public class Actor2dNew(ITransform2DNew transform2D, ISprite2D sprite2D, IAssetTree childEntities, ITransform2DNew location ) 
-    : Actor2D(transform2D, sprite2D, childEntities, location), IActor2DNew;
+public class Actor2DDucky(
+    ITransform2D transform2D,
+    [ComponentUses("827c3bc1-f688-4301-b342-b8958c1fe892")] ISprite2D sprite2D, 
+    IAssetTree childEntities
+) : Actor2D(transform2D, sprite2D, childEntities);
 
 // [Entity("1")]
 // [UsedImplicitly]

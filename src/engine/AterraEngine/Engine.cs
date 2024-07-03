@@ -10,13 +10,16 @@ using AterraCore.Contracts.Nexities.Data.Assets;
 using AterraCore.Contracts.Nexities.Data.Levels;
 using AterraCore.Contracts.Nexities.Data.Worlds;
 using AterraCore.Contracts.Nexities.DataParsing;
+using AterraCore.Contracts.OmniVault;
 using AterraCore.Contracts.Renderer;
 using AterraCore.DI;
+using AterraCore.Nexities.Lib.Components.Sprite2D;
 using AterraCore.Nexities.Lib.Entities.Actor;
 using AterraEngine.Threading;
 using CodeOfChaos.Extensions;
 using CodeOfChaos.Extensions.Serilog;
 using JetBrains.Annotations;
+using Raylib_cs;
 using Serilog;
 
 namespace AterraEngine;
@@ -33,6 +36,7 @@ public class Engine(
     IWorld world,
     RenderThreadEvents renderThreadEvents,
     IApplicationStageManager applicationStageManager,
+    ITextureAtlas textureAtlas,
     IAssetDataXmlService assetDataXmlService
     ) : IEngine {
     private readonly CancellationTokenSource _ctsRenderThread = new();

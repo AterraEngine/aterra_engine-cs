@@ -55,12 +55,11 @@ public class PluginAtlas : IPluginAtlas {
                 .Where(record => record.AssetAttribute.CoreTags.HasFlag(filter))
                 .Select(record => new AssetRegistration {
                     AssetId = record.AssetAttribute.AssetId,
-                    ServiceLifetime = record.AssetAttribute.ServiceLifetime,
                     InterfaceTypes = record.AssetAttribute.InterfaceTypes,
                     CoreTags = record.AssetAttribute.CoreTags,
                     Type = record.Type,
                     StringTags = record.AssetTagAttributes.SelectMany(attribute => attribute.Tags),
-                    OverwritableAssetIds = record.OverwritesAssetIdAttributes.Select(attribute => attribute.AssetId),
+                    OverridableAssetIds = record.OverwritesAssetIdAttributes.Select(attribute => attribute.AssetId),
                 })
             );
     }

@@ -13,7 +13,7 @@ namespace AterraCore.Nexities.Lib.Systems;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[System("Nexities:Systems/Render2D", ServiceLifetimeType.Singleton, CoreTags.RenderSystem)]
+[System("Nexities:Systems/Render2D", CoreTags.RenderSystem)]
 public class Render2D(ILogger logger) : NexitiesSystem<IActor2D> {
 
     // -----------------------------------------------------------------------------------------------------------------

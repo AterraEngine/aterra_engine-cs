@@ -15,12 +15,11 @@ public struct AssetRegistration {
     public Type[] InterfaceTypes { get; init; }
 
     // Data from AbstractAssetAttribute
-    public ServiceLifetimeType ServiceLifetime { get; init; }
     public CoreTags CoreTags { get; init; }
 
     // Data from AbstractAssetTagAttribute
     public IEnumerable<string> StringTags { get; init; }
     
     // Data from AbstractOverwritesAssetTagAttribute
-    public IEnumerable<AssetId> OverwritableAssetIds { get; init; } 
+    public IEnumerable<AssetId> OverridableAssetIds { get; init; } 
 }

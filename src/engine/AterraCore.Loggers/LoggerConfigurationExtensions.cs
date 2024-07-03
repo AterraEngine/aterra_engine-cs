@@ -5,7 +5,7 @@
 using Serilog;
 using Serilog.Formatting.Compact;
 using Serilog.Sinks.SystemConsole.Themes;
-using static Ansi.AnsiColor;
+using static CodeOfChaos.Ansi.AnsiColor;
 
 namespace AterraCore.Loggers;
 

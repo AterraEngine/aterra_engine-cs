@@ -4,6 +4,7 @@
 using AterraCore.Boot.FlexiPlug;
 using AterraCore.Boot.FlexiPlug.PluginLoading;
 using AterraCore.Boot.Nexities;
+using AterraCore.Boot.OmniVault;
 using AterraCore.Common.ConfigFiles.EngineConfig;
 using AterraCore.Common.Data;
 using AterraCore.Contracts;
@@ -70,7 +71,8 @@ public class EngineConfiguration(ILogger? logger = null) : IEngineConfiguration 
     public ISubConfigurations SubConfigurations {
         get => _subConfigurations ??= new SubConfigurations(
             new FlexiPlugConfiguration(StartupLog, EngineConfig, PluginLoader),
-            new NexitiesConfiguration(StartupLog, EngineConfig, PluginLoader)
+            new NexitiesConfiguration(StartupLog, EngineConfig, PluginLoader),
+            new OmniVaultConfiguration(StartupLog, EngineConfig)
         );
         set {
             if (_subConfigurations is null) {

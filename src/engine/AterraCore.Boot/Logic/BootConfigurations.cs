@@ -20,17 +20,13 @@ public static class BootConfigurations {
         
         subConfigurationsCallback.Invoke(subConfigurations);
 
-        if (subConfigurations.FlexiPlug.Warnings != Nominal && configuration.EngineConfig.BootConfig.Exceptions.BreakOnFlowException) {
-            logger.ThrowFatal<InvalidOperationException>("Engine configuration for FlexiPlug has warnings: {Warnings}", subConfigurations.FlexiPlug.Warnings);
-        } 
-        configuration.ServicesDefault.AddLastRepeated(subConfigurations.FlexiPlug.ServicesDefault);
-        configuration.ServicesStatic.AddLastRepeated(subConfigurations.FlexiPlug.ServicesStatic);
-        
-        if (subConfigurations.Nexities.Warnings != Nominal && configuration.EngineConfig.BootConfig.Exceptions.BreakOnFlowException) {
-            logger.ThrowFatal<InvalidOperationException>("Engine configuration for Nexities has warnings: {Warnings}", subConfigurations.Nexities.Warnings);
-        } 
-        configuration.ServicesDefault.AddLastRepeated(subConfigurations.Nexities.ServicesDefault);
-        configuration.ServicesStatic.AddLastRepeated(subConfigurations.Nexities.ServicesStatic);
+        foreach (IBootConfiguration bootConfiguration in subConfigurations) {
+            if (bootConfiguration.Warnings != Nominal && configuration.EngineConfig.BootConfig.Exceptions.BreakOnFlowException) {
+                logger.ThrowFatal<InvalidOperationException>("Engine configuration for {Type} has warnings: {Warnings}", bootConfiguration.GetType().FullName, bootConfiguration.Warnings);
+            } 
+            configuration.ServicesDefault.AddLastRepeated(bootConfiguration.ServicesDefault);
+            configuration.ServicesStatic.AddLastRepeated(bootConfiguration.ServicesStatic);
+        }
         
         return configuration;
     }

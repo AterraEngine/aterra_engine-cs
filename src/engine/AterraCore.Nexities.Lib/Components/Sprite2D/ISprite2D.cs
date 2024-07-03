@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.Nexities.Data.Components;
+using Raylib_cs;
 
 namespace AterraCore.Nexities.Lib.Components.Sprite2D;
 
@@ -9,4 +10,5 @@ namespace AterraCore.Nexities.Lib.Components.Sprite2D;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface ISprite2D : IComponent {
+    public Texture2D? Texture2D { get; set; }
 }
