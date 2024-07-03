@@ -33,7 +33,7 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas) : IAsset
         // Will work for Entities which have DI injected components,
         //      because all components have their interface mapped to their assetId
         // Will work for others as well
-        instance = EngineServices.CreateWithServices<T>(registration.InterfaceType ?? registration.Type);
+        instance = EngineServices.CreateWithServices<T>(registration.Type);
         instance.AssetId = assetId;
 
         // Update the generated

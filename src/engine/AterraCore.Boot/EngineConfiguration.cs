@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Boot.FlexiPlug;
+using AterraCore.Boot.FlexiPlug.PluginLoading;
 using AterraCore.Boot.Nexities;
 using AterraCore.Common.ConfigFiles.EngineConfig;
 using AterraCore.Common.Data;
@@ -43,12 +44,12 @@ public class EngineConfiguration(ILogger? logger = null) : IEngineConfiguration 
         }
     }
 
-    public BootFlowOfOperations Flow { get; private set; } = UnConfigured;
-    
+    public BootFlowOfOperations Flow => UnConfigured;
+
     public IEngineServiceBuilder EngineServiceBuilder { get; } = new EngineServiceBuilder(GetStartupLogger(logger));
     
     public ILogger StartupLog { get; } = GetStartupLogger(logger);
-    public Func<ILogger> EngineLoggerCallback { get; set; } = () => Loggers.EngineLogger.CreateLogger(false);
+    public Func<ILogger> EngineLoggerCallback { get; set; } = () => EngineLogger.CreateLogger(false);
     
     private EngineConfigXml? _engineConfig;
     public EngineConfigXml EngineConfig {
@@ -62,11 +63,14 @@ public class EngineConfiguration(ILogger? logger = null) : IEngineConfiguration 
         }
     }
 
+    private PluginLoader? _pluginLoaderCache;
+    private PluginLoader PluginLoader => _pluginLoaderCache ??= new PluginLoader(StartupLog);
+
     private ISubConfigurations? _subConfigurations;
     public ISubConfigurations SubConfigurations {
         get => _subConfigurations ??= new SubConfigurations(
-            new FlexiPlugConfiguration(StartupLog, EngineConfig),
-            new NexitiesConfiguration(StartupLog, EngineConfig)
+            new FlexiPlugConfiguration(StartupLog, EngineConfig, PluginLoader),
+            new NexitiesConfiguration(StartupLog, EngineConfig, PluginLoader)
         );
         set {
             if (_subConfigurations is null) {
@@ -82,7 +86,7 @@ public class EngineConfiguration(ILogger? logger = null) : IEngineConfiguration 
     // -----------------------------------------------------------------------------------------------------------------
 
     // If the logger is already defined by the program.cs which creates the engine, use that one else use the standard
-    private static ILogger GetStartupLogger(ILogger? logger) => logger ?? Loggers.StartupLogger.CreateLogger(false).ForStartupContext();
+    private static ILogger GetStartupLogger(ILogger? logger) => logger ?? StartupLogger.CreateLogger(false).ForStartupContext();
     private bool EngineNotPresentAsStaticService() => ServicesStatic.FirstOrDefault(descriptor => descriptor.ServiceType == typeof(IEngine)) != null;
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -102,7 +106,7 @@ public class EngineConfiguration(ILogger? logger = null) : IEngineConfiguration 
         // Populate Plugin Atlas with plugin list
         //      Is a singleton anyway, so doesn't matter when we assign this data
         IPluginAtlas pluginAtlas = EngineServices.GetPluginAtlas();
-        pluginAtlas.ImportLoadedPluginDtos(SubConfigurations.FlexiPlug.PluginLoader.Plugins);
+        pluginAtlas.ImportLoadedPluginDtos(PluginLoader.Plugins);
 
         // Create the Actual Engine
         //  Should be the last step

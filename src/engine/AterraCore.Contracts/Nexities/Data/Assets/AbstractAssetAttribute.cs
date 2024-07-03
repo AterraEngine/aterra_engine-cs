@@ -14,5 +14,5 @@ public abstract class AbstractAssetAttribute : Attribute {
     public abstract AssetId AssetId { get; }
     public abstract ServiceLifetimeType ServiceLifetime { get; }
     public abstract CoreTags CoreTags { get; }
-    public abstract Type? InterfaceType { get; }
+    public abstract Type[] InterfaceTypes { get; }
 }

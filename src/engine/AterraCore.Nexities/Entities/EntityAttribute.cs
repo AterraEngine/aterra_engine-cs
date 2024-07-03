@@ -15,17 +15,12 @@ public class EntityAttribute(
     string assetId,
     ServiceLifetimeType instanceType = ServiceLifetimeType.Multiple,
     CoreTags coreTags = CoreTags.Entity,
-    Type? @interface = null
-    ) : AssetAttribute(
-assetId,
-instanceType,
-coreTags | CoreTags.Entity
-) {
-    public Type? Interface { get; } = @interface;
-}
+    params Type[] interfaceTypes
+) : AssetAttribute(
+    assetId,
+    instanceType,
+    coreTags | CoreTags.Entity,
+    interfaceTypes
+);
 
-public class EntityAttribute<TInterface>(
-    string partialId,
-    ServiceLifetimeType instanceType = ServiceLifetimeType.Multiple,
-    CoreTags coreTags = CoreTags.Entity
-    ) : EntityAttribute(partialId, instanceType, coreTags, typeof(TInterface));
+public class EntityAttribute<TInterface>( string assetId, ServiceLifetimeType instanceType = ServiceLifetimeType.Multiple, CoreTags coreTags = CoreTags.Entity ) : EntityAttribute(assetId, instanceType, coreTags, typeof(TInterface));

@@ -56,7 +56,7 @@ public class PluginAtlas : IPluginAtlas {
                 .Select(record => new AssetRegistration {
                     AssetId = record.AssetAttribute.AssetId,
                     ServiceLifetime = record.AssetAttribute.ServiceLifetime,
-                    InterfaceType = record.AssetAttribute.InterfaceType,
+                    InterfaceTypes = record.AssetAttribute.InterfaceTypes,
                     CoreTags = record.AssetAttribute.CoreTags,
                     Type = record.Type,
                     StringTags = record.AssetTagAttributes.SelectMany(attrib => attrib.Tags)

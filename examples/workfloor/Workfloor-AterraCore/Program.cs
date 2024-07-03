@@ -22,12 +22,14 @@ public static class Program {
             .ImportEngineConfig(Paths.ConfigEngine)
             
             // --- Assign SubConfigurations ---
-            .AddSubConfigurations()
             .WithSubConfigurations(sc => {
                 sc.FlexiPlug
                     .CheckAndIncludeRootAssembly() 
                     .PreLoadPlugins()
                 ;
+
+                sc.Nexities
+                    .IncludeNexitiesLibAssembly();
             })
             
             // --- Assign Services for the ServiceProvider ---

@@ -12,7 +12,7 @@ public struct AssetRegistration {
 
     // Actual type of class
     public Type Type { get; init; }
-    public Type? InterfaceType { get; init; }
+    public Type[] InterfaceTypes { get; init; }
 
     // Data from AbstractAssetAttribute
     public ServiceLifetimeType ServiceLifetime { get; init; }

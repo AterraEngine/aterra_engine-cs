@@ -21,13 +21,11 @@ namespace AterraCore.Boot.FlexiPlug;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public class FlexiPlugConfiguration(ILogger logger, EngineConfigXml engineConfigDto) : IFlexiPlugConfiguration {
+public class FlexiPlugConfiguration(ILogger logger, EngineConfigXml engineConfigDto, IPluginLoader pluginLoader) : IFlexiPlugConfiguration {
     public LinkedList<ServiceDescriptor> ServicesDefault { get; } = [];
     public LinkedList<ServiceDescriptor> ServicesStatic { get; } = new ([
         NewServiceDescriptor<IPluginAtlas, PluginAtlas>(ServiceLifetime.Singleton),
     ]);
-    
-    public IPluginLoader PluginLoader { get; } = new PluginLoader(logger);
     public EngineConfigXml EngineConfig { get; set; } = engineConfigDto;
 
     public ConfigurationWarnings Warnings { get; private set; } = Nominal;
@@ -40,7 +38,7 @@ public class FlexiPlugConfiguration(ILogger logger, EngineConfigXml engineConfig
         if (EngineConfig.LoadOrder is not { RootAssembly: {} rootAssembly}) return this;
         // if (rootNameSpace.IsNotNullOrEmpty()) return this;
         
-        PluginLoader.InjectAssemblyAsPlugin(
+        pluginLoader.InjectAssemblyAsPlugin(
             Assembly.GetEntryAssembly()!,
             new InjectableAssemblyData (
                 rootAssembly.NameSpace ,
@@ -57,7 +55,7 @@ public class FlexiPlugConfiguration(ILogger logger, EngineConfigXml engineConfig
             p => Path.Combine(EngineConfig.LoadOrder.RootFolderRelative, p.FilePath)
         );
         
-        if (PluginLoader.TryParseAllPlugins(filePaths)) return this;
+        if (pluginLoader.TryParseAllPlugins(filePaths)) return this;
         
         logger.Warning("Failed to load all plugins correctly.");
         Warnings |= PluginLoadOrderUnstable | UnstablePlugin;
@@ -67,8 +65,8 @@ public class FlexiPlugConfiguration(ILogger logger, EngineConfigXml engineConfig
     
     public ConfigurationWarnings AsSubConfiguration(IEngineConfiguration engineConfiguration) {
         // Assign custom services
-        ServicesDefault.AddLastRepeated(PluginLoader.Plugins.SelectMany(dto => dto.GetServicesDefault()));
-        ServicesStatic.AddLastRepeated(PluginLoader.Plugins.SelectMany(dto => dto.GetServicesDefault()));
+        ServicesDefault.AddLastRepeated(pluginLoader.Plugins.SelectMany(dto => dto.GetServicesDefault()));
+        ServicesStatic.AddLastRepeated(pluginLoader.Plugins.SelectMany(dto => dto.GetServicesDefault()));
         
         logger.Information("Plugins successfully loaded.");
         return Nominal;

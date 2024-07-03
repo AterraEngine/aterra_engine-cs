@@ -1,8 +1,6 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Boot.FlexiPlug;
-using AterraCore.Boot.Nexities;
 using AterraCore.Contracts.Boot;
 using CodeOfChaos.Extensions;
 using CodeOfChaos.Extensions.Serilog;
@@ -16,17 +14,6 @@ namespace AterraCore.Boot.Logic;
 // ---------------------------------------------------------------------------------------------------------------------
 
 public static class BootConfigurations {
-    public static IEngineConfiguration AddSubConfigurations(this IEngineConfiguration configuration) {
-        ILogger logger = configuration.StartupLog;
-
-        configuration.SubConfigurations = new SubConfigurations(
-            new FlexiPlugConfiguration(logger, configuration.EngineConfig),
-            new NexitiesConfiguration(logger, configuration.EngineConfig)
-        );
-        
-        return configuration;
-    }
-    
     public static IEngineConfiguration WithSubConfigurations(this IEngineConfiguration configuration, Action<ISubConfigurations> subConfigurationsCallback) {
         ILogger logger = configuration.StartupLog;
         ISubConfigurations subConfigurations = configuration.SubConfigurations;

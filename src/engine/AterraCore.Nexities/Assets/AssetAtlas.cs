@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Data.Assets;
+using AterraCore.Loggers;
 using CodeOfChaos.Extensions;
 using JetBrains.Annotations;
 using Serilog;
@@ -17,6 +18,8 @@ namespace AterraCore.Nexities.Assets;
 
 [UsedImplicitly]
 public class AssetAtlas(ILogger logger) : IAssetAtlas {
+    private ILogger Logger { get; } = logger.ForAssetAtlas();
+    
     private readonly ConcurrentDictionary<AssetId, AssetRegistration> _assetsById = new();
     private readonly ConcurrentDictionary<Type, AssetId> _assetsByType = new();
     private readonly ConcurrentDictionary<ServiceLifetimeType, ConcurrentBag<AssetId>> _assetServiceLifetimeMap = new ConcurrentDictionary<ServiceLifetimeType, ConcurrentBag<AssetId>>().PopulateWithEmpties();
@@ -34,54 +37,46 @@ public class AssetAtlas(ILogger logger) : IAssetAtlas {
 
         // Assigns the asset to the dict
         if (!_assetsById.TryAdd(registration.AssetId, registration)) {
-            logger.Warning(
+            Logger.Warning(
             "Asset with ID: {AssetId} already exists with type {ExistingAssetType}. Cannot assign a new asset with the same ID.",
             registration.AssetId, _assetsById[registration.AssetId].Type.FullName
             );
             return false;
         }
         if (!_assetsByType.TryAdd(registration.Type, registration.AssetId)) {
-            logger.Warning(
+            Logger.Warning(
             "Asset with ID: {AssetId} Cannot assign a new asset because it's {Type} is already assigned to another asset.",
             registration.AssetId, registration.Type.FullName
             );
             return false;
         }
 
-        if (registration.InterfaceType is not null && !_assetsByType.TryAdd(registration.InterfaceType, registration.AssetId)) {
-            logger.Warning(
-            "Asset with ID: {AssetId} Cannot assign a new asset because it's interface {interface} is already assigned to another asset.",
-            registration.AssetId, registration.InterfaceType.FullName
-            );
-            return false;
+        foreach (Type interfaceType in registration.InterfaceTypes) {
+            _assetsByType.AddOrUpdate(interfaceType, registration.AssetId);
+            Logger.Information("Asset {AssetId} linked to the type of {Type}", registration.AssetId, interfaceType.FullName);
         }
 
         // Assign to the instance type
         if (!_assetServiceLifetimeMap.TryAddToBagOrCreateBag(registration.ServiceLifetime, registration.AssetId)) {
             // This shouldn't happen
-            logger.Error("Asset {AssetId} could not be be mapped to an InstanceType", registration.AssetId);
+            Logger.Error("Asset {AssetId} could not be be mapped to an InstanceType", registration.AssetId);
         }
 
         // After Everything is said and done with the assigning, start assigning the Core tags and string tags
-        List<string> tagsList = [];
-
         foreach (CoreTags tag in Enum.GetValuesAsUnderlyingType<CoreTags>()) {
             if (!registration.CoreTags.HasFlag(tag)) continue;
             _coreTaggedAssets.TryAddToBagOrCreateBag(tag, registration.AssetId);
-            tagsList.Add(tag.ToString());
         }
 
         foreach (string stringTag in registration.StringTags) {
             if (!_stringTaggedAssets.TryAddToBagOrCreateBag(stringTag, registration.AssetId)) {
-                logger.Warning("String Tag of {tag} could not be assigned to {assetId}", stringTag, registration.AssetId);
-                continue;
+                Logger.Warning("String Tag of {tag} could not be assigned to {assetId}", stringTag, registration.AssetId);
             }
-            tagsList.Add(stringTag);
         }
 
-        logger.Information(
-        "Assigned asset {AssetId} of Type {AssetTypeName} to plugin {PluginId} as a '{@tags}",
-        registration.AssetId, registration.Type.FullName, registration.Type, tagsList
+        Logger.Information(
+            "Assigned asset {AssetId} of Type {AssetTypeName}",
+            registration.AssetId, registration.Type.FullName
         );
 
         assetId = registration.AssetId;
@@ -112,13 +107,13 @@ public class AssetAtlas(ILogger logger) : IAssetAtlas {
         type = registration.Type;
         return true;
     }
-    public bool TryGetInterfaceType(AssetId assetId, out Type? type) {
-        type = default;
+    public bool TryGetInterfaceTypes(AssetId assetId, out Type[] type) {
+        type = [];
         if (!_assetsById.TryGetValue(assetId, out AssetRegistration registration)) {
             return false;
         }
 
-        type = registration.InterfaceType;
+        type = registration.InterfaceTypes;
         return true;
     }
 
