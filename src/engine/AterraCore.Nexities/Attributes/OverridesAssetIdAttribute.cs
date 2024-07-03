@@ -1,15 +1,14 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
-using AterraCore.FlexiPlug.Attributes;
-namespace Workfloor_AterraCore.Plugin.Systems;
+using AterraCore.Common.Types.Nexities;
+using AterraCore.Contracts.Nexities.Data.Assets;
+namespace AterraCore.Nexities.Attributes;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ITestService;
-
-[Injectable<ITestService>]
-public class TestService : ITestService {
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+public class OverridesAssetIdAttribute(string assetId) : AbstractOverridesAssetIdAttribute {
+    public override AssetId AssetId { get; } = new(assetId);
 }

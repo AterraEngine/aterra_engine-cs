@@ -59,14 +59,14 @@ public class PluginAtlas : IPluginAtlas {
                     InterfaceTypes = record.AssetAttribute.InterfaceTypes,
                     CoreTags = record.AssetAttribute.CoreTags,
                     Type = record.Type,
-                    StringTags = record.AssetTagAttributes.SelectMany(attrib => attrib.Tags)
+                    StringTags = record.AssetTagAttributes.SelectMany(attribute => attribute.Tags),
+                    OverwritableAssetIds = record.OverwritesAssetIdAttributes.Select(attribute => attribute.AssetId),
                 })
             );
     }
 
     public IEnumerable<AssetRegistration> GetEntityRegistrations(string? pluginNameSpace = null) => GetAssetRegistrations(pluginNameSpace, CoreTags.Entity);
 
-    // Todo add the registration of Named Values here as well
     public IEnumerable<AssetRegistration> GetComponentRegistrations(string? pluginNameSpace = null) => GetAssetRegistrations(pluginNameSpace, CoreTags.Component);
 
     public bool TryGetPluginByReadableName(string readableName, [NotNullWhen(true)] out IPluginRecord? plugin) => PluginsByReadableNames.TryGetValue(readableName, out plugin);

@@ -26,7 +26,11 @@ public static class SectionExtensions {
         return logger.ForContext("Section", "FlexiPlug");
     }
     
-    public static ILogger ForAssetAtlas(this ILogger logger) {
+    public static ILogger ForAssetAtlasContext(this ILogger logger) {
+        return logger.ForContext("Section", "AssetAtlas");
+    }
+    
+    public static ILogger ForEngineContext(this ILogger logger) {
         return logger.ForContext("Section", "AssetAtlas");
     }
 }

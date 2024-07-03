@@ -12,6 +12,7 @@ using AterraCore.Contracts.Nexities.Data.Worlds;
 using AterraCore.Contracts.Nexities.DataParsing;
 using AterraCore.Contracts.Renderer;
 using AterraCore.DI;
+using AterraCore.Nexities.Lib.Entities.Actor;
 using AterraEngine.Threading;
 using CodeOfChaos.Extensions;
 using CodeOfChaos.Extensions.Serilog;
@@ -75,10 +76,7 @@ public class Engine(
         renderThreadEvents.InvokeApplicationStageChange(ApplicationStage.StartupScreen);
 
         foreach (AssetRegistration assetRegistration in pluginAtlas.GetAssetRegistrations()) {
-            // await Task.Delay(1000); // TODO REMOVE DELAY
-            
-            Console.WriteLine(assetRegistration.AssetId);
-            
+            await Task.Delay(100); // TODO REMOVE DELAY
             if (!assetAtlas.TryAssignAsset(assetRegistration, out AssetId? _)) {
                 logger.Warning("Type {Type} could not be assigned as an asset", assetRegistration.Type);
             }
@@ -86,7 +84,11 @@ public class Engine(
 
         renderThreadEvents.InvokeApplicationStageChange(ApplicationStage.Level);
 
-        // TODO create window etc...
+        if (instanceAtlas.TryCreateInstance(new AssetId("Nexities:Entities/Actor2D"), out Actor2D? instance)) {
+            logger.Error("{Id}", instance.Guid);
+            logger.Error("{AssetId}", instance.AssetId);
+            logger.Error("{Components}", instance.Components);
+        }
 
         // Task.Run(() => {
         //     Task.Delay(5000, cts.Token);

@@ -77,7 +77,7 @@ public class AssetDataXmlService(
                     continue;
                 }
 
-                IComponent? foundComponent = instance.Components.FirstOrDefault(c => c.AssetId == componentId);
+                IComponent? foundComponent = instance.ComponentsArray.FirstOrDefault(c => c.AssetId == componentId);
                 if (foundComponent is null) {
                     logger.Warning("Component could not be loaded");// TODO add file, guid if present etc ...
                     continue;

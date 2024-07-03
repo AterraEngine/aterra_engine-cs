@@ -2,35 +2,39 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
+using AterraCore.Contracts.Nexities.Data.Components.AssetTree;
+using AterraCore.FlexiPlug.Attributes;
+using AterraCore.Nexities.Attributes;
 using JetBrains.Annotations;
 using AterraCore.Nexities.Lib.Components.Sprite2D;
-namespace Workfloor_AterraCore.Plugin.Assets;
-
-using AterraCore.Common.Types.Nexities;
+using AterraCore.Nexities.Lib.Components.Transform2D;
+using AterraCore.Nexities.Lib.Entities.Actor;
 using AterraCore.Nexities.Components;
+using AterraCore.Nexities.Entities;
+
+namespace Workfloor_AterraCore.Plugin.Assets;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Component("WorkfloorAterraEngine:PlayerSprite", ServiceLifetimeType.Singleton)] // Services.AddSingleton<PlayerSprite>()
-[UsedImplicitly]
-public class PlayerSprite : Sprite2D {
-    public string Data = "bla-bla";
+public interface ITransform2DNew : ITransform2D {
+    public string Data { get; }
 }
 
-[Component("WorkfloorAterraEngine:PlayerSpriteA", ServiceLifetimeType.Singleton)] // Services.AddSingleton<PlayerSprite>()
+public interface IActor2DNew : IActor2D;
+
+[Component<ITransform2D, ITransform2DNew>("WorkfloorAterraEngine:Transform2DNew")]
 [UsedImplicitly]
-public class aPlayerSprite : Sprite2D {
-    public string Data = "bla-bla";
+public class Transform2DNew : Transform2D, ITransform2DNew {
+    public string Data => "bla-bla";
 }
 
-[Component("WorkfloorAterraEngine:PlayerSpriteB", ServiceLifetimeType.Singleton)] // Services.AddSingleton<PlayerSprite>()
+[Entity<IActor2D, IActor2DNew>("WorkfloorAterraEngine:Actor2DNew")]
+[OverridesAssetId("Nexities:Entities/Actor2D")]
 [UsedImplicitly]
-public class bPlayerSprite : Sprite2D {
-    public string Data = "bla-bla";
-}
+public class Actor2dNew(ITransform2D transform2D, ISprite2D sprite2D, IAssetTree childEntities) 
+    : Actor2D(transform2D, sprite2D, childEntities), IActor2DNew;
 
-//
 // [Entity("1")]
 // [UsedImplicitly]
 // public class PlayerActor(ITransform2D transform2D, PlayerSprite sprite) : Actor2D(transform2D, sprite);

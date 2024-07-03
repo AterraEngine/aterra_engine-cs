@@ -1,13 +1,14 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+
 using AterraCore.Common.Types.Nexities;
 
-namespace AterraCore.Nexities.Attributes;
+namespace AterraCore.Contracts.Nexities.Data.Assets;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[AttributeUsage(AttributeTargets.Class)]
-sealed class OverridesAssetAttribute(string PluginReadableName, AssetId assetId) : Attribute;
-
+public abstract class AbstractOverridesAssetIdAttribute : Attribute {
+    public abstract AssetId AssetId { get; }
+}

@@ -11,5 +11,5 @@ namespace AterraCore.Contracts.Nexities.Data.Assets;
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IAssetInstance {
     public Guid Guid { get; set; }
-    public AssetId? AssetId { get; set; }
+    public AssetId AssetId { get; set; }
 }

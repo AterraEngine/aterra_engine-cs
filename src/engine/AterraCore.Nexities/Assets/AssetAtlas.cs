@@ -11,14 +11,12 @@ using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 
 namespace AterraCore.Nexities.Assets;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
 [UsedImplicitly]
 public class AssetAtlas(ILogger logger) : IAssetAtlas {
-    private ILogger Logger { get; } = logger.ForAssetAtlas();
+    private ILogger Logger { get; } = logger.ForAssetAtlasContext();
     
     private readonly ConcurrentDictionary<AssetId, AssetRegistration> _assetsById = new();
     private readonly ConcurrentDictionary<Type, AssetId> _assetsByType = new();
@@ -38,22 +36,24 @@ public class AssetAtlas(ILogger logger) : IAssetAtlas {
         // Assigns the asset to the dict
         if (!_assetsById.TryAdd(registration.AssetId, registration)) {
             Logger.Warning(
-            "Asset with ID: {AssetId} already exists with type {ExistingAssetType}. Cannot assign a new asset with the same ID.",
-            registration.AssetId, _assetsById[registration.AssetId].Type.FullName
+                "Asset with ID: {AssetId} already exists with type {ExistingAssetType}. Cannot assign a new asset with the same ID.",
+                registration.AssetId, _assetsById[registration.AssetId].Type.FullName
             );
             return false;
         }
         if (!_assetsByType.TryAdd(registration.Type, registration.AssetId)) {
+            // The reason for this, is the class type is hard linked to an AssetId
             Logger.Warning(
-            "Asset with ID: {AssetId} Cannot assign a new asset because it's {Type} is already assigned to another asset.",
-            registration.AssetId, registration.Type.FullName
+                "Asset with ID: {AssetId} Cannot assign a new asset because it's {Type} is already assigned to another asset.",
+                registration.AssetId, registration.Type.FullName
             );
             return false;
         }
 
         foreach (Type interfaceType in registration.InterfaceTypes) {
+            // The reason for this, is the class type is soft linked to an AssetId, and can be overwritten
             _assetsByType.AddOrUpdate(interfaceType, registration.AssetId);
-            Logger.Information("Asset {AssetId} linked to the type of {Type}", registration.AssetId, interfaceType.FullName);
+            Logger.Information("Asset {AssetId} linked to the interface of {Type}", registration.AssetId, interfaceType.FullName);
         }
 
         // Assign to the instance type
@@ -73,7 +73,19 @@ public class AssetAtlas(ILogger logger) : IAssetAtlas {
                 Logger.Warning("String Tag of {tag} could not be assigned to {assetId}", stringTag, registration.AssetId);
             }
         }
-
+        
+        // Assign overloads
+        foreach (AssetId overridableAssetId in registration.OverwritableAssetIds) {
+            if (!_assetsById.TryGetValue(overridableAssetId, out AssetRegistration comparisonValue )) continue;
+            if (!_assetsById.TryUpdate(overridableAssetId, registration, comparisonValue)) continue;
+          
+            logger.Information(
+                "Assigned asset {AssetId} to overwrite {overridableAssetId}",
+                registration.AssetId,
+                overridableAssetId
+            ); 
+        }
+        
         Logger.Information(
             "Assigned asset {AssetId} of Type {AssetTypeName}",
             registration.AssetId, registration.Type.FullName

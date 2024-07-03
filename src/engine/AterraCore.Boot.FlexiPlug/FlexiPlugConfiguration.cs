@@ -54,21 +54,16 @@ public class FlexiPlugConfiguration(ILogger logger, EngineConfigXml engineConfig
         IEnumerable<string> filePaths = EngineConfig.LoadOrder.Plugins.Select(
             p => Path.Combine(EngineConfig.LoadOrder.RootFolderRelative, p.FilePath)
         );
-        
-        if (pluginLoader.TryParseAllPlugins(filePaths)) return this;
-        
-        logger.Warning("Failed to load all plugins correctly.");
-        Warnings |= PluginLoadOrderUnstable | UnstablePlugin;
 
-        return this;
-    }
-    
-    public ConfigurationWarnings AsSubConfiguration(IEngineConfiguration engineConfiguration) {
-        // Assign custom services
-        ServicesDefault.AddLastRepeated(pluginLoader.Plugins.SelectMany(dto => dto.GetServicesDefault()));
-        ServicesStatic.AddLastRepeated(pluginLoader.Plugins.SelectMany(dto => dto.GetServicesDefault()));
+        if (!pluginLoader.TryParseAllPlugins(filePaths)) {
+            logger.Warning("Failed to load all plugins correctly.");
+            Warnings |= PluginLoadOrderUnstable | UnstablePlugin;
+
+            return this;
+        }
         
-        logger.Information("Plugins successfully loaded.");
-        return Nominal;
+        ServicesDefault.AddLastRepeated(pluginLoader.Plugins.SelectMany(dto => dto.GetServicesDefault()));
+        ServicesStatic.AddLastRepeated(pluginLoader.Plugins.SelectMany(dto => dto.GetServicesStatic()));
+        return this;
     }
 }

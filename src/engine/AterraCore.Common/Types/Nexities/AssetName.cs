@@ -81,9 +81,7 @@ public readonly struct AssetName :
     public bool Equals(AssetName other) => Values
         .Select(a => a.ToLowerInvariant())
         .SequenceEqual(other.Values.Select(a => a.ToLowerInvariant()));
-    
-    public override int GetHashCode() {
-        return Values.GetHashCode();
-    }
+
+    public override int GetHashCode() => Value.GetHashCode();
 
 }

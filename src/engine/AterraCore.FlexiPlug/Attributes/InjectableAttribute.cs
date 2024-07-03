@@ -12,10 +12,10 @@ namespace AterraCore.FlexiPlug.Attributes;
 // ---------------------------------------------------------------------------------------------------------------------
 [AttributeUsage(AttributeTargets.Class)]
 [UsedImplicitly]
-public class InjectableServiceAttribute(Type typeInterface, ServiceLifetime serviceLifetime = ServiceLifetime.Singleton, bool @static=false) : Attribute {
+public class InjectableAttribute(Type typeInterface, ServiceLifetime serviceLifetime = ServiceLifetime.Transient, bool @static=false) : Attribute {
     public readonly Type Interface = typeInterface;
     public readonly ServiceLifetime Lifetime = serviceLifetime;
     public readonly bool IsStatic = @static;
 }
 
-public class InjectableServiceAttribute<T>(ServiceLifetime serviceLifetime = ServiceLifetime.Singleton, bool @static=false) : InjectableServiceAttribute(typeof(T), serviceLifetime, @static);
+public class InjectableAttribute<T>(ServiceLifetime serviceLifetime = ServiceLifetime.Transient, bool @static=false) : InjectableAttribute(typeof(T), serviceLifetime, @static);

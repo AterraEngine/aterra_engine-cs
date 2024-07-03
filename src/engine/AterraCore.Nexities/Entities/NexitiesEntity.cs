@@ -6,6 +6,7 @@ using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Data.Components;
 using AterraCore.Contracts.Nexities.Data.Entities;
 using AterraCore.Nexities.Assets;
+using Serilog.Core;
 using System.Collections.Concurrent;
 
 namespace AterraCore.Nexities.Entities;
@@ -14,8 +15,8 @@ namespace AterraCore.Nexities.Entities;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public abstract class NexitiesEntity(params IComponent[]? components) : AssetInstance, INexitiesEntity {
-    protected readonly ConcurrentDictionary<AssetId, IComponent> ComponentsCache = CreateFromComponents(components ?? []);
-    public IEnumerable<IComponent> Components => ComponentsCache.Values;
+    public ConcurrentDictionary<AssetId, IComponent> Components { get; set; } = CreateFromComponents(components ?? []);
+    public IEnumerable<IComponent> ComponentsArray => Components.Values;
 
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -26,7 +27,12 @@ public abstract class NexitiesEntity(params IComponent[]? components) : AssetIns
         components
             // The reason we ! Null possibility of component.AssetId is because when an entity is created
             //      the asset instance atlas creates the instance & populates the asset id
-            .ToDictionary(keySelector: component => (AssetId)component.AssetId!, elementSelector: component => component)
-            .AsEnumerable());
+            .ToDictionary(keySelector: component => {
+                Console.WriteLine(component.AssetId);
+                Console.WriteLine(component.Guid);
+                return component.AssetId;
+            }, elementSelector: component => component)
+            .AsEnumerable()
+        );
     }
 }

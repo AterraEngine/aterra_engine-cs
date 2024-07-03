@@ -23,13 +23,15 @@ public static class Program {
             
             // --- Assign SubConfigurations ---
             .WithSubConfigurations(sc => {
+                // Has to be ran before FlexiPlug configuration.
+                //      Else it will add the simulated plugin after other plugins
+                sc.Nexities
+                    .IncludeNexitiesLibAssembly();
+                
                 sc.FlexiPlug
                     .CheckAndIncludeRootAssembly() 
                     .PreLoadPlugins()
                 ;
-
-                sc.Nexities
-                    .IncludeNexitiesLibAssembly();
             })
             
             // --- Assign Services for the ServiceProvider ---

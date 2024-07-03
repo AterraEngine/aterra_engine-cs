@@ -11,5 +11,5 @@ namespace AterraCore.Nexities.Assets;
 // ---------------------------------------------------------------------------------------------------------------------
 public class AssetInstance : IAssetInstance {
     public Guid Guid { get; set; }// Internal set because we need to not have randomly generated when loading from file
-    public AssetId? AssetId { get; set; }
+    public AssetId AssetId { get; set; }
 }

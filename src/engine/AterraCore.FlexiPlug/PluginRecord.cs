@@ -34,6 +34,7 @@ public class PluginRecord : IPluginRecord {
             .Select(box => new AssetTypeRecord(
                 box.Type,
                 box.AssetAttibute!,// We check in the where LINQ
+                box.Type.GetCustomAttributes<AbstractOverridesAssetIdAttribute>(),
                 box.Type.GetCustomAttributes<AbstractAssetTagAttribute>()
             ))
             .ToDictionary(keySelector: record => record.Type, elementSelector: record => record)

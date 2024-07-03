@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.FlexiPlug.Attributes;
 using AterraCore.Nexities.Components;
 using AterraCore.Nexities.Parsers.NamedValues.PreMade;
 using System.Numerics;
@@ -11,6 +12,7 @@ namespace AterraCore.Nexities.Lib.Components.Transform2D;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [Component<ITransform2D>("Nexities:Components/Transform2D")]
+[Injectable<ITransform2D>]
 public class Transform2D : NexitiesComponent, ITransform2D {
 
     [NamedValueVector2("Translation")]

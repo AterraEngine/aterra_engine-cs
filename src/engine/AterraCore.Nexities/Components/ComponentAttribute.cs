@@ -23,7 +23,6 @@ coreTags | CoreTags.Component,
 @interface
 );
 
-
 [UsedImplicitly] public class ComponentAttribute<TInterface>(string assetId, ServiceLifetimeType instanceType = ServiceLifetimeType.Multiple, CoreTags coreTags = CoreTags.Component) : ComponentAttribute(assetId, instanceType, coreTags, typeof(TInterface));
 [UsedImplicitly] public class ComponentAttribute<T1, T2>(string assetId, ServiceLifetimeType instanceType = ServiceLifetimeType.Multiple, CoreTags coreTags = CoreTags.Component) : ComponentAttribute(assetId, instanceType, coreTags, typeof(T1), typeof(T2));
 [UsedImplicitly] public class ComponentAttribute<T1, T2, T3>(string assetId, ServiceLifetimeType instanceType = ServiceLifetimeType.Multiple, CoreTags coreTags = CoreTags.Component) : ComponentAttribute(assetId, instanceType, coreTags, typeof(T1), typeof(T2), typeof(T3));

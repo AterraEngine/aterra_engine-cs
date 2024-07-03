@@ -1,15 +1,11 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using Serilog;
 
-using AterraCore.FlexiPlug.Attributes;
-namespace Workfloor_AterraCore.Plugin.Systems;
+namespace AterraCore.Contracts.Loggers;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ITestService;
-
-[Injectable<ITestService>]
-public class TestService : ITestService {
-}
+public interface IRaylibLogger : ILogger;

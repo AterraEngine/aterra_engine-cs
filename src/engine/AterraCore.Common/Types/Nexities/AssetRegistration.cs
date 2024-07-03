@@ -20,4 +20,7 @@ public struct AssetRegistration {
 
     // Data from AbstractAssetTagAttribute
     public IEnumerable<string> StringTags { get; init; }
+    
+    // Data from AbstractOverwritesAssetTagAttribute
+    public IEnumerable<AssetId> OverwritableAssetIds { get; init; } 
 }

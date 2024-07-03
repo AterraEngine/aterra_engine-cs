@@ -34,13 +34,27 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas) : IAsset
         //      because all components have their interface mapped to their assetId
         // Will work for others as well
         instance = EngineServices.CreateWithServices<T>(registration.Type);
-        instance.AssetId = assetId;
+        instance.AssetId = registration.AssetId;
 
         // Update the generated
-        instance.Guid = predefinedGuid ?? new Guid();
+        instance.Guid = predefinedGuid ?? Guid.NewGuid();
 
         // Finally add the instance
         return _assetInstances.TryAdd(instance.Guid, instance);
+    }
+
+    public bool TryCreateInstance<T>([NotNullWhen(true)] out T? instance) where T : IAssetInstance {
+        instance = default;
+        if (assetAtlas.TryGetAssetId<T>(out AssetId assetId)) return TryCreateInstance(assetId, out instance);
+        logger.Warning("Type {T} could not be matched to a assetId", typeof(T));
+        return false;
+    }
+    
+    public bool TryCreateInstance(Type type, [NotNullWhen(true)] out IAssetInstance? instance) {
+        instance = default;
+        if (assetAtlas.TryGetAssetId(type, out AssetId assetId)) return TryCreateInstance(assetId, out instance);
+        logger.Warning("Type {T} could not be matched to a assetId", type);
+        return false;
     }
 
     public bool TryGetInstance<T>(Guid instanceId, [NotNullWhen(true)] out T? instance) where T : IAssetInstance {

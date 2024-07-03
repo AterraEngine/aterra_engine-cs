@@ -29,6 +29,7 @@
     <ItemGroup>
         <ProjectReference Include="..\..\lib\Ansi\Ansi.csproj"/>
         <ProjectReference Include="..\AterraCore.Common\AterraCore.Common.csproj"/>
+        <ProjectReference Include="..\AterraCore.Contracts\AterraCore.Contracts.csproj" />
     </ItemGroup>
 
 </Project>
