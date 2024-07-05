@@ -9,7 +9,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="CodeOfChaos.Extensions" Version="0.2.0" />
+        <PackageReference Include="CodeOfChaos.Ansi" Version="0.1.7" />
+        <PackageReference Include="CodeOfChaos.Extensions" Version="0.4.3" />
         <PackageReference Include="CodeOfChaos.Extensions.DependencyInjection" Version="0.1.0" />
         <PackageReference Include="CodeOfChaos.Extensions.Serilog" Version="0.2.0" />
         <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="8.0.6" />
@@ -27,8 +28,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\lib\Ansi\Ansi.csproj"/>
         <ProjectReference Include="..\AterraCore.Common\AterraCore.Common.csproj"/>
+        <ProjectReference Include="..\AterraCore.Contracts\AterraCore.Contracts.csproj" />
     </ItemGroup>
 
 </Project>

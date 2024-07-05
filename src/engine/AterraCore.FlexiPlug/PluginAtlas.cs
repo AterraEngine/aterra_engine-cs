@@ -25,7 +25,7 @@ public class PluginAtlas : IPluginAtlas {
     private int? _totalAssetCountCache;
     public LinkedList<IPluginRecord> Plugins { get; private set; } = [];
     public IReadOnlyDictionary<string, IPluginRecord> PluginsByReadableNames => _pluginsByReadableNamesCache ??= Plugins
-        .Select(p => (p.ReadableName, p))
+        .Select(p => (ReadableName: p.NameReadable, p))
         .ToDictionary().AsReadOnly();
     public int TotalAssetCount => _totalAssetCountCache ??= Plugins.SelectMany(p => p.AssetTypes).Count();
 
@@ -35,8 +35,8 @@ public class PluginAtlas : IPluginAtlas {
     public void ImportLoadedPluginDtos(IEnumerable<ILoadedPluginDto> plugins) => Plugins = new LinkedList<IPluginRecord>(
     plugins.Select(
         dto => new PluginRecord {
-            Id = dto.Id,
-            ReadableName = dto.ReadableName,
+            NameSpace = dto.NameSpace,
+            NameReadable = dto.NameReadable,
             Types = dto.Types
         }
     ));
@@ -45,32 +45,28 @@ public class PluginAtlas : IPluginAtlas {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public IEnumerable<AssetRegistration> GetAssetRegistrations(int? pluginId = null, CoreTags filter = CoreTags.Asset) {
-        // GIven this is only done once (during project startup), caching this seems a bit unnecessary.
-
+    public IEnumerable<AssetRegistration> GetAssetRegistrations(string? pluginNameSpace = null, CoreTags filter = CoreTags.Asset) {
+        // Given this is only done once (during project startup), caching this seems a bit unnecessary.
         return Plugins
             // Filter down to only the plugin we need
-            .Where(p => pluginId == null || p.Id == new PluginId((int)pluginId))
-            .Select(p => new { PluginId = p.Id, Pairs = p.AssetTypes })
-            .SelectMany(box => box.Pairs
+            .ConditionalWhere(pluginNameSpace != null, p => p.NameSpace == pluginNameSpace)
+            .SelectMany(p => p.AssetTypes
                 // Filter down to which Asset Tag we want
                 .Where(record => record.AssetAttribute.CoreTags.HasFlag(filter))
                 .Select(record => new AssetRegistration {
-                    PluginId = box.PluginId,
-                    PartialAssetId = record.AssetAttribute.PartialAssetId,
-                    ServiceLifetime = record.AssetAttribute.ServiceLifetime,
-                    InterfaceType = record.AssetAttribute.InterfaceType,
+                    AssetId = record.AssetAttribute.AssetId,
+                    InterfaceTypes = record.AssetAttribute.InterfaceTypes,
                     CoreTags = record.AssetAttribute.CoreTags,
                     Type = record.Type,
-                    StringTags = record.AssetTagAttributes.SelectMany(attrib => attrib.Tags)
+                    StringTags = record.AssetTagAttributes.SelectMany(attribute => attribute.Tags),
+                    OverridableAssetIds = record.OverwritesAssetIdAttributes.Select(attribute => attribute.AssetId),
                 })
             );
     }
 
-    public IEnumerable<AssetRegistration> GetEntityRegistrations(int? pluginId = null) => GetAssetRegistrations(pluginId, CoreTags.Entity);
+    public IEnumerable<AssetRegistration> GetEntityRegistrations(string? pluginNameSpace = null) => GetAssetRegistrations(pluginNameSpace, CoreTags.Entity);
 
-    // Todo add the registration of Named Values here as well
-    public IEnumerable<AssetRegistration> GetComponentRegistrations(int? pluginId = null) => GetAssetRegistrations(pluginId, CoreTags.Component);
+    public IEnumerable<AssetRegistration> GetComponentRegistrations(string? pluginNameSpace = null) => GetAssetRegistrations(pluginNameSpace, CoreTags.Component);
 
     public bool TryGetPluginByReadableName(string readableName, [NotNullWhen(true)] out IPluginRecord? plugin) => PluginsByReadableNames.TryGetValue(readableName, out plugin);
 }

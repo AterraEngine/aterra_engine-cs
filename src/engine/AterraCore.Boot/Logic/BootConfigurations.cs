@@ -1,8 +1,6 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Boot.FlexiPlug;
-using AterraCore.Boot.Nexities;
 using AterraCore.Contracts.Boot;
 using CodeOfChaos.Extensions;
 using CodeOfChaos.Extensions.Serilog;
@@ -16,34 +14,19 @@ namespace AterraCore.Boot.Logic;
 // ---------------------------------------------------------------------------------------------------------------------
 
 public static class BootConfigurations {
-    public static IEngineConfiguration AddSubConfigurations(this IEngineConfiguration configuration) {
-        ILogger logger = configuration.StartupLog;
-
-        configuration.SubConfigurations = new SubConfigurations(
-            new FlexiPlugConfiguration(logger, configuration.EngineConfig),
-            new NexitiesConfiguration(logger, configuration.EngineConfig)
-        );
-        
-        return configuration;
-    }
-    
     public static IEngineConfiguration WithSubConfigurations(this IEngineConfiguration configuration, Action<ISubConfigurations> subConfigurationsCallback) {
         ILogger logger = configuration.StartupLog;
         ISubConfigurations subConfigurations = configuration.SubConfigurations;
         
         subConfigurationsCallback.Invoke(subConfigurations);
 
-        if (subConfigurations.FlexiPlug.Warnings != Nominal && configuration.EngineConfig.BootConfig.Exceptions.BreakOnFlowException) {
-            logger.ThrowFatal<InvalidOperationException>("Engine configuration for FlexiPlug has warnings: {Warnings}", subConfigurations.FlexiPlug.Warnings);
-        } 
-        configuration.ServicesDefault.AddLastRepeated(subConfigurations.FlexiPlug.ServicesDefault);
-        configuration.ServicesStatic.AddLastRepeated(subConfigurations.FlexiPlug.ServicesStatic);
-        
-        if (subConfigurations.Nexities.Warnings != Nominal && configuration.EngineConfig.BootConfig.Exceptions.BreakOnFlowException) {
-            logger.ThrowFatal<InvalidOperationException>("Engine configuration for Nexities has warnings: {Warnings}", subConfigurations.Nexities.Warnings);
-        } 
-        configuration.ServicesDefault.AddLastRepeated(subConfigurations.Nexities.ServicesDefault);
-        configuration.ServicesStatic.AddLastRepeated(subConfigurations.Nexities.ServicesStatic);
+        foreach (IBootConfiguration bootConfiguration in subConfigurations) {
+            if (bootConfiguration.Warnings != Nominal && configuration.EngineConfig.BootConfig.Exceptions.BreakOnFlowException) {
+                logger.ThrowFatal<InvalidOperationException>("Engine configuration for {Type} has warnings: {Warnings}", bootConfiguration.GetType().FullName, bootConfiguration.Warnings);
+            } 
+            configuration.ServicesDefault.AddLastRepeated(bootConfiguration.ServicesDefault);
+            configuration.ServicesStatic.AddLastRepeated(bootConfiguration.ServicesStatic);
+        }
         
         return configuration;
     }

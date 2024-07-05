@@ -10,8 +10,8 @@ namespace AterraCore.Contracts.FlexiPlug.Plugin;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IPluginRecord {
-    public PluginId Id { get; }
-    public string ReadableName { get; }
+    public string NameSpace { get; }
+    public string NameReadable { get; }
 
     public IEnumerable<Type> Types { get; }
 

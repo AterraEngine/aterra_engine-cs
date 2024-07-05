@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Serilog" Version="4.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\AterraCore.Common\AterraCore.Common.csproj" />
+      <ProjectReference Include="..\AterraCore.Contracts\AterraCore.Contracts.csproj" />
+      <ProjectReference Include="..\AterraCore.OmniVault.Textures\AterraCore.OmniVault.Textures.csproj" />
+    </ItemGroup>
+
+</Project>

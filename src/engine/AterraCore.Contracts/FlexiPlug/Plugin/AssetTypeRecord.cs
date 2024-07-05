@@ -12,5 +12,6 @@ namespace AterraCore.Contracts.FlexiPlug.Plugin;
 public record AssetTypeRecord(
     Type Type,
     AbstractAssetAttribute AssetAttribute,
+    IEnumerable<AbstractOverridesAssetIdAttribute> OverwritesAssetIdAttributes,
     IEnumerable<AbstractAssetTagAttribute> AssetTagAttributes
-    );
+);

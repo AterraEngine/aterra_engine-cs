@@ -1,13 +1,14 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Types.Nexities;
+using AterraCore.Contracts.Nexities.Data.Assets;
 
 namespace AterraCore.Nexities.Attributes;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[AttributeUsage(AttributeTargets.Class)]
-sealed class OverridesAssetAttribute(string PluginReadableName, PartialAssetId assetId) : Attribute;
-
+[AttributeUsage(AttributeTargets.Parameter, AllowMultiple = true)]
+public class RefersToAttribute(string guid) : AbstractRefersToAttribute {
+    public override Guid Guid { get; } = Guid.Parse(guid);
+}

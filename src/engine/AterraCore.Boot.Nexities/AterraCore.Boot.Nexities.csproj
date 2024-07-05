@@ -7,13 +7,15 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\AterraCore.Boot.FlexiPlug\AterraCore.Boot.FlexiPlug.csproj" />
       <ProjectReference Include="..\AterraCore.Contracts\AterraCore.Contracts.csproj" />
+      <ProjectReference Include="..\AterraCore.Nexities.Lib\AterraCore.Nexities.Lib.csproj" />
       <ProjectReference Include="..\AterraCore.Nexities.Parsers\AterraCore.Nexities.Parsers.csproj" />
       <ProjectReference Include="..\AterraCore.Nexities\AterraCore.Nexities.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="CodeOfChaos.Extensions" Version="0.2.0" />
+      <PackageReference Include="CodeOfChaos.Extensions" Version="0.4.3" />
       <PackageReference Include="CodeOfChaos.Extensions.DependencyInjection" Version="0.1.0" />
       <PackageReference Include="CodeOfChaos.Extensions.Serilog" Version="0.2.0" />
     </ItemGroup>

@@ -11,8 +11,8 @@ namespace AterraCore.Common.ConfigFiles.EngineConfig.Elements;
 // ---------------------------------------------------------------------------------------------------------------------
 
 public class BootLoggingDto {
-    [XmlAttribute("async-console")] public bool UseAsyncConsole { get; set; } = true;
+    [XmlAttribute("asyncConsole")] public bool UseAsyncConsole { get; set; } = true;
     
-    [XmlAttribute("output-file")] public string? OutputFilePath { get; set; } = string.Empty;
+    [XmlAttribute("outputFile")] public string? OutputFilePath { get; set; } = string.Empty;
     public bool OutputToFile => OutputFilePath.IsNotNullOrEmpty();
 }

@@ -16,8 +16,10 @@ namespace AterraCore.Common.ConfigFiles.PluginConfig;
 // ---------------------------------------------------------------------------------------------------------------------
 [XmlRoot("pluginConfig")]
 public class PluginConfigXml {
-    [XmlElement("name")]
-    public string ReadableName { get; set; } = null!;
+    [XmlElement("nameSpace")]
+    public string NameSpace { get; set; } = null!;
+    [XmlElement("nameReadable")]
+    public string NameReadable { get; set; } = null!;
 
     [XmlElement("author")]
     public string Author { get; set; } = string.Empty;
@@ -45,7 +47,7 @@ public class PluginConfigXml {
         
         ValuedStringBuilder valuedBuilder = new ValuedStringBuilder()
             .AppendLine("Plugin PluginDtos loaded with the following data:")
-            .AppendLineValued("- Name: ", ReadableName)
+            .AppendLineValued("- Name: ", NameReadable)
             .AppendLineValued("- Author: ", Author)
             .AppendLineValued("- Plugin Version: ", PluginVersion)
             .AppendLineValued("- Expected Game Version: ", GameVersion)

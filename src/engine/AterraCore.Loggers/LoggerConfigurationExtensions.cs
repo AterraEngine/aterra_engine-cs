@@ -5,7 +5,7 @@
 using Serilog;
 using Serilog.Formatting.Compact;
 using Serilog.Sinks.SystemConsole.Themes;
-using static Ansi.AnsiColor;
+using static CodeOfChaos.Ansi.AnsiColor;
 
 namespace AterraCore.Loggers;
 
@@ -14,7 +14,7 @@ namespace AterraCore.Loggers;
 // ---------------------------------------------------------------------------------------------------------------------
 
 public static class LoggerConfigurationExtensions {
-    private const string OutputTemplate = "[{Timestamp:HH:mm:ss.fff} {Level:u3}] {Message:lj}{NewLine}{Exception}";
+    private const string OutputTemplate = "[{Section,12}] [{Timestamp:HH:mm:ss.fff} {Level:u3}] {Message:lj}{NewLine}{Exception}";
 
     private static readonly AnsiConsoleTheme Theme = new(
     new Dictionary<ConsoleThemeStyle, string> {

@@ -21,13 +21,11 @@ namespace AterraCore.Boot.FlexiPlug;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public class FlexiPlugConfiguration(ILogger logger, EngineConfigXml engineConfigDto) : IFlexiPlugConfiguration {
+public class FlexiPlugConfiguration(ILogger logger, EngineConfigXml engineConfigDto, IPluginLoader pluginLoader) : IFlexiPlugConfiguration {
     public LinkedList<ServiceDescriptor> ServicesDefault { get; } = [];
     public LinkedList<ServiceDescriptor> ServicesStatic { get; } = new ([
         NewServiceDescriptor<IPluginAtlas, PluginAtlas>(ServiceLifetime.Singleton),
     ]);
-    
-    public IPluginLoader PluginLoader { get; } = new PluginLoader(logger);
     public EngineConfigXml EngineConfig { get; set; } = engineConfigDto;
 
     public ConfigurationWarnings Warnings { get; private set; } = Nominal;
@@ -37,12 +35,16 @@ public class FlexiPlugConfiguration(ILogger logger, EngineConfigXml engineConfig
     // -----------------------------------------------------------------------------------------------------------------
     public IFlexiPlugConfiguration CheckAndIncludeRootAssembly() {
         // Include root assembly as the primary plugin
-        if (EngineConfig.LoadOrder is not { IncludeRootAssembly: true, RootAssembly: not null }) return this;
+        if (EngineConfig.LoadOrder is not { RootAssembly: {} rootAssembly}) return this;
+        // if (rootNameSpace.IsNotNullOrEmpty()) return this;
         
-        PluginLoader.InjectAssemblyAsPlugin(
-            Assembly.GetEntryAssembly()!, 
-            EngineConfig.LoadOrder.RootAssembly.Author, 
-            EngineConfig.LoadOrder.RootAssembly.Name
+        pluginLoader.InjectAssemblyAsPlugin(
+            Assembly.GetEntryAssembly()!,
+            new InjectableAssemblyData (
+                rootAssembly.NameSpace ,
+                rootAssembly.NameReadable,
+                rootAssembly.Author
+            )
         );
         logger.Information("Assigned Root Assembly as plugin");
         return this;
@@ -52,21 +54,16 @@ public class FlexiPlugConfiguration(ILogger logger, EngineConfigXml engineConfig
         IEnumerable<string> filePaths = EngineConfig.LoadOrder.Plugins.Select(
             p => Path.Combine(EngineConfig.LoadOrder.RootFolderRelative, p.FilePath)
         );
-        
-        if (PluginLoader.TryParseAllPlugins(filePaths)) return this;
-        
-        logger.Warning("Failed to load all plugins correctly.");
-        Warnings |= PluginLoadOrderUnstable | UnstablePlugin;
 
-        return this;
-    }
-    
-    public ConfigurationWarnings AsSubConfiguration(IEngineConfiguration engineConfiguration) {
-        // Assign custom services
-        ServicesDefault.AddLastRepeated(PluginLoader.Plugins.SelectMany(dto => dto.GetServicesDefault()));
-        ServicesStatic.AddLastRepeated(PluginLoader.Plugins.SelectMany(dto => dto.GetServicesDefault()));
+        if (!pluginLoader.TryParseAllPlugins(filePaths)) {
+            logger.Warning("Failed to load all plugins correctly.");
+            Warnings |= PluginLoadOrderUnstable | UnstablePlugin;
+
+            return this;
+        }
         
-        logger.Information("Plugins successfully loaded.");
-        return Nominal;
+        ServicesDefault.AddLastRepeated(pluginLoader.Plugins.SelectMany(dto => dto.GetServicesDefault()));
+        ServicesStatic.AddLastRepeated(pluginLoader.Plugins.SelectMany(dto => dto.GetServicesStatic()));
+        return this;
     }
 }

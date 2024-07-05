@@ -2,15 +2,13 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using AterraCore.Contracts.Nexities.Data.Components;
+using AterraCore.Common.Types.Nexities;
 
-namespace AterraCore.Nexities.Attributes;
+namespace AterraCore.Contracts.Nexities.Data.Assets;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-public class UsesComponentAttribute<TComponent>(string? specificId = null) : Attribute where TComponent : IComponent {
-    public Type Type { get; } = typeof(TComponent);
-    public string? Id { get; } = specificId;// WARN THIS IS A BIG ISSUE! HOW TO DEAL WITH IMPORTING COMPONENTS FROM OTHER PLUGINS?
+public abstract class AbstractOverridesAssetIdAttribute : Attribute {
+    public abstract AssetId AssetId { get; }
 }

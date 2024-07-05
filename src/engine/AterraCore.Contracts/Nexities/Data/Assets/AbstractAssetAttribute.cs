@@ -1,7 +1,6 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
 using AterraCore.Common.Types.Nexities;
 
 namespace AterraCore.Contracts.Nexities.Data.Assets;
@@ -11,8 +10,7 @@ namespace AterraCore.Contracts.Nexities.Data.Assets;
 // ---------------------------------------------------------------------------------------------------------------------
 
 public abstract class AbstractAssetAttribute : Attribute {
-    public abstract PartialAssetId PartialAssetId { get; }
-    public abstract ServiceLifetimeType ServiceLifetime { get; }
+    public abstract AssetId AssetId { get; }
     public abstract CoreTags CoreTags { get; }
-    public abstract Type? InterfaceType { get; }
+    public abstract Type[] InterfaceTypes { get; }
 }

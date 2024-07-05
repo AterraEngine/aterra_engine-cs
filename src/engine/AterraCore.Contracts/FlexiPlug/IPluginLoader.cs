@@ -17,5 +17,5 @@ public interface IPluginLoader {
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public bool TryParseAllPlugins(IEnumerable<string> filePaths);
-    public void InjectAssemblyAsPlugin(Assembly assembly, string author, string name);
+    public void InjectAssemblyAsPlugin(Assembly assembly, IInjectableAssemblyData dto);
 }

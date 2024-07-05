@@ -1,48 +1,25 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
+using AterraCore.Contracts.Nexities.Data.Components.AssetTree;
+using AterraCore.Nexities.Attributes;
 using JetBrains.Annotations;
 using AterraCore.Nexities.Lib.Components.Sprite2D;
-namespace Workfloor_AterraCore.Plugin.Assets;
+using AterraCore.Nexities.Lib.Components.Transform2D;
+using AterraCore.Nexities.Lib.Entities.Actor;
+using AterraCore.Nexities.Entities;
 
-using AterraCore.Common.Types.Nexities;
-using AterraCore.Nexities.Components;
+namespace Workfloor_AterraCore.Plugin.Assets;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Component("A", ServiceLifetimeType.Singleton)] // Services.AddSingleton<PlayerSprite>()
-[UsedImplicitly]
-public class PlayerSprite : Sprite2D {
-    public string Data = "bla-bla";
-}
+public interface IDuckyHypeActor : IActor2D;
 
-[Component("B", ServiceLifetimeType.Singleton)] // Services.AddSingleton<PlayerSprite>()
+[Entity<IDuckyHypeActor>("NexitiesDebug:Entities/DuckyHypeActor")]
 [UsedImplicitly]
-public class aPlayerSprite : Sprite2D {
-    public string Data = "bla-bla";
-}
-
-[Component("C", ServiceLifetimeType.Singleton)] // Services.AddSingleton<PlayerSprite>()
-[UsedImplicitly]
-public class bPlayerSprite : Sprite2D {
-    public string Data = "bla-bla";
-}
-
-//
-// [Entity("1")]
-// [UsedImplicitly]
-// public class PlayerActor(ITransform2D transform2D, PlayerSprite sprite) : Actor2D(transform2D, sprite);
-//
-//
-// [Component("B", AssetInstanceType.Singleton)] // Services.AddSingleton<TreeSprite>()
-// [UsedImplicitly]
-// public class TreeSprite : Sprite2D {
-//     public string data = "leaves";
-// }
-//
-//
-// [Entity("1")] // Services.AddTransient<TreeActor>()
-// [UsedImplicitly]
-// public class TreeActor(ITransform2D transform2D, TreeSprite sprite) : Actor2D(transform2D, sprite);
+public class DuckyHypeActor(
+    ITransform2D transform2D, 
+    [RefersTo("827c3bc1-f688-4301-b342-b8958c1fe892")] ISprite2D sprite2D,
+    IAssetTree childEntities 
+    ) : Actor2D(transform2D, sprite2D, childEntities), IDuckyHypeActor;

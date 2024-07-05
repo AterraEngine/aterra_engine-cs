@@ -24,8 +24,8 @@ public interface IPluginAtlas {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public IEnumerable<AssetRegistration> GetAssetRegistrations(int? pluginId = null, CoreTags filter = CoreTags.Asset);
-    public IEnumerable<AssetRegistration> GetEntityRegistrations(int? pluginId = null);
-    public IEnumerable<AssetRegistration> GetComponentRegistrations(int? pluginId = null);
+    public IEnumerable<AssetRegistration> GetAssetRegistrations(string? pluginNameSpace = null, CoreTags filter = CoreTags.Asset);
+    public IEnumerable<AssetRegistration> GetEntityRegistrations(string? pluginNameSpace = null);
+    public IEnumerable<AssetRegistration> GetComponentRegistrations(string? pluginNameSpace = null);
     bool TryGetPluginByReadableName(string readableName, [NotNullWhen(true)] out IPluginRecord? plugin);
 }

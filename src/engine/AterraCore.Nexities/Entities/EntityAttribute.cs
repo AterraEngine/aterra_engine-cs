@@ -4,6 +4,7 @@
 
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Nexities.Assets;
+using JetBrains.Annotations;
 
 namespace AterraCore.Nexities.Entities;
 
@@ -12,20 +13,15 @@ namespace AterraCore.Nexities.Entities;
 // ---------------------------------------------------------------------------------------------------------------------
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
 public class EntityAttribute(
-    string partialId,
-    ServiceLifetimeType instanceType = ServiceLifetimeType.Multiple,
+    string assetId,
     CoreTags coreTags = CoreTags.Entity,
-    Type? @interface = null
-    ) : AssetAttribute(
-partialId,
-instanceType,
-coreTags | CoreTags.Entity
-) {
-    public Type? Interface { get; } = @interface;
-}
+    params Type[] interfaceTypes
+) : AssetAttribute(
+    assetId,
+    coreTags | CoreTags.Entity,
+    interfaceTypes
+);
 
-public class EntityAttribute<TInterface>(
-    string partialId,
-    ServiceLifetimeType instanceType = ServiceLifetimeType.Multiple,
-    CoreTags coreTags = CoreTags.Entity
-    ) : EntityAttribute(partialId, instanceType, coreTags, typeof(TInterface));
+[UsedImplicitly] public class EntityAttribute<TInterface>(string assetId,  CoreTags coreTags = CoreTags.Component) : EntityAttribute(assetId, coreTags, typeof(TInterface));
+[UsedImplicitly] public class EntityAttribute<T1, T2>(string assetId,  CoreTags coreTags = CoreTags.Component) : EntityAttribute(assetId, coreTags, typeof(T1), typeof(T2));
+[UsedImplicitly] public class EntityAttribute<T1, T2, T3>(string assetId, CoreTags coreTags = CoreTags.Component) : EntityAttribute(assetId, coreTags, typeof(T1), typeof(T2), typeof(T3));

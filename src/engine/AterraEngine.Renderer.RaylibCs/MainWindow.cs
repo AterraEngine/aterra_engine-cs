@@ -2,8 +2,12 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
+using AterraCore.Common.Types.Nexities;
+using AterraCore.Contracts.Nexities.Data.Assets;
+using AterraCore.Contracts.OmniVault;
 using AterraCore.Contracts.Renderer;
 using AterraCore.DI;
+using AterraCore.Nexities.Lib.Components.Sprite2D;
 using AterraEngine.Renderer.RaylibCs.FrameProcessors;
 using JetBrains.Annotations;
 
@@ -14,7 +18,7 @@ namespace AterraEngine.Renderer.RaylibCs;
 // ---------------------------------------------------------------------------------------------------------------------
 
 [UsedImplicitly]
-public class MainWindow(IApplicationStageManager applicationStageManager) : IMainWindow {
+public class MainWindow(IApplicationStageManager applicationStageManager, IAssetInstanceAtlas instanceAtlas, ITextureAtlas textureAtlas) : IMainWindow {
     private static int Width => 800;
     private static int Height => 400;
     private static string Name => "AterraEngine - Test";
@@ -26,7 +30,9 @@ public class MainWindow(IApplicationStageManager applicationStageManager) : IMai
             // Necessary to write Raylib logs with Serilog
             SetTraceLogCallback(RaylibLogger.GetPointer());
         }
-        SetConfigFlags(ConfigFlags.ResizableWindow
+        SetConfigFlags(
+            ConfigFlags.ResizableWindow |
+            ConfigFlags.Msaa4xHint
         // | ConfigFlags.UndecoratedWindow
         // | ConfigFlags.MousePassthroughWindow
         );
@@ -35,14 +41,14 @@ public class MainWindow(IApplicationStageManager applicationStageManager) : IMai
 
         applicationStageManager.TryRegisterStage(
         ApplicationStage.Undefined,
-        EngineServices.CreateWithServices<UndefinedRaylibFrameProcessor>()
+        EngineServices.CreateWithServices<GeneralRenderRaylibFrameProcessor>()
         );
 
         applicationStageManager.TryRegisterStage(
         ApplicationStage.StartupScreen,
         EngineServices.CreateWithServices<StartupRaylibFrameProcessor>()
         );
-
+        
         IsInitialised = true;
     }
 }

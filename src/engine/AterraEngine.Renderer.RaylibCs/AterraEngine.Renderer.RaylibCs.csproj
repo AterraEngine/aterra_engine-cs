@@ -8,17 +8,18 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="CodeOfChaos.Extensions" Version="0.2.0" />
+        <PackageReference Include="CodeOfChaos.Extensions" Version="0.4.3" />
         <PackageReference Include="CodeOfChaos.Extensions.DependencyInjection" Version="0.1.0" />
         <PackageReference Include="CodeOfChaos.Extensions.Serilog" Version="0.2.0" />
         <PackageReference Include="Microsoft.Extensions.ObjectPool.DependencyInjection" Version="8.5.0" />
-        <PackageReference Include="Raylib-cs" Version="6.0.0"/>
+        <PackageReference Include="Raylib-cs" Version="6.1.1" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\AterraCore.Contracts\AterraCore.Contracts.csproj"/>
         <ProjectReference Include="..\AterraCore.DI\AterraCore.DI.csproj"/>
         <ProjectReference Include="..\AterraCore.Loggers\AterraCore.Loggers.csproj"/>
+        <ProjectReference Include="..\AterraCore.Nexities.Lib\AterraCore.Nexities.Lib.csproj" />
     </ItemGroup>
 
     <ItemGroup>

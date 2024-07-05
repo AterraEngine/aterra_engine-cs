@@ -4,6 +4,7 @@
 
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Nexities.Assets;
+using JetBrains.Annotations;
 
 namespace AterraCore.Nexities.Systems;
 
@@ -12,11 +13,14 @@ namespace AterraCore.Nexities.Systems;
 // ---------------------------------------------------------------------------------------------------------------------
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
 public class SystemAttribute(
-    string partialId,
-    ServiceLifetimeType instanceType = ServiceLifetimeType.Singleton,
-    CoreTags coreTags = CoreTags.System
-    ) : AssetAttribute(
-partialId,
-instanceType,
-coreTags | CoreTags.System
+    string assetId,
+    CoreTags coreTags = CoreTags.System,
+    params Type[] interfaceTypes
+) : AssetAttribute(
+    assetId,
+    coreTags | CoreTags.System,
+    interfaceTypes
 );
+
+[UsedImplicitly]
+public class SystemAttribute<TInterface>( string assetId, CoreTags coreTags = CoreTags.Entity ) : SystemAttribute(assetId, coreTags, typeof(TInterface));

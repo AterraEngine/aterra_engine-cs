@@ -1,8 +1,9 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
-using AterraCore.Common.Types.FlexiPlug;
+using AterraCore.Common.Data;
+using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
 using System.Text.RegularExpressions;
 
 namespace AterraCore.Common.Types.Nexities;
@@ -10,80 +11,70 @@ namespace AterraCore.Common.Types.Nexities;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public readonly partial struct AssetId : IComparable<AssetId>, IEqualityComparer<AssetId> {
-    private static readonly Regex Regex = MyRegex();
-
-    public PluginId PluginId { get; }
-    public PartialAssetId Id { get; }
+public readonly struct AssetId : IEqualityOperators<AssetId, AssetId, bool>, IEquatable<AssetId>, IEqualityOperators<AssetId, PluginId, bool> {
+    public PluginId PluginId { get; init; }
+    public AssetName AssetName { get; init; }
 
     // -----------------------------------------------------------------------------------------------------------------
     // Constructors
     // -----------------------------------------------------------------------------------------------------------------
-    public AssetId(PluginId pluginId, PartialAssetId partialId) {
+    public AssetId(string pluginName, IEnumerable<string> nameSpace) {
+        PluginId = new PluginId(pluginName);
+        AssetName = new AssetName(nameSpace);
+    }
+    
+    public AssetId(string pluginName, string nameSpace) {
+        PluginId = new PluginId(pluginName);
+        AssetName = new AssetName(nameSpace);
+    }
+    
+    public AssetId(PluginId pluginId, AssetName assetName) {
         PluginId = pluginId;
-        Id = partialId;
+        AssetName = assetName;
     }
 
-    public AssetId(string pluginId, PartialAssetId partialId) {
-        PluginId = new PluginId(pluginId);
-        Id = partialId;
-    }
-
-    public AssetId(PluginId pluginId, string partialId) {
-        PluginId = pluginId;
-        Id = new PartialAssetId(partialId);
-    }
-
-    public AssetId(string pluginId, string partialId) {
-        PluginId = new PluginId(pluginId);
-        Id = new PartialAssetId(partialId);
-    }
-
-    public AssetId(string fullId) {
-        if (string.IsNullOrWhiteSpace(fullId)) {
-            throw new ArgumentException($"Invalid format: {fullId}", nameof(fullId));
-        }
-
-        Match match = Regex.Match(fullId
-            .Replace("-", "")
-            .PadLeft(12, '0')
+    public AssetId(string assetId) {
+        Match match = RegexLib.AssetId.Match(assetId);
+        PluginId = new PluginId(match.Groups[1].Success
+            ? match.Groups[1]
+            : throw new ArgumentException("Plugin Name could not be determined ")
         );
-        if (!match.Success) {
-            throw new ArgumentException("Invalid input format.", fullId);
-        }
-
-        // because of the internal tag, we can immediately cast to an Uint here, and bypass another regex check
-        PluginId = new PluginId(PluginId.CastToUshort(match.Groups[1].Value));
-        Id = new PartialAssetId(PartialAssetId.CastToUint(match.Groups[2].Value));
+        AssetName = new AssetName(match.Groups[2].Success 
+            ? match.Groups[2] 
+            : throw new ArgumentException("Namespace for the asset could not be determined")
+        );
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    // Methods
+    // Helper Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public override string ToString() => $"{PluginId.ToString()}{Id.ToString()}";
-    public string ToStringReadable() => $"{PluginId.ToStringReadable()}-{Id.ToStringReadable()}";
+    public static bool TryCreateNew(string assetId, [NotNullWhen(true)] out AssetId? output) {
+        Match match = RegexLib.AssetId.Match(assetId);
+        if (!match.Groups[1].Success || !match.Groups[2].Success) {
+            output = null;
+            return false;
+        }
 
-    [GeneratedRegex("^([0-9a-fA-F]{4})?([0-9a-fA-F]{8})$")]
-    private static partial Regex MyRegex();
+        output = new AssetId(new PluginId(match.Groups[1]), new AssetName(match.Groups[2]));
+        return true;
+    }
+
+    public override string ToString() => $"{PluginId}:{string.Join('/', AssetName)}";
 
     // -----------------------------------------------------------------------------------------------------------------
-    // Comparisons
+    // Comparison Methods
     // -----------------------------------------------------------------------------------------------------------------
     public static bool operator ==(AssetId left, AssetId right) => left.Equals(right);
-    public static bool operator !=(AssetId left, AssetId right) => !left.Equals(right);
-
-    public int CompareTo(AssetId other) {
-        int pluginIdComparison = PluginId.CompareTo(other.PluginId);
-        return pluginIdComparison != 0
-            ? pluginIdComparison
-            : Id.CompareTo(other.Id);
-    }
-
+    public static bool operator !=(AssetId left, AssetId right) => !left.Equals(right); 
+    
+    public static bool operator ==(AssetId left, PluginId right) => left.PluginId == right;
+    public static bool operator !=(AssetId left, PluginId right) => left.PluginId != right;
+    
     public override bool Equals(object? obj) => obj is AssetId other && Equals(other);
-    public bool Equals(AssetId x, AssetId y) => x.PluginId.Equals(y.PluginId) && x.Id == y.Id;
-    public bool Equals(AssetId other) => PluginId.Equals(other.PluginId) && Id == other.Id;
+    public bool Equals(AssetId other) =>
+        PluginId.Equals(other.PluginId)
+        && AssetName.Equals(other.AssetName)
+    ;
 
-    public int GetHashCode(AssetId obj) => HashCode.Combine(obj.PluginId, obj.Id);
-    public override int GetHashCode() => HashCode.Combine(PluginId, Id);
-
+    public override int GetHashCode() => HashCode.Combine(PluginId, AssetName);
 }

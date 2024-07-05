@@ -20,7 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="CodeOfChaos.Extensions" Version="0.2.0" />
+        <PackageReference Include="CodeOfChaos.Extensions" Version="0.4.3" />
         <PackageReference Include="CodeOfChaos.Extensions.DependencyInjection" Version="0.1.0" />
         <PackageReference Include="CodeOfChaos.Extensions.Serilog" Version="0.2.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0"/>
@@ -41,7 +41,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Assets\"/>
+        <Content Include="Assets\*.png">
+            <Link>assets\%(Filename)%(Extension)</Link>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 
     <Target Name="AddingPlugins" AfterTargets="Build">

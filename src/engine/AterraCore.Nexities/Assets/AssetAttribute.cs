@@ -12,14 +12,11 @@ namespace AterraCore.Nexities.Assets;
 // ---------------------------------------------------------------------------------------------------------------------
 [AttributeUsage(AttributeTargets.Class)]
 public class AssetAttribute(
-    string partialId,
-    ServiceLifetimeType serviceLifetime,
+    string assetId,
     CoreTags coreTags,
-    Type? interfaceType = null
-    ) : AbstractAssetAttribute {
-
-    public override PartialAssetId PartialAssetId { get; } = new(partialId);
-    public override ServiceLifetimeType ServiceLifetime { get; } = serviceLifetime;
+    params Type[] interfaceTypes
+) : AbstractAssetAttribute {
+    public override AssetId AssetId { get; } = new(assetId);
     public override CoreTags CoreTags { get; } = coreTags | CoreTags.Asset;
-    public override Type? InterfaceType { get; } = interfaceType;// Might be defined, depending on the asset in question
+    public override Type[] InterfaceTypes { get; } = interfaceTypes;
 }

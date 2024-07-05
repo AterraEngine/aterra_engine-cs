@@ -1,10 +1,9 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
-using AterraCore.Common.Types.FlexiPlug;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Data.Assets;
+using AterraCore.Loggers;
 using CodeOfChaos.Extensions;
 using JetBrains.Annotations;
 using Serilog;
@@ -12,83 +11,80 @@ using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 
 namespace AterraCore.Nexities.Assets;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
 [UsedImplicitly]
 public class AssetAtlas(ILogger logger) : IAssetAtlas {
+    private ILogger Logger { get; } = logger.ForAssetAtlasContext();
+    
     private readonly ConcurrentDictionary<AssetId, AssetRegistration> _assetsById = new();
     private readonly ConcurrentDictionary<Type, AssetId> _assetsByType = new();
-    private readonly ConcurrentDictionary<ServiceLifetimeType, ConcurrentBag<AssetId>> _assetServiceLifetimeMap = new ConcurrentDictionary<ServiceLifetimeType, ConcurrentBag<AssetId>>().PopulateWithEmpties();
 
     private readonly ConcurrentDictionary<CoreTags, ConcurrentBag<AssetId>> _coreTaggedAssets = new ConcurrentDictionary<CoreTags, ConcurrentBag<AssetId>>().PopulateWithEmpties();
     private readonly ConcurrentDictionary<string, ConcurrentBag<AssetId>> _stringTaggedAssets = new();
 
     public int TotalCount => _assetsById.Count;
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------------------- ----
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public bool TryAssignAsset(AssetRegistration registration, [NotNullWhen(true)] out AssetId? assetId) {
         assetId = null;
 
-        var newAssetId = new AssetId(registration.PluginId, registration.PartialAssetId);
-
         // Assigns the asset to the dict
-        if (!_assetsById.TryAdd(newAssetId, registration)) {
-            logger.Warning(
-            "Asset with ID: {AssetId} already exists with type {ExistingAssetType}. Cannot assign a new asset with the same ID.",
-            newAssetId, _assetsById[newAssetId].Type.FullName
+        if (!_assetsById.TryAdd(registration.AssetId, registration)) {
+            Logger.Warning(
+                "Asset with ID: {AssetId} already exists with type {ExistingAssetType}. Cannot assign a new asset with the same ID.",
+                registration.AssetId, _assetsById[registration.AssetId].Type.FullName
             );
             return false;
         }
-        if (!_assetsByType.TryAdd(registration.Type, newAssetId)) {
-            logger.Warning(
-            "Asset with ID: {AssetId} Cannot assign a new asset because it's {Type} is already assigned to another asset.",
-            newAssetId, registration.Type.FullName
-            );
-            return false;
-        }
-
-        if (registration.InterfaceType is not null && !_assetsByType.TryAdd(registration.InterfaceType, newAssetId)) {
-            logger.Warning(
-            "Asset with ID: {AssetId} Cannot assign a new asset because it's interface {interface} is already assigned to another asset.",
-            newAssetId, registration.InterfaceType.FullName
+        if (!_assetsByType.TryAdd(registration.Type, registration.AssetId)) {
+            // The reason for this, is the class type is hard linked to an AssetId
+            Logger.Warning(
+                "Asset with ID: {AssetId} Cannot assign a new asset because it's {Type} is already assigned to another asset.",
+                registration.AssetId, registration.Type.FullName
             );
             return false;
         }
 
-        // Assign to the instance type
-        if (!_assetServiceLifetimeMap.TryAddToBagOrCreateBag(registration.ServiceLifetime, newAssetId)) {
-            // This shouldn't happen
-            logger.Error("Asset {AssetId} could not be be mapped to an InstanceType", newAssetId);
+        foreach (Type interfaceType in registration.InterfaceTypes) {
+            // The reason for this, is the class type is soft linked to an AssetId, and can be overwritten
+            _assetsByType.AddOrUpdate(interfaceType, registration.AssetId);
+            Logger.Information("Asset {AssetId} linked to the interface of {Type}", registration.AssetId, interfaceType.FullName);
         }
 
         // After Everything is said and done with the assigning, start assigning the Core tags and string tags
-        List<string> tagsList = [];
-
         foreach (CoreTags tag in Enum.GetValuesAsUnderlyingType<CoreTags>()) {
             if (!registration.CoreTags.HasFlag(tag)) continue;
-            _coreTaggedAssets.TryAddToBagOrCreateBag(tag, newAssetId);
-            tagsList.Add(tag.ToString());
+            _coreTaggedAssets.TryAddToBagOrCreateBag(tag, registration.AssetId);
         }
 
         foreach (string stringTag in registration.StringTags) {
-            if (!_stringTaggedAssets.TryAddToBagOrCreateBag(stringTag, newAssetId)) {
-                logger.Warning("String Tag of {tag} could not be assigned to {assetId}", stringTag, newAssetId);
-                continue;
+            if (!_stringTaggedAssets.TryAddToBagOrCreateBag(stringTag, registration.AssetId)) {
+                Logger.Warning("String Tag of {tag} could not be assigned to {assetId}", stringTag, registration.AssetId);
             }
-            tagsList.Add(stringTag);
         }
-
-        logger.Information(
-        "Assigned asset {AssetId} of Type {AssetTypeName} to plugin {PluginId} as a '{@tags}",
-        newAssetId, registration.Type.FullName, registration.Type, tagsList
+        
+        // Assign overloads
+        foreach (AssetId overridableAssetId in registration.OverridableAssetIds) {
+            if (!_assetsById.TryGetValue(overridableAssetId, out AssetRegistration comparisonValue )) continue;
+            if (!_assetsById.TryUpdate(overridableAssetId, registration, comparisonValue)) continue;
+          
+            logger.Information(
+                "Assigned asset {AssetId} to overwrite {overridableAssetId}",
+                registration.AssetId,
+                overridableAssetId
+            ); 
+        }
+        
+        Logger.Information(
+            "Assigned asset {AssetId} of Type {AssetTypeName}",
+            registration.AssetId, registration.Type.FullName
         );
 
-        assetId = newAssetId;
+        assetId = registration.AssetId;
         return true;
     }
 
@@ -101,8 +97,9 @@ public class AssetAtlas(ILogger logger) : IAssetAtlas {
     public IEnumerable<AssetId> GetAllAssetsOfStringTag(string stringTag) =>
         _stringTaggedAssets.TryGetValue(stringTag, out ConcurrentBag<AssetId>? bag) ? bag : [];
 
-    public IEnumerable<AssetId> GetAllAssetsOfPlugin(PluginId pluginId) =>
-        _assetsById.Where(pair => pair.Key.PluginId == pluginId).Select(pair => pair.Key);
+    public IEnumerable<AssetId> GetAllAssetsOfPlugin(string pluginId) => _assetsById
+        .Where(pair => pair.Key.PluginId == pluginId)
+        .Select(pair => pair.Key);
 
     public bool TryGetRegistration(AssetId assetId, out AssetRegistration registration) => _assetsById.TryGetValue(assetId, out registration);
 
@@ -115,13 +112,13 @@ public class AssetAtlas(ILogger logger) : IAssetAtlas {
         type = registration.Type;
         return true;
     }
-    public bool TryGetInterfaceType(AssetId assetId, out Type? type) {
-        type = default;
+    public bool TryGetInterfaceTypes(AssetId assetId, out Type[] type) {
+        type = [];
         if (!_assetsById.TryGetValue(assetId, out AssetRegistration registration)) {
             return false;
         }
 
-        type = registration.InterfaceType;
+        type = registration.InterfaceTypes;
         return true;
     }
 

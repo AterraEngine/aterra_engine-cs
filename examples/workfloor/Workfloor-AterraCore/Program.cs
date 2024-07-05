@@ -1,7 +1,6 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
 using AterraCore.Contracts;
 using AterraCore.Contracts.Renderer;
 using AterraEngine.Renderer.RaylibCs;
@@ -11,13 +10,11 @@ using AterraCore.Boot;
 using AterraCore.Boot.Logic;
 using AterraCore.Common.Data;
 using static CodeOfChaos.Extensions.DependencyInjection.ServiceDescriptorExtension;
-
 namespace Workfloor_AterraCore;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
 public static class Program {
     public static void Main(string[] args) {
         IEngine engine = new EngineConfiguration()
@@ -25,15 +22,16 @@ public static class Program {
             .ImportEngineConfig(Paths.ConfigEngine)
             
             // --- Assign SubConfigurations ---
-            .AddSubConfigurations()
             .WithSubConfigurations(sc => {
+                // Has to be ran before FlexiPlug configuration.
+                //      Else it will add the simulated plugin after other plugins
+                sc.Nexities
+                    .IncludeNexitiesLibAssembly();
+                
                 sc.FlexiPlug
                     .CheckAndIncludeRootAssembly() 
                     .PreLoadPlugins()
                 ;
-                
-                // sc.Nexities
-                // ;
             })
             
             // --- Assign Services for the ServiceProvider ---
