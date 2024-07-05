@@ -94,7 +94,6 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas) : IAsset
         if (!_assetInstances.TryGetValue(instanceId, out IAssetInstance? assetInstance)) return false;
         if (assetInstance is not T convertedInstance) return false;
         instance = convertedInstance;
-        logger.Debug("{guid} retrieved from atlas", instance.Guid);
         return true;
     }
 

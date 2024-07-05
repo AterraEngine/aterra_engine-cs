@@ -21,8 +21,8 @@ public abstract class AbstractRaylibFrameProcessor : IFrameProcessor {
     public virtual void DrawFrame() {
         BeginDrawing();
         ClearBackground(ClearColor);
-        DrawUi();
         Draw2D();
+        DrawUi();
         EndDrawing();
     }
 

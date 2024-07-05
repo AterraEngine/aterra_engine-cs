@@ -6,7 +6,6 @@ using AterraCore.Contracts.Nexities.Data.Assets;
 using AterraCore.Contracts.Nexities.Data.Components.AssetTree;
 using AterraCore.FlexiPlug.Attributes;
 using AterraCore.Nexities.Components;
-using AterraCore.Nexities.Lib.Components.Sprite2D;
 using JetBrains.Annotations;
 
 namespace AterraCore.Nexities.Lib.Components.AssetTree;
@@ -15,7 +14,6 @@ namespace AterraCore.Nexities.Lib.Components.AssetTree;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [Component<IAssetTree>("Nexities:Components/AssetTree")]
-[Injectable<IAssetTree>]
 [UsedImplicitly]
 public class AssetTree : NexitiesComponent, IAssetTree {
     private readonly LinkedList<IAssetInstance> _nodes = [];

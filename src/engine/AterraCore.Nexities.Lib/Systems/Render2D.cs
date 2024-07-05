@@ -32,11 +32,12 @@ public class Render2D(ILogger logger) : NexitiesSystem<IActor2D> {
 
             if (childEntity.Sprite2D.Texture2D is not {} texture) continue;
             // Raylib.DrawTexture(texture, (int)translation.X, -(int)translation.Y, Color.White);
+            
             Raylib.DrawTexturePro(
                 texture: texture, 
                 source: childEntity.Sprite2D.TextureRectangle,
                 dest: new Rectangle(translation, scale),
-                origin: translation, 
+                origin: new Vector2(0,0), 
                 rotation:rotation.X, 
                 Color.White
             );
