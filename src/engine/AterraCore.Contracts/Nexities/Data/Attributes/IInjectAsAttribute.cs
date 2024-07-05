@@ -1,12 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraCore.Contracts.Nexities.Data.Assets;
+namespace AterraCore.Contracts.Nexities.Data.Attributes;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public abstract class AbstractRefersToAttribute : Attribute {
+// ReSharper disable once InconsistentNaming
+public abstract class IInjectAsAttribute : Attribute {
     public abstract Guid Guid { get; }
 }

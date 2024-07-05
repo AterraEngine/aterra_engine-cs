@@ -1,15 +1,16 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.Types.Nexities;
 
-using AterraCore.Contracts.Nexities.Data.Assets;
-
-namespace AterraCore.Nexities.Assets;
+namespace AterraCore.Contracts.Nexities.Data.Assets;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-public class AssetTagAttribute(params string[]? tags) : AbstractAssetTagAttribute {
-    public override string[] Tags { get; } = tags?.ToArray() ?? [];
+// ReSharper disable once InconsistentNaming
+public abstract class IAssetAttribute : Attribute {
+    public abstract AssetId AssetId { get; }
+    public abstract CoreTags CoreTags { get; }
+    public abstract Type[] InterfaceTypes { get; }
 }

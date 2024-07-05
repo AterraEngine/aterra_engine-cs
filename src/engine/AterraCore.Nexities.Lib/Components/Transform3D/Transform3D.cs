@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using AterraCore.Nexities.Assets;
+using AterraCore.Nexities.Attributes;
 using AterraCore.Nexities.Components;
 using JetBrains.Annotations;
 using System.Numerics;

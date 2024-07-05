@@ -1,14 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Nexities.Data.Assets;
 
-namespace AterraCore.Nexities.Attributes;
+using AterraCore.Common.Types.Nexities;
+
+namespace AterraCore.Contracts.Nexities.Data.Attributes;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[AttributeUsage(AttributeTargets.Parameter, AllowMultiple = true)]
-public class RefersToAttribute(string guid) : AbstractRefersToAttribute {
-    public override Guid Guid { get; } = Guid.Parse(guid);
+// ReSharper disable once InconsistentNaming
+public abstract class IOverridesAssetIdAttribute : Attribute {
+    public abstract AssetId AssetId { get; }
 }

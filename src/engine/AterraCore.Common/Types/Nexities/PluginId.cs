@@ -37,6 +37,12 @@ public readonly struct PluginId :
     }
     
     // -----------------------------------------------------------------------------------------------------------------
+    // Implicit Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    public static implicit operator PluginId(string s) => new(s);
+    public static implicit operator string(PluginId pluginId) => pluginId.ToString();
+    
+    // -----------------------------------------------------------------------------------------------------------------
     // Helper Methods
     // -----------------------------------------------------------------------------------------------------------------
     public static bool TryCreateNew(string value, [NotNullWhen(true)] out PluginId? output) {

@@ -17,4 +17,5 @@ public static class SectionExtensions {
     public static ILogger ForAssetAtlasContext(this ILogger logger) => logger.ForContext("Section", "AssetAtlas");
     public static ILogger ForEngineContext(this ILogger logger) => logger.ForContext("Section", "Engine");
     public static ILogger ForTextureAtlasContext(this ILogger logger) => logger.ForContext("Section", "TextureAtlas");
+    public static ILogger ForEngineServiceBuilderContext(this ILogger logger) => logger.ForContext("Section", "EngineServiceBuilder");
 }

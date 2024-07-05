@@ -14,10 +14,10 @@ public struct AssetRegistration {
     public Type Type { get; init; }
     public Type[] InterfaceTypes { get; init; }
 
-    // Data from AbstractAssetAttribute
+    // Data from IAssetAttribute
     public CoreTags CoreTags { get; init; }
 
-    // Data from AbstractAssetTagAttribute
+    // Data from IAssetTagAttribute
     public IEnumerable<string> StringTags { get; init; }
     
     // Data from AbstractOverwritesAssetTagAttribute

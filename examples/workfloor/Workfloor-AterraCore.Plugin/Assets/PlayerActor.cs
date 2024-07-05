@@ -20,6 +20,6 @@ public interface IDuckyHypeActor : IActor2D;
 [UsedImplicitly]
 public class DuckyHypeActor(
     ITransform2D transform2D, 
-    [RefersTo("827c3bc1-f688-4301-b342-b8958c1fe892")] ISprite2D sprite2D,
+    [InjectAs("827c3bc1-f688-4301-b342-b8958c1fe892")] ISprite2D sprite2D,
     IAssetTree childEntities 
     ) : Actor2D(transform2D, sprite2D, childEntities), IDuckyHypeActor;

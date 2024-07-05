@@ -46,6 +46,12 @@ public readonly struct AssetId : IEqualityOperators<AssetId, AssetId, bool>, IEq
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+    // Implicit Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    public static implicit operator AssetId(string s) => new(s);
+    public static implicit operator string(AssetId assetId) => assetId.ToString();
+
+    // -----------------------------------------------------------------------------------------------------------------
     // Helper Methods
     // -----------------------------------------------------------------------------------------------------------------
     public static bool TryCreateNew(string assetId, [NotNullWhen(true)] out AssetId? output) {

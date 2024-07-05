@@ -7,7 +7,7 @@ namespace AterraCore.Contracts.Nexities.Data.Assets;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
-public abstract class AbstractAssetTagAttribute : Attribute {
+// ReSharper disable once InconsistentNaming
+public abstract class IAssetTagAttribute : Attribute {
     public abstract string[] Tags { get; }
 }

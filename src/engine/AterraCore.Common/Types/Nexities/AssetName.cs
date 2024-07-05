@@ -43,6 +43,12 @@ public readonly struct AssetName :
     public AssetName(Group matchGroup) {
         Values = matchGroup.Value.Split('.', '/');
     }
+    
+    // -----------------------------------------------------------------------------------------------------------------
+    // Implicit Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    public static implicit operator AssetName(string s) => new(s);
+    public static implicit operator string(AssetName assetName) => assetName.ToString();
 
     // -----------------------------------------------------------------------------------------------------------------
     // Helper Methods

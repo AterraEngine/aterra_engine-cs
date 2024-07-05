@@ -60,7 +60,13 @@ public partial struct SemanticVersion : IComparable<SemanticVersion>, IEquatable
 
     public static SemanticVersion Zero => new(0, 0, 0);
     public static SemanticVersion Max => new(int.MaxValue, int.MaxValue, int.MaxValue);
-
+    
+    // -----------------------------------------------------------------------------------------------------------------
+    // Implicit Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    public static implicit operator SemanticVersion(string s) => new(s);
+    public static implicit operator string(SemanticVersion assetId) => assetId.ToString();
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------

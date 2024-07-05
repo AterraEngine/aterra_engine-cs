@@ -49,7 +49,7 @@ public class LoadedPluginDto(ulong id, string filepath) : ILoadedPluginDto {
     private IEnumerable<(Type Type, ServiceLifetime Lifetime)>? _nexitiesAssets;
     private IEnumerable<(Type Type, ServiceLifetime Lifetime)> InjectableNexitiesAssetTypes => _nexitiesAssets ??= Types
         .SelectMany(type => type
-            .GetCustomAttributes<AbstractAssetAttribute>(false)// this way we only get the attribute once
+            .GetCustomAttributes<IAssetAttribute>(false)// this way we only get the attribute once
             .SelectMany(attribute => attribute.InterfaceTypes.Select(t => (Type:t, Lifetime:ServiceLifetime.Transient)))
         );
 

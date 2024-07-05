@@ -7,6 +7,7 @@ using CodeOfChaos.Extensions;
 using CodeOfChaos.Extensions.Serilog;
 using Serilog;
 using System.Xml.Serialization;
+using static System.Environment;
 
 namespace AterraCore.Common.ConfigFiles.EngineConfig;
 
@@ -27,12 +28,12 @@ public class EngineConfigXml {
     public void OutputToLog(ILogger logger) {
 
         ValuedStringBuilder valuedBuilder = new ValuedStringBuilder()
-            .AppendLine("Engine PluginDtos loaded with the following data:")
+            .Append("Engine PluginDtos loaded with the following data:")
             .AppendLineValued("- Engine version: ", Engine.Version)
             .AppendLineValued("- Game: ", Game.Version)
-            .AppendLineValued("- Plugin RootFolder: ",destruct:true, LoadOrder.RootFolderRelative)
-            .AppendLine()
-            .AppendLine("Plugins - Load Order : (Ids are not final)");
+            .AppendLineValued("- Plugin RootFolder: ", destruct:true, LoadOrder.RootFolderRelative)
+            
+            .Append($"{NewLine}Plugins - Load Order : (Ids are not final)");
 
         int offset = 0;
         if (LoadOrder.RootAssembly is not null) {
@@ -40,11 +41,12 @@ public class EngineConfigXml {
         }
         
         LoadOrder.Plugins
-            .Select((r, i) => new { r.FilePath, Id = offset})
+            .Select(r => (r.FilePath, Id: offset++))
             .IterateOver(box => valuedBuilder.AppendLineValued($"- id_{box.Id} : ", box.FilePath));
-
-        valuedBuilder.AppendLine();
-
-        logger.Information(valuedBuilder.ToString(), valuedBuilder.ValuesToArray());
+        
+        logger.Information(
+            valuedBuilder.ToString(), // Message template 
+            valuedBuilder.ValuesToArray() // array of all parameters to insert
+        );
     }
 }

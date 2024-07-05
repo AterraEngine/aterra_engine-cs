@@ -14,7 +14,7 @@ namespace AterraCore.Loggers;
 // ---------------------------------------------------------------------------------------------------------------------
 
 public static class LoggerConfigurationExtensions {
-    private const string OutputTemplate = "[{Section,12}] [{Timestamp:HH:mm:ss.fff} {Level:u3}] {Message:lj}{NewLine}{Exception}";
+    private const string OutputTemplate = "[{Section,24} : {Timestamp:HH:mm:ss.fff} : {Level:u3}] | {Message:lj}{NewLine}{Exception}";
 
     private static readonly AnsiConsoleTheme Theme = new(
     new Dictionary<ConsoleThemeStyle, string> {
