@@ -21,6 +21,8 @@ using CodeOfChaos.Extensions.Serilog;
 using JetBrains.Annotations;
 using Raylib_cs;
 using Serilog;
+using System.Collections.Concurrent;
+using System.Numerics;
 
 namespace AterraEngine;
 
@@ -38,12 +40,16 @@ public class Engine(
     IApplicationStageManager applicationStageManager,
     ITextureAtlas textureAtlas,
     IAssetDataXmlService assetDataXmlService
-    ) : IEngine {
+) : IEngine {
     private readonly CancellationTokenSource _ctsRenderThread = new();
     private readonly TaskCompletionSource<bool> _openGlContextCreated = new();
-
+    private ConcurrentQueue<TextureQueueRecord> _textureQueue = new();
+    
+    // -----------------------------------------------------------------------------------------------------------------
+    // Methods
+    // -----------------------------------------------------------------------------------------------------------------
     public bool TryAssignStartingLevel(AssetId assetId) =>
-        instanceAtlas.TryCreateInstance(assetId, out ILevel? level)
+        instanceAtlas.TryCreate(assetId, out ILevel? level)
         && world.TryLoadLevel(level);
 
     public IEngine SubscribeToEvents() {
@@ -57,6 +63,7 @@ public class Engine(
     public IEngine SpawnRenderThread() {
         var renderThreadProcessor = EngineServices.CreateWithServices<RenderThreadProcessor>();
         renderThreadProcessor.CancellationToken = _ctsRenderThread.Token;
+        renderThreadProcessor.TextureQueue = _textureQueue;
         var renderThread = new Thread(renderThreadProcessor.Run);
         renderThread.Start();
         logger.Information("Spawned RenderThread");
@@ -88,11 +95,23 @@ public class Engine(
 
         renderThreadEvents.InvokeApplicationStageChange(ApplicationStage.Level);
 
-        if (instanceAtlas.TryCreateInstance(new AssetId("Nexities:Entities/Actor2D"), out Actor2D? instance)) {
+        if (instanceAtlas.TryCreate(new AssetId("Nexities:Entities/Actor2D"), out Actor2D? instance, predefinedGuid:Guid.Parse("af15db3d-f69e-4382-a768-d163011125f5"))) {
             logger.Error("{Id}", instance.Guid);
             logger.Error("{AssetId}", instance.AssetId);
             logger.Error("{Components}", instance.ComponentsArray);
+            logger.Error("{Sprite2D}", instance.Sprite2D);
+            logger.Error("{Sprite2DGuid}", instance.Sprite2D.Guid);
+            
+            instance.Transform2D.Translation = new Vector2(100, 200);
+            instance.Transform2D.Scale = new Vector2(100, 100);
         }
+        
+        _textureQueue.Enqueue(new TextureQueueRecord (
+            TextureAssetId : new AssetId("Nexities:Components/Sprite2D"),
+            PredefinedGuid :  Guid.Parse("827c3bc1-f688-4301-b342-b8958c1fe892"),
+            TexturePath : "assets/ducky-hype.png",
+            RecordType : TextureQueueRecordType.Register
+        ));
         
         Console.WriteLine() ;
         Console.WriteLine() ;

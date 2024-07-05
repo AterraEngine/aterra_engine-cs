@@ -1,7 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Types.Nexities;
+using AterraCore.Contracts.Nexities.Data.Assets;
 using Raylib_cs;
 
 namespace AterraCore.Contracts.OmniVault;
@@ -10,7 +10,6 @@ namespace AterraCore.Contracts.OmniVault;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public interface ITextureAtlas {
-    public bool TryLoadAndRegisterTexture<T>(AssetId textureAssetId, string imagePath, out T? textureAsset, Guid? predefinedGuid = null)
-        where T : class, ITexture2DAsset;
+public interface ITexture2DAsset : IAssetInstance {
+    public Texture2D? Texture2D { get; set; }
 }

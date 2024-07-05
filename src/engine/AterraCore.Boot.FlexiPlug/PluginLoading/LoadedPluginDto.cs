@@ -6,6 +6,7 @@ using AterraCore.Common.Types.FlexiPlug;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Boot.FlexiPlug;
 using AterraCore.Contracts.Nexities.Data.Assets;
+using AterraCore.DI;
 using AterraCore.FlexiPlug.Attributes;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -60,12 +61,7 @@ public class LoadedPluginDto(ulong id, string filepath) : ILoadedPluginDto {
             .Where(t => !t.Attribute.IsStatic)
             .Select(t => new ServiceDescriptor(
                 t.Attribute.Interface,
-                factory: provider => provider
-                    .GetRequiredService<IAssetInstanceAtlas>()
-                    .TryCreateInstance(t.Attribute.Interface, out IAssetInstance? instance)
-                    ? instance
-                    : throw new InvalidOperationException("Object could not be created")
-                ,
+                factory: _ => EngineServices.CreateNexitiesAsset<IAssetInstance>(t.Attribute.Interface) ,
                 t.Attribute.Lifetime
             ))
             
@@ -73,12 +69,7 @@ public class LoadedPluginDto(ulong id, string filepath) : ILoadedPluginDto {
                 InjectableNexitiesAssetTypes
                     .Select(t => new ServiceDescriptor(
                         t.Type,
-                        factory: provider => provider
-                            .GetRequiredService<IAssetInstanceAtlas>()
-                            .TryCreateInstance(t.Type, out IAssetInstance? instance)
-                            ? instance
-                            : throw new InvalidOperationException("Object could not be created")
-                        ,
+                        factory: _ => EngineServices.CreateNexitiesAsset<IAssetInstance>(t.Type) ,
                         t.Lifetime
                     )))
         ;
@@ -89,12 +80,7 @@ public class LoadedPluginDto(ulong id, string filepath) : ILoadedPluginDto {
             .Where(t => t.Attribute.IsStatic)
             .Select(t => new ServiceDescriptor(
             t.Attribute.Interface,
-            factory: provider => provider
-                .GetRequiredService<IAssetInstanceAtlas>()
-                .TryCreateInstance(t.Attribute.Interface, out IAssetInstance? instance)
-                ? instance
-                : throw new InvalidOperationException("Object could not be created")
-            ,
+            factory: _ => EngineServices.CreateNexitiesAsset<IAssetInstance>(t.Attribute.Interface) ,
             t.Attribute.Lifetime
             ));
     }

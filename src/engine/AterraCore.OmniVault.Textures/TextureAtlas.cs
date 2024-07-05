@@ -16,29 +16,34 @@ namespace AterraCore.OmniVault.Textures;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
-public class TextureAtlas(ILogger logger, IAssetInstanceAtlas instanceAtlas, IAssetAtlas assetAtlas) : ITextureAtlas {
-    public ILogger Logger { get; } = logger.ForTextureAtlasContext();
-
-
+public class TextureAtlas(ILogger logger, IAssetInstanceAtlas instanceAtlas) : ITextureAtlas {
+    private ILogger Logger { get; } = logger.ForTextureAtlasContext();
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public bool TryLoadImage(AssetId assetId, string imagePath, out Texture2D? texture2D) {
-        texture2D = default;
+    public bool TryLoadAndRegisterTexture<T>(AssetId textureAssetId, string imagePath, out T? asset, Guid? predefinedGuid = null)
+        where T : class, ITexture2DAsset
+    {
+        asset = default;
         if (!Path.Exists(imagePath)) return false;
-        
-        Image image = Raylib.LoadImage(imagePath);
-        texture2D = Raylib.LoadTextureFromImage(image);
-        Raylib.UnloadImage(image);
-        
-        return true;
-    }
+        if (!instanceAtlas.TryGetOrCreate(typeof(T), predefinedGuid, out asset)) return false;
 
-    public Texture2D LoadImage(string imagePath) {
-        Image image = Raylib.LoadImage(imagePath);
-        Texture2D texture2D = Raylib.LoadTextureFromImage(image);
-        // Raylib.UnloadImage(image);
-        return texture2D;
+        try {
+            Image image = Raylib.LoadImage(imagePath);
+            Logger.Debug("Loaded image {path}", imagePath);
+        
+            asset.Texture2D = Raylib.LoadTextureFromImage(image);
+            Logger.Debug("Assigned image {path} to asset {guid}", imagePath, asset.Guid);
+            
+            Raylib.UnloadImage(image);
+            Logger.Debug("Unloaded image {path}", imagePath);
+            return true;
+        }
+        catch (Exception ex) {
+            logger.Warning(ex, "Failed without proper exception catching");
+            asset = default;
+            return false;
+        }
     }
-
 }

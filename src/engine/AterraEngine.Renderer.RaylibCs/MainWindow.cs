@@ -30,7 +30,9 @@ public class MainWindow(IApplicationStageManager applicationStageManager, IAsset
             // Necessary to write Raylib logs with Serilog
             SetTraceLogCallback(RaylibLogger.GetPointer());
         }
-        SetConfigFlags(ConfigFlags.ResizableWindow
+        SetConfigFlags(
+            ConfigFlags.ResizableWindow |
+            ConfigFlags.Msaa4xHint
         // | ConfigFlags.UndecoratedWindow
         // | ConfigFlags.MousePassthroughWindow
         );
@@ -39,23 +41,14 @@ public class MainWindow(IApplicationStageManager applicationStageManager, IAsset
 
         applicationStageManager.TryRegisterStage(
         ApplicationStage.Undefined,
-        EngineServices.CreateWithServices<UndefinedRaylibFrameProcessor>()
+        EngineServices.CreateWithServices<GeneralRenderRaylibFrameProcessor>()
         );
 
         applicationStageManager.TryRegisterStage(
         ApplicationStage.StartupScreen,
         EngineServices.CreateWithServices<StartupRaylibFrameProcessor>()
         );
-
-        // TODO CHECK HOW I CAN DO THIS FROM THE MAIN THREAD
-        // Guid id = Guid.Parse("827c3bc1-f688-4301-b342-b8958c1fe892");
-        // if (instanceAtlas.TryCreateInstance(new AssetId("Nexities:Components/Sprite2D"), out Sprite2D? spriteInstance, id)) {
-        //     // logger.Information("sprite created");
-        //     spriteInstance.Texture2D = textureAtlas.LoadImage("assets/ducky-hype.png");
-        //     // logger.Information("texture assigned");
-        // }
         
-
         IsInitialised = true;
     }
 }

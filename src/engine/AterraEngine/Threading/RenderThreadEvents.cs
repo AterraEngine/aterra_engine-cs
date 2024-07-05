@@ -22,7 +22,6 @@ public class ApplicationStageChangeEventArgs(ApplicationStage applicationStage) 
 public class RenderThreadEvents {
     public event EventHandler<EventArgs>? EventOpenGlContextCreated;
     public event EventHandler<ApplicationStageChangeEventArgs>? EventApplicationStageChange;
-
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
