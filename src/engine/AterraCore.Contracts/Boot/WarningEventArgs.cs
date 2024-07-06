@@ -6,6 +6,7 @@ namespace AterraCore.Contracts.Boot;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class WarningEventArgs(IWarning warning) : EventArgs {
+public class WarningEventArgs(IWarning warning, object?[] messageParams) : EventArgs {
     public IWarning Warning { get; } = warning;
+    public object?[] MessageParams { get; } = messageParams;
 }

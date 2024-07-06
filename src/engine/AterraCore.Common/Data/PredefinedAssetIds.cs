@@ -15,6 +15,7 @@ public static class PredefinedAssetIds {
         public static readonly AssetId Undefined = "AterraEngineBoot:Warnings/Undefined";
         public static readonly AssetId UnstableBootOperationOrder = "AterraEngineBoot:Warnings/UnstableBootOperationOrder";
         public static readonly AssetId UnableToLoadEngineConfigFile = "AterraEngineBoot:Warnings/UnableToLoadEngineConfigFile";
+        public static readonly AssetId EngineOverwritten = "AterraEngineBoot:Warnings/EngineOverwritten";
     }
     #endregion
     
@@ -22,6 +23,7 @@ public static class PredefinedAssetIds {
     public static class NewBootOperationNames {
         public static readonly AssetId EngineConfigLoaderOperation = "AterraEngineBoot:Operations/EngineConfigLoader";
         public static readonly AssetId RegisterWarningsOperation = "AterraEngineBoot:Operations/RegisterWarnings";
+        public static readonly AssetId UseEngineOperation = "AterraEngineBoot:Operations/UseEngine";
     }
     #endregion
 }

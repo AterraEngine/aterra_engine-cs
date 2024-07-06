@@ -24,6 +24,7 @@ public class NewConfigurationWarningAtlas(ILogger logger) : IConfigurationWarnin
         { UnstableFlexiPlugLoadOrder, new NewWarning(nameof(UnstableFlexiPlugLoadOrder)) },
         { UnstableBootOperationOrder, new NewWarning(nameof(UnstableBootOperationOrder)) },
         { UnableToLoadEngineConfigFile, new NewWarning(nameof(UnableToLoadEngineConfigFile)) },
+        { EngineOverwritten, new NewWarning(nameof(EngineOverwritten)) },
     };
     
     private readonly Dictionary<AssetId, EventHandler<WarningEventArgs>> _eventHandlers = new() {
@@ -48,8 +49,8 @@ public class NewConfigurationWarningAtlas(ILogger logger) : IConfigurationWarnin
         _eventHandlers.AddOrUpdate(assetId, eventHandler);
     }
     
-    public void RaiseWarningEvent(AssetId assetId, object? sender = null) {
+    public void RaiseWarningEvent(AssetId assetId, object? sender = null, params object?[] messageParams) {
         if (!_eventHandlers.TryGetValue(assetId, out EventHandler<WarningEventArgs>? eventHandler)) return;
-        eventHandler.Invoke(sender, new WarningEventArgs(GetWarning(assetId)));
+        eventHandler.Invoke(sender, new WarningEventArgs(GetWarning(assetId), messageParams));
     }
 }

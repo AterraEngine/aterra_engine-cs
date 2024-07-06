@@ -22,7 +22,7 @@ public static class BootConfigurations {
         subConfigurationsCallback.Invoke(subConfigurations);
 
         foreach (IBootConfiguration bootConfiguration in subConfigurations) {
-            if (bootConfiguration.Warnings != Nominal && configuration.EngineConfig.BootConfig.Exceptions.BreakOnFlowException) {
+            if (bootConfiguration.Warnings != Nominal && configuration.EngineConfig.BootConfig.Exceptions.BreakOnUnstableLoadOrder) {
                 logger.ThrowFatal<InvalidOperationException>(
                     "Engine configuration for {Type} has warnings: {Warnings}",
                     bootConfiguration.GetType().FullName, 

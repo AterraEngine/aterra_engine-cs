@@ -5,8 +5,8 @@
     <boot>
         <logging asyncConsole="false"/>
         <expections 
-            breakOnFlowException="true" 
-            breakOnUnstableLoadOrder="false"
+            breakOnUnstableLoadOrder="true"
+            breakOnOverwriteOfEngine="true"
         />
     </boot>
     

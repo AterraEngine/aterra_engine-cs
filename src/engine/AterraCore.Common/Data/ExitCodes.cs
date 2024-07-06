@@ -9,5 +9,6 @@ public enum ExitCodes {
     GeneralError = 1,
     UnstableFlexiPlugLoadOrder = 2,
     UnstableBootOperationOrder = 3,
-    PluginIdsExhausted = 4
+    PluginIdsExhausted = 4,
+    EngineOverwritten = 5,
 }

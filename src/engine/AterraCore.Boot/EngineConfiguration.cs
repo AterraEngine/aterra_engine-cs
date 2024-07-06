@@ -14,8 +14,6 @@ using AterraCore.Contracts.FlexiPlug;
 using AterraCore.DI;
 using AterraCore.Loggers;
 using AterraEngine;
-using CodeOfChaos.Extensions;
-using CodeOfChaos.Extensions.Serilog;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using static AterraCore.Common.Data.BootFlowOfOperations;
@@ -27,22 +25,10 @@ namespace AterraCore.Boot;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class EngineConfiguration(ILogger? logger = null) : IEngineConfiguration {
-    private ConfigurationWarnings _warnings = Nominal;
     public LinkedList<ServiceDescriptor> ServicesDefault { get; } = [];
     public LinkedList<ServiceDescriptor> ServicesStatic { get; } = [];
 
-    public ConfigurationWarnings Warnings {
-        get => _warnings;
-        private set {
-            if (EngineConfig.BootConfig.Exceptions.BreakOnFlowException) {
-                StartupLog.ThrowFatal<InvalidOperationException>(
-                    "Engine was not correctly configured with the following flags {@flags}", 
-                    _warnings.GetFlaggedAsValues().Select(f => f.ToString())
-                );
-            }
-            _warnings = value;
-        }
-    }
+    public ConfigurationWarnings Warnings => Nominal;
 
     public BootFlowOfOperations Flow => UnConfigured;
 
