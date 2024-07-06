@@ -9,7 +9,7 @@ namespace AterraCore.Loggers;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public static class EngineLogger {
-    public static LoggerConfiguration CreateConfiguration(bool asyncConsole) =>
+    private static LoggerConfiguration CreateConfiguration(bool asyncConsole) =>
         new LoggerConfiguration()
             .MinimumLevel.Verbose()
             .DefaultEnrich("Engine")

@@ -6,7 +6,6 @@ using AterraCore.Contracts;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.Nexities.Data.Assets;
 using AterraCore.Loggers;
-using CodeOfChaos.Extensions.Serilog;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 

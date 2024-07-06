@@ -31,12 +31,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Reference Include="..\..\..\src\engine\AterraCore.Common\bin\Debug\net8.0\AterraCore.Common.dll">
-            <CopyLocal>true</CopyLocal>
-        </Reference>
-        <Reference Include="..\..\..\src\engine\AterraCore.Nexities\bin\Debug\net8.0\AterraCore.Nexities.dll">
-            <CopyLocal>true</CopyLocal>
-        </Reference>
         <ProjectReference Include="..\AterraEngine.Analyzers\AterraEngine.Analyzers.csproj"/>
     </ItemGroup>
 

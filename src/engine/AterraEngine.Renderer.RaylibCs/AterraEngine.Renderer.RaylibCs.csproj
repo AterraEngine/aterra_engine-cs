@@ -7,6 +7,11 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <DocumentationFile>bin\Debug\AterraEngine.Renderer.RaylibCs.xml</DocumentationFile>
+      <NoWarn>1701;1702;1591</NoWarn>
+    </PropertyGroup>
+
     <ItemGroup>
         <PackageReference Include="CodeOfChaos.Extensions" Version="0.6.0" />
         <PackageReference Include="CodeOfChaos.Extensions.DependencyInjection" Version="0.1.1" />
