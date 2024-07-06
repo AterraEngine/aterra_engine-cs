@@ -6,11 +6,9 @@ using System.Reflection;
 using Xml.Elements;
 
 namespace AterraCore.Contracts.FlexiPlug;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
 public interface IPluginZipImporter<T> {
     string CheckSum { get; }
     bool TryGetPluginConfig([NotNullWhen(true)] out T? pluginConfig);

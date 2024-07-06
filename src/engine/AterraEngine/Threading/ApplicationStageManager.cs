@@ -1,18 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
 using AterraCore.Contracts.Renderer;
 using AterraCore.Contracts.Threading;
 using CodeOfChaos.Extensions;
 using JetBrains.Annotations;
 
 namespace AterraEngine.Threading;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
 [UsedImplicitly]
 public class ApplicationStageManager : IApplicationStageManager {
     private readonly Dictionary<ApplicationStage, IFrameProcessor> _frameProcessors = new();

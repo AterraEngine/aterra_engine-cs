@@ -5,11 +5,9 @@ using Raylib_cs;
 using System.Numerics;
 
 namespace AterraCore.Nexities.Lib.Components.HUD.Text;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
 public interface IRaylibHudTextPro {
     public Font Font { get; set; }
     public float FontSize { get; set; }

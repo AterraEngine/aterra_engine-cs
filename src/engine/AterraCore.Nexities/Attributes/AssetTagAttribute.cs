@@ -1,15 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Xml.Serialization;
+using AterraCore.Contracts.Nexities.Data.Attributes;
 
-namespace AterraCore.Nexities.Parsers.FileElements;
-
+namespace AterraCore.Nexities.Attributes;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
-public class InstanceDto {
-    [XmlAttribute("guid")]
-    public string? Guid { get; set; }
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+public class AssetTagAttribute(params string[]? tags) : IAssetTagAttribute {
+    public override string[] Tags { get; } = tags?.ToArray() ?? [];
 }

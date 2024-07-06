@@ -1,13 +1,11 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
-namespace AterraCore.Contracts.Boot.FlexiPlug.PluginDtos;
-
+namespace AterraCore.Contracts.Nexities.Data.Attributes;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
-public interface IPluginConfigDto {
-
+// ReSharper disable once InconsistentNaming
+public abstract class IAssetTagAttribute : Attribute {
+    public abstract string[] Tags { get; }
 }

@@ -8,7 +8,6 @@ using System.Numerics;
 using System.Text.RegularExpressions;
 
 namespace AterraCore.Common.Types.Nexities;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -35,6 +34,12 @@ public readonly struct PluginId :
     internal PluginId(Group matchGroup) {
         Value = matchGroup.Value;
     }
+    
+    // -----------------------------------------------------------------------------------------------------------------
+    // Implicit Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    public static implicit operator PluginId(string s) => new(s);
+    public static implicit operator string(PluginId pluginId) => pluginId.ToString();
     
     // -----------------------------------------------------------------------------------------------------------------
     // Helper Methods

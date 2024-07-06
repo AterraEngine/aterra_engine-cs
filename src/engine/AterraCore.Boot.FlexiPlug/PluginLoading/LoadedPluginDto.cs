@@ -3,7 +3,6 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.ConfigFiles.PluginConfig;
 using AterraCore.Common.Types.FlexiPlug;
-using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Boot.FlexiPlug;
 using AterraCore.Contracts.Nexities.Data.Assets;
 using AterraCore.DI;
@@ -12,7 +11,6 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
 namespace AterraCore.Boot.FlexiPlug.PluginLoading;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -49,7 +47,7 @@ public class LoadedPluginDto(ulong id, string filepath) : ILoadedPluginDto {
     private IEnumerable<(Type Type, ServiceLifetime Lifetime)>? _nexitiesAssets;
     private IEnumerable<(Type Type, ServiceLifetime Lifetime)> InjectableNexitiesAssetTypes => _nexitiesAssets ??= Types
         .SelectMany(type => type
-            .GetCustomAttributes<AbstractAssetAttribute>(false)// this way we only get the attribute once
+            .GetCustomAttributes<IAssetAttribute>(false)// this way we only get the attribute once
             .SelectMany(attribute => attribute.InterfaceTypes.Select(t => (Type:t, Lifetime:ServiceLifetime.Transient)))
         );
 
@@ -64,7 +62,6 @@ public class LoadedPluginDto(ulong id, string filepath) : ILoadedPluginDto {
                 factory: _ => EngineServices.CreateNexitiesAsset<IAssetInstance>(t.Attribute.Interface) ,
                 t.Attribute.Lifetime
             ))
-            
             .Concat(
                 InjectableNexitiesAssetTypes
                     .Select(t => new ServiceDescriptor(

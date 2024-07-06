@@ -8,7 +8,6 @@ using AterraCore.Nexities.Lib.Components.Transform2D;
 using JetBrains.Annotations;
 
 namespace AterraCore.Nexities.Lib.Entities.Actor;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------

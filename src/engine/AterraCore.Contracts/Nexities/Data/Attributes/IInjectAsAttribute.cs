@@ -1,11 +1,11 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using Serilog;
-
-namespace AterraCore.Contracts.Loggers;
-
+namespace AterraCore.Contracts.Nexities.Data.Attributes;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IStartupLogger : ILogger;
+// ReSharper disable once InconsistentNaming
+public abstract class IInjectAsAttribute : Attribute {
+    public abstract Guid Guid { get; }
+}

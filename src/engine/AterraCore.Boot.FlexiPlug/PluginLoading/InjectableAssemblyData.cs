@@ -4,11 +4,9 @@
 using AterraCore.Contracts.Boot.FlexiPlug;
 
 namespace AterraCore.Boot.FlexiPlug.PluginLoading;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
 public record InjectableAssemblyData(
     string NameSpace,
     string? NameReadable,

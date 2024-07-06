@@ -1,20 +1,17 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
 using Serilog;
 using Serilog.Formatting.Compact;
 using Serilog.Sinks.SystemConsole.Themes;
 using static CodeOfChaos.Ansi.AnsiColor;
 
 namespace AterraCore.Loggers;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
 public static class LoggerConfigurationExtensions {
-    private const string OutputTemplate = "[{Section,12}] [{Timestamp:HH:mm:ss.fff} {Level:u3}] {Message:lj}{NewLine}{Exception}";
+    private const string OutputTemplate = "[{Section,24} : {Timestamp:HH:mm:ss.fff} : {Level:u3}] | {Message:lj}{NewLine}{Exception}";
 
     private static readonly AnsiConsoleTheme Theme = new(
     new Dictionary<ConsoleThemeStyle, string> {

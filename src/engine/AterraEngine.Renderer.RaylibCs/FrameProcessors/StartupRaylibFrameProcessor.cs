@@ -1,18 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.Nexities.Data.Assets;
 using JetBrains.Annotations;
 using System.Numerics;
 
 namespace AterraEngine.Renderer.RaylibCs.FrameProcessors;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
 [UsedImplicitly]
 public class StartupRaylibFrameProcessor(IAssetAtlas assetAtlas, IPluginAtlas pluginAtlas) : AbstractRaylibFrameProcessor {
     protected override Color ClearColor { get; set; } = new(0, 0, 0, 0);

@@ -1,16 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
 using AterraCore.Common.Data;
 using Serilog;
 
 namespace AterraCore.Loggers;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
 // A "special" logger to be used before the service collection is built
 //      Don't use this after the startup procedure has ended.
 public static class StartupLogger {
@@ -19,7 +16,7 @@ public static class StartupLogger {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public static LoggerConfiguration CreateConfiguration(bool asyncConsole) =>
+    private static LoggerConfiguration CreateConfiguration(bool asyncConsole) =>
         new LoggerConfiguration()
             .MinimumLevel.Verbose()
             .DefaultEnrich("Startup")

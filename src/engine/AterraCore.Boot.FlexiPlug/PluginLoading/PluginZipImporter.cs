@@ -32,7 +32,6 @@ public class PluginZipImporter(ILogger logger, string zipPath) : IPluginZipImpor
         GC.SuppressFinalize(this);
     }
     public string CheckSum => _checkSum ??= ComputeSha256Hash();
-
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------

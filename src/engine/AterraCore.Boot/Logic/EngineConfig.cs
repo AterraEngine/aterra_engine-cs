@@ -8,13 +8,15 @@ using Serilog;
 using Xml;
 
 namespace AterraCore.Boot.Logic;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
 public static class EngineConfig {
-    public static IEngineConfiguration ImportEngineConfig(this IEngineConfiguration configuration, string filePath, bool outputToLog = true) {
+    public static IEngineConfiguration ImportEngineConfig(
+        this IEngineConfiguration configuration,
+        string filePath,
+        bool outputToLog = true
+    ) {
         ILogger logger = configuration.StartupLog;
             
         XmlParser<EngineConfigXml> configXmlParser = new(

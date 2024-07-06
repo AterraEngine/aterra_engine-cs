@@ -10,10 +10,8 @@ namespace AterraCore.Contracts;
 // ---------------------------------------------------------------------------------------------------------------------
 
 public interface IEngine {
-
-    public bool TryAssignStartingLevel(AssetId assetId);
-    public IEngine SubscribeToEvents();
-    public IEngine SpawnRenderThread();
-
-    public Task Run();
+    bool TryAssignStartingLevel(AssetId assetId);
+    IEngine SubscribeToEvents();
+    IEngine SpawnRenderThread();
+    Task Run();
 }

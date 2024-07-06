@@ -1,14 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.Types.Nexities;
 
-namespace AterraCore.Common.Types.FlexiPlug;
-
+namespace AterraCore.Contracts.Nexities.Data.Assets;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public enum PluginType {
-    CsProj,
-    ZipJson,
-    ZipXml
+// ReSharper disable once InconsistentNaming
+public abstract class IAssetAttribute : Attribute {
+    public abstract AssetId AssetId { get; }
+    public abstract CoreTags CoreTags { get; }
+    public abstract Type[] InterfaceTypes { get; }
 }

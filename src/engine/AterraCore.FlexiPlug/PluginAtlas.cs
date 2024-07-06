@@ -1,8 +1,6 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
-using AterraCore.Common.Types.FlexiPlug;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Boot.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug;
@@ -12,14 +10,11 @@ using JetBrains.Annotations;
 using System.Diagnostics.CodeAnalysis;
 
 namespace AterraCore.FlexiPlug;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
 [UsedImplicitly]
 public class PluginAtlas : IPluginAtlas {
-
     private IReadOnlyDictionary<string, IPluginRecord>? _pluginsByReadableNamesCache;
 
     private int? _totalAssetCountCache;
@@ -30,7 +25,7 @@ public class PluginAtlas : IPluginAtlas {
     public int TotalAssetCount => _totalAssetCountCache ??= Plugins.SelectMany(p => p.AssetTypes).Count();
 
     // -----------------------------------------------------------------------------------------------------------------
-    // Constructor or population Methods
+    // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public void ImportLoadedPluginDtos(IEnumerable<ILoadedPluginDto> plugins) => Plugins = new LinkedList<IPluginRecord>(
     plugins.Select(
@@ -42,10 +37,7 @@ public class PluginAtlas : IPluginAtlas {
     ));
     public void InvalidateAllCaches() => Plugins.IterateOver(plugin => plugin.InvalidateCaches());
 
-    // -----------------------------------------------------------------------------------------------------------------
-    // Methods
-    // -----------------------------------------------------------------------------------------------------------------
-    public IEnumerable<AssetRegistration> GetAssetRegistrations(string? pluginNameSpace = null, CoreTags filter = CoreTags.Asset) {
+   public IEnumerable<AssetRegistration> GetAssetRegistrations(string? pluginNameSpace = null, CoreTags filter = CoreTags.Asset) {
         // Given this is only done once (during project startup), caching this seems a bit unnecessary.
         return Plugins
             // Filter down to only the plugin we need
@@ -64,9 +56,12 @@ public class PluginAtlas : IPluginAtlas {
             );
     }
 
-    public IEnumerable<AssetRegistration> GetEntityRegistrations(string? pluginNameSpace = null) => GetAssetRegistrations(pluginNameSpace, CoreTags.Entity);
+    public IEnumerable<AssetRegistration> GetEntityRegistrations(string? pluginNameSpace = null) => 
+        GetAssetRegistrations(pluginNameSpace, CoreTags.Entity);
 
-    public IEnumerable<AssetRegistration> GetComponentRegistrations(string? pluginNameSpace = null) => GetAssetRegistrations(pluginNameSpace, CoreTags.Component);
+    public IEnumerable<AssetRegistration> GetComponentRegistrations(string? pluginNameSpace = null) =>
+        GetAssetRegistrations(pluginNameSpace, CoreTags.Component);
 
-    public bool TryGetPluginByReadableName(string readableName, [NotNullWhen(true)] out IPluginRecord? plugin) => PluginsByReadableNames.TryGetValue(readableName, out plugin);
+    public bool TryGetPluginByReadableName(string readableName, [NotNullWhen(true)] out IPluginRecord? plugin) => 
+        PluginsByReadableNames.TryGetValue(readableName, out plugin);
 }

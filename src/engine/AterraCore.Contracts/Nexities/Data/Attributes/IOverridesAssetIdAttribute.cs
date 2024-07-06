@@ -1,9 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraCore.Nexities.Parsers.NamedValues.PreMade;
+using AterraCore.Common.Types.Nexities;
 
+namespace AterraCore.Contracts.Nexities.Data.Attributes;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class NamedValueStringAttribute(string? name = null) : NamedValueAttribute(name);
+// ReSharper disable once InconsistentNaming
+public abstract class IOverridesAssetIdAttribute : Attribute {
+    public abstract AssetId AssetId { get; }
+}

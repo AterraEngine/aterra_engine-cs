@@ -1,17 +1,16 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
 using AterraCore.Contracts.Nexities.Data.Assets;
+using AterraCore.Contracts.Nexities.Data.Attributes;
 
 namespace AterraCore.Contracts.FlexiPlug.Plugin;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public record AssetTypeRecord(
     Type Type,
-    AbstractAssetAttribute AssetAttribute,
-    IEnumerable<AbstractOverridesAssetIdAttribute> OverwritesAssetIdAttributes,
-    IEnumerable<AbstractAssetTagAttribute> AssetTagAttributes
+    IAssetAttribute AssetAttribute,
+    IEnumerable<IOverridesAssetIdAttribute> OverwritesAssetIdAttributes,
+    IEnumerable<IAssetTagAttribute> AssetTagAttributes
 );

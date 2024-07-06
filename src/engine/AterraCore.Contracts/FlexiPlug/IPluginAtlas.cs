@@ -7,11 +7,9 @@ using AterraCore.Contracts.FlexiPlug.Plugin;
 using System.Diagnostics.CodeAnalysis;
 
 namespace AterraCore.Contracts.FlexiPlug;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
 public interface IPluginAtlas {
     public int TotalAssetCount { get; }
 

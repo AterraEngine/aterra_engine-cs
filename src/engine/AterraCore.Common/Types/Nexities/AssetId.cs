@@ -7,7 +7,6 @@ using System.Numerics;
 using System.Text.RegularExpressions;
 
 namespace AterraCore.Common.Types.Nexities;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -44,6 +43,12 @@ public readonly struct AssetId : IEqualityOperators<AssetId, AssetId, bool>, IEq
             : throw new ArgumentException("Namespace for the asset could not be determined")
         );
     }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Implicit Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    public static implicit operator AssetId(string s) => new(s);
+    public static implicit operator string(AssetId assetId) => assetId.ToString();
 
     // -----------------------------------------------------------------------------------------------------------------
     // Helper Methods

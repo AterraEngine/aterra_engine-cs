@@ -1,16 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
 using AterraCore.Contracts.Renderer;
 using JetBrains.Annotations;
 
 namespace AterraEngine.Renderer.RaylibCs.FrameProcessors;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
 [UsedImplicitly]
 public abstract class AbstractRaylibFrameProcessor : IFrameProcessor {
     protected virtual Color ClearColor { get; set; } = Color.Black;
