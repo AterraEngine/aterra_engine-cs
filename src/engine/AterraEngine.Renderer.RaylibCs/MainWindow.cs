@@ -1,22 +1,17 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
-using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Data.Assets;
 using AterraCore.Contracts.OmniVault;
 using AterraCore.Contracts.Renderer;
 using AterraCore.DI;
-using AterraCore.Nexities.Lib.Components.Sprite2D;
 using AterraEngine.Renderer.RaylibCs.FrameProcessors;
 using JetBrains.Annotations;
 
 namespace AterraEngine.Renderer.RaylibCs;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
 [UsedImplicitly]
 public class MainWindow(IApplicationStageManager applicationStageManager, IAssetInstanceAtlas instanceAtlas, ITextureAtlas textureAtlas) : IMainWindow {
     private static int Width => 800;

@@ -12,11 +12,9 @@ using static AterraCore.Common.Data.ConfigurationWarnings;
 using static CodeOfChaos.Extensions.DependencyInjection.ServiceDescriptorExtension;
 
 namespace AterraCore.Boot.OmniVault;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
 public class OmniVaultConfiguration(ILogger logger, EngineConfigXml engineConfigDto) : IOmniVaultConfiguration {
     public LinkedList<ServiceDescriptor> ServicesDefault { get; } = new([
         NewServiceDescriptor<ITextureAtlas, TextureAtlas>(ServiceLifetime.Singleton),

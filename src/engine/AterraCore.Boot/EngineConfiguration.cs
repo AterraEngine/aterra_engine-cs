@@ -23,7 +23,6 @@ using static AterraCore.Common.Data.ConfigurationWarnings;
 using static CodeOfChaos.Extensions.DependencyInjection.ServiceDescriptorExtension;
 
 namespace AterraCore.Boot;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -104,7 +103,6 @@ public class EngineConfiguration(ILogger? logger = null) : IEngineConfiguration 
     }
 
     public IEngine CreateEngine() {
-
         // Populate Plugin Atlas with plugin list
         //      Is a singleton anyway, so doesn't matter when we assign this data
         IPluginAtlas pluginAtlas = EngineServices.GetPluginAtlas();

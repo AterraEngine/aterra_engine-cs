@@ -10,7 +10,6 @@
       <ProjectReference Include="..\AterraCore.Boot.FlexiPlug\AterraCore.Boot.FlexiPlug.csproj" />
       <ProjectReference Include="..\AterraCore.Contracts\AterraCore.Contracts.csproj" />
       <ProjectReference Include="..\AterraCore.Nexities.Lib\AterraCore.Nexities.Lib.csproj" />
-      <ProjectReference Include="..\AterraCore.Nexities.Parsers\AterraCore.Nexities.Parsers.csproj" />
       <ProjectReference Include="..\AterraCore.Nexities\AterraCore.Nexities.csproj" />
     </ItemGroup>
 

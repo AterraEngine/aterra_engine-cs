@@ -4,7 +4,6 @@
 using AterraCore.Boot.FlexiPlug.PluginLoading;
 using AterraCore.Common.ConfigFiles.EngineConfig;
 using AterraCore.Common.Data;
-using AterraCore.Contracts.Boot;
 using AterraCore.Contracts.Boot.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.FlexiPlug;
@@ -16,12 +15,14 @@ using static AterraCore.Common.Data.ConfigurationWarnings;
 using static CodeOfChaos.Extensions.DependencyInjection.ServiceDescriptorExtension;
 
 namespace AterraCore.Boot.FlexiPlug;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
-public class FlexiPlugConfiguration(ILogger logger, EngineConfigXml engineConfigDto, IPluginLoader pluginLoader) : IFlexiPlugConfiguration {
+public class FlexiPlugConfiguration(
+    ILogger logger,
+    EngineConfigXml engineConfigDto, 
+    IPluginLoader pluginLoader
+) : IFlexiPlugConfiguration {
     public LinkedList<ServiceDescriptor> ServicesDefault { get; } = [];
     public LinkedList<ServiceDescriptor> ServicesStatic { get; } = new ([
         NewServiceDescriptor<IPluginAtlas, PluginAtlas>(ServiceLifetime.Singleton),

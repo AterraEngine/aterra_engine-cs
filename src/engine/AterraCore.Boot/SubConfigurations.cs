@@ -12,7 +12,6 @@ namespace AterraCore.Boot;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
 public record SubConfigurations(
     IFlexiPlugConfiguration FlexiPlug,
     INexitiesConfiguration Nexities,

@@ -1,7 +1,6 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
 using AterraCore.Common.Data;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts;
@@ -9,23 +8,19 @@ using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.Nexities.Data.Assets;
 using AterraCore.Contracts.Nexities.Data.Levels;
 using AterraCore.Contracts.Nexities.Data.Worlds;
-using AterraCore.Contracts.Nexities.DataParsing;
-using AterraCore.Contracts.OmniVault;
 using AterraCore.Contracts.Renderer;
 using AterraCore.DI;
-using AterraCore.Nexities.Lib.Components.Sprite2D;
+using AterraCore.Loggers;
 using AterraCore.Nexities.Lib.Entities.Actor;
 using AterraEngine.Threading;
 using CodeOfChaos.Extensions;
 using CodeOfChaos.Extensions.Serilog;
 using JetBrains.Annotations;
-using Raylib_cs;
 using Serilog;
 using System.Collections.Concurrent;
 using System.Numerics;
 
 namespace AterraEngine;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -37,13 +32,12 @@ public class Engine(
     IPluginAtlas pluginAtlas,
     IWorld world,
     RenderThreadEvents renderThreadEvents,
-    IApplicationStageManager applicationStageManager,
-    ITextureAtlas textureAtlas,
-    IAssetDataXmlService assetDataXmlService
+    IApplicationStageManager applicationStageManager
 ) : IEngine {
     private readonly CancellationTokenSource _ctsRenderThread = new();
     private readonly TaskCompletionSource<bool> _openGlContextCreated = new();
     private ConcurrentQueue<TextureQueueRecord> _textureQueue = new();
+    private ILogger Logger { get; } = logger.ForEngineContext();
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
@@ -56,7 +50,7 @@ public class Engine(
         renderThreadEvents.EventApplicationStageChange += applicationStageManager.ReceiveStageChange;
 
         renderThreadEvents.EventOpenGlContextCreated += (_, _) => { _openGlContextCreated.SetResult(true); };
-        renderThreadEvents.EventOpenGlContextCreated += (_, _) => { logger.Information("OpenGL Context Created"); };
+        renderThreadEvents.EventOpenGlContextCreated += (_, _) => { Logger.Information("OpenGL Context Created"); };
         return this;
     }
 
@@ -66,13 +60,13 @@ public class Engine(
         renderThreadProcessor.TextureQueue = _textureQueue;
         var renderThread = new Thread(renderThreadProcessor.Run);
         renderThread.Start();
-        logger.Information("Spawned RenderThread");
+        Logger.Information("Spawned RenderThread");
 
         return this;
     }
 
     public async Task Run() {
-        logger.Information("Entered AterraEngine");
+        Logger.Information("Entered AterraEngine");
 
         // Don't wait forever for the opengl context to be created, else we will have many issues
         try {
@@ -80,7 +74,7 @@ public class Engine(
             await _openGlContextCreated.Task.WithCancellation(cts.Token);
         }
         catch (OperationCanceledException ex) {
-            logger.Fatal(ex, "Render Thread did not signal back of successful window creation before the timeout period");
+            Logger.Fatal(ex, "Render Thread did not signal back of successful window creation before the timeout period");
             await HandleFatalExceptionGracefully();
         }
 
@@ -89,7 +83,7 @@ public class Engine(
         foreach (AssetRegistration assetRegistration in pluginAtlas.GetAssetRegistrations()) {
             await Task.Delay(100); // TODO REMOVE DELAY
             if (!assetAtlas.TryAssignAsset(assetRegistration, out AssetId? _)) {
-                logger.Warning("Type {Type} could not be assigned as an asset", assetRegistration.Type);
+                Logger.Warning("Type {Type} could not be assigned as an asset", assetRegistration.Type);
             }
         }
 
@@ -149,6 +143,6 @@ public class Engine(
     private async Task HandleFatalExceptionGracefully() {
         await _ctsRenderThread.CancelAsync();
 
-        logger.ExitFatal((int)ExitCodes.GeneralError, "Fatally Crashing gracefully");
+        Logger.ExitFatal((int)ExitCodes.GeneralError, "Fatally Crashing gracefully");
     }
 }

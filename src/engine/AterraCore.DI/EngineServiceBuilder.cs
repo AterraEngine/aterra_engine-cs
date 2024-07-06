@@ -8,12 +8,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
 namespace AterraCore.DI;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class EngineServiceBuilder(ILogger logger) : IEngineServiceBuilder {
-    public ILogger Logger { get; set; } = logger.ForEngineServiceBuilderContext();
+    private ILogger Logger { get; set; } = logger.ForEngineServiceBuilderContext();
     public IServiceCollection ServiceCollection { get; } = new ServiceCollection();
 
     // -----------------------------------------------------------------------------------------------------------------

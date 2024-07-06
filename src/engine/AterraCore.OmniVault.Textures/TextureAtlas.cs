@@ -7,11 +7,9 @@ using AterraCore.Contracts.OmniVault;
 using AterraCore.Loggers;
 using JetBrains.Annotations;
 using Raylib_cs;
-
 using Serilog;
 
 namespace AterraCore.OmniVault.Textures;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------

@@ -1,10 +1,11 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraCore.Nexities.Lib.Components.Transform2D;
+using AterraCore.Common.ConfigFiles.PluginConfig;
+using AterraCore.Contracts.Boot.FlexiPlug;
+
+namespace AterraCore.Contracts.FlexiPlug;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IHasTransform2D {
-    public ITransform2D Transform2D { get; }
-}
+public delegate ILoadedPluginDto ZipImportCallback(ILoadedPluginDto pluginData, IPluginZipImporter<PluginConfigXml> zipImporter);

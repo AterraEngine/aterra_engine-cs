@@ -2,7 +2,6 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.ConfigFiles.EngineConfig.Elements;
-using AterraCore.Common.Types.FlexiPlug;
 using CodeOfChaos.Extensions;
 using CodeOfChaos.Extensions.Serilog;
 using Serilog;

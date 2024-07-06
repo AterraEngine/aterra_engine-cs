@@ -8,11 +8,9 @@ using CodeOfChaos.Extensions;
 using System.Reflection;
 
 namespace AterraCore.FlexiPlug;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
 public class PluginRecord : IPluginRecord {
     public required string NameSpace { get; init; }
     private readonly string? _nameReadableCache; 
@@ -47,36 +45,4 @@ public class PluginRecord : IPluginRecord {
     public void InvalidateCaches() {
         _assetTypeRecords = null;
     }
-    
-    
-    // public IEnumerable<ServiceDescriptor> GetNexitiesComponents() {
-    //     return Types
-    //         .Select(t => new { Type = t, Attribute = t.GetCustomAttribute<ComponentAttribute>(false) })// this way we only get the attribute once
-    //         .Where(t => t.Attribute != null)
-    //         .Select(t => new ServiceDescriptor(
-    //         t.Attribute?.InterfaceType ?? t.Type,
-    //         t.Type,
-    //         t.Attribute?.ServiceLifetime switch {
-    //             ServiceLifetimeType.Singleton => ServiceLifetime.Singleton,
-    //             ServiceLifetimeType.Multiple => ServiceLifetime.Transient,
-    //             // (AssetInstanceType.Pooled) => ServiceLifetime.Pooled
-    //             _ => ServiceLifetime.Transient
-    //         }
-    //         ));
-    // }
-    
-    // public IEnumerable<ServiceDescriptor> GetNexitiesEntities() {
-    //     return Types
-    //         .Select(t => new { Type = t, Attribute = t.GetCustomAttribute<EntityAttribute>(false) })// this way we only get the attribute once
-    //         .Where(t => t.Attribute != null)
-    //         .Select(t => new ServiceDescriptor(
-    //         t.Attribute?.Interface ?? t.Type,
-    //         t.Type,
-    //         t.Attribute?.ServiceLifetime switch {
-    //             ServiceLifetimeType.Singleton => ServiceLifetime.Singleton,
-    //             ServiceLifetimeType.Multiple => ServiceLifetime.Transient,
-    //             _ => ServiceLifetime.Transient
-    //         }
-    //         ));
-    // }
 }
