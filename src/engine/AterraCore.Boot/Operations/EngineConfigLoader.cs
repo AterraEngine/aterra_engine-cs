@@ -19,7 +19,7 @@ namespace AterraCore.Boot.Operations;
 // ---------------------------------------------------------------------------------------------------------------------
 public class EngineConfigLoader(string? configFilePath = null) : IBootOperation {
     public AssetId AssetId => EngineConfigLoaderOperation;
-    private ILogger Logger { get; } = StartupLogger.CreateLogger(false).ForContext("Context", "BO : EngineConfigLoader"); 
+    private ILogger Logger { get; } = StartupLogger.CreateLogger(false).ForContext("Section", "BO : EngineConfigLoader"); 
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods

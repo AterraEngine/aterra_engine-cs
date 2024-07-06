@@ -20,7 +20,7 @@ namespace AterraCore.Boot.Operations;
 // ---------------------------------------------------------------------------------------------------------------------
 public class RegisterWarnings : IBootOperation {
     public AssetId AssetId => RegisterWarningsOperation;
-    private ILogger Logger { get; } = StartupLogger.CreateLogger(false).ForContext("Context", "BO : RegisterWarnings"); 
+    private ILogger Logger { get; } = StartupLogger.CreateLogger(false).ForContext("Section", "BO : RegisterWarnings"); 
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods

@@ -6,6 +6,7 @@ using AterraCore.Contracts;
 using AterraCore.Contracts.Boot;
 using AterraCore.Loggers;
 using CodeOfChaos.Extensions;
+using CodeOfChaos.Extensions.Serilog;
 using Serilog;
 using System.Diagnostics.CodeAnalysis;
 using static AterraCore.Common.Data.PredefinedAssetIds.NewConfigurationWarnings;
@@ -52,7 +53,7 @@ public class NewEngineConfiguration(ILogger? logger = null) : INewEngineConfigur
             case (null, null) : {
                 Logger.Debug("No dependencies were defined");
                 operations.AddFirst(newOperation);
-                return VerifyDependencies(operations); 
+                return true; 
             }
             
             // Only a "before" dependency was defined
@@ -60,7 +61,7 @@ public class NewEngineConfiguration(ILogger? logger = null) : INewEngineConfigur
             case (null, not null) when operations.Find(n => n.AssetId == (AssetId)before) is {} node: {
                 Logger.Debug("Only a \"before\" dependency was defined AND the dependency is present");
                 operations.AddBefore(node, newOperation);
-                return VerifyDependencies(operations);
+                return true;
             }
             
             // Only a "before" dependency was defined
@@ -69,7 +70,7 @@ public class NewEngineConfiguration(ILogger? logger = null) : INewEngineConfigur
                 Logger.Debug("Only a \"before\" dependency was defined BUT operation under that AssetId was not present ");
                 if (!TryResolveNested((AssetId)before, out LinkedListNode<IBootOperation>? node, operations)) return false;
                 operations.AddBefore(node, newOperation);
-                return VerifyDependencies(operations);
+                return true;
             }
             
             // Only an "after" dependency was defined
@@ -77,7 +78,7 @@ public class NewEngineConfiguration(ILogger? logger = null) : INewEngineConfigur
             case (not null, null) when operations.Find(n => n.AssetId == (AssetId)after) is {} node: {
                 Logger.Debug("Only an \"after\" dependency was defined AND the dependency is already present");
                 operations.AddAfter(node, newOperation);
-                return VerifyDependencies(operations);
+                return true;
             }
             
             // Only an "after" dependency was defined
@@ -86,7 +87,7 @@ public class NewEngineConfiguration(ILogger? logger = null) : INewEngineConfigur
                 Logger.Debug("Only an \"after\" dependency was defined BUT operation under that AssetId was not present ");
                 if (!TryResolveNested((AssetId)after, out LinkedListNode<IBootOperation>? node, operations)) return false;
                 operations.AddAfter(node, newOperation);
-                return VerifyDependencies(operations);
+                return true;
             }
             
             // Both an "after" and a "before" dependencies were defined
@@ -104,12 +105,9 @@ public class NewEngineConfiguration(ILogger? logger = null) : INewEngineConfigur
                     ?? (TryResolveNested((AssetId)before, out LinkedListNode<IBootOperation>? bNode, operations) ? bNode : null);
                 if (beforeNode is null) return false;
                 
-                // Actually check if it can be placed between the nodes
-                if (IsNodeBefore(afterNode, beforeNode)) {
-                    operations.AddBefore(beforeNode, newOperation);
-                    return VerifyDependencies(operations);
-                }
-                break;
+                if (!IsNodeBefore(afterNode, beforeNode)) return false;
+                operations.AddBefore(beforeNode, newOperation);
+                return true;
             } 
         }
         return false;
@@ -180,11 +178,15 @@ public class NewEngineConfiguration(ILogger? logger = null) : INewEngineConfigur
     }
     
     public INewEngineConfiguration RunBootOperations() {
+        Logger.Information("Started Resolving Boot Operations");
         foreach ((IBootOperation operation, AssetId? after, AssetId? before) in Dependencies.Values) {
             if (!TryResolveBootOperation(operation, after, before)) {
                 Logger.Warning("Operation {operation} could not resolved", operation );
+            } else {
+                Logger.Information("Operation {operation} resolved correctly", operation );
             }
         }
+        if (!VerifyDependencies(OrderOfBootOperations)) Logger.ThrowFatal<SystemException>("Operations were not able to be verified");
         
         // Actually stuff
         var components = new BootOperationComponents(
