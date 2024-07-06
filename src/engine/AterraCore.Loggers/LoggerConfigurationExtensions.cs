@@ -12,7 +12,6 @@ namespace AterraCore.Loggers;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
 public static class LoggerConfigurationExtensions {
     private const string OutputTemplate = "[{Section,24} : {Timestamp:HH:mm:ss.fff} : {Level:u3}] | {Message:lj}{NewLine}{Exception}";
 

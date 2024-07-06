@@ -6,11 +6,9 @@ using AterraCore.Contracts.DI;
 using Serilog;
 
 namespace AterraCore.Contracts.Boot;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
 public interface IEngineConfiguration : IBootConfiguration {
     public BootFlowOfOperations Flow { get; }
     public ILogger StartupLog { get; }

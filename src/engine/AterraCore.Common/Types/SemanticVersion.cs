@@ -5,7 +5,6 @@ using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 
 namespace AterraCore.Common.Types;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Support Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -105,26 +104,11 @@ public partial struct SemanticVersion : IComparable<SemanticVersion>, IEquatable
     public override bool Equals(object? obj) => obj is SemanticVersion version && Equals(version);
 
     public int CompareTo(SemanticVersion other) {
-        if (Major != other.Major) {
-            return Major.CompareTo(other.Major);
-        }
-
-        if (Minor != other.Minor) {
-            return Minor.CompareTo(other.Minor);
-        }
-
-        if (Patch != other.Patch) {
-            return Patch.CompareTo(other.Patch);
-        }
-
-        if (Addendum == null && other.Addendum != null) {
-            return -1;
-        }
-
-        if (Addendum != null && other.Addendum == null) {
-            return 1;
-        }
-
+        if (Major != other.Major) return Major.CompareTo(other.Major);
+        if (Minor != other.Minor) return Minor.CompareTo(other.Minor);
+        if (Patch != other.Patch) return Patch.CompareTo(other.Patch);
+        if (Addendum == null && other.Addendum != null) return -1;
+        if (Addendum != null && other.Addendum == null) return 1;
         return 0;
     }
     public override int GetHashCode() => (Major, Minor, Patch, Addendum).GetHashCode();

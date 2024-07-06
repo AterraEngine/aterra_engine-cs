@@ -2,7 +2,6 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 namespace AterraCore.Common.Data;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -11,11 +10,7 @@ public enum ConfigurationWarnings : ulong {
     Nominal = 0ul,
 
     PluginLoadOrderUnstable = 1ul << 0,
-    UnstableAssembly = 1ul << 1,
-    UnstablePlugin = 1ul << 2,
-    FlowOfOperationsNotRespected = 1ul << 3,
-    NoPluginsDefined = 1ul << 4,
-    InvalidConfiguration = 1ul << 5,
+    UnstablePlugin =          1ul << 2,
     
     
 }

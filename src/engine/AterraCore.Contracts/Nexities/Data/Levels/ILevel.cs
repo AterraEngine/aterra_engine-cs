@@ -11,5 +11,4 @@ namespace AterraCore.Contracts.Nexities.Data.Levels;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
 public interface ILevel : INexitiesEntity, IHasAssetTree, IHasLevelDataSystems;
