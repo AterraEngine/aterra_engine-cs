@@ -112,24 +112,6 @@ public class Engine(
                 RecordType : TextureQueueRecordType.Register
             ));
         }
-        
-        
-        Console.WriteLine() ;
-        Console.WriteLine() ;
-        Console.WriteLine() ;
-        Console.WriteLine() ;
-        Console.WriteLine() ;
-        Console.WriteLine() ;
-        Console.WriteLine() ;
-        Console.WriteLine() ;
-        Console.WriteLine() ;
-        Console.WriteLine() ;
-        Console.WriteLine() ;
-        Console.WriteLine() ;
-        Console.WriteLine() ;
-        Console.WriteLine() ;
-        Console.WriteLine() ;
-        Console.WriteLine() ;
 
         // Task.Run(() => {
         //     Task.Delay(5000, cts.Token);
