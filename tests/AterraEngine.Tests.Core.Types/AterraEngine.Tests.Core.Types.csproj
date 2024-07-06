@@ -11,10 +11,10 @@
 
     <ItemGroup>
         <PackageReference Include="CodeOfChaos.Extensions" Version="0.4.3" />
-        <PackageReference Include="CodeOfChaos.Extensions.DependencyInjection" Version="0.1.0" />
-        <PackageReference Include="CodeOfChaos.Extensions.Serilog" Version="0.2.0" />
+        <PackageReference Include="CodeOfChaos.Extensions.DependencyInjection" Version="0.1.1" />
+        <PackageReference Include="CodeOfChaos.Extensions.Serilog" Version="0.2.2" />
         <PackageReference Include="JetBrains.Annotations" Version="2023.3.0"/>
-        <PackageReference Include="Microsoft.Extensions.ObjectPool.DependencyInjection" Version="8.5.0" />
+        <PackageReference Include="Microsoft.Extensions.ObjectPool.DependencyInjection" Version="8.6.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
         <PackageReference Include="xunit" Version="2.8.1" />
         <PackageReference Include="xunit.runner.visualstudio" Version="2.8.1">

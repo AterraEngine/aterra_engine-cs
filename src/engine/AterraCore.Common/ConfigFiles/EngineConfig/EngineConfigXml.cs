@@ -25,7 +25,6 @@ public class EngineConfigXml {
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public void OutputToLog(ILogger logger) {
-
         ValuedStringBuilder valuedBuilder = new ValuedStringBuilder()
             .Append("Engine PluginDtos loaded with the following data:")
             .AppendLineValued("- Engine version: ", Engine.Version)
