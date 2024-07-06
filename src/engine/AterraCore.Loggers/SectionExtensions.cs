@@ -17,4 +17,5 @@ public static class SectionExtensions {
     public static ILogger ForRaylibContext(this ILogger logger) => logger.ForContext("Section", "Raylib");
     public static ILogger ForStartupContext(this ILogger logger) => logger.ForContext("Section", "Startup");
     public static ILogger ForTextureAtlasContext(this ILogger logger) => logger.ForContext("Section", "TextureAtlas");
+    public static ILogger ForConfigurationWarningAtlasContext(this ILogger logger) => logger.ForContext("Section", "ConfigurationWarningAtlas");
 }

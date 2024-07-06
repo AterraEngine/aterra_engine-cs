@@ -25,7 +25,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="CodeOfChaos.Extensions" Version="0.4.3" />
+        <PackageReference Include="CodeOfChaos.Extensions" Version="0.6.0" />
         <PackageReference Include="CodeOfChaos.Extensions.DependencyInjection" Version="0.1.1" />
         <PackageReference Include="CodeOfChaos.Extensions.Serilog" Version="0.2.2" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0"/>
