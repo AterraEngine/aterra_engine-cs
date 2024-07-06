@@ -11,7 +11,6 @@ namespace AterraCore.Loggers;
 /// Contains extension methods for the <see cref="ILogger"/> interface.
 /// </summary>
 public static class SectionExtensions {
-    
     /// <summary>
     /// Extends the logger with a context for AssetAtlas section.
     /// </summary>

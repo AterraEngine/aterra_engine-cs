@@ -14,19 +14,42 @@ namespace AterraCore.DI;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
+/// <summary>
+/// Provides various engine-related services such as dependency injection, logging, and asset management.
+/// </summary>
 public static class EngineServices {
+    /// <summary>
+    /// Provides access to various services in the AterraCore Engine.
+    /// </summary>
     private static ServiceProvider ServiceProvider { get; set; } = null!;
-
+    
+    /// <summary>
+    /// Represents the logger used in the EngineServices class.
+    /// </summary>
     private static ILogger? _logger;
+
+    /// <summary>
+    /// Provides logging functionality for the application.
+    /// </summary>
     private static ILogger Logger => _logger ??= GetLogger().ForEngineServicesContext(); 
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
+    /// <summary>
+    /// Builds the service provider using the provided service collection.
+    /// </summary>
+    /// <param name="serviceCollection">The service collection.</param>
     public static void BuildServiceProvider(IServiceCollection serviceCollection) {
         ServiceProvider = serviceCollection.BuildServiceProvider();
     }
 
+    /// <summary>
+    /// Retrieves an instance of the specified service type.
+    /// </summary>
+    /// <typeparam name="T">The type of the service to retrieve.</typeparam>
+    /// <returns>An instance of the specified service type.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when the service type could not be found.</exception>
     public static T GetService<T>() where T : notnull {
         try {
             return ServiceProvider.GetRequiredService<T>();
@@ -38,8 +61,31 @@ public static class EngineServices {
         }
     }
 
+    /// <summary>
+    /// Creates an instance of the specified type with the required services.
+    /// </summary>
+    /// <typeparam name="T">The type of the instance to create.</typeparam>
+    /// <returns>
+    /// An instance of the specified type.
+    /// </returns>
+    /// <remarks>
+    /// This method uses the <see cref="IServiceProvider"/> to resolve dependencies and create the instance of the specified type.
+    /// </remarks>
     public static T CreateWithServices<T>() => CreateWithServices<T>(typeof(T));
+    /// <summary>
+    /// Creates an instance of type T with the registered services.
+    /// </summary>
+    /// <typeparam name="T">The type of the object to be created.</typeparam>
+    /// <param name="objectType">The type of the object to be created.</param>
+    /// <returns>The created instance of type T.</returns>
     public static T CreateWithServices<T>(Type objectType) => (T)ActivatorUtilities.CreateInstance(ServiceProvider, objectType);
+    /// <summary>
+    /// Creates an instance of a Nexities asset of the specified type.
+    /// </summary>
+    /// <typeparam name="T">The type of the asset to create.</typeparam>
+    /// <param name="objectType">The type object of the asset.</param>
+    /// <returns>An instance of the specified asset type.</returns>
+    /// <exception cref="InvalidOperationException">Thrown if the object could not be created.</exception>
     public static T CreateNexitiesAsset<T>(Type objectType) => GetAssetInstanceAtlas().TryCreate(objectType, out IAssetInstance? instance)
         ? (T)instance
         : throw new InvalidOperationException("Object could not be created");
@@ -47,9 +93,29 @@ public static class EngineServices {
     // -----------------------------------------------------------------------------------------------------------------
     // Default Systems Quick access
     // -----------------------------------------------------------------------------------------------------------------
+    /// <summary>
+    /// Retrieves the logger instance for the EngineServices context.
+    /// </summary>
+    /// <returns>The logger instance.</returns>
     public static ILogger GetLogger() => GetService<ILogger>();
+    /// <summary>
+    /// Retrieves an instance of the <see cref="IEngine"/> interface.
+    /// </summary>
+    /// <returns>An instance of the <see cref="IEngine"/> interface.</returns>
     public static IEngine GetEngine() => GetService<IEngine>();
+    /// <summary>
+    /// Retrieves the instance of the plugin atlas service.
+    /// </summary>
+    /// <returns>The instance of the plugin atlas service.</returns>
     public static IPluginAtlas GetPluginAtlas() => GetService<IPluginAtlas>();
+    /// <summary>
+    /// Retrieves an instance of the asset atlas.
+    /// </summary>
+    /// <returns>An instance of the asset atlas.</returns>
     public static IAssetAtlas GetAssetAtlas() => GetService<IAssetAtlas>();
+    /// <summary>
+    /// Retrieves the instance atlas for asset instances.
+    /// </summary>
+    /// <returns>The asset instance atlas.</returns>
     public static IAssetInstanceAtlas GetAssetInstanceAtlas() => GetService<IAssetInstanceAtlas>();
 }
