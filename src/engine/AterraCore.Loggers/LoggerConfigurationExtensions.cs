@@ -17,7 +17,8 @@ public static class LoggerConfigurationExtensions {
     /// <summary>
     /// The output template used for formatting log messages.
     /// </summary>
-    private const string OutputTemplate = "[{Section,24} : {Timestamp:HH:mm:ss.fff} : {Level:u3}] | {Message:lj}{NewLine}{Exception}";
+    public const string OutputTemplateEngine = "[ {Section,24} : {Timestamp:HH:mm:ss.fff} : {Level:u3}] | {Message:lj} {NewLine}{Exception}";
+    public const string OutputTemplateStartup = "[ {IsBootOperation,-4}{Section,20} : {Timestamp:HH:mm:ss.fff} : {Level:u3}] | {Message:lj} {NewLine}{Exception}";
 
     #region Theme
     /// <summary>
@@ -85,11 +86,12 @@ public static class LoggerConfigurationExtensions {
     /// Writes log events to the console sink with default configuration.
     /// </summary>
     /// <param name="lc">The <see cref="LoggerConfiguration"/> object.</param>
+    /// <param name="outputTemplate">Serilog console template</param>
     /// <returns>The updated <see cref="LoggerConfiguration"/> object.</returns>
-    public static LoggerConfiguration DefaultSinkConsole(this LoggerConfiguration lc) =>
+    public static LoggerConfiguration DefaultSinkConsole(this LoggerConfiguration lc, string? outputTemplate = null) =>
         lc.WriteTo.Console(
         theme: Theme,
-        outputTemplate: OutputTemplate
+        outputTemplate: outputTemplate ?? OutputTemplateEngine
         );
 
     /// <summary>
@@ -97,27 +99,31 @@ public static class LoggerConfigurationExtensions {
     /// Using the async sink avoids any performance issues during gameplay.
     /// </summary>
     /// <param name="lc">The LoggerConfiguration object.</param>
+    /// <param name="outputTemplate">Serilog console template</param>
     /// <returns>The updated LoggerConfiguration object.</returns>
-    public static LoggerConfiguration AsyncSinkConsole(this LoggerConfiguration lc) {
+    public static LoggerConfiguration AsyncSinkConsole(this LoggerConfiguration lc, string? outputTemplate = null) {
         return lc
             // Using Async Sink to write logs asynchronously 
             // to avoid any performance issues during gameplay
             .WriteTo.Async(lsc => lsc.Console(
             theme: Theme,
-            outputTemplate: OutputTemplate
+            outputTemplate: outputTemplate ?? OutputTemplateEngine
             ));
     }
 
     /// <summary>
-    /// Sets up the console sink for Serilog logging. </summary> <param name="lc">The <see cref="LoggerConfiguration"/> instance.</param> <returns>The <see cref="LoggerConfiguration"/> instance with console sink configured.</returns>
-    /// /
-    public static LoggerConfiguration SinkConsole(this LoggerConfiguration lc) =>
+    /// Sets up the console sink for Serilog logging.
+    /// </summary>
+    /// <param name="lc">The <see cref="LoggerConfiguration"/> instance.</param>
+    /// <param name="outputTemplate">Serilog console template</param>
+    /// <returns>The <see cref="LoggerConfiguration"/> instance with console sink configured.</returns>
+    public static LoggerConfiguration SinkConsole(this LoggerConfiguration lc, string? outputTemplate = null) =>
         lc
             // Using Async Sink to write logs asynchronously 
             // to avoid any performance issues during gameplay
             .WriteTo.Console(
             theme: Theme,
-            outputTemplate: OutputTemplate
+            outputTemplate: outputTemplate ?? OutputTemplateEngine
             );
 
     /// <summary>
@@ -125,6 +131,7 @@ public static class LoggerConfigurationExtensions {
     /// </summary>
     /// <param name="lc">The logger configuration.</param>
     /// <param name="allowAsync">A boolean flag indicating whether to use asynchronous console sink or not.</param>
+    /// <param name="outputTemplate"></param>
     /// <returns>The updated logger configuration.</returns>
-    public static LoggerConfiguration SetConsole(this LoggerConfiguration lc, bool allowAsync) => allowAsync ? lc.AsyncSinkConsole() : lc.SinkConsole();
+    public static LoggerConfiguration SetConsole(this LoggerConfiguration lc, bool allowAsync, string? outputTemplate = null) => allowAsync ? lc.AsyncSinkConsole(outputTemplate) : lc.SinkConsole(outputTemplate);
 }

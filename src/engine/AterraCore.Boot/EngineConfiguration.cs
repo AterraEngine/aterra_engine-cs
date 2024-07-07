@@ -8,14 +8,12 @@ using AterraCore.Boot.OmniVault;
 using AterraCore.Common.ConfigFiles.EngineConfig;
 using AterraCore.Common.Data;
 using AterraCore.Contracts;
-using AterraCore.Contracts.Boot;
 using AterraCore.Contracts.DI;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.DI;
 using AterraCore.Loggers;
 using AterraEngine;
 using Microsoft.Extensions.DependencyInjection;
-using Serilog;
 using static AterraCore.Common.Data.BootFlowOfOperations;
 using static AterraCore.Common.Data.ConfigurationWarnings;
 using static CodeOfChaos.Extensions.DependencyInjection.ServiceDescriptorExtension;
@@ -60,11 +58,11 @@ public class EngineConfiguration(ILogger? logger = null) : IEngineConfiguration 
             new OmniVaultConfiguration(StartupLog, EngineConfig)
         );
         set {
-            if (_subConfigurations is null) {
+            if (_subConfigurations is not null) {
+                StartupLog.Warning("Tried to update SubConfigurations when it has already been defined");
+            } else {
                 _subConfigurations = value;
-                return;
             }
-            StartupLog.Warning("Tried to update SubConfigurations when it has already been defined");
         }
     } 
 
@@ -81,9 +79,7 @@ public class EngineConfiguration(ILogger? logger = null) : IEngineConfiguration 
     // -----------------------------------------------------------------------------------------------------------------
     public IEngineConfiguration UseDefaultEngine() => UseCustomEngine<Engine>();
     public IEngineConfiguration UseCustomEngine<T>() where T : IEngine {
-        if (EngineNotPresentAsStaticService()) {
-            return this;
-        }
+        if (EngineNotPresentAsStaticService()) return this;
         ServicesStatic.AddFirst(NewServiceDescriptor<IEngine, T>(ServiceLifetime.Singleton));
         return this;
     }

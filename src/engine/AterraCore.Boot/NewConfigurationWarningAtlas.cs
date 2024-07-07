@@ -3,11 +3,9 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Data;
 using AterraCore.Common.Types.Nexities;
-using AterraCore.Contracts.Boot;
 using AterraCore.Loggers;
 using CodeOfChaos.Extensions;
 using CodeOfChaos.Extensions.Serilog;
-using Serilog;
 using static AterraCore.Common.Data.PredefinedAssetIds.NewConfigurationWarnings;
 
 namespace AterraCore.Boot;
@@ -18,13 +16,13 @@ namespace AterraCore.Boot;
 public class NewConfigurationWarningAtlas(ILogger logger) : IConfigurationWarningAtlas {
     private ILogger Logger { get; } = logger.ForConfigurationWarningAtlasContext();
     
-    private static readonly IWarning UndefinedWarning = new NewWarning(nameof(Undefined));
+    private static readonly IWarning UndefinedWarning = new Warning(nameof(Undefined));
     private readonly Dictionary<AssetId, IWarning> _warnings = new() {
-        { Undefined, UndefinedWarning }, 
-        { UnstableFlexiPlugLoadOrder, new NewWarning(nameof(UnstableFlexiPlugLoadOrder)) },
-        { UnstableBootOperationOrder, new NewWarning(nameof(UnstableBootOperationOrder)) },
-        { UnableToLoadEngineConfigFile, new NewWarning(nameof(UnableToLoadEngineConfigFile)) },
-        { EngineOverwritten, new NewWarning(nameof(EngineOverwritten)) },
+        { Undefined,                    UndefinedWarning }, 
+        { UnstableFlexiPlugLoadOrder,   new Warning(nameof(UnstableFlexiPlugLoadOrder)) },
+        { UnstableBootOperationOrder,   new Warning(nameof(UnstableBootOperationOrder)) },
+        { UnableToLoadEngineConfigFile, new Warning(nameof(UnableToLoadEngineConfigFile)) },
+        { EngineOverwritten,            new Warning(nameof(EngineOverwritten)) },
     };
     
     private readonly Dictionary<AssetId, EventHandler<WarningEventArgs>> _eventHandlers = new() {

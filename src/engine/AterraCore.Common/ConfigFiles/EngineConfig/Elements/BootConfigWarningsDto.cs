@@ -1,15 +1,16 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Boot;
+using System.Xml.Serialization;
 
-namespace AterraCore.Boot;
-
+namespace AterraCore.Common.ConfigFiles.EngineConfig.Elements;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public record NewWarning(
-    string Name,  
-    string? Description = null,
-    string? MessageTemplate = null
-) : IWarning;
+public class BootConfigWarningsDto {
+    [XmlElement("warning")] public BootWarningDto[] OriginalWarnings { get; set; } = [];
+    [XmlElement("error")] public BootWarningDto[] OriginalErrors { get; set; } = [];
+
+    [XmlIgnore] public IEnumerable<BootWarningDto> Warnings => OriginalWarnings.ToHashSet();
+    [XmlIgnore] public IEnumerable<BootWarningDto> Errors => OriginalErrors.ToHashSet();
+}

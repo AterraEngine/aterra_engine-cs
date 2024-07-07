@@ -17,6 +17,11 @@ public static class SectionExtensions {
     /// <param name="logger">The logger instance.</param>
     /// <returns>The logger instance with the AssetAtlas context added.</returns>
     public static ILogger ForAssetAtlasContext(this ILogger logger) => logger.ForContext("Section", "AssetAtlas");
+
+    /// <summary>
+    /// Contains extension methods for the <see cref="ILogger"/> interface.
+    /// </summary>
+    public static ILogger ForBootOperationContext(this ILogger logger, string section) => logger.ForContext("IsBootOperation", "BO:").ForContext("Section", section);
     
     /// <summary>
     /// Returns a logger with the "Section" context set to "Engine".

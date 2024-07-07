@@ -11,6 +11,10 @@ namespace AterraCore.DI;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
+/// <summary>
+/// The Dependency Injection Builder for the Aterra Engine.
+/// </summary>
+/// <param name="logger"></param>
 public class EngineServiceBuilder(ILogger logger) : IEngineServiceBuilder {
     /// <summary>
     /// Represents a logger for the EngineServiceBuilder section.
@@ -33,13 +37,13 @@ public class EngineServiceBuilder(ILogger logger) : IEngineServiceBuilder {
         Logger.Information(
             "Type {Type} assigned to {Imp}",
             serviceDescriptor.ServiceType,
-            serviceDescriptor.ImplementationType
+            serviceDescriptor.ImplementationType ?? serviceDescriptor.ImplementationInstance ?? serviceDescriptor.KeyedImplementationInstance
         );
     }
     /// <summary>
-    /// Assigns service descriptors to the service collection.
+    /// Assigns multiple <see cref="ServiceDescriptor"/> objects to the <see cref="IServiceCollection"/> of the <see cref="EngineServiceBuilder"/>.
     /// </summary>
-    /// <param name="services">The service descriptors.</param>
+    /// <param name="services">The collection of <see cref="ServiceDescriptor"/> objects.</param>
     public void AssignFromServiceDescriptors(IEnumerable<ServiceDescriptor> services) =>
         services.IterateOver(AssignFromServiceDescriptor);
 

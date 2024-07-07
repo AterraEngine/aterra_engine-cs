@@ -9,5 +9,5 @@ namespace AterraCore.Common.ConfigFiles.EngineConfig.Elements;
 // ---------------------------------------------------------------------------------------------------------------------
 public class BootConfigDto {
     [XmlElement("logging")] public BootLoggingDto Logging { get; set; } = new();
-    [XmlElement("expections")] public BootExceptionsDto Exceptions { get; set; } = new();
+    [XmlElement("exceptions")] public BootConfigWarningsDto Exceptions { get; set; } = new();
 }

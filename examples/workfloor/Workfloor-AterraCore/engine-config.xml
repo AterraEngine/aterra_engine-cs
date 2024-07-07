@@ -4,10 +4,13 @@
     <game version="0.0.0"/>
     <boot>
         <logging asyncConsole="false"/>
-        <expections 
-            breakOnUnstableLoadOrder="true"
-            breakOnOverwriteOfEngine="true"
-        />
+        <exceptions>
+            <warning id="AterraEngineBoot:Warnings/UnstableFlexiPlugLoadOrder"/>
+            <warning id="AterraEngineBoot:Warnings/Undefined"/>
+            <warning id="AterraEngineBoot:Warnings/UnableToLoadEngineConfigFile"/>
+            <warning id="AterraEngineBoot:Warnings/EngineOverwritten"/>
+            <error id="AterraEngineBoot:Warnings/UnstableBootOperationOrder"/>
+        </exceptions>
     </boot>
     
     <loadOrder relativeRootPath="plugins">

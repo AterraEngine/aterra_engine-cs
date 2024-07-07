@@ -24,6 +24,8 @@ public static class PredefinedAssetIds {
         public static readonly AssetId EngineConfigLoaderOperation = "AterraEngineBoot:Operations/EngineConfigLoader";
         public static readonly AssetId RegisterWarningsOperation = "AterraEngineBoot:Operations/RegisterWarnings";
         public static readonly AssetId UseEngineOperation = "AterraEngineBoot:Operations/UseEngine";
+        public static readonly AssetId CollectDependenciesOperation = "AterraEngineBoot:Operations/CollectDependencies";
+        public static readonly AssetId BuildDependenciesOperation = "AterraEngineBoot:Operations/BuildDependencies";
     }
     #endregion
 }

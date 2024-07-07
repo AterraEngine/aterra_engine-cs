@@ -12,8 +12,9 @@ namespace AterraCore.Contracts.Boot;
 public record BootOperationComponents(
     IConfigurationWarningAtlas WarningAtlas
 ) {
-    public LinkedList<ServiceDescriptor> DefaultServices { get; } = [];
+    public LinkedList<ServiceDescriptor> DefaultServices { get; set; } = [];
     public LinkedList<ServiceDescriptor> StaticServices { get; } = [];
+    public LinkedList<ServiceDescriptor> DynamicServices { get; } = [];
     
     private EngineConfigXml? _engineConfigXml;
     public EngineConfigXml EngineConfigXml {

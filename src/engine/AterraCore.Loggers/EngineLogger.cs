@@ -26,7 +26,7 @@ public static class EngineLogger {
             .MinimumLevel.Verbose()
             .DefaultEnrich("Engine")
             .AsyncSinkFile(Paths.Logs.EngineLog)
-            .SetConsole(asyncConsole);
+            .SetConsole(asyncConsole, LoggerConfigurationExtensions.OutputTemplateStartup);
 
     /// <summary>
     /// Creates a logger based on the provided configuration.

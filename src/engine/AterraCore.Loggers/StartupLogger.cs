@@ -33,7 +33,7 @@ public static class StartupLogger {
             .MinimumLevel.Verbose()
             .DefaultEnrich("Startup")
             .AsyncSinkFile(Paths.Logs.StartupLog)
-            .SetConsole(asyncConsole);
+            .SetConsole(asyncConsole, LoggerConfigurationExtensions.OutputTemplateStartup);
 
     /// <summary>
     /// Creates a logger instance with the specified configuration.

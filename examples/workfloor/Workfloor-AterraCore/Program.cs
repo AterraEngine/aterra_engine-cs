@@ -17,7 +17,8 @@ public static class Program {
         INewEngineConfiguration config = new NewEngineConfiguration()
             .RegisterBootOperation(new RegisterWarnings(), after: EngineConfigLoaderOperation)
             .RegisterBootOperation(new EngineConfigLoader())
-            .RegisterBootOperation(new UseEngine())
+            .RegisterBootOperation(new CollectDependencies(), after: RegisterWarningsOperation)
+            .RegisterBootOperation(new BuildDependencies(), after: CollectDependenciesOperation)
         ;
         
         config.RunBootOperations();

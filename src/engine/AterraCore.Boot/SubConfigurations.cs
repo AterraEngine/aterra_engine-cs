@@ -1,7 +1,6 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Boot;
 using AterraCore.Contracts.Boot.FlexiPlug;
 using AterraCore.Contracts.Boot.Nexities;
 using AterraCore.Contracts.Boot.OmniVault;
