@@ -16,6 +16,7 @@ namespace AterraCore.Boot.Operations;
 // ---------------------------------------------------------------------------------------------------------------------
 public class RegisterWarnings : IBootOperation {
     public AssetId AssetId => RegisterWarningsOperation;
+    public AssetId? RanAfter => EngineConfigLoaderOperation;
     private ILogger Logger { get; } = StartupLogger.CreateLogger(false).ForBootOperationContext("RegisterWarnings"); 
 
     private Dictionary<AssetId, (string warning, string error, ExitCodes exitCodes)> Exceptions { get; } = new() {

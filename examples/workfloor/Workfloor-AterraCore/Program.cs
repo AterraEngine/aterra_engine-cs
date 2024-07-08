@@ -15,13 +15,13 @@ namespace Workfloor_AterraCore;
 public static class Program {
     public static void Main(string[] args) {
         INewEngineConfiguration config = new NewEngineConfiguration()
-            .RegisterBootOperation(new RegisterWarnings(), after: EngineConfigLoaderOperation)
-            .RegisterBootOperation(new EngineConfigLoader())
-            .RegisterBootOperation(new CollectDependencies(), after: RegisterWarningsOperation)
-            .RegisterBootOperation(new BuildDependencies(), after: CollectDependenciesOperation)
+            .RegisterBootOperation<RegisterWarnings>()
+            .RegisterBootOperation<EngineConfigLoader>()
+            .RegisterBootOperation<CollectDependencies>()
+            .RegisterBootOperation<BuildDependencies>()
+
+            .RunBootOperations()
         ;
-        
-        config.RunBootOperations();
 
         IEngine engine = config.BuildEngine();
         Task.Run(engine.Run)

@@ -10,6 +10,7 @@ namespace AterraCore.Contracts.Boot;
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IBootOperation {
     public AssetId AssetId { get; }
+    public AssetId? RanAfter { get; }
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods

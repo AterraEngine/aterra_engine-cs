@@ -15,6 +15,7 @@ namespace AterraCore.Boot.Operations;
 
 public class BuildDependencies : IBootOperation {
     public AssetId AssetId => BuildDependenciesOperation;
+    public AssetId? RanAfter => CollectDependenciesOperation;
     private ILogger Logger { get; } = StartupLogger.CreateLogger(false).ForBootOperationContext("Build Dependencies"); 
 
     // -----------------------------------------------------------------------------------------------------------------

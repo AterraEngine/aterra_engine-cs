@@ -114,8 +114,9 @@ public class NewEngineConfiguration(ILogger? logger = null) : INewEngineConfigur
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     #region RegisterBootOperations
-    public INewEngineConfiguration RegisterBootOperation(IBootOperation newOperation, AssetId? after = null) {
-        if (!Dependencies.TryAdd(newOperation.AssetId, (newOperation, after))) ConfigurationWarningAtlas.RaiseWarningEvent(UnstableBootOperationOrder, newOperation);
+    public INewEngineConfiguration RegisterBootOperation<T>() where T : IBootOperation, new() => RegisterBootOperation(new T());
+    public INewEngineConfiguration RegisterBootOperation(IBootOperation newOperation) {
+        if (!Dependencies.TryAdd(newOperation.AssetId, (newOperation, newOperation.RanAfter))) ConfigurationWarningAtlas.RaiseWarningEvent(UnstableBootOperationOrder, newOperation);
         return this;
     }
     #endregion

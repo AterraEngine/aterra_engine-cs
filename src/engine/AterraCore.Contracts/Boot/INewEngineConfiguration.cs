@@ -9,7 +9,8 @@ namespace AterraCore.Contracts.Boot;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface INewEngineConfiguration {
-    INewEngineConfiguration RegisterBootOperation(IBootOperation newOperation, AssetId? after = null);
+    INewEngineConfiguration RegisterBootOperation<T>() where T : IBootOperation, new();
+    INewEngineConfiguration RegisterBootOperation(IBootOperation newOperation);
     INewEngineConfiguration RunBootOperations();
     IEngine BuildEngine();
 }

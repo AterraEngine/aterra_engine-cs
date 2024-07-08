@@ -4,7 +4,7 @@
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts;
 using AterraCore.Loggers;
-using AterraEngine;
+using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using static AterraCore.Common.Data.PredefinedAssetIds.NewBootOperationNames;
 using static AterraCore.Common.Data.PredefinedAssetIds.NewConfigurationWarnings;
@@ -15,8 +15,10 @@ namespace AterraCore.Boot.Operations;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
+[UsedImplicitly]
 public class UseEngine<T> : IBootOperation where T : class, IEngine {
     public AssetId AssetId => UseEngineOperation;
+    public AssetId? RanAfter => null;
     private ILogger Logger { get; } = StartupLogger.CreateLogger(false).ForBootOperationContext("UseEngine"); 
 
     // -----------------------------------------------------------------------------------------------------------------

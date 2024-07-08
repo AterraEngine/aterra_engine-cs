@@ -6,6 +6,7 @@ using AterraCore.Common.Data;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Loggers;
 using CodeOfChaos.Extensions;
+using JetBrains.Annotations;
 using Xml;
 using static AterraCore.Common.Data.PredefinedAssetIds.NewBootOperationNames;
 using static AterraCore.Common.Data.PredefinedAssetIds.NewConfigurationWarnings;
@@ -14,10 +15,19 @@ namespace AterraCore.Boot.Operations;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class EngineConfigLoader(string? configFilePath = null) : IBootOperation {
+public class EngineConfigLoader : IBootOperation {
     public AssetId AssetId => EngineConfigLoaderOperation;
-    private ILogger Logger { get; } = StartupLogger.CreateLogger(false).ForBootOperationContext("EngineConfigLoader"); 
-
+    public AssetId? RanAfter => null;
+    private ILogger Logger { get; } = StartupLogger.CreateLogger(false).ForBootOperationContext("EngineConfigLoader");
+    private readonly string? _configFilePath;
+    
+    // -----------------------------------------------------------------------------------------------------------------
+    // Constructors
+    // -----------------------------------------------------------------------------------------------------------------
+    [UsedImplicitly] public EngineConfigLoader(){}
+    [UsedImplicitly] public EngineConfigLoader(string? configFilePath = null) {
+        _configFilePath = configFilePath;
+    }
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -30,9 +40,9 @@ public class EngineConfigLoader(string? configFilePath = null) : IBootOperation 
             Paths.Xsd.XsdEngineConfigDto
         );
 
-        string filepath = configFilePath.IsNullOrEmpty()
+        string filepath = _configFilePath.IsNullOrEmpty()
             ? Paths.ConfigEngine
-            : configFilePath!;
+            : _configFilePath!;
         
         if (!configXmlParser.TryDeserializeFromFile(filepath, out EngineConfigXml? configDto)) {
             components.WarningAtlas.RaiseWarningEvent(UnableToLoadEngineConfigFile);
