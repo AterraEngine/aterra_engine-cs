@@ -24,7 +24,7 @@ public class UseEngine<T> : IBootOperation where T : class, IEngine {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void Run(BootOperationComponents components) {
+    public void Run(IBootOperationComponents components) {
         Logger.Debug("Entered UseEngine");
         if (components.DynamicServices.FirstOrDefault(descriptor => descriptor.ServiceType == typeof(IEngine)) is {} engineServiceDescriptor) {
             // By Default, this is a warning, even if it is set to not break on this.

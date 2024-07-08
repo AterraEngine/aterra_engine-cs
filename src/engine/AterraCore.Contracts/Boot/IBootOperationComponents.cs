@@ -2,23 +2,18 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.ConfigFiles.EngineConfig;
+using AterraCore.Contracts.FlexiPlug;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AterraCore.Contracts.Boot;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public record BootOperationComponents(
-    IConfigurationWarningAtlas WarningAtlas
-) {
-    public LinkedList<ServiceDescriptor> DefaultServices { get; set; } = [];
-    public LinkedList<ServiceDescriptor> StaticServices { get; } = [];
-    public LinkedList<ServiceDescriptor> DynamicServices { get; } = [];
-    
-    private EngineConfigXml? _engineConfigXml;
-    public EngineConfigXml EngineConfigXml {
-        get => _engineConfigXml!;
-        set => _engineConfigXml ??= value;
-    }
+public interface IBootOperationComponents {
+    IWarningAtlas WarningAtlas { get; }
+    LinkedList<ServiceDescriptor> DefaultServices { get; }
+    LinkedList<ServiceDescriptor> StaticServices { get; }
+    LinkedList<ServiceDescriptor> DynamicServices { get; }
+    public EngineConfigXml EngineConfigXml { get; set; }
+    public IPluginLoader PluginLoader { get; set; }
 }

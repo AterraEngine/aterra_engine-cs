@@ -13,7 +13,7 @@ namespace AterraCore.Boot;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class NewConfigurationWarningAtlas(ILogger logger) : IConfigurationWarningAtlas {
+public class WarningAtlas(ILogger logger) : IWarningAtlas {
     private ILogger Logger { get; } = logger.ForConfigurationWarningAtlasContext();
     
     private static readonly IWarning UndefinedWarning = new Warning(nameof(Undefined));

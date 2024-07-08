@@ -5,24 +5,23 @@
 using AterraCore.Common.ConfigFiles.PluginConfig;
 using AterraCore.Common.Data;
 using AterraCore.Contracts.FlexiPlug;
-using Serilog;
+using AterraCore.Loggers;
 using System.Diagnostics.CodeAnalysis;
 using System.IO.Compression;
 using System.Reflection;
-using System.Security.Cryptography;
-using System.Text;
 using Xml;
 using Xml.Elements;
 
-namespace AterraCore.Boot.FlexiPlug.PluginLoading;
+namespace AterraCore.Boot.Logic.PluginLoading;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class PluginZipImporter(ILogger logger, string zipPath) : IPluginZipImporter<PluginConfigXml>, IDisposable {
+public class PluginZipImporter(string zipPath) : IPluginZipImporter<PluginConfigXml>, IDisposable {
+    private static ILogger Logger { get; } = StartupLogger.CreateLogger(false).ForZipImporterContext();
+    
     private readonly ZipArchive _archive = ZipFile.OpenRead(zipPath);
-    private readonly XmlParser<PluginConfigXml> _pluginConfigParser = new(logger, XmlNameSpaces.ConfigPlugin, Paths.Xsd.XsdPluginConfigDto);
-    private string? _checkSum;
+    private readonly XmlParser<PluginConfigXml> _pluginConfigParser = new(Logger, XmlNameSpaces.ConfigPlugin, Paths.Xsd.XsdPluginConfigDto);
 
     // -----------------------------------------------------------------------------------------------------------------
     // Disposable
@@ -31,7 +30,6 @@ public class PluginZipImporter(ILogger logger, string zipPath) : IPluginZipImpor
         _archive.Dispose();
         GC.SuppressFinalize(this);
     }
-    public string CheckSum => _checkSum ??= ComputeSha256Hash();
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -40,16 +38,16 @@ public class PluginZipImporter(ILogger logger, string zipPath) : IPluginZipImpor
 
         using var memoryStream = new MemoryStream();
         if (!TryGetFileBytesFromZip(Paths.Plugins.PluginConfig, out byte[]? bytes)) {
-            logger.Warning("Could not extract {path} from {zip}", Paths.Plugins.PluginConfig, zipPath);
+            Logger.Warning("Could not extract {path} from {zip}", Paths.Plugins.PluginConfig, zipPath);
             return false;
         }
 
         if (!_pluginConfigParser.TrySerializeFromBytes(bytes, out pluginConfig)) {
-            logger.Warning("Failed to deserialize plugin config from {path} in {zip}", Paths.Plugins.PluginConfig, zipPath);
+            Logger.Warning("Failed to deserialize plugin config from {path} in {zip}", Paths.Plugins.PluginConfig, zipPath);
             return false;
         }
 
-        logger.Information("Plugin PluginDtos found within {zip}", zipPath);
+        Logger.Information("Plugin PluginDtos found within {zip}", zipPath);
         return true;
 
     }
@@ -62,16 +60,16 @@ public class PluginZipImporter(ILogger logger, string zipPath) : IPluginZipImpor
             string filePathFix = binDto.FilePath.Replace("\\", "/");
 
             if (!TryGetFileBytesFromZip(filePathFix, out byte[]? assemblyBytes)) {
-                logger.Warning("Could not get bytes for assembly file of {assemblyNameInZip} from {zipPath}", binDto.FilePath, zipPath);
+                Logger.Warning("Could not get bytes for assembly file of {assemblyNameInZip} from {zipPath}", binDto.FilePath, zipPath);
                 return false;
             }
 
             assembly = Assembly.Load(assemblyBytes);
-            logger.Information("Assembly file of {assemblyNameInZip} from {zipPath} successfully loaded", binDto.FilePath, zipPath);
+            Logger.Information("Assembly file of {assemblyNameInZip} from {zipPath} successfully loaded", binDto.FilePath, zipPath);
             return true;
         }
         catch (Exception e) {
-            logger.Warning("Failed to load assembly {assemblyNameInZip} from {zipPath}, {e}", binDto.FilePath, zipPath, e);
+            Logger.Warning("Failed to load assembly {assemblyNameInZip} from {zipPath}, {e}", binDto.FilePath, zipPath, e);
             return false;
         }
     }
@@ -82,7 +80,7 @@ public class PluginZipImporter(ILogger logger, string zipPath) : IPluginZipImpor
             fileNames.AddRange(_archive.Entries.Select(entry => entry.FullName));
         }
         catch (Exception e) {
-            logger.Warning("Failed to retrieve file names from {zipPath}, {e}", zipPath, e);
+            Logger.Warning("Failed to retrieve file names from {zipPath}, {e}", zipPath, e);
         }
         return fileNames;
     }
@@ -92,7 +90,7 @@ public class PluginZipImporter(ILogger logger, string zipPath) : IPluginZipImpor
 
         ZipArchiveEntry? fileEntry = _archive.GetEntry(fileNameInZip);
         if (fileEntry == null) {
-            logger.Warning("File of {fileNameInZip} could not be found in {zipPath}", fileNameInZip, zipPath);
+            Logger.Warning("File of {fileNameInZip} could not be found in {zipPath}", fileNameInZip, zipPath);
             return false;
         }
 
@@ -103,16 +101,5 @@ public class PluginZipImporter(ILogger logger, string zipPath) : IPluginZipImpor
         return true;
     }
 
-    private string ComputeSha256Hash() {
-        using var mySha256 = SHA256.Create();
-        using FileStream stream = File.OpenRead(zipPath);
-        stream.Position = 0;
-        byte[] hashBytes = mySha256.ComputeHash(stream);
-        var builder = new StringBuilder();
-        foreach (byte b in hashBytes) {
-            builder.Append(b.ToString("x2"));
-        }
 
-        return builder.ToString();
-    }
 }

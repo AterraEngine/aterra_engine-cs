@@ -3,7 +3,13 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts;
+using AterraCore.Contracts.FlexiPlug;
+using AterraCore.Contracts.Nexities.Data.Assets;
+using AterraCore.Contracts.Nexities.Data.Worlds;
+using AterraCore.FlexiPlug;
 using AterraCore.Loggers;
+using AterraCore.Nexities.Assets;
+using AterraCore.Nexities.Worlds;
 using AterraEngine;
 using CodeOfChaos.Extensions;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,7 +28,7 @@ public class CollectDependencies : IBootOperation {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void Run(BootOperationComponents components) {
+    public void Run(IBootOperationComponents components) {
         Logger.Debug("Entered Collection of Dependencies");
 
         ServiceDescriptor[] defaultDependencies = [
@@ -30,7 +36,15 @@ public class CollectDependencies : IBootOperation {
             NewServiceDescriptor<IEngine, Engine>(ServiceLifetime.Singleton),
             #endregion
             #region IEngineLogger
-            NewServiceDescriptor<ILogger>(EngineLogger.CreateLogger(components.EngineConfigXml.BootConfig.Logging.UseAsyncConsole))
+            NewServiceDescriptor<ILogger>(EngineLogger.CreateLogger(components.EngineConfigXml.BootConfig.Logging.UseAsyncConsole)),
+            #endregion
+            #region FlexiPlug
+            NewServiceDescriptor<IPluginAtlas, PluginAtlas>(ServiceLifetime.Singleton),
+            #endregion
+            #region Nexities
+            NewServiceDescriptor<IAssetAtlas, AssetAtlas>(ServiceLifetime.Singleton),
+            NewServiceDescriptor<IAssetInstanceAtlas, AssetInstanceAtlas>(ServiceLifetime.Singleton),
+            NewServiceDescriptor<IWorld, World>(ServiceLifetime.Singleton),
             #endregion
         ];
         

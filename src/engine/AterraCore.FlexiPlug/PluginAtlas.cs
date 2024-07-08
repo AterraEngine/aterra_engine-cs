@@ -27,11 +27,11 @@ public class PluginAtlas : IPluginAtlas {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void ImportLoadedPluginDtos(IEnumerable<ILoadedPluginDto> plugins) => Plugins = new LinkedList<IPluginRecord>(
+    public void ImportLoadedPluginDtos(IEnumerable<IPreLoadedPluginDto> plugins) => Plugins = new LinkedList<IPluginRecord>(
     plugins.Select(
         dto => new PluginRecord {
-            NameSpace = dto.NameSpace,
-            NameReadable = dto.NameReadable,
+            NameSpace = dto.ConfigXml.NameSpace,
+            NameReadable = dto.ConfigXml.NameReadable,
             Types = dto.Types
         }
     ));

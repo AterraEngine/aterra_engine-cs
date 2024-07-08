@@ -85,4 +85,5 @@ public static class SectionExtensions {
     /// <param name="logger">The original ILogger instance.</param>
     /// <returns>A new ILogger instance with the context "ConfigurationWarningAtlas".</returns>
     public static ILogger ForConfigurationWarningAtlasContext(this ILogger logger) => logger.ForContext("Section", "ConfigurationWarningAtlas");
+    public static ILogger ForZipImporterContext(this ILogger logger) => logger.ForContext("Section", "ZipImporter");
 }

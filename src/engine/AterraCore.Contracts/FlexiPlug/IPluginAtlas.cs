@@ -16,7 +16,7 @@ public interface IPluginAtlas {
     // -----------------------------------------------------------------------------------------------------------------
     // Constructor or population Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void ImportLoadedPluginDtos(IEnumerable<ILoadedPluginDto> plugins);
+    public void ImportLoadedPluginDtos(IEnumerable<IPreLoadedPluginDto> plugins);
     public void InvalidateAllCaches();
 
     // -----------------------------------------------------------------------------------------------------------------

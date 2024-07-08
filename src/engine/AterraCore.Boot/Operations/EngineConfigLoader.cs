@@ -31,7 +31,7 @@ public class EngineConfigLoader : IBootOperation {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void Run(BootOperationComponents components) {
+    public void Run(IBootOperationComponents components) {
         Logger.Debug("Entered Engine Config Loader");
         
         XmlParser<EngineConfigXml> configXmlParser = new(

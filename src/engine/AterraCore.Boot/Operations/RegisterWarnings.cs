@@ -39,7 +39,7 @@ public class RegisterWarnings : IBootOperation {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void Run(BootOperationComponents components) {
+    public void Run(IBootOperationComponents components) {
         Logger.Debug("Entered Register Warnings");
 
         #region Non breaking Warnings

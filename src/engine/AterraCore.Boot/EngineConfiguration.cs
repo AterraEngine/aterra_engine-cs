@@ -1,94 +1,171 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Boot.FlexiPlug;
-using AterraCore.Boot.FlexiPlug.PluginLoading;
-using AterraCore.Boot.Nexities;
-using AterraCore.Boot.OmniVault;
-using AterraCore.Common.ConfigFiles.EngineConfig;
-using AterraCore.Common.Data;
+using AterraCore.Boot.Logic.PluginLoading;
+using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts;
-using AterraCore.Contracts.DI;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.DI;
 using AterraCore.Loggers;
-using AterraEngine;
-using Microsoft.Extensions.DependencyInjection;
-using static AterraCore.Common.Data.BootFlowOfOperations;
-using static AterraCore.Common.Data.ConfigurationWarnings;
-using static CodeOfChaos.Extensions.DependencyInjection.ServiceDescriptorExtension;
+using CodeOfChaos.Extensions;
+using CodeOfChaos.Extensions.Serilog;
+using System.Diagnostics.CodeAnalysis;
+using static AterraCore.Common.Data.PredefinedAssetIds.NewConfigurationWarnings;
 
 namespace AterraCore.Boot;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class EngineConfiguration(ILogger? logger = null) : IEngineConfiguration {
-    public LinkedList<ServiceDescriptor> ServicesDefault { get; } = [];
-    public LinkedList<ServiceDescriptor> ServicesStatic { get; } = [];
-
-    public ConfigurationWarnings Warnings => Nominal;
-
-    public BootFlowOfOperations Flow => UnConfigured;
-
-    public IEngineServiceBuilder EngineServiceBuilder { get; } = new EngineServiceBuilder(GetStartupLogger(logger));
+    private ILogger Logger { get; } = GetStartupLogger(logger);
     
-    public ILogger StartupLog { get; } = GetStartupLogger(logger);
-    public Func<ILogger> EngineLoggerCallback { get; set; } = () => EngineLogger.CreateLogger(false);
+    private WarningAtlas ConfigurationWarningAtlas { get; } = new(GetStartupLogger(logger));
     
-    private EngineConfigXml? _engineConfig;
-    public EngineConfigXml EngineConfig {
-        get => _engineConfig ??= new EngineConfigXml();
-        set {
-            if (_engineConfig is null) {
-                _engineConfig = value;
-                return;
-            }
-            StartupLog.Warning("Tried to update Engine Config when it has already been defined");
-        }
-    }
-
-    private PluginLoader? _pluginLoaderCache;
-    private PluginLoader PluginLoader => _pluginLoaderCache ??= new PluginLoader(StartupLog);
-
-    private ISubConfigurations? _subConfigurations;
-    public ISubConfigurations SubConfigurations {
-        get => _subConfigurations ??= new SubConfigurations(
-            new FlexiPlugConfiguration(StartupLog, EngineConfig, PluginLoader),
-            new NexitiesConfiguration(StartupLog, EngineConfig, PluginLoader),
-            new OmniVaultConfiguration(StartupLog, EngineConfig)
-        );
-        set {
-            if (_subConfigurations is not null) {
-                StartupLog.Warning("Tried to update SubConfigurations when it has already been defined");
-            } else {
-                _subConfigurations = value;
-            }
-        }
-    } 
-
+    private LinkedList<IBootOperation> OrderOfBootOperations { get; } = [];
+    private Dictionary<AssetId, (IBootOperation Operation, AssetId? After)> Dependencies { get; } = [];
+    
+    private BootOperationComponents 
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Helper Methods
     // -----------------------------------------------------------------------------------------------------------------
-
-    // If the logger is already defined by the program.cs which creates the engine, use that one else use the standard
-    private static ILogger GetStartupLogger(ILogger? logger) => logger ?? StartupLogger.CreateLogger(false).ForStartupContext();
-    private bool EngineNotPresentAsStaticService() => ServicesStatic.FirstOrDefault(descriptor => descriptor.ServiceType == typeof(IEngine)) != null;
-
-    // -----------------------------------------------------------------------------------------------------------------
-    // Configuration Methods
-    // -----------------------------------------------------------------------------------------------------------------
-    public IEngineConfiguration UseDefaultEngine() => UseCustomEngine<Engine>();
-    public IEngineConfiguration UseCustomEngine<T>() where T : IEngine {
-        if (EngineNotPresentAsStaticService()) return this;
-        ServicesStatic.AddFirst(NewServiceDescriptor<IEngine, T>(ServiceLifetime.Singleton));
-        return this;
+    #region StartupLogger Helper
+    private static ILogger? _startupLogger;
+    private static ILogger GetStartupLogger(ILogger? logger) => logger ?? ( _startupLogger ??= StartupLogger.CreateLogger(false).ForStartupContext());
+    #endregion
+    
+    #region Register Boot Operations
+    private bool TryResolveBootOperation(IBootOperation newOperation, AssetId? after, LinkedList<IBootOperation>? nestedOperations = null, int depthIndentations = 0) {
+        LinkedList<IBootOperation> operations = nestedOperations ?? OrderOfBootOperations;
+        string depth = new(' ', 4*depthIndentations);
+        
+        if (operations.Find(n => n.AssetId == newOperation.AssetId) is not null) {
+            Logger.Debug("{depth}No need to resolve {assetId}, as it was already present", depth,newOperation.AssetId);
+            return true;
+        }
+        
+        Logger.Debug("{depth}Trying to resolve : {assetId}", depth, newOperation.AssetId );
+        
+        switch (after) {
+            // No dependencies were defined
+            case null : {
+                Logger.Debug("{depth}No dependencies were defined", depth);
+                operations.AddFirst(newOperation);
+                return true; 
+            }
+            
+            // Only an "after" dependency was defined
+            //      AND the dependency is already present
+            case not null when operations.Find(n => n.AssetId == (AssetId)after) is {} node: {
+                Logger.Debug("{depth}Only an \"after\" dependency was defined AND the dependency is already present", depth);
+                operations.AddAfter(node, newOperation);
+                return true;
+            }
+            
+            // Only an "after" dependency was defined
+            //      BUT no operation under that AssetId was already present 
+            case not null when operations.Find(n => n.AssetId == (AssetId)after) is null: {
+                Logger.Debug("{depth}Only an \"after\" dependency was defined BUT operation under that AssetId was not present ", depth);
+                if (!TryResolveNested((AssetId)after, out LinkedListNode<IBootOperation>? node, operations, depthIndentations)) return false;
+                operations.AddAfter(node, newOperation);
+                return true;
+            }
+        }
+        return false;
     }
 
-    public IEngine CreateEngine() {
+    private bool VerifyDependencies(LinkedList<IBootOperation> operations) {
+        LinkedListNode<IBootOperation>? node = operations.First;
+        
+        while (node is not null) {
+            if (!Dependencies.TryGetValue(node.Value.AssetId, out (IBootOperation, AssetId?) tuple )) return false;
+            (_, AssetId? after) = tuple;
+
+            if (after != null) {
+                if (operations.Find(n => n.AssetId == after) is not {} afterNode 
+                    || !IsNodeBefore(afterNode, node)
+                ) return false;
+            }
+            
+            node = node.Next;
+        }
+
+        Logger.Debug("Dependencies Verified");
+        return true;
+    }
+
+    private static bool IsNodeBefore(LinkedListNode<IBootOperation> node, LinkedListNode<IBootOperation> referenceNode) {
+        LinkedListNode<IBootOperation>? current = node;
+        while (current != null) {
+            if (current == referenceNode) return true;
+            current = current.Next;
+        }
+        return false;
+    }
+    
+    private bool TryResolveNested(AssetId assetId, [NotNullWhen(true)] out LinkedListNode<IBootOperation>? node, LinkedList<IBootOperation> nestedOperations, int depthIndentations = 0) {
+        node = default;
+        if (!Dependencies.TryGetValue(assetId, out (IBootOperation, AssetId?) tuple)) return false;
+        if (!TryResolveBootOperation(tuple.Item1, tuple.Item2, nestedOperations, ++depthIndentations)) return false;
+        if (nestedOperations.Find(n => n.AssetId == assetId) is not {} newNode) return false;
+      
+        node = newNode;
+        return true;
+    }
+    
+    #endregion
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    #region RegisterBootOperations
+    public IEngineConfiguration RegisterBootOperation<T>() where T : IBootOperation, new() => RegisterBootOperation(new T());
+    public IEngineConfiguration RegisterBootOperation(IBootOperation newOperation) {
+        if (!Dependencies.TryAdd(newOperation.AssetId, (newOperation, newOperation.RanAfter))) ConfigurationWarningAtlas.RaiseWarningEvent(UnstableBootOperationOrder, newOperation);
+        return this;
+    }
+    #endregion
+    
+    #region RunBootOperation
+    public IEngineConfiguration RunBootOperations() {
+        Logger.Information("Started Resolving Boot Operations");
+        foreach ((IBootOperation operation, AssetId? after) in Dependencies.Values) {
+            if (!TryResolveBootOperation(operation, after)) {
+                Logger.Warning("Operation {operation} could not resolved", operation );
+            } else {
+                Logger.Information("Operation {operation} resolved correctly", operation );
+            }
+        }
+        if (!VerifyDependencies(OrderOfBootOperations)) Logger.ThrowFatal<SystemException>("Operations were not able to be verified");
+
+        // Log operation order
+        var builder = new ValuedStringBuilder();
+        builder.AppendLine("Order of Boot Operations:");
+       
+        foreach (IBootOperation operation in OrderOfBootOperations) {
+            builder.AppendLineValued("- ", operation.AssetId);
+        }
+        Logger.Information(builder);
+        
+        // Actually stuff
+        var components = new BootOperationComponents(
+        WarningAtlas: ConfigurationWarningAtlas
+        );
+        
+        foreach (IBootOperation operation in OrderOfBootOperations) {
+            operation.Run(components);
+        }
+        
+        return this;
+    }
+    #endregion
+
+    #region BuildEngine
+    public IEngine BuildEngine() {
         // Populate Plugin Atlas with plugin list
         //      Is a singleton anyway, so doesn't matter when we assign this data
         IPluginAtlas pluginAtlas = EngineServices.GetPluginAtlas();
-        pluginAtlas.ImportLoadedPluginDtos(PluginLoader.Plugins);
+        pluginAtlas.ImportLoadedPluginDtos();
 
         // Create the Actual Engine
         //  Should be the last step
@@ -96,4 +173,5 @@ public class EngineConfiguration(ILogger? logger = null) : IEngineConfiguration 
         StartupLog.Information("Engine instance created of type: {Type}", engine.GetType().FullName);
         return engine;
     }
+    #endregion
 }

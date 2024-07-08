@@ -3,28 +3,25 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.ConfigFiles.PluginConfig;
 using AterraCore.Common.Types.FlexiPlug;
-using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
 namespace AterraCore.Contracts.Boot.FlexiPlug;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ILoadedPluginDto {
-    public string NameSpace{ get; }
-    public string NameReadable { get; }
-    public List<Assembly> Assemblies { get; }
-    public bool IsProcessed { get; set; }
-    public PluginValidity Validity { get; set; }
-    public string? CheckSum { get; set; }
-    public IEnumerable<Type> Types { get; }
-    public string FilePath { get; }
+public interface IPreLoadedPluginDto {
+    string FilePath { get; }
+    string CheckSum { get; }
+    PluginValidity Validity { get; set; }
+    IEnumerable<string> InternalFilePaths { get; set; }
+    PluginConfigXml ConfigXml { get; set; }
     
-    public PluginConfigXml? Data { get; set; }
-    public IEnumerable<string> InternalFilePaths { get; set; }
+    List<Assembly> Assemblies { get;}
+    IEnumerable<Type> Types { get; }
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public IEnumerable<ServiceDescriptor> GetServicesDefault();
-    public IEnumerable<ServiceDescriptor> GetServicesStatic();
+    public void SetInvalid();
+    IEnumerable<(Type Type, T Attribute)> GetOfAttribute<T>() where T : Attribute;
 }

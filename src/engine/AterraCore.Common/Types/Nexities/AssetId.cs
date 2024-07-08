@@ -65,7 +65,8 @@ public readonly struct AssetId : IEqualityOperators<AssetId, AssetId, bool>, IEq
     }
 
     public override string ToString() => $"{PluginId}:{string.Join('/', AssetName)}";
-
+    public override int GetHashCode() => HashCode.Combine(PluginId, AssetName);
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Comparison Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -80,6 +81,4 @@ public readonly struct AssetId : IEqualityOperators<AssetId, AssetId, bool>, IEq
         PluginId.Equals(other.PluginId)
         && AssetName.Equals(other.AssetName)
     ;
-
-    public override int GetHashCode() => HashCode.Combine(PluginId, AssetName);
 }

@@ -18,8 +18,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\lib\Xml\Xml.csproj"/>
-        <ProjectReference Include="..\AterraCore.Boot.FlexiPlug\AterraCore.Boot.FlexiPlug.csproj" />
-        <ProjectReference Include="..\AterraCore.Boot.Nexities\AterraCore.Boot.Nexities.csproj" />
         <ProjectReference Include="..\AterraCore.Boot.OmniVault\AterraCore.Boot.OmniVault.csproj" />
         <ProjectReference Include="..\AterraCore.DI\AterraCore.DI.csproj" />
         <ProjectReference Include="..\AterraCore.Loggers\AterraCore.Loggers.csproj"/>
@@ -31,7 +29,7 @@
     <ItemGroup>
       <PackageReference Include="CodeOfChaos.Extensions" Version="0.6.0" />
       <PackageReference Include="CodeOfChaos.Extensions.DependencyInjection" Version="0.1.1" />
-      <PackageReference Include="CodeOfChaos.Extensions.Serilog" Version="0.2.2" />
+      <PackageReference Include="CodeOfChaos.Extensions.Serilog" Version="0.3.0" />
     </ItemGroup>
 
 </Project>

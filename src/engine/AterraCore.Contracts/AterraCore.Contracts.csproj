@@ -25,7 +25,7 @@
     <ItemGroup>
         <PackageReference Include="CodeOfChaos.Extensions" Version="0.6.0" />
         <PackageReference Include="CodeOfChaos.Extensions.DependencyInjection" Version="0.1.1" />
-        <PackageReference Include="CodeOfChaos.Extensions.Serilog" Version="0.2.2" />
+        <PackageReference Include="CodeOfChaos.Extensions.Serilog" Version="0.3.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1"/>
         <PackageReference Include="Microsoft.Extensions.ObjectPool.DependencyInjection" Version="8.6.0" />
         <PackageReference Include="Raylib-cs" Version="6.1.1" />

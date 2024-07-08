@@ -15,5 +15,5 @@ public interface IBootOperation {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void Run(BootOperationComponents components);
+    public void Run(IBootOperationComponents components);
 }
