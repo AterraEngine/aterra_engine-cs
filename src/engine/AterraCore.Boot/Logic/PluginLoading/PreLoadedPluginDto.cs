@@ -17,15 +17,15 @@ public class PreLoadedPluginDto(string filepath) : IPreLoadedPluginDto {
     private string? _checksum;
     public string CheckSum => _checksum ??= ComputeSha256Hash(FilePath);
     
-    private PluginValidity _validity = PluginValidity.Untested;
+    private PluginValidity _validity = PluginValidity.Valid;
     public PluginValidity Validity {
         get => _validity;
-        set => _validity = _validity != PluginValidity.Invalid ? value : _validity;// Once invalid, always invalid
+        set => _validity = _validity != PluginValidity.Invalid ? value : _validity; // Once invalid, always invalid
     }
     
     public IEnumerable<string> InternalFilePaths { get; set; } = [];
     
-    private PluginConfigXml? _configXml;
+    private PluginConfigXml _configXml;
     public PluginConfigXml ConfigXml {
         get => _configXml!;
         set => _configXml ??= value;

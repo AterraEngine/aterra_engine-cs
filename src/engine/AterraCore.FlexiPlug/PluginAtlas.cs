@@ -7,6 +7,7 @@ using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug.Plugin;
 using CodeOfChaos.Extensions;
 using JetBrains.Annotations;
+using Serilog;
 using System.Diagnostics.CodeAnalysis;
 
 namespace AterraCore.FlexiPlug;
@@ -14,27 +15,31 @@ namespace AterraCore.FlexiPlug;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
-public class PluginAtlas : IPluginAtlas {
+public class PluginAtlas(ILogger logger) : IPluginAtlas {
+    private ILogger Logger => logger.ForContext<PluginAtlas>();
+    
     private IReadOnlyDictionary<string, IPluginRecord>? _pluginsByReadableNamesCache;
 
     private int? _totalAssetCountCache;
-    public LinkedList<IPluginRecord> Plugins { get; private set; } = [];
-    public IReadOnlyDictionary<string, IPluginRecord> PluginsByReadableNames => _pluginsByReadableNamesCache ??= Plugins
+    private LinkedList<IPluginRecord> Plugins { get; } = [];
+    private IReadOnlyDictionary<string, IPluginRecord> PluginsByReadableNames => _pluginsByReadableNamesCache ??= Plugins
         .Select(p => (ReadableName: p.NameReadable, p))
         .ToDictionary().AsReadOnly();
+    
     public int TotalAssetCount => _totalAssetCountCache ??= Plugins.SelectMany(p => p.AssetTypes).Count();
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void ImportLoadedPluginDtos(IEnumerable<IPreLoadedPluginDto> plugins) => Plugins = new LinkedList<IPluginRecord>(
-    plugins.Select(
-        dto => new PluginRecord {
-            NameSpace = dto.ConfigXml.NameSpace,
-            NameReadable = dto.ConfigXml.NameReadable,
-            Types = dto.Types
+    public void ImportLoadedPluginDtos(Span<IPreLoadedPluginDto> plugins) {
+        foreach (IPreLoadedPluginDto plugin in plugins) {
+            Plugins.AddLast(new PluginRecord {
+                NameSpace = plugin.ConfigXml.NameSpace,
+                NameReadable = plugin.ConfigXml.NameReadable,
+                Types = plugin.Types
+            });
         }
-    ));
+    }
     public void InvalidateAllCaches() => Plugins.IterateOver(plugin => plugin.InvalidateCaches());
 
    public IEnumerable<AssetRegistration> GetAssetRegistrations(string? pluginNameSpace = null, CoreTags filter = CoreTags.Asset) {

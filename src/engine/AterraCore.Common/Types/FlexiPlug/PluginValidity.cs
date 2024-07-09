@@ -6,7 +6,6 @@ namespace AterraCore.Common.Types.FlexiPlug;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public enum PluginValidity {
-    Untested,
     Valid,
     Invalid
 }

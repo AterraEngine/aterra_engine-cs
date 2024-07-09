@@ -17,7 +17,7 @@ namespace AterraCore.Boot.Operations;
 public class RegisterWarnings : IBootOperation {
     public AssetId AssetId => RegisterWarningsOperation;
     public AssetId? RanAfter => EngineConfigLoaderOperation;
-    private ILogger Logger { get; } = StartupLogger.CreateLogger(false).ForBootOperationContext("RegisterWarnings"); 
+    private ILogger Logger { get; } = StartupLogger.CreateLogger(false).ForBootOperationContext<RegisterWarnings>(); 
 
     private Dictionary<AssetId, (string warning, string error, ExitCodes exitCodes)> Exceptions { get; } = new() {
         #region UnstableFlexiPlugLoadOrder
@@ -34,6 +34,20 @@ public class RegisterWarnings : IBootOperation {
             exitCodes: ExitCodes.EngineOverwritten
         )},
         #endregion
+        #region UnableToLoadEngineConfigFile
+        {UnableToLoadEngineConfigFile, (
+                warning: "No ConfigFile for the Engine could be found.",
+                error:"No ConfigFile for the Engine could be found.",
+                exitCodes: ExitCodes.UnableToLoadEngineConfigFile
+            )},
+        #endregion
+        #region NoPluginConfigXmlFound
+        {NoPluginConfigXmlFound, (
+                warning: "Plugin {filePath} did not have a valid plugin.xml file.",
+                error:"Plugin {filePath} did not have a valid plugin.xml file.",
+                exitCodes: ExitCodes.UnableToLoadEngineConfigFile
+            )},
+        #endregion
     };
     
     // -----------------------------------------------------------------------------------------------------------------
@@ -41,11 +55,11 @@ public class RegisterWarnings : IBootOperation {
     // -----------------------------------------------------------------------------------------------------------------
     public void Run(IBootOperationComponents components) {
         Logger.Debug("Entered Register Warnings");
-
+        
         #region Non breaking Warnings
         foreach (BootWarningDto dto in components.EngineConfigXml.BootConfig.Exceptions.Warnings) {
             if (!Exceptions.TryGetValue(dto.AssetId, out (string warning, string error, ExitCodes exitCode) exception)) continue;
-            components.WarningAtlas.AddWarningEvent(dto.AssetId, (_, args) => {
+            components.WarningAtlas.AddEvent(dto.AssetId, (_, args) => {
                 Logger.Warning(
                 exception.warning,
                 args.MessageParams
@@ -54,11 +68,10 @@ public class RegisterWarnings : IBootOperation {
             Logger.Debug("Registered Warning Event callback for {assetId}", dto.AssetId);
         }
         #endregion
-        
         #region Fatal Errors
         foreach (BootWarningDto dto in components.EngineConfigXml.BootConfig.Exceptions.Errors) {
             if (!Exceptions.TryGetValue(dto.AssetId, out (string warning, string error, ExitCodes exitCode) exception)) continue;
-            components.WarningAtlas.AddWarningEvent(dto.AssetId, (_, args) => {
+            components.WarningAtlas.AddEvent(dto.AssetId, (_, args) => {
                 Logger.ExitFatal(
                 (int)exception.exitCode,
                 exception.error,

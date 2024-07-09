@@ -11,7 +11,8 @@ namespace AterraCore.Boot;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public record BootOperationComponents(
-    IWarningAtlas WarningAtlas
+    IWarningAtlas WarningAtlas,
+    IPluginLoader PluginLoader
 ) : IBootOperationComponents {
     public LinkedList<ServiceDescriptor> DefaultServices { get; } = [];
     public LinkedList<ServiceDescriptor> StaticServices { get; } = [];
@@ -21,11 +22,5 @@ public record BootOperationComponents(
     public EngineConfigXml EngineConfigXml {
         get => _engineConfigXml!;
         set => _engineConfigXml ??= value;
-    }
-    
-    private IPluginLoader? _pluginLoader;
-    public IPluginLoader PluginLoader {
-        get => _pluginLoader!;
-        set => _pluginLoader ??= value;
     }
 }

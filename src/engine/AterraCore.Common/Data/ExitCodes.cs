@@ -11,4 +11,5 @@ public enum ExitCodes {
     UnstableBootOperationOrder = 3,
     PluginIdsExhausted = 4,
     EngineOverwritten = 5,
+    UnableToLoadEngineConfigFile = 6,
 }

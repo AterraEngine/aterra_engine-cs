@@ -2,7 +2,6 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.DI;
-using AterraCore.Loggers;
 using CodeOfChaos.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -16,10 +15,8 @@ namespace AterraCore.DI;
 /// </summary>
 /// <param name="logger"></param>
 public class EngineServiceBuilder(ILogger logger) : IEngineServiceBuilder {
-    /// <summary>
-    /// Represents a logger for the EngineServiceBuilder section.
-    /// </summary>
-    private ILogger Logger { get; set; } = logger.ForEngineServiceBuilderContext();
+    private ILogger Logger { get; } = logger.ForContext<EngineServiceBuilder>();
+    
     /// <summary>
     /// Represents a builder for configuring and building the service collection in the AterraCore engine.
     /// </summary>
@@ -37,7 +34,7 @@ public class EngineServiceBuilder(ILogger logger) : IEngineServiceBuilder {
         Logger.Information(
             "Type {Type} assigned to {Imp}",
             serviceDescriptor.ServiceType,
-            serviceDescriptor.ImplementationType ?? serviceDescriptor.ImplementationInstance ?? serviceDescriptor.KeyedImplementationInstance
+            serviceDescriptor.ImplementationType ?? serviceDescriptor.ImplementationInstance ?? serviceDescriptor.ServiceType
         );
     }
     /// <summary>

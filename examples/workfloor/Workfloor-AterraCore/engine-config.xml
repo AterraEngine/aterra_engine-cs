@@ -9,6 +9,7 @@
             <warning id="AterraEngineBoot:Warnings/Undefined"/>
             <warning id="AterraEngineBoot:Warnings/UnableToLoadEngineConfigFile"/>
             <warning id="AterraEngineBoot:Warnings/EngineOverwritten"/>
+            <warning id="AterraEngineBoot:Warnings/NoPluginConfigXmlFound"/>
             <error id="AterraEngineBoot:Warnings/UnstableBootOperationOrder"/>
         </exceptions>
     </boot>

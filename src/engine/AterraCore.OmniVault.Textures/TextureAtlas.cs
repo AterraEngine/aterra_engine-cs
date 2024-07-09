@@ -4,7 +4,6 @@
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Data.Assets;
 using AterraCore.Contracts.OmniVault;
-using AterraCore.Loggers;
 using JetBrains.Annotations;
 using Raylib_cs;
 using Serilog;
@@ -15,7 +14,7 @@ namespace AterraCore.OmniVault.Textures;
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
 public class TextureAtlas(ILogger logger, IAssetInstanceAtlas instanceAtlas) : ITextureAtlas {
-    private ILogger Logger { get; } = logger.ForTextureAtlasContext();
+    private ILogger Logger { get; } = logger.ForContext<TextureAtlas>();
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods

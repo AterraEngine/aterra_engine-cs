@@ -17,11 +17,11 @@ namespace AterraCore.Boot.Logic.PluginLoading;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class PluginZipImporter(string zipPath) : IPluginZipImporter<PluginConfigXml>, IDisposable {
-    private static ILogger Logger { get; } = StartupLogger.CreateLogger(false).ForZipImporterContext();
+public class PluginZipImporter(string zipPath, ILogger logger) : IPluginZipImporter<PluginConfigXml>, IDisposable {
+    private ILogger Logger { get; } = logger.ForContext<PluginZipImporter>();
     
     private readonly ZipArchive _archive = ZipFile.OpenRead(zipPath);
-    private readonly XmlParser<PluginConfigXml> _pluginConfigParser = new(Logger, XmlNameSpaces.ConfigPlugin, Paths.Xsd.XsdPluginConfigDto);
+    private readonly XmlParser<PluginConfigXml> _pluginConfigParser = new(logger, XmlNameSpaces.ConfigPlugin, Paths.Xsd.XsdPluginConfigDto);
 
     // -----------------------------------------------------------------------------------------------------------------
     // Disposable

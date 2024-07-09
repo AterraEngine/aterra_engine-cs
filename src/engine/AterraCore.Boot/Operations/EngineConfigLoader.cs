@@ -18,7 +18,7 @@ namespace AterraCore.Boot.Operations;
 public class EngineConfigLoader : IBootOperation {
     public AssetId AssetId => EngineConfigLoaderOperation;
     public AssetId? RanAfter => null;
-    private ILogger Logger { get; } = StartupLogger.CreateLogger(false).ForBootOperationContext("EngineConfigLoader");
+    private ILogger Logger { get; } = StartupLogger.CreateLogger(false).ForBootOperationContext<EngineConfigLoader>();
     private readonly string? _configFilePath;
     
     // -----------------------------------------------------------------------------------------------------------------
@@ -45,7 +45,7 @@ public class EngineConfigLoader : IBootOperation {
             : _configFilePath!;
         
         if (!configXmlParser.TryDeserializeFromFile(filepath, out EngineConfigXml? configDto)) {
-            components.WarningAtlas.RaiseWarningEvent(UnableToLoadEngineConfigFile);
+            components.WarningAtlas.RaiseEvent(UnableToLoadEngineConfigFile);
             return;
         }
         components.EngineConfigXml = configDto; 

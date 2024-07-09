@@ -19,7 +19,7 @@ namespace AterraCore.Boot.Operations;
 public class UseEngine<T> : IBootOperation where T : class, IEngine {
     public AssetId AssetId => UseEngineOperation;
     public AssetId? RanAfter => null;
-    private ILogger Logger { get; } = StartupLogger.CreateLogger(false).ForBootOperationContext("UseEngine"); 
+    private ILogger Logger { get; } = StartupLogger.CreateLogger(false).ForBootOperationContext<UseEngine<T>>(); 
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
@@ -28,7 +28,7 @@ public class UseEngine<T> : IBootOperation where T : class, IEngine {
         Logger.Debug("Entered UseEngine");
         if (components.DynamicServices.FirstOrDefault(descriptor => descriptor.ServiceType == typeof(IEngine)) is {} engineServiceDescriptor) {
             // By Default, this is a warning, even if it is set to not break on this.
-            components.WarningAtlas.RaiseWarningEvent(EngineOverwritten, this, engineServiceDescriptor.ImplementationType, typeof(T));
+            components.WarningAtlas.RaiseEvent(EngineOverwritten, this, engineServiceDescriptor.ImplementationType, typeof(T));
         }
         components.DynamicServices.AddFirst(NewServiceDescriptor<IEngine, T>(ServiceLifetime.Singleton));
     }

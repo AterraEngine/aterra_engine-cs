@@ -44,7 +44,7 @@ public class XmlParser<T>(ILogger logger, string nameSpace, string xsdPath) : IC
         }
         catch (Exception e) {
             // Handle other exceptions
-            logger.Error($"An unexpected error occurred: {e.Message}");
+            logger.Error(e,"An unexpected error occurred");
             return false;
         }
     }
@@ -58,7 +58,7 @@ public class XmlParser<T>(ILogger logger, string nameSpace, string xsdPath) : IC
             return true;
         }
         catch (Exception e) {
-            Console.WriteLine($"An unexpected error occurred: {e.Message}");
+            logger.Error(e,"An unexpected error occurred");
             return false;
         }
 

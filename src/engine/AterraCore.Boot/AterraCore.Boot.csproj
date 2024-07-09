@@ -18,11 +18,11 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\lib\Xml\Xml.csproj"/>
-        <ProjectReference Include="..\AterraCore.Boot.OmniVault\AterraCore.Boot.OmniVault.csproj" />
         <ProjectReference Include="..\AterraCore.DI\AterraCore.DI.csproj" />
         <ProjectReference Include="..\AterraCore.Loggers\AterraCore.Loggers.csproj"/>
         <ProjectReference Include="..\AterraCore.Common\AterraCore.Common.csproj"/>
         <ProjectReference Include="..\AterraCore.Contracts\AterraCore.Contracts.csproj"/>
+        <ProjectReference Include="..\AterraCore.OmniVault.Textures\AterraCore.OmniVault.Textures.csproj" />
         <ProjectReference Include="..\AterraEngine\AterraEngine.csproj" />
     </ItemGroup>
 

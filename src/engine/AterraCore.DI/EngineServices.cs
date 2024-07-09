@@ -5,9 +5,10 @@
 using AterraCore.Contracts;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.Nexities.Data.Assets;
-using AterraCore.Loggers;
+using CodeOfChaos.Extensions.Serilog;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using Serilog.Core;
 
 namespace AterraCore.DI;
 
@@ -31,7 +32,7 @@ public static class EngineServices {
     /// <summary>
     /// Provides logging functionality for the application.
     /// </summary>
-    private static ILogger Logger => _logger ??= GetLogger().ForEngineServicesContext(); 
+    private static ILogger Logger => _logger ??= GetLogger().ForContext(Constants.SourceContextPropertyName, typeof(EngineServices)); 
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
@@ -56,8 +57,8 @@ public static class EngineServices {
         }
         catch (InvalidOperationException e) {
             string? typeName = typeof(T).FullName;// Get type name
-            Logger.Fatal("Service type of {TypeOfT} could not be found.", typeName);
-            throw new InvalidOperationException($"Service type of {typeName} could not be found.", e);
+            Logger.ThrowFatal(e,"Service type of {TypeOfT} could not be found.", typeName);
+            throw;
         }
     }
 

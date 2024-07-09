@@ -4,6 +4,7 @@
 using AterraCore.Common.Data;
 using AterraCore.Loggers;
 using Serilog;
+using Serilog.Core;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -12,9 +13,9 @@ namespace AterraEngine.Renderer.RaylibCs;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class RaylibLogger {
+public static class RaylibLogger {
     // ReSharper disable once InconsistentNaming
-    private static ILogger _logger { get; } = CreateConfiguration().CreateLogger().ForRaylibContext();
+    private static ILogger _logger { get; } = CreateConfiguration().CreateLogger().ForContext(Constants.SourceContextPropertyName, "RayLib");
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods

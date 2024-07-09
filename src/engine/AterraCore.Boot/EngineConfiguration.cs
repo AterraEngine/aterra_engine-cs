@@ -4,6 +4,7 @@
 using AterraCore.Boot.Logic.PluginLoading;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts;
+using AterraCore.Contracts.Boot.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.DI;
 using AterraCore.Loggers;
@@ -23,15 +24,20 @@ public class EngineConfiguration(ILogger? logger = null) : IEngineConfiguration 
     
     private LinkedList<IBootOperation> OrderOfBootOperations { get; } = [];
     private Dictionary<AssetId, (IBootOperation Operation, AssetId? After)> Dependencies { get; } = [];
-    
-    private BootOperationComponents 
+
+    private BootOperationComponents? _components;
+    private BootOperationComponents Components => _components ??= new BootOperationComponents(
+        WarningAtlas:ConfigurationWarningAtlas,
+        PluginLoader:new PluginLoader(Logger)
+    );
     
     // -----------------------------------------------------------------------------------------------------------------
     // Helper Methods
     // -----------------------------------------------------------------------------------------------------------------
     #region StartupLogger Helper
     private static ILogger? _startupLogger;
-    private static ILogger GetStartupLogger(ILogger? logger) => logger ?? ( _startupLogger ??= StartupLogger.CreateLogger(false).ForStartupContext());
+    private static ILogger GetStartupLogger(ILogger? logger) => 
+        logger ?? ( _startupLogger ??= StartupLogger.CreateLogger(false).ForContext<EngineConfiguration>());
     #endregion
     
     #region Register Boot Operations
@@ -121,7 +127,7 @@ public class EngineConfiguration(ILogger? logger = null) : IEngineConfiguration 
     #region RegisterBootOperations
     public IEngineConfiguration RegisterBootOperation<T>() where T : IBootOperation, new() => RegisterBootOperation(new T());
     public IEngineConfiguration RegisterBootOperation(IBootOperation newOperation) {
-        if (!Dependencies.TryAdd(newOperation.AssetId, (newOperation, newOperation.RanAfter))) ConfigurationWarningAtlas.RaiseWarningEvent(UnstableBootOperationOrder, newOperation);
+        if (!Dependencies.TryAdd(newOperation.AssetId, (newOperation, newOperation.RanAfter))) ConfigurationWarningAtlas.RaiseEvent(UnstableBootOperationOrder, newOperation);
         return this;
     }
     #endregion
@@ -148,13 +154,9 @@ public class EngineConfiguration(ILogger? logger = null) : IEngineConfiguration 
         Logger.Information(builder);
         
         // Actually stuff
-        var components = new BootOperationComponents(
-        WarningAtlas: ConfigurationWarningAtlas
+        OrderOfBootOperations.IterateOver(
+            operation => operation.Run(Components)
         );
-        
-        foreach (IBootOperation operation in OrderOfBootOperations) {
-            operation.Run(components);
-        }
         
         return this;
     }
@@ -164,13 +166,15 @@ public class EngineConfiguration(ILogger? logger = null) : IEngineConfiguration 
     public IEngine BuildEngine() {
         // Populate Plugin Atlas with plugin list
         //      Is a singleton anyway, so doesn't matter when we assign this data
+        Span<IPreLoadedPluginDto> validPlugins = Components.PluginLoader.GetValidPlugins().ToArray();
+        Logger.Information("Preloading the Engine {i} plugins", validPlugins.Length);
         IPluginAtlas pluginAtlas = EngineServices.GetPluginAtlas();
-        pluginAtlas.ImportLoadedPluginDtos();
+        pluginAtlas.ImportLoadedPluginDtos(validPlugins);
 
         // Create the Actual Engine
         //  Should be the last step
         IEngine engine = EngineServices.GetEngine();
-        StartupLog.Information("Engine instance created of type: {Type}", engine.GetType().FullName);
+        Logger.Information("Engine instance created of type: {Type}", engine.GetType().FullName);
         return engine;
     }
     #endregion

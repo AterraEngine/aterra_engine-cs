@@ -3,7 +3,6 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Data.Assets;
-using AterraCore.Loggers;
 using CodeOfChaos.Extensions;
 using JetBrains.Annotations;
 using Serilog;
@@ -16,7 +15,7 @@ namespace AterraCore.Nexities.Assets;
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
 public class AssetAtlas(ILogger logger) : IAssetAtlas {
-    private ILogger Logger { get; } = logger.ForAssetAtlasContext();
+    private ILogger Logger { get; } = logger.ForContext<AssetAtlas>();
     
     private readonly ConcurrentDictionary<AssetId, AssetRegistration> _assetsById = new();
     private readonly ConcurrentDictionary<Type, AssetId> _assetsByType = new();

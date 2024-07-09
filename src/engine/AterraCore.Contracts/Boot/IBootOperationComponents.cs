@@ -11,9 +11,9 @@ namespace AterraCore.Contracts.Boot;
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IBootOperationComponents {
     IWarningAtlas WarningAtlas { get; }
+    IPluginLoader PluginLoader { get; }
     LinkedList<ServiceDescriptor> DefaultServices { get; }
     LinkedList<ServiceDescriptor> StaticServices { get; }
     LinkedList<ServiceDescriptor> DynamicServices { get; }
     public EngineConfigXml EngineConfigXml { get; set; }
-    public IPluginLoader PluginLoader { get; set; }
 }

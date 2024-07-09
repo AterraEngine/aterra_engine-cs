@@ -10,7 +10,6 @@ using AterraCore.Contracts.Nexities.Data.Levels;
 using AterraCore.Contracts.Nexities.Data.Worlds;
 using AterraCore.Contracts.Renderer;
 using AterraCore.DI;
-using AterraCore.Loggers;
 using AterraCore.Nexities.Lib.Entities.Actor;
 using AterraEngine.Threading;
 using CodeOfChaos.Extensions;
@@ -36,8 +35,8 @@ public class Engine(
 ) : IEngine {
     private readonly CancellationTokenSource _ctsRenderThread = new();
     private readonly TaskCompletionSource<bool> _openGlContextCreated = new();
-    private ConcurrentQueue<TextureQueueRecord> _textureQueue = new();
-    private ILogger Logger { get; } = logger.ForEngineContext();
+    private readonly ConcurrentQueue<TextureQueueRecord> _textureQueue = new();
+    private ILogger Logger { get; } = logger.ForContext<Engine>();
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods

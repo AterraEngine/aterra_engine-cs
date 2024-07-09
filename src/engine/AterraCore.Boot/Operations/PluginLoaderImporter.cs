@@ -1,12 +1,9 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Boot.Logic.PluginLoading;
 using AterraCore.Common.ConfigFiles.PluginConfig;
 using AterraCore.Common.Data;
-using AterraCore.Common.Types.FlexiPlug;
 using AterraCore.Common.Types.Nexities;
-using AterraCore.Contracts.Boot.FlexiPlug;
 using AterraCore.Contracts.Nexities.Data.Assets;
 using AterraCore.DI;
 using AterraCore.FlexiPlug.Attributes;
@@ -26,14 +23,13 @@ namespace AterraCore.Boot.Operations;
 public class PluginLoaderImporter : IBootOperation {
     public AssetId AssetId => PluginLoaderImporterOperation;
     public AssetId? RanAfter => PluginLoaderPreChecksOperation;
-    private ILogger Logger { get; } = StartupLogger.CreateLogger(false).ForBootOperationContext("PL : Importer");
+    private ILogger Logger { get; } = StartupLogger.CreateLogger(false).ForPluginLoaderContext("Importer");
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public void Run(IBootOperationComponents components) {
-        Logger.Debug("Entered Plugin Loader Importer");
-        components.PluginLoader = new PluginLoader();
+        Logger.Debug("Entered Plugin Loader Importer with {i} valid plugins", components.PluginLoader.GetValidPlugins().Count());
 
         components.PluginLoader.IterateOverValidWithZipImporter(
             #region Get Files & Config
@@ -41,10 +37,12 @@ public class PluginLoaderImporter : IBootOperation {
                 plugin.InternalFilePaths = zipImporter.GetFileNamesInZip();
                 if (!zipImporter.TryGetPluginConfig(out PluginConfigXml? pluginConfig)) {
                     plugin.SetInvalid();
-                    components.WarningAtlas.RaiseWarningEvent(NoPluginConfigXmlFound);
+                    components.WarningAtlas.RaiseEvent(NoPluginConfigXmlFound);
                     return;
                 }
+                
                 plugin.ConfigXml = pluginConfig;
+                Logger.Debug("Loaded ConfigXml for {plugin}", plugin.ConfigXml.NameSpace);
             },     
             #endregion
             #region Import Data
@@ -61,7 +59,7 @@ public class PluginLoaderImporter : IBootOperation {
                     .Select(fileDto => {
                         if (zipImporter.TryGetDllAssembly(fileDto, out Assembly? assembly)) return assembly;
                         plugin.SetInvalid();
-                        components.WarningAtlas.RaiseWarningEvent(AssemblyCouldNotBeLoaded);
+                        components.WarningAtlas.RaiseEvent(AssemblyCouldNotBeLoaded);
                         return assembly;
                     })
                     .Where(assembly => assembly != null)
@@ -87,7 +85,7 @@ public class PluginLoaderImporter : IBootOperation {
             #endregion
             #region Import Static injectables from Assembly
             .IterateOverValid((_, plugin) => {
-                components.DynamicServices.AddLastRepeated(
+                components.StaticServices.AddLastRepeated(
                 plugin.GetOfAttribute<InjectableAttribute>()
                     .Where(tuple => tuple.Attribute.IsStatic)
                     .Select(tuple => new ServiceDescriptor(

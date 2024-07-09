@@ -11,6 +11,6 @@ namespace AterraCore.Contracts.Boot;
 public interface IWarningAtlas {
     public IWarning GetWarning(AssetId assetId);
     public bool TryRegisterWarning(AssetId assetId, IWarning warning);
-    public void AddWarningEvent(AssetId assetId, EventHandler<WarningEventArgs> eventHandler);
-    public void RaiseWarningEvent(AssetId assetId, object? sender = null, params object?[] messageParams);
+    public void AddEvent(AssetId assetId, EventHandler<WarningEventArgs> eventHandler);
+    public void RaiseEvent(AssetId assetId, object? sender = null, params object?[] messageParams);
 }

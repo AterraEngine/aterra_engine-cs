@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Loggers.Enrichers;
 using Serilog;
 using Serilog.Formatting.Compact;
 using Serilog.Sinks.SystemConsole.Themes;
@@ -17,8 +18,8 @@ public static class LoggerConfigurationExtensions {
     /// <summary>
     /// The output template used for formatting log messages.
     /// </summary>
-    public const string OutputTemplateEngine = "[ {Section,24} : {Timestamp:HH:mm:ss.fff} : {Level:u3}] | {Message:lj} {NewLine}{Exception}";
-    public const string OutputTemplateStartup = "[ {IsBootOperation,-4}{Section,20} : {Timestamp:HH:mm:ss.fff} : {Level:u3}] | {Message:lj} {NewLine}{Exception}";
+    public const string OutputTemplateEngine = "[ {SourceContext,24} : {Timestamp:HH:mm:ss.fff} : {Level:u3}] | {Message:lj} {NewLine}{Exception}";
+    public const string OutputTemplateStartup = "[ {IsBootOperation,-4}{SourceContext,24} : {Timestamp:HH:mm:ss.fff} : {Level:u3}] | {Message:lj} {NewLine}{Exception}";
 
     #region Theme
     /// <summary>
@@ -63,7 +64,9 @@ public static class LoggerConfigurationExtensions {
             .Enrich.WithProperty("Stage", stage)
             .Enrich.WithProperty("MachineName", Environment.MachineName)
             .Enrich.WithThreadId()
-            .Enrich.WithMemoryUsage();
+            .Enrich.WithMemoryUsage()
+            .Enrich.With(new TruncateSourceContextEnricher(21))
+        ;
 
     /// <summary>
     /// Adds an async file sink to the logger configuration for writing logs asynchronously.
