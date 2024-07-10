@@ -11,6 +11,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\..\src\engine\AterraCore.Boot\AterraCore.Boot.csproj" />
+        <ProjectReference Include="..\..\..\src\lib\AterraLib\AterraLib.csproj" />
         <ProjectReference Include="..\..\..\tools\AterraEngine.Analyzers\AterraEngine.Analyzers\AterraEngine.Analyzers.csproj">
             <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
             <OutputItemType>Analyzer</OutputItemType>

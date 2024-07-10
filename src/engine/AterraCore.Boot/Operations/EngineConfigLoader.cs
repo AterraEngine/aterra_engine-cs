@@ -3,12 +3,10 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.ConfigFiles.EngineConfig;
 using AterraCore.Common.Data;
-using AterraCore.Common.Types.Nexities;
 using AterraCore.Loggers;
 using CodeOfChaos.Extensions;
 using JetBrains.Annotations;
 using Xml;
-using static AterraCore.Common.Data.PredefinedAssetIds.NewBootOperationNames;
 using static AterraCore.Common.Data.PredefinedAssetIds.NewConfigurationWarnings;
 
 namespace AterraCore.Boot.Operations;
@@ -16,8 +14,6 @@ namespace AterraCore.Boot.Operations;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class EngineConfigLoader : IBootOperation {
-    public AssetId AssetId => EngineConfigLoaderOperation;
-    public AssetId? RanAfter => null;
     private ILogger Logger { get; } = StartupLogger.CreateLogger(false).ForBootOperationContext<EngineConfigLoader>();
     private readonly string? _configFilePath;
     

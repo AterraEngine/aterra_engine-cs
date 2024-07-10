@@ -8,4 +8,4 @@ namespace AterraCore.Contracts.FlexiPlug;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public delegate IPreLoadedPluginDto ZipImportCallback(IPreLoadedPluginDto pluginData, IPluginZipImporter<PluginConfigXml> zipImporter);
+public delegate IFilePathLoadedPluginDto ZipImportCallback(IFilePathLoadedPluginDto pluginData, IPluginZipImporter<PluginConfigXml> zipImporter);

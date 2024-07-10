@@ -3,8 +3,8 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.Nexities.Data.Assets;
-using AterraCore.Nexities.Lib.Entities.Actor;
-using AterraCore.Nexities.Lib.Systems;
+using AterraCore.Contracts.Nexities.Data.Levels;
+using AterraLib.Nexities.Systems;
 using JetBrains.Annotations;
 using Serilog;
 

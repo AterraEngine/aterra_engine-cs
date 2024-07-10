@@ -23,7 +23,6 @@ public static class RaylibLogger {
     private static LoggerConfiguration CreateConfiguration() =>
         new LoggerConfiguration()
             .MinimumLevel.Verbose()
-            .DefaultEnrich("Raylib")
             .AsyncSinkFile(Paths.Logs.RendererLog)
             .SinkConsole();// Allow async console as well?
 

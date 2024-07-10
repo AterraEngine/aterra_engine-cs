@@ -6,7 +6,6 @@ using AterraCore.Common.Data;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Loggers;
 using CodeOfChaos.Extensions.Serilog;
-using static AterraCore.Common.Data.PredefinedAssetIds.NewBootOperationNames;
 using static AterraCore.Common.Data.PredefinedAssetIds.NewConfigurationWarnings;
 
 namespace AterraCore.Boot.Operations;
@@ -15,8 +14,6 @@ namespace AterraCore.Boot.Operations;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class RegisterWarnings : IBootOperation {
-    public AssetId AssetId => RegisterWarningsOperation;
-    public AssetId? RanAfter => EngineConfigLoaderOperation;
     private ILogger Logger { get; } = StartupLogger.CreateLogger(false).ForBootOperationContext<RegisterWarnings>(); 
 
     private Dictionary<AssetId, (string warning, string error, ExitCodes exitCodes)> Exceptions { get; } = new() {
@@ -57,7 +54,7 @@ public class RegisterWarnings : IBootOperation {
         Logger.Debug("Entered Register Warnings");
         
         #region Non breaking Warnings
-        foreach (BootWarningDto dto in components.EngineConfigXml.BootConfig.Exceptions.Warnings) {
+        foreach (BootWarningDto dto in components.EngineConfigXml.BootConfig.Exceptions.Warnings ) {
             if (!Exceptions.TryGetValue(dto.AssetId, out (string warning, string error, ExitCodes exitCode) exception)) continue;
             components.WarningAtlas.AddEvent(dto.AssetId, (_, args) => {
                 Logger.Warning(

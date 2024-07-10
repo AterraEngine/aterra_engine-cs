@@ -5,4 +5,6 @@ namespace AterraCore.Contracts.Nexities.Data.Systems;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface INexitiesSystem;
+public interface INexitiesSystem {
+    Type ProcessableEntityType { get; }
+}

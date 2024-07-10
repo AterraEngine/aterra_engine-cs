@@ -9,6 +9,5 @@ namespace AterraCore.Contracts.Boot;
 public interface IEngineConfiguration {
     IEngineConfiguration RegisterBootOperation<T>() where T : IBootOperation, new();
     IEngineConfiguration RegisterBootOperation(IBootOperation newOperation);
-    IEngineConfiguration RunBootOperations();
     IEngine BuildEngine();
 }

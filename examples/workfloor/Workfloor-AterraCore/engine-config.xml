@@ -14,8 +14,7 @@
         </exceptions>
     </boot>
     
-    <loadOrder relativeRootPath="plugins">
-        <rootAssembly author="Andreas Sas" nameSpace="AterraWorkfloor" nameReadable="Aterra Workfloor"/>
+    <loadOrder relativeRootPath="plugins" aterraLib="0.0.0">
         <plugin file="Workfloor-AterraCore.Plugin.zip"/>
     </loadOrder>
     

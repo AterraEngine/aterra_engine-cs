@@ -31,7 +31,7 @@ public class EngineServiceBuilder(ILogger logger) : IEngineServiceBuilder {
     /// <param name="serviceDescriptor">The <see cref="ServiceDescriptor"/> to assign.</param>
     public void AssignFromServiceDescriptor(ServiceDescriptor serviceDescriptor) {
         ServiceCollection.Add(serviceDescriptor);
-        Logger.Information(
+        Logger.Debug(
             "Type {Type} assigned to {Imp}",
             serviceDescriptor.ServiceType,
             serviceDescriptor.ImplementationType ?? serviceDescriptor.ImplementationInstance ?? serviceDescriptor.ServiceType

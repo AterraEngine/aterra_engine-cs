@@ -5,6 +5,7 @@ using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Data.Assets;
 using AterraCore.DI;
 using AterraCore.Nexities.Attributes;
+using CodeOfChaos.Extensions.Serilog;
 using JetBrains.Annotations;
 using Serilog;
 using System.Collections.Concurrent;
@@ -41,18 +42,16 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas) : IAsset
                     return EngineServices.CreateWithServices<object>(p.ParameterType);
                 }
 
-                if (p.GetCustomAttribute<InjectAsAttribute>() is not {} refersToAttribute) {
-                    logger.Warning("Parameter type {t} did not have a {attrib}", p.ParameterType, typeof(InjectAsAttribute));
+                if (p.GetCustomAttribute<InjectAsAttribute>() is not {} refersToAttribute)
                     return EngineServices.CreateNexitiesAsset<IAssetInstance>(
-                        !assetAtlas.TryGetType(paramAssetId, out Type? classType) 
-                            ? p.ParameterType 
+                        !assetAtlas.TryGetType(paramAssetId, out Type? classType)
+                            ? p.ParameterType
                             : classType
                     );
-                }
                 
                 logger.Debug("Parameter type {t} refers to instance {guid} ", p.ParameterType, refersToAttribute.Guid);
-                
-                if (TryGetOrCreate(paramAssetId, refersToAttribute.Guid, out IAssetInstance? instance) ) {
+
+                if (TryGetOrCreate(paramAssetId, refersToAttribute.Guid, out IAssetInstance? instance)) {
                     logger.Debug("Found or created an instance");
                     return instance;
                 }

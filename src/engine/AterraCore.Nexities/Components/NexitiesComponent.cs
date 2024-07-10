@@ -8,4 +8,4 @@ namespace AterraCore.Nexities.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class NexitiesComponent : AssetInstance, IComponent;
+public abstract class NexitiesComponent : AssetInstance, INexitiesComponent;

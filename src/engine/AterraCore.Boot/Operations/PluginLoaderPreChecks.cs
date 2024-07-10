@@ -1,9 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Types.Nexities;
 using AterraCore.Loggers;
-using static AterraCore.Common.Data.PredefinedAssetIds.NewBootOperationNames;
 using static AterraCore.Common.Data.PredefinedAssetIds.NewConfigurationWarnings;
 
 namespace AterraCore.Boot.Operations;
@@ -12,8 +10,6 @@ namespace AterraCore.Boot.Operations;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class PluginLoaderPreChecks : IBootOperation {
-    public AssetId AssetId => PluginLoaderPreChecksOperation;
-    public AssetId? RanAfter => PluginLoaderDefineOperation;
     private ILogger Logger { get; } = StartupLogger.CreateLogger(false).ForPluginLoaderContext("PreChecks");
 
     // -----------------------------------------------------------------------------------------------------------------

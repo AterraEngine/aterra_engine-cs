@@ -5,6 +5,8 @@ using AterraCore.Contracts;
 using AterraCore.Boot;
 using AterraCore.Boot.Operations;
 using AterraCore.Contracts.Boot;
+using AterraEngine;
+using AterraLib;
 
 namespace Workfloor_AterraCore;
 
@@ -14,67 +16,28 @@ namespace Workfloor_AterraCore;
 public static class Program {
     public static void Main(string[] args) {
         IEngineConfiguration config = new EngineConfiguration()
-            .RegisterBootOperation<RegisterWarnings>()
             .RegisterBootOperation<EngineConfigLoader>()
-            .RegisterBootOperation<CollectDependencies>()
-            .RegisterBootOperation<BuildDependencies>()
+            .RegisterBootOperation<RegisterWarnings>()
+            .RegisterBootOperation<RegisterAssemblyAsPlugin<AterraLibEntry>>()
+            .RegisterBootOperation<CollectDefaultDependencies>()
             .RegisterBootOperation<PluginLoaderDefine>()
             .RegisterBootOperation<PluginLoaderPreChecks>()
-            .RegisterBootOperation<PluginLoaderImporter>()
-
-            .RunBootOperations()
+            .RegisterBootOperation<PluginLoaderZipImporter>()
+            .RegisterBootOperation<PluginExtractor>()
+            .RegisterBootOperation<BuildDependencies>()
         ;
 
         IEngine engine = config.BuildEngine();
+        
+        // --- Engine is running ---
+        engine
+            .SubscribeToEvents()
+            .SpawnRenderThread()
+        ;
+        
+        // Actually startup the engine
         Task.Run(engine.Run)
             .GetAwaiter()
             .GetResult();
-
-
-        // IEngine engine = new EngineConfiguration()
-        //     .UseDefaultEngine()
-        //     .ImportEngineConfig(Paths.ConfigEngine)
-        //     
-        //     // --- Assign SubConfigurations ---
-        //     .WithSubConfigurations(sc => {
-        //         // Has to be ran before FlexiPlug configuration.
-        //         //      Else it will add the simulated plugin after other plugins
-        //         sc.Nexities
-        //             .IncludeNexitiesLibAssembly();
-        //         
-        //         sc.FlexiPlug
-        //             .CheckAndIncludeRootAssembly() 
-        //             .PreLoadPlugins()
-        //         ;
-        //     })
-        //     
-        //     // --- Assign Services for the ServiceProvider ---
-        //     // Assigns services which may be overriden by plugins
-        //     .AddDefaultServices([
-        //         NewServiceDescriptor<RaylibLogger, RaylibLogger>(ServiceLifetime.Singleton),
-        //         NewServiceDescriptor<IMainWindow, MainWindow>(ServiceLifetime.Singleton)
-        //     ])
-        //     
-        //     .AddStaticServices([
-        //         NewServiceDescriptor<RenderThreadEvents, RenderThreadEvents>(ServiceLifetime.Singleton),
-        //         NewServiceDescriptor<IApplicationStageManager, ApplicationStageManager>(ServiceLifetime.Singleton),
-        //     ])
-        //     
-        //     // Finish building the DI container
-        //     .BuildDependencyInjectionContainer()
-        //     
-        //     // --- Create Engine ---
-        //     // Actually create the engine instance
-        //     .CreateEngine();
-        //
-        // // --- Engine is running ---
-        // engine
-        //     .SubscribeToEvents()
-        //     .SpawnRenderThread()
-        // ;
-        //
-        // // Actually startup the engine
-        // // Task.Run(engine.Run).GetAwaiter().GetResult();
-
     }
 }

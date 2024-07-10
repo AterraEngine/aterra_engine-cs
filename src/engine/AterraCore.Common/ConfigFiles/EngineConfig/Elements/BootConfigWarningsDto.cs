@@ -8,9 +8,9 @@ namespace AterraCore.Common.ConfigFiles.EngineConfig.Elements;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class BootConfigWarningsDto {
-    [XmlElement("warning")] public BootWarningDto[] OriginalWarnings { get; set; } = [];
-    [XmlElement("error")] public BootWarningDto[] OriginalErrors { get; set; } = [];
+    [XmlElement("warning")] public BootWarningDto[]? OriginalWarnings { get; set; } = [];
+    [XmlElement("error")] public BootWarningDto[]? OriginalErrors { get; set; } = [];
 
-    [XmlIgnore] public IEnumerable<BootWarningDto> Warnings => OriginalWarnings.ToHashSet();
-    [XmlIgnore] public IEnumerable<BootWarningDto> Errors => OriginalErrors.ToHashSet();
+    [XmlIgnore] public IEnumerable<BootWarningDto> Warnings => OriginalWarnings?.ToHashSet() ?? [];
+    [XmlIgnore] public IEnumerable<BootWarningDto> Errors => OriginalErrors?.ToHashSet() ?? [];
 }

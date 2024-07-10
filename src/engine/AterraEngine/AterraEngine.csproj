@@ -18,6 +18,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\lib\AterraLib\AterraLib.csproj" />
         <ProjectReference Include="..\..\lib\Xml\Xml.csproj"/>
         <ProjectReference Include="..\AterraCore.Contracts\AterraCore.Contracts.csproj"/>
         <ProjectReference Include="..\AterraCore.DI\AterraCore.DI.csproj"/>

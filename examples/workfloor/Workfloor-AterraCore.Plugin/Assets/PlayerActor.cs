@@ -1,13 +1,12 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Nexities.Data.Components.AssetTree;
+using AterraCore.Contracts.Nexities.Data.Components;
+using AterraCore.Contracts.Nexities.Data.Levels;
 using AterraCore.Nexities.Attributes;
 using JetBrains.Annotations;
-using AterraCore.Nexities.Lib.Components.Sprite2D;
-using AterraCore.Nexities.Lib.Components.Transform2D;
-using AterraCore.Nexities.Lib.Entities.Actor;
 using AterraCore.Nexities.Entities;
+using AterraLib.Nexities.Entities;
 
 namespace Workfloor_AterraCore.Plugin.Assets;
 

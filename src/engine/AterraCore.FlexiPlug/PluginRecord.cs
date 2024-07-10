@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.FlexiPlug.Plugin;
 using AterraCore.Contracts.Nexities.Data.Assets;
 using AterraCore.Contracts.Nexities.Data.Attributes;
@@ -12,13 +13,7 @@ namespace AterraCore.FlexiPlug;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class PluginRecord : IPluginRecord {
-    public required string NameSpace { get; init; }
-    private readonly string? _nameReadableCache; 
-    public string NameReadable {
-        get => (_nameReadableCache.IsNotNullOrEmpty() ? _nameReadableCache : NameReadable) ?? NameSpace;
-        init => _nameReadableCache = value;
-    }
-
+    public PluginId PluginId { get; init; }
     public IEnumerable<Type> Types { get; init; } = [];// DON'T invalidate this !!!
 
     private Dictionary<Type, AssetTypeRecord>? _assetTypeRecords;

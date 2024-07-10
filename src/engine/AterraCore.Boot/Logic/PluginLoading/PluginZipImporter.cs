@@ -5,7 +5,6 @@
 using AterraCore.Common.ConfigFiles.PluginConfig;
 using AterraCore.Common.Data;
 using AterraCore.Contracts.FlexiPlug;
-using AterraCore.Loggers;
 using System.Diagnostics.CodeAnalysis;
 using System.IO.Compression;
 using System.Reflection;

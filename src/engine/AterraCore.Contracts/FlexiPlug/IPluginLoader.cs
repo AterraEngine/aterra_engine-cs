@@ -8,14 +8,14 @@ namespace AterraCore.Contracts.FlexiPlug;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IPluginLoader {
-    public LinkedList<IPreLoadedPluginDto> Plugins { get; }
+public interface IFilePathPluginLoader {
+    public LinkedList<IFilePathLoadedPluginDto> Plugins { get; }
     public HashSet<string> Checksums { get; }
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public IPluginLoader IterateOverValid(Action<IPluginLoader, IPreLoadedPluginDto> action);
-    public IPluginLoader IterateOverValidWithZipImporter(params Action<IPluginLoader, IPreLoadedPluginDto, IPluginZipImporter<PluginConfigXml>>[] actions);
-    public IEnumerable<IPreLoadedPluginDto> GetValidPlugins();
+    public IFilePathPluginLoader IterateOverValid(Action<IFilePathPluginLoader, IFilePathLoadedPluginDto> action);
+    public IFilePathPluginLoader IterateOverValidWithZipImporter(params Action<IFilePathPluginLoader, IFilePathLoadedPluginDto, IPluginZipImporter<PluginConfigXml>>[] actions);
+    public IEnumerable<IFilePathLoadedPluginDto> GetValidPlugins();
 }

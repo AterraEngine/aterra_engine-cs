@@ -1,6 +1,5 @@
 ﻿// Global using directives
 
-global using System;
 global using System.Threading.Tasks;
 global using AterraEngine.Analyzers;
 global using Microsoft.CodeAnalysis;

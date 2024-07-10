@@ -14,7 +14,7 @@ public class TruncateSourceContextEnricher(int maxLength) : ILogEventEnricher {
         if (!logEvent.Properties.TryGetValue("SourceContext", out LogEventPropertyValue? sourceContextValue) 
             || sourceContextValue is not ScalarValue { Value: string sourceContext }) return;
         
-        string truncatedSourceContext = sourceContext.Length > maxLength
+        string truncatedSourceContext = sourceContext.Length > maxLength+3
             ? string.Concat("...", sourceContext.AsSpan(sourceContext.Length - maxLength, maxLength))
             : sourceContext;
 

@@ -3,9 +3,6 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using AterraCore.Common.Types;
-using CodeOfChaos.Extensions;
-using CodeOfChaos.Extensions.Serilog;
-using Serilog;
 using System.Xml.Serialization;
 using Xml.Elements;
 
@@ -30,25 +27,4 @@ public class PluginConfigXml {
     [XmlIgnore] public SemanticVersion GameVersion =>_gameVersionCache ??= new SemanticVersion(GameVersionValue);
 
     [XmlIgnore] public IEnumerable<FileDto> Dlls => BinDtos;
-    
-    // -----------------------------------------------------------------------------------------------------------------
-    // Methods
-    // -----------------------------------------------------------------------------------------------------------------
-    public void OutputToLog(ILogger logger) {
-        ValuedStringBuilder valuedBuilder = new ValuedStringBuilder()
-            .AppendLine("Plugin PluginDtos loaded with the following data:")
-            .AppendLineValued("- Name: ", NameReadable)
-            .AppendLineValued("- Author: ", Author)
-            .AppendLineValued("- Plugin Version: ", PluginVersion)
-            .AppendLineValued("- Expected Game Version: ", GameVersion)
-            .AppendLine("Bins:");
-
-        BinDtos
-            .IterateOver(bin => valuedBuilder.AppendLineValued("- Bin : ", [bin.FilePath]));
-
-        logger.Information(
-            valuedBuilder.ToString(), // Message template 
-            valuedBuilder.ValuesToArray() // array of all parameters to insert
-        );
-    }
 }

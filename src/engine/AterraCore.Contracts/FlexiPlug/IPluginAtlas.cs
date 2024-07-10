@@ -16,14 +16,13 @@ public interface IPluginAtlas {
     // -----------------------------------------------------------------------------------------------------------------
     // Constructor or population Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void ImportLoadedPluginDtos(Span<IPreLoadedPluginDto> plugins);
+    public void ImportLoadedPluginDtos(Span<IPluginDto> plugins);
     public void InvalidateAllCaches();
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public IEnumerable<AssetRegistration> GetAssetRegistrations(string? pluginNameSpace = null, CoreTags filter = CoreTags.Asset);
-    public IEnumerable<AssetRegistration> GetEntityRegistrations(string? pluginNameSpace = null);
-    public IEnumerable<AssetRegistration> GetComponentRegistrations(string? pluginNameSpace = null);
-    bool TryGetPluginByReadableName(string readableName, [NotNullWhen(true)] out IPluginRecord? plugin);
+    public IEnumerable<AssetRegistration> GetAssetRegistrations(PluginId? pluginNameSpace = null, CoreTags? filter = null);
+    public IEnumerable<AssetRegistration> GetEntityRegistrations(PluginId? pluginNameSpace = null);
+    public IEnumerable<AssetRegistration> GetComponentRegistrations(PluginId? pluginNameSpace = null);
 }
