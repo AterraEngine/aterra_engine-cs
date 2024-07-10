@@ -58,10 +58,6 @@ public class AssetTree : NexitiesComponent, IAssetTree {
             }
             currentNode = currentNode.Next;
         }
-        foreach (IAssetInstance node in nodes) {
-            
-            
-        }
     }
     private static IEnumerable<T> OfTypeManyReverseInternal<T>(LinkedList<IAssetInstance> nodes) where T : IAssetInstance {
         LinkedListNode<IAssetInstance>? currentNode = nodes.Last;
@@ -78,23 +74,23 @@ public class AssetTree : NexitiesComponent, IAssetTree {
     }
     #endregion
 
+    #region Caching helpers
     private IEnumerable<T> GetOrAddToCache<T>(bool many, bool reverse, Func<LinkedList<IAssetInstance>, IEnumerable<T>> callback) {
         (Type, bool, bool) key = (typeof(T), many, reverse);
-        
-        if (!_nodeByTypeCache.TryGetValue(key, out LinkedList<IAssetInstance>? result)) {
-            IEnumerable<T> output = callback(Nodes);
-            result = [];
-            foreach (T node in output) {
+
+        if (_nodeByTypeCache.TryGetValue(key, out LinkedList<IAssetInstance>? result)) {
+            foreach (T node in result) {
                 yield return node;
-                result.AddLast((IAssetInstance)node!);
             }
-            
-            _nodeByTypeCache.TryAdd(key, result);
             yield break;
         }
-        foreach (T node in result) {
+        
+        result = [];
+        foreach (T node in callback(Nodes)) {
             yield return node;
+            result.AddLast((IAssetInstance)node!);
         }
+        _nodeByTypeCache.TryAdd(key, result);
     }
 
     private void InvalidateCaches<T>() {
@@ -103,7 +99,8 @@ public class AssetTree : NexitiesComponent, IAssetTree {
         _nodeByTypeCache.TryRemove((typeof(T), true, false), out _);
         _nodeByTypeCache.TryRemove((typeof(T), true, true), out _);
     }
-
+    #endregion
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Retrieval Methods
     // -----------------------------------------------------------------------------------------------------------------

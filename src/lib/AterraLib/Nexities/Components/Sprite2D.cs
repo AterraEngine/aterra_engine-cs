@@ -1,13 +1,12 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Diagnostics.CodeAnalysis;
-
 namespace AterraLib.Nexities.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [Component<ISprite2D>("AterraLib:Nexities/Components/Sprite2D")]
+[UsedImplicitly]
 public class Sprite2D : NexitiesComponent, ISprite2D {
     private Texture2D? _texture2D;
     public Texture2D? Texture2D {
