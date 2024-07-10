@@ -20,11 +20,11 @@ public class Render2D(ILogger logger) : NexitiesSystem<IActor2D> {
         IActor2D[] entities = [..entity.ChildEntities.OfTypeManyReverse<IActor2D>(), entity];
         
         foreach (IActor2D childEntity in entities) {
+            if (!childEntity.Sprite2D.TryGetTexture2D(out Texture2D texture)) continue;
             Vector2 translation = childEntity.Transform2D.Translation + entity.Transform2D.Translation;
             Vector2 scale = childEntity.Transform2D.Scale + entity.Transform2D.Scale;
             Vector2 rotation = childEntity.Transform2D.Rotation + entity.Transform2D.Rotation;
-
-            if (childEntity.Sprite2D.Texture2D is not {} texture) continue;
+            
             // Raylib.DrawTexture(texture, (int)translation.X, -(int)translation.Y, Color.White);
             
             Raylib.DrawTexturePro(

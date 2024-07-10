@@ -6,11 +6,14 @@ using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.Nexities.Data.Assets;
+using AterraCore.Contracts.Nexities.Data.Components;
 using AterraCore.Contracts.Nexities.Data.Levels;
 using AterraCore.Contracts.Nexities.Data.Worlds;
 using AterraCore.Contracts.Renderer;
 using AterraCore.DI;
+using AterraCore.Nexities.Assets;
 using AterraEngine.Threading;
+using AterraLib.Nexities.Components;
 using AterraLib.Nexities.Entities;
 using CodeOfChaos.Extensions;
 using CodeOfChaos.Extensions.Serilog;
@@ -94,33 +97,43 @@ public class Engine(
             TexturePath : "assets/ducky-hype.png",
             RecordType : TextureQueueRecordType.Register
         ));
-
         
-
+        _textureQueue.Enqueue(new TextureQueueRecord (
+            TextureAssetId : new AssetId("AterraLib:Nexities/Components/Sprite2D"),
+            PredefinedGuid : Guid.Parse("827c3bc1-f688-4301-b342-b8958c1fe893"),
+            TexturePath : "assets/DuckyPlatinum.png",
+            RecordType : TextureQueueRecordType.Register
+        ));
+        
+        // -------------------------------------------------------------------------------------------------------------
+        TryAssignStartingLevel("NexitiesDebug:Levels/MainLevel");
+        
+        var spriteDuckyHype = instanceAtlas.GetOrCreate<ISprite2D>("AterraLib:Nexities/Components/Sprite2D", Guid.Parse("827c3bc1-f688-4301-b342-b8958c1fe892"));
+        var spriteDuckyPlatinum = instanceAtlas.GetOrCreate<ISprite2D>("AterraLib:Nexities/Components/Sprite2D", Guid.Parse("827c3bc1-f688-4301-b342-b8958c1fe893"));
+        
         if (instanceAtlas.TryCreate(new AssetId("NexitiesDebug:Entities/DuckyHypeActor"), out Actor2D? instance, predefinedGuid:Guid.Parse("af15db3d-f69e-4382-a768-d163011125f5"))) {
             instance.Transform2D.Translation = new Vector2(150, 20);
             instance.Transform2D.Scale = new Vector2(100, 100);
+            world.LoadedLevel?.ChildEntities.AddLast(instance);
         }
         
         if (instanceAtlas.TryCreate(new AssetId("AterraLib:Nexities/Entities/Actor2D"), out Actor2D? instance2, predefinedGuid:Guid.Parse("af15db3d-f69e-4382-a768-123456789012"))) {
             instance2.Transform2D.Translation = new Vector2(20, 30);
             instance2.Transform2D.Scale = new Vector2(100, 100);
-            
-            _textureQueue.Enqueue(new TextureQueueRecord (
-                TextureAssetId : new AssetId("AterraLib:Nexities/Components/Sprite2D"),
-                PredefinedGuid :  instance2.Sprite2D.Guid,
-                TexturePath : "assets/DuckyPlatinum.png",
-                RecordType : TextureQueueRecordType.Register
-            ));
-
+            instance2.TryUpdateComponent(spriteDuckyPlatinum);
+            world.LoadedLevel?.ChildEntities.AddLast(instance2);
         }
 
-        const int a = 100;
+        const int a = 10;
         for (int i = 0; i < a; i++) {
             for (int j = 0; j < a; j++) {
                 if (!instanceAtlas.TryCreate(new AssetId("NexitiesDebug:Entities/DuckyHypeActor"), out Actor2D? newDucky)) continue;
-                newDucky.Transform2D.Translation = new Vector2(10 * i, 10 * j);
+                newDucky.Transform2D.Translation = new Vector2(250 + 10 * i, 10 * j);
                 newDucky.Transform2D.Scale = new Vector2(10, 10);
+                newDucky.TryUpdateComponent( j % 2 == 1 ? spriteDuckyHype : spriteDuckyPlatinum );
+                world.LoadedLevel?.ChildEntities.AddLast(newDucky);
+                
+                Logger.Fatal("{i}", i*a + j);
             }
         }
 

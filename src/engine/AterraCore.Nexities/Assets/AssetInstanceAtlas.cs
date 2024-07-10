@@ -43,11 +43,11 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas) : IAsset
 
                 if (p.GetCustomAttribute<InjectAsAttribute>() is not {} refersToAttribute)
                     return EngineServices.CreateNexitiesAsset<IAssetInstance>(
-                        !assetAtlas.TryGetType(paramAssetId, out Type? classType)
-                            ? p.ParameterType
-                            : classType
+                    !assetAtlas.TryGetType(paramAssetId, out Type? classType)
+                        ? p.ParameterType
+                        : classType
                     );
-                
+
                 logger.Debug("Parameter type {t} refers to instance {guid} ", p.ParameterType, refersToAttribute.Guid);
 
                 if (TryGetOrCreate(paramAssetId, refersToAttribute.Guid, out IAssetInstance? instance)) {
@@ -59,7 +59,7 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas) : IAsset
 
             })
             .ToArray();
-        
+
         // ReSharper disable once CoVariantArrayConversion
         instance = (T)constructor.Invoke(parameters);
         instance.AssetId = registration.AssetId;
@@ -76,12 +76,12 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas) : IAsset
         return false;
     }
 
-    public bool TryCreate<T>([NotNullWhen(true)] out T? instance, Guid? predefinedGuid = null) where T : class, IAssetInstance => 
+    public bool TryCreate<T>([NotNullWhen(true)] out T? instance, Guid? predefinedGuid = null) where T : class, IAssetInstance =>
         TryCreate(typeof(T), out instance, predefinedGuid);
 
     public bool TryCreate<T>(Type type, [NotNullWhen(true)] out T? instance, Guid? predefinedGuid = null) where T : class, IAssetInstance {
         instance = null;
-        return assetAtlas.TryGetAssetId(type, out AssetId assetId) 
+        return assetAtlas.TryGetAssetId(type, out AssetId assetId)
                && TryCreate(assetId, out instance, predefinedGuid);
     }
 
@@ -93,11 +93,21 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas) : IAsset
         return true;
     }
 
-    public bool TryGetOrCreate<T>(Type type, Guid? guid, [NotNullWhen(true)] out T? instance) where T : class, IAssetInstance => 
-        guid is not null && TryGet((Guid)guid, out instance) 
+    public bool TryGetOrCreate<T>(Type type, Guid? guid, [NotNullWhen(true)] out T? instance) where T : class, IAssetInstance =>
+        guid is not null && TryGet((Guid)guid, out instance)
         || TryCreate(type, out instance, predefinedGuid: guid);
-    
-    public bool TryGetOrCreate<T>(AssetId assetId, Guid? guid, [NotNullWhen(true)] out T? instance) where T : class, IAssetInstance => 
-        guid is not null && TryGet((Guid)guid, out instance) 
+
+    public bool TryGetOrCreate<T>(AssetId assetId, Guid? guid, [NotNullWhen(true)] out T? instance) where T : class, IAssetInstance =>
+        guid is not null && TryGet((Guid)guid, out instance)
         || TryCreate(assetId, out instance, predefinedGuid: guid);
+
+    public T GetOrCreate<T>(Type type, Guid? guid = null) where T : class, IAssetInstance {
+        if (!TryGetOrCreate(type, guid, out T? instance)) throw new ArgumentException($"Asset Id {guid} not found");
+        return instance;
+    }
+
+    public T GetOrCreate<T>(AssetId assetId, Guid? guid = null) where T : class, IAssetInstance {
+        if (!TryGetOrCreate(assetId, guid, out T? instance)) throw new ArgumentException($"Asset Id {guid} not found");
+        return instance;
+    }
 }

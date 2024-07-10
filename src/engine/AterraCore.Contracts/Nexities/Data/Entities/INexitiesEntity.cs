@@ -12,8 +12,8 @@ namespace AterraCore.Contracts.Nexities.Data.Entities;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface INexitiesEntity : IAssetInstance {
-    INexitiesComponent[] Components { get; }
-    AssetId[] ComponentAssetIds { get; }
+    ICollection<INexitiesComponent> Components { get; }
+    ICollection<AssetId> ComponentAssetIds { get; }
 
     bool TryGetComponent(AssetId assetId, [NotNullWhen(true)] out INexitiesComponent? component);
     bool TryAddComponent(INexitiesComponent component);

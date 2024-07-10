@@ -23,4 +23,7 @@ public interface IAssetInstanceAtlas {
 
     bool TryGetOrCreate<T>(Type type, Guid? guid, [NotNullWhen(true)] out T? instance) where T : class, IAssetInstance;
     bool TryGetOrCreate<T>(AssetId assetId, Guid? guid, [NotNullWhen(true)] out T? instance) where T : class, IAssetInstance;
+    
+    T GetOrCreate<T>(Type type, Guid? guid = null) where T : class, IAssetInstance;
+    T GetOrCreate<T>(AssetId assetId, Guid? guid = null) where T : class, IAssetInstance;
 }

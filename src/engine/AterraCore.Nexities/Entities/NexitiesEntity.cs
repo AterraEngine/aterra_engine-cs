@@ -13,47 +13,33 @@ namespace AterraCore.Nexities.Entities;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public abstract class NexitiesEntity(params INexitiesComponent[] components) : AssetInstance, INexitiesEntity {
-    private readonly ConcurrentDictionary<AssetId, INexitiesComponent> _componentsCache = new(
+    private readonly ConcurrentDictionary<AssetId, INexitiesComponent> _components = new(
         components.Select(component => new KeyValuePair<AssetId,INexitiesComponent>(component.AssetId, component))
     );
 
-    private INexitiesComponent[]? _components;
-    public INexitiesComponent[] Components => _components ??= _componentsCache.Values.ToArray();
-
-    private AssetId[]? _assetIds;
-    public AssetId[] ComponentAssetIds => _assetIds ??= _componentsCache.Keys.ToArray();
-
-    // -----------------------------------------------------------------------------------------------------------------
-    // Helper Methods
-    // -----------------------------------------------------------------------------------------------------------------
-    private bool InvalidateIfTrue(bool input) {
-        if (!input) return input;
-        _components = null;
-        _assetIds = null;
-        return input;
-    }
+    public ICollection<INexitiesComponent> Components => _components.Values;
+    public ICollection<AssetId> ComponentAssetIds => _components.Keys;
     
     // -----------------------------------------------------------------------------------------------------------------
     // Component manipulation Methods
     // -----------------------------------------------------------------------------------------------------------------
     public bool TryGetComponent(AssetId assetId, [NotNullWhen(true)] out INexitiesComponent? component) =>
-        InvalidateIfTrue(_componentsCache.TryGetValue(assetId, out component));
+        _components.TryGetValue(assetId, out component);
     
     public bool TryAddComponent(INexitiesComponent component) =>
-        InvalidateIfTrue(_componentsCache.TryAdd(component.AssetId, component));
+        _components.TryAdd(component.AssetId, component);
     
     public bool TryUpdateComponent(INexitiesComponent component) =>
-        InvalidateIfTrue(TryUpdateComponent(component, out _));
+        TryUpdateComponent(component, out _);
     public bool TryUpdateComponent(INexitiesComponent component, [NotNullWhen(true)] out INexitiesComponent? oldComponent) =>
-        InvalidateIfTrue(
-            _componentsCache.TryGetValue(component.AssetId, out oldComponent)
-            && _componentsCache.TryUpdate(component.AssetId, component, oldComponent)
-        );
+        _components.TryGetValue(component.AssetId, out oldComponent)
+        && _components.TryUpdate(component.AssetId, component, oldComponent)
+        ;
 
     public bool TryRemoveComponent(AssetId assetId, [NotNullWhen(true)] out INexitiesComponent? oldComponent) =>
-        InvalidateIfTrue(_componentsCache.TryRemove(assetId, out oldComponent));
+        _components.TryRemove(assetId, out oldComponent);
     public bool TryRemoveComponent(AssetId assetId) => 
-        InvalidateIfTrue(_componentsCache.TryRemove(assetId, out _));
+        _components.TryRemove(assetId, out _);
     
 
 }

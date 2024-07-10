@@ -1,9 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.FlexiPlug;
-using AterraCore.Contracts.Nexities.Data.Assets;
-using AterraCore.Contracts.Nexities.Data.Levels;
+using AterraCore.Contracts.Nexities.Data.Worlds;
 using AterraLib.Nexities.Systems;
 using JetBrains.Annotations;
 using Serilog;
@@ -13,7 +11,7 @@ namespace AterraEngine.Renderer.RaylibCs.FrameProcessors;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
-public class GeneralRenderRaylibFrameProcessor(IAssetInstanceAtlas assetInstanceAtlas, IPluginAtlas pluginAtlas, ILogger logger) : AbstractRaylibFrameProcessor {
+public class GeneralRenderRaylibFrameProcessor(ILogger logger, INexitiesWorld world) : AbstractRaylibFrameProcessor {
     protected override Color ClearColor { get; set; } = new(0, 0, 0, 0);
     private Render2D Render2D { get; } = new(logger);
     
@@ -25,11 +23,8 @@ public class GeneralRenderRaylibFrameProcessor(IAssetInstanceAtlas assetInstance
     }
 
     protected override void Draw2D() {
-        if (assetInstanceAtlas.TryGet(Guid.Parse("af15db3d-f69e-4382-a768-d163011125f5"), out IActor2D? actor2D)) {
-            Render2D.ProcessSingularEntity(actor2D);
-        }
-        if (assetInstanceAtlas.TryGet(Guid.Parse("af15db3d-f69e-4382-a768-123456789012"), out IActor2D? actor2D2)) {
-            Render2D.ProcessSingularEntity(actor2D2);
+        if (world.LoadedLevel != null) {
+            Render2D.ProcessLevel(world.LoadedLevel);
         }
     }
 }
