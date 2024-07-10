@@ -1,18 +1,18 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.ConfigFiles.EngineConfig;
-using AterraCore.Common.Data;
-using Microsoft.Extensions.DependencyInjection;
+using AterraCore.Common.ConfigFiles.PluginConfig;
+using System.Reflection;
 
-namespace AterraCore.Contracts.Boot;
+namespace AterraCore.Contracts.Boot.Logic.PluginLoading;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IBootConfiguration {
-    public LinkedList<ServiceDescriptor> ServicesDefault { get; }
-    public LinkedList<ServiceDescriptor> ServicesStatic { get; }
-    public EngineConfigXml EngineConfig { get; set; }
+public interface IFilePathLoadedPluginDto : IPluginDto {
+    string FilePath { get; }
+    string CheckSum { get; }
+    IEnumerable<string> InternalFilePaths { set; }
+    PluginConfigXml ConfigXml { get; set; }
     
-    public ConfigurationWarnings Warnings { get; }
+    List<Assembly> Assemblies { get;}
 }

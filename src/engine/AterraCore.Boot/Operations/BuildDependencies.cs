@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Contracts.Boot.Operations;
 using AterraCore.DI;
 using AterraCore.Loggers;
 
@@ -16,7 +17,7 @@ public class BuildDependencies : IBootOperation {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void Run(IBootOperationComponents components) {
+    public void Run(IBootComponents components) {
         Logger.Debug("Entered Build Service Provider");
         
         var builder = new EngineServiceBuilder(Logger);

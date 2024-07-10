@@ -5,7 +5,6 @@ using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Data.Assets;
 using AterraCore.DI;
 using AterraCore.Nexities.Attributes;
-using CodeOfChaos.Extensions.Serilog;
 using JetBrains.Annotations;
 using Serilog;
 using System.Collections.Concurrent;

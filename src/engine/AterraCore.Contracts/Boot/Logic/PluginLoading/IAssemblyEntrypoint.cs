@@ -3,10 +3,10 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Types.Nexities;
 
-namespace AterraCore.Contracts.Boot;
+namespace AterraCore.Contracts.Boot.Logic.PluginLoading;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IAterraLibEntry {
+public interface IAssemblyEntrypoint {
     PluginId Enter();
 }

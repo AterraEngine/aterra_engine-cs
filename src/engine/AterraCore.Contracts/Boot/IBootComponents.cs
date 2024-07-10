@@ -2,7 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.ConfigFiles.EngineConfig;
-using AterraCore.Contracts.Boot.FlexiPlug;
+using AterraCore.Contracts.Boot.Logic.PluginLoading;
 using AterraCore.Contracts.FlexiPlug;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,8 +10,7 @@ namespace AterraCore.Contracts.Boot;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IBootOperationComponents {
-    IWarningAtlas WarningAtlas { get; }
+public interface IBootComponents {
     IFilePathPluginLoader PluginLoader { get; }
     LinkedList<ServiceDescriptor> DefaultServices { get; }
     LinkedList<ServiceDescriptor> StaticServices { get; }

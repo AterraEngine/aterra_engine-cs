@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Boot.Logic.PluginLoading;
+using AterraCore.Contracts.Boot.Operations;
 using AterraCore.Loggers;
 using CodeOfChaos.Extensions;
 
@@ -16,7 +17,7 @@ public class PluginLoaderDefine : IBootOperation {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void Run(IBootOperationComponents components) {
+    public void Run(IBootComponents components) {
         Logger.Debug("Entered Plugin Loader Creation");
         
         string pluginFolder = components.EngineConfigXml.LoadOrder.RootFolderRelative;

@@ -3,8 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Boot.Logic.PluginLoading;
 using AterraCore.Contracts;
-using AterraCore.Contracts.Boot.FlexiPlug;
-using AterraCore.Contracts.FlexiPlug;
+using AterraCore.Contracts.Boot.Operations;
 using AterraCore.DI;
 using AterraCore.Loggers;
 using CodeOfChaos.Extensions;
@@ -17,13 +16,10 @@ namespace AterraCore.Boot;
 public class EngineConfiguration(ILogger? logger = null) : IEngineConfiguration {
     private ILogger Logger { get; } = GetStartupLogger(logger);
     
-    private WarningAtlas ConfigurationWarningAtlas { get; } = new(GetStartupLogger(logger));
-    
     private LinkedList<IBootOperation> OrderOfBootOperations { get; } = [];
 
-    private BootOperationComponents? _components;
-    private BootOperationComponents Components => _components ??= new BootOperationComponents(
-        WarningAtlas:ConfigurationWarningAtlas,
+    private BootComponents? _components;
+    private BootComponents Components => _components ??= new BootComponents(
         PluginLoader:new FilePathPluginLoader(Logger)
     );
     

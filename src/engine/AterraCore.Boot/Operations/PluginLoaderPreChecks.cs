@@ -1,8 +1,8 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Contracts.Boot.Operations;
 using AterraCore.Loggers;
-using static AterraCore.Common.Data.PredefinedAssetIds.NewConfigurationWarnings;
 
 namespace AterraCore.Boot.Operations;
 
@@ -15,7 +15,7 @@ public class PluginLoaderPreChecks : IBootOperation {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void Run(IBootOperationComponents components) {
+    public void Run(IBootComponents components) {
         Logger.Debug("Entered Plugin Loader Pre Checks");
 
         components.PluginLoader
@@ -25,7 +25,7 @@ public class PluginLoaderPreChecks : IBootOperation {
                 (_, plugin) => {
                     if (File.Exists(plugin.FilePath)) return;
                     plugin.SetInvalid();
-                    components.WarningAtlas.RaiseEvent(UnstableFlexiPlugLoadOrder);
+                    Logger.Error($"Plugin file \"{plugin.FilePath}\" does not exist");
                 }
             )       
             #endregion
@@ -35,7 +35,7 @@ public class PluginLoaderPreChecks : IBootOperation {
                 (loader, plugin) => {
                     if (loader.Checksums.Contains(plugin.CheckSum)) {
                         plugin.SetInvalid();
-                        components.WarningAtlas.RaiseEvent(DuplicateInPluginLoadOrder);
+                        Logger.Warning($"Plugin file \"{plugin.FilePath}\" checksum already exists");
                     }
                     loader.Checksums.Add(plugin.CheckSum);
                 }

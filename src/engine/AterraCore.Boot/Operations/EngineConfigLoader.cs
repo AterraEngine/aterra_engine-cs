@@ -3,11 +3,13 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.ConfigFiles.EngineConfig;
 using AterraCore.Common.Data;
+using AterraCore.Contracts.Boot.Operations;
 using AterraCore.Loggers;
 using CodeOfChaos.Extensions;
+using CodeOfChaos.Extensions.Serilog;
 using JetBrains.Annotations;
+using System.Configuration;
 using Xml;
-using static AterraCore.Common.Data.PredefinedAssetIds.NewConfigurationWarnings;
 
 namespace AterraCore.Boot.Operations;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -27,7 +29,7 @@ public class EngineConfigLoader : IBootOperation {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void Run(IBootOperationComponents components) {
+    public void Run(IBootComponents components) {
         Logger.Debug("Entered Engine Config Loader");
         
         XmlParser<EngineConfigXml> configXmlParser = new(
@@ -41,7 +43,7 @@ public class EngineConfigLoader : IBootOperation {
             : _configFilePath!;
         
         if (!configXmlParser.TryDeserializeFromFile(filepath, out EngineConfigXml? configDto)) {
-            components.WarningAtlas.RaiseEvent(UnableToLoadEngineConfigFile);
+            Logger.ThrowError<ConfigurationException>("Failed to load Engine Config");
             return;
         }
         components.EngineConfigXml = configDto; 

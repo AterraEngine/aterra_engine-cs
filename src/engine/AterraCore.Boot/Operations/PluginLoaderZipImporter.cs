@@ -3,15 +3,10 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.ConfigFiles.PluginConfig;
 using AterraCore.Common.Data;
-using AterraCore.Contracts.Nexities.Data.Assets;
-using AterraCore.DI;
-using AterraCore.FlexiPlug.Attributes;
+using AterraCore.Contracts.Boot.Operations;
 using AterraCore.Loggers;
-using CodeOfChaos.Extensions;
-using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using Xml.Elements;
-using static AterraCore.Common.Data.PredefinedAssetIds.NewConfigurationWarnings;
 
 namespace AterraCore.Boot.Operations;
 
@@ -24,7 +19,7 @@ public class PluginLoaderZipImporter : IBootOperation {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void Run(IBootOperationComponents components) {
+    public void Run(IBootComponents components) {
         Logger.Debug("Entered Plugin Loader Importer with {i} valid plugins", components.PluginLoader.GetValidPlugins().Count());
 
         components.PluginLoader.IterateOverValidWithZipImporter(
@@ -33,7 +28,7 @@ public class PluginLoaderZipImporter : IBootOperation {
                 plugin.InternalFilePaths = zipImporter.GetFileNamesInZip();
                 if (!zipImporter.TryGetPluginConfig(out PluginConfigXml? pluginConfig)) {
                     plugin.SetInvalid();
-                    components.WarningAtlas.RaiseEvent(NoPluginConfigXmlFound);
+                    Logger.Warning("Plugin config is invalid");
                     return;
                 }
                 
@@ -55,7 +50,7 @@ public class PluginLoaderZipImporter : IBootOperation {
                     .Select(fileDto => {
                         if (zipImporter.TryGetDllAssembly(fileDto, out Assembly? assembly)) return assembly;
                         plugin.SetInvalid();
-                        components.WarningAtlas.RaiseEvent(AssemblyCouldNotBeLoaded);
+                        Logger.Warning("Failed to load assembly {file}", fileDto.FilePath);
                         return assembly;
                     })
                     .Where(assembly => assembly != null)

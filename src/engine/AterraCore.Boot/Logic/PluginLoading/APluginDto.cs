@@ -3,7 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Types.FlexiPlug;
 using AterraCore.Common.Types.Nexities;
-using AterraCore.Contracts.Boot.FlexiPlug;
+using AterraCore.Contracts.Boot.Logic.PluginLoading;
 using System.Reflection;
 
 namespace AterraCore.Boot.Logic.PluginLoading;

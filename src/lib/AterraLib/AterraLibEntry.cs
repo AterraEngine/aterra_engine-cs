@@ -1,8 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Boot;
-using AterraCore.Contracts.Boot.FlexiPlug;
+using AterraCore.Contracts.Boot.Logic.PluginLoading;
 
 namespace AterraLib;
 
@@ -10,7 +9,7 @@ namespace AterraLib;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
-public class AterraLibEntry : IAterraLibEntry, IAssemblyEntrypoint {
+public class AterraLibEntry : IAssemblyEntrypoint {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------

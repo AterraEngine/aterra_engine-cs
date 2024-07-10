@@ -3,7 +3,8 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Boot.Logic.PluginLoading;
 using AterraCore.Common.Types.Nexities;
-using AterraCore.Contracts.Boot.FlexiPlug;
+using AterraCore.Contracts.Boot.Logic.PluginLoading;
+using AterraCore.Contracts.Boot.Operations;
 using AterraCore.Loggers;
 using System.Reflection;
 
@@ -18,7 +19,7 @@ public class RegisterAssemblyAsPlugin(Assembly assembly, PluginId pluginId) : IB
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void Run(IBootOperationComponents components) {
+    public void Run(IBootComponents components) {
         Logger.Debug("Entered RegisterAssemblyAsPlugin for the assembly {name}", assembly.GetName().Name);
         components.AssemblyLoadedPlugins.AddLast(new AssemblyLoadedPluginDto(assembly, pluginId));
     }

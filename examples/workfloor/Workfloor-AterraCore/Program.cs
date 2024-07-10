@@ -5,7 +5,6 @@ using AterraCore.Contracts;
 using AterraCore.Boot;
 using AterraCore.Boot.Operations;
 using AterraCore.Contracts.Boot;
-using AterraEngine;
 using AterraLib;
 
 namespace Workfloor_AterraCore;
@@ -17,7 +16,6 @@ public static class Program {
     public static void Main(string[] args) {
         IEngineConfiguration config = new EngineConfiguration()
             .RegisterBootOperation<EngineConfigLoader>()
-            .RegisterBootOperation<RegisterWarnings>()
             .RegisterBootOperation<RegisterAssemblyAsPlugin<AterraLibEntry>>()
             .RegisterBootOperation<CollectDefaultDependencies>()
             .RegisterBootOperation<PluginLoaderDefine>()

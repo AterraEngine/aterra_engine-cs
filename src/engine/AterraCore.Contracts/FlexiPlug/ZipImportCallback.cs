@@ -2,7 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.ConfigFiles.PluginConfig;
-using AterraCore.Contracts.Boot.FlexiPlug;
+using AterraCore.Contracts.Boot.Logic.PluginLoading;
 
 namespace AterraCore.Contracts.FlexiPlug;
 // ---------------------------------------------------------------------------------------------------------------------

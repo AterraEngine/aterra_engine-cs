@@ -2,9 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Types.Nexities;
-using AterraCore.Contracts.Boot.FlexiPlug;
-using AterraCore.Contracts.FlexiPlug.Plugin;
-using System.Diagnostics.CodeAnalysis;
+using AterraCore.Contracts.Boot.Logic.PluginLoading;
 
 namespace AterraCore.Contracts.FlexiPlug;
 // ---------------------------------------------------------------------------------------------------------------------

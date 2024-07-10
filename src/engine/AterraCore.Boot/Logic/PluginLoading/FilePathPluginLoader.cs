@@ -3,7 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.ConfigFiles.PluginConfig;
 using AterraCore.Common.Types.FlexiPlug;
-using AterraCore.Contracts.Boot.FlexiPlug;
+using AterraCore.Contracts.Boot.Logic.PluginLoading;
 using AterraCore.Contracts.FlexiPlug;
 
 namespace AterraCore.Boot.Logic.PluginLoading;

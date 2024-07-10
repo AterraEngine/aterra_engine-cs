@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts;
+using AterraCore.Contracts.Boot.Operations;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.Nexities.Data.Assets;
 using AterraCore.Contracts.Nexities.Data.Worlds;
@@ -29,7 +30,7 @@ public class CollectDefaultDependencies : IBootOperation {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void Run(IBootOperationComponents components) {
+    public void Run(IBootComponents components) {
         Logger.Debug("Entered Collection of Dependencies");
 
         ServiceDescriptor[] defaultDependencies = [
@@ -40,7 +41,7 @@ public class CollectDefaultDependencies : IBootOperation {
             NewServiceDescriptor<IApplicationStageManager, ApplicationStageManager>(ServiceLifetime.Singleton),
             NewServiceDescriptor<IMainWindow, MainWindow>(ServiceLifetime.Singleton),
             #endregion
-            #region FlexiPlug
+            #region PluginLoading
             NewServiceDescriptor<IPluginAtlas, PluginAtlas>(ServiceLifetime.Singleton),
             #endregion
             #region Nexities

@@ -1,7 +1,8 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Boot.FlexiPlug;
+using AterraCore.Contracts.Boot.Logic.PluginLoading;
+using AterraCore.Contracts.Boot.Operations;
 using AterraCore.Contracts.Nexities.Data.Assets;
 using AterraCore.DI;
 using AterraCore.FlexiPlug.Attributes;
@@ -20,7 +21,7 @@ public class PluginExtractor : IBootOperation {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void Run(IBootOperationComponents components) {
+    public void Run(IBootComponents components) {
         foreach (IPluginDto plugin in components.ValidPlugins) {
             #region Import Dynamic injectables from Assembly
             components.DynamicServices.AddLastRepeated(

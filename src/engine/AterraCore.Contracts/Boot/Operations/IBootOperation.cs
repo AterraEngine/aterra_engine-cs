@@ -1,12 +1,11 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraCore.Contracts.Boot.FlexiPlug;
+namespace AterraCore.Contracts.Boot.Operations;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IInjectableAssemblyData {
-    string NameSpace { get; }
-    string? NameReadable { get; }
-    string? Author { get; }
+public interface IBootOperation {
+    void Run(IBootComponents components);
 }

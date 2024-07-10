@@ -5,7 +5,6 @@ using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.FlexiPlug.Plugin;
 using AterraCore.Contracts.Nexities.Data.Assets;
 using AterraCore.Contracts.Nexities.Data.Attributes;
-using CodeOfChaos.Extensions;
 using System.Reflection;
 
 namespace AterraCore.FlexiPlug;
