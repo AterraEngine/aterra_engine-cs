@@ -9,6 +9,6 @@ namespace AterraCore.Contracts.Nexities.Data.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 public interface ITransform2D : INexitiesComponent {
     public Vector2 Translation { get; set; }
-    public Vector2 Scale { get; set; }
+    public Vector2 Scale { get; set; } 
     public Vector2 Rotation { get; set; }
 }

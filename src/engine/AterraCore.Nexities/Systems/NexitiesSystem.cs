@@ -2,8 +2,10 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.Nexities.Data.Assets;
+using AterraCore.Contracts.Nexities.Data.Components;
 using AterraCore.Contracts.Nexities.Data.Levels;
 using AterraCore.Contracts.Nexities.Data.Systems;
+using Raylib_cs;
 
 namespace AterraCore.Nexities.Systems;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -12,6 +14,7 @@ namespace AterraCore.Nexities.Systems;
 public abstract class NexitiesSystem<TEntity> : INexitiesSystem where TEntity : IAssetInstance {
     public Type ProcessableEntityType { get; } = typeof(TEntity);
 
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------

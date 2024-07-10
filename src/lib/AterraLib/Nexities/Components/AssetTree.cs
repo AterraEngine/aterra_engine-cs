@@ -10,7 +10,7 @@ namespace AterraLib.Nexities.Components;
 [Component<IAssetTree>("AterraLib:Nexities/Components/AssetTree")]
 [UsedImplicitly]
 public class AssetTree : NexitiesComponent, IAssetTree {
-    public LinkedList<IAssetInstance> Nodes { get; } = [];
+    public LinkedList<IAssetInstance> Nodes { get; } = []; // Todo make it private / immutable somehow when editied from outside
     private readonly ReaderWriterLockSlim _lock = new();
     public int Count {
         get {
@@ -116,10 +116,10 @@ public class AssetTree : NexitiesComponent, IAssetTree {
         _lock.EnterWriteLock();
         try {
             Nodes.AddLast(node);
-            InvalidateCaches<T>();
         }
         finally {
             _lock.ExitWriteLock();
+            InvalidateCaches<T>();
         }
     }
     
@@ -127,10 +127,10 @@ public class AssetTree : NexitiesComponent, IAssetTree {
         _lock.EnterWriteLock();
         try {
             Nodes.AddFirst(node);
-            InvalidateCaches<T>();
         }
         finally {
             _lock.ExitWriteLock();
+            InvalidateCaches<T>();
         }
     }
 }

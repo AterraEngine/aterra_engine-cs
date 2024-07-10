@@ -31,6 +31,9 @@ public class MainWindow(IApplicationStageManager applicationStageManager, IAsset
         // | ConfigFlags.UndecoratedWindow
         // | ConfigFlags.MousePassthroughWindow
         );
+        
+        SetTargetFPS(240);
+        
         InitWindow(Width, Height, Name);
         SetWindowMonitor(1);// WArn dev stuff
 

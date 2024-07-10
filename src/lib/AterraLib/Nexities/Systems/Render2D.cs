@@ -11,6 +11,7 @@ namespace AterraLib.Nexities.Systems;
 [System("AterraLib:Nexities/Systems/Render2D", CoreTags.RenderSystem)]
 public class Render2D(ILogger logger) : NexitiesSystem<IActor2D> {
     public ILogger Logger { get; } = logger.ForContext("Context", "Render2D");
+    public static int DrawCalls = 0;
     
     // -----------------------------------------------------------------------------------------------------------------
     // Helper Methods
@@ -25,12 +26,21 @@ public class Render2D(ILogger logger) : NexitiesSystem<IActor2D> {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    protected override void ProcessEntity(IActor2D entity) {
-        foreach (IActor2D childEntity in GetEntitiesInOrder(entity)) {
+    protected override void ProcessEntity(IActor2D originalEntity) {
+        foreach (IActor2D childEntity in GetEntitiesInOrder(originalEntity)) {
             if (!childEntity.Sprite2D.TryGetTexture2D(out Texture2D texture)) continue;
-            Vector2 translation = childEntity.Transform2D.Translation + entity.Transform2D.Translation;
-            Vector2 scale = childEntity.Transform2D.Scale + entity.Transform2D.Scale;
-            Vector2 rotation = childEntity.Transform2D.Rotation + entity.Transform2D.Rotation;
+            Vector2 translation = childEntity.Transform2D.Translation + originalEntity.Transform2D.Translation;
+            // Vector2 translation = childEntity.Transform2D.Translation ;
+            Vector2 scale = childEntity.Transform2D.Scale + originalEntity.Transform2D.Scale;
+            // Vector2 scale = childEntity.Transform2D.Scale;
+            Vector2 rotation = childEntity.Transform2D.Rotation + originalEntity.Transform2D.Rotation;
+            // Vector2 rotation = childEntity.Transform2D.Rotation;
+            
+            Raylib.DrawRectangleLinesEx(
+                new Rectangle(translation, scale),
+                1,
+                Color.Red
+            );
             
             Raylib.DrawTexturePro(
                 texture: texture, 
@@ -40,6 +50,8 @@ public class Render2D(ILogger logger) : NexitiesSystem<IActor2D> {
                 rotation:rotation.X, 
                 Color.White
             );
+
+            DrawCalls++;
         }
     }
 }

@@ -111,36 +111,34 @@ public class Engine(
         var spriteDuckyHype = instanceAtlas.GetOrCreate<ISprite2D>("AterraLib:Nexities/Components/Sprite2D", Guid.Parse("827c3bc1-f688-4301-b342-b8958c1fe892"));
         var spriteDuckyPlatinum = instanceAtlas.GetOrCreate<ISprite2D>("AterraLib:Nexities/Components/Sprite2D", Guid.Parse("827c3bc1-f688-4301-b342-b8958c1fe893"));
         
-        if (instanceAtlas.TryCreate(new AssetId("NexitiesDebug:Entities/DuckyHypeActor"), out Actor2D? instance, predefinedGuid:Guid.Parse("af15db3d-f69e-4382-a768-d163011125f5"))) {
-            instance.Transform2D.Translation = new Vector2(150, 20);
-            instance.Transform2D.Scale = new Vector2(100, 100);
-            world.LoadedLevel?.ChildEntities.AddLast(instance);
-        }
-        
-        if (instanceAtlas.TryCreate(new AssetId("AterraLib:Nexities/Entities/Actor2D"), out Actor2D? instance2, predefinedGuid:Guid.Parse("af15db3d-f69e-4382-a768-123456789012"))) {
-            instance2.Transform2D.Translation = new Vector2(20, 30);
-            instance2.Transform2D.Scale = new Vector2(100, 100);
-            instance2.TryUpdateComponent(spriteDuckyPlatinum);
-            world.LoadedLevel?.ChildEntities.AddLast(instance2);
-        }
+        // if (instanceAtlas.TryCreate(new AssetId("NexitiesDebug:Entities/DuckyHypeActor"), out Actor2D? instance, predefinedGuid:Guid.Parse("af15db3d-f69e-4382-a768-d163011125f5"))) {
+        //     instance.Transform2D.Translation = new Vector2(150, 20);
+        //     instance.Transform2D.Scale = new Vector2(100, 100);
+        //     world.LoadedLevel?.ChildEntities.AddLast(instance);
+        // }
+        //
+        // if (instanceAtlas.TryCreate(new AssetId("AterraLib:Nexities/Entities/Actor2D"), out Actor2D? instance2, predefinedGuid:Guid.Parse("af15db3d-f69e-4382-a768-123456789012"))) {
+        //     instance2.Transform2D.Translation = new Vector2(20, 30);
+        //     instance2.Transform2D.Scale = new Vector2(100, 100);
+        //     instance2.TryOverwriteComponent(spriteDuckyPlatinum);
+        //     world.LoadedLevel?.ChildEntities.AddLast(instance2);
+        // }
 
-        const int a = 25;
-        for (int i = 0; i < a; i++) {
+        const int a = 100;
+        for (int k = 0; k < a; k++) {
             for (int j = 0; j < a; j++) {
                 if (!instanceAtlas.TryCreate(new AssetId("NexitiesDebug:Entities/DuckyHypeActor"), out Actor2D? newDucky)) continue;
-                newDucky.Transform2D.Translation = new Vector2(250 + 10 * i, 10 * j);
-                newDucky.Transform2D.Scale = new Vector2(10, 10);
-                newDucky.TryUpdateComponent( j % 2 == 1 ? spriteDuckyHype : spriteDuckyPlatinum );
+                newDucky.Transform2D.Translation = new Vector2(50 * j,50 * k);
+                newDucky.Transform2D.Scale = new Vector2(50, 50);
+                newDucky.TryOverwriteComponent( j % 2 == 0 ? spriteDuckyHype : spriteDuckyPlatinum );
+               
                 world.LoadedLevel?.ChildEntities.AddLast(newDucky);
-                
-                Logger.Fatal("{i}", i*a + j);
+                Logger.Fatal("{i}", k*a + j);
             }
         }
-
-        // Task.Run(() => {
-        //     Task.Delay(5000, cts.Token);
-        //     _ctsRenderThread.Cancel();
-        // }, _ctsRenderThread.Token);
+        
+        await Task.Delay(50000000);
+        await _ctsRenderThread.CancelAsync();
     }
 
     // -----------------------------------------------------------------------------------------------------------------

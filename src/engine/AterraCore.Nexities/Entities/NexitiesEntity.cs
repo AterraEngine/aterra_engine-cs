@@ -29,9 +29,9 @@ public abstract class NexitiesEntity(params INexitiesComponent[] components) : A
     public bool TryAddComponent(INexitiesComponent component) =>
         _components.TryAdd(component.AssetId, component);
     
-    public bool TryUpdateComponent(INexitiesComponent component) =>
-        TryUpdateComponent(component, out _);
-    public bool TryUpdateComponent(INexitiesComponent component, [NotNullWhen(true)] out INexitiesComponent? oldComponent) =>
+    public bool TryOverwriteComponent(INexitiesComponent component) =>
+        TryOverwriteComponent(component, out _);
+    public bool TryOverwriteComponent(INexitiesComponent component, [NotNullWhen(true)] out INexitiesComponent? oldComponent) =>
         _components.TryGetValue(component.AssetId, out oldComponent)
         && _components.TryUpdate(component.AssetId, component, oldComponent)
         ;

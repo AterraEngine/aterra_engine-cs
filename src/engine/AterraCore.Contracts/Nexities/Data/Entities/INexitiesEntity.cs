@@ -17,8 +17,8 @@ public interface INexitiesEntity : IAssetInstance {
 
     bool TryGetComponent(AssetId assetId, [NotNullWhen(true)] out INexitiesComponent? component);
     bool TryAddComponent(INexitiesComponent component);
-    bool TryUpdateComponent(INexitiesComponent component);
-    bool TryUpdateComponent(INexitiesComponent component, [NotNullWhen(true)] out INexitiesComponent? oldComponent);
+    bool TryOverwriteComponent(INexitiesComponent component);
+    bool TryOverwriteComponent(INexitiesComponent component, [NotNullWhen(true)] out INexitiesComponent? oldComponent);
     bool TryRemoveComponent(AssetId assetId, [NotNullWhen(true)] out INexitiesComponent? oldComponent);
     bool TryRemoveComponent(AssetId assetId);
 }
