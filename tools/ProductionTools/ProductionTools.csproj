@@ -18,7 +18,7 @@
         <PackageReference Include="CodeOfChaos.Extensions" Version="0.6.0" />
         <PackageReference Include="CodeOfChaos.Extensions.DependencyInjection" Version="0.1.1" />
         <PackageReference Include="CodeOfChaos.Extensions.Serilog" Version="0.3.0" />
-        <PackageReference Include="Microsoft.Extensions.ObjectPool.DependencyInjection" Version="8.6.0" />
+        <PackageReference Include="Microsoft.Extensions.ObjectPool.DependencyInjection" Version="8.7.0" />
         <PackageReference Include="Serilog" Version="4.0.0" />
     </ItemGroup>
 

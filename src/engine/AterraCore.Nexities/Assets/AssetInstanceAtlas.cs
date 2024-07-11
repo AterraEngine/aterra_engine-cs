@@ -37,8 +37,9 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas) : IAsset
         object[] parameters = constructor.GetParameters()
             .Select(p => {
                 if (!assetAtlas.TryGetAssetId(p.ParameterType, out AssetId paramAssetId)) {
-                    logger.Warning("Parameter type {t} not found in assetAtlas", p.ParameterType);
-                    return EngineServices.CreateWithServices<object>(p.ParameterType);
+                    return !EngineServices.TryGetService(p.ParameterType, out object? output)
+                        ? EngineServices.CreateWithServices<object>(p.ParameterType)
+                        : output;
                 }
 
                 if (p.GetCustomAttribute<InjectAsAttribute>() is not {} refersToAttribute)

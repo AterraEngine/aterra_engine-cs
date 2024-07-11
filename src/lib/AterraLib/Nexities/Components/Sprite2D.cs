@@ -1,6 +1,8 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using System.Diagnostics.CodeAnalysis;
+
 namespace AterraLib.Nexities.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
@@ -23,9 +25,9 @@ public class Sprite2D : NexitiesComponent, ISprite2D {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public bool TryGetTexture2D(out Texture2D texture) {
+    public bool TryGetTexture2D([NotNullWhen(true)] out Texture2D? texture) {
         if (_texture2D is null) {
-            texture = default;
+            texture = null;
             return false;
         }
         texture = (Texture2D)_texture2D;

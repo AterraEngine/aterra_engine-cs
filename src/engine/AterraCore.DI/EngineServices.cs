@@ -9,6 +9,7 @@ using CodeOfChaos.Extensions.Serilog;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Core;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AterraCore.DI;
 
@@ -60,6 +61,12 @@ public static class EngineServices {
             Logger.ThrowFatal(e,"Service type of {TypeOfT} could not be found.", typeName);
             throw;
         }
+    }
+
+    public static bool TryGetService<T>([NotNullWhen(true)] out T? output) where T : class => TryGetService(typeof(T), out output);
+    public static bool TryGetService<T>(Type input, [NotNullWhen(true)] out T? output) where T : class {
+        output = ServiceProvider.GetService(input) as T;
+        return output is not null;
     }
 
     /// <summary>

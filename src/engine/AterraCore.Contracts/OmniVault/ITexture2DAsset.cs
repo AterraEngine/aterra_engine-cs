@@ -15,5 +15,5 @@ public interface ITexture2DAsset : IAssetInstance {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    bool TryGetTexture2D(out Texture2D texture);
+    bool TryGetTexture2D([NotNullWhen(true)]out Texture2D? texture);
 }

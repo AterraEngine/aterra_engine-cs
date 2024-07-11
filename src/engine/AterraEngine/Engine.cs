@@ -124,7 +124,7 @@ public class Engine(
         //     world.LoadedLevel?.ChildEntities.AddLast(instance2);
         // }
 
-        const int a = 100;
+        const int a = 10;
         for (int k = 0; k < a; k++) {
             for (int j = 0; j < a; j++) {
                 if (!instanceAtlas.TryCreate(new AssetId("NexitiesDebug:Entities/DuckyHypeActor"), out Actor2D? newDucky)) continue;

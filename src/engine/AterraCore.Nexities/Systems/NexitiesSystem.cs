@@ -2,7 +2,6 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.Nexities.Data.Assets;
-using AterraCore.Contracts.Nexities.Data.Components;
 using AterraCore.Contracts.Nexities.Data.Levels;
 using AterraCore.Contracts.Nexities.Data.Systems;
 using Raylib_cs;
@@ -13,17 +12,16 @@ namespace AterraCore.Nexities.Systems;
 // ---------------------------------------------------------------------------------------------------------------------
 public abstract class NexitiesSystem<TEntity> : INexitiesSystem where TEntity : IAssetInstance {
     public Type ProcessableEntityType { get; } = typeof(TEntity);
-
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public bool IsRequiredType(IAssetInstance instance) => instance is TEntity;// Use this for caching <-- ??? how?
     public void ProcessLevel(INexitiesLevel level) {
-        foreach (TEntity instance in level.ChildEntities.OfTypeManyReverse<TEntity>()) {
+        foreach (TEntity instance in EntitySelector(level)) {
             ProcessEntity(instance);
         }
     }
 
+    protected abstract IEnumerable<TEntity> EntitySelector(INexitiesLevel level);
     protected abstract void ProcessEntity(TEntity entity);
 }

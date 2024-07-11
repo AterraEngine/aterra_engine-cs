@@ -14,8 +14,8 @@ namespace AterraEngine.Renderer.RaylibCs;
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
 public class MainWindow(IApplicationStageManager applicationStageManager, IAssetInstanceAtlas instanceAtlas, ITextureAtlas textureAtlas) : IMainWindow {
-    private static int Width => 800;
-    private static int Height => 400;
+    private static int Width => 1000;
+    private static int Height => 1000;
     private static string Name => "AterraEngine - Test";
 
     public bool IsInitialised { get; private set; }
@@ -32,7 +32,7 @@ public class MainWindow(IApplicationStageManager applicationStageManager, IAsset
         // | ConfigFlags.MousePassthroughWindow
         );
         
-        SetTargetFPS(240);
+        // SetTargetFPS(240);
         
         InitWindow(Width, Height, Name);
         SetWindowMonitor(1);// WArn dev stuff
