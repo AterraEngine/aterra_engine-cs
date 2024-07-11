@@ -11,10 +11,10 @@ namespace AterraLib.Nexities.Systems;
 [System("AterraLib:Nexities/Systems/RenderHud", CoreTags.RenderSystem)]
 public class RenderHud : NexitiesSystem<IHud> {
     protected override IEnumerable<IHud> EntitySelector(INexitiesLevel level) {
-        return level.ChildEntities.OfTypeManyReverse<IHud>();
+        return level.AssetTree.OfTypeManyReverse<IHud>();
     }
     protected override void ProcessEntity(IHud entity) {
-        entity.ChildEntities
+        entity.AssetTree
             .OfTypeManyReverse<IHudElement>()
             .IterateOver(element => {
                 switch (element.HudComponent.Type) {

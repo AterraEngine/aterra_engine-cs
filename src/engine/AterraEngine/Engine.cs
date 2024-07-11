@@ -132,7 +132,7 @@ public class Engine(
                 newDucky.Transform2D.Scale = new Vector2(50, 50);
                 newDucky.TryOverwriteComponent( j % 2 == 0 ? spriteDuckyHype : spriteDuckyPlatinum );
                
-                world.LoadedLevel?.ChildEntities.AddLast(newDucky);
+                world.LoadedLevel?.AssetTree.AddLast(newDucky);
                 Logger.Fatal("{i}", k*a + j);
             }
         }

@@ -21,7 +21,7 @@ public class GeneralRenderRaylibFrameProcessor(ILogger logger, INexitiesWorld wo
     protected override void DrawUi() {
         DrawFPS(0,0);
         if (world.LoadedLevel is null) return;
-        DrawText(world.LoadedLevel.ChildEntities.Count.ToString(),50, 50, 32, Color.Red );
+        DrawText(world.LoadedLevel.AssetTree.Count.ToString(),50, 50, 32, Color.Red );
     }
 
     protected override void Draw2D() {

@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.Nexities.Data.Assets;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AterraCore.Contracts.Nexities.Data.Components;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -27,4 +28,17 @@ public interface IAssetTree : INexitiesComponent {
     
     void AddLast<T>(T node) where T : IAssetInstance;
     void AddFirst<T>(T node) where T : IAssetInstance;
+
+    bool TryGetFirst<T>([NotNullWhen(true)] out T? output) where T : class, IAssetInstance;
+    IAssetInstance? First { get; }
+
+    bool TryGetLast<T>([NotNullWhen(true)] out T? output) where T : class, IAssetInstance;
+    IAssetInstance? Last { get; }
+
+    bool TryAddAfter<T>(Guid assetGuid, T newAsset) where T : IAssetInstance;
+    bool TryAddBefore<T>(Guid assetGuid, T newAsset) where T : IAssetInstance;
+
+    bool TryFind(Guid assetGuid, [NotNullWhen(true)] out LinkedListNode<IAssetInstance>? output);
+    bool TryFind(Guid assetGuid, [NotNullWhen(true)] out IAssetInstance? output);
+    bool TryFind<T>(Guid assetGuid, [NotNullWhen(true)] out T? output) where T : class, IAssetInstance;
 }

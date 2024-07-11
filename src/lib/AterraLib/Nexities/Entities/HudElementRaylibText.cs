@@ -12,6 +12,6 @@ public class HudElementRaylibText(IAssetTree childEntities, IRaylibHudText hudCo
     IHudElement 
 {
     public IRaylibHudText TextComponent => hudComponent;
-    public IAssetTree ChildEntities => childEntities;
+    public IAssetTree AssetTree => childEntities;
     public IHudComponent HudComponent => (IHudComponent)TextComponent;
 }

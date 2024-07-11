@@ -17,7 +17,7 @@ public class Render2D(ILogger logger) : NexitiesSystem<IActor2D> {
     // Helper Methods
     // -----------------------------------------------------------------------------------------------------------------
     private static IEnumerable<T> GetEntitiesInOrder<T>(T entity) where T : IHasAssetTree, IAssetInstance {
-        foreach (T e in entity.ChildEntities.OfTypeManyReverse<T>()) {
+        foreach (T e in entity.AssetTree.OfTypeManyReverse<T>()) {
             yield return e;        
         }
         yield return entity;
@@ -27,7 +27,7 @@ public class Render2D(ILogger logger) : NexitiesSystem<IActor2D> {
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     protected override IEnumerable<IActor2D> EntitySelector(INexitiesLevel level) {
-        return level.ChildEntities.OfTypeReverse<IActor2D>();
+        return level.AssetTree.OfTypeReverse<IActor2D>();
     }
     protected override void ProcessEntity(IActor2D originalEntity) {
         foreach (IActor2D childEntity in GetEntitiesInOrder(originalEntity)) {

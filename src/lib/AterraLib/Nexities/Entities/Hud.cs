@@ -10,5 +10,5 @@ namespace AterraLib.Nexities.Entities;
 [UsedImplicitly]
 [Entity<IHud>("AterraLib:Nexities/Entities/Hud")]
 public class Hud(IAssetTree childEntities) : NexitiesEntity(childEntities), IHud {
-    public IAssetTree ChildEntities => childEntities;
+    public IAssetTree AssetTree => childEntities;
 }

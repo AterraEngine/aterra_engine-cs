@@ -14,5 +14,5 @@ namespace Workfloor_AterraCore.Plugin.Assets;
 [Entity<INexitiesLevel>("NexitiesDebug:Levels/MainLevel")]
 [UsedImplicitly]
 public class MainLevel(IAssetTree assetTree) : NexitiesEntity(assetTree), INexitiesLevel {
-    public IAssetTree ChildEntities { get; } = assetTree;
+    public IAssetTree AssetTree { get; } = assetTree;
 }

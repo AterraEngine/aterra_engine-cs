@@ -6,5 +6,5 @@ namespace AterraCore.Contracts.Nexities.Data.Components;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IHasAssetTree {
-    public IAssetTree ChildEntities { get; }
+    public IAssetTree AssetTree { get; }
 }
