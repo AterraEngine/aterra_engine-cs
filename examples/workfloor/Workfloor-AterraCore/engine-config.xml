@@ -3,7 +3,7 @@
     <engine version="0.0.0"/>
     <game version="0.0.0"/>
     <boot>
-        <logging asyncConsole="false"/>
+        <logging asyncConsole="true"/>
         <exceptions>
             <warning id="AterraEngineBoot:Warnings/UnstableFlexiPlugLoadOrder"/>
             <warning id="AterraEngineBoot:Warnings/Undefined"/>

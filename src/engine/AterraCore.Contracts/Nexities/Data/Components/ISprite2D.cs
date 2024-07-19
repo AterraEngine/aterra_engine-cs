@@ -9,5 +9,5 @@ namespace AterraCore.Contracts.Nexities.Data.Components;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface ISprite2D : INexitiesComponent, ITexture2DAsset {
-    public Rectangle TextureRectangle { get; }
+    public Rectangle Selection { get; }
 }

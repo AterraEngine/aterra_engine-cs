@@ -26,4 +26,6 @@ public interface IAssetInstanceAtlas {
     
     T GetOrCreate<T>(Type type, Guid? guid = null) where T : class, IAssetInstance;
     T GetOrCreate<T>(AssetId assetId, Guid? guid = null) where T : class, IAssetInstance;
+    
+    IEnumerable<T> OfType<T>() where T : class, IAssetInstance;
 }

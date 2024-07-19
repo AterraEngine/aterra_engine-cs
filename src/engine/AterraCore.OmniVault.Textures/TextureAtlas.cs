@@ -15,11 +15,12 @@ namespace AterraCore.OmniVault.Textures;
 [UsedImplicitly]
 public class TextureAtlas(ILogger logger, IAssetInstanceAtlas instanceAtlas) : ITextureAtlas {
     private ILogger Logger { get; } = logger.ForContext<TextureAtlas>();
+    private IEnumerable<ITexture2DAsset> TextureAssets => instanceAtlas.OfType<ITexture2DAsset>();
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public bool TryLoadAndRegisterTexture<T>(AssetId textureAssetId, string imagePath, out T? asset, Guid? predefinedGuid = null)
+    public bool TryRegisterTexture<T>(AssetId textureAssetId, string imagePath, out T? asset, Guid? predefinedGuid = null)
         where T : class, ITexture2DAsset
     {
         asset = default;
@@ -42,5 +43,13 @@ public class TextureAtlas(ILogger logger, IAssetInstanceAtlas instanceAtlas) : I
             asset = default;
             return false;
         }
+    }
+    public bool TryUnregisterTexture<T>(Guid predefinedGuid) {
+        if (!TextureAssets.Any()) return false;
+        if (!instanceAtlas.TryGet(predefinedGuid, out ITexture2DAsset? instance)) return false;
+        if (!instance.TryGetTexture2D(out Texture2D texture)) return false;
+        Raylib.UnloadTexture(texture);
+        Logger.Debug("Unloaded texture {texture}", texture.Id);
+        return true;
     }
 }

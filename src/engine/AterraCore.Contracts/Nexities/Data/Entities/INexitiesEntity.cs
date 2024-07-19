@@ -15,6 +15,7 @@ public interface INexitiesEntity : IAssetInstance {
     ICollection<INexitiesComponent> Components { get; }
     ICollection<AssetId> ComponentAssetIds { get; }
 
+    bool TryGetComponent<T>(AssetId assetId, [NotNullWhen(true)] out T? component) where T : INexitiesComponent;
     bool TryGetComponent(AssetId assetId, [NotNullWhen(true)] out INexitiesComponent? component);
     bool TryAddComponent(INexitiesComponent component);
     bool TryOverwriteComponent(INexitiesComponent component);

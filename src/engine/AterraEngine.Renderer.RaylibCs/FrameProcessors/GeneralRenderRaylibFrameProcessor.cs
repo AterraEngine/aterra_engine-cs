@@ -13,7 +13,7 @@ namespace AterraEngine.Renderer.RaylibCs.FrameProcessors;
 [UsedImplicitly]
 public class GeneralRenderRaylibFrameProcessor(ILogger logger, INexitiesWorld world) : AbstractRaylibFrameProcessor {
     protected override Color ClearColor { get; set; } = new(0, 0, 0, 0);
-    private Render2D Render2D { get; } = new(logger);
+    private Render2D Render2D { get; } = new();
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
@@ -21,7 +21,7 @@ public class GeneralRenderRaylibFrameProcessor(ILogger logger, INexitiesWorld wo
     protected override void DrawUi() {
         DrawFPS(0,0);
         if (world.LoadedLevel is null) return;
-        DrawText(world.LoadedLevel.AssetTree.Count.ToString(),50, 50, 32, Color.Red );
+        DrawText(world.LoadedLevel.AssetTree.Count.ToString(),50, 50, 32, Color.Lime );
     }
 
     protected override void Draw2D() {

@@ -35,7 +35,7 @@ public class RenderThreadProcessor(
         while (!Raylib.WindowShouldClose()) {
             // Check for new textures
             if (TextureQueue.TryDequeue(out TextureQueueRecord? textureRecord)) {
-                textureAtlas.TryLoadAndRegisterTexture(
+                textureAtlas.TryRegisterTexture(
                     textureRecord.TextureAssetId, 
                     textureRecord.TexturePath,
                     out ISprite2D? _,

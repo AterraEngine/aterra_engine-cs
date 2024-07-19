@@ -11,7 +11,7 @@ namespace AterraLib.Nexities.Entities;
 [UsedImplicitly]
 [Entity<IActor2D>("AterraLib:Nexities/Entities/Actor2D")]
 public class Actor2D(ITransform2D transform2D, ISprite2D sprite2D, IAssetTree childEntities) : NexitiesEntity(transform2D, sprite2D, childEntities), IActor2D {
-    public ITransform2D Transform2D => (ITransform2D)Components.First(c => c.GetType().IsAssignableTo(typeof(ITransform2D)));
-    public ISprite2D Sprite2D => (ISprite2D)Components.First(c => c.GetType().IsAssignableTo(typeof(ISprite2D)));
-    public IAssetTree AssetTree => (IAssetTree)Components.First(c => c.GetType().IsAssignableTo(typeof(IAssetTree)));
+    public ITransform2D Transform2D => GetComponent<ITransform2D>(transform2D.AssetId);
+    public ISprite2D Sprite2D => GetComponent<ISprite2D>(sprite2D.AssetId);
+    public IAssetTree AssetTree => GetComponent<IAssetTree>(childEntities.AssetId);
 }
