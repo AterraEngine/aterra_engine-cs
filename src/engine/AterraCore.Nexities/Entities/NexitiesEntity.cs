@@ -4,7 +4,7 @@
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Data.Components;
 using AterraCore.Contracts.Nexities.Data.Entities;
-using AterraCore.Nexities.Assets;
+using AterraCore.OmniVault.Assets;
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 
@@ -16,7 +16,9 @@ public abstract class NexitiesEntity(params INexitiesComponent[] components) : A
     private readonly ConcurrentDictionary<AssetId, INexitiesComponent> _components = new(
         components.Select(component => new KeyValuePair<AssetId,INexitiesComponent>(component.AssetId, component))
     );
-    protected readonly ConcurrentDictionary<AssetId, AssetId> ComponentTypes = new();
+    private readonly ConcurrentDictionary<Type, AssetId> ComponentTypes = new(
+        components.Select(component => new KeyValuePair<Type,AssetId>(component.GetType(), component.AssetId))
+    );
 
     public ICollection<INexitiesComponent> Components => _components.Values;
     public ICollection<AssetId> ComponentAssetIds => _components.Keys;
@@ -25,10 +27,32 @@ public abstract class NexitiesEntity(params INexitiesComponent[] components) : A
     // Component manipulation Methods
     // -----------------------------------------------------------------------------------------------------------------
     public T GetComponent<T>(AssetId assetId) where T : INexitiesComponent {
-        if (!TryGetComponent(assetId, out INexitiesComponent? nexitiesComponent)) throw new ArgumentException($"Component with assetId {assetId} not found");
-        return (T)nexitiesComponent;
+        try {
+            return (T)_components[assetId];
+        }
+        catch (Exception e) {
+            throw new ArgumentException($"Component with assetId {assetId} not found", e);
+        }
     }
-    
+
+    public T GetComponent<T>() where T : INexitiesComponent {
+        try {
+            AssetId assetId = ComponentTypes[typeof(T)]; 
+            return (T)_components[assetId];
+        }
+        catch (Exception e) {
+            throw new ArgumentException($"Component with type {typeof(T)} not found", e);
+        }
+    }
+
+    public bool TryGetComponent<T>([NotNullWhen(true)] out T? component) where T : INexitiesComponent {
+        if (!(ComponentTypes.TryGetValue(typeof(T), out AssetId assetId) && _components.TryGetValue(assetId, out INexitiesComponent? nexitiesComponent))) {
+            component = default;
+            return false;
+        }
+        component = (T)nexitiesComponent;
+        return true;
+    }
     public bool TryGetComponent<T>(AssetId assetId, [NotNullWhen(true)] out T? component) where T : INexitiesComponent {
         component = default;
         if (!TryGetComponent(assetId, out INexitiesComponent? nexitiesComponent)) return false;
@@ -41,7 +65,7 @@ public abstract class NexitiesEntity(params INexitiesComponent[] components) : A
     
     public bool TryAddComponent(INexitiesComponent component) {
         return _components.TryAdd(component.AssetId, component) 
-               && ComponentTypes.TryAdd(component.AssetId, component.AssetId);
+               && ComponentTypes.TryAdd(component.GetType(), component.AssetId);
     }
 
     public bool TryOverwriteComponent(INexitiesComponent component) =>
@@ -49,16 +73,16 @@ public abstract class NexitiesEntity(params INexitiesComponent[] components) : A
     public bool TryOverwriteComponent(INexitiesComponent component, [NotNullWhen(true)] out INexitiesComponent? oldComponent) =>
         _components.TryGetValue(component.AssetId, out oldComponent)
         && _components.TryUpdate(component.AssetId, component, oldComponent)
-        && ComponentTypes.TryGetValue(oldComponent.AssetId, out AssetId oldAssetId)
-        && ComponentTypes.TryUpdate(oldComponent.AssetId, component.AssetId, oldAssetId)
+        && ComponentTypes.TryGetValue(oldComponent.GetType(), out AssetId oldAssetId)
+        && ComponentTypes.TryUpdate(oldComponent.GetType(), component.AssetId, oldAssetId)
         ;
 
     public bool TryRemoveComponent(AssetId assetId, [NotNullWhen(true)] out INexitiesComponent? oldComponent) =>
         _components.TryRemove(assetId, out oldComponent)
-        && ComponentTypes.TryRemove(oldComponent.AssetId, out _);
+        && ComponentTypes.TryRemove(oldComponent.GetType(), out _);
     public bool TryRemoveComponent(AssetId assetId) => 
         _components.TryRemove(assetId, out INexitiesComponent? oldComponent)
-        && ComponentTypes.TryRemove(oldComponent.AssetId, out _);
+        && ComponentTypes.TryRemove(oldComponent.GetType(), out _);
     
 
 }

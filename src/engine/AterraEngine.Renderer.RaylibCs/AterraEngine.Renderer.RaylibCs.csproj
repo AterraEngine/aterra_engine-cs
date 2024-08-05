@@ -25,7 +25,6 @@
         <ProjectReference Include="..\AterraCore.Contracts\AterraCore.Contracts.csproj"/>
         <ProjectReference Include="..\AterraCore.DI\AterraCore.DI.csproj"/>
         <ProjectReference Include="..\AterraCore.Loggers\AterraCore.Loggers.csproj"/>
-        <ProjectReference Include="..\AterraCore.Nexities.Lib\AterraCore.Nexities.Lib.csproj" />
     </ItemGroup>
 
     <ItemGroup>

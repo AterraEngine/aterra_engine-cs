@@ -36,10 +36,7 @@ public class RenderThreadProcessor(
             // Check for new textures
             if (TextureQueue.TryDequeue(out TextureQueueRecord? textureRecord)) {
                 textureAtlas.TryRegisterTexture(
-                    textureRecord.TextureAssetId, 
-                    textureRecord.TexturePath,
-                    out ISprite2D? _,
-                    predefinedGuid:textureRecord.PredefinedGuid
+                    textureRecord.TextureAssetId
                 );
             }
             

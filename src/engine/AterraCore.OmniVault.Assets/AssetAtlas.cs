@@ -9,7 +9,7 @@ using Serilog;
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 
-namespace AterraCore.Nexities.Assets;
+namespace AterraCore.OmniVault.Assets;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------

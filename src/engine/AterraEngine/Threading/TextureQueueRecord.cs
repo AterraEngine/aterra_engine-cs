@@ -13,8 +13,5 @@ public enum TextureQueueRecordType {
 }
 
 public record TextureQueueRecord(
-    AssetId TextureAssetId,
-    string TexturePath,
-    TextureQueueRecordType RecordType,
-    Guid? PredefinedGuid = null
+    AssetId TextureAssetId
 );

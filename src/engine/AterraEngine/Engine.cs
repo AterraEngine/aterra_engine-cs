@@ -89,33 +89,24 @@ public class Engine(
 
         renderThreadEvents.InvokeApplicationStageChange(ApplicationStage.Level);
         
-        _textureQueue.Enqueue(new TextureQueueRecord (
-            TextureAssetId : new AssetId("AterraLib:Nexities/Components/Sprite2D"),
-            PredefinedGuid :  Guid.Parse("827c3bc1-f688-4301-b342-b8958c1fe892"),
-            TexturePath : "assets/ducky-hype.png",
-            RecordType : TextureQueueRecordType.Register
-        ));
-        
-        _textureQueue.Enqueue(new TextureQueueRecord (
-            TextureAssetId : new AssetId("AterraLib:Nexities/Components/Sprite2D"),
-            PredefinedGuid : Guid.Parse("827c3bc1-f688-4301-b342-b8958c1fe893"),
-            TexturePath : "assets/DuckyPlatinum.png",
-            RecordType : TextureQueueRecordType.Register
-        ));
-        
         // -------------------------------------------------------------------------------------------------------------
         TryAssignStartingLevel("NexitiesDebug:Levels/MainLevel");
         
-        var spriteDuckyHype = instanceAtlas.GetOrCreate<ISprite2D>("AterraLib:Nexities/Components/Sprite2D", Guid.Parse("827c3bc1-f688-4301-b342-b8958c1fe892"));
-        var spriteDuckyPlatinum = instanceAtlas.GetOrCreate<ISprite2D>("AterraLib:Nexities/Components/Sprite2D", Guid.Parse("827c3bc1-f688-4301-b342-b8958c1fe893"));
+        _textureQueue.Enqueue(new TextureQueueRecord (
+            TextureAssetId :  "Workfloor:TextureDuckyHype"
+        ));
+        _textureQueue.Enqueue(new TextureQueueRecord (
+            TextureAssetId :  "Workfloor:TextureDuckyPlatinum"
+        ));
 
         const int a = 100;
         for (int k = 0; k < a; k++) {
             for (int j = 0; j < a; j++) {
-                if (!instanceAtlas.TryCreate(new AssetId("NexitiesDebug:Entities/DuckyHypeActor"), out Actor2D? newDucky)) continue;
+                // AssetId assetId = "NexitiesDebug:Entities/DuckyPlatinumActor" ;
+                AssetId assetId = j % 2 == 0 ? "Workfloor:ActorDuckyHype" : "Workfloor:ActorDuckyPlatinum";
+                if (!instanceAtlas.TryCreate(assetId, out IActor2D? newDucky)) continue;
                 newDucky.Transform2D.Translation = new Vector2(50 * j,50 * k);
                 newDucky.Transform2D.Scale = new Vector2(50, 50);
-                newDucky.TryOverwriteComponent( j % 2 == 0 ? spriteDuckyHype : spriteDuckyPlatinum );
                 world.LoadedLevel?.AssetTree.AddLast(newDucky);
             }
         }

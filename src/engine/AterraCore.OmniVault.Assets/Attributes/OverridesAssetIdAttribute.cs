@@ -2,14 +2,15 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Types.Nexities;
-using Raylib_cs;
+using AterraCore.Contracts.Nexities.Data.Attributes;
+using JetBrains.Annotations;
 
-namespace AterraCore.Contracts.OmniVault;
+namespace AterraCore.OmniVault.Assets.Attributes;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ITextureAtlas {
-    #region Registering Texture to GPU
-    bool TryRegisterTexture(AssetId textureAssetId);
-    #endregion
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+[UsedImplicitly]
+public class OverridesAssetIdAttribute(string assetId) : IOverridesAssetIdAttribute {
+    public override AssetId AssetId { get; } = new(assetId);
 }

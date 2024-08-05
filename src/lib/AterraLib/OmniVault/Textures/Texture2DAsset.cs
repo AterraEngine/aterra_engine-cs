@@ -1,16 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Types.Nexities;
-using AterraCore.Contracts.Nexities.Data.Attributes;
-using JetBrains.Annotations;
+using AterraCore.OmniVault.Assets;
+using AterraCore.OmniVault.Textures;
 
-namespace AterraCore.Nexities.Attributes;
+namespace AterraLib.OmniVault.Textures;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-[UsedImplicitly]
-public class OverridesAssetIdAttribute(string assetId) : IOverridesAssetIdAttribute {
-    public override AssetId AssetId { get; } = new(assetId);
+[Texture("AterraLib:OmniVault/Textures/Texture2DAsset")]
+public class Texture2DAsset : AssetInstance, ITexture2DAsset {
+    public virtual string imagePath { get; set; } = string.Empty;
+    public Texture2D? Texture { get; set; }
 }

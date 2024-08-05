@@ -1,20 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Types.Nexities;
-using AterraCore.Contracts.Nexities.Data.Assets;
+using AterraCore.Contracts.Nexities.Data.Attributes;
 
-namespace AterraCore.Nexities.Assets;
+namespace AterraCore.OmniVault.Assets.Attributes;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[AttributeUsage(AttributeTargets.Class)]
-public class AssetAttribute(
-    string assetId,
-    CoreTags coreTags,
-    params Type[] interfaceTypes
-) : IAssetAttribute {
-    public override AssetId AssetId { get; } = assetId;
-    public override CoreTags CoreTags { get; } = coreTags | CoreTags.Asset;
-    public override Type[] InterfaceTypes { get; } = interfaceTypes;
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+public class AssetTagAttribute(params string[]? tags) : IAssetTagAttribute {
+    public override string[] Tags { get; } = tags?.ToArray() ?? [];
 }

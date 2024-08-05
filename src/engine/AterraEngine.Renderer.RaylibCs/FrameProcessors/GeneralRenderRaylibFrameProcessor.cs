@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.Nexities.Data.Worlds;
+using AterraCore.DI;
 using AterraLib.Nexities.Systems;
 using JetBrains.Annotations;
 using Serilog;
@@ -13,7 +14,7 @@ namespace AterraEngine.Renderer.RaylibCs.FrameProcessors;
 [UsedImplicitly]
 public class GeneralRenderRaylibFrameProcessor(ILogger logger, INexitiesWorld world) : AbstractRaylibFrameProcessor {
     protected override Color ClearColor { get; set; } = new(0, 0, 0, 0);
-    private Render2D Render2D { get; } = new();
+    private Render2D Render2D { get; } = EngineServices.CreateWithServices<Render2D>();
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods

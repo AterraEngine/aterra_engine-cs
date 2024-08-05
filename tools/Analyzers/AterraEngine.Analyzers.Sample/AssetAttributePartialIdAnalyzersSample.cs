@@ -4,23 +4,23 @@
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedMember.Global
 
+using AterraCore.OmniVault.Assets.Attributes;
+
 namespace AterraEngine.Analyzer.Sample;
 
-using AterraCore.Common.Types.Nexities;
-using AterraCore.Nexities.Assets;
 using AterraCore.Nexities.Entities;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Asset("1", CoreTags.Asset)]
+[Asset("1")]
 public class TestEntity3 : NexitiesEntity;
 
-[Asset("2", CoreTags.Asset)]
+[Asset("2")]
 public class TestEntity4 : NexitiesEntity;
 
-[Asset("3", CoreTags.Asset)]
+[Asset("3")]
 public class TestEntity6 : NexitiesEntity;
 
-[Asset("5", CoreTags.Asset)]
+[Asset("5")]
 public class TestEntaity4 : NexitiesEntity;

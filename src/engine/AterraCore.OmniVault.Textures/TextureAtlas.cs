@@ -20,36 +20,26 @@ public class TextureAtlas(ILogger logger, IAssetInstanceAtlas instanceAtlas) : I
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public bool TryRegisterTexture<T>(AssetId textureAssetId, string imagePath, out T? asset, Guid? predefinedGuid = null)
-        where T : class, ITexture2DAsset
-    {
-        asset = default;
-        if (!Path.Exists(imagePath)) return false;
-        if (!instanceAtlas.TryGetOrCreate(typeof(T), predefinedGuid, out asset)) return false;
+    #region Registering Texture to GPU
+    public bool TryRegisterTexture(AssetId textureAssetId) {
+        if (!instanceAtlas.TryGetOrCreateSingleton(textureAssetId, out ITexture2DAsset? textureAsset)) return false;
+        if (!Path.Exists(textureAsset.imagePath)) return false;
 
         try {
-            Image image = Raylib.LoadImage(imagePath);
-            Logger.Debug("Loaded image {path}", imagePath);
+            Image image = Raylib.LoadImage(textureAsset.imagePath);
+            Logger.Debug("Loaded image {path}", textureAsset.imagePath);
         
-            asset.Texture2D = Raylib.LoadTextureFromImage(image);
-            Logger.Debug("Assigned image {path} to asset {guid}", imagePath, asset.Guid);
+            textureAsset.Texture = Raylib.LoadTextureFromImage(image);
+            Logger.Debug("Assigned image {path} to asset {guid}", textureAsset.imagePath, textureAsset.Guid);
             
             Raylib.UnloadImage(image);
-            Logger.Debug("Unloaded image {path}", imagePath);
+            Logger.Debug("Unloaded image {path}", textureAsset.imagePath);
             return true;
         }
         catch (Exception ex) {
             logger.Warning(ex, "Failed without proper exception catching");
-            asset = default;
             return false;
         }
     }
-    public bool TryUnregisterTexture<T>(Guid predefinedGuid) {
-        if (!TextureAssets.Any()) return false;
-        if (!instanceAtlas.TryGet(predefinedGuid, out ITexture2DAsset? instance)) return false;
-        if (!instance.TryGetTexture2D(out Texture2D texture)) return false;
-        Raylib.UnloadTexture(texture);
-        Logger.Debug("Unloaded texture {texture}", texture.Id);
-        return true;
-    }
+    #endregion
 }

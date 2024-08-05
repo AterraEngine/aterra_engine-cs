@@ -10,8 +10,8 @@ using AterraCore.Contracts.OmniVault;
 using AterraCore.Contracts.Renderer;
 using AterraCore.FlexiPlug;
 using AterraCore.Loggers;
-using AterraCore.Nexities.Assets;
 using AterraCore.Nexities.Worlds;
+using AterraCore.OmniVault.Assets;
 using AterraCore.OmniVault.Textures;
 using AterraEngine;
 using AterraEngine.Renderer.RaylibCs;
@@ -45,11 +45,12 @@ public class CollectDefaultDependencies : IBootOperation {
             NewServiceDescriptor<IPluginAtlas, PluginAtlas>(ServiceLifetime.Singleton),
             #endregion
             #region Nexities
-            NewServiceDescriptor<IAssetAtlas, AssetAtlas>(ServiceLifetime.Singleton),
-            NewServiceDescriptor<IAssetInstanceAtlas, AssetInstanceAtlas>(ServiceLifetime.Singleton),
             NewServiceDescriptor<INexitiesWorld, NexitiesWorld>(ServiceLifetime.Singleton),
             #endregion
             #region OmniVault
+            NewServiceDescriptor<IAssetAtlas, AssetAtlas>(ServiceLifetime.Singleton),
+            NewServiceDescriptor<IAssetInstanceAtlas, AssetInstanceAtlas>(ServiceLifetime.Singleton),
+            
             NewServiceDescriptor<ITextureAtlas, TextureAtlas>(ServiceLifetime.Singleton),
             #endregion
         ];

@@ -1,13 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Nexities.Data.Attributes;
+using AterraCore.Common.Types.Nexities;
+using AterraCore.Contracts.Nexities.Data.Assets;
 
-namespace AterraCore.Nexities.Attributes;
+namespace AterraCore.OmniVault.Assets;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-public class AssetTagAttribute(params string[]? tags) : IAssetTagAttribute {
-    public override string[] Tags { get; } = tags?.ToArray() ?? [];
+public class AssetInstance : IAssetInstance {
+    public Guid Guid { get; set; }
+    public AssetId AssetId { get; set; }
 }

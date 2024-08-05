@@ -1,13 +1,14 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.OmniVault;
+using AterraCore.Common.Types.Nexities;
 using Raylib_cs;
 
 namespace AterraCore.Contracts.Nexities.Data.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ISprite2D : INexitiesComponent, ITexture2DAsset {
-    public Rectangle Selection { get; }
+public interface ISprite2D : INexitiesComponent {
+    public AssetId TextureAssetId { get; set; }
+    public Rectangle Selection {get; set;}
 }
