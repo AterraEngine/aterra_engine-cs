@@ -1,8 +1,6 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Diagnostics.CodeAnalysis;
-
 namespace AterraLib.Nexities.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
@@ -11,7 +9,15 @@ namespace AterraLib.Nexities.Components;
 [UsedImplicitly]
 public class Sprite2D : NexitiesComponent, ISprite2D {
     public virtual AssetId TextureAssetId { get; set; } = new();
-    public virtual Rectangle UvSelection { get; set; } = new(0, 0, 1, 1);
+
+    private Rectangle _uvSelection  = new(0, 0, 1, 1);
+    public virtual Rectangle UvSelection {
+        get => _uvSelection;
+        set {
+            _uvSelection = value;
+            UvAndSourceCalculated = null;
+        }
+    }
     
     public Rectangle? UvAndSourceCalculated { get; set; } 
 }
