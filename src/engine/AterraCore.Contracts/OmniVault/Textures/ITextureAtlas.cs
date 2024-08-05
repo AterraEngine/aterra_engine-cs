@@ -1,11 +1,14 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraCore.Contracts.Nexities.Data.Attributes;
+using AterraCore.Common.Types.Nexities;
+
+namespace AterraCore.Contracts.OmniVault.Textures;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-// ReSharper disable once InconsistentNaming
-public abstract class IInjectAsAttribute : Attribute {
-    public abstract Guid Guid { get; }
+public interface ITextureAtlas {
+    #region Registering Texture to GPU
+    bool TryRegisterTexture(AssetId textureAssetId);
+    #endregion
 }

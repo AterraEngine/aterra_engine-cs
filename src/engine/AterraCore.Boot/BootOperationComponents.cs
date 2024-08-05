@@ -7,7 +7,6 @@ using AterraCore.Contracts.FlexiPlug;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AterraCore.Boot;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -27,5 +26,6 @@ public record BootComponents(
     }
 
     public Span<IPluginDto> ValidPlugins => AssemblyLoadedPlugins
-        .Concat<IPluginDto>(PluginLoader.GetValidPlugins()).ToArray();
+        .Concat<IPluginDto>(PluginLoader.GetValidPlugins())
+        .ToArray();
 }

@@ -6,11 +6,9 @@ using AterraCore.DI;
 using AterraCore.Loggers;
 
 namespace AterraCore.Boot.Operations;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
 public class BuildDependencies : IBootOperation {
     private ILogger Logger { get; } = StartupLogger.CreateLogger(false).ForBootOperationContext<BuildDependencies>(); 
 

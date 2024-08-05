@@ -4,7 +4,7 @@
 
 using AterraCore.Contracts;
 using AterraCore.Contracts.FlexiPlug;
-using AterraCore.Contracts.Nexities.Data.Assets;
+using AterraCore.Contracts.OmniVault.Assets;
 using CodeOfChaos.Extensions.Serilog;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;

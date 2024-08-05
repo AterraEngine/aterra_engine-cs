@@ -16,4 +16,4 @@ public class InjectableAttribute(Type typeInterface, ServiceLifetime serviceLife
     public readonly bool IsStatic = @static;
 }
 
-public class InjectableAttribute<T>(ServiceLifetime serviceLifetime = ServiceLifetime.Transient, bool @static=false) : InjectableAttribute(typeof(T), serviceLifetime, @static);
+[UsedImplicitly] public class InjectableAttribute<T>(ServiceLifetime serviceLifetime = ServiceLifetime.Transient, bool @static=false) : InjectableAttribute(typeof(T), serviceLifetime, @static);

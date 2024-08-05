@@ -3,7 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.Boot.Logic.PluginLoading;
 using AterraCore.Contracts.Boot.Operations;
-using AterraCore.Contracts.Nexities.Data.Assets;
+using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.DI;
 using AterraCore.FlexiPlug.Attributes;
 using AterraCore.Loggers;
@@ -11,7 +11,6 @@ using CodeOfChaos.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AterraCore.Boot.Operations;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------

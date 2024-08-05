@@ -3,11 +3,11 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Types.Nexities;
 
-namespace AterraCore.Contracts.Nexities.Data.Assets;
+namespace AterraCore.Contracts.OmniVault.Assets.Attributes;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IAssetInstance {
-    public Guid Guid { get; set; }
-    public AssetId AssetId { get; set; }
+// ReSharper disable once InconsistentNaming
+public abstract class IOverridesAssetIdAttribute : Attribute {
+    public abstract AssetId AssetId { get; }
 }

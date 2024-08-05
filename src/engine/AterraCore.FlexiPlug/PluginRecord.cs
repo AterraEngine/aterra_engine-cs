@@ -3,8 +3,8 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.FlexiPlug.Plugin;
-using AterraCore.Contracts.Nexities.Data.Assets;
-using AterraCore.Contracts.Nexities.Data.Attributes;
+using AterraCore.Contracts.OmniVault.Assets;
+using AterraCore.Contracts.OmniVault.Assets.Attributes;
 using System.Reflection;
 
 namespace AterraCore.FlexiPlug;

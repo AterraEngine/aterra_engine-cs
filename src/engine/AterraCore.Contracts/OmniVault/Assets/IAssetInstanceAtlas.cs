@@ -5,7 +5,7 @@
 using AterraCore.Common.Types.Nexities;
 using System.Diagnostics.CodeAnalysis;
 
-namespace AterraCore.Contracts.Nexities.Data.Assets;
+namespace AterraCore.Contracts.OmniVault.Assets;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------

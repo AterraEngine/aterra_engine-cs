@@ -2,8 +2,9 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Types.Nexities;
-using AterraCore.Contracts.Nexities.Data.Assets;
 using AterraCore.Contracts.OmniVault;
+using AterraCore.Contracts.OmniVault.Assets;
+using AterraCore.Contracts.OmniVault.Textures;
 using JetBrains.Annotations;
 using Raylib_cs;
 using Serilog;

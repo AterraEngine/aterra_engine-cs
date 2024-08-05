@@ -1,8 +1,9 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Nexities.Data.Assets;
 using AterraCore.Contracts.OmniVault;
+using AterraCore.Contracts.OmniVault.Assets;
+using AterraCore.Contracts.OmniVault.Textures;
 using AterraCore.Contracts.Renderer;
 using AterraCore.DI;
 using AterraEngine.Renderer.RaylibCs.FrameProcessors;

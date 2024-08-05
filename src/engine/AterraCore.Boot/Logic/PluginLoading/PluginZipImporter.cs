@@ -55,7 +55,6 @@ public class PluginZipImporter(string zipPath, ILogger logger) : IPluginZipImpor
         assembly = null;
 
         try {
-            // I have no clue why I need to do this ...
             string filePathFix = binDto.FilePath.Replace("\\", "/");
 
             if (!TryGetFileBytesFromZip(filePathFix, out byte[]? assemblyBytes)) {

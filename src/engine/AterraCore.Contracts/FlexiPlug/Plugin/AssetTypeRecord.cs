@@ -1,8 +1,8 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Nexities.Data.Assets;
-using AterraCore.Contracts.Nexities.Data.Attributes;
+using AterraCore.Contracts.OmniVault.Assets;
+using AterraCore.Contracts.OmniVault.Assets.Attributes;
 
 namespace AterraCore.Contracts.FlexiPlug.Plugin;
 // ---------------------------------------------------------------------------------------------------------------------

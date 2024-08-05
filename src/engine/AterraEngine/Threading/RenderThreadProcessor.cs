@@ -1,8 +1,8 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Nexities.Data.Components;
 using AterraCore.Contracts.OmniVault;
+using AterraCore.Contracts.OmniVault.Textures;
 using AterraCore.Contracts.Renderer;
 using JetBrains.Annotations;
 using Raylib_cs;

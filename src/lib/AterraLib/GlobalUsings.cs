@@ -1,5 +1,4 @@
 ﻿global using AterraCore.Common.Types.Nexities;
-global using AterraCore.Contracts.Nexities.Data.Assets;
 global using AterraCore.Contracts.Nexities.Data.Components;
 global using AterraCore.Contracts.Nexities.Data.Levels;
 global using AterraCore.Contracts.OmniVault;

@@ -2,8 +2,8 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Types.Nexities;
-using AterraCore.Contracts.Nexities.Data.Assets;
 using AterraCore.Contracts.Nexities.Data.Components;
+using AterraCore.Contracts.OmniVault.Assets;
 using System.Diagnostics.CodeAnalysis;
 
 namespace AterraCore.Contracts.Nexities.Data.Entities;

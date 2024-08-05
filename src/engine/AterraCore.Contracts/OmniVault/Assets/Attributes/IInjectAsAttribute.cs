@@ -1,16 +1,11 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Nexities.Data.Assets;
-using Raylib_cs;
-using System.Numerics;
-
-namespace AterraCore.Contracts.OmniVault;
+namespace AterraCore.Contracts.OmniVault.Assets.Attributes;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ITexture2DAsset : IAssetInstance {
-    string imagePath { get; set; }
-    Texture2D? Texture { get; set; }
-    Vector2 Size { get; set; }
+// ReSharper disable once InconsistentNaming
+public abstract class IInjectAsAttribute : Attribute {
+    public abstract Guid Guid { get; }
 }

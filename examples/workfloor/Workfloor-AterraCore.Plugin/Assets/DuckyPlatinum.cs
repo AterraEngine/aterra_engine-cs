@@ -5,6 +5,7 @@ using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Data.Components;
 using AterraCore.Contracts.Nexities.Data.Levels;
 using AterraCore.Contracts.OmniVault;
+using AterraCore.Contracts.OmniVault.Textures;
 using AterraCore.Nexities.Components;
 using AterraCore.Nexities.Entities;
 using AterraCore.OmniVault.Textures;
