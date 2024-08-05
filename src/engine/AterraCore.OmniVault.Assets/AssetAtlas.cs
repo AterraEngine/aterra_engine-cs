@@ -110,7 +110,7 @@ public class AssetAtlas(ILogger logger) : IAssetAtlas {
         type = registration.Type;
         return true;
     }
-    public bool TryGetInterfaceTypes(AssetId assetId, out Type[] type) {
+    public bool TryGetInterfaceTypes(AssetId assetId, out IEnumerable<Type> type) {
         type = [];
         if (!_assetsById.TryGetValue(assetId, out AssetRegistration registration)) {
             return false;
@@ -118,6 +118,11 @@ public class AssetAtlas(ILogger logger) : IAssetAtlas {
 
         type = registration.InterfaceTypes;
         return true;
+    }
+    public bool TryUpdateRegistration(ref AssetRegistration registration) {
+        return _assetsById.TryGetValue(registration.AssetId, out AssetRegistration oldRegistration)
+               && _assetsById.TryUpdate(registration.AssetId, registration, oldRegistration);
+
     }
 
     public bool TryGetAssetId<T>(out AssetId assetId) => TryGetAssetId(typeof(T), out assetId);

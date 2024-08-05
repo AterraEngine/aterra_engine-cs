@@ -97,7 +97,7 @@ public class Engine(
             TextureAssetId :  "Workfloor:TextureDuckyPlatinum"
         ));
 
-        const int a = 10;
+        const int a = 100;
         for (int k = 0; k < a; k++) {
             for (int j = 0; j < a; j++) {
                 // AssetId assetId = "NexitiesDebug:Entities/DuckyPlatinumActor" ;

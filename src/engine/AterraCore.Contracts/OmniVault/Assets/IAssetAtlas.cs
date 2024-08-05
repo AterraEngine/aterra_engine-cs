@@ -24,5 +24,7 @@ public interface IAssetAtlas {
     bool TryGetType(AssetId assetId, [NotNullWhen(true)] out Type? type);
     bool TryGetAssetId(Type type, out AssetId assetId);
     bool TryGetAssetId<T>(out AssetId assetId);
-    bool TryGetInterfaceTypes(AssetId assetId, out Type[] type);
+    bool TryGetInterfaceTypes(AssetId assetId, out IEnumerable<Type> type);
+    
+    bool TryUpdateRegistration(ref AssetRegistration registration);
 }

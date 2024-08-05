@@ -25,6 +25,42 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas) : IAsset
     public int TotalCount => _assetInstances.Count;
 
     // -----------------------------------------------------------------------------------------------------------------
+    // Helper Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    private object[] CreateParameters(ref AssetRegistration registration) {
+        if (registration.ConstructorParameters is not null) {
+            return registration.ConstructorParameters;
+        }
+        
+        object[] parameters = registration.Constructor.GetParameters()
+            .Select(p => {
+                if (!assetAtlas.TryGetAssetId(p.ParameterType, out AssetId paramAssetId)) {
+                    return !EngineServices.TryGetService(p.ParameterType, out object? service)
+                        ? EngineServices.CreateWithServices<object>(p.ParameterType)
+                        : service;
+                }
+                if (p.GetCustomAttribute<InjectAsAttribute>() is not {} refersToAttribute) {
+                    return EngineServices.CreateNexitiesAsset<IAssetInstance>(
+                        !assetAtlas.TryGetType(paramAssetId, out Type? classType)
+                            ? p.ParameterType
+                            : classType
+                    );
+                }
+                logger.Debug("Parameter type {type} refers to instance {guid}", p.ParameterType, refersToAttribute.Guid);
+                if (TryGetOrCreate(paramAssetId, refersToAttribute.Guid, out IAssetInstance? assetInstance)) {
+                    logger.Debug("Found or created an instance");
+                    return assetInstance;
+                }
+                logger.Warning("No instance could be created");
+                return EngineServices.CreateWithServices<object>(p.ParameterType);
+            }).ToArray();
+        
+        registration.ConstructorParameters = parameters; // Cache the parameters
+        
+        return parameters;
+    }
+    
+    // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public bool TryCreate<T>(AssetId assetId, [NotNullWhen(true)] out T? instance, Guid? predefinedGuid = null) where T : class, IAssetInstance {
@@ -33,63 +69,28 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas) : IAsset
             logger.Warning("Asset Id {id} could not be matched to a registration", assetId);
             return false;
         }
-        
+
         // check if it is a singleton and already exists
         if (registration.IsSingleton() 
-            && _singletonAssetInstances.TryGetValue(registration.AssetId, out Guid guid)
-            && _assetInstances.TryGetValue(guid, out IAssetInstance? assetInstance)
-            && assetInstance is T convertedInstance
-        ) {
+            && _singletonAssetInstances.TryGetValue(registration.AssetId, out Guid existingGuid)
+            && _assetInstances.TryGetValue(existingGuid, out IAssetInstance? existingInstance)
+            && existingInstance is T convertedInstance) {
             instance = convertedInstance;
             return true;
         }
 
-        // Will work for Entities which have DI injected components,
-        //      because all components have their interface mapped to their assetId
-        // Will work for others as well
-        ConstructorInfo constructor = registration.Type.GetConstructors().First();
-        object[] parameters = constructor.GetParameters()
-            .Select(p => {
-                if (!assetAtlas.TryGetAssetId(p.ParameterType, out AssetId paramAssetId)) {
-                    return !EngineServices.TryGetService(p.ParameterType, out object? output)
-                        ? EngineServices.CreateWithServices<object>(p.ParameterType)
-                        : output;
-                }
-
-                if (p.GetCustomAttribute<InjectAsAttribute>() is not {} refersToAttribute)
-                    return EngineServices.CreateNexitiesAsset<IAssetInstance>(
-                    !assetAtlas.TryGetType(paramAssetId, out Type? classType)
-                        ? p.ParameterType
-                        : classType
-                    );
-
-                logger.Debug("Parameter type {t} refers to instance {guid} ", p.ParameterType, refersToAttribute.Guid);
-
-                if (TryGetOrCreate(paramAssetId, refersToAttribute.Guid, out IAssetInstance? instance)) {
-                    logger.Debug("Found or created an instance");
-                    return instance;
-                }
-                logger.Warning("No instance could be created");
-                return EngineServices.CreateWithServices<object>(p.ParameterType);
-
-            })
-            .ToArray();
-
-        // ReSharper disable once CoVariantArrayConversion
-        instance = (T)constructor.Invoke(parameters);
+        instance = (T)registration.Constructor.Invoke(CreateParameters(ref registration));
         instance.AssetId = registration.AssetId;
-
-        // Update the generated
         instance.Guid = predefinedGuid ?? Guid.NewGuid();
 
-        // Finally add the instance
         if (_assetInstances.TryAdd(instance.Guid, instance)) {
             if (!_assetsByTypes.TryAddToBagOrCreateBag(typeof(T), instance.Guid)) {
-                logger.Debug("{guid} could not be added to Type bag of {T}", instance.Guid, typeof(T));
+                logger.Debug("{guid} could not be added to Type bag of {type}", instance.Guid, typeof(T));
             }
-            if (registration.IsSingleton()) _singletonAssetInstances.TryAdd(instance.AssetId, instance.Guid);
-            
-            logger.Debug("{guid} added to atlas", instance.Guid);
+            if (registration.IsSingleton()) {
+                _singletonAssetInstances.TryAdd(instance.AssetId, instance.Guid);
+            }
+            // logger.Debug("{guid} added to atlas", instance.Guid);
             return true;
         }
         logger.Debug("{guid} could not be added to atlas", instance.Guid);
