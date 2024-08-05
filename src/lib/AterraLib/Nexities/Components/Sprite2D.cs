@@ -11,5 +11,7 @@ namespace AterraLib.Nexities.Components;
 [UsedImplicitly]
 public class Sprite2D : NexitiesComponent, ISprite2D {
     public virtual AssetId TextureAssetId { get; set; } = new();
-    public virtual Rectangle Selection { get; set; } = new(0, 0, 1, 1);
+    public virtual Rectangle UvSelection { get; set; } = new(0, 0, 1, 1);
+    
+    public Rectangle? UvAndSourceCalculated { get; set; } 
 }

@@ -7,6 +7,7 @@ using AterraCore.Contracts.OmniVault;
 using JetBrains.Annotations;
 using Raylib_cs;
 using Serilog;
+using System.Numerics;
 
 namespace AterraCore.OmniVault.Textures;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -30,6 +31,7 @@ public class TextureAtlas(ILogger logger, IAssetInstanceAtlas instanceAtlas) : I
             Logger.Debug("Loaded image {path}", textureAsset.imagePath);
         
             textureAsset.Texture = Raylib.LoadTextureFromImage(image);
+            textureAsset.Size = new Vector2(image.Width, image.Height);
             Logger.Debug("Assigned image {path} to asset {guid}", textureAsset.imagePath, textureAsset.Guid);
             
             Raylib.UnloadImage(image);

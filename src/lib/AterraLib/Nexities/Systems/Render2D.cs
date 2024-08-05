@@ -34,7 +34,7 @@ public class Render2D(ITextureAtlas textureAtlas, IAssetInstanceAtlas instanceAt
 
             Raylib.DrawTexturePro(
                 texture: (Texture2D)texture2DAsset.Texture,
-                source: childEntity.Sprite2D.Selection,
+                source: childEntity.Sprite2D.UvAndSourceCalculated ??= new Rectangle(childEntity.Sprite2D.UvSelection.Position, childEntity.Sprite2D.UvSelection.Size * texture2DAsset.Size ),
                 dest: new Rectangle(translation, scale),
                 origin: new Vector2(0, 0),
                 rotation: rotation.X,
@@ -45,7 +45,7 @@ public class Render2D(ITextureAtlas textureAtlas, IAssetInstanceAtlas instanceAt
         if (textureOriginalEntity.Texture is null) return;
         Raylib.DrawTexturePro(
             texture: (Texture2D)textureOriginalEntity.Texture, 
-            source: originalEntity.Sprite2D.Selection,
+            source: originalEntity.Sprite2D.UvAndSourceCalculated ??= new Rectangle(originalEntity.Sprite2D.UvSelection.Position, originalEntity.Sprite2D.UvSelection.Size * textureOriginalEntity.Size ),
             dest: originalEntity.Transform2D.DestinationRectangle,
             origin: new Vector2(0,0), 
             rotation:originalEntity.Transform2D.Rotation.X, 

@@ -22,23 +22,23 @@ public interface ITextureDuckyHype : ITexture2DAsset;
 public interface ISpriteDuckyHype : ISprite2D;
 public interface IDuckyHypeActor : IActor2D;
 
-[Texture<ITextureDuckyHype>("Workfloor:TextureDuckyHype")]
+[Texture("Workfloor:TextureDuckyHype")]
 [UsedImplicitly]
 public class TextureDuckyHype : Texture2DAsset, ITextureDuckyHype {
     public override string imagePath { get; set; } = "assets/ducky-hype.png";
 }
 
-[Component<ISpriteDuckyHype>("Workfloor:SpriteDuckyHype")]
+[Component("Workfloor:SpriteDuckyHype")]
 [UsedImplicitly]
 public class SpriteDuckyHype : Sprite2D, ISpriteDuckyHype {
-    public override AssetId TextureAssetId => "Workfloor:TextureDuckyHype";
-    public override Rectangle Selection =>  new(0, 0, 2048, 2048);
+    public override AssetId TextureAssetId { get; set; } = new("Workfloor:TextureDuckyHype");
+    public override Rectangle UvSelection { get; set; } =  new(0, 0, 1, 1);
 }
 
-[Entity<IDuckyHypeActor>("Workfloor:ActorDuckyHype")]
+[Entity("Workfloor:ActorDuckyHype")]
 [UsedImplicitly]
 public class DuckyHypeActor(
     ITransform2D transform2D, 
-    ISpriteDuckyHype sprite2D,
+    SpriteDuckyHype sprite2D,
     IAssetTree childEntities 
 ) : Actor2D(transform2D, sprite2D, childEntities), IDuckyHypeActor;

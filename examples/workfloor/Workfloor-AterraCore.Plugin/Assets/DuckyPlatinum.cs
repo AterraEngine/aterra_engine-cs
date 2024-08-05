@@ -22,23 +22,23 @@ public interface ITextureDuckyPlatinum : ITexture2DAsset;
 public interface ISpriteDuckyPlatinum : ISprite2D;
 public interface IDuckyPlatinumActor : IActor2D;
 
-[Texture<ITextureDuckyPlatinum>("Workfloor:TextureDuckyPlatinum")]
+[Texture("Workfloor:TextureDuckyPlatinum")]
 [UsedImplicitly]
 public class TextureDuckyPlatinum : Texture2DAsset,ITextureDuckyPlatinum {
     public override string imagePath { get; set; } = "assets/ducky-platinum.png";
 }
 
-[Component<ISpriteDuckyPlatinum>("Workfloor:SpriteDuckyPlatinum")]
+[Component("Workfloor:SpriteDuckyPlatinum")]
 [UsedImplicitly]
 public class SpriteDuckyPlatinum : Sprite2D,ISpriteDuckyPlatinum  {
-    public override AssetId TextureAssetId => "Workfloor:TextureDuckyPlatinum";
-    public override Rectangle Selection =>  new(0, 0, 2048, 2048);
+    public override AssetId TextureAssetId { get; set; } = new("Workfloor:TextureDuckyPlatinum");
+    public override Rectangle UvSelection { get; set; } =  new(0, 0, 1, 1);
 }
 
-[Entity<IDuckyPlatinumActor>("Workfloor:ActorDuckyPlatinum")]
+[Entity("Workfloor:ActorDuckyPlatinum")]
 [UsedImplicitly]
 public class DuckyPlatinumActor(
     ITransform2D transform2D, 
-    ISpriteDuckyPlatinum sprite2D,
+    SpriteDuckyPlatinum sprite2D,
     IAssetTree childEntities 
 ) : Actor2D(transform2D, sprite2D, childEntities), IDuckyPlatinumActor;

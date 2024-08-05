@@ -10,5 +10,7 @@ namespace AterraCore.Contracts.Nexities.Data.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 public interface ISprite2D : INexitiesComponent {
     public AssetId TextureAssetId { get; set; }
-    public Rectangle Selection {get; set;}
+    public Rectangle UvSelection {get; set;}
+    
+    public Rectangle? UvAndSourceCalculated { get; set; } 
 }
