@@ -20,9 +20,10 @@ public class GeneralRenderRaylibFrameProcessor(ILogger logger, INexitiesWorld wo
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     protected override void DrawUi() {
-        DrawFPS(0,0);
+        DrawRectangle(0,0,250,100,Color.White);
+        DrawText($"   FPS : {GetFPS()}", 0, 0, 32, Color.DarkBlue);
         if (world.LoadedLevel is null) return;
-        DrawText(world.LoadedLevel.AssetTree.Count.ToString(),50, 50, 32, Color.Lime );
+        DrawText($"DUCKS : {world.LoadedLevel.AssetTree.Count}",0, 50, 32, Color.DarkBlue);
     }
 
     protected override void Draw2D() {

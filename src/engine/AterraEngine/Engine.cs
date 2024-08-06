@@ -84,8 +84,6 @@ public class Engine(
                 Logger.Warning("Type {Type} could not be assigned as an asset", assetRegistration.Type);
             }
         }
-
-        renderThreadEvents.InvokeApplicationStageChange(ApplicationStage.Level);
         
         // -------------------------------------------------------------------------------------------------------------
         TryAssignStartingLevel("NexitiesDebug:Levels/MainLevel");
@@ -109,7 +107,10 @@ public class Engine(
             }
         }
         
-        await Task.Delay(50000000);
+        // -------------------------------------------------------------------------------------------------------------
+        renderThreadEvents.InvokeApplicationStageChange(ApplicationStage.Level);
+        
+        await Task.Delay(50_000_000);
         await _ctsRenderThread.CancelAsync();
     }
 

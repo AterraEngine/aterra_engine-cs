@@ -13,7 +13,7 @@ namespace AterraLib.Nexities.Components;
 [UsedImplicitly]
 public class AssetTree : NexitiesComponent, IAssetTree {
     private LinkedList<IAssetInstance> Nodes { get; } = [];
-    private readonly ReaderWriterLockSlim _lock = new();
+    private readonly ReaderWriterLockSlim _cacheLock = new();
     
     private readonly ConcurrentDictionary<(Type, CacheType), LinkedList<IAssetInstance>> _nodeByTypeCache = new();
     
@@ -41,11 +41,11 @@ public class AssetTree : NexitiesComponent, IAssetTree {
     // -----------------------------------------------------------------------------------------------------------------
     #region GetCount
     private int GetCount() {
-        _lock.EnterReadLock();
+        _cacheLock.EnterReadLock();
         try {
             return Nodes.Count;
         } finally {
-            _lock.ExitReadLock();
+            _cacheLock.ExitReadLock();
         }
     }
     #endregion
@@ -86,34 +86,31 @@ public class AssetTree : NexitiesComponent, IAssetTree {
     #region Caching helpers
     private IEnumerable<T> GetOrAddToCache<T>(CacheType cacheType, Func<IEnumerable<T>> callback) {
         (Type, CacheType) key = (typeof(T), cacheType);
-        _lock.EnterUpgradeableReadLock();
-        try {
-            if (_nodeByTypeCache.TryGetValue(key, out LinkedList<IAssetInstance>? result)) {
-                foreach (T node in result) {
-                    yield return node;
-                }
-                yield break;
+        
+        if (_nodeByTypeCache.TryGetValue(key, out LinkedList<IAssetInstance>? result)) {
+            foreach (T node in result) {
+                yield return node;
             }
-            
-            _lock.EnterWriteLock();
-            try {
-                result = [];
-                foreach (T node in callback()) {
-                    if (node is IAssetInstance castedNode) result.AddLast(castedNode);
-                }
+            yield break;
+        }
+        
+        // Use ConcurrentDictionary GetOrAdd for thread-safe retrieval and addition
+        result = _nodeByTypeCache.GetOrAdd(key, _ => {
+            LinkedList<IAssetInstance> nodeList = [];
+            foreach (T node in callback()) {
+                if (node is IAssetInstance castedNode) nodeList.AddLast(castedNode);
+            }
+            return nodeList;
+        });
 
-                _nodeByTypeCache[key] = result;
-            } finally {
-                _lock.ExitWriteLock();
-            }
-            
-            foreach (IAssetInstance item in result) {
-                yield return (T)item;
-            }
+        foreach (IAssetInstance item in result) {
+            yield return (T)item;
         }
-        finally {
-            _lock.ExitUpgradeableReadLock();
-        }
+    }
+
+    private void ClearCaches() {
+        _nodeByTypeCache.Clear();
+        _countCache = null;
     }
 
     private void InvalidateCaches() {
@@ -123,18 +120,12 @@ public class AssetTree : NexitiesComponent, IAssetTree {
                 return;
             }
             
-            _debounceTimer = new Timer(
-                _ => {
-                    lock (_debounceLock) {
-                        _nodeByTypeCache.Clear();
-                        _countCache = null;
-                        _debounceTimer = null;
-                    }
-                },
-                state: null,
-                (long)DebounceIntervalMs,
-                Timeout.Infinite
-            );
+            _debounceTimer = new Timer(_ => {
+                lock (_debounceLock) {
+                    ClearCaches();
+                    _debounceTimer = null;
+                }
+            }, null, DebounceIntervalMs, Timeout.Infinite);
         }
     }
     #endregion
@@ -160,22 +151,22 @@ public class AssetTree : NexitiesComponent, IAssetTree {
     // -----------------------------------------------------------------------------------------------------------------
     #region AddLast
     public void AddLast<T>(T node) where T : IAssetInstance {
-        _lock.EnterWriteLock();
+        _cacheLock.EnterWriteLock();
         try {
             Nodes.AddLast(node);
         } finally {
-            _lock.ExitWriteLock();
+            _cacheLock.ExitWriteLock();
         }
         InvalidateCaches();
     }
     #endregion
     #region AddFirst
     public void AddFirst<T>(T node) where T : IAssetInstance {
-        _lock.EnterWriteLock();
+        _cacheLock.EnterWriteLock();
         try {
             Nodes.AddFirst(node);
         } finally {
-            _lock.ExitWriteLock();
+            _cacheLock.ExitWriteLock();
         }
         InvalidateCaches();
     }
@@ -183,64 +174,62 @@ public class AssetTree : NexitiesComponent, IAssetTree {
     #region First & TryGetFirst
     public IAssetInstance? First => TryGetFirst(out IAssetInstance? output) ? output : null;
     public bool TryGetFirst<T>([NotNullWhen(true)] out T? output) where T : class, IAssetInstance {
-        _lock.EnterWriteLock();
+        _cacheLock.EnterReadLock();
         output = default;
         try {
             IAssetInstance? node = Nodes.First?.Value;
             output = node as T;
             return output is not null;
         } finally {
-            _lock.ExitWriteLock();
+            _cacheLock.ExitReadLock();
         }
     }
     #endregion
     #region Last & TryGetLast
-    public IAssetInstance? Last => TryGetFirst(out IAssetInstance? output) ? output : null;
+    public IAssetInstance? Last => TryGetLast(out IAssetInstance? output) ? output : null;
     public bool TryGetLast<T>([NotNullWhen(true)] out T? output) where T : class, IAssetInstance {
-        _lock.EnterWriteLock();
+        _cacheLock.EnterReadLock();
         output = default;
         try {
             IAssetInstance? node = Nodes.Last?.Value;
             output = node as T;
             return output is not null;
         } finally {
-            _lock.ExitWriteLock();
+            _cacheLock.ExitReadLock();
         }
     }
     #endregion
     #region TryAddAfter
     public bool TryAddAfter<T>(Guid assetGuid, T newAsset) where T : IAssetInstance {
-        _lock.EnterUpgradeableReadLock();
+        _cacheLock.EnterUpgradeableReadLock();
         try {
             if (Nodes.Find(a => a.Guid == assetGuid) is not {} node) return false;
-            _lock.EnterWriteLock();
+            _cacheLock.EnterWriteLock();
             try {
                 Nodes.AddAfter(node, newAsset);
                 return true;
-            }
-            finally {
-                _lock.ExitWriteLock();
+            } finally {
+                _cacheLock.ExitWriteLock();
             }
         } finally {
-            _lock.ExitUpgradeableReadLock();
+            _cacheLock.ExitUpgradeableReadLock();
         }
     }
     #endregion
     #region TryAddBefore
     public bool TryAddBefore<T>(Guid assetGuid, T newAsset) where T : IAssetInstance {
-        _lock.EnterUpgradeableReadLock();
+        _cacheLock.EnterUpgradeableReadLock();
         try {
             if (Nodes.Find(a => a.Guid == assetGuid) is not {} node) return false;
-            _lock.EnterWriteLock();
+            _cacheLock.EnterWriteLock();
             try {
                 Nodes.AddBefore(node, newAsset);
                 return true;
-            }
-            finally {
-                _lock.ExitWriteLock();
+            } finally {
+                _cacheLock.ExitWriteLock();
             }
         } finally {
-            _lock.ExitUpgradeableReadLock();
+            _cacheLock.ExitUpgradeableReadLock();
         }
     }
     #endregion

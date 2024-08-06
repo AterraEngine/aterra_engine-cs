@@ -16,11 +16,11 @@ public abstract class NexitiesSystem<TEntity> : INexitiesSystem where TEntity : 
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public void ProcessLevel(INexitiesLevel level) {
-        foreach (TEntity instance in EntitySelector(level)) {
+        foreach (TEntity instance in SelectEntities(level)) {
             ProcessEntity(instance);
         }
     }
 
-    protected abstract IEnumerable<TEntity> EntitySelector(INexitiesLevel level);
+    protected abstract IEnumerable<TEntity> SelectEntities(INexitiesLevel level);
     protected abstract void ProcessEntity(TEntity entity);
 }
