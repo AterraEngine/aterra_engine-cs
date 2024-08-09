@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.OmniVault.DataCollector;
 using Serilog;
+using System.Numerics;
 
 namespace AterraCore.OmniVault.DataCollector;
 

@@ -8,10 +8,36 @@ namespace AterraLib.Nexities.Components;
 [Component<IImpulse2D>("AterraLib:Nexities/Components/Impulse2D")]
 [UsedImplicitly]
 public class Impulse2D : NexitiesComponent, IImpulse2D {
-    public Vector2 TranslationOffset { get; set; } = Vector2.Zero;
-    public Vector2 ScaleOffset { get; set; } = Vector2.Zero;
-    public float RotationOffset { get; set; }
-    
+    private Vector2 _translationOffset = Vector2.Zero;
+    private Vector2 _scaleOffset = Vector2.Zero;
+    private float _rotationOffset;
+    public bool IsEmpty { get; private set; } = true;
+    public bool IsNotEmpty => !IsEmpty;
+
+    public Vector2 TranslationOffset {
+        get => _translationOffset;
+        set {
+            _translationOffset = value;
+            if (value != Vector2.Zero) IsEmpty = false;
+        }
+    }
+
+    public Vector2 ScaleOffset {
+        get => _scaleOffset;
+        set {
+            _scaleOffset = value;
+            if (value != Vector2.Zero) IsEmpty = false;
+        }
+    }
+
+    public float RotationOffset {
+        get => _rotationOffset;
+        set {
+            _rotationOffset = value;
+            if (value != 0) IsEmpty = false;
+        }
+    }
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
