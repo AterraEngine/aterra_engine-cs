@@ -5,14 +5,13 @@ using AterraCore.Contracts.Renderer;
 using AterraCore.Contracts.Threading;
 using JetBrains.Annotations;
 
-namespace AterraEngine.Threading;
+namespace AterraEngine.Threading.Render;
 // ---------------------------------------------------------------------------------------------------------------------
 // Support Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class ApplicationStageChangeEventArgs(ApplicationStage applicationStage) : EventArgs, IApplicationStageChangeEventArgs {
     public ApplicationStage ChangeToApplicationStage => applicationStage;
 }
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------

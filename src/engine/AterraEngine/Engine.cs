@@ -9,8 +9,11 @@ using AterraCore.Contracts.Nexities.Data.Levels;
 using AterraCore.Contracts.Nexities.Data.Worlds;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.Renderer;
+using AterraCore.Contracts.Threading.Logic;
 using AterraCore.DI;
 using AterraEngine.Threading;
+using AterraEngine.Threading.Logic;
+using AterraEngine.Threading.Render;
 using CodeOfChaos.Extensions;
 using CodeOfChaos.Extensions.Serilog;
 using JetBrains.Annotations;
@@ -30,9 +33,17 @@ public class Engine(
     IPluginAtlas pluginAtlas,
     INexitiesWorld world,
     RenderThreadEvents renderThreadEvents,
-    IApplicationStageManager applicationStageManager
+    IApplicationStageManager applicationStageManager,
+    ILogicEventManager logicEventManager
 ) : IEngine {
+    
+    
+    private Thread? _renderThread;
     private readonly CancellationTokenSource _ctsRenderThread = new();
+    
+    private Thread? _logicThread;
+    private readonly CancellationTokenSource _ctsLogicThread = new();
+    
     private readonly TaskCompletionSource<bool> _openGlContextCreated = new();
     private readonly ConcurrentQueue<TextureQueueRecord> _textureQueue = new();
     private ILogger Logger { get; } = logger.ForContext<Engine>();
@@ -40,9 +51,7 @@ public class Engine(
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public bool TryAssignStartingLevel(AssetId assetId) =>
-        instanceAtlas.TryCreate(assetId, out INexitiesLevel? level)
-        && world.TryLoadLevel(level);
+    public bool TryAssignStartingLevel(AssetId assetId) => world.TryChangeActiveLevel(assetId);
 
     public IEngine SubscribeToEvents() {
         renderThreadEvents.EventApplicationStageChange += applicationStageManager.ReceiveStageChange;
@@ -56,9 +65,21 @@ public class Engine(
         var renderThreadProcessor = EngineServices.CreateWithServices<RenderThreadProcessor>();
         renderThreadProcessor.CancellationToken = _ctsRenderThread.Token;
         renderThreadProcessor.TextureQueue = _textureQueue;
-        var renderThread = new Thread(renderThreadProcessor.Run);
-        renderThread.Start();
+        _renderThread = new Thread(renderThreadProcessor.Run);
+        _renderThread.Start();
         Logger.Information("Spawned RenderThread");
+
+        return this;
+    }
+
+    public IEngine SpawnLogicThread() {
+        var logicThreadProcessor = EngineServices.CreateWithServices<LogicThreadProcessor>();
+        logicThreadProcessor.CancellationToken = _ctsLogicThread.Token;
+        logicThreadProcessor.RegisterEvents();
+        
+        _logicThread = new Thread(logicThreadProcessor.Run);
+        _logicThread.Start();
+        Logger.Information("Spawned LogicThread");
 
         return this;
     }
@@ -86,7 +107,7 @@ public class Engine(
         }
         
         // -------------------------------------------------------------------------------------------------------------
-        TryAssignStartingLevel("NexitiesDebug:Levels/MainLevel");
+        logicEventManager.InvokeChangeActiveLevel("AterraLib:Nexities/Levels/Empty");
         
         _textureQueue.Enqueue(new TextureQueueRecord (
             TextureAssetId :  "Workfloor:TextureDuckyHype"
@@ -103,7 +124,7 @@ public class Engine(
                 if (!instanceAtlas.TryCreate(assetId, out IActor2D? newDucky)) continue;
                 newDucky.Transform2D.Translation = new Vector2(50 * j,50 * k);
                 newDucky.Transform2D.Scale = new Vector2(50, 50);
-                world.LoadedLevel?.AssetTree.AddLast(newDucky);
+                world.ActiveLevel?.AssetTree.AddLast(newDucky);
             }
         }
         

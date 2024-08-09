@@ -31,6 +31,7 @@ public static class Program {
         engine
             .SubscribeToEvents()
             .SpawnRenderThread()
+            .SpawnLogicThread()
         ;
         
         // Actually startup the engine

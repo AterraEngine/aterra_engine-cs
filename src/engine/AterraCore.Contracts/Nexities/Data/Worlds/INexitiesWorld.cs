@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Data.Levels;
 
 namespace AterraCore.Contracts.Nexities.Data.Worlds;
@@ -8,10 +9,11 @@ namespace AterraCore.Contracts.Nexities.Data.Worlds;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface INexitiesWorld {
-    public INexitiesLevel? LoadedLevel { get; }
+    public AssetId ActiveLevelId { get; }
+    public INexitiesLevel? ActiveLevel { get; }
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public bool TryLoadLevel(INexitiesLevel level);
+    public bool TryChangeActiveLevel(AssetId levelId) ;
 }

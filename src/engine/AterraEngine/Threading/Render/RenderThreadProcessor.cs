@@ -1,7 +1,6 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.OmniVault;
 using AterraCore.Contracts.OmniVault.Textures;
 using AterraCore.Contracts.Renderer;
 using JetBrains.Annotations;
@@ -9,7 +8,7 @@ using Raylib_cs;
 using Serilog;
 using System.Collections.Concurrent;
 
-namespace AterraEngine.Threading;
+namespace AterraEngine.Threading.Render;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------

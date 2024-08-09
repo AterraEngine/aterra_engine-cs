@@ -13,5 +13,6 @@ public interface IEngine {
     bool TryAssignStartingLevel(AssetId assetId);
     IEngine SubscribeToEvents();
     IEngine SpawnRenderThread();
+    IEngine SpawnLogicThread();
     Task Run();
 }
