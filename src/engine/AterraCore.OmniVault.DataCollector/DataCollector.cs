@@ -1,12 +1,14 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Types.Nexities;
-using AterraCore.Contracts.Threading.Logic.EventDelegates;
+using AterraCore.Contracts.OmniVault.DataCollector;
+using Serilog;
 
-namespace AterraEngine.Threading.Logic.EventDelegates;
+namespace AterraCore.OmniVault.DataCollector;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public record ChangeActiveLevelEventArgs(AssetId NewLevelId) : IChangeActiveLevelEventArgs;
+public class DataCollector(ILogger logger) : IDataCollector {
+    public double TPS { get; set; } = 0;
+}

@@ -6,12 +6,14 @@ using AterraCore.Contracts.Boot.Operations;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.Nexities.Data.Worlds;
 using AterraCore.Contracts.OmniVault.Assets;
+using AterraCore.Contracts.OmniVault.DataCollector;
 using AterraCore.Contracts.OmniVault.Textures;
 using AterraCore.Contracts.Renderer;
 using AterraCore.Contracts.Threading.Logic;
 using AterraCore.FlexiPlug;
 using AterraCore.Loggers;
 using AterraCore.OmniVault.Assets;
+using AterraCore.OmniVault.DataCollector;
 using AterraCore.OmniVault.Textures;
 using AterraCore.OmniVault.World;
 using AterraEngine;
@@ -57,6 +59,7 @@ public class CollectDefaultDependencies : IBootOperation {
             #endregion
             
             NewServiceDescriptor<ILogicEventManager, LogicEventManager>(ServiceLifetime.Singleton),
+            ServiceDescriptor.Singleton(DataCollectorFactory.Create), 
         ];
         
         components.DefaultServices.AddLastRepeated(defaultDependencies);

@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Data.Levels;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AterraCore.Contracts.Nexities.Data.Worlds;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -10,10 +11,10 @@ namespace AterraCore.Contracts.Nexities.Data.Worlds;
 // ---------------------------------------------------------------------------------------------------------------------
 public interface INexitiesWorld {
     public AssetId ActiveLevelId { get; }
-    public INexitiesLevel? ActiveLevel { get; }
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public bool TryChangeActiveLevel(AssetId levelId) ;
+    public bool TryGetActiveLevel([NotNullWhen(true)] out INexitiesLevel? level);
 }

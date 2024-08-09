@@ -13,11 +13,14 @@ public interface ILogicEventManager {
     public event EventHandler? EventStart;
     public event EventHandler? EventStop;
     public event EventHandler<IChangeActiveLevelEventArgs>? EventChangeActiveLevel;
+    public event EventHandler<double>? EventActualTPS;
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void InvokeEventStop();
+    public void InvokeStop();
+    public void InvokeStart();
     public void InvokeChangeActiveLevel(AssetId assetId);
     public void InvokeChangeActiveLevel(IChangeActiveLevelEventArgs eventArgs);
+    public void InvokeSendActualTps(double actualTps);
 }

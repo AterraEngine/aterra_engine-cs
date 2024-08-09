@@ -13,6 +13,7 @@ using AterraCore.Contracts.Threading.Logic;
 using AterraCore.DI;
 using AterraEngine.Threading;
 using AterraEngine.Threading.Logic;
+using AterraEngine.Threading.Logic.EventDelegates;
 using AterraEngine.Threading.Render;
 using CodeOfChaos.Extensions;
 using CodeOfChaos.Extensions.Serilog;
@@ -55,9 +56,10 @@ public class Engine(
 
     public IEngine SubscribeToEvents() {
         renderThreadEvents.EventApplicationStageChange += applicationStageManager.ReceiveStageChange;
-
+        
         renderThreadEvents.EventOpenGlContextCreated += (_, _) => { _openGlContextCreated.SetResult(true); };
         renderThreadEvents.EventOpenGlContextCreated += (_, _) => { Logger.Information("OpenGL Context Created"); };
+        
         return this;
     }
 
@@ -107,7 +109,9 @@ public class Engine(
         }
         
         // -------------------------------------------------------------------------------------------------------------
-        logicEventManager.InvokeChangeActiveLevel("AterraLib:Nexities/Levels/Empty");
+        TryAssignStartingLevel("AterraLib:Nexities/Levels/Empty");
+        if(!world.TryGetActiveLevel(out INexitiesLevel? level)) return;
+        logicEventManager.InvokeStart();
         
         _textureQueue.Enqueue(new TextureQueueRecord (
             TextureAssetId :  "Workfloor:TextureDuckyHype"
@@ -124,7 +128,7 @@ public class Engine(
                 if (!instanceAtlas.TryCreate(assetId, out IActor2D? newDucky)) continue;
                 newDucky.Transform2D.Translation = new Vector2(50 * j,50 * k);
                 newDucky.Transform2D.Scale = new Vector2(50, 50);
-                world.ActiveLevel?.AssetTree.AddLast(newDucky);
+                level?.AssetTree.AddLast(newDucky);
             }
         }
         

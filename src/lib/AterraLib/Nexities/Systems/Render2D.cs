@@ -24,7 +24,7 @@ public class Render2D(ITextureAtlas textureAtlas, IAssetInstanceAtlas instanceAt
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    protected override IEnumerable<IActor2D> SelectEntities(INexitiesLevel level) {
+    protected override IEnumerable<IActor2D> SelectEntities(INexitiesLevel? level) {
         return level.AssetTree.OfTypeReverse<IActor2D>();
     }
     

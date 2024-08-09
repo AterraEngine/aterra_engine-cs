@@ -17,12 +17,16 @@ public class LogicEventManager : ILogicEventManager {
     public event EventHandler? EventStart;
     public event EventHandler? EventStop;
     public event EventHandler<IChangeActiveLevelEventArgs>? EventChangeActiveLevel;
+    public event EventHandler<double>? EventActualTPS;
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void InvokeEventStop() => EventStop?.Invoke(this, EventArgs.Empty);
+    public void InvokeStop() => EventStop?.Invoke(this, EventArgs.Empty);
+    public void InvokeStart() => EventStart?.Invoke(this, EventArgs.Empty);
     
     public void InvokeChangeActiveLevel(AssetId assetId) => EventChangeActiveLevel?.Invoke(this, new ChangeActiveLevelEventArgs(assetId));
     public void InvokeChangeActiveLevel(IChangeActiveLevelEventArgs eventArgs) => EventChangeActiveLevel?.Invoke(this, eventArgs);
+    
+    public void InvokeSendActualTps(double actualTps) => EventActualTPS?.Invoke(this, actualTps);
 }

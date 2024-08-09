@@ -22,6 +22,7 @@
         <ProjectReference Include="..\AterraCore.Loggers\AterraCore.Loggers.csproj"/>
         <ProjectReference Include="..\AterraCore.Common\AterraCore.Common.csproj"/>
         <ProjectReference Include="..\AterraCore.Contracts\AterraCore.Contracts.csproj"/>
+        <ProjectReference Include="..\AterraCore.OmniVault.DataCollector\AterraCore.OmniVault.DataCollector.csproj" />
         <ProjectReference Include="..\AterraCore.OmniVault.Textures\AterraCore.OmniVault.Textures.csproj" />
         <ProjectReference Include="..\AterraCore.OmniVault.World\AterraCore.OmniVault.World.csproj" />
         <ProjectReference Include="..\AterraEngine\AterraEngine.csproj" />
