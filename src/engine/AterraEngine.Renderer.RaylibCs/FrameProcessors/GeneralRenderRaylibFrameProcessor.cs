@@ -28,7 +28,7 @@ public class GeneralRenderRaylibFrameProcessor(ILogger logger, INexitiesWorld wo
         if (!world.TryGetActiveLevel(out INexitiesLevel? level)) return;
         DrawText($"DUCKS : {level.AssetTree.Count}",0, 100, 32, Color.DarkBlue);
     }
-    private double GetTps() => dataCollector.TPS;
+    private double GetTps() => dataCollector.Tps;
 
     protected override void Draw2D() {
         if (!world.TryGetActiveLevel(out INexitiesLevel? level)) return;

@@ -57,8 +57,8 @@ public class Engine(
     public IEngine SubscribeToEvents() {
         renderThreadEvents.EventApplicationStageChange += applicationStageManager.ReceiveStageChange;
         
-        renderThreadEvents.EventOpenGlContextCreated += (_, _) => { _openGlContextCreated.SetResult(true); };
-        renderThreadEvents.EventOpenGlContextCreated += (_, _) => { Logger.Information("OpenGL Context Created"); };
+        renderThreadEvents.EventOpenGlContextCreated += (_, _) => _openGlContextCreated.SetResult(true);
+        renderThreadEvents.EventOpenGlContextCreated += (_, _) => Logger.Information("OpenGL Context Created");
         
         return this;
     }
@@ -120,7 +120,7 @@ public class Engine(
             TextureAssetId :  "Workfloor:TextureDuckyPlatinum"
         ));
 
-        const int a = 100;
+        const int a = 1;
         for (int k = 0; k < a; k++) {
             for (int j = 0; j < a; j++) {
                 // AssetId assetId = "NexitiesDebug:Entities/DuckyPlatinumActor" ;

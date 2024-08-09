@@ -28,12 +28,13 @@ public class LogicThreadProcessor(
     public bool IsRunning { get; private set; } = true;
     public bool IsFinished { get; private set; }
     public double ActualTps { get; private set; }
+    public double DeltaTps { get; private set; }
     
     public List<Action> EndOfTickActions { get; set; } = [];
 
     private Stopwatch TickStopwatch { get; } = Stopwatch.StartNew();
     private Stopwatch TpsStopwatch { get; } = Stopwatch.StartNew();
-    private int _ticks = 0;
+    private int _ticks;
     
     // -----------------------------------------------------------------------------------------------------------------
     // Run Method
@@ -85,10 +86,10 @@ public class LogicThreadProcessor(
 
     private void SleepUntilEndOfTick() {
         TickStopwatch.Stop();
-        double elapsed = TickStopwatch.Elapsed.TotalMilliseconds;
+        DeltaTps = TickStopwatch.Elapsed.TotalMilliseconds;
+        eventManager.InvokeUpdateDeltaTps(DeltaTps);
         
-        // Logger.Debug("TickTime : {elapsed}ms ", elapsed);
-        double sleepTime = MillisecondsPerTick - elapsed;
+        double sleepTime = MillisecondsPerTick - DeltaTps;
         if (sleepTime > 0) Thread.Sleep((int)sleepTime);
     }
 
@@ -99,7 +100,7 @@ public class LogicThreadProcessor(
         _ticks = 0;
         TpsStopwatch.Restart();
         
-        eventManager.InvokeSendActualTps(ActualTps);
+        eventManager.InvokeUpdateActualTps(ActualTps);
     }
     
     #endregion

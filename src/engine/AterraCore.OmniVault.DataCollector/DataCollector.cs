@@ -10,5 +10,6 @@ namespace AterraCore.OmniVault.DataCollector;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class DataCollector(ILogger logger) : IDataCollector {
-    public double TPS { get; set; } = 0;
+    public double Tps { get; internal set; }
+    public double DeltaTps { get; internal set; }
 }

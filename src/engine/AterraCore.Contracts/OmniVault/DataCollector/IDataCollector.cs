@@ -7,5 +7,6 @@ namespace AterraCore.Contracts.OmniVault.DataCollector;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IDataCollector {
-    public double TPS { get; set; }
+    public double Tps { get;}
+    public double DeltaTps { get;}
 }
