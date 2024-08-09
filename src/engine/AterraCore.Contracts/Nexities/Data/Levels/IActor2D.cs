@@ -11,4 +11,5 @@ namespace AterraCore.Contracts.Nexities.Data.Levels;
 public interface IActor2D : INexitiesEntity,
     IHasTransform2D,
     IHasSprite2D,
-    IHasAssetTree;
+    IHasAssetTree,
+    IHasImpulse2D;

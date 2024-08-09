@@ -24,11 +24,15 @@ public class Transform2D : NexitiesComponent, ITransform2D {
         set {
             _scale = value;
             _destinationRectangle = null;
+            _rotationOrigin = null;
         }
     }
 
-    public Vector2 Rotation { get; set; } = Vector2.Zero;
+    public float Rotation { get; set; } =0;
 
     private Rectangle? _destinationRectangle;
     public Rectangle DestinationRectangle => _destinationRectangle ??= new Rectangle(Translation, Scale);
+    
+    private Vector2? _rotationOrigin;
+    public Vector2 RotationOrigin => _rotationOrigin ??= Scale / 2;
 }

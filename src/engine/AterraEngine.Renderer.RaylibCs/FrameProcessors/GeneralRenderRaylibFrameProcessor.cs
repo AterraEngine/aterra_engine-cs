@@ -6,6 +6,7 @@ using AterraCore.Contracts.Nexities.Data.Worlds;
 using AterraCore.Contracts.OmniVault.DataCollector;
 using AterraCore.DI;
 using AterraLib.Nexities.Systems;
+using AterraLib.Nexities.Systems.Rendering;
 using JetBrains.Annotations;
 using Serilog;
 

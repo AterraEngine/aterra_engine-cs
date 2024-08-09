@@ -5,6 +5,7 @@ using AterraCore.Common.Data;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts;
 using AterraCore.Contracts.FlexiPlug;
+using AterraCore.Contracts.Nexities.Data.Entities;
 using AterraCore.Contracts.Nexities.Data.Levels;
 using AterraCore.Contracts.Nexities.Data.Worlds;
 using AterraCore.Contracts.OmniVault.Assets;
@@ -15,6 +16,7 @@ using AterraEngine.Threading;
 using AterraEngine.Threading.Logic;
 using AterraEngine.Threading.Logic.EventDelegates;
 using AterraEngine.Threading.Render;
+using AterraLib.Nexities.Entities;
 using CodeOfChaos.Extensions;
 using CodeOfChaos.Extensions.Serilog;
 using JetBrains.Annotations;
@@ -120,7 +122,7 @@ public class Engine(
             TextureAssetId :  "Workfloor:TextureDuckyPlatinum"
         ));
 
-        const int a = 1;
+        const int a = 100;
         for (int k = 0; k < a; k++) {
             for (int j = 0; j < a; j++) {
                 // AssetId assetId = "NexitiesDebug:Entities/DuckyPlatinumActor" ;
@@ -131,6 +133,11 @@ public class Engine(
                 level?.AssetTree.AddLast(newDucky);
             }
         }
+        
+        if (!instanceAtlas.TryCreate("Workfloor:ActorDuckyPlayer", out IPlayer2D? player2D)) return;
+        player2D.Transform2D.Translation = new Vector2(250, 250);
+        player2D.Transform2D.Scale = new Vector2(50, 50);
+        level?.AssetTree.AddFirst(player2D);
         
         // -------------------------------------------------------------------------------------------------------------
         renderThreadEvents.InvokeApplicationStageChange(ApplicationStage.Level);

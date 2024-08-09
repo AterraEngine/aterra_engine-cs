@@ -8,10 +8,10 @@ namespace AterraCore.Contracts.Nexities.Data.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ITransform2D : INexitiesComponent {
-    Vector2 Translation { get; set; }
-    Vector2 Scale { get; set; } 
-    float Rotation { get; set; }
-    Rectangle DestinationRectangle { get; }
-    Vector2 RotationOrigin { get; }
+public interface IImpulse2D : INexitiesComponent {
+    Vector2 TranslationOffset { get; set; }
+    Vector2 ScaleOffset { get; set; } 
+    float RotationOffset { get; set; }
+
+    void Clear();
 }

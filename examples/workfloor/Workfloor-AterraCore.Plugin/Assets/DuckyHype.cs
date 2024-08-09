@@ -41,5 +41,6 @@ public class SpriteDuckyHype : Sprite2D, ISpriteDuckyHype {
 public class DuckyHypeActor(
     ITransform2D transform2D, 
     SpriteDuckyHype sprite2D,
-    IAssetTree childEntities 
-) : Actor2D(transform2D, sprite2D, childEntities), IDuckyHypeActor;
+    IAssetTree childEntities,
+    IImpulse2D impulse2D
+) : Actor2D(transform2D, sprite2D, childEntities,impulse2D), IDuckyHypeActor;

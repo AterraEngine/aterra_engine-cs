@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\engine\AterraCore.Contracts\AterraCore.Contracts.csproj" />
+      <ProjectReference Include="..\..\engine\AterraCore.FlexiPlug\AterraCore.FlexiPlug.csproj" />
       <ProjectReference Include="..\..\engine\AterraCore.Nexities\AterraCore.Nexities.csproj" />
       <ProjectReference Include="..\..\engine\AterraCore.OmniVault.Textures\AterraCore.OmniVault.Textures.csproj" />
     </ItemGroup>

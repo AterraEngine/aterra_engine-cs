@@ -14,4 +14,5 @@ public enum CoreTags : ulong {
     RenderSystem = 1 << 04,
     Texture =      1 << 05,
     Singleton =    1 << 06,
+    LogicSystem =  1 << 07,
 }

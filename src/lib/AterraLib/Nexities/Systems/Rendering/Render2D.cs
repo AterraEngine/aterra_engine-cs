@@ -4,7 +4,7 @@
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.Textures;
 
-namespace AterraLib.Nexities.Systems;
+namespace AterraLib.Nexities.Systems.Rendering;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -17,8 +17,8 @@ public class Render2D(ITextureAtlas textureAtlas, IAssetInstanceAtlas instanceAt
         return entity.AssetTree.OfTypeManyReverse<T>();
     }
 
-    private static void DrawEntityTexture(Texture2D texture, Rectangle source, Rectangle dest, float rotation) {
-        Raylib.DrawTexturePro(texture, source, dest, new Vector2(0, 0), rotation, Color.White);
+    private static void DrawEntityTexture(Texture2D texture, Rectangle source, Rectangle dest, float rotation, Vector2 rotationOrigin) {
+        Raylib.DrawTexturePro(texture, source, dest, rotationOrigin, rotation, Color.White);
     }
     
     // -----------------------------------------------------------------------------------------------------------------
@@ -40,7 +40,8 @@ public class Render2D(ITextureAtlas textureAtlas, IAssetInstanceAtlas instanceAt
 
             Vector2 translation = childEntity.Transform2D.Translation + originalEntity.Transform2D.Translation;
             Vector2 scale = childEntity.Transform2D.Scale * originalEntity.Transform2D.Scale;
-            Vector2 rotation = childEntity.Transform2D.Rotation + originalEntity.Transform2D.Rotation;
+            float rotation = childEntity.Transform2D.Rotation + originalEntity.Transform2D.Rotation;
+            Vector2 rotationOrigin = childEntity.Transform2D.RotationOrigin + originalEntity.Transform2D.RotationOrigin;
 
             DrawEntityTexture(
                 (Texture2D)texture2DAsset.Texture, 
@@ -49,7 +50,8 @@ public class Render2D(ITextureAtlas textureAtlas, IAssetInstanceAtlas instanceAt
                     childEntity.Sprite2D.UvSelection.Size * texture2DAsset.Size
                 ), 
                 new Rectangle(translation, scale), 
-                rotation.X
+                rotation,
+                rotationOrigin
             );
         }
     }
@@ -63,6 +65,6 @@ public class Render2D(ITextureAtlas textureAtlas, IAssetInstanceAtlas instanceAt
             originalEntity.Sprite2D.UvSelection.Size * texture2DAsset.Size
         );
 
-        DrawEntityTexture((Texture2D)texture2DAsset.Texture, sourceRectangle, originalEntity.Transform2D.DestinationRectangle, originalEntity.Transform2D.Rotation.X);
+        DrawEntityTexture((Texture2D)texture2DAsset.Texture, sourceRectangle, originalEntity.Transform2D.DestinationRectangle, originalEntity.Transform2D.Rotation, originalEntity.Transform2D.RotationOrigin);
     }
 }

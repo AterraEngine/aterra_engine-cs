@@ -41,5 +41,6 @@ public class SpriteDuckyPlatinum : Sprite2D,ISpriteDuckyPlatinum  {
 public class DuckyPlatinumActor(
     ITransform2D transform2D, 
     SpriteDuckyPlatinum sprite2D,
-    IAssetTree childEntities 
-) : Actor2D(transform2D, sprite2D, childEntities), IDuckyPlatinumActor;
+    IAssetTree childEntities,
+    IImpulse2D impulse2D
+) : Actor2D(transform2D, sprite2D, childEntities,impulse2D), IDuckyPlatinumActor;

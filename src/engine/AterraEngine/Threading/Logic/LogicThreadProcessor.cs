@@ -5,6 +5,8 @@ using AterraCore.Contracts.Nexities.Data.Levels;
 using AterraCore.Contracts.Nexities.Data.Worlds;
 using AterraCore.Contracts.OmniVault.Textures;
 using AterraCore.Contracts.Threading.Logic;
+using AterraCore.DI;
+using AterraLib.Nexities.Systems.Logic;
 using JetBrains.Annotations;
 using Serilog;
 using System.Diagnostics;
@@ -75,6 +77,8 @@ public class LogicThreadProcessor(
         // Get all logic systems required by active level
         
         // run all logic systems
+        EngineServices.GetService<PlayerController>().ProcessLevel(level);
+        EngineServices.GetService<ApplyImpulse>().ProcessLevel(level);
         
         // cleanup
     }
@@ -112,6 +116,9 @@ public class LogicThreadProcessor(
         eventManager.EventStart += Start;
         eventManager.EventStop += Stop;
         eventManager.EventChangeActiveLevel += (_, args) => EndOfTickActions.Add(() => world.TryChangeActiveLevel(args.NewLevelId));
+        
+        eventManager.EventActualTps += (_, d) => Logger.Debug("TPS: {0}", d);
+        
     }
 
     private void Start(object? _, EventArgs __) {

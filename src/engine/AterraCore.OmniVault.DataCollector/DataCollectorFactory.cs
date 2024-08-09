@@ -17,7 +17,7 @@ public static class DataCollectorFactory {
         
         var logicEventManager = serviceProvider.GetRequiredService<ILogicEventManager>();
         logicEventManager.EventActualTps += (_, d) => dataCollector.Tps = d;
-        logicEventManager.EventDeltaTps += (_, d) => dataCollector.Tps = d;
+        logicEventManager.EventDeltaTps += (_, d) => dataCollector.DeltaTps = d;
         
         return dataCollector;
     }
