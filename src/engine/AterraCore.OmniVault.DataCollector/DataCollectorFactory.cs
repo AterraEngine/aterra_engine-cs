@@ -4,7 +4,6 @@
 using AterraCore.Contracts.OmniVault.DataCollector;
 using AterraCore.Contracts.Threading.Logic;
 using Microsoft.Extensions.DependencyInjection;
-using Serilog;
 
 namespace AterraCore.OmniVault.DataCollector;
 
@@ -13,9 +12,14 @@ namespace AterraCore.OmniVault.DataCollector;
 // ---------------------------------------------------------------------------------------------------------------------
 public static class DataCollectorFactory {
     public static IDataCollector Create(IServiceProvider serviceProvider) {
-        var dataCollector = new DataCollector(serviceProvider.GetRequiredService<ILogger>());
+        DataCollector dataCollector = RegisterEventCallbacks(
+            serviceProvider.GetRequiredService<ILogicEventManager>(),
+            new DataCollector()); 
         
-        var logicEventManager = serviceProvider.GetRequiredService<ILogicEventManager>();
+        return dataCollector;
+    }
+
+    private static DataCollector RegisterEventCallbacks(ILogicEventManager logicEventManager, DataCollector dataCollector) {
         logicEventManager.EventActualTps += (_, d) => dataCollector.Tps = d;
         logicEventManager.EventDeltaTps += (_, d) => dataCollector.DeltaTps = d;
         

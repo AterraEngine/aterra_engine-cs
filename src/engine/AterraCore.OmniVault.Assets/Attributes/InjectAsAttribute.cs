@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.Assets.Attributes;
+using JetBrains.Annotations;
 
 namespace AterraCore.OmniVault.Assets.Attributes;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -15,6 +16,7 @@ namespace AterraCore.OmniVault.Assets.Attributes;
 /// </summary>
 /// <param name="guid">The GUID, stored in the <see cref="IAssetInstanceAtlas"/>, used to inject in this reference.</param>
 [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = true)]
+[UsedImplicitly]
 public class InjectAsAttribute(string guid) : IInjectAsAttribute {
     /// <summary>
     /// Represents an attribute used to inject a dependency with a specified GUID.

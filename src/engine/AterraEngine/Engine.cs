@@ -1,22 +1,19 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Data;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts;
 using AterraCore.Contracts.FlexiPlug;
-using AterraCore.Contracts.Nexities.Data.Entities;
-using AterraCore.Contracts.Nexities.Data.Levels;
-using AterraCore.Contracts.Nexities.Data.Worlds;
+using AterraCore.Contracts.Nexities.Entities;
+using AterraCore.Contracts.Nexities.Levels;
 using AterraCore.Contracts.OmniVault.Assets;
+using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Renderer;
 using AterraCore.Contracts.Threading.Logic;
 using AterraCore.DI;
 using AterraEngine.Threading;
 using AterraEngine.Threading.Logic;
-using AterraEngine.Threading.Logic.EventDelegates;
 using AterraEngine.Threading.Render;
-using AterraLib.Nexities.Entities;
 using CodeOfChaos.Extensions;
 using CodeOfChaos.Extensions.Serilog;
 using JetBrains.Annotations;
@@ -34,7 +31,7 @@ public class Engine(
     IAssetAtlas assetAtlas,
     IAssetInstanceAtlas instanceAtlas,
     IPluginAtlas pluginAtlas,
-    INexitiesWorld world,
+    IAterraCoreWorld world,
     RenderThreadEvents renderThreadEvents,
     IApplicationStageManager applicationStageManager,
     ILogicEventManager logicEventManager
@@ -151,7 +148,6 @@ public class Engine(
     // -----------------------------------------------------------------------------------------------------------------
     private async Task HandleFatalExceptionGracefully() {
         await _ctsRenderThread.CancelAsync();
-
-        Logger.ExitFatal((int)ExitCodes.GeneralError, "Fatally Crashing gracefully");
+        Logger.ExitFatal(-1, "Fatally Crashing gracefully");
     }
 }

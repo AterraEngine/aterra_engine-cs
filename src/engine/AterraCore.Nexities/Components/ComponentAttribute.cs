@@ -23,3 +23,5 @@ public class ComponentAttribute(
 [UsedImplicitly] public class ComponentAttribute<TInterface>(string assetId, CoreTags coreTags = CoreTags.Component) : ComponentAttribute(assetId, coreTags, typeof(TInterface));
 [UsedImplicitly] public class ComponentAttribute<T1, T2>(string assetId, CoreTags coreTags = CoreTags.Component) : ComponentAttribute(assetId, coreTags, typeof(T1), typeof(T2));
 [UsedImplicitly] public class ComponentAttribute<T1, T2, T3>(string assetId, CoreTags coreTags = CoreTags.Component) : ComponentAttribute(assetId, coreTags, typeof(T1), typeof(T2), typeof(T3));
+[UsedImplicitly] public class ComponentAttribute<T1, T2, T3, T4>(string assetId, CoreTags coreTags = CoreTags.Component) : ComponentAttribute(assetId, coreTags, typeof(T1), typeof(T2), typeof(T3), typeof(T4));
+

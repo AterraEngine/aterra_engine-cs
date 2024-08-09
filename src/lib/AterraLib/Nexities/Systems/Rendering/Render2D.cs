@@ -1,6 +1,8 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Contracts.Nexities.Components;
+using AterraCore.Contracts.Nexities.Levels;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.Textures;
 
@@ -9,7 +11,7 @@ namespace AterraLib.Nexities.Systems.Rendering;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [System("AterraLib:Nexities/Systems/Render2D", CoreTags.RenderSystem)]
-public class Render2D(ITextureAtlas textureAtlas, IAssetInstanceAtlas instanceAtlas) : NexitiesSystem<IActor2D> {
+public class Render2D(IAssetInstanceAtlas instanceAtlas) : NexitiesSystem<IActor2D> {
     // -----------------------------------------------------------------------------------------------------------------
     // Helper Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -25,7 +27,7 @@ public class Render2D(ITextureAtlas textureAtlas, IAssetInstanceAtlas instanceAt
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     protected override IEnumerable<IActor2D> SelectEntities(INexitiesLevel? level) {
-        return level.AssetTree.OfTypeReverse<IActor2D>();
+        return level?.AssetTree.OfTypeReverse<IActor2D>() ?? [];
     }
     
     protected override void ProcessEntity(IActor2D originalEntity) {

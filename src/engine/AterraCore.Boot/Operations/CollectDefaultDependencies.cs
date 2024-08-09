@@ -4,10 +4,9 @@
 using AterraCore.Contracts;
 using AterraCore.Contracts.Boot.Operations;
 using AterraCore.Contracts.FlexiPlug;
-using AterraCore.Contracts.Nexities.Data.Worlds;
 using AterraCore.Contracts.OmniVault.Assets;
-using AterraCore.Contracts.OmniVault.DataCollector;
 using AterraCore.Contracts.OmniVault.Textures;
+using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Renderer;
 using AterraCore.Contracts.Threading.Logic;
 using AterraCore.FlexiPlug;
@@ -55,7 +54,7 @@ public class CollectDefaultDependencies : IBootOperation {
             
             NewServiceDescriptor<ITextureAtlas, TextureAtlas>(ServiceLifetime.Singleton),
             
-            NewServiceDescriptor<INexitiesWorld, NexitiesWorld>(ServiceLifetime.Singleton),
+            NewServiceDescriptor<IAterraCoreWorld, AterraCoreWorld>(ServiceLifetime.Singleton),
             #endregion
             
             NewServiceDescriptor<ILogicEventManager, LogicEventManager>(ServiceLifetime.Singleton),

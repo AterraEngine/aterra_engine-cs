@@ -39,7 +39,7 @@ public readonly struct AssetName :
     }
     
     // Only supposed to be used by AssetId
-    public AssetName(Group matchGroup) {
+    internal AssetName(Group matchGroup) {
         Values = matchGroup.Value.Split('.', '/');
     }
     

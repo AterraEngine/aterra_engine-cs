@@ -1,9 +1,8 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Nexities.Data.Levels;
-using AterraCore.Contracts.Nexities.Data.Worlds;
-using AterraCore.Contracts.OmniVault.Textures;
+using AterraCore.Contracts.Nexities.Levels;
+using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading.Logic;
 using AterraCore.DI;
 using AterraLib.Nexities.Systems.Logic;
@@ -19,7 +18,7 @@ namespace AterraEngine.Threading.Logic;
 [UsedImplicitly]
 public class LogicThreadProcessor(
     ILogger logger,
-    INexitiesWorld world,
+    IAterraCoreWorld world,
     ILogicEventManager eventManager
 ) : AbstractThread {
     private ILogger Logger { get; } = logger.ForContext<LogicThreadProcessor>();

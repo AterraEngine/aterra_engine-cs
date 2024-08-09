@@ -1,21 +1,19 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Nexities.Data.Levels;
-using AterraCore.Contracts.Nexities.Data.Worlds;
+using AterraCore.Contracts.Nexities.Levels;
 using AterraCore.Contracts.OmniVault.DataCollector;
+using AterraCore.Contracts.OmniVault.World;
 using AterraCore.DI;
-using AterraLib.Nexities.Systems;
 using AterraLib.Nexities.Systems.Rendering;
 using JetBrains.Annotations;
-using Serilog;
 
 namespace AterraEngine.Renderer.RaylibCs.FrameProcessors;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
-public class GeneralRenderRaylibFrameProcessor(ILogger logger, INexitiesWorld world, IDataCollector dataCollector) : AbstractRaylibFrameProcessor {
+public class GeneralRenderRaylibFrameProcessor(IAterraCoreWorld world, IDataCollector dataCollector) : AbstractRaylibFrameProcessor {
     protected override Color ClearColor { get; set; } = new(0, 0, 0, 0);
     private Render2D Render2D { get; } = EngineServices.CreateWithServices<Render2D>();
     

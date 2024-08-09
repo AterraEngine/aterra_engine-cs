@@ -72,10 +72,10 @@
         <Copy SourceFiles="@(DllFiles)" DestinationFiles="@(DllFiles->'$(OutDir)\temp\bin\%(Filename)%(Extension)')"/>
 
         <!-- Assets - xml markup files of instances of assets -->
-        <ItemGroup>
-             <AssetFiles Include="$(OutDir)Data\actor.xml"/>
-        </ItemGroup>
-        <Copy SourceFiles="@(AssetFiles)" DestinationFiles="@(AssetFiles->'$(OutDir)\temp\assets\%(Filename)%(Extension)')"/>
+<!--        <ItemGroup>-->
+<!--             <AssetFiles Include="$(OutDir)Data\actor.xml"/>-->
+<!--        </ItemGroup>-->
+<!--        <Copy SourceFiles="@(AssetFiles)" DestinationFiles="@(AssetFiles->'$(OutDir)\temp\assets\%(Filename)%(Extension)')"/>-->
 
         <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 

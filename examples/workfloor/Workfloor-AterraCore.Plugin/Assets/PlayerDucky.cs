@@ -1,9 +1,8 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Nexities.Data.Components;
-using AterraCore.Contracts.Nexities.Data.Entities;
-using AterraCore.Contracts.Nexities.Data.Levels;
+using AterraCore.Contracts.Nexities.Components;
+using AterraCore.Contracts.Nexities.Entities;
 using AterraCore.Nexities.Entities;
 using AterraLib.Nexities.Entities;
 using JetBrains.Annotations;

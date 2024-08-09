@@ -2,7 +2,6 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.ConfigFiles.PluginConfig;
-using AterraCore.Common.Types.FlexiPlug;
 using AterraCore.Contracts.Boot.Logic.PluginLoading;
 using AterraCore.Contracts.FlexiPlug;
 
@@ -33,15 +32,15 @@ public class FilePathPluginLoader(ILogger logger) : IFilePathPluginLoader {
         foreach (IFilePathLoadedPluginDto plugin in GetValidPlugins()) {
             using var zipImporter = new PluginZipImporter(plugin.FilePath, logger);
             
+            // Just, I know this isn't "standard", but save yourself a "too long line headache"
+            //      Look at the params type of this method if you really want to know the type.
             // ReSharper disable once SuggestVarOrType_Elsewhere
             foreach (var action in actions) {
-                if (plugin.Validity is not PluginValidity.Valid) continue;
                 action(this, plugin, zipImporter);
             }
         }
         
         return this;
     }
-    public IEnumerable<IFilePathLoadedPluginDto> GetValidPlugins() => Plugins
-        .Where(plugin => plugin.Validity is PluginValidity.Valid);
+    public IEnumerable<IFilePathLoadedPluginDto> GetValidPlugins() => Plugins;
 }

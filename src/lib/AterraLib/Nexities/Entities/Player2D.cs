@@ -1,7 +1,9 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Nexities.Data.Entities;
+using AterraCore.Contracts.Nexities.Components;
+using AterraCore.Contracts.Nexities.Entities;
+using AterraCore.Contracts.Nexities.Levels;
 
 namespace AterraLib.Nexities.Entities;
 

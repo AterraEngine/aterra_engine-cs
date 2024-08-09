@@ -35,6 +35,7 @@ public class PluginAtlas(ILogger logger) : IPluginAtlas {
     }
     public void InvalidateAllCaches() => Plugins.IterateOver(plugin => plugin.InvalidateCaches());
 
+    #region Get Registrations
     public IEnumerable<AssetRegistration> GetAssetRegistrations(PluginId? pluginNameSpace = null, CoreTags? filter = null) {
         // Given this is only done once (during project startup), caching this seems a bit unnecessary.
         return Plugins
@@ -59,4 +60,5 @@ public class PluginAtlas(ILogger logger) : IPluginAtlas {
 
     public IEnumerable<AssetRegistration> GetComponentRegistrations(PluginId? pluginNameSpace = null) =>
         GetAssetRegistrations(pluginNameSpace, CoreTags.Component);
+    #endregion
 }

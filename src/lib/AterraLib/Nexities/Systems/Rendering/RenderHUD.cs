@@ -1,6 +1,8 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Contracts.Nexities.Components;
+using AterraCore.Contracts.Nexities.Levels;
 using AterraLib.Nexities.Components;
 
 namespace AterraLib.Nexities.Systems.Rendering;
@@ -10,7 +12,7 @@ namespace AterraLib.Nexities.Systems.Rendering;
 [System("AterraLib:Nexities/Systems/RenderHud", CoreTags.RenderSystem)]
 public class RenderHud : NexitiesSystem<IHud> {
     protected override IEnumerable<IHud> SelectEntities(INexitiesLevel? level) {
-        return level.AssetTree.OfTypeManyReverse<IHud>();
+        return level?.AssetTree.OfTypeManyReverse<IHud>() ?? [];
     }
     protected override void ProcessEntity(IHud entity) {
         entity.AssetTree

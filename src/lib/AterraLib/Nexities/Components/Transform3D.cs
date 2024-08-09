@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Contracts.Nexities.Components;
 using AterraCore.OmniVault.Assets.Attributes;
 
 namespace AterraLib.Nexities.Components;
