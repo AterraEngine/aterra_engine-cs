@@ -86,24 +86,17 @@ public class AssetTree : NexitiesComponent, IAssetTree {
     private IEnumerable<T> GetOrAddToCache<T>(CacheType cacheType, Func<IEnumerable<T>> callback) {
         (Type, CacheType) key = (typeof(T), cacheType);
 
-        if (_nodeByTypeCache.TryGetValue(key, out LinkedList<IAssetInstance>? result)) {
-            foreach (T node in result) {
-                yield return node;
-            }
-            yield break;
-        }
+        if (_nodeByTypeCache.TryGetValue(key, out LinkedList<IAssetInstance>? cachedList)) return cachedList.Cast<T>();
 
-        // Manual caching code to avoid closure allocation
-        LinkedList<IAssetInstance> nodeList = new();
+        LinkedList<IAssetInstance> nodeList = [];
+        List<T> resultList = [];
         foreach (T node in callback()) {
             nodeList.AddLast((IAssetInstance)node!);
+            resultList.Add(node);
         }
 
-        _nodeByTypeCache[key] = nodeList; // Populate the dictionary outside of the closure context.
-
-        foreach (T item in nodeList) {
-            yield return item;
-        }
+        _nodeByTypeCache[key] = nodeList;
+        return resultList;
     }
 
     private void ClearCaches() {
