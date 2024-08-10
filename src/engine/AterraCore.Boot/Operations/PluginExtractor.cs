@@ -50,7 +50,10 @@ public class PluginExtractor : IBootOperation {
                 .SelectMany(tuple => tuple.Attribute.InterfaceTypes.Select(i => (tuple.Type, tuple.Attribute, Interface: i))
                     .Select(valueTuple => new ServiceDescriptor(
                         valueTuple.Interface,
-                        factory: _ => EngineServices.CreateNexitiesAsset<IAssetInstance>(valueTuple.Type) , 
+                        factory: provider => provider.GetRequiredService<IAssetInstanceAtlas>()
+                            .TryCreate(valueTuple.Type, out IAssetInstance? instance)
+                            ? instance
+                            : throw new InvalidOperationException("Object could not be created"),  
                         valueTuple.Attribute.Lifetime
                     ))
                 )

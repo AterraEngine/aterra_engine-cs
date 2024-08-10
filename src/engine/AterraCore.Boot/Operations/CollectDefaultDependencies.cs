@@ -51,6 +51,7 @@ public class CollectDefaultDependencies : IBootOperation {
             #region OmniVault
             NewServiceDescriptor<IAssetAtlas, AssetAtlas>(ServiceLifetime.Singleton),
             NewServiceDescriptor<IAssetInstanceAtlas, AssetInstanceAtlas>(ServiceLifetime.Singleton),
+            NewServiceDescriptor<IAssetInstanceFactory, AssetInstanceFactory>(ServiceLifetime.Singleton),
             
             NewServiceDescriptor<ITextureAtlas, TextureAtlas>(ServiceLifetime.Singleton),
             

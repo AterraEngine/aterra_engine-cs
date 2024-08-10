@@ -44,11 +44,12 @@ public class PluginAtlas(ILogger logger) : IPluginAtlas {
             .SelectMany(p => p.AssetTypes
                 // Filter down to which Asset Tag we want
                 .ConditionalWhere(filter != null, record => record.AssetAttribute.CoreTags.HasFlag(filter!))
-                .Select(record => new AssetRegistration {
-                    AssetId = record.AssetAttribute.AssetId,
+                .Select(record => new AssetRegistration(
+                    AssetId: record.AssetAttribute.AssetId,
+                    Type:record.Type
+                    ) {
                     InterfaceTypes = record.AssetAttribute.InterfaceTypes,
                     CoreTags = record.AssetAttribute.CoreTags,
-                    Type = record.Type,
                     StringTags = record.AssetTagAttributes.SelectMany(attribute => attribute.Tags),
                     OverridableAssetIds = record.OverwritesAssetIdAttributes.Select(attribute => attribute.AssetId),
                 })
