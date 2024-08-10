@@ -35,10 +35,10 @@ public interface IAssetTree : INexitiesComponent {
     bool TryGetLast<T>([NotNullWhen(true)] out T? output) where T : class, IAssetInstance;
     IAssetInstance? Last { get; }
 
-    bool TryAddAfter<T>(Guid assetGuid, T newAsset) where T : IAssetInstance;
-    bool TryAddBefore<T>(Guid assetGuid, T newAsset) where T : IAssetInstance;
+    bool TryAddAfter<T>(Ulid assetUlid, T newAsset) where T : IAssetInstance;
+    bool TryAddBefore<T>(Ulid assetUlid, T newAsset) where T : IAssetInstance;
 
-    bool TryFind(Guid assetGuid, [NotNullWhen(true)] out LinkedListNode<IAssetInstance>? output);
-    bool TryFind(Guid assetGuid, [NotNullWhen(true)] out IAssetInstance? output);
-    bool TryFind<T>(Guid assetGuid, [NotNullWhen(true)] out T? output) where T : class, IAssetInstance;
+    bool TryFind(Ulid assetUlid, [NotNullWhen(true)] out LinkedListNode<IAssetInstance>? output);
+    bool TryFind(Ulid assetUlid, [NotNullWhen(true)] out IAssetInstance? output);
+    bool TryFind<T>(Ulid assetUlid, [NotNullWhen(true)] out T? output) where T : class, IAssetInstance;
 }

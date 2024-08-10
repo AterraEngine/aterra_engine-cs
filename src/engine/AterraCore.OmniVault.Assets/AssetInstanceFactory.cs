@@ -131,7 +131,7 @@ public class AssetInstanceFactory(ILogger logger) : IAssetInstanceFactory {
         IAssetInstanceAtlas instanceAtlas = EngineServices.GetAssetInstanceAtlas();
         var injectAsValue = parameter.GetCustomAttribute<IInjectAsAttribute>()!;
         
-        return instanceAtlas.GetOrCreate<IAssetInstance>(parameter.ParameterType, injectAsValue.Guid);
+        return instanceAtlas.GetOrCreate<IAssetInstance>(parameter.ParameterType, injectAsValue.Ulid);
     }
     #endregion
 

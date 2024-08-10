@@ -3,7 +3,6 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.OmniVault.Assets;
-using CodeOfChaos.Extensions;
 using JetBrains.Annotations;
 using Serilog;
 using System.Collections.Concurrent;
@@ -15,15 +14,15 @@ namespace AterraCore.OmniVault.Assets;
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
 public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetInstanceFactory factory) : IAssetInstanceAtlas {
-    private readonly ConcurrentDictionary<Guid, IAssetInstance> _assetInstances = new();
-    private readonly ConcurrentDictionary<Type, List<Guid>> _assetsByTypes = new();
-    private readonly ConcurrentDictionary<AssetId, Guid> _singletonAssetInstances = new();
+    private readonly ConcurrentDictionary<Ulid, IAssetInstance> _assetInstances = new();
+    private readonly ConcurrentDictionary<Type, List<Ulid>> _assetsByTypes = new();
+    private readonly ConcurrentDictionary<AssetId, Ulid> _singletonAssetInstances = new();
     
     public int TotalCount => _assetInstances.Count;
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public bool TryCreate<T>(AssetId assetId, [NotNullWhen(true)] out T? instance, Guid? predefinedGuid = null) where T : class, IAssetInstance {
+    public bool TryCreate<T>(AssetId assetId, [NotNullWhen(true)] out T? instance, Ulid? predefinedUlid = null) where T : class, IAssetInstance {
         instance = default;
         if (!assetAtlas.TryGetRegistration(assetId, out AssetRegistration registration)) {
             logger.Warning("Asset Id {id} could not be matched to a registration", assetId);
@@ -32,8 +31,8 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetIn
 
         // check if it is a singleton and already exists
         if (registration.IsSingleton 
-            && _singletonAssetInstances.TryGetValue(registration.AssetId, out Guid existingGuid)
-            && _assetInstances.TryGetValue(existingGuid, out IAssetInstance? existingInstance)
+            && _singletonAssetInstances.TryGetValue(registration.AssetId, out Ulid existingUlid)
+            && _assetInstances.TryGetValue(existingUlid, out IAssetInstance? existingInstance)
             && existingInstance is T convertedInstance) {
             instance = convertedInstance;
             return true;
@@ -41,34 +40,34 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetIn
         
         if (!factory.TryCreate(registration, out instance)) return false;
         instance.AssetId = registration.AssetId;
-        instance.Guid = predefinedGuid ?? Guid.NewGuid();
+        instance.Ulid = predefinedUlid ?? Ulid.NewUlid();
 
-        if (_assetInstances.TryAdd(instance.Guid, instance)) {
-            Guid guid = instance.Guid;
+        if (_assetInstances.TryAdd(instance.Ulid, instance)) {
+            Ulid ulid = instance.Ulid;
             _assetsByTypes.AddOrUpdate(
                 typeof(T),
-                _ => [guid],
-                (_, list) => { list.Add(guid); return list; });
+                _ => [ulid],
+                (_, list) => { list.Add(ulid); return list; });
             
             if (registration.IsSingleton) {
-                _singletonAssetInstances.TryAdd(instance.AssetId, instance.Guid);
+                _singletonAssetInstances.TryAdd(instance.AssetId, instance.Ulid);
             }
             return true;
         }
-        logger.Debug("{guid} could not be added to atlas", instance.Guid);
+        logger.Debug("{Ulid} could not be added to atlas", instance.Ulid);
         return false;
     }
 
-    public bool TryCreate<T>([NotNullWhen(true)] out T? instance, Guid? predefinedGuid = null) where T : class, IAssetInstance =>
-        TryCreate(typeof(T), out instance, predefinedGuid);
+    public bool TryCreate<T>([NotNullWhen(true)] out T? instance, Ulid? predefinedUlid = null) where T : class, IAssetInstance =>
+        TryCreate(typeof(T), out instance, predefinedUlid);
 
-    public bool TryCreate<T>(Type type, [NotNullWhen(true)] out T? instance, Guid? predefinedGuid = null) where T : class, IAssetInstance {
+    public bool TryCreate<T>(Type type, [NotNullWhen(true)] out T? instance, Ulid? predefinedUlid = null) where T : class, IAssetInstance {
         instance = null;
         return assetAtlas.TryGetAssetId(type, out AssetId assetId)
-               && TryCreate(assetId, out instance, predefinedGuid);
+               && TryCreate(assetId, out instance, predefinedUlid);
     }
 
-    public bool TryGet<T>(Guid instanceId, [NotNullWhen(true)] out T? instance) where T : class, IAssetInstance {
+    public bool TryGet<T>(Ulid instanceId, [NotNullWhen(true)] out T? instance) where T : class, IAssetInstance {
         instance = default;
         if (!_assetInstances.TryGetValue(instanceId, out IAssetInstance? assetInstance)) return false;
         if (assetInstance is not T convertedInstance) return false;
@@ -78,38 +77,38 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetIn
 
     public bool TryGetSingleton<T>(AssetId assetId, [NotNullWhen(true)] out T? instance) where T : class, IAssetInstance {
         instance = default;
-        if (!_singletonAssetInstances.TryGetValue(assetId, out Guid guid)) return false;
-        if (!_assetInstances.TryGetValue(guid, out IAssetInstance? assetInstance)) return false;
+        if (!_singletonAssetInstances.TryGetValue(assetId, out Ulid ulid)) return false;
+        if (!_assetInstances.TryGetValue(ulid, out IAssetInstance? assetInstance)) return false;
         if (assetInstance is not T convertedInstance) return false;
         instance = convertedInstance;
         return true;
     }
 
-    public bool TryGetOrCreate<T>(Type type, Guid? guid, [NotNullWhen(true)] out T? instance) where T : class, IAssetInstance =>
-        guid is not null && TryGet((Guid)guid, out instance)
-        || TryCreate(type, out instance, predefinedGuid: guid);
+    public bool TryGetOrCreate<T>(Type type, Ulid? ulid, [NotNullWhen(true)] out T? instance) where T : class, IAssetInstance =>
+        ulid is not null && TryGet((Ulid)ulid, out instance)
+        || TryCreate(type, out instance, predefinedUlid: ulid);
 
-    public bool TryGetOrCreate<T>(AssetId assetId, Guid? guid, [NotNullWhen(true)] out T? instance) where T : class, IAssetInstance =>
-        guid is not null && TryGet((Guid)guid, out instance)
-        || TryCreate(assetId, out instance, predefinedGuid: guid);
+    public bool TryGetOrCreate<T>(AssetId assetId, Ulid? ulid, [NotNullWhen(true)] out T? instance) where T : class, IAssetInstance =>
+        ulid is not null && TryGet((Ulid)ulid, out instance)
+        || TryCreate(assetId, out instance, predefinedUlid: ulid);
 
     public bool TryGetOrCreateSingleton<T>(AssetId assetId, [NotNullWhen(true)] out T? instance) where T : class, IAssetInstance =>
         TryGetSingleton(assetId, out instance)
         || TryCreate(assetId, out instance);
 
-    public T GetOrCreate<T>(Type type, Guid? guid = null) where T : class, IAssetInstance {
-        if (!TryGetOrCreate(type, guid, out T? instance)) throw new ArgumentException($"Asset Id {guid} not found");
+    public T GetOrCreate<T>(Type type, Ulid? ulid = null) where T : class, IAssetInstance {
+        if (!TryGetOrCreate(type, ulid, out T? instance)) throw new ArgumentException($"Asset Id {ulid} not found");
         return instance;
     }
 
-    public T GetOrCreate<T>(AssetId assetId, Guid? guid = null) where T : class, IAssetInstance {
-        if (!TryGetOrCreate(assetId, guid, out T? instance)) throw new ArgumentException($"Asset Id {guid} not found");
+    public T GetOrCreate<T>(AssetId assetId, Ulid? ulid = null) where T : class, IAssetInstance {
+        if (!TryGetOrCreate(assetId, ulid, out T? instance)) throw new ArgumentException($"Asset Id {ulid} not found");
         return instance;
     }
 
     public IEnumerable<T> OfType<T>() where T : class, IAssetInstance {
-        if (!_assetsByTypes.TryGetValue(typeof(T), out List<Guid>? assetIds)) yield break;
-        foreach (Guid assetId in assetIds) {
+        if (!_assetsByTypes.TryGetValue(typeof(T), out List<Ulid>? assetIds)) yield break;
+        foreach (Ulid assetId in assetIds) {
             if (TryGet(assetId, out T? instance)) yield return instance;
         }
     }

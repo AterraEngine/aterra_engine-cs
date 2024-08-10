@@ -74,38 +74,35 @@ public class AssetTree : NexitiesComponent, IAssetTree {
     }
     
     private IEnumerable<T> OfTypeManyReverseInternal<T>() where T : IAssetInstance {
+        var result = new List<T>();
         for (LinkedListNode<IAssetInstance>? currentNode = Nodes.Last; currentNode != null; currentNode = currentNode.Previous) {
-            if (currentNode.Value is IHasAssetTree entities) {
-                foreach (T subChild in entities.AssetTree.OfTypeManyReverseUnCached<T>()) {
-                    yield return subChild;
-                }
-            }
-            if (currentNode.Value is T nodeType) yield return nodeType;
+            if (currentNode.Value is IHasAssetTree entities) result.AddRange(entities.AssetTree.OfTypeManyReverse<T>());
+            if (currentNode.Value is T nodeType) result.Add(nodeType);
         }
+        return result;
     }
     #endregion
     #region Caching helpers
     private IEnumerable<T> GetOrAddToCache<T>(CacheType cacheType, Func<IEnumerable<T>> callback) {
         (Type, CacheType) key = (typeof(T), cacheType);
-        
+
         if (_nodeByTypeCache.TryGetValue(key, out LinkedList<IAssetInstance>? result)) {
             foreach (T node in result) {
                 yield return node;
             }
             yield break;
         }
-        
-        // Use ConcurrentDictionary GetOrAdd for thread-safe retrieval and addition
-        result = _nodeByTypeCache.GetOrAdd(key, _ => {
-            LinkedList<IAssetInstance> nodeList = [];
-            foreach (T node in callback()) {
-                if (node is IAssetInstance castedNode) nodeList.AddLast(castedNode);
-            }
-            return nodeList;
-        });
 
-        foreach (IAssetInstance item in result) {
-            yield return (T)item;
+        // Manual caching code to avoid closure allocation
+        LinkedList<IAssetInstance> nodeList = new();
+        foreach (T node in callback()) {
+            nodeList.AddLast((IAssetInstance)node!);
+        }
+
+        _nodeByTypeCache[key] = nodeList; // Populate the dictionary outside of the closure context.
+
+        foreach (T item in nodeList) {
+            yield return item;
         }
     }
 
@@ -201,10 +198,10 @@ public class AssetTree : NexitiesComponent, IAssetTree {
     }
     #endregion
     #region TryAddAfter
-    public bool TryAddAfter<T>(Guid assetGuid, T newAsset) where T : IAssetInstance {
+    public bool TryAddAfter<T>(Ulid assetUlid, T newAsset) where T : IAssetInstance {
         _cacheLock.EnterUpgradeableReadLock();
         try {
-            if (Nodes.Find(a => a.Guid == assetGuid) is not {} node) return false;
+            if (Nodes.Find(a => a.Ulid == assetUlid) is not {} node) return false;
             _cacheLock.EnterWriteLock();
             try {
                 Nodes.AddAfter(node, newAsset);
@@ -218,10 +215,10 @@ public class AssetTree : NexitiesComponent, IAssetTree {
     }
     #endregion
     #region TryAddBefore
-    public bool TryAddBefore<T>(Guid assetGuid, T newAsset) where T : IAssetInstance {
+    public bool TryAddBefore<T>(Ulid assetUlid, T newAsset) where T : IAssetInstance {
         _cacheLock.EnterUpgradeableReadLock();
         try {
-            if (Nodes.Find(a => a.Guid == assetGuid) is not {} node) return false;
+            if (Nodes.Find(a => a.Ulid == assetUlid) is not {} node) return false;
             _cacheLock.EnterWriteLock();
             try {
                 Nodes.AddBefore(node, newAsset);
@@ -235,16 +232,16 @@ public class AssetTree : NexitiesComponent, IAssetTree {
     }
     #endregion
     #region TryFind
-    public bool TryFind(Guid assetGuid, [NotNullWhen(true)] out LinkedListNode<IAssetInstance>? output) {
-        output = Nodes.Find(a => a.Guid == assetGuid);
+    public bool TryFind(Ulid assetUlid, [NotNullWhen(true)] out LinkedListNode<IAssetInstance>? output) {
+        output = Nodes.Find(a => a.Ulid == assetUlid);
         return output is not null;
     }
-    public bool TryFind(Guid assetGuid, [NotNullWhen(true)] out IAssetInstance? output) {
-        output = Nodes.Find(a => a.Guid == assetGuid)?.Value;
+    public bool TryFind(Ulid assetUlid, [NotNullWhen(true)] out IAssetInstance? output) {
+        output = Nodes.Find(a => a.Ulid == assetUlid)?.Value;
         return output is not null;
     }
-    public bool TryFind<T>(Guid assetGuid, [NotNullWhen(true)] out T? output) where T : class, IAssetInstance {
-        IAssetInstance? node = Nodes.Find(a => a.Guid == assetGuid)?.Value;
+    public bool TryFind<T>(Ulid assetUlid, [NotNullWhen(true)] out T? output) where T : class, IAssetInstance {
+        IAssetInstance? node = Nodes.Find(a => a.Ulid == assetUlid)?.Value;
         output = node as T;
         return output is not null;
     }

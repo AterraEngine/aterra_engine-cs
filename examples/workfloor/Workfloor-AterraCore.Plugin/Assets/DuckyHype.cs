@@ -25,7 +25,7 @@ public interface IDuckyHypeActor : IActor2D;
 [Texture("Workfloor:TextureDuckyHype")]
 [UsedImplicitly]
 public class TextureDuckyHype : Texture2DAsset, ITextureDuckyHype {
-    public override string imagePath { get; set; } = "assets/ducky-hype.png";
+    public override string ImagePath { get; set; } = "assets/ducky-hype.png";
 }
 
 [Component("Workfloor:SpriteDuckyHype")]

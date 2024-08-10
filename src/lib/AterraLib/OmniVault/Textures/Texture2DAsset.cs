@@ -11,7 +11,7 @@ namespace AterraLib.OmniVault.Textures;
 // ---------------------------------------------------------------------------------------------------------------------
 [Texture("AterraLib:OmniVault/Textures/Texture2DAsset")]
 public class Texture2DAsset : AssetInstance, ITexture2DAsset {
-    public virtual string imagePath { get; set; } = string.Empty;
+    public virtual string ImagePath { get; set; } = string.Empty;
     public Texture2D? Texture { get; set; }
     public Vector2 Size { get; set; } = Vector2.Zero;
 }

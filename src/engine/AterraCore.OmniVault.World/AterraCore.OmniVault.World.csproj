@@ -10,4 +10,8 @@
       <ProjectReference Include="..\AterraCore.Contracts\AterraCore.Contracts.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Ulid" Version="1.3.4" />
+    </ItemGroup>
+
 </Project>

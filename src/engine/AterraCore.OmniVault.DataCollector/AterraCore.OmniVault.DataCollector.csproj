@@ -11,4 +11,8 @@
       <ProjectReference Include="..\AterraCore.DI\AterraCore.DI.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Ulid" Version="1.3.4" />
+    </ItemGroup>
+
 </Project>

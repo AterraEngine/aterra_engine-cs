@@ -25,7 +25,7 @@ public interface IDuckyPlatinumActor : IActor2D;
 [Texture("Workfloor:TextureDuckyPlatinum")]
 [UsedImplicitly]
 public class TextureDuckyPlatinum : Texture2DAsset,ITextureDuckyPlatinum {
-    public override string imagePath { get; set; } = "assets/ducky-platinum.png";
+    public override string ImagePath { get; set; } = "assets/ducky-platinum.png";
 }
 
 [Component("Workfloor:SpriteDuckyPlatinum")]
