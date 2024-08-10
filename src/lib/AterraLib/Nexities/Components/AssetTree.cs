@@ -17,6 +17,7 @@ public class AssetTree : NexitiesComponent, IAssetTree {
     private readonly ReaderWriterLockSlim _cacheLock = new();
     
     private readonly ConcurrentDictionary<(Type, CacheType), LinkedList<IAssetInstance>> _nodeByTypeCache = new();
+    private static readonly Dictionary<(Type, CacheType), Delegate> _delegateCache = new();
     
     private const int DebounceIntervalMs = 10; // in ms
     private Timer? _debounceTimer;
@@ -86,10 +87,12 @@ public class AssetTree : NexitiesComponent, IAssetTree {
     private IEnumerable<T> GetOrAddToCache<T>(CacheType cacheType, Func<IEnumerable<T>> callback) {
         (Type, CacheType) key = (typeof(T), cacheType);
 
-        if (_nodeByTypeCache.TryGetValue(key, out LinkedList<IAssetInstance>? cachedList)) return cachedList.Cast<T>();
+        if (_nodeByTypeCache.TryGetValue(key, out LinkedList<IAssetInstance>? cachedList)) 
+            return cachedList.OfType<T>();
 
         LinkedList<IAssetInstance> nodeList = [];
         List<T> resultList = [];
+
         foreach (T node in callback()) {
             nodeList.AddLast((IAssetInstance)node!);
             resultList.Add(node);
@@ -119,16 +122,32 @@ public class AssetTree : NexitiesComponent, IAssetTree {
             }, null, DebounceIntervalMs, Timeout.Infinite);
         }
     }
+    
+    private IEnumerable<T> GetOrAddToCacheWithCachedDelegate<T>(CacheType cacheType, Func<IEnumerable<T>> internalMethod) where T : IAssetInstance {
+        (Type, CacheType cacheType) key = (typeof(T), cacheType);
+        if (_delegateCache.TryGetValue(key, out Delegate? cachedDelegate)) return GetOrAddToCache(cacheType, (Func<IEnumerable<T>>)cachedDelegate);
+        
+        _delegateCache[key] = internalMethod;
+        return GetOrAddToCache(cacheType, internalMethod);
+    }
+    
     #endregion
     
     // -----------------------------------------------------------------------------------------------------------------
     // Of Type Retrieval Methods
     // -----------------------------------------------------------------------------------------------------------------
     # region OfType… Cached
-    public IEnumerable<T> OfType<T>() where T : IAssetInstance =>                    GetOrAddToCache(CacheType.None, OfTypeInternal<T>);
-    public IEnumerable<T> OfTypeReverse<T>() where T : IAssetInstance =>             GetOrAddToCache(CacheType.Reverse, OfTypeReverseInternal<T>);
-    public IEnumerable<T> OfTypeMany<T>() where T : IAssetInstance =>                GetOrAddToCache(CacheType.Many, OfTypeManyInternal<T>);
-    public IEnumerable<T> OfTypeManyReverse<T>() where T : IAssetInstance =>         GetOrAddToCache(CacheType.Many | CacheType.Reverse, OfTypeManyReverseInternal<T>);
+    public IEnumerable<T> OfType<T>() where T : IAssetInstance =>
+        GetOrAddToCacheWithCachedDelegate(CacheType.None, OfTypeInternal<T>);
+
+    public IEnumerable<T> OfTypeReverse<T>() where T : IAssetInstance =>
+        GetOrAddToCacheWithCachedDelegate(CacheType.Reverse, OfTypeReverseInternal<T>);
+
+    public IEnumerable<T> OfTypeMany<T>() where T : IAssetInstance =>
+        GetOrAddToCacheWithCachedDelegate(CacheType.Many, OfTypeManyInternal<T>);
+    
+    public IEnumerable<T> OfTypeManyReverse<T>() where T : IAssetInstance =>
+        GetOrAddToCacheWithCachedDelegate(CacheType.Many | CacheType.Reverse, OfTypeManyReverseInternal<T>);
     # endregion
     # region OfType… UnCached
     public IEnumerable<T> OfTypeUnCached<T>() where T : IAssetInstance =>            OfTypeInternal<T>();
