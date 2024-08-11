@@ -4,6 +4,8 @@
 using AterraCore.Contracts.Nexities.Components;
 using AterraCore.Contracts.OmniVault.Assets;
 using Pools;
+using System.Buffers;
+using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 
 namespace AterraLib.Nexities.Components;
@@ -101,7 +103,6 @@ public class AssetTree : NexitiesComponent, IAssetTree {
             }
         }
         finally {
-            // Ensure that we return the list to the pool no matter what
             result.TrimExcess();
         }
         return result;
@@ -139,71 +140,80 @@ public class AssetTree : NexitiesComponent, IAssetTree {
 
         _cacheLock.EnterUpgradeableReadLock();
         try {
-            if (DelegateCache.TryGetValue(key, out Delegate? cachedDelegate)) {
-                return GetOrYieldFromCache(cacheType, (Func<IEnumerable<T>>)cachedDelegate);
+            if (DelegateCache.TryGetValue(key, out Delegate? cachedDelegate) 
+                && cachedDelegate is Func<LinkedList<IAssetInstance>, IEnumerable<T>> convertedCallback) {
+                return GetOrYieldFromCache(cacheType, convertedCallback, nodes);
             }
 
             _cacheLock.EnterWriteLock();
             try {
-                Func<IEnumerable<T>> internalMethod = () => callback(nodes);
+                Func<LinkedList<IAssetInstance>, IEnumerable<T>> internalMethod = callback;
                 DelegateCache[key] = internalMethod;
                 cachedDelegate = internalMethod;
             } finally {
                 _cacheLock.ExitWriteLock();
             }
 
-            return GetOrYieldFromCache(cacheType, (Func<IEnumerable<T>>)cachedDelegate);
+            return GetOrYieldFromCache(cacheType, (Func<LinkedList<IAssetInstance>, IEnumerable<T>>)cachedDelegate, nodes);
         } finally {
             _cacheLock.ExitUpgradeableReadLock();
         }
     }
 
-private List<T> GetOrYieldFromCache<T>(CacheType cacheType, Func<IEnumerable<T>> callback) where T : IAssetInstance {
-    (Type, CacheType) key = (typeof(T), cacheType);
-    List<T>? resultList;
+    private List<T> GetOrYieldFromCache<T>(CacheType cacheType, Func<LinkedList<IAssetInstance>, IEnumerable<T>> callback, LinkedList<IAssetInstance> nodes) where T : IAssetInstance {
+        (Type, CacheType) key = (typeof(T), cacheType);
+        List<T>? cachedList;
+        T[]? pooledArray = null;
 
-    _cacheLock.EnterUpgradeableReadLock();
-    try {
-        if (_typeCache.TryGetValue(key, out List<object>? cachedList)) {
-            resultList = cachedList.ConvertAll(item => (T)item);
-        } else {
-            resultList = [..callback()];
-            _typeCache[key] = resultList.Cast<object>().ToList();
+        _cacheLock.EnterUpgradeableReadLock();
+        try {
+            if (!_typeCache.TryGetValue(key, out List<object>? objectList)) {
+                _cacheLock.EnterWriteLock();
+                try {
+                    objectList = callback(nodes).Cast<object>().ToList();
+                    _typeCache[key] = objectList;
+                } finally {
+                    _cacheLock.ExitWriteLock();
+                }
+            }
+
+            // Pool an array for the temporary operation
+            pooledArray = ArrayPool<T>.Shared.Rent(objectList.Count);
+
+            int i = 0;
+            foreach (object item in objectList)
+                if (item is T typedItem) pooledArray[i++] = typedItem;
+
+            cachedList = [..pooledArray.AsSpan(0, i).ToArray()];
+        } finally {
+            _cacheLock.ExitUpgradeableReadLock();
+            if (pooledArray != null) ArrayPool<T>.Shared.Return(pooledArray);
         }
-    } finally {
-        _cacheLock.ExitUpgradeableReadLock();
-    }
 
-    return resultList;
-}
+        return cachedList;
+    }
     #endregion
     
     // -----------------------------------------------------------------------------------------------------------------
     // Of Type Retrieval Methods
     // -----------------------------------------------------------------------------------------------------------------
     # region OfType… Cached
-    public IEnumerable<T> OfType<T>() where T : IAssetInstance =>
-        GetOrAddToCacheWithCachedDelegate(CacheType.None, OfTypeInternal<T>, Nodes);
-    public IEnumerable<T> OfTypeReverse<T>() where T : IAssetInstance =>
-        GetOrAddToCacheWithCachedDelegate(CacheType.Reverse, OfTypeReverseInternal<T>, Nodes);
-    public IEnumerable<T> OfTypeMany<T>() where T : IAssetInstance =>
-        GetOrAddToCacheWithCachedDelegate(CacheType.Many, OfTypeManyInternal<T>, Nodes);
-    public IEnumerable<T> OfTypeManyReverse<T>() where T : IAssetInstance =>
-        GetOrAddToCacheWithCachedDelegate(CacheType.Many | CacheType.Reverse, OfTypeManyReverseInternal<T>, Nodes);
+    private const CacheType CtOfType =            CacheType.None;
+    private const CacheType CtOfTypeReverse =     CacheType.Reverse;
+    private const CacheType CtOfTypeMany =        CacheType.Many;
+    private const CacheType CtOfTypeManyReverse = CacheType.Many | CacheType.Reverse;
+    
+    public IEnumerable<T> OfType<T>() where T : IAssetInstance =>                GetOrAddToCacheWithCachedDelegate(CtOfType, OfTypeInternal<T>, Nodes);
+    public IEnumerable<T> OfTypeReverse<T>() where T : IAssetInstance =>         GetOrAddToCacheWithCachedDelegate(CtOfTypeReverse, OfTypeReverseInternal<T>, Nodes);
+    public IEnumerable<T> OfTypeMany<T>() where T : IAssetInstance =>            GetOrAddToCacheWithCachedDelegate(CtOfTypeMany, OfTypeManyInternal<T>, Nodes);
+    public IEnumerable<T> OfTypeManyReverse<T>() where T : IAssetInstance =>     GetOrAddToCacheWithCachedDelegate(CtOfTypeManyReverse, OfTypeManyReverseInternal<T>, Nodes);
     # endregion
     
     # region OfType… Local
-    public IEnumerable<T> OfTypeLocal<T>() where T : IAssetInstance => 
-        OfTypeInternal<T>(Nodes);
-
-    public IEnumerable<T> OfTypeReverseLocal<T>() where T : IAssetInstance => 
-        OfTypeReverseInternal<T>(Nodes);
-
-    public IEnumerable<T> OfTypeManyLocal<T>() where T : IAssetInstance => 
-        OfTypeManyInternal<T>(Nodes);
-
-    public IEnumerable<T> OfTypeManyReverseLocal<T>() where T : IAssetInstance => 
-        OfTypeManyReverseInternal<T>(Nodes);
+    public IEnumerable<T> OfTypeLocal<T>() where T : IAssetInstance =>            OfTypeInternal<T>(Nodes);
+    public IEnumerable<T> OfTypeReverseLocal<T>() where T : IAssetInstance =>     OfTypeReverseInternal<T>(Nodes);
+    public IEnumerable<T> OfTypeManyLocal<T>() where T : IAssetInstance =>        OfTypeManyInternal<T>(Nodes);
+    public IEnumerable<T> OfTypeManyReverseLocal<T>() where T : IAssetInstance => OfTypeManyReverseInternal<T>(Nodes);
     # endregion
 
     // -----------------------------------------------------------------------------------------------------------------
