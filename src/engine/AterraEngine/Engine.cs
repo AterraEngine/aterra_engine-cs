@@ -134,7 +134,7 @@ public class Engine(
         if (!instanceAtlas.TryCreate("Workfloor:ActorDuckyPlayer", out IPlayer2D? player2D)) return;
         player2D.Transform2D.Translation = new Vector2(250, 250);
         player2D.Transform2D.Scale = new Vector2(50, 50);
-        level?.AssetTree.Add(player2D);
+        level?.AssetTree.AddFirst(player2D);
         
         // -------------------------------------------------------------------------------------------------------------
         renderThreadEvents.InvokeApplicationStageChange(ApplicationStage.Level);

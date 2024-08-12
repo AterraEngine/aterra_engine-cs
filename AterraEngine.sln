@@ -78,8 +78,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraCore.OmniVault.World"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraCore.OmniVault.DataCollector", "src\engine\AterraCore.OmniVault.DataCollector\AterraCore.OmniVault.DataCollector.csproj", "{998355EF-DA9D-45D5-ABD3-6CB467D8BF20}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pools", "src\lib\Pools\Pools.csproj", "{FD60E2B2-3BC9-4D99-B08B-E63CED3B8D68}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -121,7 +119,6 @@ Global
 		{5CF1943C-1807-48D7-8E02-0667F7194454} = {291BFDE8-A431-4094-A9D7-415FBC474733}
 		{3929EFE1-4A08-4EC6-BFE0-0C0E9ED58C8C} = {291BFDE8-A431-4094-A9D7-415FBC474733}
 		{998355EF-DA9D-45D5-ABD3-6CB467D8BF20} = {291BFDE8-A431-4094-A9D7-415FBC474733}
-		{FD60E2B2-3BC9-4D99-B08B-E63CED3B8D68} = {72601D4B-0D88-47AC-9217-34B2F6B46509}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{0EE5AA16-BD73-46B5-9921-17CF895E4F52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -212,9 +209,5 @@ Global
 		{998355EF-DA9D-45D5-ABD3-6CB467D8BF20}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{998355EF-DA9D-45D5-ABD3-6CB467D8BF20}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{998355EF-DA9D-45D5-ABD3-6CB467D8BF20}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FD60E2B2-3BC9-4D99-B08B-E63CED3B8D68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FD60E2B2-3BC9-4D99-B08B-E63CED3B8D68}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FD60E2B2-3BC9-4D99-B08B-E63CED3B8D68}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FD60E2B2-3BC9-4D99-B08B-E63CED3B8D68}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

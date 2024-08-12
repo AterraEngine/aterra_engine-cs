@@ -3,7 +3,6 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.Nexities.Components;
 using AterraCore.Contracts.OmniVault.Assets;
-using System.Diagnostics.CodeAnalysis;
 
 namespace AterraLib.Nexities.Components;
 
@@ -13,29 +12,30 @@ namespace AterraLib.Nexities.Components;
 [Component<IAssetTree>("AterraLib:Nexities/Components/AssetTree")]
 [UsedImplicitly]
 public class AssetTree : NexitiesComponent, IAssetTree {
-    private readonly Dictionary<Ulid, IAssetInstance> _nodesById = new();
     private readonly List<IAssetInstance> _nodes = [];
-    private readonly Dictionary<Ulid, List<Ulid>> _children = new();
-    private readonly Dictionary<Ulid, Ulid?> _parents = new();
     
     private int? _countCache;
     public int Count => _countCache ??= GetCount();
+    
+    private IAssetInstance[]? _cachedSnapshot;
+    private IAssetInstance[] UpdateSnapshotCache() {
+        lock (_nodes) return _nodes.ToArray();
+    }
+    private IAssetInstance[] CachedSnapshot => _cachedSnapshot ??= UpdateSnapshotCache();
+    
+    private IAssetInstance[]? _cachedSnapshotReverse;
+    private IAssetInstance[] UpdateSnapshotReverseCache() {
+        lock (_nodes) return _nodes.ToArray().Reverse().ToArray();
+    }
+    private IAssetInstance[] CachedSnapshotReverse => _cachedSnapshotReverse ??= UpdateSnapshotReverseCache();
 
     // -----------------------------------------------------------------------------------------------------------------
     // Helper Methods
     // -----------------------------------------------------------------------------------------------------------------
     #region GetCount
     private int GetCount() {
-        lock (_nodesById) {
-            return _nodesById.Count;
-        }
-    }
-    #endregion
-    
-    #region Snapshot
-    private IAssetInstance[] GetSnapshot() {
         lock (_nodes) {
-            return _nodes.ToArray();
+            return _nodes.Count;
         }
     }
     #endregion
@@ -45,36 +45,36 @@ public class AssetTree : NexitiesComponent, IAssetTree {
     // -----------------------------------------------------------------------------------------------------------------
     #region OfType Methods
     public IEnumerable<T> OfType<T>() where T : IAssetInstance {
-        foreach (IAssetInstance node in GetSnapshot()) {
-            if (node is T typedItem)
-                yield return typedItem;
+        lock (CachedSnapshot) {
+            foreach (IAssetInstance node in CachedSnapshot)
+                if (node is T typedItem) yield return typedItem;
         }
     }
    
     public IEnumerable<T> OfTypeReverse<T>() where T : IAssetInstance {
-        IAssetInstance[] snapshot = GetSnapshot();
-        for (int i = snapshot.Length - 1; i >= 0; i--) {
-            if (snapshot[i] is T typedItem)
-                yield return typedItem;
+        lock (CachedSnapshotReverse) {
+            foreach (IAssetInstance node in CachedSnapshotReverse)
+                if (node is T typedItem) yield return typedItem;
         }
     }
     public IEnumerable<T> OfTypeMany<T>() where T : IAssetInstance {
-        foreach (IAssetInstance node in GetSnapshot()) {
-            if (node is T typedItem) yield return typedItem;
-            if (node is not IHasAssetTree entities) continue;
-            foreach (T assetInstance in entities.AssetTree.OfTypeMany<T>()) {
-                yield return assetInstance;
+        lock (CachedSnapshot) {
+            foreach (IAssetInstance node in CachedSnapshot) {
+                if (node is T typedItem) yield return typedItem;
+                if (node is not IHasAssetTree entities) continue;
+                foreach (T entity in entities.AssetTree.OfTypeMany<T>())
+                    yield return entity;
             }
         }
     }
     public IEnumerable<T> OfTypeManyReverse<T>() where T : IAssetInstance {
-        IAssetInstance[] snapshot = GetSnapshot();
-        for (int i = snapshot.Length - 1; i >= 0; i--) {
-            if (snapshot[i] is IHasAssetTree entities)
-                foreach (T assetInstance in entities.AssetTree.OfTypeMany<T>())
-                    yield return assetInstance;
-            if (snapshot[i] is T typedItem)
-                yield return typedItem;
+        lock (CachedSnapshotReverse) {
+            foreach (IAssetInstance node in CachedSnapshotReverse) {
+                if (node is IHasAssetTree entities)
+                    foreach (T entity in entities.AssetTree.OfTypeManyReverse<T>())
+                        yield return entity;
+                if (node is T typedItem) yield return typedItem;
+            }
         }
     }
     #endregion
@@ -83,53 +83,27 @@ public class AssetTree : NexitiesComponent, IAssetTree {
     // Addition Methods
     // -----------------------------------------------------------------------------------------------------------------
     #region Add
-    public void Add<T>(T node, Ulid? parentUlid = null) where T : IAssetInstance {
-        lock (_nodesById) {
-            lock (_nodes) {
-                _nodesById[node.Ulid] = node;
-                _nodes.Add(node);
-            }
-
-            if (parentUlid == null) return;
-            
-            _parents[node.Ulid] = parentUlid;
-            if (!_children.TryGetValue(parentUlid.Value, out List<Ulid>? value)) {
-                value = [];
-                _children[parentUlid.Value] = value;
-            }
-            
-            value.Add(node.Ulid);
+    public void Add<T>(T node) where T : IAssetInstance {
+        lock (_nodes) {
+            _nodes.Add(node);
+        }
+        lock (CachedSnapshot) {
+            _cachedSnapshot = null;
+        }
+        lock (CachedSnapshotReverse) {
+            _cachedSnapshotReverse = null;
         }
     }
-    #endregion
-
-    #region TryFind
-    public bool TryFind(Ulid assetUlid, [NotNullWhen(true)] out IAssetInstance? output) {
-        lock (_nodesById) {
-            return _nodesById.TryGetValue(assetUlid, out output);
+    public void AddFirst<T>(T node) where T : IAssetInstance {
+        lock (_nodes) {
+            _nodes.Insert(0, node);
         }
-    }
-    #endregion
-
-    #region Parent-Child Relationship Methods
-    public IEnumerable<IAssetInstance> GetChildren(Ulid parentUlid) {
-        lock (_nodesById) {
-            if (!_children.TryGetValue(parentUlid, out List<Ulid>? childUlids)) yield break;
-            foreach (Ulid ulid in childUlids) {
-                if (!_nodesById.TryGetValue(ulid, out IAssetInstance? child)) continue;
-                yield return child;
-            }
+        lock (CachedSnapshot) {
+            _cachedSnapshot = null;
         }
-    }
-
-    // Fetch parent of a specific node
-    public IAssetInstance? GetParent(Ulid assetUlid) {
-        lock (_nodesById) {
-            if (!_parents.TryGetValue(assetUlid, out Ulid? parentUlid) || parentUlid == null) return null;
-            _nodesById.TryGetValue(parentUlid.Value, out IAssetInstance? parent);
-            return parent;
-        }
-
+        lock (CachedSnapshotReverse) {
+            _cachedSnapshotReverse = null;
+        } 
     }
     #endregion
 }

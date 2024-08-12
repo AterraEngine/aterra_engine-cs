@@ -19,10 +19,6 @@ public interface IAssetTree : INexitiesComponent {
     IEnumerable<T> OfTypeMany<T>() where T : IAssetInstance;
     IEnumerable<T> OfTypeManyReverse<T>() where T : IAssetInstance;
 
-    void Add<T>(T node, Ulid? parentUlid = null) where T : IAssetInstance;
-
-    bool TryFind(Ulid assetUlid, [NotNullWhen(true)] out IAssetInstance? output);
-
-    IEnumerable<IAssetInstance> GetChildren(Ulid parentUlid);
-    IAssetInstance? GetParent(Ulid assetUlid);
+    void Add<T>(T node) where T : IAssetInstance;
+    void AddFirst<T>(T node) where T : IAssetInstance;
 }

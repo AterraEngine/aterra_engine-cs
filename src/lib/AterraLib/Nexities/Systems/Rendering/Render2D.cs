@@ -15,10 +15,6 @@ public class Render2D(IAssetInstanceAtlas instanceAtlas) : NexitiesSystem<IActor
     // -----------------------------------------------------------------------------------------------------------------
     // Helper Methods
     // -----------------------------------------------------------------------------------------------------------------
-    private static IEnumerable<T> GetEntitiesInOrder<T>(T entity) where T : IHasAssetTree, IAssetInstance {
-        return entity.AssetTree.OfTypeManyReverse<T>();
-    }
-
     private static void DrawEntityTexture(Texture2D texture, Rectangle source, Rectangle dest, float rotation, Vector2 rotationOrigin) {
         Raylib.DrawTexturePro(texture, source, dest, rotationOrigin, rotation, Color.White);
     }
@@ -36,7 +32,7 @@ public class Render2D(IAssetInstanceAtlas instanceAtlas) : NexitiesSystem<IActor
     }
     
     private void ProcessChildEntities(IActor2D originalEntity) {
-        foreach (IActor2D childEntity in GetEntitiesInOrder(originalEntity)) {
+        foreach (IActor2D childEntity in originalEntity.AssetTree.OfTypeManyReverse<IActor2D>()) {
             if (!instanceAtlas.TryGetOrCreateSingleton(childEntity.Sprite2D.TextureAssetId, out ITexture2DAsset? texture2DAsset) 
                 || texture2DAsset.Texture is null) continue;
 
