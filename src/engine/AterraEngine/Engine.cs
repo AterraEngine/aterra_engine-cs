@@ -127,14 +127,14 @@ public class Engine(
                 if (!instanceAtlas.TryCreate(assetId, out IActor2D? newDucky)) continue;
                 newDucky.Transform2D.Translation = new Vector2(50 * j,50 * k);
                 newDucky.Transform2D.Scale = new Vector2(50, 50);
-                level?.AssetTree.Add(newDucky);
+                level?.ChildrenIDs.TryAdd(newDucky.InstanceId);
             }
         }
         
         if (!instanceAtlas.TryCreate("Workfloor:ActorDuckyPlayer", out IPlayer2D? player2D)) return;
         player2D.Transform2D.Translation = new Vector2(250, 250);
         player2D.Transform2D.Scale = new Vector2(50, 50);
-        level?.AssetTree.AddFirst(player2D);
+        level?.ChildrenIDs.AddFirst(player2D);
         
         // -------------------------------------------------------------------------------------------------------------
         renderThreadEvents.InvokeApplicationStageChange(ApplicationStage.Level);

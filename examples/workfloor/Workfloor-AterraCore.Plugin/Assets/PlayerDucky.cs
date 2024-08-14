@@ -18,6 +18,6 @@ public interface IDuckyPlayerActor : IPlayer2D;
 public class DuckyPlayerActor(
     ITransform2D transform2D, 
     SpriteDuckyPlatinum sprite2D,
-    IAssetTree childEntities,
+    IDirectChildren childEntities,
     IImpulse2D impulse2D
 ) : Player2D(transform2D, sprite2D, childEntities,impulse2D), IDuckyPlayerActor;

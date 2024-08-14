@@ -2,12 +2,13 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.Nexities.Components;
-using AterraCore.Contracts.Nexities.Entities;
 
-namespace AterraCore.Contracts.Nexities.Levels;
+namespace AterraCore.Contracts.Nexities.Entities;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IHudElement : INexitiesEntity,
-    IHasAssetTree,
-    IHasHudComponent;
+public interface IActor2D : INexitiesEntity,
+    IHasTransform2D,
+    IHasSprite2D,
+    IHasDirectChildren,
+    IHasImpulse2D;

@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.Nexities.Levels;
+using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading.Logic;
 using AterraCore.DI;
@@ -74,10 +75,12 @@ public class LogicThreadProcessor(
         if (!world.TryGetActiveLevel(out INexitiesLevel? level)) return;
         
         // Get all logic systems required by active level
-        
+        lock (world.LogicSystems) {
+            foreach (INexitiesSystem logicSystem in world.LogicSystems) {
+                logicSystem.Update(world);
+            }
+        }
         // run all logic systems
-        EngineServices.GetService<PlayerController>().ProcessLevel(level);
-        EngineServices.GetService<ApplyImpulse>().ProcessLevel(level);
         
         // cleanup
     }

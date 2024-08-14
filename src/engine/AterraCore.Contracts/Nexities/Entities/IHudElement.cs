@@ -1,10 +1,12 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraCore.Contracts.Nexities.Components;
+using AterraCore.Contracts.Nexities.Components;
+
+namespace AterraCore.Contracts.Nexities.Entities;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IHasAssetTree {
-    public IAssetTree AssetTree { get; }
-}
+public interface IHudElement : INexitiesEntity,
+    IHasDirectChildren,
+    IHasHudComponent;

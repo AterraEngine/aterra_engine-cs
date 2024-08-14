@@ -1,23 +1,18 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.OmniVault.Assets;
-
 namespace AterraCore.Contracts.Nexities.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IAssetTree : INexitiesComponent {
+public interface IDirectChildren : INexitiesComponent {
     int Count { get; }
+    IReadOnlyCollection<Ulid> Children { get; }
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    IEnumerable<T> OfType<T>() where T : IAssetInstance;
-    IEnumerable<T> OfTypeReverse<T>() where T : IAssetInstance;
-    IEnumerable<T> OfTypeMany<T>() where T : IAssetInstance;
-    IEnumerable<T> OfTypeManyReverse<T>() where T : IAssetInstance;
-
-    void Add<T>(T node) where T : IAssetInstance;
-    void AddFirst<T>(T node) where T : IAssetInstance;
+    bool TryAdd(Ulid id);
+    bool TryInsertBefore(Ulid id, Ulid before);
+    bool TryInsertAfter(Ulid id, Ulid after);
 }

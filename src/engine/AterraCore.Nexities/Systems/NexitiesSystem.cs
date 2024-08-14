@@ -4,12 +4,13 @@
 using AterraCore.Contracts.Nexities.Levels;
 using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.Assets;
+using AterraCore.OmniVault.Assets;
 
 namespace AterraCore.Nexities.Systems;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class NexitiesSystem<TEntity> : INexitiesSystem where TEntity : IAssetInstance {
+public abstract class NexitiesSystem<TEntity> : AssetInstance, INexitiesSystem where TEntity : IAssetInstance {
     public Type ProcessableEntityType { get; } = typeof(TEntity);
     
     // -----------------------------------------------------------------------------------------------------------------

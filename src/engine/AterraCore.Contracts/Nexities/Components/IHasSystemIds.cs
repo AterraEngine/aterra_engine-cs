@@ -1,12 +1,10 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Nexities.Components;
-using AterraCore.Contracts.Nexities.Entities;
-
-namespace AterraCore.Contracts.Nexities.Levels;
+namespace AterraCore.Contracts.Nexities.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IHud : INexitiesEntity,
-    IHasAssetTree;
+public interface IHasSystemIds {
+    public ISystemIds NexitiesSystemIds { get; }
+}

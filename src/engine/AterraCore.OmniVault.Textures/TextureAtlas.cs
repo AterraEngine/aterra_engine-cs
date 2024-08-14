@@ -32,7 +32,7 @@ public class TextureAtlas(ILogger logger, IAssetInstanceAtlas instanceAtlas) : I
         
             textureAsset.Texture = Raylib.LoadTextureFromImage(image);
             textureAsset.Size = new Vector2(image.Width, image.Height);
-            Logger.Debug("Assigned image {path} to asset {Ulid}", textureAsset.ImagePath, textureAsset.Ulid);
+            Logger.Debug("Assigned image {path} to asset {Ulid}", textureAsset.ImagePath, textureAsset.InstanceId);
             
             Raylib.UnloadImage(image);
             Logger.Debug("Unloaded image {path}", textureAsset.ImagePath);

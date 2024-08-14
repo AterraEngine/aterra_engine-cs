@@ -1,8 +1,10 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Contracts.Nexities.Entities;
 using AterraCore.Contracts.Nexities.Levels;
 using AterraCore.FlexiPlug.Attributes;
+using AterraLib.Nexities.Entities;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AterraLib.Nexities.Systems.Logic;
@@ -16,7 +18,7 @@ namespace AterraLib.Nexities.Systems.Logic;
 public class ApplyImpulse: NexitiesSystem<IActor2D> {
     
     protected override IEnumerable<IActor2D> SelectEntities(INexitiesLevel? level) {
-        return level?.AssetTree.OfType<IActor2D>().Where(actor2D => !actor2D.Impulse2D.IsEmpty) ?? [];
+        return level?.ChildrenIDs.OfType<IActor2D>().Where(actor2D => !actor2D.Impulse2D.IsEmpty) ?? [];
     }
     
     protected override void ProcessEntity(IActor2D entity) {

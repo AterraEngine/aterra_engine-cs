@@ -1,7 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Nexities.Components;
+using AterraCore.Contracts.Nexities.Entities;
 using AterraCore.Contracts.Nexities.Levels;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.Textures;
@@ -23,7 +23,7 @@ public class Render2D(IAssetInstanceAtlas instanceAtlas) : NexitiesSystem<IActor
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     protected override IEnumerable<IActor2D> SelectEntities(INexitiesLevel? level) {
-        return level?.AssetTree.OfTypeReverse<IActor2D>() ?? [];
+        return level?.ChildrenIDs.OfTypeReverse<IActor2D>() ?? [];
     }
     
     protected override void ProcessEntity(IActor2D originalEntity) {
@@ -32,7 +32,7 @@ public class Render2D(IAssetInstanceAtlas instanceAtlas) : NexitiesSystem<IActor
     }
     
     private void ProcessChildEntities(IActor2D originalEntity) {
-        foreach (IActor2D childEntity in originalEntity.AssetTree.OfTypeManyReverse<IActor2D>()) {
+        foreach (IActor2D childEntity in originalEntity.ChildrenIDs.OfTypeManyReverse<IActor2D>()) {
             if (!instanceAtlas.TryGetOrCreateSingleton(childEntity.Sprite2D.TextureAssetId, out ITexture2DAsset? texture2DAsset) 
                 || texture2DAsset.Texture is null) continue;
 

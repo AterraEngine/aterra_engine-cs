@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.Nexities.Components;
 using AterraCore.Contracts.Nexities.Levels;
+using AterraCore.Contracts.Nexities.Systems;
 
 namespace AterraLib.Nexities.Entities;
 
@@ -11,7 +12,8 @@ namespace AterraLib.Nexities.Entities;
 // ---------------------------------------------------------------------------------------------------------------------
 [Entity<INexitiesLevel>("AterraLib:Nexities/Levels/Empty")]
 [UsedImplicitly]
-public class EmptyLevel(IAssetTree assetTree) : NexitiesEntity(assetTree), INexitiesLevel {
-    public IAssetTree AssetTree { get; } = assetTree;
+public class EmptyLevel(IDirectChildren directChildren, ISystemIds systemIds) : NexitiesEntity(directChildren, systemIds), INexitiesLevel {
+    public IDirectChildren ChildrenIDs { get; } = directChildren;
+    public ISystemIds NexitiesSystemIds { get; } = systemIds;
 }
 

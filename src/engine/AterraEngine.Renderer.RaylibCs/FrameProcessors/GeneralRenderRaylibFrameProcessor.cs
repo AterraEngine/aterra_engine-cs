@@ -25,7 +25,7 @@ public class GeneralRenderRaylibFrameProcessor(IAterraCoreWorld world, IDataColl
         DrawText($"   FPS : {GetFPS()}", 0, 0, 32, Color.DarkBlue);
         DrawText($"   TPS : {GetTps()}", 0, 50, 32, Color.DarkBlue);
         if (!world.TryGetActiveLevel(out INexitiesLevel? level)) return;
-        DrawText($"DUCKS : {level.AssetTree.Count}",0, 100, 32, Color.DarkBlue);
+        DrawText($"DUCKS : {level.ChildrenIDs.Count}",0, 100, 32, Color.DarkBlue);
     }
     private double GetTps() => dataCollector.Tps;
 

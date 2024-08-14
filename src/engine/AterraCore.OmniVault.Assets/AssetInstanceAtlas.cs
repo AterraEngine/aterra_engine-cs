@@ -40,21 +40,21 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetIn
         
         if (!factory.TryCreate(registration, out instance)) return false;
         instance.AssetId = registration.AssetId;
-        instance.Ulid = predefinedUlid ?? Ulid.NewUlid();
+        instance.InstanceId = predefinedUlid ?? Ulid.NewUlid();
 
-        if (_assetInstances.TryAdd(instance.Ulid, instance)) {
-            Ulid ulid = instance.Ulid;
+        if (_assetInstances.TryAdd(instance.InstanceId, instance)) {
+            Ulid ulid = instance.InstanceId;
             _assetsByTypes.AddOrUpdate(
                 typeof(T),
                 _ => [ulid],
                 (_, list) => { list.Add(ulid); return list; });
             
             if (registration.IsSingleton) {
-                _singletonAssetInstances.TryAdd(instance.AssetId, instance.Ulid);
+                _singletonAssetInstances.TryAdd(instance.AssetId, instance.InstanceId);
             }
             return true;
         }
-        logger.Debug("{Ulid} could not be added to atlas", instance.Ulid);
+        logger.Debug("{Ulid} could not be added to atlas", instance.InstanceId);
         return false;
     }
 

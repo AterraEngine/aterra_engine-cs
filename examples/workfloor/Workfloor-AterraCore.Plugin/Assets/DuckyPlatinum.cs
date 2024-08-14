@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Components;
+using AterraCore.Contracts.Nexities.Entities;
 using AterraCore.Contracts.Nexities.Levels;
 using AterraCore.Contracts.OmniVault.Textures;
 using AterraCore.Nexities.Components;
@@ -40,6 +41,6 @@ public class SpriteDuckyPlatinum : Sprite2D,ISpriteDuckyPlatinum  {
 public class DuckyPlatinumActor(
     ITransform2D transform2D, 
     SpriteDuckyPlatinum sprite2D,
-    IAssetTree childEntities,
+    IDirectChildren childEntities,
     IImpulse2D impulse2D
 ) : Actor2D(transform2D, sprite2D, childEntities,impulse2D), IDuckyPlatinumActor;
