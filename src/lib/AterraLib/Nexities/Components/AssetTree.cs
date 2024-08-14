@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.Nexities.Components;
 using AterraCore.Contracts.OmniVault.Assets;
+using AterraCore.OmniVault.Assets.Attributes;
 
 namespace AterraLib.Nexities.Components;
 
@@ -25,7 +26,15 @@ public class AssetTree : NexitiesComponent, IAssetTree {
     
     private IAssetInstance[]? _cachedSnapshotReverse;
     private IAssetInstance[] UpdateSnapshotReverseCache() {
-        lock (_directChildren) return _directChildren.ToArray().Reverse().ToArray();
+
+        lock (_directChildren) {
+            var count = _directChildren.Count;
+            var cachedSnapshotReverse = new IAssetInstance[count];
+            for (int i = 0; i < count; i++) {
+                cachedSnapshotReverse[i] = _directChildren[count - 1 - i];
+            }
+            return cachedSnapshotReverse;
+        }
     }
     private IAssetInstance[] CachedSnapshotReverse => _cachedSnapshotReverse ??= UpdateSnapshotReverseCache();
 
