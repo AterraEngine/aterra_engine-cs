@@ -27,10 +27,9 @@ public readonly struct ActiveLevel(INexitiesLevel level) : IActiveLevel {
         var instanceAtlas = EngineServices.GetService<IAssetInstanceAtlas>();
         
         var systems = new List<INexitiesSystem>(systemIds.Count);
-        int index = 0;
         foreach (AssetId assetId in systemIds) {
             if (instanceAtlas.TryGetOrCreate(assetId, null, out INexitiesSystem? instance)) {
-                systems[index++] = instance;
+                systems.Add(instance);
             }
         }
         
@@ -40,7 +39,6 @@ public readonly struct ActiveLevel(INexitiesLevel level) : IActiveLevel {
 
     private static IEntityNodeTree GetActiveEntityTree(Ulid rootInstanceId) {
         var entityTreeFactory = EngineServices.GetService<IEntityTreeFactory>();
-        
         return entityTreeFactory.CreateFromRootId(rootInstanceId);
     }
 }
