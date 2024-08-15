@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.Data;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts;
 using AterraCore.Contracts.FlexiPlug;
@@ -51,8 +52,6 @@ public class Engine(
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public bool TryAssignStartingLevel(AssetId assetId) => world.TryChangeActiveLevel(assetId);
-
     public IEngine SubscribeToEvents() {
         renderThreadEvents.EventApplicationStageChange += applicationStageManager.ReceiveStageChange;
         
@@ -108,8 +107,8 @@ public class Engine(
         }
         
         // -------------------------------------------------------------------------------------------------------------
-        TryAssignStartingLevel("AterraLib:Nexities/Levels/Empty");
-        if(!world.TryGetActiveLevel(out INexitiesLevel? level)) return;
+        if(!instanceAtlas.TryGetOrCreateSingleton("Workfloor:Levels/MainLevel", out INexitiesLevel? level)) return;
+        
         logicEventManager.InvokeStart();
         
         _textureQueue.Enqueue(new TextureQueueRecord (
@@ -127,14 +126,18 @@ public class Engine(
                 if (!instanceAtlas.TryCreate(assetId, out IActor2D? newDucky)) continue;
                 newDucky.Transform2D.Translation = new Vector2(50 * j,50 * k);
                 newDucky.Transform2D.Scale = new Vector2(50, 50);
-                level?.ChildrenIDs.TryAdd(newDucky.InstanceId);
+                if (!level.ChildrenIDs.TryAdd(newDucky.InstanceId)) throw new ApplicationException("Entity could not be added");
             }
         }
         
         if (!instanceAtlas.TryCreate("Workfloor:ActorDuckyPlayer", out IPlayer2D? player2D)) return;
         player2D.Transform2D.Translation = new Vector2(250, 250);
         player2D.Transform2D.Scale = new Vector2(50, 50);
-        level?.ChildrenIDs.AddFirst(player2D);
+        level.ChildrenIDs.TryAddFirst(player2D.InstanceId);
+        
+        if (!world.TryChangeActiveLevel("Workfloor:Levels/MainLevel")) throw new ApplicationException("Failed to change active level");
+        logger.Debug("Spawned {x} entities", level.ChildrenIDs.Count);
+        logger.Debug("Spawned {x} level", level.InstanceId);
         
         // -------------------------------------------------------------------------------------------------------------
         renderThreadEvents.InvokeApplicationStageChange(ApplicationStage.Level);

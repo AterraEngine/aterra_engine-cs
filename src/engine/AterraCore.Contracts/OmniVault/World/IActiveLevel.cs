@@ -1,16 +1,18 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraLib.Nexities.Components;
+using AterraCore.Contracts.Nexities.Levels;
+using AterraCore.Contracts.Nexities.Systems;
+using AterraCore.Contracts.OmniVault.World.EntityTree;
+
+namespace AterraCore.Contracts.OmniVault.World;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Component<IRaylibHudText>(AssetIdLib.AterraCore.Components.RaylibHudText)]
-[UsedImplicitly]
-public class RaylibHudText : NexitiesComponent, IHudComponent, IRaylibHudText {
-    public HudType Type => HudType.Text;
-    public string Text { get; set; } = string.Empty;
-    public Vector<int> Pos { get; set; }
-    public int FontSize { get; set; }
-    public Color Color { get; set; }
+public interface IActiveLevel {
+    public INexitiesLevel RawLevelData { get;}
+    public IReadOnlyCollection<INexitiesSystem> LogicSystems { get; }
+    public IReadOnlyCollection<INexitiesSystem> RenderSystems { get; }
+    public IEntityNodeTree ActiveEntityTree { get; }
 }

@@ -1,17 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Nexities.Components;
-using AterraCore.Contracts.Nexities.Entities;
-using AterraCore.Contracts.Nexities.Levels;
-
 namespace AterraLib.Nexities.Entities;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [Serializable]
 [UsedImplicitly]
-[Entity<IActor2D>("AterraLib:Nexities/Entities/Actor2D")]
+[Entity<IActor2D>(AssetIdLib.AterraCore.Entities.Actor2D)]
 public class Actor2D(ITransform2D transform2D, ISprite2D sprite2D, IDirectChildren childEntities, IImpulse2D impulse2D) : NexitiesEntity(transform2D, sprite2D, childEntities, impulse2D), IActor2D {
     public ITransform2D Transform2D => transform2D;
     public ISprite2D Sprite2D => sprite2D;

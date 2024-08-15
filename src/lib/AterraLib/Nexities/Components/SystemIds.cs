@@ -1,14 +1,12 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Nexities.Components;
-
 namespace AterraLib.Nexities.Components;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Component<ISystemIds>("AterraLib:Nexities/Components/AssetTree")]
+[Component<ISystemIds>(AssetIdLib.AterraCore.Components.SystemIds)]
 [UsedImplicitly]
 public class SystemIds : NexitiesComponent, ISystemIds {
     protected virtual AssetId[] LogicSystems { get; set; } = [];

@@ -1,10 +1,8 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Nexities.Entities;
-using AterraCore.Contracts.Nexities.Levels;
+using AterraCore.Contracts.OmniVault.World;
 using AterraCore.FlexiPlug.Attributes;
-using AterraLib.Nexities.Entities;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AterraLib.Nexities.Systems.Logic;
@@ -12,20 +10,20 @@ namespace AterraLib.Nexities.Systems.Logic;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[System("AterraLib:Nexities/Systems/ApplyImpulse", CoreTags.LogicSystem)]
+[System(AssetIdLib.AterraCore.SystemsLogic.ApplyImpluse, CoreTags.LogicSystem)]
 [Injectable<ApplyImpulse>(ServiceLifetime.Singleton)]
 [UsedImplicitly]
-public class ApplyImpulse: NexitiesSystem<IActor2D> {
+public class ApplyImpulse() : NexitiesSystem<IActor2D>(uncached:true) {
+    protected override Predicate<IActor2D> Filter { get; } = entity => !entity.Impulse2D.IsEmpty;
     
-    protected override IEnumerable<IActor2D> SelectEntities(INexitiesLevel? level) {
-        return level?.ChildrenIDs.OfType<IActor2D>().Where(actor2D => !actor2D.Impulse2D.IsEmpty) ?? [];
-    }
-    
-    protected override void ProcessEntity(IActor2D entity) {
-        entity.Transform2D.Translation += entity.Impulse2D.TranslationOffset;
-        entity.Transform2D.Scale += entity.Impulse2D.ScaleOffset;
-        entity.Transform2D.Rotation += entity.Impulse2D.RotationOffset;
+    public override void Tick(IAterraCoreWorld world) {
+        IActor2D[] entities = GetEntities(world);
+        foreach (IActor2D entity in entities) {
+            entity.Transform2D.Translation += entity.Impulse2D.TranslationOffset;
+            entity.Transform2D.Scale += entity.Impulse2D.ScaleOffset;
+            entity.Transform2D.Rotation += entity.Impulse2D.RotationOffset;
 
-        entity.Impulse2D.Clear();
+            entity.Impulse2D.Clear();
+        }
     }
 }

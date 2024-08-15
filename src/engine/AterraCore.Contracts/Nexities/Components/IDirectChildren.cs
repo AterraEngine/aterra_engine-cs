@@ -12,6 +12,7 @@ public interface IDirectChildren : INexitiesComponent {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
+    bool TryAddFirst(Ulid id);
     bool TryAdd(Ulid id);
     bool TryInsertBefore(Ulid id, Ulid before);
     bool TryInsertAfter(Ulid id, Ulid after);

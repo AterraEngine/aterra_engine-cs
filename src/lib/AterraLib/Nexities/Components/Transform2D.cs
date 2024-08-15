@@ -1,13 +1,11 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Nexities.Components;
-
 namespace AterraLib.Nexities.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Component<ITransform2D>("AterraLib:Nexities/Components/Transform2D")]
+[Component<ITransform2D>(AssetIdLib.AterraCore.Components.Transfrom2D)]
 [UsedImplicitly]
 public class Transform2D : NexitiesComponent, ITransform2D {
 

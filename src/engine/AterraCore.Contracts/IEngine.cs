@@ -1,8 +1,6 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Types.Nexities;
-
 namespace AterraCore.Contracts;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -10,7 +8,6 @@ namespace AterraCore.Contracts;
 // ---------------------------------------------------------------------------------------------------------------------
 
 public interface IEngine {
-    bool TryAssignStartingLevel(AssetId assetId);
     IEngine SubscribeToEvents();
     IEngine SpawnRenderThread();
     IEngine SpawnLogicThread();

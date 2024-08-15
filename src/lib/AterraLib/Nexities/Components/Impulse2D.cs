@@ -1,13 +1,11 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Nexities.Components;
-
 namespace AterraLib.Nexities.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Component<IImpulse2D>("AterraLib:Nexities/Components/Impulse2D")]
+[Component<IImpulse2D>(AssetIdLib.AterraCore.Components.Impulse2D)]
 [UsedImplicitly]
 public class Impulse2D : NexitiesComponent, IImpulse2D {
     private Vector2 _translationOffset = Vector2.Zero;

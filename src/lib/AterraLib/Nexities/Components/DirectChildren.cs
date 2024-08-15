@@ -1,14 +1,12 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Nexities.Components;
-
 namespace AterraLib.Nexities.Components;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Component<IDirectChildren>("AterraLib:Nexities/Components/AssetTree")]
+[Component<IDirectChildren>(AssetIdLib.AterraCore.Components.DirectChildren)]
 [UsedImplicitly]
 public class DirectChildren : NexitiesComponent, IDirectChildren {
     private readonly List<Ulid> _directChildren = [];
@@ -33,6 +31,13 @@ public class DirectChildren : NexitiesComponent, IDirectChildren {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
+    public bool TryAddFirst(Ulid id) {
+        lock (_directChildren) {
+            if (_directChildren.Contains(id)) return false;
+            _directChildren.Insert(0, id);
+        }
+        return true;
+    }
     public bool TryAdd(Ulid id) {
         lock (_directChildren) {
             if (_directChildren.Contains(id)) return false;

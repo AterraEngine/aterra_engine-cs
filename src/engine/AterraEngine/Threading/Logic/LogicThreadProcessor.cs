@@ -72,13 +72,11 @@ public class LogicThreadProcessor(
 
     private void Update() {
         // Go into world
-        if (!world.TryGetActiveLevel(out INexitiesLevel? level)) return;
+        if (!world.TryGetActiveLevel(out IActiveLevel? level)) return;
         
         // Get all logic systems required by active level
-        lock (world.LogicSystems) {
-            foreach (INexitiesSystem logicSystem in world.LogicSystems) {
-                logicSystem.Update(world);
-            }
+        foreach (INexitiesSystem logicSystem in level.LogicSystems) {
+            logicSystem.Tick(world);
         }
         // run all logic systems
         
