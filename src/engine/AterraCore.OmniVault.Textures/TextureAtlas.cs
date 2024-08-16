@@ -29,13 +29,16 @@ public class TextureAtlas(ILogger logger, IAssetInstanceAtlas instanceAtlas) : I
         try {
             Image image = Raylib.LoadImage(textureAsset.ImagePath);
             Logger.Debug("Loaded image {path}", textureAsset.ImagePath);
-        
-            textureAsset.Texture = Raylib.LoadTextureFromImage(image);
+
+            Texture2D texture = Raylib.LoadTextureFromImage(image);
+            if (!textureAsset.TrySetTexture(texture)) return false;
             textureAsset.Size = new Vector2(image.Width, image.Height);
             Logger.Debug("Assigned image {path} to asset {Ulid}", textureAsset.ImagePath, textureAsset.InstanceId);
             
             Raylib.UnloadImage(image);
             Logger.Debug("Unloaded image {path}", textureAsset.ImagePath);
+            
+            Raylib.GenTextureMipmaps(ref texture);
             return true;
         }
         catch (Exception ex) {

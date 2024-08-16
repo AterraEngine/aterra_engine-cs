@@ -13,6 +13,7 @@ namespace AterraLib.Nexities.Systems.Rendering;
 [UsedImplicitly]
 public class Render2D(IAssetInstanceAtlas instanceAtlas) : NexitiesSystemWithParents<IHasTransform2D,IActor2D> {
     protected override bool EntitiesReversed => true;
+    private Dictionary<AssetId, ITexture2DAsset> _texturesCache = new();
     
     // -----------------------------------------------------------------------------------------------------------------
     // Helper Methods
@@ -32,19 +33,23 @@ public class Render2D(IAssetInstanceAtlas instanceAtlas) : NexitiesSystemWithPar
     }
     
     private void ProcessChildEntities(IActor2D parent, IActor2D child) {
-        if (!instanceAtlas.TryGetOrCreateSingleton(child.Sprite2D.TextureAssetId, out ITexture2DAsset? texture2DAsset) 
-            || texture2DAsset.Texture is null) return;
-    
+        if (!_texturesCache.TryGetValue(child.Sprite2D.TextureAssetId, out ITexture2DAsset? textureAsset)) {
+            if (instanceAtlas.TryGetOrCreateSingleton(child.Sprite2D.TextureAssetId, out textureAsset)) 
+                _texturesCache[child.Sprite2D.TextureAssetId] = textureAsset;
+            return;
+        }
+        if (!textureAsset.TryGetTexture(out Texture2D texture)) return;
+        
         Vector2 translation = child.Transform2D.Translation + parent.Transform2D.Translation;
         Vector2 scale = child.Transform2D.Scale * parent.Transform2D.Scale;
         float rotation = child.Transform2D.Rotation + parent.Transform2D.Rotation;
         Vector2 rotationOrigin = child.Transform2D.RotationOrigin + parent.Transform2D.RotationOrigin;
     
         DrawEntityTexture(
-            (Texture2D)texture2DAsset.Texture, 
+            texture, 
             child.Sprite2D.UvAndSourceCalculated ??= new Rectangle(
                 child.Sprite2D.UvSelection.Position, 
-                child.Sprite2D.UvSelection.Size * texture2DAsset.Size
+                child.Sprite2D.UvSelection.Size * textureAsset.Size
             ), 
             new Rectangle(translation, scale), 
             rotation,
@@ -53,14 +58,18 @@ public class Render2D(IAssetInstanceAtlas instanceAtlas) : NexitiesSystemWithPar
     }
 
     private void ProcessOriginalEntity(IActor2D originalEntity) {
-        if (!instanceAtlas.TryGetOrCreateSingleton(originalEntity.Sprite2D.TextureAssetId, out ITexture2DAsset? texture2DAsset) 
-            || texture2DAsset.Texture is null) return;
-
+        if (!_texturesCache.TryGetValue(originalEntity.Sprite2D.TextureAssetId, out ITexture2DAsset? textureAsset)) {
+            if (instanceAtlas.TryGetOrCreateSingleton(originalEntity.Sprite2D.TextureAssetId, out textureAsset)) 
+                _texturesCache[originalEntity.Sprite2D.TextureAssetId] = textureAsset;
+            return;
+        }
+        if (!textureAsset.TryGetTexture(out Texture2D texture)) return;
+        
         Rectangle sourceRectangle = originalEntity.Sprite2D.UvAndSourceCalculated ??= new Rectangle(
             originalEntity.Sprite2D.UvSelection.Position, 
-            originalEntity.Sprite2D.UvSelection.Size * texture2DAsset.Size
+            originalEntity.Sprite2D.UvSelection.Size * textureAsset.Size
         );
 
-        DrawEntityTexture((Texture2D)texture2DAsset.Texture, sourceRectangle, originalEntity.Transform2D.DestinationRectangle, originalEntity.Transform2D.Rotation, originalEntity.Transform2D.RotationOrigin);
+        DrawEntityTexture(texture, sourceRectangle, originalEntity.Transform2D.DestinationRectangle, originalEntity.Transform2D.Rotation, originalEntity.Transform2D.RotationOrigin);
     }
 }
