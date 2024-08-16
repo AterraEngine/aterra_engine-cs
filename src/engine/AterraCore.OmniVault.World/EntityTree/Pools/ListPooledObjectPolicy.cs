@@ -1,14 +1,19 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraLib.Nexities.Entities;
+using AterraCore.Contracts.OmniVault.Assets;
+using Microsoft.Extensions.ObjectPool;
+
+namespace AterraCore.OmniVault.World.EntityTree.Pools;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Serializable]
-[UsedImplicitly]
-[Entity<IActor2D>(AssetIdLib.AterraCore.Entities.Player2D)]
-public class Player2D(ITransform2D transform2D, ISprite2D sprite2D, IDirectChildren childEntities, IImpulse2D impulse2D) 
-    : Actor2D(transform2D, sprite2D, childEntities, impulse2D), IPlayer2D;
+public class ListPooledObjectPolicy(int initialCapacity) : PooledObjectPolicy<List<IAssetInstance>> {
 
+    public override List<IAssetInstance> Create() => new(initialCapacity);
+    public override bool Return(List<IAssetInstance> obj) {
+        obj.Clear();
+        return true;
+    }
+}

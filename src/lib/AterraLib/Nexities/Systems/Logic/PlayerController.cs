@@ -15,8 +15,7 @@ namespace AterraLib.Nexities.Systems.Logic;
 [UsedImplicitly]
 public class PlayerController: NexitiesSystem<IPlayer2D> {
     public override void Tick(IAterraCoreWorld world) {
-        IPlayer2D[] entities = GetEntities(world);
-        foreach (IPlayer2D entity in entities) {
+        foreach (IPlayer2D entity in GetEntities(world)) {
             
             if (Raylib.IsKeyDown(KeyboardKey.W)) entity.Impulse2D.TranslationOffset = entity.Impulse2D.TranslationOffset with { Y = entity.Impulse2D.TranslationOffset.Y - 10 };
             if (Raylib.IsKeyDown(KeyboardKey.S)) entity.Impulse2D.TranslationOffset = entity.Impulse2D.TranslationOffset with { Y = entity.Impulse2D.TranslationOffset.Y + 10 };

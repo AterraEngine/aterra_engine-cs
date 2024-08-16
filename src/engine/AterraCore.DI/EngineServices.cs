@@ -63,6 +63,10 @@ public static class EngineServices {
         }
     }
 
+    private static bool TryGetService(Type input, [NotNullWhen(true)] out object? output) {
+        output = ServiceProvider.GetService(input);
+        return output is not null;
+    }
     public static bool TryGetService<T>([NotNullWhen(true)] out T? output) where T : class => TryGetService(typeof(T), out output);
     public static bool TryGetService<T>(Type input, [NotNullWhen(true)] out T? output) where T : class {
         output = ServiceProvider.GetService(input) as T;

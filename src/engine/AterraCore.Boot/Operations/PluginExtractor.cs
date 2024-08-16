@@ -4,7 +4,6 @@
 using AterraCore.Contracts.Boot.Logic.PluginLoading;
 using AterraCore.Contracts.Boot.Operations;
 using AterraCore.Contracts.OmniVault.Assets;
-using AterraCore.DI;
 using AterraCore.FlexiPlug.Attributes;
 using AterraCore.Loggers;
 using CodeOfChaos.Extensions;
@@ -15,8 +14,6 @@ namespace AterraCore.Boot.Operations;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class PluginExtractor : IBootOperation {
-    private ILogger Logger { get; } = StartupLogger.CreateLogger(false).ForBootOperationContext(typeof(PluginExtractor));
-
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------

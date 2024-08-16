@@ -2,11 +2,18 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.OmniVault.Assets;
+using Microsoft.Extensions.ObjectPool;
 
-namespace AterraCore.Contracts.Nexities.Components;
+namespace AterraCore.OmniVault.World.EntityTree.Pools;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IHasTransform2D : IAssetInstance {
-    public ITransform2D Transform2D { get; }
+public class ParentedListPooledObjectPolicy(int initialCapacity) : PooledObjectPolicy<List<(IAssetInstance? Parent, IAssetInstance Child)>> {
+
+    public override List<(IAssetInstance? Parent, IAssetInstance Child)> Create() => new(initialCapacity);
+    public override bool Return(List<(IAssetInstance? Parent, IAssetInstance Child)> obj) {
+        obj.Clear();
+        return true;
+    }
 }

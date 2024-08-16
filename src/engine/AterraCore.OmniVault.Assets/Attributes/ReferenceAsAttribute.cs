@@ -2,7 +2,6 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Types.Nexities;
-using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.Assets.Attributes;
 using JetBrains.Annotations;
 

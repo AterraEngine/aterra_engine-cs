@@ -20,7 +20,7 @@ namespace Workfloor_AterraCore.Plugin.Assets;
 public class MainLevelSystemIds : SystemIds {
     protected override AssetId[] LogicSystems { get; set; } = [
         AssetIdLib.AterraCore.SystemsLogic.PlayerController,
-        AssetIdLib.AterraCore.SystemsLogic.ApplyImpluse,
+        AssetIdLib.AterraCore.SystemsLogic.ApplyImpulse,
     ];
     
     protected override AssetId[] RenderSystems { get; set; } = [

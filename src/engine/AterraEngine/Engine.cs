@@ -1,7 +1,6 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Data;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts;
 using AterraCore.Contracts.FlexiPlug;
@@ -89,7 +88,7 @@ public class Engine(
 
         // Don't wait forever for the opengl context to be created, else we will have many issues
         try {
-            var cts = new CancellationTokenSource(5000);
+            var cts = new CancellationTokenSource(50000);
             await _openGlContextCreated.Task.WithCancellation(cts.Token);
         }
         catch (OperationCanceledException ex) {
@@ -100,7 +99,6 @@ public class Engine(
         renderThreadEvents.InvokeApplicationStageChange(ApplicationStage.StartupScreen);
 
         foreach (AssetRegistration assetRegistration in pluginAtlas.GetAssetRegistrations()) {
-            await Task.Delay(100); // TODO REMOVE DELAY
             if (!assetAtlas.TryAssignAsset(assetRegistration, out AssetId? _)) {
                 Logger.Warning("Type {Type} could not be assigned as an asset", assetRegistration.Type);
             }
@@ -134,6 +132,11 @@ public class Engine(
         player2D.Transform2D.Translation = new Vector2(250, 250);
         player2D.Transform2D.Scale = new Vector2(50, 50);
         level.ChildrenIDs.TryAddFirst(player2D.InstanceId);
+        
+        if (!instanceAtlas.TryCreate("Workfloor:ActorDuckyHype", out IActor2D? playerAddendum)) return;
+        playerAddendum.Transform2D.Translation = new Vector2(10,10);
+        playerAddendum.Transform2D.Scale = new Vector2(1, 1);
+        player2D.ChildrenIDs.TryAddFirst(playerAddendum.InstanceId);
         
         if (!world.TryChangeActiveLevel("Workfloor:Levels/MainLevel")) throw new ApplicationException("Failed to change active level");
         logger.Debug("Spawned {x} entities", level.ChildrenIDs.Count);

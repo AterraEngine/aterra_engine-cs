@@ -4,8 +4,6 @@
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.Textures;
 using AterraCore.Contracts.OmniVault.World;
-using Serilog;
-using Serilog.Core;
 
 namespace AterraLib.Nexities.Systems.Rendering;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -13,7 +11,9 @@ namespace AterraLib.Nexities.Systems.Rendering;
 // ---------------------------------------------------------------------------------------------------------------------
 [System(AssetIdLib.AterraCore.SystemsRendering.Render2D, CoreTags.RenderSystem)]
 [UsedImplicitly]
-public class Render2D(IAssetInstanceAtlas instanceAtlas, ILogger logger) : NexitiesSystem<IActor2D>(entitiesReversed:true) {
+public class Render2D(IAssetInstanceAtlas instanceAtlas) : NexitiesSystemWithParents<IHasTransform2D,IActor2D> {
+    protected override bool EntitiesReversed => true;
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Helper Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -25,32 +25,32 @@ public class Render2D(IAssetInstanceAtlas instanceAtlas, ILogger logger) : Nexit
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public override void Tick(IAterraCoreWorld world) {
-        foreach (IActor2D entity in GetEntities(world)) {
-            // ProcessChildEntities(entity);
-            ProcessOriginalEntity(entity);
+        foreach ((IActor2D? Parent, IActor2D Child) entity in GetEntities(world)) {
+            if (entity.Parent is not null) ProcessChildEntities(entity.Parent, entity.Child);
+            ProcessOriginalEntity(entity.Child);
         }
     }
     
-    // private void ProcessChildEntities(IActor2D originalEntity) {
-    //     if (!instanceAtlas.TryGetOrCreateSingleton(childEntity.Sprite2D.TextureAssetId, out ITexture2DAsset? texture2DAsset) 
-    //         || texture2DAsset.Texture is null) continue;
-    //
-    //     Vector2 translation = childEntity.Transform2D.Translation + originalEntity.Transform2D.Translation;
-    //     Vector2 scale = childEntity.Transform2D.Scale * originalEntity.Transform2D.Scale;
-    //     float rotation = childEntity.Transform2D.Rotation + originalEntity.Transform2D.Rotation;
-    //     Vector2 rotationOrigin = childEntity.Transform2D.RotationOrigin + originalEntity.Transform2D.RotationOrigin;
-    //
-    //     DrawEntityTexture(
-    //         (Texture2D)texture2DAsset.Texture, 
-    //         childEntity.Sprite2D.UvAndSourceCalculated ??= new Rectangle(
-    //             childEntity.Sprite2D.UvSelection.Position, 
-    //             childEntity.Sprite2D.UvSelection.Size * texture2DAsset.Size
-    //         ), 
-    //         new Rectangle(translation, scale), 
-    //         rotation,
-    //         rotationOrigin
-    //     );
-    // }
+    private void ProcessChildEntities(IActor2D parent, IActor2D child) {
+        if (!instanceAtlas.TryGetOrCreateSingleton(child.Sprite2D.TextureAssetId, out ITexture2DAsset? texture2DAsset) 
+            || texture2DAsset.Texture is null) return;
+    
+        Vector2 translation = child.Transform2D.Translation + parent.Transform2D.Translation;
+        Vector2 scale = child.Transform2D.Scale * parent.Transform2D.Scale;
+        float rotation = child.Transform2D.Rotation + parent.Transform2D.Rotation;
+        Vector2 rotationOrigin = child.Transform2D.RotationOrigin + parent.Transform2D.RotationOrigin;
+    
+        DrawEntityTexture(
+            (Texture2D)texture2DAsset.Texture, 
+            child.Sprite2D.UvAndSourceCalculated ??= new Rectangle(
+                child.Sprite2D.UvSelection.Position, 
+                child.Sprite2D.UvSelection.Size * texture2DAsset.Size
+            ), 
+            new Rectangle(translation, scale), 
+            rotation,
+            rotationOrigin
+        );
+    }
 
     private void ProcessOriginalEntity(IActor2D originalEntity) {
         if (!instanceAtlas.TryGetOrCreateSingleton(originalEntity.Sprite2D.TextureAssetId, out ITexture2DAsset? texture2DAsset) 

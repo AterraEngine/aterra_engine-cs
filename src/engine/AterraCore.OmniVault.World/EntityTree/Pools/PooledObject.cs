@@ -1,14 +1,16 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraLib.Nexities.Entities;
+using Microsoft.Extensions.ObjectPool;
+
+namespace AterraCore.OmniVault.World.EntityTree.Pools;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Serializable]
-[UsedImplicitly]
-[Entity<IActor2D>(AssetIdLib.AterraCore.Entities.Player2D)]
-public class Player2D(ITransform2D transform2D, ISprite2D sprite2D, IDirectChildren childEntities, IImpulse2D impulse2D) 
-    : Actor2D(transform2D, sprite2D, childEntities, impulse2D), IPlayer2D;
 
+public readonly struct PooledObject<T>(ObjectPool<T> pool) : IDisposable where T : class {
+    public T Item { get; } = pool.Get();
+    public void Dispose() => pool.Return(Item);
+
+}

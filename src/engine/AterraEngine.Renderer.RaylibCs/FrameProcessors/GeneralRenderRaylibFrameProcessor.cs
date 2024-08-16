@@ -1,16 +1,11 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Nexities.Levels;
 using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.DataCollector;
 using AterraCore.Contracts.OmniVault.World;
-using AterraCore.DI;
-using AterraLib.Nexities.Systems.Rendering;
-using CodeOfChaos.Extensions.Serilog;
 using JetBrains.Annotations;
 using Serilog;
-using Serilog.Core;
 
 namespace AterraEngine.Renderer.RaylibCs.FrameProcessors;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -29,7 +24,7 @@ public class GeneralRenderRaylibFrameProcessor(IAterraCoreWorld world, IDataColl
         
         if (!world.TryGetActiveLevel(out IActiveLevel? level)) return;
         DrawText($"DUCKS : {level.RawLevelData.ChildrenIDs.Count}",0, 100, 32, Color.DarkBlue);
-        DrawText($"ID : {level.RawLevelData.AssetId}",0, 150, 32, Color.DarkBlue);
+        DrawText($"ID : {level.RawLevelData.AssetId}",0, 150, 12, Color.DarkBlue);
     }
     private double GetTps() => dataCollector.Tps;
 
@@ -40,7 +35,6 @@ public class GeneralRenderRaylibFrameProcessor(IAterraCoreWorld world, IDataColl
         // Get all logic systems required by active level
         foreach (INexitiesSystem system in level.RenderSystems) {
             system.Tick(world);
-            logger.Debug("system {s}", system.AssetId);
         }
     }
 }

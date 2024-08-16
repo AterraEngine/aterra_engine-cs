@@ -39,7 +39,7 @@ public static class AssetIdLib {
         public static class SystemsLogic {
             private const string ThisClass = nameof(SystemsLogic);
             
-            public const string ApplyImpluse = $"{ThisSection}:{ThisClass}/{nameof(ApplyImpluse)}";
+            public const string ApplyImpulse = $"{ThisSection}:{ThisClass}/{nameof(ApplyImpulse)}";
             public const string PlayerController = $"{ThisSection}:{ThisClass}/{nameof(PlayerController)}";
         }
         #endregion

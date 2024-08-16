@@ -1,12 +1,9 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Nexities.Levels;
 using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading.Logic;
-using AterraCore.DI;
-using AterraLib.Nexities.Systems.Logic;
 using JetBrains.Annotations;
 using Serilog;
 using System.Diagnostics;

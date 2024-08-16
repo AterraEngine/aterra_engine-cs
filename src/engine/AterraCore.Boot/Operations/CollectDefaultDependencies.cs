@@ -17,6 +17,7 @@ using AterraCore.OmniVault.DataCollector;
 using AterraCore.OmniVault.Textures;
 using AterraCore.OmniVault.World;
 using AterraCore.OmniVault.World.EntityTree;
+using AterraCore.OmniVault.World.EntityTree.Pools;
 using AterraEngine;
 using AterraEngine.Renderer.RaylibCs;
 using AterraEngine.Threading;
@@ -60,6 +61,7 @@ public class CollectDefaultDependencies : IBootOperation {
             NewServiceDescriptor<IAterraCoreWorld, AterraCoreWorld>(ServiceLifetime.Singleton),
             
             NewServiceDescriptor<IEntityTreeFactory, EntityTreeFactory>(ServiceLifetime.Singleton),
+            NewServiceDescriptor<IEntityTreePools, EntityTreePools>(ServiceLifetime.Singleton),
             #endregion
             
             NewServiceDescriptor<ILogicEventManager, LogicEventManager>(ServiceLifetime.Singleton),
