@@ -11,7 +11,6 @@ namespace AterraCore.OmniVault.World.EntityTree.Pools;
 // ---------------------------------------------------------------------------------------------------------------------
 
 public class StackPooledObjectPolicy(int initialCapacity) : PooledObjectPolicy<Stack<IEntityNode>> {
-
     public override Stack<IEntityNode> Create() => new(initialCapacity);
     public override bool Return(Stack<IEntityNode> obj) {
         obj.Clear();

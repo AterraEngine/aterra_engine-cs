@@ -10,7 +10,6 @@ namespace AterraCore.OmniVault.World.EntityTree.Pools;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class QueuePooledObjectPolicy(int initialCapacity) : PooledObjectPolicy<Queue<IEntityNode>> {
-
     public override Queue<IEntityNode> Create() => new(initialCapacity);
     public override bool Return(Queue<IEntityNode> obj) {
         obj.Clear();
