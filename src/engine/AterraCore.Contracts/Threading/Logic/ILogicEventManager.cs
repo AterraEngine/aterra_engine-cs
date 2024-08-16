@@ -15,6 +15,7 @@ public interface ILogicEventManager {
     public event EventHandler<IChangeActiveLevelEventArgs>? EventChangeActiveLevel;
     public event EventHandler<double>? EventActualTps;
     public event EventHandler<double>? EventDeltaTps;
+    public event EventHandler<int>? EventFps;
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
@@ -25,4 +26,5 @@ public interface ILogicEventManager {
     public void InvokeChangeActiveLevel(IChangeActiveLevelEventArgs eventArgs);
     public void InvokeUpdateActualTps(double actualTps);
     public void InvokeUpdateDeltaTps(double actualTps);
+    public void InvokeUpdateFps(int fps);
 }

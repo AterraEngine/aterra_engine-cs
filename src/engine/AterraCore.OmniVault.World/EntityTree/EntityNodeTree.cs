@@ -106,9 +106,10 @@ public readonly struct EntityNodeTree(IEntityNode root, IEntityTreePools entityT
             for (int i = node.Children.Count - 1; i >= 0; i--)
                 stack.Push((node, node.Children[i]));
         }
+        
+        foreach ((IAssetInstance? Parent, IAssetInstance Child) asset in assets) 
+            yield return asset;
 
-        for (int i = assets.Count - 1; i >= 0; i--)
-            yield return assets[i];
     }
     #endregion
     

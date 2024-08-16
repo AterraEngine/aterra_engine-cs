@@ -12,7 +12,7 @@ namespace AterraLib.Nexities.Systems.Rendering;
 [System(AssetIdLib.AterraCore.SystemsRendering.Render2D, CoreTags.RenderSystem)]
 [UsedImplicitly]
 public class Render2D(IAssetInstanceAtlas instanceAtlas) : NexitiesSystemWithParents<IHasTransform2D,IActor2D> {
-    protected override bool EntitiesReversed => true;
+    protected override bool EntitiesReversed => false;
     private Dictionary<AssetId, ITexture2DAsset> _texturesCache = new();
     
     // -----------------------------------------------------------------------------------------------------------------
