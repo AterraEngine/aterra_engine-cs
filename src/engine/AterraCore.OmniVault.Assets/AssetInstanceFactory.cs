@@ -7,11 +7,13 @@ using AterraCore.Contracts.OmniVault.Assets.Attributes;
 using AterraCore.DI;
 using JetBrains.Annotations;
 using Serilog;
-using Serilog.Core;
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Reflection;
+#if !DEBUG
+using System.Security;
+#endif
 
 namespace AterraCore.OmniVault.Assets;
 
@@ -146,24 +148,6 @@ public class AssetInstanceFactory(ILogger logger) : IAssetInstanceFactory {
             ;
     }
     private static object CreateReferencedAssetIdNexitiesAsset(ParameterInfo parameter) {
-        IAssetInstanceAtlas instanceAtlas = EngineServices.GetAssetInstanceAtlas();
-        IAssetAtlas assetAtlas = EngineServices.GetAssetAtlas();
-        
-        var referenceAs = parameter.GetCustomAttribute<IReferenceAsAttribute>()!;
-        Type assetType = assetAtlas.GetAssetType(referenceAs.AssetId);
-        
-        return instanceAtlas.GetOrCreate<IAssetInstance>(assetType);
-    }
-    #endregion
-
-    #region Referenced Asset Id Nexities Asset
-    private static bool IsNexitiesSystem(ParameterInfo parameter) {
-        Type paramType = parameter.ParameterType;
-        return typeof(IAssetInstance).IsAssignableFrom(paramType)
-               && parameter.GetCustomAttributes<IReferenceAsAttribute>().Any()
-            ;
-    }
-    private static object CreateNexitiesSystem(ParameterInfo parameter) {
         IAssetInstanceAtlas instanceAtlas = EngineServices.GetAssetInstanceAtlas();
         IAssetAtlas assetAtlas = EngineServices.GetAssetAtlas();
         

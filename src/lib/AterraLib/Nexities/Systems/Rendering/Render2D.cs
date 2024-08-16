@@ -12,64 +12,73 @@ namespace AterraLib.Nexities.Systems.Rendering;
 [System(AssetIdLib.AterraCore.SystemsRendering.Render2D, CoreTags.RenderSystem)]
 [UsedImplicitly]
 public class Render2D(IAssetInstanceAtlas instanceAtlas) : NexitiesSystemWithParents<IHasTransform2D,IActor2D> {
-    protected override bool EntitiesReversed => false;
-    private Dictionary<AssetId, ITexture2DAsset> _texturesCache = new();
+    protected override bool EntitiesReversed => true;
+    private readonly Dictionary<AssetId, ITexture2DAsset> _texturesCache = new();
+    private (IHasTransform2D? Parent, IActor2D Child)[]? _entityArray;
     
     // -----------------------------------------------------------------------------------------------------------------
     // Helper Methods
     // -----------------------------------------------------------------------------------------------------------------
-    private static void DrawEntityTexture(Texture2D texture, Rectangle source, Rectangle dest, float rotation, Vector2 rotationOrigin) {
-        Raylib.DrawTexturePro(texture, source, dest, rotationOrigin, rotation, Color.White);
+    private ITexture2DAsset? GetTextureAsset(AssetId textureAssetId) {
+        if (_texturesCache.TryGetValue(textureAssetId, out ITexture2DAsset? textureAsset)) return textureAsset;
+        if (instanceAtlas.TryGetOrCreateSingleton(textureAssetId, out textureAsset)) _texturesCache[textureAssetId] = textureAsset;
+        return textureAsset;
     }
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public override void Tick(IAterraCoreWorld world) {
-        foreach ((IActor2D? Parent, IActor2D Child) entity in GetEntities(world)) {
-            if (entity.Parent is not null) ProcessChildEntities(entity.Parent, entity.Child);
+        (IHasTransform2D? Parent, IActor2D Child)[] entities =_entityArray ??= GetEntities(world).ToArray();
+
+        foreach ((IHasTransform2D? Parent, IActor2D Child) entity in entities.AsSpan()) {
+            if (entity.Parent is not null) {
+                ProcessChildEntities(entity.Parent, entity.Child);
+            }
             ProcessOriginalEntity(entity.Child);
         }
     }
     
-    private void ProcessChildEntities(IActor2D parent, IActor2D child) {
-        if (!_texturesCache.TryGetValue(child.Sprite2D.TextureAssetId, out ITexture2DAsset? textureAsset)) {
-            if (instanceAtlas.TryGetOrCreateSingleton(child.Sprite2D.TextureAssetId, out textureAsset)) 
-                _texturesCache[child.Sprite2D.TextureAssetId] = textureAsset;
-            return;
-        }
-        if (!textureAsset.TryGetTexture(out Texture2D texture)) return;
+    private void ProcessChildEntities(IHasTransform2D parent, IActor2D child) {
+        ITexture2DAsset? textureAsset = GetTextureAsset(child.Sprite2D.TextureAssetId);
+        if (textureAsset is null || !textureAsset.TryGetTexture(out Texture2D texture)) return;
         
-        Vector2 translation = child.Transform2D.Translation + parent.Transform2D.Translation;
-        Vector2 scale = child.Transform2D.Scale * parent.Transform2D.Scale;
-        float rotation = child.Transform2D.Rotation + parent.Transform2D.Rotation;
-        Vector2 rotationOrigin = child.Transform2D.RotationOrigin + parent.Transform2D.RotationOrigin;
-    
-        DrawEntityTexture(
-            texture, 
-            child.Sprite2D.UvAndSourceCalculated ??= new Rectangle(
-                child.Sprite2D.UvSelection.Position, 
-                child.Sprite2D.UvSelection.Size * textureAsset.Size
-            ), 
-            new Rectangle(translation, scale), 
-            rotation,
-            rotationOrigin
+        Rectangle sourceRectangle = child.Sprite2D.UvAndSourceCalculated ??= new Rectangle(
+            child.Sprite2D.UvSelection.Position,
+            child.Sprite2D.UvSelection.Size * textureAsset.Size
+        );
+
+        var destRectangle = new Rectangle(
+            child.Transform2D.Translation + parent.Transform2D.Translation, 
+            child.Transform2D.Scale * parent.Transform2D.Scale
+        );
+
+        Raylib.DrawTexturePro(
+            texture: texture, 
+            source: sourceRectangle, 
+            dest: destRectangle, 
+            origin: child.Transform2D.RotationOrigin + parent.Transform2D.RotationOrigin, 
+            rotation: child.Transform2D.Rotation + parent.Transform2D.Rotation, 
+            tint: Color.White
         );
     }
 
     private void ProcessOriginalEntity(IActor2D originalEntity) {
-        if (!_texturesCache.TryGetValue(originalEntity.Sprite2D.TextureAssetId, out ITexture2DAsset? textureAsset)) {
-            if (instanceAtlas.TryGetOrCreateSingleton(originalEntity.Sprite2D.TextureAssetId, out textureAsset)) 
-                _texturesCache[originalEntity.Sprite2D.TextureAssetId] = textureAsset;
-            return;
-        }
-        if (!textureAsset.TryGetTexture(out Texture2D texture)) return;
-        
+        ITexture2DAsset? textureAsset = GetTextureAsset(originalEntity.Sprite2D.TextureAssetId);
+        if (textureAsset is null || !textureAsset.TryGetTexture(out Texture2D texture)) return;
+
         Rectangle sourceRectangle = originalEntity.Sprite2D.UvAndSourceCalculated ??= new Rectangle(
-            originalEntity.Sprite2D.UvSelection.Position, 
+            originalEntity.Sprite2D.UvSelection.Position,
             originalEntity.Sprite2D.UvSelection.Size * textureAsset.Size
         );
-
-        DrawEntityTexture(texture, sourceRectangle, originalEntity.Transform2D.DestinationRectangle, originalEntity.Transform2D.Rotation, originalEntity.Transform2D.RotationOrigin);
+        
+        Raylib.DrawTexturePro(
+            texture: texture, 
+            source: sourceRectangle, 
+            dest: originalEntity.Transform2D.DestinationRectangle, 
+            origin: originalEntity.Transform2D.RotationOrigin, 
+            rotation: originalEntity.Transform2D.Rotation, 
+            tint: Color.White
+        );
     }
 }
