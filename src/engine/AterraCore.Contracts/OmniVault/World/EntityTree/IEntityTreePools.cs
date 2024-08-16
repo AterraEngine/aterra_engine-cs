@@ -10,6 +10,8 @@ namespace AterraCore.Contracts.OmniVault.World.EntityTree;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IEntityTreePools {
+    ObjectPool<Stack<(IEntityNode ParentNode, Ulid InstanceId)>> FactoryStack { get;}
+    
     ObjectPool<Queue<IEntityNode>> QueuePool {get;}
     ObjectPool<Stack<IEntityNode>> StackPool {get;}
     ObjectPool<List<IAssetInstance>> ListPool {get;}

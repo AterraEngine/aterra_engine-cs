@@ -4,6 +4,7 @@
 using AterraCore.Contracts.Nexities.Components;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World.EntityTree;
+using AterraCore.OmniVault.World.EntityTree.Pools;
 using JetBrains.Annotations;
 
 namespace AterraCore.OmniVault.World.EntityTree;
@@ -19,13 +20,26 @@ public class EntityTreeFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreePoo
     private EntityNode PopulateNodes(Ulid instanceId) {
         if (!instanceAtlas.TryGet(instanceId, out IAssetInstance? instance)) throw new ArgumentException("Node was not a IAssetInstance");
 
-        EntityNode node = new(instance);
-        if (instance is not IHasDirectChildren hasDirectChildren) return node;
-
-        foreach (Ulid childId in hasDirectChildren.ChildrenIDs.Children) {
-            node.Children.Add(PopulateNodes(childId));
+        var rootNode = new EntityNode(instance);
+        if (instance is not IHasDirectChildren) return rootNode;
+        
+        using var stackPool = new PooledResource<Stack<(IEntityNode ParentNode, Ulid InstanceId)>>(entityTreePools.FactoryStack);
+        Stack<(IEntityNode ParentNode, Ulid InstanceId)> stack = stackPool.Item;
+        
+        stack.Push((rootNode, instanceId));
+        while (stack.Count > 0) {
+            (IEntityNode parentNode, Ulid ulid) = stack.Pop();
+            
+            if (!instanceAtlas.TryGet(ulid, out IAssetInstance? childInstance)) continue; // the asset wasn't managed by AtteraEngine
+            var currentNode = new EntityNode(childInstance);
+            parentNode.Children.Add(currentNode);
+            
+            if (childInstance is not IHasDirectChildren hasDirectChildren) continue;
+            foreach (Ulid grandChildId in hasDirectChildren.ChildrenIDs.Children) {
+               stack.Push((currentNode, grandChildId));
+            }
         }
 
-        return node;
+        return rootNode;
     }
 }

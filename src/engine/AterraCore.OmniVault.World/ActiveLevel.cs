@@ -25,7 +25,6 @@ public readonly struct ActiveLevel(INexitiesLevel level) : IActiveLevel {
     // -----------------------------------------------------------------------------------------------------------------
     private static INexitiesSystem[] GetNexitiesSystems(IReadOnlyCollection<AssetId> systemIds) {
         var instanceAtlas = EngineServices.GetService<IAssetInstanceAtlas>();
-        var assetAtlas = EngineServices.GetService<IAssetAtlas>();
         
         var systems = new List<INexitiesSystem>(systemIds.Count);
         foreach (AssetId assetId in systemIds) {

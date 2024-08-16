@@ -37,6 +37,7 @@ public class EngineServiceBuilder(ILogger logger) : IEngineServiceBuilder {
             serviceDescriptor.ImplementationType ?? serviceDescriptor.ImplementationInstance ?? serviceDescriptor.ServiceType
         );
     }
+    
     /// <summary>
     /// Assigns multiple <see cref="ServiceDescriptor"/> objects to the <see cref="IServiceCollection"/> of the <see cref="EngineServiceBuilder"/>.
     /// </summary>
