@@ -33,6 +33,7 @@ public static class AssetIdLib {
             public const string EmptyLevel = $"{ThisSection}:{ThisClass}/{nameof(EmptyLevel)}";
             public const string Hud = $"{ThisSection}:{ThisClass}/{nameof(Hud)}";
             public const string Player2D = $"{ThisSection}:{ThisClass}/{nameof(Player2D)}";
+            public const string LevelRoot = $"{ThisSection}:{ThisClass}/{nameof(LevelRoot)}";
         }
         #endregion
         #region Systems - Logic

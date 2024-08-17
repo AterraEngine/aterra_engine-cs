@@ -14,8 +14,8 @@ namespace AterraCore.OmniVault.World;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public readonly struct ActiveLevel(INexitiesLevel level) : IActiveLevel {
-    public INexitiesLevel RawLevelData { get;} = level;
+public readonly struct ActiveLevel(INexitiesLevel2D level) : IActiveLevel {
+    public INexitiesLevel2D RawLevelData { get;} = level;
     public IReadOnlyCollection<INexitiesSystem> LogicSystems { get; } = GetNexitiesSystems(level.NexitiesSystemIds.LogicSystemIds).AsReadOnly();
     public IReadOnlyCollection<INexitiesSystem> RenderSystems { get; } = GetNexitiesSystems(level.NexitiesSystemIds.RenderSystemIds).AsReadOnly();
     public IEntityNodeTree ActiveEntityTree { get; } = GetActiveEntityTree(level.InstanceId);

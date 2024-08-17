@@ -30,7 +30,6 @@ public class Render2D(IAssetInstanceAtlas instanceAtlas) : NexitiesSystemWithPar
     // -----------------------------------------------------------------------------------------------------------------
     public override void Tick(IAterraCoreWorld world) {
         (IHasTransform2D? Parent, IActor2D Child)[] entities =_entityArray ??= GetEntities(world).ToArray();
-
         foreach ((IHasTransform2D? Parent, IActor2D Child) entity in entities.AsSpan()) {
             if (entity.Parent is not null) {
                 ProcessChildEntities(entity.Parent, entity.Child);

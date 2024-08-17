@@ -9,7 +9,7 @@ namespace AterraCore.Contracts.Nexities.Levels;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface INexitiesLevel : INexitiesEntity,
+public interface INexitiesLevel2D : INexitiesEntity,
     IHasDirectChildren,
     IHasSystemIds
 ;

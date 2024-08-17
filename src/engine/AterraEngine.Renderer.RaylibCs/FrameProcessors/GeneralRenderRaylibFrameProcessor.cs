@@ -6,7 +6,6 @@ using AterraCore.Contracts.OmniVault.DataCollector;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading.Logic;
 using JetBrains.Annotations;
-using Serilog;
 
 namespace AterraEngine.Renderer.RaylibCs.FrameProcessors;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -42,8 +41,7 @@ public class GeneralRenderRaylibFrameProcessor(IAterraCoreWorld world, IDataColl
         if (!world.TryGetActiveLevel(out IActiveLevel? level)) return;
         
         // Get all logic systems required by active level
-        foreach (INexitiesSystem system in level.RenderSystems) {
+        foreach (INexitiesSystem system in level.RenderSystems) 
             system.Tick(world);
-        }
     }
 }

@@ -9,9 +9,9 @@ namespace AterraCore.OmniVault.World.EntityTree.Pools;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class ParentedListPooledObjectPolicy(int initialCapacity) : PooledObjectPolicy<List<(IAssetInstance? Parent, IAssetInstance Child)>> {
-    public override List<(IAssetInstance? Parent, IAssetInstance Child)> Create() => new(initialCapacity);
-    public override bool Return(List<(IAssetInstance? Parent, IAssetInstance Child)> obj) {
+public class ParentedStackAssetInstancePooledObjectPolicy(int initialCapacity) : PooledObjectPolicy<Stack<(IAssetInstance? Parent, IAssetInstance Child)>> {
+    public override Stack<(IAssetInstance? Parent, IAssetInstance Child)> Create() => new(initialCapacity);
+    public override bool Return(Stack<(IAssetInstance? Parent, IAssetInstance Child)> obj) {
         obj.Clear();
         return true;
     }

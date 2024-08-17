@@ -20,16 +20,15 @@ public class LogicThreadProcessor(
     ILogicEventManager eventManager
 ) : AbstractThread {
     private ILogger Logger { get; } = logger.ForContext<LogicThreadProcessor>();
-    
-    public int TargetTicksPerSecond { get; set; } = 20; // TPS
+
+    private int TargetTicksPerSecond { get; set; } = 20; // TPS
     private double MillisecondsPerTick => 1000.0 / TargetTicksPerSecond;
-    public bool IsStarted { get; private set; }
-    public bool IsRunning { get; private set; } = true;
-    public bool IsFinished { get; private set; }
-    public double ActualTps { get; private set; }
-    public double DeltaTps { get; private set; }
     
-    public List<Action> EndOfTickActions { get; set; } = [];
+    private bool IsStarted { get; set; }
+    private bool IsRunning { get; set; } = true;
+    public bool IsFinished { get; private set; }
+
+    private List<Action> EndOfTickActions { get; set; } = [];
 
     private Stopwatch TickStopwatch { get; } = Stopwatch.StartNew();
     private Stopwatch TpsStopwatch { get; } = Stopwatch.StartNew();
@@ -87,21 +86,19 @@ public class LogicThreadProcessor(
 
     private void SleepUntilEndOfTick() {
         TickStopwatch.Stop();
-        DeltaTps = TickStopwatch.Elapsed.TotalMilliseconds;
-        eventManager.InvokeUpdateDeltaTps(DeltaTps);
+        double deltaTps = TickStopwatch.Elapsed.TotalMilliseconds;
+        eventManager.InvokeUpdateDeltaTps(deltaTps);
         
-        double sleepTime = MillisecondsPerTick - DeltaTps;
+        double sleepTime = MillisecondsPerTick - deltaTps;
         if (sleepTime > 0) Thread.Sleep((int)sleepTime);
     }
 
     private void CalculateActualTps() {
         if (TpsStopwatch.ElapsedMilliseconds < 1000) return;
         
-        ActualTps = _ticks;
+        eventManager.InvokeUpdateActualTps(_ticks);
         _ticks = 0;
         TpsStopwatch.Restart();
-        
-        eventManager.InvokeUpdateActualTps(ActualTps);
     }
     
     #endregion

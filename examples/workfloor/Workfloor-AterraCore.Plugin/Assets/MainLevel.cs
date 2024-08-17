@@ -28,7 +28,7 @@ public class MainLevelSystemIds : SystemIds {
     ];
 }
 
-[Entity<INexitiesLevel>("Workfloor:Levels/MainLevel", CoreTags.Singleton)]
+[Entity<INexitiesLevel2D>("Workfloor:Levels/MainLevel", CoreTags.Singleton)]
 [UsedImplicitly]
 public class MainLevel(
     IDirectChildren assetTree, 

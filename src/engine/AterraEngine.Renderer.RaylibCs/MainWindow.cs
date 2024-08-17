@@ -30,8 +30,6 @@ public class MainWindow(IApplicationStageManager applicationStageManager) : IMai
         // | ConfigFlags.MousePassthroughWindow
         );
         
-        // SetTargetFPS(240);
-        
         InitWindow(Width, Height, Name);
         SetWindowMonitor(1);// WArn dev stuff
 

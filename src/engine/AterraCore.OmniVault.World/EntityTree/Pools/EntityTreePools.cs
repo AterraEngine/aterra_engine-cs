@@ -27,16 +27,16 @@ public class EntityTreePools : IEntityTreePools {
     private ObjectPool<Stack<IEntityNode>>? _stackPool;
     public ObjectPool<Stack<IEntityNode>> StackPool => 
         _stackPool ??= _objectPoolProvider.Create(new StackPooledObjectPolicy(InitialCapacity));
-        
-    private ObjectPool<List<IAssetInstance>>? _listPool;
-    public ObjectPool<List<IAssetInstance>> ListPool => 
-        _listPool ??= _objectPoolProvider.Create(new ListPooledObjectPolicy(InitialCapacity));
+    
+    private ObjectPool<Queue<IAssetInstance>>? _queueAssetInstancePool;
+    public ObjectPool<Queue<IAssetInstance>> QueueAssetInstancePool => 
+        _queueAssetInstancePool ??= _objectPoolProvider.Create(new QueueAssetInstancePooledObjectPolicy(InitialCapacity));
         
     private ObjectPool<Stack<(IEntityNode? Parent, IEntityNode Node)>>? _parentedStackPool;
     public ObjectPool<Stack<(IEntityNode? Parent, IEntityNode Node)>> ParentedStackPool => 
         _parentedStackPool ??= _objectPoolProvider.Create(new ParentedStackPooledObjectPolicy(InitialCapacity));
         
-    private ObjectPool<List<(IAssetInstance? Parent, IAssetInstance Child)>>? _parentedListPool;
-    public ObjectPool<List<(IAssetInstance? Parent, IAssetInstance Child)>> ParentedListPool => 
-        _parentedListPool ??= _objectPoolProvider.Create(new ParentedListPooledObjectPolicy(InitialCapacity));
+    private ObjectPool<Stack<(IAssetInstance? Parent, IAssetInstance Child)>>? _parentedStackAssetInstanceListPool;
+    public ObjectPool<Stack<(IAssetInstance? Parent, IAssetInstance Node)>> ParentedStackAssetInstancePool => 
+        _parentedStackAssetInstanceListPool ??= _objectPoolProvider.Create(new ParentedStackAssetInstancePooledObjectPolicy(InitialCapacity));
 }

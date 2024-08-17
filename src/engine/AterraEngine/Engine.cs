@@ -105,7 +105,7 @@ public class Engine(
         }
         
         // -------------------------------------------------------------------------------------------------------------
-        if(!instanceAtlas.TryGetOrCreateSingleton("Workfloor:Levels/MainLevel", out INexitiesLevel? level)) return;
+        if(!instanceAtlas.TryGetOrCreateSingleton("Workfloor:Levels/MainLevel", out INexitiesLevel2D? level)) return;
         
         logicEventManager.InvokeStart();
         
@@ -137,6 +137,11 @@ public class Engine(
         playerAddendum.Transform2D.Translation = new Vector2(10,10);
         playerAddendum.Transform2D.Scale = new Vector2(1, 1);
         player2D.ChildrenIDs.TryAddFirst(playerAddendum.InstanceId);
+        
+        if (!instanceAtlas.TryCreate("Workfloor:ActorDuckyHype", out IActor2D? playerAddendum2)) return;
+        playerAddendum.Transform2D.Translation = new Vector2(10,10);
+        playerAddendum.Transform2D.Scale = new Vector2(1, 1);
+        playerAddendum.ChildrenIDs.TryAddFirst(playerAddendum2.InstanceId);
         
         if (!world.TryChangeActiveLevel("Workfloor:Levels/MainLevel")) throw new ApplicationException("Failed to change active level");
         logger.Debug("Spawned {x} entities", level.ChildrenIDs.Count);

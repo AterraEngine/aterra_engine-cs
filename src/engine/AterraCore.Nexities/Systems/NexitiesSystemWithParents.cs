@@ -16,8 +16,8 @@ public abstract class NexitiesSystemWithParents<TParent, TChild> : AssetInstance
     where TParent : class, IAssetInstance 
     where TChild : class, IAssetInstance
 {
-    private List<(TParent? Parent,TChild Child)>? _entitiesBuffer;
-    protected virtual Predicate<(TParent? Parent,TChild Child)> Filter { get; } = _ => true;
+    private List<(TParent Parent,TChild Child)>? _entitiesBuffer;
+    protected virtual Predicate<(TParent Parent,TChild Child)> Filter { get; } = _ => true;
     protected virtual bool EntitiesReversed => false;
     protected virtual bool Uncached => false;
     

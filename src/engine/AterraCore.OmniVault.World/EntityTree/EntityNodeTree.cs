@@ -12,7 +12,7 @@ namespace AterraCore.OmniVault.World.EntityTree;
 /// <summary>
 /// The `EntityNodeTree` struct represents a hierarchical tree structure of entity nodes in an entity system.
 /// </summary>
-public readonly struct EntityNodeTree(IEntityNode root, IEntityTreePools entityTreePools) : IEntityNodeTree {
+public readonly struct EntityNodeTree(IEntityNode root, IEntityTreePools poolProvider) : IEntityNodeTree {
     /// <summary>
     /// Represents a tree structure of entity nodes with a root node.
     /// </summary>
@@ -27,12 +27,13 @@ public readonly struct EntityNodeTree(IEntityNode root, IEntityTreePools entityT
     /// </summary>
     /// <returns>A collection of asset instances in the entity tree.</returns>
     public IEnumerable<IAssetInstance> GetAsFlat() {
-        using var stackPool = new PooledResource<Stack<IEntityNode>>(entityTreePools.StackPool);
+        using var stackPool = new PooledResource<Stack<IEntityNode>>(poolProvider.StackPool);
+        
         Stack<IEntityNode> stack = stackPool.Item;
         
         stack.Push(Root);
-        while (stack.Count > 0) {
-            IEntityNode currentNode = stack.Pop();
+        
+        while (stack.TryPop(out IEntityNode? currentNode)){
             yield return currentNode.Value;
 
             for (int i = currentNode.Children.Count - 1; i >= 0; i--) 
@@ -47,22 +48,23 @@ public readonly struct EntityNodeTree(IEntityNode root, IEntityTreePools entityT
     /// </summary>
     /// <returns>A collection of asset instances in the entity tree in reverse order.</returns>
     public IEnumerable<IAssetInstance> GetAsFlatReverse() {
-        using var queuePool = new PooledResource<Queue<IEntityNode>>(entityTreePools.QueuePool);
-        using var assetsPool = new PooledResource<List<IAssetInstance>>(entityTreePools.ListPool);
+        using var queuePool = new PooledResource<Queue<IEntityNode>>(poolProvider.QueuePool);
+        using var assetsPool = new PooledResource<Queue<IAssetInstance>>(poolProvider.QueueAssetInstancePool);
+        
         Queue<IEntityNode> queue = queuePool.Item;
-        List<IAssetInstance> assets = assetsPool.Item;
+        Queue<IAssetInstance> assets = assetsPool.Item;
 
         queue.Enqueue(Root);
-        while (queue.Count > 0) {
-            IEntityNode currentNode = queue.Dequeue();
-            assets.Add(currentNode.Value);
+        
+        while (queue.TryDequeue(out IEntityNode? currentNode)) {
+            assets.Enqueue(currentNode.Value);
 
             foreach (IEntityNode child in currentNode.Children) 
                 queue.Enqueue(child);
         }
 
-        for (int i = assets.Count - 1; i >= 0; i--)
-            yield return assets[i];
+        while(assets.TryDequeue(out IAssetInstance? asset)) 
+            yield return asset;
     }
     #endregion
     #region FlatWithParent | root -> child -> n-grandchildren
@@ -70,17 +72,19 @@ public readonly struct EntityNodeTree(IEntityNode root, IEntityTreePools entityT
     /// Retrieves all assets in the entity tree as a flattened collection along with their parent assets.
     /// </summary>
     /// <returns>A collection of tuples, each containing a parent asset instance and its child asset instance.</returns>
-    public IEnumerable<(IAssetInstance? Parent,IAssetInstance Child)> GetAsFlatWithParent() {
-        using var stackPool = new PooledResource<Stack<(IEntityNode? Parent, IEntityNode Child)>>(entityTreePools.ParentedStackPool);
+    public IEnumerable<(IAssetInstance? Parent, IAssetInstance Child)> GetAsFlatWithParent() {
+        using var stackPool = new PooledResource<Stack<(IEntityNode? Parent, IEntityNode Child)>>(poolProvider.ParentedStackPool);
+        
         Stack<(IEntityNode? Parent, IEntityNode Child)> stack = stackPool.Item;
         
         stack.Push((null, Root));
-        while (stack.Count > 0) {
-            (IEntityNode? Parent, IEntityNode Child) currentNode = stack.Pop();
-            yield return (currentNode.Parent?.Value, currentNode.Child.Value);
+        
+        while (stack.TryPop(out (IEntityNode? Parent, IEntityNode Node) t)) {
+            (IEntityNode? parent, IEntityNode child) = t;
+            yield return (parent?.Value, child.Value);
 
-            for (int i = currentNode.Child.Children.Count -1 ; i >= 0; i--)
-                stack.Push((currentNode.Child, currentNode.Child.Children[i]));
+            for (int i = child.Children.Count -1 ; i >= 0; i--)
+                stack.Push((child, child.Children[i]));
         }
     }
     #endregion
@@ -93,23 +97,26 @@ public readonly struct EntityNodeTree(IEntityNode root, IEntityTreePools entityT
     /// Each tuple contains an <see cref="IAssetInstance"/> representing the possible existing parent node and an <see cref="IAssetInstance"/> representing the child node.
     /// </returns>
     public IEnumerable<(IAssetInstance? Parent, IAssetInstance Child)> GetAsFlatReverseWithParent() {
-        using var stackPool = new PooledResource<Stack<(IEntityNode? Parent, IEntityNode Node)>>(entityTreePools.ParentedStackPool);
-        using var assetsPool = new PooledResource<List<(IAssetInstance? Parent, IAssetInstance Child)>>(entityTreePools.ParentedListPool);
+        using var stackPool = new PooledResource<Stack<(IEntityNode? Parent, IEntityNode Node)>>(poolProvider.ParentedStackPool);
+        using var assetsPool = new PooledResource<Stack<(IAssetInstance? Parent, IAssetInstance Child)>>(poolProvider.ParentedStackAssetInstancePool);
+        
+        // I'm using the usefulness of stacks, LIFO to just get all of them after the fact
         Stack<(IEntityNode? Parent, IEntityNode Node)> stack = stackPool.Item;
-        List<(IAssetInstance? Parent, IAssetInstance Child)> assets = assetsPool.Item;
+        Stack<(IAssetInstance? Parent, IAssetInstance Child)> assets = assetsPool.Item;
 
         stack.Push((null, Root));
-        while (stack.Count > 0) {
-            (IEntityNode? parent, IEntityNode node) = stack.Pop();
-            assets.Add((parent?.Value, node.Value));
-
-            for (int i = node.Children.Count - 1; i >= 0; i--)
-                stack.Push((node, node.Children[i]));
-        }
         
-        foreach ((IAssetInstance? Parent, IAssetInstance Child) asset in assets) 
-            yield return asset;
+        while (stack.TryPop(out (IEntityNode? Parent, IEntityNode Node) t)) {
+            (IEntityNode? parent, IEntityNode child) = t;
+            assets.Push((parent?.Value, child.Value));
+            
+            foreach (IEntityNode grandChild in child.Children) {
+                stack.Push((child, grandChild));
+            }
+        }
 
+        while (assets.TryPop(out (IAssetInstance? Parent, IAssetInstance Child) asset))
+            yield return asset;
     }
     #endregion
     

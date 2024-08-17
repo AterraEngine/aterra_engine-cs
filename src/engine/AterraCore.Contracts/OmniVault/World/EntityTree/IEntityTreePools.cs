@@ -14,7 +14,7 @@ public interface IEntityTreePools {
     
     ObjectPool<Queue<IEntityNode>> QueuePool {get;}
     ObjectPool<Stack<IEntityNode>> StackPool {get;}
-    ObjectPool<List<IAssetInstance>> ListPool {get;}
+    ObjectPool<Queue<IAssetInstance>> QueueAssetInstancePool {get;}
     ObjectPool<Stack<(IEntityNode? Parent, IEntityNode Node)>> ParentedStackPool {get;}
-    ObjectPool<List<(IAssetInstance? Parent, IAssetInstance Child)>> ParentedListPool {get;}
+    ObjectPool<Stack<(IAssetInstance? Parent, IAssetInstance Node)>> ParentedStackAssetInstancePool {get;}
 }

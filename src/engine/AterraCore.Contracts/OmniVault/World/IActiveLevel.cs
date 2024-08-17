@@ -11,7 +11,7 @@ namespace AterraCore.Contracts.OmniVault.World;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IActiveLevel {
-    public INexitiesLevel RawLevelData { get;}
+    public INexitiesLevel2D RawLevelData { get;}
     public IReadOnlyCollection<INexitiesSystem> LogicSystems { get; }
     public IReadOnlyCollection<INexitiesSystem> RenderSystems { get; }
     public IEntityNodeTree ActiveEntityTree { get; }
