@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Contracts.Nexities.Entities.QuickHands;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.Textures;
 using AterraCore.Contracts.OmniVault.World;
@@ -11,8 +12,7 @@ namespace AterraLib.Nexities.Systems.Rendering;
 // ---------------------------------------------------------------------------------------------------------------------
 [System(AssetIdLib.AterraCore.SystemsRendering.Render2D, CoreTags.RenderSystem)]
 [UsedImplicitly]
-public class Render2D(IAssetInstanceAtlas instanceAtlas) : NexitiesSystemWithParents<IHasTransform2D,IActor2D> {
-    protected override bool EntitiesReversed => true;
+public class Render2D(IAssetInstanceAtlas instanceAtlas) : NexitiesSystemWithParentsReversed<IHasTransform2D,IActor2D> {
     private readonly Dictionary<AssetId, ITexture2DAsset> _texturesCache = new();
     private (IHasTransform2D? Parent, IActor2D Child)[]? _entityArray;
     
@@ -28,12 +28,10 @@ public class Render2D(IAssetInstanceAtlas instanceAtlas) : NexitiesSystemWithPar
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public override void Tick(IAterraCoreWorld world) {
-        (IHasTransform2D? Parent, IActor2D Child)[] entities =_entityArray ??= GetEntities(world).ToArray();
+    public override void Tick(IActiveLevel level) {
+        (IHasTransform2D? Parent, IActor2D Child)[] entities =_entityArray ??= GetEntities(level).ToArray();
         foreach ((IHasTransform2D? Parent, IActor2D Child) entity in entities.AsSpan()) {
-            if (entity.Parent is not null) {
-                ProcessChildEntities(entity.Parent, entity.Child);
-            }
+            if (entity.Parent is not null) ProcessChildEntities(entity.Parent, entity.Child);
             ProcessOriginalEntity(entity.Child);
         }
     }

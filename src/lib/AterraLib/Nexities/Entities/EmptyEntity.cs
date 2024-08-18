@@ -8,4 +8,9 @@ namespace AterraLib.Nexities.Entities;
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
 [Entity<IEmptyEntity>(AssetIdLib.AterraCore.Entities.EmptyEntity)]
-public class EmptyEntity : NexitiesEntity, IEmptyEntity;
+public class EmptyEntity : NexitiesEntity, IEmptyEntity {
+    // -----------------------------------------------------------------------------------------------------------------
+    // Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    protected override void ComponentOverwritten() {}
+}

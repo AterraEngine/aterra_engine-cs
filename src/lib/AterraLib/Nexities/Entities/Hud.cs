@@ -7,6 +7,14 @@ namespace AterraLib.Nexities.Entities;
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
 [Entity<IHud>(AssetIdLib.AterraCore.Entities.Hud)]
-public class Hud(IDirectChildren childEntities) : NexitiesEntity(childEntities), IHud {
-    public IDirectChildren ChildrenIDs => GetComponent<IDirectChildren>(childEntities.AssetId);
+public class Hud(IDirectChildren children) : NexitiesEntity(children), IHud {
+    private IDirectChildren? _children = children;
+    public IDirectChildren ChildrenIDs => _children ??= GetComponent<IDirectChildren>();
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    protected override void ComponentOverwritten() {
+        _children = null;
+    }
 }

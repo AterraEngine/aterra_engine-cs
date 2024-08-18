@@ -8,8 +8,8 @@ namespace AterraCore.OmniVault.World.EntityTree;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public struct EntityNode(IAssetInstance asset) : IEntityNode {
-    public IAssetInstance Value { get; set; } = asset;
+public readonly struct EntityNode(IAssetInstance asset) : IEntityNode {
+    public IAssetInstance Value { get; } = asset;
     public List<IEntityNode> Children { get;} = [];
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -17,8 +17,5 @@ public struct EntityNode(IAssetInstance asset) : IEntityNode {
     // -----------------------------------------------------------------------------------------------------------------
     public void AddChild(IAssetInstance child) {
         Children.Add(new EntityNode(child));
-    }
-    public void AddChild(IEntityNode node) {
-        Children.Add(node);
     }
 }

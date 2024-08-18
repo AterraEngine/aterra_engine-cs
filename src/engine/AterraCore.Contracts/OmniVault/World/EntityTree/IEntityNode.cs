@@ -9,7 +9,7 @@ namespace AterraCore.Contracts.OmniVault.World.EntityTree;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IEntityNode {
-    public IAssetInstance Value { get; set; }
+    public IAssetInstance Value { get; }
     public List<IEntityNode> Children { get; }
 
     // -----------------------------------------------------------------------------------------------------------------

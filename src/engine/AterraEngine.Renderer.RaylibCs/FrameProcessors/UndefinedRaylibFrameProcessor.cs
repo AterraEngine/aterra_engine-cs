@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Contracts.OmniVault.World;
 using JetBrains.Annotations;
 
 namespace AterraEngine.Renderer.RaylibCs.FrameProcessors;
@@ -8,8 +9,8 @@ namespace AterraEngine.Renderer.RaylibCs.FrameProcessors;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
-public class UndefinedRaylibFrameProcessor : AbstractRaylibFrameProcessor {
-    protected override Color ClearColor { get; set; } = new(0, 0, 0, 0);
+public class UndefinedRaylibFrameProcessor(IAterraCoreWorld world) : AbstractRaylibFrameProcessor(world) {
+    protected override Color ClearColor { get; } = new(0, 0, 0, 0);
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods

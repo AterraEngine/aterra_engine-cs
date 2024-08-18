@@ -1,10 +1,12 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraCore.Contracts.Nexities.Components;
+using AterraCore.Contracts.Nexities.Components;
+
+namespace AterraCore.Contracts.Nexities.Entities.QuickHands;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IHasSprite2D {
-    public ISprite2D Sprite2D { get; }
+public interface IHasHudComponent {
+    public IHudComponent HudComponent { get; }
 }

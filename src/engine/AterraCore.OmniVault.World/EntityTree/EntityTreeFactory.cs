@@ -2,7 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.Nexities.Components;
-using AterraCore.Contracts.Nexities.Levels;
+using AterraCore.Contracts.Nexities.Entities.QuickHands;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World.EntityTree;
 using AterraCore.OmniVault.World.EntityTree.Pools;
@@ -30,7 +30,8 @@ public class EntityTreeFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreePoo
         stack.Push((rootNode, instanceId));
         while (stack.TryPop(out (IEntityNode ParentNode, Ulid InstanceId) node)) {
             (IEntityNode parentNode, Ulid ulid) = node;
-            if (!instanceAtlas.TryGet(ulid, out IAssetInstance? childInstance)) continue; // the asset wasn't managed by AtteraEngine
+            
+            if (!instanceAtlas.TryGet(ulid, out IAssetInstance? childInstance)) continue; // the asset wasn't managed by AterraEngine
             var currentNode = new EntityNode(childInstance);
             parentNode.Children.Add(currentNode);
             

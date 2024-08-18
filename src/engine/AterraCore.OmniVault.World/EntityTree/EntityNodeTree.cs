@@ -119,8 +119,43 @@ public readonly struct EntityNodeTree(IEntityNode root, IEntityTreePools poolPro
             yield return asset;
     }
     #endregion
+
+    #region TraverseDepthFirst
+    /// <summary>
+    /// Traverses the entity node tree in a depth-first manner and returns an enumerable collection of the visited entity nodes.
+    /// </summary>
+    /// <returns>An enumerable collection of <see cref="IEntityNode"/> representing the visited entity nodes in a depth-first traversal.</returns>
+    public IEnumerable<IEntityNode> TraverseDepthFirst() {
+        using var stackPool = new PooledResource<Stack<IEntityNode>>(poolProvider.StackPool);
     
+        Stack<IEntityNode> stack = stackPool.Item;
     
+        stack.Push(Root);
+        while (stack.TryPop(out IEntityNode? currentNode)) {
+            yield return currentNode;
+        
+            for (int i = currentNode.Children.Count - 1; i >= 0; i--) 
+                stack.Push(currentNode.Children[i]);
+        }
+    }
+    #endregion
+    #region TraverseBreadthFirst
+    /// <summary>
+    /// Traverses the entity node tree in a breadth-first manner, yielding each entity node.
+    /// </summary>
+    /// <returns>An IEnumerable of IEntityNode representing the entity nodes in the tree, traversed in a breadth-first manner.</returns>
+    public IEnumerable<IEntityNode> TraverseBreadthFirst() {
+        using var queuePool = new PooledResource<Queue<IEntityNode>>(poolProvider.QueuePool);
     
+        Queue<IEntityNode> queue = queuePool.Item;
     
+        queue.Enqueue(Root);
+        while (queue.TryDequeue(out IEntityNode? currentNode)) {
+            yield return currentNode;
+        
+            foreach (IEntityNode child in currentNode.Children)
+                queue.Enqueue(child);
+        }
+    }
+    #endregion
 }

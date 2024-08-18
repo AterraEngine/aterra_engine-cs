@@ -9,5 +9,5 @@ namespace AterraCore.Contracts.Nexities.Systems;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface INexitiesSystem : IAssetInstance {
-    void Tick(IAterraCoreWorld world);
+    void Tick(IActiveLevel level);
 }

@@ -12,8 +12,8 @@ namespace AterraCore.Contracts.Nexities.Entities;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface INexitiesEntity : IAssetInstance {
-    ICollection<INexitiesComponent> Components { get; }
-    ICollection<AssetId> ComponentAssetIds { get; }
+    IReadOnlyCollection<INexitiesComponent> Components { get; }
+    IReadOnlyCollection<AssetId> ComponentAssetIds { get; }
 
     T GetComponent<T>(AssetId assetId) where T : INexitiesComponent;
     T GetComponent<T>() where T : INexitiesComponent;
@@ -24,6 +24,4 @@ public interface INexitiesEntity : IAssetInstance {
     bool TryAddComponent(INexitiesComponent component);
     bool TryOverwriteComponent(INexitiesComponent component);
     bool TryOverwriteComponent(INexitiesComponent component, [NotNullWhen(true)] out INexitiesComponent? oldComponent);
-    bool TryRemoveComponent(AssetId assetId, [NotNullWhen(true)] out INexitiesComponent? oldComponent);
-    bool TryRemoveComponent(AssetId assetId);
 }

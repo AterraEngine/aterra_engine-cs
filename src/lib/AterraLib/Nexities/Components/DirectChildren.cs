@@ -1,6 +1,8 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Contracts.OmniVault.Assets;
+
 namespace AterraLib.Nexities.Components;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -45,7 +47,7 @@ public class DirectChildren : NexitiesComponent, IDirectChildren {
         }
         return true;
     }
-    
+
     public bool TryInsertBefore(Ulid id, Ulid before) {
         lock (_directChildren) {
             if (_directChildren.Contains(id) || !_directChildren.Contains(before)) return false;

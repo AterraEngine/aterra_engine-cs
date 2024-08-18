@@ -10,7 +10,7 @@ namespace AterraCore.Nexities.Systems;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class NexitiesSystem<TEntity> : AssetInstance, INexitiesSystem 
+public abstract class NexitiesSystemReversed<TEntity> : AssetInstance, INexitiesSystem 
     where TEntity : IAssetInstance
 {
     private readonly List<TEntity> _entitiesBuffer = [];
@@ -26,10 +26,10 @@ public abstract class NexitiesSystem<TEntity> : AssetInstance, INexitiesSystem
     // -----------------------------------------------------------------------------------------------------------------
     protected IEnumerable<TEntity> GetEntities(IActiveLevel level) {
         if (_entitiesBuffer.Count != 0) return _entitiesBuffer;
-        
+
         _entitiesBuffer.Clear(); // Reuse the buffer instead of allocating a new one
         
-        foreach (IAssetInstance instance in level.ActiveEntityTree.GetAsFlat()) {
+        foreach (IAssetInstance instance in level.ActiveEntityTree.GetAsFlatReverse()) {
             if (instance is TEntity assetInstance && Filter(assetInstance)) 
                 _entitiesBuffer.Add(assetInstance);
         }

@@ -11,7 +11,7 @@ namespace AterraCore.Nexities.Systems;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class NexitiesSystemWithParents<TParent, TChild> : AssetInstance, INexitiesSystem
+public abstract class NexitiesSystemWithParentsReversed<TParent, TChild> : AssetInstance, INexitiesSystem
     where TParent : class, IAssetInstance 
     where TChild : class, IAssetInstance
 {
@@ -28,8 +28,8 @@ public abstract class NexitiesSystemWithParents<TParent, TChild> : AssetInstance
     // -----------------------------------------------------------------------------------------------------------------
     protected IEnumerable<(TParent? Parent,TChild Child)> GetEntities(IActiveLevel level) {
         if (_entitiesBuffer.Count != 0) return _entitiesBuffer;
-
-        IEnumerable<(IAssetInstance? Parent, IAssetInstance Child)> entities = level.ActiveEntityTree.GetAsFlatWithParent();
+        
+        IEnumerable<(IAssetInstance? Parent, IAssetInstance Child)> entities = level.ActiveEntityTree.GetAsFlatReverseWithParent();
         
         _entitiesBuffer.Clear(); // Reuse the buffer instead of allocating a new one
         

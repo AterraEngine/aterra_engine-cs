@@ -7,17 +7,15 @@ using AterraCore.Contracts.OmniVault.World;
 using AterraCore.OmniVault.Assets;
 
 namespace AterraCore.Nexities.Systems;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class NexitiesSystemWithParents<TParent, TChild> : AssetInstance, INexitiesSystem
-    where TParent : class, IAssetInstance 
-    where TChild : class, IAssetInstance
+public abstract class NexitiesSystemUnCached<TEntity> : AssetInstance, INexitiesSystem 
+    where TEntity : IAssetInstance
 {
-    private readonly List<(TParent? Parent,TChild Child)> _entitiesBuffer = [];
-    protected virtual Predicate<(TParent? Parent,TChild Child)> Filter { get; } = _ => true;
-    
+    protected virtual Predicate<TEntity> Filter { get; } = _ => true;
+    private static bool EntitiesReversed => false;
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -26,20 +24,14 @@ public abstract class NexitiesSystemWithParents<TParent, TChild> : AssetInstance
     // -----------------------------------------------------------------------------------------------------------------
     // Helper Methods
     // -----------------------------------------------------------------------------------------------------------------
-    protected IEnumerable<(TParent? Parent,TChild Child)> GetEntities(IActiveLevel level) {
-        if (_entitiesBuffer.Count != 0) return _entitiesBuffer;
-
-        IEnumerable<(IAssetInstance? Parent, IAssetInstance Child)> entities = level.ActiveEntityTree.GetAsFlatWithParent();
+    protected IEnumerable<TEntity> GetEntities(IActiveLevel level) {
+        IEnumerable<IAssetInstance> entities = EntitiesReversed 
+            ? level.ActiveEntityTree.GetAsFlatReverse() 
+            : level.ActiveEntityTree.GetAsFlat();
         
-        _entitiesBuffer.Clear(); // Reuse the buffer instead of allocating a new one
-        
-        foreach ((IAssetInstance? Parent, IAssetInstance Child) instance in entities) {
-            var parent = instance.Parent as TParent;
-            if (instance.Child is TChild child && Filter((parent, child))) 
-                _entitiesBuffer.Add((parent, child));
+        foreach (IAssetInstance instance in entities) {
+            if (instance is TEntity assetInstance && Filter(assetInstance)) 
+                yield return assetInstance;
         }
-        
-        return _entitiesBuffer;
     }
-    
 }

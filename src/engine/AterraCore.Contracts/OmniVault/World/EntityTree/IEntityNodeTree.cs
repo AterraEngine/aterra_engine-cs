@@ -10,9 +10,11 @@ namespace AterraCore.Contracts.OmniVault.World.EntityTree;
 // ---------------------------------------------------------------------------------------------------------------------
 
 public interface IEntityNodeTree {
-    public IEnumerable<IAssetInstance> GetAsFlat();
-    public IEnumerable<IAssetInstance> GetAsFlatReverse();
+    IEnumerable<IAssetInstance> GetAsFlat();
+    IEnumerable<IAssetInstance> GetAsFlatReverse();
+    IEnumerable<(IAssetInstance? Parent, IAssetInstance Child)> GetAsFlatWithParent();
+    IEnumerable<(IAssetInstance? Parent, IAssetInstance Child)> GetAsFlatReverseWithParent();
 
-    public IEnumerable<(IAssetInstance? Parent, IAssetInstance Child)> GetAsFlatWithParent();
-    public IEnumerable<(IAssetInstance? Parent, IAssetInstance Child)> GetAsFlatReverseWithParent();
+    IEnumerable<IEntityNode> TraverseDepthFirst();
+    IEnumerable<IEntityNode> TraverseBreadthFirst();
 }

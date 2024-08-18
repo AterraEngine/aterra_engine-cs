@@ -72,7 +72,7 @@ public class LogicThreadProcessor(
         
         // Get all logic systems required by active level
         foreach (INexitiesSystem logicSystem in level.LogicSystems) {
-            logicSystem.Tick(world);
+            logicSystem.Tick(level);
         }
         // run all logic systems
         

@@ -15,6 +15,7 @@ public static class AssetIdLib {
             private const string ThisClass = nameof(Components);
             
             public const string DirectChildren = $"{ThisSection}:{ThisClass}/{nameof(DirectChildren)}";
+            public const string DirectParent = $"{ThisSection}:{ThisClass}/{nameof(DirectParent)}";
             public const string Impulse2D = $"{ThisSection}:{ThisClass}/{nameof(Impulse2D)}";
             public const string RaylibHudText = $"{ThisSection}:{ThisClass}/{nameof(RaylibHudText)}";
             public const string RaylibHudTextPro = $"{ThisSection}:{ThisClass}/{nameof(RaylibHudTextPro)}";
@@ -30,6 +31,7 @@ public static class AssetIdLib {
             
             public const string Actor2D = $"{ThisSection}:{ThisClass}/{nameof(Actor2D)}";
             public const string EmptyEntity = $"{ThisSection}:{ThisClass}/{nameof(EmptyEntity)}";
+            public const string EmptySprite = $"{ThisSection}:{ThisClass}/{nameof(EmptySprite)}";
             public const string EmptyLevel = $"{ThisSection}:{ThisClass}/{nameof(EmptyLevel)}";
             public const string Hud = $"{ThisSection}:{ThisClass}/{nameof(Hud)}";
             public const string Player2D = $"{ThisSection}:{ThisClass}/{nameof(Player2D)}";
