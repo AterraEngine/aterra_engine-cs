@@ -11,7 +11,7 @@
       <ProjectReference Include="..\..\engine\AterraCore.FlexiPlug\AterraCore.FlexiPlug.csproj" />
       <ProjectReference Include="..\..\engine\AterraCore.Nexities\AterraCore.Nexities.csproj" />
       <ProjectReference Include="..\..\engine\AterraCore.OmniVault.Textures\AterraCore.OmniVault.Textures.csproj" />
-      <ProjectReference Include="..\Extensions\Extensions.csproj" />
+      <ProjectReference Include="..\..\lib\Extensions\Extensions.csproj" />
     </ItemGroup>
 
     <ItemGroup>

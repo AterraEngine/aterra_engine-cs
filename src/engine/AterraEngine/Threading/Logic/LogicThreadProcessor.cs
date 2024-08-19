@@ -28,7 +28,7 @@ public class LogicThreadProcessor(
     private bool IsRunning { get; set; } = true;
     public bool IsFinished { get; private set; }
 
-    private List<Action> EndOfTickActions { get; set; } = [];
+    private Stack<Action> EndOfTickActions { get; set; } = [];
 
     private Stopwatch TickStopwatch { get; } = Stopwatch.StartNew();
     private Stopwatch TpsStopwatch { get; } = Stopwatch.StartNew();
@@ -80,7 +80,9 @@ public class LogicThreadProcessor(
     }
 
     private void RunEndOfTick() {
-        foreach (Action endOfUpdateAction in EndOfTickActions) endOfUpdateAction();
+        while (EndOfTickActions.TryPop(out Action? action)) {
+            action();
+        }
         EndOfTickActions.Clear();
     }
 
@@ -109,7 +111,7 @@ public class LogicThreadProcessor(
     public void RegisterEvents() {
         eventManager.EventStart += Start;
         eventManager.EventStop += Stop;
-        eventManager.EventChangeActiveLevel += (_, args) => EndOfTickActions.Add(() => world.TryChangeActiveLevel(args.NewLevelId));
+        eventManager.EventChangeActiveLevel += (_, args) => EndOfTickActions.Push(() => world.TryChangeActiveLevel(args.NewLevelId));
         
         eventManager.EventActualTps += (_, d) => Logger.Debug("TPS: {0}", d);
         
