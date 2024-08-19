@@ -7,7 +7,7 @@ namespace AterraLib.Nexities.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Component<ITransform3D>("AterraLib:Nexities/Components/Transform3D")]
+[Component<ITransform3D>(AssetIdLib.AterraCore.Components.Transfrom3D)]
 [AssetTag("data")]
 [UsedImplicitly]
 public class Transform3D : NexitiesComponent, ITransform3D {

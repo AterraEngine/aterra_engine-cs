@@ -12,7 +12,7 @@
     <ItemGroup>
         <ProjectReference Include="..\..\..\src\engine\AterraCore.Boot\AterraCore.Boot.csproj" />
         <ProjectReference Include="..\..\..\src\lib\AterraLib\AterraLib.csproj" />
-        <ProjectReference Include="..\..\..\tools\AterraEngine.Analyzers\AterraEngine.Analyzers\AterraEngine.Analyzers.csproj">
+        <ProjectReference Include="..\..\..\tools\Analyzers\AterraEngine.Analyzers\AterraEngine.Analyzers.csproj">
             <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
             <OutputItemType>Analyzer</OutputItemType>
         </ProjectReference>
@@ -25,6 +25,7 @@
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1"/>
         <PackageReference Include="Microsoft.Extensions.ObjectPool.DependencyInjection" Version="8.7.0" />
+        <PackageReference Include="Ulid" Version="1.3.4" />
     </ItemGroup>
 
     <ItemGroup>
@@ -46,8 +47,6 @@
     </ItemGroup>
 
     <Target Name="AddingPlugins" AfterTargets="Build">
-
-
         <!-- Create output directories -->
         <RemoveDir Directories="$(OutDir)plugins"/>
         <MakeDir Directories="$(OutDir)plugins"/>

@@ -5,7 +5,7 @@ namespace AterraLib.Nexities.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Component<IRaylibHudText>("AterraLib:Nexities/Components/RaylibHubText")]
+[Component<IRaylibHudText>(AssetIdLib.AterraCore.Components.RaylibHudText)]
 [UsedImplicitly]
 public class RaylibHudText : NexitiesComponent, IHudComponent, IRaylibHudText {
     public HudType Type => HudType.Text;

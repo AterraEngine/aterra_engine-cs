@@ -99,9 +99,11 @@ public class AssetAtlas(ILogger logger) : IAssetAtlas {
         .Where(pair => pair.Key.PluginId == pluginId)
         .Select(pair => pair.Key);
 
+    public Type GetAssetType(AssetId assetId) => _assetsById[assetId].Type;
+
     public bool TryGetRegistration(AssetId assetId, out AssetRegistration registration) => _assetsById.TryGetValue(assetId, out registration);
 
-    public bool TryGetType(AssetId assetId, [NotNullWhen(true)] out Type? type) {
+    public bool TryGetAssetType(AssetId assetId, [NotNullWhen(true)] out Type? type) {
         type = default;
         if (!_assetsById.TryGetValue(assetId, out AssetRegistration registration)) {
             return false;

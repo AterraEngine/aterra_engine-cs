@@ -5,7 +5,7 @@ namespace AterraLib.Nexities.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Component<ITransform2D>("AterraLib:Nexities/Components/Transform2D")]
+[Component<ITransform2D>(AssetIdLib.AterraCore.Components.Transfrom2D)]
 [UsedImplicitly]
 public class Transform2D : NexitiesComponent, ITransform2D {
 
@@ -24,11 +24,15 @@ public class Transform2D : NexitiesComponent, ITransform2D {
         set {
             _scale = value;
             _destinationRectangle = null;
+            _rotationOrigin = null;
         }
     }
 
-    public Vector2 Rotation { get; set; } = Vector2.Zero;
+    public float Rotation { get; set; } =0;
 
     private Rectangle? _destinationRectangle;
     public Rectangle DestinationRectangle => _destinationRectangle ??= new Rectangle(Translation, Scale);
+    
+    private Vector2? _rotationOrigin;
+    public Vector2 RotationOrigin => _rotationOrigin ??= Scale / 2;
 }

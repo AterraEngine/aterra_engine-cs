@@ -2,9 +2,8 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Types.Nexities;
-using AterraCore.Contracts.Nexities.Data.Components;
-using AterraCore.Contracts.Nexities.Data.Levels;
-using AterraCore.Contracts.OmniVault;
+using AterraCore.Contracts.Nexities.Components;
+using AterraCore.Contracts.Nexities.Entities;
 using AterraCore.Contracts.OmniVault.Textures;
 using AterraCore.Nexities.Components;
 using AterraCore.Nexities.Entities;
@@ -26,7 +25,7 @@ public interface IDuckyHypeActor : IActor2D;
 [Texture("Workfloor:TextureDuckyHype")]
 [UsedImplicitly]
 public class TextureDuckyHype : Texture2DAsset, ITextureDuckyHype {
-    public override string imagePath { get; set; } = "assets/ducky-hype.png";
+    public override string ImagePath { get; set; } = "assets/ducky-hype.png";
 }
 
 [Component("Workfloor:SpriteDuckyHype")]
@@ -41,5 +40,6 @@ public class SpriteDuckyHype : Sprite2D, ISpriteDuckyHype {
 public class DuckyHypeActor(
     ITransform2D transform2D, 
     SpriteDuckyHype sprite2D,
-    IAssetTree childEntities 
-) : Actor2D(transform2D, sprite2D, childEntities), IDuckyHypeActor;
+    IDirectChildren childEntities,
+    IImpulse2D impulse2D
+) : Actor2D(transform2D, sprite2D, childEntities,impulse2D), IDuckyHypeActor;

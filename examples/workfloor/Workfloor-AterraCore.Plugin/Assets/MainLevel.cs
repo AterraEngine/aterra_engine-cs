@@ -1,17 +1,37 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Nexities.Data.Components;
-using AterraCore.Contracts.Nexities.Data.Levels;
+using AterraCore.Common.Data;
+using AterraCore.Common.Types.Nexities;
+using AterraCore.Contracts.Nexities.Components;
+using AterraCore.Contracts.Nexities.Levels;
+using AterraCore.Nexities.Components;
 using AterraCore.Nexities.Entities;
+using AterraLib.Nexities.Components;
+using AterraLib.Nexities.Entities;
 using JetBrains.Annotations;
 
 namespace Workfloor_AterraCore.Plugin.Assets;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Entity<INexitiesLevel>("NexitiesDebug:Levels/MainLevel")]
+[Component("Workfloor:MainLevelSystemIds")]
 [UsedImplicitly]
-public class MainLevel(IAssetTree assetTree) : NexitiesEntity(assetTree), INexitiesLevel {
-    public IAssetTree AssetTree { get; } = assetTree;
+public class MainLevelSystemIds : SystemIds {
+    protected override AssetId[] LogicSystems { get; set; } = [
+        AssetIdLib.AterraCore.SystemsLogic.PlayerController,
+        AssetIdLib.AterraCore.SystemsLogic.ApplyImpulse,
+    ];
+    
+    protected override AssetId[] RenderSystems { get; set; } = [
+        AssetIdLib.AterraCore.SystemsRendering.Render2D
+    ];
 }
+
+[Entity<INexitiesLevel2D>("Workfloor:Levels/MainLevel", CoreTags.Singleton)]
+[UsedImplicitly]
+public class MainLevel(
+    IDirectChildren assetTree, 
+    MainLevelSystemIds systemIds
+) : EmptyLevel(assetTree, systemIds); 
+

@@ -3,21 +3,24 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.Assets.Attributes;
+using JetBrains.Annotations;
+using System.Globalization;
 
 namespace AterraCore.OmniVault.Assets.Attributes;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 /// <summary>
-/// Represents an attribute used to inject a dependency with a specified GUID.
+/// Represents an attribute used to inject a dependency with a specified Ulid.
 /// When used in a constructor of an <see cref="IAssetInstance"/>, it will always use an instance of the parameter
-/// type which has the same guid as the required one.
+/// type which has the same Ulid as the required one.
 /// </summary>
-/// <param name="guid">The GUID, stored in the <see cref="IAssetInstanceAtlas"/>, used to inject in this reference.</param>
+/// <param name="ulid">The Ulid, stored in the <see cref="IAssetInstanceAtlas"/>, used to inject in this reference.</param>
 [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = true)]
-public class InjectAsAttribute(string guid) : IInjectAsAttribute {
+[UsedImplicitly]
+public class InjectAsAttribute(string ulid) : IInjectAsAttribute {
     /// <summary>
-    /// Represents an attribute used to inject a dependency with a specified GUID.
+    /// Represents an attribute used to inject a dependency with a specified Ulid.
     /// </summary>
-    public override Guid Guid { get; } = Guid.Parse(guid);
+    public override Ulid Ulid { get; } = Ulid.Parse(ulid, CultureInfo.InvariantCulture);
 }

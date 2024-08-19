@@ -1,7 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Nexities.Data.Components;
+using AterraCore.Contracts.Nexities.Components;
 using AterraCore.OmniVault.Assets;
 
 namespace AterraCore.Nexities.Components;

@@ -18,7 +18,7 @@ public static class Program {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    private static async Task MainAsync(string[] args) {
+    private async static Task MainAsync(string[] args) {
         await using Logger logger = new LoggerConfiguration()
             .MinimumLevel.Verbose()
             .DefaultSinkConsole() // Using the normal version of the Sink Console, else the empty lines get processed earlier.

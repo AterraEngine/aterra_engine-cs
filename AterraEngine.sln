@@ -74,6 +74,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraLib", "src\lib\Aterra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraCore.OmniVault.Assets", "src\engine\AterraCore.OmniVault.Assets\AterraCore.OmniVault.Assets.csproj", "{5CF1943C-1807-48D7-8E02-0667F7194454}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraCore.OmniVault.World", "src\engine\AterraCore.OmniVault.World\AterraCore.OmniVault.World.csproj", "{3929EFE1-4A08-4EC6-BFE0-0C0E9ED58C8C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraCore.OmniVault.DataCollector", "src\engine\AterraCore.OmniVault.DataCollector\AterraCore.OmniVault.DataCollector.csproj", "{998355EF-DA9D-45D5-ABD3-6CB467D8BF20}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extensions", "src\lib\Extensions\Extensions.csproj", "{1001A63D-9E3A-4B3F-A4ED-921F29BDE49A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -113,6 +119,9 @@ Global
 		{1BC19D48-B26F-4C7E-82CA-2FD716103C66} = {291BFDE8-A431-4094-A9D7-415FBC474733}
 		{9D0A0CBC-D69A-4DC0-9A5C-77624F08D5A8} = {62ADC2B9-AB4C-4E7A-AADC-FD92209A4398}
 		{5CF1943C-1807-48D7-8E02-0667F7194454} = {291BFDE8-A431-4094-A9D7-415FBC474733}
+		{3929EFE1-4A08-4EC6-BFE0-0C0E9ED58C8C} = {291BFDE8-A431-4094-A9D7-415FBC474733}
+		{998355EF-DA9D-45D5-ABD3-6CB467D8BF20} = {291BFDE8-A431-4094-A9D7-415FBC474733}
+		{1001A63D-9E3A-4B3F-A4ED-921F29BDE49A} = {72601D4B-0D88-47AC-9217-34B2F6B46509}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{0EE5AA16-BD73-46B5-9921-17CF895E4F52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -195,5 +204,17 @@ Global
 		{5CF1943C-1807-48D7-8E02-0667F7194454}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5CF1943C-1807-48D7-8E02-0667F7194454}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5CF1943C-1807-48D7-8E02-0667F7194454}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3929EFE1-4A08-4EC6-BFE0-0C0E9ED58C8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3929EFE1-4A08-4EC6-BFE0-0C0E9ED58C8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3929EFE1-4A08-4EC6-BFE0-0C0E9ED58C8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3929EFE1-4A08-4EC6-BFE0-0C0E9ED58C8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{998355EF-DA9D-45D5-ABD3-6CB467D8BF20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{998355EF-DA9D-45D5-ABD3-6CB467D8BF20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{998355EF-DA9D-45D5-ABD3-6CB467D8BF20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{998355EF-DA9D-45D5-ABD3-6CB467D8BF20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1001A63D-9E3A-4B3F-A4ED-921F29BDE49A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1001A63D-9E3A-4B3F-A4ED-921F29BDE49A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1001A63D-9E3A-4B3F-A4ED-921F29BDE49A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1001A63D-9E3A-4B3F-A4ED-921F29BDE49A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

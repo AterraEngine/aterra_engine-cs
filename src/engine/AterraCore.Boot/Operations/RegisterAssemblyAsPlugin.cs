@@ -12,6 +12,7 @@ namespace AterraCore.Boot.Operations;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
+public class RegisterAssemblyAsPlugin<T>() : RegisterAssemblyAsPlugin(typeof(T).Assembly, new T().Enter()) where T : class, IAssemblyEntrypoint, new();
 public class RegisterAssemblyAsPlugin(Assembly assembly, PluginId pluginId) : IBootOperation {
     private ILogger Logger { get; } = StartupLogger.CreateLogger(false).ForBootOperationContext<RegisterAssemblyAsPlugin>(); 
 
@@ -24,4 +25,3 @@ public class RegisterAssemblyAsPlugin(Assembly assembly, PluginId pluginId) : IB
     }
 }
 
-public class RegisterAssemblyAsPlugin<T>() : RegisterAssemblyAsPlugin(typeof(T).Assembly, new T().Enter()) where T : class, IAssemblyEntrypoint, new();

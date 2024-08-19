@@ -1,9 +1,6 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.OmniVault;
-using AterraCore.Contracts.OmniVault.Assets;
-using AterraCore.Contracts.OmniVault.Textures;
 using AterraCore.Contracts.Renderer;
 using AterraCore.DI;
 using AterraEngine.Renderer.RaylibCs.FrameProcessors;
@@ -14,7 +11,7 @@ namespace AterraEngine.Renderer.RaylibCs;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
-public class MainWindow(IApplicationStageManager applicationStageManager, IAssetInstanceAtlas instanceAtlas, ITextureAtlas textureAtlas) : IMainWindow {
+public class MainWindow(IApplicationStageManager applicationStageManager) : IMainWindow {
     private static int Width => 1000;
     private static int Height => 1000;
     private static string Name => "AterraEngine - Test";
@@ -32,8 +29,6 @@ public class MainWindow(IApplicationStageManager applicationStageManager, IAsset
         // | ConfigFlags.UndecoratedWindow
         // | ConfigFlags.MousePassthroughWindow
         );
-        
-        // SetTargetFPS(240);
         
         InitWindow(Width, Height, Name);
         SetWindowMonitor(1);// WArn dev stuff

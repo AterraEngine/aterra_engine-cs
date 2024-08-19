@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.OmniVault.Assets;
 using Raylib_cs;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
 namespace AterraCore.Contracts.OmniVault.Textures;
@@ -10,7 +11,9 @@ namespace AterraCore.Contracts.OmniVault.Textures;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface ITexture2DAsset : IAssetInstance {
-    string imagePath { get; set; }
-    Texture2D? Texture { get; set; }
+    string ImagePath { get; set; }
     Vector2 Size { get; set; }
+
+    bool TryGetTexture(out Texture2D texture);
+    bool TrySetTexture(Texture2D texture);
 }

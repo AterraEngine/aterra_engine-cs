@@ -1,26 +1,39 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Nexities.Data.Levels;
-using AterraCore.Contracts.Nexities.Data.Systems;
+using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.Assets;
+using AterraCore.Contracts.OmniVault.World;
+using AterraCore.OmniVault.Assets;
 
 namespace AterraCore.Nexities.Systems;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class NexitiesSystem<TEntity> : INexitiesSystem where TEntity : IAssetInstance {
-    public Type ProcessableEntityType { get; } = typeof(TEntity);
-    
+public abstract class NexitiesSystem<TEntity> : AssetInstance, INexitiesSystem 
+    where TEntity : IAssetInstance
+{
+    private readonly List<TEntity> _entitiesBuffer = [];
+    protected virtual Predicate<TEntity> Filter { get; } = _ => true;
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void ProcessLevel(INexitiesLevel level) {
-        foreach (TEntity instance in SelectEntities(level)) {
-            ProcessEntity(instance);
-        }
-    }
+    public abstract void Tick(IActiveLevel level);
 
-    protected abstract IEnumerable<TEntity> SelectEntities(INexitiesLevel level);
-    protected abstract void ProcessEntity(TEntity entity);
+    // -----------------------------------------------------------------------------------------------------------------
+    // Helper Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    protected IEnumerable<TEntity> GetEntities(IActiveLevel level) {
+        if (_entitiesBuffer.Count != 0) return _entitiesBuffer;
+        
+        _entitiesBuffer.Clear(); // Reuse the buffer instead of allocating a new one
+        
+        foreach (IAssetInstance instance in level.ActiveEntityTree.GetAsFlat()) {
+            if (instance is TEntity assetInstance && Filter(assetInstance)) 
+                _entitiesBuffer.Add(assetInstance);
+        }
+        
+        return _entitiesBuffer;
+    }
 }

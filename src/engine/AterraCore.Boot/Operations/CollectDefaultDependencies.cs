@@ -4,19 +4,25 @@
 using AterraCore.Contracts;
 using AterraCore.Contracts.Boot.Operations;
 using AterraCore.Contracts.FlexiPlug;
-using AterraCore.Contracts.Nexities.Data.Worlds;
-using AterraCore.Contracts.OmniVault;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.Textures;
+using AterraCore.Contracts.OmniVault.World;
+using AterraCore.Contracts.OmniVault.World.EntityTree;
 using AterraCore.Contracts.Renderer;
+using AterraCore.Contracts.Threading.Logic;
 using AterraCore.FlexiPlug;
 using AterraCore.Loggers;
-using AterraCore.Nexities.Worlds;
 using AterraCore.OmniVault.Assets;
+using AterraCore.OmniVault.DataCollector;
 using AterraCore.OmniVault.Textures;
+using AterraCore.OmniVault.World;
+using AterraCore.OmniVault.World.EntityTree;
+using AterraCore.OmniVault.World.EntityTree.Pools;
 using AterraEngine;
 using AterraEngine.Renderer.RaylibCs;
 using AterraEngine.Threading;
+using AterraEngine.Threading.Logic;
+using AterraEngine.Threading.Render;
 using CodeOfChaos.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using static CodeOfChaos.Extensions.DependencyInjection.ServiceDescriptorExtension;
@@ -45,15 +51,21 @@ public class CollectDefaultDependencies : IBootOperation {
             #region PluginLoading
             NewServiceDescriptor<IPluginAtlas, PluginAtlas>(ServiceLifetime.Singleton),
             #endregion
-            #region Nexities
-            NewServiceDescriptor<INexitiesWorld, NexitiesWorld>(ServiceLifetime.Singleton),
-            #endregion
             #region OmniVault
             NewServiceDescriptor<IAssetAtlas, AssetAtlas>(ServiceLifetime.Singleton),
             NewServiceDescriptor<IAssetInstanceAtlas, AssetInstanceAtlas>(ServiceLifetime.Singleton),
+            NewServiceDescriptor<IAssetInstanceFactory, AssetInstanceFactory>(ServiceLifetime.Singleton),
             
             NewServiceDescriptor<ITextureAtlas, TextureAtlas>(ServiceLifetime.Singleton),
+            
+            NewServiceDescriptor<IAterraCoreWorld, AterraCoreWorld>(ServiceLifetime.Singleton),
+            
+            NewServiceDescriptor<IEntityTreeFactory, EntityTreeFactory>(ServiceLifetime.Singleton),
+            NewServiceDescriptor<IEntityTreePools, EntityTreePools>(ServiceLifetime.Singleton),
             #endregion
+            
+            NewServiceDescriptor<ILogicEventManager, LogicEventManager>(ServiceLifetime.Singleton),
+            ServiceDescriptor.Singleton(DataCollectorFactory.Create), 
         ];
         
         components.DefaultServices.AddLastRepeated(defaultDependencies);

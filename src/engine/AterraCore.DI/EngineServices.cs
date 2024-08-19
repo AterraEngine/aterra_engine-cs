@@ -63,6 +63,10 @@ public static class EngineServices {
         }
     }
 
+    private static bool TryGetService(Type input, [NotNullWhen(true)] out object? output) {
+        output = ServiceProvider.GetService(input);
+        return output is not null;
+    }
     public static bool TryGetService<T>([NotNullWhen(true)] out T? output) where T : class => TryGetService(typeof(T), out output);
     public static bool TryGetService<T>(Type input, [NotNullWhen(true)] out T? output) where T : class {
         output = ServiceProvider.GetService(input) as T;
@@ -87,16 +91,6 @@ public static class EngineServices {
     /// <param name="objectType">The type of the object to be created.</param>
     /// <returns>The created instance of type T.</returns>
     public static T CreateWithServices<T>(Type objectType) => (T)ActivatorUtilities.CreateInstance(ServiceProvider, objectType);
-    /// <summary>
-    /// Creates an instance of a Nexities asset of the specified type.
-    /// </summary>
-    /// <typeparam name="T">The type of the asset to create.</typeparam>
-    /// <param name="objectType">The type object of the asset.</param>
-    /// <returns>An instance of the specified asset type.</returns>
-    /// <exception cref="InvalidOperationException">Thrown if the object could not be created.</exception>
-    public static T CreateNexitiesAsset<T>(Type objectType) => GetAssetInstanceAtlas().TryCreate(objectType, out IAssetInstance? instance)
-        ? (T)instance
-        : throw new InvalidOperationException("Object could not be created");
 
     // -----------------------------------------------------------------------------------------------------------------
     // Default Systems Quick access
@@ -126,4 +120,9 @@ public static class EngineServices {
     /// </summary>
     /// <returns>The asset instance atlas.</returns>
     public static IAssetInstanceAtlas GetAssetInstanceAtlas() => GetService<IAssetInstanceAtlas>();
+    /// <summary>
+    /// Retrieves the factory for instances of assets.
+    /// </summary>
+    /// <returns>The Asset Instance Factory.</returns>
+    public static IAssetInstanceFactory GetAssetInstanceFactory() => GetService<IAssetInstanceFactory>();
 }

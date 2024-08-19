@@ -2,7 +2,6 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Types.Nexities;
-using AterraCore.Contracts.OmniVault;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.Textures;
 using JetBrains.Annotations;
@@ -25,18 +24,21 @@ public class TextureAtlas(ILogger logger, IAssetInstanceAtlas instanceAtlas) : I
     #region Registering Texture to GPU
     public bool TryRegisterTexture(AssetId textureAssetId) {
         if (!instanceAtlas.TryGetOrCreateSingleton(textureAssetId, out ITexture2DAsset? textureAsset)) return false;
-        if (!Path.Exists(textureAsset.imagePath)) return false;
+        if (!Path.Exists(textureAsset.ImagePath)) return false;
 
         try {
-            Image image = Raylib.LoadImage(textureAsset.imagePath);
-            Logger.Debug("Loaded image {path}", textureAsset.imagePath);
-        
-            textureAsset.Texture = Raylib.LoadTextureFromImage(image);
+            Image image = Raylib.LoadImage(textureAsset.ImagePath);
+            Logger.Debug("Loaded image {path}", textureAsset.ImagePath);
+
+            Texture2D texture = Raylib.LoadTextureFromImage(image);
+            if (!textureAsset.TrySetTexture(texture)) return false;
             textureAsset.Size = new Vector2(image.Width, image.Height);
-            Logger.Debug("Assigned image {path} to asset {guid}", textureAsset.imagePath, textureAsset.Guid);
+            Logger.Debug("Assigned image {path} to asset {Ulid}", textureAsset.ImagePath, textureAsset.InstanceId);
             
             Raylib.UnloadImage(image);
-            Logger.Debug("Unloaded image {path}", textureAsset.imagePath);
+            Logger.Debug("Unloaded image {path}", textureAsset.ImagePath);
+            
+            Raylib.GenTextureMipmaps(ref texture);
             return true;
         }
         catch (Exception ex) {

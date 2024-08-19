@@ -72,7 +72,7 @@ public class PluginZipImporter(string zipPath, ILogger logger) : IPluginZipImpor
         }
     }
 
-    public List<string> GetFileNamesInZip() {
+    public List<string> GetFileNamesInZip() { // TODO cleanup
         var fileNames = new List<string>();
         try {
             fileNames.AddRange(_archive.Entries.Select(entry => entry.FullName));

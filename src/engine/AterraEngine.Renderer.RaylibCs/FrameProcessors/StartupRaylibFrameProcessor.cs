@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.OmniVault.Assets;
+using AterraCore.Contracts.OmniVault.World;
 using JetBrains.Annotations;
 using System.Numerics;
 
@@ -11,13 +12,13 @@ namespace AterraEngine.Renderer.RaylibCs.FrameProcessors;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
-public class StartupRaylibFrameProcessor(IAssetAtlas assetAtlas, IPluginAtlas pluginAtlas) : AbstractRaylibFrameProcessor {
-    protected override Color ClearColor { get; set; } = new(0, 0, 0, 0);
+public class StartupRaylibFrameProcessor(IAssetAtlas assetAtlas, IPluginAtlas pluginAtlas, IAterraCoreWorld world) : AbstractRaylibFrameProcessor(world) {
+    protected override Color ClearColor { get; } = new(0, 0, 0, 0);
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    protected override void DrawUi() {
+    protected override void DrawUi(IActiveLevel level) {
         float screenWidth = GetRenderWidth();
         float screenHeight = GetRenderHeight();
 
@@ -26,22 +27,23 @@ public class StartupRaylibFrameProcessor(IAssetAtlas assetAtlas, IPluginAtlas pl
         float progress = assetAtlas.TotalCount * (barMaxWidth / pluginAtlas.TotalAssetCount);
 
         // logger.Information("{a},{b}, {c}", screenWidth, screenHeight, new Vector2(screenWidth / 2, 0)); 
+        DrawRectanglePro(
+            new Rectangle(
+            new Vector2(screenWidth / 2 - barMaxWidth / 2, 5 * (screenHeight / 10) - barHeight),
+            new Vector2(barMaxWidth, barHeight)),
+            Vector2.Zero,
+            0,
+            Color.Red
+        );
 
         DrawRectanglePro(
-        new Rectangle(
-        new Vector2(screenWidth / 2 - barMaxWidth / 2, 5 * (screenHeight / 10) - barHeight),
-        new Vector2(barMaxWidth, barHeight)),
-        Vector2.Zero,
-        0,
-        Color.Red);
-
-        DrawRectanglePro(
-        new Rectangle(
-        new Vector2(screenWidth / 2 - barMaxWidth / 2, 5 * (screenHeight / 10) - barHeight),
-        new Vector2(progress, barHeight)),
-        Vector2.Zero,
-        0,
-        Color.Yellow);
+            new Rectangle(
+            new Vector2(screenWidth / 2 - barMaxWidth / 2, 5 * (screenHeight / 10) - barHeight),
+            new Vector2(progress, barHeight)),
+            Vector2.Zero,
+            0,
+            Color.Yellow
+        );
 
         // DrawRectangleLines(0, 0, (int)maxWidth, 10, Color.Yellow);
         // DrawRectangle(0, 0, (int)progress, 10, Color.White);

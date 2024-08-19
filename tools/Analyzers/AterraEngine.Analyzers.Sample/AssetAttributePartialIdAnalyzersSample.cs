@@ -14,13 +14,13 @@ using AterraCore.Nexities.Entities;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [Asset("1")]
-public class TestEntity3 : NexitiesEntity;
+public class TestEntity1 : EmptyNexitiesEntity;
 
 [Asset("2")]
-public class TestEntity4 : NexitiesEntity;
+public class TestEntity2 : EmptyNexitiesEntity;
 
 [Asset("3")]
-public class TestEntity6 : NexitiesEntity;
+public class TestEntity3 : EmptyNexitiesEntity;
 
 [Asset("5")]
-public class TestEntaity4 : NexitiesEntity;
+public class TestEntity5 : EmptyNexitiesEntity;

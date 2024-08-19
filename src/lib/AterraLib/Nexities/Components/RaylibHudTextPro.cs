@@ -5,7 +5,7 @@ namespace AterraLib.Nexities.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Component<IRaylibHudTextPro>("AterraLib:Nexities/Components/RaylibHubTextPro")]
+[Component<IRaylibHudTextPro>(AssetIdLib.AterraCore.Components.RaylibHudTextPro)]
 [UsedImplicitly]
 public class RaylibHudTextPro : NexitiesComponent, IRaylibHudTextPro {
     public Font Font { get; set; }

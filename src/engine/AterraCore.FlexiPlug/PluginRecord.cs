@@ -13,7 +13,7 @@ namespace AterraCore.FlexiPlug;
 // ---------------------------------------------------------------------------------------------------------------------
 public class PluginRecord : IPluginRecord {
     public PluginId PluginId { get; init; }
-    public IEnumerable<Type> Types { get; init; } = [];// DON'T invalidate this !!!
+    public IEnumerable<Type> Types { get; init; } = []; // DON'T invalidate this !!!
 
     private Dictionary<Type, AssetTypeRecord>? _assetTypeRecords;
     public IEnumerable<AssetTypeRecord> AssetTypes => (

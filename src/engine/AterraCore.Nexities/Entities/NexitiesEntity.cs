@@ -2,8 +2,8 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Types.Nexities;
-using AterraCore.Contracts.Nexities.Data.Components;
-using AterraCore.Contracts.Nexities.Data.Entities;
+using AterraCore.Contracts.Nexities.Components;
+using AterraCore.Contracts.Nexities.Entities;
 using AterraCore.OmniVault.Assets;
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
@@ -20,8 +20,13 @@ public abstract class NexitiesEntity(params INexitiesComponent[] components) : A
         components.Select(component => new KeyValuePair<Type,AssetId>(component.GetType(), component.AssetId))
     );
 
-    public ICollection<INexitiesComponent> Components => _components.Values;
-    public ICollection<AssetId> ComponentAssetIds => _components.Keys;
+    public IReadOnlyCollection<INexitiesComponent> Components => _components.Values.ToArray().AsReadOnly();
+    public IReadOnlyCollection<AssetId> ComponentAssetIds => _components.Keys.ToArray().AsReadOnly();
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Abstract Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    protected abstract void ComponentOverwritten();
     
     // -----------------------------------------------------------------------------------------------------------------
     // Component manipulation Methods
@@ -37,7 +42,7 @@ public abstract class NexitiesEntity(params INexitiesComponent[] components) : A
 
     public T GetComponent<T>() where T : INexitiesComponent {
         try {
-            AssetId assetId = _componentTypes[typeof(T)]; 
+            AssetId assetId = _componentTypes.FirstOrDefault(kvp => typeof(T).IsAssignableFrom(kvp.Key)).Value;
             return (T)_components[assetId];
         }
         catch (Exception e) {
@@ -70,40 +75,16 @@ public abstract class NexitiesEntity(params INexitiesComponent[] components) : A
                && _componentTypes.TryAdd(component.GetType(), component.AssetId);
     }
 
-    public bool TryOverwriteComponent(INexitiesComponent component) =>
-        TryOverwriteComponent(component, out _);
-    public bool TryOverwriteComponent(INexitiesComponent component, [NotNullWhen(true)] out INexitiesComponent? oldComponent) =>
-        _components.TryGetValue(component.AssetId, out oldComponent)
-        && _components.TryUpdate(component.AssetId, component, oldComponent)
-        && _componentTypes.TryGetValue(oldComponent.GetType(), out AssetId oldAssetId)
-        && _componentTypes.TryUpdate(oldComponent.GetType(), component.AssetId, oldAssetId)
-        ;
-
-    public bool TryRemoveComponent(AssetId assetId, [NotNullWhen(true)] out INexitiesComponent? oldComponent) =>
-        _components.TryRemove(assetId, out oldComponent)
-        && _componentTypes.TryRemove(oldComponent.GetType(), out _);
-    public bool TryRemoveComponent(AssetId assetId) => 
-        _components.TryRemove(assetId, out INexitiesComponent? oldComponent)
-        && _componentTypes.TryRemove(oldComponent.GetType(), out _);
-    
-
+    public bool TryOverwriteComponent(INexitiesComponent component) => TryOverwriteComponent(component, out _);
+    public bool TryOverwriteComponent(INexitiesComponent component, [NotNullWhen(true)] out INexitiesComponent? oldComponent) {
+        oldComponent = null;
+        if (!_components.TryGetValue(component.AssetId, out oldComponent)
+            || !_componentTypes.TryGetValue(oldComponent.GetType(), out AssetId oldAssetId)) 
+            return false;
+        if (!_components.TryUpdate(component.AssetId, component, oldComponent)
+            || !_componentTypes.TryUpdate(oldComponent.GetType(), component.AssetId, oldAssetId)) return false;
+        
+        ComponentOverwritten();
+        return true;
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

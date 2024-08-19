@@ -19,6 +19,7 @@ public class BuildDependencies : IBootOperation {
         Logger.Debug("Entered Build Service Provider");
         
         var builder = new EngineServiceBuilder(Logger);
+        
         builder.AssignFromServiceDescriptors(components.DefaultServices);
         builder.AssignFromServiceDescriptors(components.DynamicServices);
         builder.AssignFromServiceDescriptors(components.StaticServices);

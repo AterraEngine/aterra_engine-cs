@@ -8,7 +8,6 @@ using AterraCore.Contracts.Boot;
 using AterraLib;
 
 namespace Workfloor_AterraCore;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -29,8 +28,9 @@ public static class Program {
         
         // --- Engine is running ---
         engine
-            .SubscribeToEvents()
-            .SpawnRenderThread()
+            .SubscribeToEvents() // TODO cleanup event subbing
+            .SpawnRenderThread() // TODO spawn through factory
+            .SpawnLogicThread()  // TODO spawn through factory
         ;
         
         // Actually startup the engine
