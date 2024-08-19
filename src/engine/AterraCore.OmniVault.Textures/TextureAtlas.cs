@@ -46,5 +46,19 @@ public class TextureAtlas(ILogger logger, IAssetInstanceAtlas instanceAtlas) : I
             return false;
         }
     }
+    public bool TryUnRegisterTexture(AssetId textureAssetId) {
+        if(!instanceAtlas.TryGetSingleton(textureAssetId, out ITexture2DAsset? textureAsset)) return false;
+
+        try {
+            if (!textureAsset.TryUnSetTexture(out Texture2D texture)) return false;
+            Raylib.UnloadTexture(texture);
+            Logger.Debug("Unloaded texture {id}", textureAssetId);
+            return true;
+        }
+        catch (Exception ex) {
+            logger.Warning(ex, "Failed without proper exception catching");
+            return false;
+        }
+    }
     #endregion
 }

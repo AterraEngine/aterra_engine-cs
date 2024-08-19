@@ -13,7 +13,7 @@ public interface ILogicEventManager {
     public event EventHandler? EventStart;
     public event EventHandler? EventStop;
     public event EventHandler<IChangeActiveLevelEventArgs>? EventChangeActiveLevel;
-    public event EventHandler<double>? EventActualTps;
+    public event EventHandler<int>? EventActualTps;
     public event EventHandler<double>? EventDeltaTps;
     public event EventHandler<int>? EventFps;
 
@@ -24,7 +24,7 @@ public interface ILogicEventManager {
     public void InvokeStart();
     public void InvokeChangeActiveLevel(AssetId assetId);
     public void InvokeChangeActiveLevel(IChangeActiveLevelEventArgs eventArgs);
-    public void InvokeUpdateActualTps(double actualTps);
-    public void InvokeUpdateDeltaTps(double actualTps);
+    public void InvokeUpdateActualTps(int actualTps);
+    public void InvokeUpdateDeltaTps(double deltaTps);
     public void InvokeUpdateFps(int fps);
 }

@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.World;
+using AterraCore.Contracts.Threading.CTQ;
 using AterraCore.Contracts.Threading.Logic;
 using JetBrains.Annotations;
 using Serilog;
@@ -17,7 +18,8 @@ namespace AterraEngine.Threading.Logic;
 public class LogicThreadProcessor(
     ILogger logger,
     IAterraCoreWorld world,
-    ILogicEventManager eventManager
+    ILogicEventManager eventManager,
+    ICrossThreadQueue crossThreadQueue
 ) : AbstractThread {
     private ILogger Logger { get; } = logger.ForContext<LogicThreadProcessor>();
 
@@ -108,7 +110,7 @@ public class LogicThreadProcessor(
     // -----------------------------------------------------------------------------------------------------------------
     // Event Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void RegisterEvents() {
+    public override void RegisterEvents() {
         eventManager.EventStart += Start;
         eventManager.EventStop += Stop;
         eventManager.EventChangeActiveLevel += (_, args) => EndOfTickActions.Push(() => world.TryChangeActiveLevel(args.NewLevelId));

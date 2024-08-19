@@ -8,8 +8,5 @@ namespace AterraCore.Contracts;
 // ---------------------------------------------------------------------------------------------------------------------
 
 public interface IEngine {
-    IEngine SubscribeToEvents();
-    IEngine SpawnRenderThread();
-    IEngine SpawnLogicThread();
     Task Run();
 }

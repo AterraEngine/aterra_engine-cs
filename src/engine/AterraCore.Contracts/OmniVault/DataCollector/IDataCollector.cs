@@ -7,9 +7,12 @@ namespace AterraCore.Contracts.OmniVault.DataCollector;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IDataCollector {
-    public int Fps { get;}
-    public int FpsMin { get;}
-    public int FpsMax { get;}
-    public double Tps { get;}
-    public double DeltaTps { get;}
+    int Fps { get;}
+    int FpsMin { get;}
+    int FpsMax { get;}
+    double FpsAverage { get; }
+    
+    int Tps { get;}
+    double TpsAverage { get; }
+    double DeltaTps { get;}
 }

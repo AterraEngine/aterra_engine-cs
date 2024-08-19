@@ -4,6 +4,7 @@
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World;
+using AterraCore.Contracts.Threading.Logic;
 using JetBrains.Annotations;
 using System.Numerics;
 
@@ -12,7 +13,7 @@ namespace AterraEngine.Renderer.RaylibCs.FrameProcessors;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
-public class StartupRaylibFrameProcessor(IAssetAtlas assetAtlas, IPluginAtlas pluginAtlas, IAterraCoreWorld world) : AbstractRaylibFrameProcessor(world) {
+public class StartupRaylibFrameProcessor(IAssetAtlas assetAtlas, IPluginAtlas pluginAtlas, IAterraCoreWorld world, ILogicEventManager eventManager) : AbstractRaylibFrameProcessor(world,eventManager) {
     protected override Color ClearColor { get; } = new(0, 0, 0, 0);
 
     // -----------------------------------------------------------------------------------------------------------------

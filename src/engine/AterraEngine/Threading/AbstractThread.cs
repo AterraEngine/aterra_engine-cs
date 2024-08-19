@@ -14,4 +14,5 @@ public abstract class AbstractThread : IThread {
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public abstract void Run();
+    public abstract void RegisterEvents();
 }

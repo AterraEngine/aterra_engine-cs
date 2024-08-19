@@ -5,7 +5,6 @@ using AterraCore.Contracts.Boot.Logic.PluginLoading;
 using AterraCore.Contracts.Boot.Operations;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.FlexiPlug.Attributes;
-using AterraCore.Loggers;
 using CodeOfChaos.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 

@@ -9,6 +9,8 @@ using AterraCore.Contracts.OmniVault.Textures;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.OmniVault.World.EntityTree;
 using AterraCore.Contracts.Renderer;
+using AterraCore.Contracts.Threading;
+using AterraCore.Contracts.Threading.CTQ;
 using AterraCore.Contracts.Threading.Logic;
 using AterraCore.FlexiPlug;
 using AterraCore.Loggers;
@@ -21,6 +23,7 @@ using AterraCore.OmniVault.World.EntityTree.Pools;
 using AterraEngine;
 using AterraEngine.Renderer.RaylibCs;
 using AterraEngine.Threading;
+using AterraEngine.Threading.CTQ;
 using AterraEngine.Threading.Logic;
 using AterraEngine.Threading.Render;
 using CodeOfChaos.Extensions;
@@ -47,6 +50,8 @@ public class CollectDefaultDependencies : IBootOperation {
             NewServiceDescriptor<RenderThreadEvents, RenderThreadEvents>(ServiceLifetime.Singleton),
             NewServiceDescriptor<IApplicationStageManager, ApplicationStageManager>(ServiceLifetime.Singleton),
             NewServiceDescriptor<IMainWindow, MainWindow>(ServiceLifetime.Singleton),
+            NewServiceDescriptor<IThreadingManager, ThreadingManager>(ServiceLifetime.Singleton),
+            NewServiceDescriptor<ICrossThreadQueue, CrossThreadQueue>(ServiceLifetime.Singleton),
             #endregion
             #region PluginLoading
             NewServiceDescriptor<IPluginAtlas, PluginAtlas>(ServiceLifetime.Singleton),

@@ -10,5 +10,6 @@ namespace AterraCore.Contracts.OmniVault.Textures;
 public interface ITextureAtlas {
     #region Registering Texture to GPU
     bool TryRegisterTexture(AssetId textureAssetId);
+    bool TryUnRegisterTexture(AssetId textureAssetId);
     #endregion
 }

@@ -1,7 +1,6 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Nexities.Components;
 using AterraCore.Contracts.Nexities.Entities.QuickHands;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World.EntityTree;

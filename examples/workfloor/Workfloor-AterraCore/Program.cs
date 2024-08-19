@@ -27,12 +27,6 @@ public static class Program {
         IEngine engine = config.BuildEngine();
         
         // --- Engine is running ---
-        engine
-            .SubscribeToEvents() // TODO cleanup event subbing
-            .SpawnRenderThread() // TODO spawn through factory
-            .SpawnLogicThread()  // TODO spawn through factory
-        ;
-        
         // Actually startup the engine
         Task.Run(engine.Run)
             .GetAwaiter()

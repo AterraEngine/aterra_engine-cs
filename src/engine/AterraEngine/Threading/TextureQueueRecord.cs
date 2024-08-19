@@ -7,11 +7,6 @@ namespace AterraEngine.Threading;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public enum TextureQueueRecordType {
-    Register,
-    Unregister
-}
-
 public record TextureQueueRecord(
     AssetId TextureAssetId
 );

@@ -24,8 +24,8 @@ public class MainWindow(IApplicationStageManager applicationStageManager) : IMai
             SetTraceLogCallback(RaylibLogger.GetPointer());
         }
         SetConfigFlags(
-            ConfigFlags.ResizableWindow |
-            ConfigFlags.Msaa4xHint
+            ConfigFlags.ResizableWindow
+            | ConfigFlags.Msaa4xHint
         // | ConfigFlags.UndecoratedWindow
         // | ConfigFlags.MousePassthroughWindow
         );

@@ -1,19 +1,14 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.OmniVault.Assets;
-using Raylib_cs;
-using System.Numerics;
+using AterraCore.Contracts.Threading;
 
-namespace AterraCore.Contracts.OmniVault.Textures;
+namespace AterraEngine.Threading;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ITexture2DAsset : IAssetInstance {
-    string ImagePath { get; set; }
-    Vector2 Size { get; set; }
-
-    bool TryGetTexture(out Texture2D texture);
-    bool TrySetTexture(Texture2D texture);
-    bool TryUnSetTexture(out Texture2D texture);
+public readonly struct ThreadData(CancellationTokenSource cts, Thread thread) : IThreadData {
+    public CancellationTokenSource CancellationTokenSource { get; } = cts;
+    public Thread Thread { get; } = thread;
 }

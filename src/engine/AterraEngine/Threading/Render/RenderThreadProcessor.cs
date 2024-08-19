@@ -1,14 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.Textures;
-using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Renderer;
+using AterraCore.Contracts.Threading.CTQ;
+using AterraCore.Contracts.Threading.CTQ.Dto;
 using JetBrains.Annotations;
 using Raylib_cs;
 using Serilog;
-using System.Collections.Concurrent;
 
 namespace AterraEngine.Threading.Render;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -21,21 +20,16 @@ public class RenderThreadProcessor(
     IApplicationStageManager applicationStageManager,
     RenderThreadEvents renderThreadEvents,
     ITextureAtlas textureAtlas,
-    IAterraCoreWorld world
+    ICrossThreadQueue crossThreadQueue
 ) : AbstractThread {
     
     private ILogger Logger { get; } = logger.ForContext<RenderThreadProcessor>();
-    public ConcurrentQueue<TextureQueueRecord> TextureQueue { get; internal set; } = null!;
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public override void Run() {
         mainWindow.Init();
-        
-        // Wait until the main thread signaled to start
-        // Signal back that the opengl context has been created 
-        renderThreadEvents.InvokeOpenGlContextCreated();
         
         // Window is actually running now
         while (!Raylib.WindowShouldClose()) {
@@ -56,12 +50,14 @@ public class RenderThreadProcessor(
         Raylib.CloseWindow();
 
     }
+    public override void RegisterEvents() {
+        renderThreadEvents.EventApplicationStageChange += applicationStageManager.ReceiveStageChange;
+    }
 
     private void HandleQueue() {
-        if (TextureQueue.IsEmpty) return;
-        
         // Check for new textures in a batch if needed
-        while (TextureQueue.TryDequeue(out TextureQueueRecord? textureRecord)) {
+        while (crossThreadQueue.TextureRegistrarQueue.TryDequeue(out TextureRegistrar? textureRecord)) {
+            if (textureRecord.UnRegister) textureAtlas.TryUnRegisterTexture(textureRecord.TextureAssetId);
             textureAtlas.TryRegisterTexture(textureRecord.TextureAssetId);
         }
     }

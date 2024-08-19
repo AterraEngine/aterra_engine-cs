@@ -1,19 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.OmniVault.Assets;
-using Raylib_cs;
-using System.Numerics;
+using AterraCore.Contracts.Threading.CTQ.Dto;
+using System.Collections.Concurrent;
 
-namespace AterraCore.Contracts.OmniVault.Textures;
+namespace AterraCore.Contracts.Threading.CTQ;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ITexture2DAsset : IAssetInstance {
-    string ImagePath { get; set; }
-    Vector2 Size { get; set; }
 
-    bool TryGetTexture(out Texture2D texture);
-    bool TrySetTexture(Texture2D texture);
-    bool TryUnSetTexture(out Texture2D texture);
+public interface ICrossThreadQueue {
+    ConcurrentQueue<TextureRegistrar> TextureRegistrarQueue { get; }
 }

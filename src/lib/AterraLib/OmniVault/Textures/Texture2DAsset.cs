@@ -29,4 +29,12 @@ public class Texture2DAsset : AssetInstance, ITexture2DAsset {
         
         return _textureDefined;
     }
+    public bool TryUnSetTexture(out Texture2D texture) {
+        texture = _texture;
+        if (!_textureDefined) return false;
+        _texture = new Texture2D();
+        _textureDefined = false;
+
+        return true;
+    }
 }

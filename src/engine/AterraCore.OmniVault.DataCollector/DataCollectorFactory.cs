@@ -21,12 +21,14 @@ public static class DataCollectorFactory {
 
     private static DataCollector RegisterEventCallbacks(ILogicEventManager logicEventManager, DataCollector dataCollector) {
         logicEventManager.EventActualTps += (_, d) => dataCollector.Tps = d;
+        logicEventManager.EventActualTps += (_, d) => dataCollector.UpdateTpsAverage(d);
+        
         logicEventManager.EventDeltaTps += (_, d) => dataCollector.DeltaTps = d;
-        logicEventManager.EventFps += (_, d) => {
-            dataCollector.Fps = d;
-            dataCollector.FpsMin = Math.Min(dataCollector.FpsMin, d);
-            dataCollector.FpsMax = Math.Max(dataCollector.FpsMax, d);
-        };
+        
+        logicEventManager.EventFps += (_, d) => dataCollector.Fps = d;
+        logicEventManager.EventFps += (_, d) => dataCollector.FpsMin = Math.Min(dataCollector.FpsMin, d);
+        logicEventManager.EventFps += (_, d) => dataCollector.FpsMax = Math.Max(dataCollector.FpsMax, d);
+        logicEventManager.EventFps += (_, d) => dataCollector.UpdateFpsAverage(d);
         
         return dataCollector;
     }
