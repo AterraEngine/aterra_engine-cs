@@ -5,6 +5,7 @@ using AterraCore.Contracts.Nexities.Entities.QuickHands;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.Textures;
 using AterraCore.Contracts.OmniVault.World;
+using Serilog;
 
 namespace AterraLib.Nexities.Systems.Rendering;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -12,7 +13,7 @@ namespace AterraLib.Nexities.Systems.Rendering;
 // ---------------------------------------------------------------------------------------------------------------------
 [System(AssetIdLib.AterraCore.SystemsRendering.Render2D, CoreTags.RenderSystem)]
 [UsedImplicitly]
-public class Render2D(IAssetInstanceAtlas instanceAtlas) : NexitiesSystemWithParentsReversed<IHasTransform2D,IActor2D> {
+public class Render2D(IAssetInstanceAtlas instanceAtlas, ILogger logger) : NexitiesSystemWithParentsReversed<IHasTransform2D,IActor2D> {
     private readonly Dictionary<AssetId, ITexture2DAsset> _texturesCache = new();
     private (IHasTransform2D? Parent, IActor2D Child)[]? _entityArray;
     
@@ -31,8 +32,11 @@ public class Render2D(IAssetInstanceAtlas instanceAtlas) : NexitiesSystemWithPar
     public override void Tick(IActiveLevel level) {
         (IHasTransform2D? Parent, IActor2D Child)[] entities =_entityArray ??= GetEntities(level).ToArray();
         foreach ((IHasTransform2D? Parent, IActor2D Child) entity in entities.AsSpan()) {
-            if (entity.Parent is not null) ProcessChildEntities(entity.Parent, entity.Child);
-            ProcessOriginalEntity(entity.Child);
+            if (entity.Parent is not null) {
+                ProcessChildEntities(entity.Parent, entity.Child);
+            } else {
+                ProcessOriginalEntity(entity.Child);
+            }
         }
     }
     

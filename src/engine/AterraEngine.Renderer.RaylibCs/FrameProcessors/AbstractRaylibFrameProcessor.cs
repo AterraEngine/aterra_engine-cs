@@ -18,11 +18,8 @@ public abstract class AbstractRaylibFrameProcessor(IAterraCoreWorld world, ILogi
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public virtual void DrawFrame() {
-        if (!world.TryGetActiveLevel(out IActiveLevel? level)) return;
         BeginDrawing();
         ClearBackground(ClearColor);
-        Draw2D(level);
-        DrawUi(level);
         EndDrawing();
         eventManager.InvokeUpdateFps(GetFPS());
     }

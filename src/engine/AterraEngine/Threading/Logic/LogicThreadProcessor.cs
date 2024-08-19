@@ -19,7 +19,8 @@ public class LogicThreadProcessor(
     ILogger logger,
     IAterraCoreWorld world,
     ILogicEventManager eventManager,
-    ICrossThreadQueue crossThreadQueue
+    ICrossThreadQueue crossThreadQueue,
+    ICrossThreadEvents crossThreadEvents
 ) : AbstractThread {
     private ILogger Logger { get; } = logger.ForContext<LogicThreadProcessor>();
 
@@ -66,6 +67,7 @@ public class LogicThreadProcessor(
         }
         
         IsFinished = true;
+        crossThreadEvents.InvokeCloseApplication(this);
     }
 
     private void Update() {
@@ -117,6 +119,13 @@ public class LogicThreadProcessor(
         
         eventManager.EventActualTps += (_, d) => Logger.Debug("TPS: {0}", d);
         
+        crossThreadEvents.OnCloseApplication += HandleClose ;
+        
+    }
+    private void HandleClose(object? sender, EventArgs e) {
+        if (sender == this) return;
+        
+        IsRunning = false;
     }
 
     private void Start(object? _, EventArgs __) {

@@ -20,7 +20,8 @@ public class RenderThreadProcessor(
     IApplicationStageManager applicationStageManager,
     RenderThreadEvents renderThreadEvents,
     ITextureAtlas textureAtlas,
-    ICrossThreadQueue crossThreadQueue
+    ICrossThreadQueue crossThreadQueue,
+    ICrossThreadEvents crossThreadEvents
 ) : AbstractThread {
     
     private ILogger Logger { get; } = logger.ForContext<RenderThreadProcessor>();
@@ -45,13 +46,23 @@ public class RenderThreadProcessor(
             if (CancellationToken.IsCancellationRequested) break;
         }
         
-        // Cancellation requested;
+        // Actual window is closed;
+        crossThreadEvents.InvokeCloseApplication(this);
+        if (!Raylib.WindowShouldClose()) return;
         Logger.Information("Render Thread Closing");
         Raylib.CloseWindow();
 
     }
     public override void RegisterEvents() {
         renderThreadEvents.EventApplicationStageChange += applicationStageManager.ReceiveStageChange;
+        crossThreadEvents.OnCloseApplication += HandleClose;
+    }
+
+    private void HandleClose(object? sender, EventArgs __) {
+        if (sender == this) return;
+        if (!Raylib.WindowShouldClose()) return;
+        Logger.Information("Render Thread Closing");
+        Raylib.CloseWindow();
     }
 
     private void HandleQueue() {

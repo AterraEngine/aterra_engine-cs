@@ -29,6 +29,20 @@ public class GeneralRenderRaylibFrameProcessor(IAterraCoreWorld world, IDataColl
         DrawText($"DUCKS : {level.RawLevelData.ChildrenIDs.Count}",0, 300, 32, Color.DarkBlue);
         DrawText($"ID : {level.RawLevelData.AssetId}",0, 350, 12, Color.DarkBlue);
     }
+    
+    public override void DrawFrame() {
+        if (!world.TryGetActiveLevel(out IActiveLevel? level)) return;
+        BeginDrawing();
+        ClearBackground(ClearColor);
+        
+        BeginMode2D(level.Camera);
+        Draw2D(level);
+        EndMode2D();
+        
+        DrawUi(level);
+        EndDrawing();
+        eventManager.InvokeUpdateFps(GetFPS());
+    }
 
     protected override void Draw2D(IActiveLevel level) {
         // Get all logic systems required by active level

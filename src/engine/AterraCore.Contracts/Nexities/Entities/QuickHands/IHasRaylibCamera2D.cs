@@ -1,17 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.OmniVault.Assets.Attributes;
+using AterraCore.Contracts.Nexities.Components;
 
-namespace AterraLib.Nexities.Components;
+namespace AterraCore.Contracts.Nexities.Entities.QuickHands;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Component<ITransform3D>(AssetIdLib.AterraCore.Components.Transform3D)]
-[AssetTag("data")]
-[UsedImplicitly]
-public class Transform3D : NexitiesComponent, ITransform3D {
-    public Vector3 Translation { get; set; } = Vector3.Zero;
-    public Vector3 Scale { get; set; } = Vector3.One;
-    public Vector3 Rotation { get; set; } = Vector3.Zero;
+public interface IHasRaylibCamera2D {
+    public IRaylibCamera2D RaylibCamera2D { get; }
 }

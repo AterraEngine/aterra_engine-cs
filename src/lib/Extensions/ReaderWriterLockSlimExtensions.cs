@@ -1,6 +1,8 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using Microsoft.Extensions.ObjectPool;
+
 namespace Extensions;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -10,9 +12,15 @@ public static class ReaderWriterLockSlimExtensions {
     // -----------------------------------------------------------------------------------------------------------------
     // Helper Class
     // -----------------------------------------------------------------------------------------------------------------
-    private class Releaser(Action releaseAction) : IDisposable {
+    private readonly struct Releaser(Action releaseAction) : IDisposable {
         public void Dispose() => releaseAction();
     }
+    
+    // private const int InitialCapacity = 1024;
+    // private static readonly DefaultObjectPoolProvider ObjectPoolProvider = new();
+    // private static ObjectPool<Releaser>? _pool;
+    // public static ObjectPool<Releaser> Pool => 
+    //     _pool ??= ObjectPoolProvider.Create(new FactoryStackPooledObjectPolicy(InitialCapacity));
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods

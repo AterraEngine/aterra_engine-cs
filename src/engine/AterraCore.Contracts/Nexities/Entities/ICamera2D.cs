@@ -1,17 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Threading.CTQ;
-using AterraCore.Contracts.Threading.CTQ.Dto;
-using JetBrains.Annotations;
-using System.Collections.Concurrent;
+using AterraCore.Contracts.Nexities.Entities.QuickHands;
 
-namespace AterraEngine.Threading.CTQ;
+namespace AterraCore.Contracts.Nexities.Entities;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[UsedImplicitly]
-public class CrossThreadQueue : ICrossThreadQueue {
-    public ConcurrentQueue<TextureRegistrar> TextureRegistrarQueue { get; } = new();
-}
+public interface ICamera2D : INexitiesEntity,
+    IHasImpulse2D,
+    IHasRaylibCamera2D;

@@ -23,9 +23,11 @@ public class MainWindow(IApplicationStageManager applicationStageManager) : IMai
             // Necessary to write Raylib logs with Serilog
             SetTraceLogCallback(RaylibLogger.GetPointer());
         }
+        
         SetConfigFlags(
             ConfigFlags.ResizableWindow
             | ConfigFlags.Msaa4xHint
+            | ConfigFlags.InterlacedHint
         // | ConfigFlags.UndecoratedWindow
         // | ConfigFlags.MousePassthroughWindow
         );

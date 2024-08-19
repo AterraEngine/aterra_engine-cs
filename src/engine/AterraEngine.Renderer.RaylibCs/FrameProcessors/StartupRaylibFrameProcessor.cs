@@ -19,6 +19,15 @@ public class StartupRaylibFrameProcessor(IAssetAtlas assetAtlas, IPluginAtlas pl
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
+    public override void DrawFrame() {
+        if (!world.TryGetActiveLevel(out IActiveLevel? level)) return;
+        BeginDrawing();
+        ClearBackground(ClearColor);
+        DrawUi(level);
+        EndDrawing();
+        eventManager.InvokeUpdateFps(GetFPS());
+    }
+    
     protected override void DrawUi(IActiveLevel level) {
         float screenWidth = GetRenderWidth();
         float screenHeight = GetRenderHeight();

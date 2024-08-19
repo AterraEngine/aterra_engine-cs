@@ -5,7 +5,7 @@ namespace AterraLib.Nexities.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Component<ITransform2D>(AssetIdLib.AterraCore.Components.Transfrom2D)]
+[Component<ITransform2D>(AssetIdLib.AterraCore.Components.Transform2D)]
 [UsedImplicitly]
 public class Transform2D : NexitiesComponent, ITransform2D {
 
