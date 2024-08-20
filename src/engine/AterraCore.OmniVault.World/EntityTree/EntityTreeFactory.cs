@@ -16,7 +16,7 @@ namespace AterraCore.OmniVault.World.EntityTree;
 public class EntityTreeFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreePools entityTreePools) : IEntityTreeFactory {
     public IEntityNodeTree CreateFromRootId(Ulid rootInstanceId) => new EntityNodeTree(PopulateNodes(rootInstanceId),entityTreePools);
     public IEntityNodeTree CreateEmpty() => new EntityNodeTree(new EntityNode(), entityTreePools);
-
+    
     private EntityNode PopulateNodes(Ulid instanceId) {
         if (!instanceAtlas.TryGet(instanceId, out IAssetInstance? instance)) throw new ArgumentException("Node was not a IAssetInstance");
 

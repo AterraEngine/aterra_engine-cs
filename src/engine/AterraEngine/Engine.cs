@@ -64,7 +64,7 @@ public class Engine(
         logicEventManager.InvokeStart();
         crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar("Workfloor:TextureDuckyHype"));
         crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar("Workfloor:TextureDuckyPlatinum"));
-
+        
         const int a = 50;
         for (int k = -50; k < a; k++) {
             for (int j = -50; j < a; j++) {
@@ -105,6 +105,7 @@ public class Engine(
         // Block main thread until all have been cancelled
         WaitHandle[] waitHandles = threadingManager.GetWaitHandles();
         WaitHandle.WaitAll(waitHandles);
+        Logger.Information("Child Threads have been cancelled");
         
         threadingManager.JoinThreads(); // wait until all threads are done
         Logger.Information("Exiting AterraEngine");

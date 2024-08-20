@@ -1,16 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraCore.Contracts.Threading;
+using AterraCore.Contracts.Nexities.Levels;
+
+namespace AterraCore.Contracts.OmniVault.World;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IThreadingManager {
-    Task<bool> TrySpawnRenderThreadAsync();
-    Task<bool> TrySpawnLogicThreadAsync();
-
-    void CancelThreads();
-    WaitHandle[] GetWaitHandles();
-    void JoinThreads();
+public interface IActiveLevelFactory {
+    IActiveLevel CreateLevel2D(INexitiesLevel2D level2D);
 }
