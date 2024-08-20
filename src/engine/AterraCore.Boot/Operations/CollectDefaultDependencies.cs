@@ -52,7 +52,6 @@ public class CollectDefaultDependencies : IBootOperation {
             NewServiceDescriptor<IMainWindow, MainWindow>(ServiceLifetime.Singleton),
             NewServiceDescriptor<IThreadingManager, ThreadingManager>(ServiceLifetime.Singleton),
             NewServiceDescriptor<ICrossThreadQueue, CrossThreadQueue>(ServiceLifetime.Singleton),
-            NewServiceDescriptor<ICrossThreadEvents, CrossThreadEvents>(ServiceLifetime.Singleton),
             #endregion
             #region PluginLoading
             NewServiceDescriptor<IPluginAtlas, PluginAtlas>(ServiceLifetime.Singleton),

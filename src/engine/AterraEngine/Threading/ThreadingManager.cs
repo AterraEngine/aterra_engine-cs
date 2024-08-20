@@ -20,6 +20,8 @@ public class ThreadingManager(ILogger logger) : IThreadingManager {
     public IThreadData? LogicThreadData { get; private set; }
     public IThreadData? RenderThreadData { get; private set; } 
     
+    private readonly List<CancellationToken> _cancellationTokens = [];
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -29,6 +31,7 @@ public class ThreadingManager(ILogger logger) : IThreadingManager {
         try {
             var threadProcessor = EngineServices.CreateWithServices<RenderThreadProcessor>();
             threadProcessor.CancellationToken = cts.Token;
+            _cancellationTokens.Add(threadProcessor.CancellationToken);
             
             // Add extra callbacks
             threadProcessor.RegisterEvents();
@@ -53,6 +56,7 @@ public class ThreadingManager(ILogger logger) : IThreadingManager {
         try {
             var threadProcessor = EngineServices.CreateWithServices<LogicThreadProcessor>();
             threadProcessor.CancellationToken = cts.Token;
+            _cancellationTokens.Add(threadProcessor.CancellationToken);
             
             // Add extra callbacks
             threadProcessor.RegisterEvents();
@@ -70,5 +74,20 @@ public class ThreadingManager(ILogger logger) : IThreadingManager {
             return false;
         }
     }
+    public void CancelThreads() {
+        LogicThreadData?.CancellationTokenSource.Cancel();
+        RenderThreadData?.CancellationTokenSource.Cancel();
+    }
+    public WaitHandle[] GetWaitHandles() {
+        return _cancellationTokens
+            .Select(cancellationToken => cancellationToken.WaitHandle)
+            .ToArray();
+    }
+    
+    public void JoinThreads() {
+        LogicThreadData?.Thread.Join();
+        RenderThreadData?.Thread.Join();
+    }
+    
 
 }

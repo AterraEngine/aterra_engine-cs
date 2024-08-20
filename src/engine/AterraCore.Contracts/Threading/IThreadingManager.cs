@@ -12,4 +12,8 @@ public interface IThreadingManager {
     
     Task<bool> TrySpawnRenderThreadAsync();
     Task<bool> TrySpawnLogicThreadAsync();
+
+    void CancelThreads();
+    WaitHandle[] GetWaitHandles();
+    void JoinThreads();
 }

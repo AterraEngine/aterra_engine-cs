@@ -3,7 +3,9 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.World;
+using AterraCore.Contracts.Threading;
 using AterraCore.Contracts.Threading.CTQ;
+using AterraCore.Contracts.Threading.CTQ.Dto;
 using AterraCore.Contracts.Threading.Logic;
 using JetBrains.Annotations;
 using Serilog;
@@ -20,7 +22,7 @@ public class LogicThreadProcessor(
     IAterraCoreWorld world,
     ILogicEventManager eventManager,
     ICrossThreadQueue crossThreadQueue,
-    ICrossThreadEvents crossThreadEvents
+    IThreadingManager threadingManager
 ) : AbstractThread {
     private ILogger Logger { get; } = logger.ForContext<LogicThreadProcessor>();
 
@@ -42,32 +44,39 @@ public class LogicThreadProcessor(
     // -----------------------------------------------------------------------------------------------------------------
     #region Run & Update
     public override void Run() {
-        // Wait until the main thread signaled to start
-        while (!IsStarted) {
-            TickStopwatch.Restart();
-            SleepUntilEndOfTick();
-        }
-        
-        TpsStopwatch.Start();
+        try {
+            // Wait until the main thread signaled to start
+            while (!IsStarted) {
+                TickStopwatch.Restart();
+                SleepUntilEndOfTick();
+            }
 
-        // Game engine is actually running now
-        while (IsRunning) {
-            TickStopwatch.Restart();
-            
-            // Call UPDATE LOOP
-            Update();
-            RunEndOfTick();
-            
-            // Wait until the end of the Tick cycle
-            SleepUntilEndOfTick();
-            CalculateActualTps();
-            
-            // End of Tick
-            _ticks++;
+            TpsStopwatch.Start();
+
+            // Game engine is actually running now
+            while (IsRunning) {
+                TickStopwatch.Restart();
+
+                // Call UPDATE LOOP
+                Update();
+                RunEndOfTick();
+                HandleQueue();
+
+                // Wait until the end of the Tick cycle
+                SleepUntilEndOfTick();
+                CalculateActualTps();
+
+                // End of Tick
+                _ticks++;
+                if (CancellationToken.IsCancellationRequested) break;
+            }
         }
-        
-        IsFinished = true;
-        crossThreadEvents.InvokeCloseApplication(this);
+        finally {
+            IsFinished = true;
+            IsRunning = false;
+            threadingManager.CancelThreads();
+            Logger.Information("Logic Thread Closing");
+        }
     }
 
     private void Update() {
@@ -118,14 +127,6 @@ public class LogicThreadProcessor(
         eventManager.EventChangeActiveLevel += (_, args) => EndOfTickActions.Push(() => world.TryChangeActiveLevel(args.NewLevelId));
         
         eventManager.EventActualTps += (_, d) => Logger.Debug("TPS: {0}", d);
-        
-        crossThreadEvents.OnCloseApplication += HandleClose ;
-        
-    }
-    private void HandleClose(object? sender, EventArgs e) {
-        if (sender == this) return;
-        
-        IsRunning = false;
     }
 
     private void Start(object? _, EventArgs __) {
@@ -136,5 +137,14 @@ public class LogicThreadProcessor(
     private void Stop(object? _, EventArgs __) {
         IsRunning = false;
         Logger.Information("Thread stopped");
+    }
+
+    private void HandleQueue() {
+        while (crossThreadQueue.TryDequeue(QueueKey.MainToLogic, out Action? action)) {
+            action.Invoke();
+        }
+        while (crossThreadQueue.TryDequeue(QueueKey.RenderToLogic, out Action? action)) {
+            action.Invoke();
+        }
     }
 }

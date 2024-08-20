@@ -101,9 +101,12 @@ public class Engine(
         
         // -------------------------------------------------------------------------------------------------------------
         renderThreadEvents.InvokeApplicationStageChange(ApplicationStage.Level);
+
+        // Block main thread until all have been cancelled
+        WaitHandle[] waitHandles = threadingManager.GetWaitHandles();
+        WaitHandle.WaitAll(waitHandles);
         
-        await Task.Delay(50_000_000);
-        await threadingManager.LogicThreadData!.CancellationTokenSource.CancelAsync();
-        await threadingManager.RenderThreadData!.CancellationTokenSource.CancelAsync();
+        threadingManager.JoinThreads(); // wait until all threads are done
+        Logger.Information("Exiting AterraEngine");
     }
 }

@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.Threading.CTQ.Dto;
 using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AterraCore.Contracts.Threading.CTQ;
 
@@ -12,4 +13,7 @@ namespace AterraCore.Contracts.Threading.CTQ;
 
 public interface ICrossThreadQueue {
     ConcurrentQueue<TextureRegistrar> TextureRegistrarQueue { get; }
+    
+    bool TryDequeue(QueueKey key, [NotNullWhen(true)] out Action? action);
+    bool TryEnqueue(QueueKey key, Action action);
 }
