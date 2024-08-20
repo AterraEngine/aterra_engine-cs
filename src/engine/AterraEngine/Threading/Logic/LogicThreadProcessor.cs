@@ -129,7 +129,7 @@ public class LogicThreadProcessor(
         eventManager.EventChangeActiveLevel += (_, args) => EndOfTickActions.Push(() => world.TryChangeActiveLevel(args.NewLevelId));
         
         eventManager.EventActualTps += (_, d) => Logger.Debug("TPS: {0}", d);
-        eventManager.EventActualTps += (_, d) => Logger.Debug("Assets: {0}", EngineServices.GetService<IAssetInstanceAtlas>().TotalCount);
+        // eventManager.EventActualTps += (_, _) => Logger.Debug("Assets: {0}", EngineServices.GetService<IAssetInstanceAtlas>().TotalCount);
     }
 
     private void Start(object? _, EventArgs __) {

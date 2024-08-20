@@ -14,39 +14,31 @@ namespace AterraLib.Nexities.Systems.Rendering;
 [System(AssetIdLib.AterraCore.SystemsRendering.Render2D, CoreTags.RenderSystem)]
 [UsedImplicitly]
 public class Render2D(IAssetInstanceAtlas instanceAtlas, ILogger logger) : NexitiesSystemWithParentsReversed<IHasTransform2D,IActor2D> {
-    private readonly Dictionary<AssetId, ITexture2DAsset> _texturesCache = new();
-    private (IHasTransform2D? Parent, IActor2D Child)[]? _entityArray;
+    private readonly Dictionary<AssetId, (Vector2 Size, Texture2D texture2D)> _texturesCache = new();
     
     // -----------------------------------------------------------------------------------------------------------------
     // Helper Methods
     // -----------------------------------------------------------------------------------------------------------------
     private (Vector2 Size, Texture2D texture2D) GetTextureAsset(AssetId textureAssetId) {
-        if (_texturesCache.TryGetValue(textureAssetId, out ITexture2DAsset? textureAsset)) return (textureAsset.Size, textureAsset.GetTexture());
-        if (instanceAtlas.TryGetOrCreateSingleton(textureAssetId, out textureAsset)) _texturesCache[textureAssetId] = textureAsset;
-        return (textureAsset?.Size ?? Vector2.One, textureAsset?.GetTexture() ?? new Texture2D());
+        if (_texturesCache.TryGetValue(textureAssetId, out (Vector2 Size, Texture2D texture2D) cacheHit)) return cacheHit;
+        if (!instanceAtlas.TryGetOrCreateSingleton(textureAssetId, out ITexture2DAsset? textureAsset)) return (Vector2.One, new Texture2D());
+        
+        return _texturesCache[textureAssetId] = (textureAsset.Size, textureAsset.GetTexture());
     }
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public override void Tick(IActiveLevel level) {
-        // (IHasTransform2D? Parent, IActor2D Child)[] entities =.ToArray();
-        // Span<(IHasTransform2D? Parent, IActor2D Child)> span = entities.AsSpan();
-
-        (IHasTransform2D? Parent, IActor2D Child)[] array = _entityArray ??= GetEntities(level).ToArray();
-        int count = array.Length;
-        
-        for (int index = 0; index < count; index++) {
-            (IHasTransform2D? parent, IActor2D child) = array[index];
+        foreach ((IHasTransform2D? parent, IActor2D child) in GetEntities(level)) {
+            (Vector2 textureSize, Texture2D texture2D) = GetTextureAsset(child.Sprite2D.TextureAssetId);
             
-            if (parent is not null) ProcessChildEntities(parent, child);
-            else ProcessOriginalEntity(child);
+            if (parent is not null) ProcessChildEntities(parent, child, textureSize, texture2D);
+            else ProcessOriginalEntity(child, textureSize, texture2D);
         }
     }
     
-    private void ProcessChildEntities(IHasTransform2D parent, IActor2D child) {
-        (Vector2 textureSize, Texture2D texture2D) = GetTextureAsset(child.Sprite2D.TextureAssetId);
-        
+    private static void ProcessChildEntities(IHasTransform2D parent, IActor2D child, Vector2 textureSize, Texture2D texture2D) {
         Raylib.DrawTexturePro(
             texture: texture2D, 
             source: child.Sprite2D.UvAndSourceCalculated ??= new Rectangle(
@@ -63,9 +55,7 @@ public class Render2D(IAssetInstanceAtlas instanceAtlas, ILogger logger) : Nexit
         );
     }
 
-    private void ProcessOriginalEntity(IActor2D originalEntity) {
-        (Vector2 textureSize, Texture2D texture2D) = GetTextureAsset(originalEntity.Sprite2D.TextureAssetId);
-        
+    private static void ProcessOriginalEntity(IActor2D originalEntity,  Vector2 textureSize, Texture2D texture2D) {
         Raylib.DrawTexturePro(
             texture: texture2D, 
             source: originalEntity.Sprite2D.UvAndSourceCalculated ??= new Rectangle(
