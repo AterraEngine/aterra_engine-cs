@@ -67,7 +67,7 @@ public class AssetInstanceFactory(ILogger logger) : IAssetInstanceFactory {
         return lambda.Compile();
     }
 
-    public bool TryCreate<T>(AssetRegistration registration, [NotNullWhen(true)] out T? assetInstance) where T : class, IAssetInstance {
+    public bool TryCreate<T>(AssetRegistration registration, Ulid predefinedUlid, [NotNullWhen(true)] out T? assetInstance) where T : class, IAssetInstance {
         assetInstance = null;
         #if !DEBUG
         try {
@@ -76,12 +76,17 @@ public class AssetInstanceFactory(ILogger logger) : IAssetInstanceFactory {
                 registration.Type,
                 _ => CreateConstructorDelegate(registration.Constructor)
             );
-            Func<object>[] actions = _actionsMap.GetOrAdd(registration.AssetId, _ => CreateParameterActions(registration));
-            object[] parameters = actions.Select(action => action()).ToArray();
             
-            object instance = constructorDelegate(parameters);
-            if (instance is not T castedInstance) return false;
+            object[] parameters = _actionsMap
+                .GetOrAdd(registration.AssetId, _ => CreateParameterActions(registration))
+                .Select(action => action())
+                .ToArray();
+            
+            if (constructorDelegate(parameters) is not T castedInstance) return false;
             assetInstance = castedInstance;
+            
+            assetInstance.AssetId = registration.AssetId;
+            assetInstance.InstanceId = predefinedUlid;
             
             return true;
         #if !DEBUG
@@ -97,6 +102,25 @@ public class AssetInstanceFactory(ILogger logger) : IAssetInstanceFactory {
         catch (Exception e)                     {logger.Error(e, "Caught unhandled error");}
         return false;
         #endif
+    }
+    
+    public T Create<T>(AssetRegistration registration, Ulid predefinedUlid) where T : class, IAssetInstance {
+        Func<object[], object> constructorDelegate = _constructorCache.GetOrAdd(
+            registration.Type,
+            _ => CreateConstructorDelegate(registration.Constructor)
+        );
+            
+        object[] parameters = _actionsMap
+            .GetOrAdd(registration.AssetId, _ => CreateParameterActions(registration))
+            .Select(action => action())
+            .ToArray();
+
+        var assetInstance = (T)constructorDelegate(parameters) ;
+
+        assetInstance.AssetId = registration.AssetId;
+        assetInstance.InstanceId = predefinedUlid;
+
+        return assetInstance;
     }
     // -----------------------------------------------------------------------------------------------------------------
     // Parameter Creation Methods

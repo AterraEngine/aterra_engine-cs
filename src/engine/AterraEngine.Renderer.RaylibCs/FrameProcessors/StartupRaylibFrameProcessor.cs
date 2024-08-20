@@ -13,7 +13,7 @@ namespace AterraEngine.Renderer.RaylibCs.FrameProcessors;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
-public class StartupRaylibFrameProcessor(IAssetAtlas assetAtlas, IPluginAtlas pluginAtlas, IAterraCoreWorld world, ILogicEventManager eventManager) : AbstractRaylibFrameProcessor(world,eventManager) {
+public class StartupRaylibFrameProcessor(IAssetAtlas assetAtlas, IPluginAtlas pluginAtlas, IAterraCoreWorld world, ILogicEventManager eventManager) : AbstractRaylibFrameProcessor {
     protected override Color ClearColor { get; } = new(0, 0, 0, 0);
 
     // -----------------------------------------------------------------------------------------------------------------

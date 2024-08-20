@@ -4,6 +4,7 @@
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Renderer;
 using AterraCore.Contracts.Threading.Logic;
+using AterraCore.DI;
 using JetBrains.Annotations;
 
 namespace AterraEngine.Renderer.RaylibCs.FrameProcessors;
@@ -11,9 +12,10 @@ namespace AterraEngine.Renderer.RaylibCs.FrameProcessors;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
-public abstract class AbstractRaylibFrameProcessor(IAterraCoreWorld world, ILogicEventManager eventManager) : IFrameProcessor {
+public abstract class AbstractRaylibFrameProcessor : IFrameProcessor {
     protected virtual Color ClearColor => Color.Black;
 
+    private readonly ILogicEventManager _logicEventManager = EngineServices.GetService<ILogicEventManager>();
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -21,10 +23,8 @@ public abstract class AbstractRaylibFrameProcessor(IAterraCoreWorld world, ILogi
         BeginDrawing();
         ClearBackground(ClearColor);
         EndDrawing();
-        eventManager.InvokeUpdateFps(GetFPS());
+        _logicEventManager.InvokeUpdateFps(GetFPS());
     }
 
     protected virtual void DrawUi(IActiveLevel level) {}
-    protected virtual void Draw2D(IActiveLevel level) {}
-    protected virtual void Draw3D(IActiveLevel level) {}
 }

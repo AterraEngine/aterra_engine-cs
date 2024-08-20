@@ -2,11 +2,13 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.Nexities.Systems;
+using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading;
 using AterraCore.Contracts.Threading.CTQ;
 using AterraCore.Contracts.Threading.CTQ.Dto;
 using AterraCore.Contracts.Threading.Logic;
+using AterraCore.DI;
 using JetBrains.Annotations;
 using Serilog;
 using System.Diagnostics;
@@ -127,6 +129,7 @@ public class LogicThreadProcessor(
         eventManager.EventChangeActiveLevel += (_, args) => EndOfTickActions.Push(() => world.TryChangeActiveLevel(args.NewLevelId));
         
         eventManager.EventActualTps += (_, d) => Logger.Debug("TPS: {0}", d);
+        eventManager.EventActualTps += (_, d) => Logger.Debug("Assets: {0}", EngineServices.GetService<IAssetInstanceAtlas>().TotalCount);
     }
 
     private void Start(object? _, EventArgs __) {

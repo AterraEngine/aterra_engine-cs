@@ -37,4 +37,6 @@ public class Texture2DAsset : AssetInstance, ITexture2DAsset {
 
         return true;
     }
+    
+    public Texture2D GetTexture() => _texture;
 }

@@ -7,6 +7,7 @@ using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World;
 using Extensions;
 using JetBrains.Annotations;
+using Raylib_cs;
 using Serilog;
 using System.Diagnostics.CodeAnalysis;
 
@@ -17,6 +18,7 @@ namespace AterraCore.OmniVault.World;
 [UsedImplicitly]
 public class AterraCoreWorld(IAssetInstanceAtlas instanceAtlas, ILogger logger, IActiveLevelFactory levelFactory) : IAterraCoreWorld {
     private IActiveLevel? ActiveLevel { get; set; }
+    
     private readonly ReaderWriterLockSlim  _activeLevelLock = new();
     private ILogger Logger { get; } = logger.ForContext<AterraCoreWorld>();
 
@@ -35,6 +37,7 @@ public class AterraCoreWorld(IAssetInstanceAtlas instanceAtlas, ILogger logger, 
             }
             
             ActiveLevel = levelFactory.CreateLevel2D(level);
+            
             return true;
         }
     }

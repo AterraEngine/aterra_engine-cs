@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Contracts.Nexities.Components;
 using AterraCore.Contracts.Nexities.Levels;
 using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.World.EntityTree;
@@ -17,5 +18,5 @@ public interface IActiveLevel {
     public IReadOnlyCollection<INexitiesSystem> RenderSystems { get; }
     public IEntityNodeTree ActiveEntityTree { get; }
     
-    public Camera2D Camera { get; }
+    public IRaylibCamera2D Camera2DEntity { get; }
 }

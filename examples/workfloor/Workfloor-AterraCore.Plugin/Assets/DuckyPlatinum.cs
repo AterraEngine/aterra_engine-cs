@@ -7,6 +7,7 @@ using AterraCore.Contracts.Nexities.Entities;
 using AterraCore.Contracts.OmniVault.Textures;
 using AterraCore.Nexities.Components;
 using AterraCore.Nexities.Entities;
+using AterraCore.OmniVault.Assets.Attributes;
 using AterraCore.OmniVault.Textures;
 using AterraLib.Nexities.Components;
 using AterraLib.Nexities.Entities;
@@ -28,7 +29,7 @@ public class TextureDuckyPlatinum : Texture2DAsset,ITextureDuckyPlatinum {
     public override string ImagePath { get; set; } = "assets/ducky-platinum.png";
 }
 
-[Component("Workfloor:SpriteDuckyPlatinum")]
+[Component<SpriteDuckyPlatinum>("Workfloor:SpriteDuckyPlatinum")]
 [UsedImplicitly]
 public class SpriteDuckyPlatinum : Sprite2D,ISpriteDuckyPlatinum  {
     public override AssetId TextureAssetId { get; set; } = new("Workfloor:TextureDuckyPlatinum");
@@ -39,7 +40,7 @@ public class SpriteDuckyPlatinum : Sprite2D,ISpriteDuckyPlatinum  {
 [UsedImplicitly]
 public class DuckyPlatinumActor(
     ITransform2D transform2D, 
-    SpriteDuckyPlatinum sprite2D,
+    [InjectAs("01J5RA7EDMS1PRR1BMRN9XM9BU")] SpriteDuckyPlatinum sprite2D,
     IDirectChildren childEntities,
     IImpulse2D impulse2D
 ) : Actor2D(transform2D, sprite2D, childEntities,impulse2D), IDuckyPlatinumActor;

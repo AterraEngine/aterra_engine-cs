@@ -12,7 +12,9 @@ namespace AterraEngine.Renderer.RaylibCs.FrameProcessors;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
-public class GeneralRenderRaylibFrameProcessor(IAterraCoreWorld world, IDataCollector dataCollector, ILogicEventManager eventManager) : AbstractRaylibFrameProcessor(world,eventManager) {
+public class GeneralRenderRaylibFrameProcessor(IAterraCoreWorld world, IDataCollector dataCollector, ILogicEventManager eventManager) 
+    : AbstractRaylibFrameProcessor {
+    
     protected override Color ClearColor { get; } = new(0, 0, 0, 0);
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
@@ -35,18 +37,13 @@ public class GeneralRenderRaylibFrameProcessor(IAterraCoreWorld world, IDataColl
         BeginDrawing();
         ClearBackground(ClearColor);
         
-        BeginMode2D(level.Camera);
-        Draw2D(level);
+        BeginMode2D(level.Camera2DEntity.Camera);
+        foreach (INexitiesSystem system in level.RenderSystems) 
+            system.Tick(level);
         EndMode2D();
         
         DrawUi(level);
         EndDrawing();
         eventManager.InvokeUpdateFps(GetFPS());
-    }
-
-    protected override void Draw2D(IActiveLevel level) {
-        // Get all logic systems required by active level
-        foreach (INexitiesSystem system in level.RenderSystems) 
-            system.Tick(level);
     }
 }

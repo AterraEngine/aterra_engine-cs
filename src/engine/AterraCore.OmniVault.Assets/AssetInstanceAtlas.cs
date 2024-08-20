@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.OmniVault.Assets;
+using CodeOfChaos.Extensions;
 using JetBrains.Annotations;
 using Serilog;
 using System.Collections.Concurrent;
@@ -37,25 +38,26 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetIn
             instance = convertedInstance;
             return true;
         }
+        if (!factory.TryCreate(registration, predefinedUlid ?? Ulid.NewUlid(), out instance)) return false;
+        T assetInstance = instance; // copy to local
         
-        if (!factory.TryCreate(registration, out instance)) return false;
-        instance.AssetId = registration.AssetId;
-        instance.InstanceId = predefinedUlid ?? Ulid.NewUlid();
-
-        if (_assetInstances.TryAdd(instance.InstanceId, instance)) {
-            Ulid ulid = instance.InstanceId;
-            _assetsByTypes.AddOrUpdate(
-                typeof(T),
-                _ => [ulid],
-                (_, list) => { list.Add(ulid); return list; });
+        _assetInstances.AddOrUpdate(assetInstance.InstanceId,
+            assetInstance, 
+            (_, value) => value.InstanceId == assetInstance.InstanceId 
+                ? value
+                : assetInstance
+        );
+        
+        _assetsByTypes.AddOrUpdate(
+            typeof(T),
+            _ => [assetInstance.InstanceId],
+            (_, list) => { list.Add(assetInstance.InstanceId); return list; });
             
-            if (registration.IsSingleton) {
-                _singletonAssetInstances.TryAdd(instance.AssetId, instance.InstanceId);
-            }
-            return true;
+        if (registration.IsSingleton) {
+            _singletonAssetInstances.TryAdd(assetInstance.AssetId, assetInstance.InstanceId);
         }
-        logger.Debug("{Ulid} could not be added to atlas", instance.InstanceId);
-        return false;
+        
+        return true;
     }
 
     public bool TryCreate<T>([NotNullWhen(true)] out T? instance, Ulid? predefinedUlid = null) where T : class, IAssetInstance =>
@@ -97,8 +99,10 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetIn
         || TryCreate(assetId, out instance);
 
     public T GetOrCreate<T>(Type type, Ulid? ulid = null) where T : class, IAssetInstance {
-        if (!TryGetOrCreate(type, ulid, out T? instance)) throw new ArgumentException($"Asset Id {ulid} not found");
-        return instance;
+        if (TryGetOrCreate(type, ulid, out T? instance)) return instance;
+        
+        logger.Error("Asset instance could not be created from {t} as {ulid}", type, ulid);
+        throw new ArgumentException($"Asset instance could not be created from {type} as {ulid}");
     }
 
     public T GetOrCreate<T>(AssetId assetId, Ulid? ulid = null) where T : class, IAssetInstance {

@@ -65,17 +65,17 @@ public class Engine(
         crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar("Workfloor:TextureDuckyHype"));
         crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar("Workfloor:TextureDuckyPlatinum"));
         
+        Logger.Information("{a}", Ulid.NewUlid());
+        
         const int a = 50;
-        for (int k = -50; k < a; k++) {
-            for (int j = -50; j < a; j++) {
-                // AssetId assetId = "NexitiesDebug:Entities/DuckyPlatinumActor" ;
-                AssetId assetId = j % 2 == 0 ? "Workfloor:ActorDuckyHype" : "Workfloor:ActorDuckyPlatinum";
-                if (!instanceAtlas.TryCreate(assetId, out IActor2D? newDucky)) continue;
-                newDucky.Transform2D.Translation = new Vector2(1 * j,1 * k);
-                newDucky.Transform2D.Scale = Vector2.One;
+        Parallel.For(-a, a, k => {
+            Parallel.For(-a, a, j => {
+                if (!instanceAtlas.TryCreate(j % 2 == 0 ? "Workfloor:ActorDuckyHype" : "Workfloor:ActorDuckyPlatinum", out IActor2D? newDucky)) return;
+                newDucky.Transform2D.Translation = new Vector2(1 * j, 1 * k);
                 if (!level.ChildrenIDs.TryAdd(newDucky.InstanceId)) throw new ApplicationException("Entity could not be added");
-            }
-        }
+            });
+        });
+        
         if (!instanceAtlas.TryCreate(AssetIdLib.AterraCore.Entities.Camera2D, out ICamera2D? camera2D)) return;
         camera2D.RaylibCamera2D.Camera = camera2D.RaylibCamera2D.Camera with {
             Target = new Vector2(0, 0),

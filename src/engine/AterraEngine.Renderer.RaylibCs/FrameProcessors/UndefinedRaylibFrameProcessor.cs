@@ -10,7 +10,7 @@ namespace AterraEngine.Renderer.RaylibCs.FrameProcessors;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
-public class UndefinedRaylibFrameProcessor(IAterraCoreWorld world, ILogicEventManager eventManager) : AbstractRaylibFrameProcessor(world,eventManager) {
+public class UndefinedRaylibFrameProcessor : AbstractRaylibFrameProcessor {
     protected override Color ClearColor { get; } = new(0, 0, 0, 0);
 
     // -----------------------------------------------------------------------------------------------------------------

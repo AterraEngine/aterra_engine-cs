@@ -25,7 +25,7 @@ public class ApplyImpulseCamera : NexitiesSystemUnCached<ICamera2D> {
                 Zoom = entity.RaylibCamera2D.Camera.Zoom * entity.Impulse2D.ScaleOffset.X,
                 Offset = entity.RaylibCamera2D.Camera.Offset
             };
-
+            
             entity.Impulse2D.Clear();
         }
     }
