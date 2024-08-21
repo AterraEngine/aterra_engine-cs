@@ -24,13 +24,15 @@ public abstract class NexitiesEntity(params INexitiesComponent[] components) : A
 
     private static ConcurrentDictionary<AssetId, INexitiesComponent> CreateDictionaryComponents(INexitiesComponent[] components) {
         ConcurrentDictionary<AssetId, INexitiesComponent> dict = Pools.ComponentPool.Get();
-        foreach (INexitiesComponent component in components) dict.TryAdd(component.AssetId, component);
-        return new ConcurrentDictionary<AssetId, INexitiesComponent>(dict);
+        foreach (INexitiesComponent component in components) 
+            dict.TryAdd(component.AssetId, component);
+        return dict;
     }
     private static ConcurrentDictionary<Type, AssetId> CreateDictionaryComponentTypes(INexitiesComponent[] components) {
         ConcurrentDictionary<Type, AssetId> dict = Pools.ComponentTypePool.Get();
-        foreach (INexitiesComponent component in components) dict.TryAdd(component.GetType(), component.AssetId);
-        return new ConcurrentDictionary<Type, AssetId>(dict);
+        foreach (INexitiesComponent component in components) 
+            dict.TryAdd(component.GetType(), component.AssetId);
+        return dict;
     }
 
     public IReadOnlyCollection<INexitiesComponent> Components => _components.Values.ToArray().AsReadOnly();

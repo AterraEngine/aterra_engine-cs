@@ -41,17 +41,11 @@ public class AterraCoreWorld(IAssetInstanceAtlas instanceAtlas, ILogger logger, 
             
             IEnumerable<AssetId> oldTextureAssetIds = oldLevel?.TextureAssetIds.ToArray() ?? [];
             IEnumerable<AssetId> newTextureAssetIds = ActiveLevel.TextureAssetIds.ToArray();
-
-            logger.Debug("{a}",newTextureAssetIds);
-            foreach (AssetId enqueueAssetId in newTextureAssetIds) {
-                logger.Debug("{a}",enqueueAssetId);
-                crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar(enqueueAssetId));
-            }
             
-            // foreach (AssetId dequeueAssetId in oldTextureAssetIds.Except(newTextureAssetIds)) 
-            //     crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar(dequeueAssetId, UnRegister : true ));
-            // foreach (AssetId enqueueAssetId in newTextureAssetIds.Except(oldTextureAssetIds)) 
-            //     crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar(enqueueAssetId));
+            foreach (AssetId dequeueAssetId in oldTextureAssetIds.Except(newTextureAssetIds)) 
+                crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar(dequeueAssetId, UnRegister : true ));
+            foreach (AssetId enqueueAssetId in newTextureAssetIds.Except(oldTextureAssetIds)) 
+                crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar(enqueueAssetId));
             
             return true;
         }

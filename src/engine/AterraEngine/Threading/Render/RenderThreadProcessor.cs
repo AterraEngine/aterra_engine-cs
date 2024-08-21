@@ -12,7 +12,6 @@ using AterraCore.Contracts.Threading.CTQ;
 using AterraCore.Contracts.Threading.CTQ.Dto;
 using AterraCore.Contracts.Threading.Logic;
 using AterraCore.Contracts.Threading.Rendering;
-using CodeOfChaos.Extensions.Serilog;
 using JetBrains.Annotations;
 using Serilog;
 using static Raylib_cs.Raylib;
@@ -53,8 +52,13 @@ public class RenderThreadProcessor(
                 HandleQueue();
             
                 // End of Tick
-                RunEndOfTick();
+                #region End Of Tick
+                while (_endOfTickActions.TryPop(out Action? action)) {
+                    action();
+                }
+                _endOfTickActions.Clear();
                 if (CancellationToken.IsCancellationRequested) break;
+                #endregion
             }
         }
         finally {
@@ -81,14 +85,6 @@ public class RenderThreadProcessor(
         EndDrawing();
         
         logicEventManager.InvokeUpdateFps(GetFPS());
-    }
-    
-
-    private void RunEndOfTick() {
-        while (_endOfTickActions.TryPop(out Action? action)) {
-            action();
-        }
-        _endOfTickActions.Clear();
     }
     
     private void DrawUi(IActiveLevel level) {
@@ -127,15 +123,24 @@ public class RenderThreadProcessor(
     
     private void HandleQueue() {
         while (crossThreadQueue.TextureRegistrarQueue.TryDequeue(out TextureRegistrar? textureRecord)) {
-            // if (textureRecord.UnRegister) textureAtlas.TryUnRegisterTexture(textureRecord.TextureAssetId);
-            _endOfTickActions.Push(() => {
-                textureAtlas.TryRegisterTexture(textureRecord.TextureAssetId);
-                eventManager.InvokeClearSystemCaches();
-            });
-           
+            if (textureRecord.UnRegister) PushUnRegisterTexture(textureRecord);
+            PushRegisterTexture(textureRecord);
         }
         
         while (crossThreadQueue.TryDequeue(QueueKey.LogicToRender, out Action? action)) _endOfTickActions.Push(action); 
         while (crossThreadQueue.TryDequeue(QueueKey.MainToRender, out Action? action)) _endOfTickActions.Push(action); 
+    }
+    
+    private void PushRegisterTexture(TextureRegistrar textureRecord) {
+        _endOfTickActions.Push(() => {
+             textureAtlas.TryRegisterTexture(textureRecord.TextureAssetId);
+             eventManager.InvokeClearSystemCaches();
+        });
+    }
+    private void PushUnRegisterTexture(TextureRegistrar textureRecord) {
+        _endOfTickActions.Push(() => {
+            textureAtlas.TryUnRegisterTexture(textureRecord.TextureAssetId);
+            eventManager.InvokeClearSystemCaches();
+        });
     }
 }

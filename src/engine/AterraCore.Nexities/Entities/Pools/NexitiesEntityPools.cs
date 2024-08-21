@@ -15,11 +15,12 @@ namespace AterraCore.Nexities.Entities.Pools;
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
 public class NexitiesEntityPools : INexitiesEntityPools {
-    private const int InitialCapacity = 12; // Very small basic capacity, because entities don't hold that many components
+    // Small initial capacity as entities usually don't hold many components.
+    private const int InitialCapacity = 12;
     private readonly DefaultObjectPoolProvider _objectPoolProvider = new();
 
     private ObjectPool<ConcurrentDictionary<AssetId, INexitiesComponent>>? _componentPool;
-    public ObjectPool<ConcurrentDictionary<AssetId, INexitiesComponent>> ComponentPool => 
+    public ObjectPool<ConcurrentDictionary<AssetId, INexitiesComponent>> ComponentPool =>
         _componentPool ??= _objectPoolProvider.Create(new ComponentPoolPooledObjectPolicy(InitialCapacity));
 
     private ObjectPool<ConcurrentDictionary<Type, AssetId>>? _componentTypePool;
