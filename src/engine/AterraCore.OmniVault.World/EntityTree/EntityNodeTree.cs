@@ -1,9 +1,9 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.Types;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World.EntityTree;
-using AterraCore.OmniVault.World.EntityTree.Pools;
 
 namespace AterraCore.OmniVault.World.EntityTree;
 // ---------------------------------------------------------------------------------------------------------------------

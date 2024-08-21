@@ -10,7 +10,6 @@ using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.OmniVault.World.EntityTree;
 using JetBrains.Annotations;
-using Raylib_cs;
 
 namespace AterraCore.OmniVault.World;
 // ---------------------------------------------------------------------------------------------------------------------

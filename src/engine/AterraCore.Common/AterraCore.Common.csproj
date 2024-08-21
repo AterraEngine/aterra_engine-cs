@@ -29,7 +29,6 @@
 
     <ItemGroup>
       <Folder Include="ConfigFiles\" />
-      <Folder Include="Types\EntityTree\" />
     </ItemGroup>
 
     <ItemGroup>

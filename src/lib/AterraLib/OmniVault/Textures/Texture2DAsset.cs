@@ -4,8 +4,6 @@
 using AterraCore.Contracts.OmniVault.Textures;
 using AterraCore.OmniVault.Assets;
 using AterraCore.OmniVault.Textures;
-using Microsoft.Build.Framework;
-using EngineServices=AterraCore.DI.EngineServices;
 
 namespace AterraLib.OmniVault.Textures;
 // ---------------------------------------------------------------------------------------------------------------------

@@ -13,7 +13,7 @@ namespace AterraLib.Nexities.Systems.Rendering;
 // ---------------------------------------------------------------------------------------------------------------------
 [System(AssetIdLib.AterraCore.SystemsRendering.Render2D, CoreTags.RenderSystem)]
 [UsedImplicitly]
-public class Render2D(IAssetInstanceAtlas instanceAtlas, ILogger logger) : NexitiesSystemWithParentsReversed<IHasTransform2D,IActor2D> {
+public class Render2D(IAssetInstanceAtlas instanceAtlas) : NexitiesSystemWithParentsReversed<IHasTransform2D,IActor2D> {
     private readonly Dictionary<AssetId, (Vector2 Size, Texture2D texture2D)> _texturesCache = new();
     
     // -----------------------------------------------------------------------------------------------------------------
@@ -25,24 +25,29 @@ public class Render2D(IAssetInstanceAtlas instanceAtlas, ILogger logger) : Nexit
         
         return _texturesCache[textureAssetId] = (textureAsset.Size, textureAsset.GetTexture());
     }
-    public override void ClearCaches() {
-        base.ClearCaches();
+    
+    public override void InvalidateCaches() {
+        base.InvalidateCaches();
         _texturesCache.Clear();
+        _entityArray = null;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
+    private (IHasTransform2D? parent, IActor2D child)[]? _entityArray;
     public override void Tick(IActiveLevel level) {
-        foreach ((IHasTransform2D? parent, IActor2D child) in GetEntities(level)) {
-            (Vector2 textureSize, Texture2D texture2D) = GetTextureAsset(child.Sprite2D.TextureAssetId);
-            
-            if (parent is not null) ProcessChildEntities(parent, child, textureSize, texture2D);
-            else ProcessOriginalEntity(child, textureSize, texture2D);
+        Span<(IHasTransform2D? parent, IActor2D child)> span = _entityArray ??= GetEntities(level).ToArray();
+        
+        foreach ((IHasTransform2D? parent, IActor2D child) in span) {
+            if (parent is not null) ProcessChildEntities(parent, child);
+            else ProcessOriginalEntity(child);
         }
     }
     
-    private static void ProcessChildEntities(IHasTransform2D parent, IActor2D child, Vector2 textureSize, Texture2D texture2D) {
+    private void ProcessChildEntities(IHasTransform2D parent, IActor2D child) {
+        (Vector2 textureSize, Texture2D texture2D) = GetTextureAsset(child.Sprite2D.TextureAssetId);
+        
         Raylib.DrawTexturePro(
             texture: texture2D, 
             source: child.Sprite2D.UvAndSourceCalculated ??= new Rectangle(
@@ -59,7 +64,9 @@ public class Render2D(IAssetInstanceAtlas instanceAtlas, ILogger logger) : Nexit
         );
     }
 
-    private static void ProcessOriginalEntity(IActor2D originalEntity,  Vector2 textureSize, Texture2D texture2D) {
+    private void ProcessOriginalEntity(IActor2D originalEntity) {
+        (Vector2 textureSize, Texture2D texture2D) = GetTextureAsset(originalEntity.Sprite2D.TextureAssetId);
+        
         Raylib.DrawTexturePro(
             texture: texture2D, 
             source: originalEntity.Sprite2D.UvAndSourceCalculated ??= new Rectangle(

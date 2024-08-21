@@ -9,7 +9,7 @@ namespace AterraCore.OmniVault.Assets;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class AssetInstance : IAssetInstance {
+public abstract class AssetInstance : IAssetInstance {
     public Ulid InstanceId { get; set; }
     public AssetId AssetId { get; set; }
 }

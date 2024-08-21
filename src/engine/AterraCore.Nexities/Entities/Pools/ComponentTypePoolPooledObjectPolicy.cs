@@ -2,7 +2,6 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Types.Nexities;
-using AterraCore.Contracts.Nexities.Components;
 using Microsoft.Extensions.ObjectPool;
 using System.Collections.Concurrent;
 

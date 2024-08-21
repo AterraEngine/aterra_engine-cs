@@ -5,11 +5,8 @@ using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Components;
 using AterraCore.Contracts.Nexities.Levels;
 using AterraCore.Contracts.Nexities.Systems;
-using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.OmniVault.World.EntityTree;
-using AterraCore.DI;
-using Raylib_cs;
 
 namespace AterraCore.OmniVault.World;
 

@@ -2,13 +2,11 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.Nexities.Systems;
-using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading;
 using AterraCore.Contracts.Threading.CTQ;
 using AterraCore.Contracts.Threading.CTQ.Dto;
 using AterraCore.Contracts.Threading.Logic;
-using AterraCore.DI;
 using JetBrains.Annotations;
 using Serilog;
 using System.Diagnostics;
@@ -64,7 +62,10 @@ public class LogicThreadProcessor(
                 // End of Tick
                 RunEndOfTick();
                 _ticks++;
-                if (CancellationToken.IsCancellationRequested) break;
+                if (!CancellationToken.IsCancellationRequested) continue;
+                
+                IsRunning = false;
+                break;
             }
         }
         finally {
@@ -113,21 +114,10 @@ public class LogicThreadProcessor(
     // Event Methods
     // -----------------------------------------------------------------------------------------------------------------
     public void RegisterEvents() {
-        eventManager.EventStart += Start;
-        eventManager.EventStop += Stop;
         eventManager.EventChangeActiveLevel += (_, args) => EndOfTickActions.Push(() => world.TryChangeActiveLevel(args.NewLevelId));
         
         eventManager.EventActualTps += (_, d) => Logger.Debug("TPS: {0}", d);
         // eventManager.EventActualTps += (_, _) => Logger.Debug("Assets: {0}", EngineServices.GetService<IAssetInstanceAtlas>().TotalCount);
-    }
-
-    private void Start(object? _, EventArgs __) {
-        Logger.Information("Thread started");
-    }
-
-    private void Stop(object? _, EventArgs __) {
-        IsRunning = false;
-        Logger.Information("Thread stopped");
     }
 
     private void HandleQueue() {

@@ -10,7 +10,6 @@ namespace AterraCore.Contracts.Threading.CTQ;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
 public interface ICrossThreadQueue {
     ConcurrentQueue<TextureRegistrar> TextureRegistrarQueue { get; }
     

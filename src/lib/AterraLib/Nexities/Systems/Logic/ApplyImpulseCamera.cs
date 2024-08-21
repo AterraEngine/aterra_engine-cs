@@ -13,7 +13,7 @@ namespace AterraLib.Nexities.Systems.Logic;
 [System(AssetIdLib.AterraCore.SystemsLogic.ApplyImpulseCamera, CoreTags.LogicSystem)]
 [Injectable<ApplyImpulseCamera>(ServiceLifetime.Singleton)]
 [UsedImplicitly]
-public class ApplyImpulseCamera : NexitiesSystemUnCached<ICamera2D> {
+public class ApplyImpulseCamera : NexitiesSystemWithFilter<ICamera2D> {
     protected override Predicate<ICamera2D> Filter { get; } = entity => !entity.Impulse2D.IsEmpty;
 
     public override void Tick(IActiveLevel level) {

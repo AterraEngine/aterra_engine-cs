@@ -5,12 +5,14 @@ using AterraCore.Common.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 
 namespace AterraCore.Common.Types.Nexities;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
+[StructLayout(LayoutKind.Sequential)]
 public readonly struct AssetId : IEqualityOperators<AssetId, AssetId, bool>, IEquatable<AssetId>, IEqualityOperators<AssetId, PluginId, bool> {
     public PluginId PluginId { get; }
     public AssetName AssetName { get; }
@@ -39,14 +41,11 @@ public readonly struct AssetId : IEqualityOperators<AssetId, AssetId, bool>, IEq
 
     public AssetId(string assetId) {
         Match match = RegexLib.AssetId.Match(assetId);
-        PluginId = new PluginId(match.Groups[1].Success
-            ? match.Groups[1]
-            : throw new ArgumentException("Plugin Name could not be determined ")
-        );
-        AssetName = new AssetName(match.Groups[2].Success 
-            ? match.Groups[2] 
-            : throw new ArgumentException("Namespace for the asset could not be determined")
-        );
+        if (!match.Groups[1].Success) throw new ArgumentException("Plugin Name could not be determined ");
+        if (!match.Groups[2].Success) throw new ArgumentException("Namespace for the asset could not be determined");
+        
+        PluginId = new PluginId(match.Groups[1]);
+        AssetName = new AssetName(match.Groups[2]);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -74,8 +73,7 @@ public readonly struct AssetId : IEqualityOperators<AssetId, AssetId, bool>, IEq
     public override int GetHashCode() => _hashCode;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private int ComputeHashCode()
-    {
+    private int ComputeHashCode() {
         int hash = 17;
         hash = hash * 31 + PluginId.GetHashCode();
         hash = hash * 31 + AssetName.GetHashCode();

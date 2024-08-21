@@ -9,7 +9,7 @@ namespace AterraCore.Contracts.Threading.CTQ.Dto;
 public enum QueueThreads{
     Main,
     Logic,
-    Render,
+    Render
 }
 
 public record QueueKey(

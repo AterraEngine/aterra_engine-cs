@@ -21,6 +21,7 @@ public class DataCollector : IDataCollector {
     public double DeltaTps { get; internal set; }
     
     private const int MaxHistorySize = 60 * 1000;
+    #region FpsAverageWatch
     private readonly HashSet<int> _fpsHistory  = new(MaxHistorySize);
     private readonly Stopwatch _fpsAverageWatch = Stopwatch.StartNew();
     internal void UpdateFpsAverage(int fps) {
@@ -32,7 +33,8 @@ public class DataCollector : IDataCollector {
         if (_fpsAverageWatch.ElapsedMilliseconds < MaxHistorySize) _fpsHistory.Clear();
         _fpsAverageWatch.Restart();
     }
-    
+    #endregion
+    #region TpsAverageWatch
     private readonly HashSet<int> _tpsHistory  = new(MaxHistorySize);
     private readonly Stopwatch _tpsAverageWatch = Stopwatch.StartNew();
     internal void UpdateTpsAverage(int tps) {
@@ -44,4 +46,5 @@ public class DataCollector : IDataCollector {
         if (_tpsAverageWatch.ElapsedMilliseconds < MaxHistorySize) _tpsHistory.Clear();
         _tpsAverageWatch.Restart();
     }
+    #endregion
 }

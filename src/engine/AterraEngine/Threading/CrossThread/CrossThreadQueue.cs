@@ -3,7 +3,6 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.Threading.CTQ;
 using AterraCore.Contracts.Threading.CTQ.Dto;
-using CodeOfChaos.Extensions;
 using JetBrains.Annotations;
 using Serilog;
 using System.Collections.Concurrent;

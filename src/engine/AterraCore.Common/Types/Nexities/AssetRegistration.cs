@@ -2,11 +2,13 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace AterraCore.Common.Types.Nexities;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
+[StructLayout(LayoutKind.Sequential)]
 public record struct AssetRegistration(
     AssetId AssetId,
     Type Type

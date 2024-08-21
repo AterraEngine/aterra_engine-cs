@@ -11,9 +11,7 @@ using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading;
 using AterraCore.Contracts.Threading.CTQ;
-using AterraCore.Contracts.Threading.CTQ.Dto;
 using JetBrains.Annotations;
-using Raylib_cs;
 using Serilog;
 using System.Numerics;
 
@@ -56,9 +54,6 @@ public class Engine(
         // -------------------------------------------------------------------------------------------------------------
         if(!instanceAtlas.TryGetOrCreateSingleton("Workfloor:Levels/MainLevel", out INexitiesLevel2D? level)) return;
         
-        // crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar("Workfloor:TextureDuckyHype"));
-        // crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar("Workfloor:TextureDuckyPlatinum"));
-        
         const int a = 50;
         Parallel.For(-a, a, k => {
             Parallel.For(-a, a, j => {
@@ -91,12 +86,10 @@ public class Engine(
         await Task.Delay(1000);
         
         if (!world.TryChangeActiveLevel("Workfloor:Levels/MainLevel")) throw new ApplicationException("Failed to change active level");
-        logger.Debug("Spawned {x} entities", level.ChildrenIDs.Count);
-        logger.Debug("Spawned {x} level", level.InstanceId);
         
         // -------------------------------------------------------------------------------------------------------------
 
-        // Block main thread until all have been cancelled
+        // Block main thread until all sub threads have been cancelled
         WaitHandle[] waitHandles = threadingManager.GetWaitHandles();
         WaitHandle.WaitAll(waitHandles);
         Logger.Information("Child Threads have been cancelled");

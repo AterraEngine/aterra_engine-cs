@@ -6,12 +6,14 @@ using CodeOfChaos.Extensions;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 
 namespace AterraCore.Common.Types.Nexities;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
+[StructLayout(LayoutKind.Sequential)]
 public readonly struct AssetName : 
     IEqualityOperators<AssetName, AssetName, bool>,
     IEqualityOperators<AssetName, string, bool>,
@@ -26,19 +28,15 @@ public readonly struct AssetName :
     // -----------------------------------------------------------------------------------------------------------------
     public AssetName(string value) {
         Match match = RegexLib.AssetName.Match(value);
-        Values = match.Groups[1].Success
-            ? match.Groups[1].Value.Split('.', '/')
-            : throw new ArgumentException("Plugin Id could not be determined ")
-        ;
+        if (!match.Groups[1].Success) throw new ArgumentException("Plugin Id could not be determined ");
+        Values = match.Groups[1].Value.Split('.', '/');
         _hashCode = ComputeHashCode();
     }
     
     public AssetName(IEnumerable<string> values) {
         IEnumerable<string> enumerable = values as string[] ?? values.ToArray();
-        Values = enumerable.All(value => RegexLib.AssetNamePartial.Match(value).Success)
-            ? enumerable
-            : throw new ArgumentException("Asset Name could not be determined")
-        ;
+        if (!enumerable.All(value => RegexLib.AssetNamePartial.Match(value).Success)) throw new ArgumentException("Asset Name could not be determined");
+        Values = enumerable;
         _hashCode = ComputeHashCode();
     }
     

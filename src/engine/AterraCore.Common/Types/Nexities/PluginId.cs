@@ -6,12 +6,14 @@ using CodeOfChaos.Extensions;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 
 namespace AterraCore.Common.Types.Nexities;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
+[StructLayout(LayoutKind.Sequential)]
 public readonly struct PluginId : 
     IEqualityOperators<PluginId, PluginId, bool>,
     IEqualityOperators<PluginId, string, bool>,
@@ -26,10 +28,8 @@ public readonly struct PluginId :
     // -----------------------------------------------------------------------------------------------------------------
     public PluginId(string value) {
         Match match = RegexLib.PluginId.Match(value);
-        Value = match.Groups[1].Success
-            ? match.Groups[1].Value
-            : throw new ArgumentException("Plugin Id could not be determined ")
-        ;
+        if (!match.Groups[1].Success) throw new ArgumentException("Plugin Id could not be determined ");
+        Value =  match.Groups[1].Value;
         _hashCode = ComputeHashCode();
     }
     

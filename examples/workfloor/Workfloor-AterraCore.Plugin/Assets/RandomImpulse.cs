@@ -18,11 +18,10 @@ namespace Workfloor_AterraCore.Plugin.Assets;
 [System("Workfloor:ApplyRandomImpulse", CoreTags.LogicSystem)]
 [Injectable<RandomImpulse>(ServiceLifetime.Singleton)]
 [UsedImplicitly]
-public class RandomImpulse : NexitiesSystem<IActor2D> {
+public class RandomImpulse : NexitiesSystemWithFilter<IActor2D> {
     protected override Predicate<IActor2D> Filter { get; } = entity => entity is not IPlayer2D;
     private readonly Random _random  = new();
-    // private double mod = 0;
-
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------

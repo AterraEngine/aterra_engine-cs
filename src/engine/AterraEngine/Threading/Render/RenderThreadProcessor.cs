@@ -102,23 +102,13 @@ public class RenderThreadProcessor(
     }
     
     public void RegisterEvents() {
-        eventManager.EventStart += Start;
-        eventManager.EventStop += Stop;
         eventManager.EventClearSystemCaches += OnEventManagerOnEventClearSystemCaches;
     }
     
     private void OnEventManagerOnEventClearSystemCaches(object? _, EventArgs __) {
         if (!world.TryGetActiveLevel(out IActiveLevel? level)) return;
         foreach (INexitiesSystem system in level.RenderSystems) 
-            system.ClearCaches();
-    }
-
-    private void Start(object? _, EventArgs __) {
-        Logger.Information("Thread started");
-    }
-
-    private void Stop(object? _, EventArgs __) {
-        Logger.Information("Thread stopped");
+            system.InvalidateCaches();
     }
     
     private void HandleQueue() {
@@ -137,6 +127,7 @@ public class RenderThreadProcessor(
              eventManager.InvokeClearSystemCaches();
         });
     }
+    
     private void PushUnRegisterTexture(TextureRegistrar textureRecord) {
         _endOfTickActions.Push(() => {
             textureAtlas.TryUnRegisterTexture(textureRecord.TextureAssetId);

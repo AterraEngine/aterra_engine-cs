@@ -21,7 +21,7 @@ public class MainLevelSystemIds : SystemIds {
     protected override AssetId[] LogicSystems { get; set; } = [
         AssetIdLib.AterraCore.SystemsLogic.PlayerController,
         AssetIdLib.AterraCore.SystemsLogic.CameraController,
-        "Workfloor:ApplyRandomImpulse",
+        // "Workfloor:ApplyRandomImpulse",
         // "Workfloor:ApplyRandomImpulseCamera",
         AssetIdLib.AterraCore.SystemsLogic.ApplyImpulse,
         AssetIdLib.AterraCore.SystemsLogic.ApplyImpulseCamera

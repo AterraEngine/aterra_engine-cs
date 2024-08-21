@@ -3,7 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using Microsoft.Extensions.ObjectPool;
 
-namespace AterraCore.OmniVault.World.EntityTree.Pools;
+namespace AterraCore.Common.Types;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

@@ -18,7 +18,6 @@ public class PluginLoaderPreChecks : IBootOperation {
         Logger.Debug("Entered Plugin Loader Pre Checks");
 
         components.PluginLoader
-      
             #region Check FilePath exists
             .IterateOverValid(
                 (_, plugin) => {
@@ -28,7 +27,6 @@ public class PluginLoaderPreChecks : IBootOperation {
                 }
             )       
             #endregion
-
             #region Check Uniqueness
             .IterateOverValid(
                 (loader, plugin) => {
