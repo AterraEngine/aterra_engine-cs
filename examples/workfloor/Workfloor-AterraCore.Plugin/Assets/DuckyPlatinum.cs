@@ -14,6 +14,7 @@ using AterraLib.Nexities.Entities;
 using AterraLib.OmniVault.Textures;
 using JetBrains.Annotations;
 using Raylib_cs;
+using System.Numerics;
 
 namespace Workfloor_AterraCore.Plugin.Assets;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -27,6 +28,7 @@ public interface IDuckyPlatinumActor : IActor2D;
 [UsedImplicitly]
 public class TextureDuckyPlatinum : Texture2DAsset,ITextureDuckyPlatinum {
     public override string ImagePath { get; set; } = "assets/ducky-platinum.png";
+    public override Vector2 Size { get; set; } = new (2048, 2048);
 }
 
 [Component<SpriteDuckyPlatinum>("Workfloor:SpriteDuckyPlatinum")]

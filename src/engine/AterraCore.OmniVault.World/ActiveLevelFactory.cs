@@ -10,6 +10,7 @@ using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.OmniVault.World.EntityTree;
 using JetBrains.Annotations;
+using Raylib_cs;
 
 namespace AterraCore.OmniVault.World;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -19,17 +20,23 @@ namespace AterraCore.OmniVault.World;
 public class ActiveLevelFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreeFactory entityTreeFactory) : IActiveLevelFactory {
     public IActiveLevel CreateLevel2D(INexitiesLevel2D level2D) {
         IEntityNodeTree entityTree = entityTreeFactory.CreateFromRootId(level2D.InstanceId);
-        instanceAtlas.TryGet(
-            ((ICamera2D)entityTree.GetAsFlat().First(asset => asset is ICamera2D)).RaylibCamera2D.InstanceId,
-            out IRaylibCamera2D? camera2D
-        );
+        List<IAssetInstance> entityTreeFlat = entityTree.GetAsFlat().ToList();
+
+        IRaylibCamera2D? camera2D = null;
+        if (entityTreeFlat.FirstOrDefault(asset => asset is ICamera2D) is ICamera2D possibleCamera )
+            instanceAtlas.TryGet(possibleCamera.RaylibCamera2D.InstanceId, out camera2D);
         
         return new ActiveLevel {
             RawLevelData = level2D,
             LogicSystems = GetNexitiesSystems(level2D.NexitiesSystemIds.LogicSystemIds),
             RenderSystems = GetNexitiesSystems(level2D.NexitiesSystemIds.RenderSystemIds),
             ActiveEntityTree = entityTree,
-            Camera2DEntity = camera2D!
+            Camera2DEntity = camera2D,
+            TextureAssetIds = entityTreeFlat
+                .Where(asset => asset is IActor2D)
+                .Select(asset => ((IActor2D)asset).Sprite2D.TextureAssetId)
+                .Distinct()
+                .ToArray()
         };
     }
     

@@ -1,18 +1,14 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraEngine.Threading.CrossThread;
+namespace AterraCore.Contracts.Threading;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public enum QueueSubType {
-    Logic,
-    Render,
-    Main
-}
 
-public record QueueType(
-    QueueSubType Sender,
-    QueueSubType Receiver
-);
+public interface IThreadProcessor {
+    CancellationToken CancellationToken { get; set; }
+    void RegisterEvents();
+    void Run();
+}

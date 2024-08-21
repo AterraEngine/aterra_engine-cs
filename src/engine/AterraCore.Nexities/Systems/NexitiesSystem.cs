@@ -20,6 +20,7 @@ public abstract class NexitiesSystem<TEntity> : AssetInstance, INexitiesSystem
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public abstract void Tick(IActiveLevel level);
+    public virtual void ClearCaches() {}
 
     // -----------------------------------------------------------------------------------------------------------------
     // Helper Methods

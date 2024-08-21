@@ -10,4 +10,5 @@ namespace AterraCore.Contracts.Nexities.Systems;
 // ---------------------------------------------------------------------------------------------------------------------
 public interface INexitiesSystem : IAssetInstance {
     void Tick(IActiveLevel level);
+    void ClearCaches();
 }

@@ -22,6 +22,7 @@ public abstract class NexitiesSystemWithParents<TParent, TChild> : AssetInstance
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public abstract void Tick(IActiveLevel level);
+    public virtual void ClearCaches() {}
 
     // -----------------------------------------------------------------------------------------------------------------
     // Helper Methods

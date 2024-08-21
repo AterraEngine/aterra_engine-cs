@@ -9,12 +9,9 @@ using AterraCore.Contracts.Nexities.Entities;
 using AterraCore.Contracts.Nexities.Levels;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World;
-using AterraCore.Contracts.Renderer;
 using AterraCore.Contracts.Threading;
 using AterraCore.Contracts.Threading.CTQ;
 using AterraCore.Contracts.Threading.CTQ.Dto;
-using AterraCore.Contracts.Threading.Logic;
-using AterraEngine.Threading.Render;
 using JetBrains.Annotations;
 using Raylib_cs;
 using Serilog;
@@ -31,8 +28,6 @@ public class Engine(
     IAssetInstanceAtlas instanceAtlas,
     IPluginAtlas pluginAtlas,
     IAterraCoreWorld world,
-    RenderThreadEvents renderThreadEvents,
-    ILogicEventManager logicEventManager,
     IThreadingManager threadingManager,
     ICrossThreadQueue crossThreadQueue
 ) : IEngine {
@@ -48,30 +43,28 @@ public class Engine(
         Task<bool> renderTask = threadingManager.TrySpawnRenderThreadAsync();
         
         await Task.WhenAll(logicTask, renderTask);
-        if (!logicTask.Result || !renderTask.Result) return;
-
-        renderThreadEvents.InvokeApplicationStageChange(ApplicationStage.StartupScreen);
+        if (!logicTask.Result) throw new ApplicationException("Failed to start LogicThread ");
+        if (!renderTask.Result) throw new ApplicationException("Failed to start RenderThread ");
 
         foreach (AssetRegistration assetRegistration in pluginAtlas.GetAssetRegistrations()) {
             if (!assetAtlas.TryAssignAsset(assetRegistration, out AssetId? _)) {
                 Logger.Warning("Type {Type} could not be assigned as an asset", assetRegistration.Type);
             }
         }
+        if (!world.TryChangeActiveLevel(AssetIdLib.AterraCore.Entities.EmptyLevel)) throw new ApplicationException("Failed to change active level");
         
         // -------------------------------------------------------------------------------------------------------------
         if(!instanceAtlas.TryGetOrCreateSingleton("Workfloor:Levels/MainLevel", out INexitiesLevel2D? level)) return;
         
-        logicEventManager.InvokeStart();
-        crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar("Workfloor:TextureDuckyHype"));
-        crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar("Workfloor:TextureDuckyPlatinum"));
-        
-        Logger.Information("{a}", Ulid.NewUlid());
+        // crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar("Workfloor:TextureDuckyHype"));
+        // crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar("Workfloor:TextureDuckyPlatinum"));
         
         const int a = 50;
         Parallel.For(-a, a, k => {
             Parallel.For(-a, a, j => {
                 if (!instanceAtlas.TryCreate(j % 2 == 0 ? "Workfloor:ActorDuckyHype" : "Workfloor:ActorDuckyPlatinum", out IActor2D? newDucky)) return;
                 newDucky.Transform2D.Translation = new Vector2(1 * j, 1 * k);
+                newDucky.Transform2D.Scale = Vector2.One;
                 if (!level.ChildrenIDs.TryAdd(newDucky.InstanceId)) throw new ApplicationException("Entity could not be added");
             });
         });
@@ -95,12 +88,13 @@ public class Engine(
         playerAddendum.Transform2D.Scale = Vector2.One;
         player2D.ChildrenIDs.TryAddFirst(playerAddendum.InstanceId);
         
+        await Task.Delay(1000);
+        
         if (!world.TryChangeActiveLevel("Workfloor:Levels/MainLevel")) throw new ApplicationException("Failed to change active level");
         logger.Debug("Spawned {x} entities", level.ChildrenIDs.Count);
         logger.Debug("Spawned {x} level", level.InstanceId);
         
         // -------------------------------------------------------------------------------------------------------------
-        renderThreadEvents.InvokeApplicationStageChange(ApplicationStage.Level);
 
         // Block main thread until all have been cancelled
         WaitHandle[] waitHandles = threadingManager.GetWaitHandles();

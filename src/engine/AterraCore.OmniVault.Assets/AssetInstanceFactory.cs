@@ -28,7 +28,7 @@ public class AssetInstanceFactory(ILogger logger) : IAssetInstanceFactory {
     // -----------------------------------------------------------------------------------------------------------------
     // Helper Methods
     // -----------------------------------------------------------------------------------------------------------------
-    private Func<object>[] CreateParameterActions(AssetRegistration registration) {
+    private static Func<object>[] CreateParameterActions(AssetRegistration registration) {
         ParameterInfo[] parameters = registration.Constructor.GetParameters();
         
         var actions = new Func<object>[parameters.Length]; // Actions is set to an empty array
@@ -49,7 +49,6 @@ public class AssetInstanceFactory(ILogger logger) : IAssetInstanceFactory {
         }
 
         // Finally try and store the actions
-        logger.Debug("Created new asset factory");
         return actions;
     }
     

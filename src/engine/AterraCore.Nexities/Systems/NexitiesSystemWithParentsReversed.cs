@@ -26,6 +26,7 @@ public abstract class NexitiesSystemWithParentsReversed<TParent, TChild> : Asset
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public abstract void Tick(IActiveLevel level);
+    public virtual void ClearCaches() {}
 
     // -----------------------------------------------------------------------------------------------------------------
     // Helper Methods

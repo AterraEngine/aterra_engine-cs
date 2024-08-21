@@ -1,14 +1,20 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Contracts.Nexities.Systems;
+using AterraCore.Contracts.OmniVault.DataCollector;
 using AterraCore.Contracts.OmniVault.Textures;
+using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Renderer;
 using AterraCore.Contracts.Threading;
 using AterraCore.Contracts.Threading.CTQ;
 using AterraCore.Contracts.Threading.CTQ.Dto;
+using AterraCore.Contracts.Threading.Logic;
+using AterraCore.Contracts.Threading.Rendering;
+using CodeOfChaos.Extensions.Serilog;
 using JetBrains.Annotations;
-using Raylib_cs;
 using Serilog;
+using static Raylib_cs.Raylib;
 
 namespace AterraEngine.Threading.Render;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -18,56 +24,115 @@ namespace AterraEngine.Threading.Render;
 public class RenderThreadProcessor(
     ILogger logger,
     IMainWindow mainWindow,
-    IApplicationStageManager applicationStageManager,
-    RenderThreadEvents renderThreadEvents,
+    IAterraCoreWorld world,
     ITextureAtlas textureAtlas,
     ICrossThreadQueue crossThreadQueue,
-    IThreadingManager threadingManager
-) : AbstractThread {
-    
+    IThreadingManager threadingManager,
+    IDataCollector dataCollector,
+    IRenderEventManager eventManager,
+    ILogicEventManager logicEventManager
+) :  IRenderThreadProcessor {
     private ILogger Logger { get; } = logger.ForContext<RenderThreadProcessor>();
+    public CancellationToken CancellationToken { get; set; }
+    
+    private static Color ClearColor { get; } = new(0, 0, 0, 0);
+    private readonly Stack<Action> _endOfTickActions = [];
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public override void Run() {
+    public void Run() {
         mainWindow.Init();
+        
         try {
             // Window is actually running now
-            while (!Raylib.WindowShouldClose()) {
+            while (!WindowShouldClose()) {
+                Update();
                 HandleQueue();
             
-                // Draws the actual frames
-                applicationStageManager.GetCurrentFrameProcessor().DrawFrame();
-            
-                // Wait until the end of the Tick cycle
-                // Done by RayLib
-            
                 // End of Tick
+                RunEndOfTick();
                 if (CancellationToken.IsCancellationRequested) break;
             }
         }
         finally {
             Logger.Information("Render Thread Closing");
-            Raylib.CloseWindow();
+            CloseWindow();
             threadingManager.CancelThreads();
         }
     }
-    public override void RegisterEvents() {
-        renderThreadEvents.EventApplicationStageChange += applicationStageManager.ReceiveStageChange;
-    }
+    
+    private void Update() {
+        if (!world.TryGetActiveLevel(out IActiveLevel? level)) return;
+        
+        BeginDrawing();
+        ClearBackground(ClearColor);
 
-    private void HandleQueue() {
-        while (crossThreadQueue.TextureRegistrarQueue.TryDequeue(out TextureRegistrar? textureRecord)) {
-            if (textureRecord.UnRegister) textureAtlas.TryUnRegisterTexture(textureRecord.TextureAssetId);
-            textureAtlas.TryRegisterTexture(textureRecord.TextureAssetId);
+        if (level.Camera2DEntity is { Camera: var camera2D }) {
+            BeginMode2D(camera2D);
+            foreach (INexitiesSystem system in level.RenderSystems) 
+                system.Tick(level);
+            EndMode2D();
         }
         
-        while (crossThreadQueue.TryDequeue(QueueKey.LogicToRender, out Action? action)) {
-            action.Invoke();
+        DrawUi(level);
+        EndDrawing();
+        
+        logicEventManager.InvokeUpdateFps(GetFPS());
+    }
+    
+
+    private void RunEndOfTick() {
+        while (_endOfTickActions.TryPop(out Action? action)) {
+            action();
         }
-        while (crossThreadQueue.TryDequeue(QueueKey.MainToRender, out Action? action)) {
-            action.Invoke();
+        _endOfTickActions.Clear();
+    }
+    
+    private void DrawUi(IActiveLevel level) {
+        DrawRectangle(0, 0, 250, 50 * 9, Color.White);
+        DrawText($"   FPS : {dataCollector.Fps}", 0, 0, 32, Color.DarkBlue);
+        DrawText($"minFPS : {dataCollector.FpsMin}", 0, 50, 32, Color.DarkBlue);
+        DrawText($"maxFPS : {dataCollector.FpsMax}", 0, 100, 32, Color.DarkBlue);
+        DrawText($"avgFPS : {dataCollector.FpsAverage:N2}", 0, 150, 32, Color.DarkBlue);
+        DrawText($"   TPS : {dataCollector.Tps}", 0, 200, 32, Color.DarkBlue);
+        DrawText($"avgTPS : {dataCollector.TpsAverage:N2}", 0, 250, 32, Color.DarkBlue);
+        
+        DrawText($"DUCKS : {level.RawLevelData.ChildrenIDs.Count}",0, 300, 32, Color.DarkBlue);
+        DrawText($"ID : {level.RawLevelData.AssetId}",0, 350, 12, Color.DarkBlue);
+    }
+    
+    public void RegisterEvents() {
+        eventManager.EventStart += Start;
+        eventManager.EventStop += Stop;
+        eventManager.EventClearSystemCaches += OnEventManagerOnEventClearSystemCaches;
+    }
+    
+    private void OnEventManagerOnEventClearSystemCaches(object? _, EventArgs __) {
+        if (!world.TryGetActiveLevel(out IActiveLevel? level)) return;
+        foreach (INexitiesSystem system in level.RenderSystems) 
+            system.ClearCaches();
+    }
+
+    private void Start(object? _, EventArgs __) {
+        Logger.Information("Thread started");
+    }
+
+    private void Stop(object? _, EventArgs __) {
+        Logger.Information("Thread stopped");
+    }
+    
+    private void HandleQueue() {
+        while (crossThreadQueue.TextureRegistrarQueue.TryDequeue(out TextureRegistrar? textureRecord)) {
+            // if (textureRecord.UnRegister) textureAtlas.TryUnRegisterTexture(textureRecord.TextureAssetId);
+            _endOfTickActions.Push(() => {
+                textureAtlas.TryRegisterTexture(textureRecord.TextureAssetId);
+                eventManager.InvokeClearSystemCaches();
+            });
+           
         }
+        
+        while (crossThreadQueue.TryDequeue(QueueKey.LogicToRender, out Action? action)) _endOfTickActions.Push(action); 
+        while (crossThreadQueue.TryDequeue(QueueKey.MainToRender, out Action? action)) _endOfTickActions.Push(action); 
     }
 }

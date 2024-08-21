@@ -16,7 +16,7 @@ namespace AterraCore.OmniVault.Textures;
 [UsedImplicitly]
 public class TextureAtlas(ILogger logger, IAssetInstanceAtlas instanceAtlas) : ITextureAtlas {
     private ILogger Logger { get; } = logger.ForContext<TextureAtlas>();
-    private IEnumerable<ITexture2DAsset> TextureAssets => instanceAtlas.OfType<ITexture2DAsset>();
+    public IEnumerable<ITexture2DAsset> TextureAssets => instanceAtlas.OfType<ITexture2DAsset>();
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods

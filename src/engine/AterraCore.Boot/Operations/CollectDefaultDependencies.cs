@@ -12,6 +12,7 @@ using AterraCore.Contracts.Renderer;
 using AterraCore.Contracts.Threading;
 using AterraCore.Contracts.Threading.CTQ;
 using AterraCore.Contracts.Threading.Logic;
+using AterraCore.Contracts.Threading.Rendering;
 using AterraCore.FlexiPlug;
 using AterraCore.Loggers;
 using AterraCore.OmniVault.Assets;
@@ -47,13 +48,15 @@ public class CollectDefaultDependencies : IBootOperation {
             #region Base AterraEngine
             NewServiceDescriptor<IEngine, Engine>(ServiceLifetime.Singleton),
             NewServiceDescriptor<ILogger>(EngineLogger.CreateLogger(components.EngineConfigXml.BootConfig.Logging.UseAsyncConsole)),
-            NewServiceDescriptor<RenderThreadEvents, RenderThreadEvents>(ServiceLifetime.Singleton),
-            NewServiceDescriptor<IApplicationStageManager, ApplicationStageManager>(ServiceLifetime.Singleton),
             NewServiceDescriptor<IMainWindow, MainWindow>(ServiceLifetime.Singleton),
-            NewServiceDescriptor<IThreadingManager, ThreadingManager>(ServiceLifetime.Singleton),
-            NewServiceDescriptor<ICrossThreadQueue, CrossThreadQueue>(ServiceLifetime.Singleton),
             NewServiceDescriptor<IActiveLevelFactory, ActiveLevelFactory>(ServiceLifetime.Singleton),
             
+            NewServiceDescriptor<IThreadingManager, ThreadingManager>(ServiceLifetime.Singleton),
+            NewServiceDescriptor<ICrossThreadQueue, CrossThreadQueue>(ServiceLifetime.Singleton),
+            NewServiceDescriptor<ILogicEventManager, LogicEventManager>(ServiceLifetime.Singleton),
+            NewServiceDescriptor<IRenderEventManager, RenderEventManager>(ServiceLifetime.Singleton),
+            NewServiceDescriptor<ILogicThreadProcessor, LogicThreadProcessor>(ServiceLifetime.Singleton),
+            NewServiceDescriptor<IRenderThreadProcessor, RenderThreadProcessor>(ServiceLifetime.Singleton),
             #endregion
             #region PluginLoading
             NewServiceDescriptor<IPluginAtlas, PluginAtlas>(ServiceLifetime.Singleton),
@@ -70,8 +73,6 @@ public class CollectDefaultDependencies : IBootOperation {
             NewServiceDescriptor<IEntityTreeFactory, EntityTreeFactory>(ServiceLifetime.Singleton),
             NewServiceDescriptor<IEntityTreePools, EntityTreePools>(ServiceLifetime.Singleton),
             #endregion
-            
-            NewServiceDescriptor<ILogicEventManager, LogicEventManager>(ServiceLifetime.Singleton),
             ServiceDescriptor.Singleton(DataCollectorFactory.Create), 
         ];
         

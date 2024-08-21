@@ -25,7 +25,11 @@ public class Render2D(IAssetInstanceAtlas instanceAtlas, ILogger logger) : Nexit
         
         return _texturesCache[textureAssetId] = (textureAsset.Size, textureAsset.GetTexture());
     }
-    
+    public override void ClearCaches() {
+        base.ClearCaches();
+        _texturesCache.Clear();
+    }
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------

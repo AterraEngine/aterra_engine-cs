@@ -2,9 +2,9 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.Threading;
+using AterraCore.Contracts.Threading.Logic;
+using AterraCore.Contracts.Threading.Rendering;
 using AterraCore.DI;
-using AterraEngine.Threading.Logic;
-using AterraEngine.Threading.Render;
 using JetBrains.Annotations;
 using Serilog;
 
@@ -16,45 +16,20 @@ namespace AterraEngine.Threading;
 [UsedImplicitly]
 public class ThreadingManager(ILogger logger) : IThreadingManager {
     private ILogger Logger { get; } = logger.ForContext<ThreadingManager>();
-    
-    public IThreadData? LogicThreadData { get; private set; }
-    public IThreadData? RenderThreadData { get; private set; } 
+
+    private IThreadData? LogicThreadData { get; set; }
+    private IThreadData? RenderThreadData { get; set; } 
     
     private readonly List<CancellationToken> _cancellationTokens = [];
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public async Task<bool> TrySpawnRenderThreadAsync() {
-        var cts = new CancellationTokenSource();
-        
-        try {
-            var threadProcessor = EngineServices.CreateWithServices<RenderThreadProcessor>();
-            threadProcessor.CancellationToken = cts.Token;
-            _cancellationTokens.Add(threadProcessor.CancellationToken);
-            
-            // Add extra callbacks
-            threadProcessor.RegisterEvents();
-            
-            // Actually spawn the thread
-            var renderThread = new Thread(threadProcessor.Run);
-            renderThread.Start();
-            RenderThreadData = new ThreadData(cts, renderThread);
-
-            return true;
-        }
-        catch (Exception ex) {
-            Logger.Error(ex, "An error occured while spawning render thread");
-            await cts.CancelAsync();
-            return false;
-        }
-    }
-
     public async Task<bool> TrySpawnLogicThreadAsync() {
         var cts = new CancellationTokenSource();
         
         try {
-            var threadProcessor = EngineServices.CreateWithServices<LogicThreadProcessor>();
+            var threadProcessor = EngineServices.GetService<ILogicThreadProcessor>();
             threadProcessor.CancellationToken = cts.Token;
             _cancellationTokens.Add(threadProcessor.CancellationToken);
             
@@ -62,9 +37,9 @@ public class ThreadingManager(ILogger logger) : IThreadingManager {
             threadProcessor.RegisterEvents();
             
             // Actually spawn the thread
-            var renderThread = new Thread(threadProcessor.Run);
-            renderThread.Start();
-            LogicThreadData = new ThreadData(cts, renderThread);
+            var logicThread = new Thread(threadProcessor.Run);
+            LogicThreadData = new ThreadData(cts, logicThread);
+            LogicThreadData.Thread.Start();
 
             return true;
         }
@@ -74,6 +49,32 @@ public class ThreadingManager(ILogger logger) : IThreadingManager {
             return false;
         }
     }
+    
+    public async Task<bool> TrySpawnRenderThreadAsync() {
+        var cts = new CancellationTokenSource();
+        
+        try {
+            var threadProcessor = EngineServices.GetService<IRenderThreadProcessor>();
+            threadProcessor.CancellationToken = cts.Token;
+            _cancellationTokens.Add(threadProcessor.CancellationToken);
+            
+            // Add extra callbacks
+            threadProcessor.RegisterEvents();
+            
+            // Actually spawn the thread
+            var renderThread = new Thread(threadProcessor.Run);
+            RenderThreadData = new ThreadData(cts, renderThread);
+            RenderThreadData.Thread.Start();
+            
+            return true;
+        }
+        catch (Exception ex) {
+            Logger.Error(ex, "An error occured while spawning render thread");
+            await cts.CancelAsync();
+            return false;
+        }
+    }
+    
     public void CancelThreads() {
         LogicThreadData?.CancellationTokenSource.Cancel();
         RenderThreadData?.CancellationTokenSource.Cancel();

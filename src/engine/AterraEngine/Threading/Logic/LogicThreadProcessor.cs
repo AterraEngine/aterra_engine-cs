@@ -25,13 +25,13 @@ public class LogicThreadProcessor(
     ILogicEventManager eventManager,
     ICrossThreadQueue crossThreadQueue,
     IThreadingManager threadingManager
-) : AbstractThread {
+) : ILogicThreadProcessor {
     private ILogger Logger { get; } = logger.ForContext<LogicThreadProcessor>();
+    public CancellationToken CancellationToken { get; set; }
 
     private int TargetTicksPerSecond { get; set; } = 20; // TPS
     private double MillisecondsPerTick => 1000.0 / TargetTicksPerSecond;
     
-    private bool IsStarted { get; set; }
     private bool IsRunning { get; set; } = true;
     public bool IsFinished { get; private set; }
 
@@ -45,14 +45,8 @@ public class LogicThreadProcessor(
     // Run Method
     // -----------------------------------------------------------------------------------------------------------------
     #region Run & Update
-    public override void Run() {
+    public void Run() {
         try {
-            // Wait until the main thread signaled to start
-            while (!IsStarted) {
-                TickStopwatch.Restart();
-                SleepUntilEndOfTick();
-            }
-
             TpsStopwatch.Start();
 
             // Game engine is actually running now
@@ -61,7 +55,6 @@ public class LogicThreadProcessor(
 
                 // Call UPDATE LOOP
                 Update();
-                RunEndOfTick();
                 HandleQueue();
 
                 // Wait until the end of the Tick cycle
@@ -69,6 +62,7 @@ public class LogicThreadProcessor(
                 CalculateActualTps();
 
                 // End of Tick
+                RunEndOfTick();
                 _ticks++;
                 if (CancellationToken.IsCancellationRequested) break;
             }
@@ -82,16 +76,11 @@ public class LogicThreadProcessor(
     }
 
     private void Update() {
-        // Go into world
         if (!world.TryGetActiveLevel(out IActiveLevel? level)) return;
         
-        // Get all logic systems required by active level
         foreach (INexitiesSystem logicSystem in level.LogicSystems) {
             logicSystem.Tick(level);
         }
-        // run all logic systems
-        
-        // cleanup
     }
 
     private void RunEndOfTick() {
@@ -123,7 +112,7 @@ public class LogicThreadProcessor(
     // -----------------------------------------------------------------------------------------------------------------
     // Event Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public override void RegisterEvents() {
+    public void RegisterEvents() {
         eventManager.EventStart += Start;
         eventManager.EventStop += Stop;
         eventManager.EventChangeActiveLevel += (_, args) => EndOfTickActions.Push(() => world.TryChangeActiveLevel(args.NewLevelId));
@@ -133,7 +122,6 @@ public class LogicThreadProcessor(
     }
 
     private void Start(object? _, EventArgs __) {
-        IsStarted = true;
         Logger.Information("Thread started");
     }
 

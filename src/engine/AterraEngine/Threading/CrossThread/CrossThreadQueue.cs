@@ -18,7 +18,6 @@ namespace AterraEngine.Threading.CrossThread;
 public class CrossThreadQueue(ILogger logger) : ICrossThreadQueue {
     private ILogger Logger { get; } = logger.ForContext<CrossThreadQueue>();
     
-    
     public ConcurrentQueue<TextureRegistrar> TextureRegistrarQueue { get; } = new();
     
     private ConcurrentDictionary<QueueKey, ConcurrentQueue<Action>> GeneralActionQueue { get; } = new();
@@ -27,7 +26,7 @@ public class CrossThreadQueue(ILogger logger) : ICrossThreadQueue {
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public bool TryDequeue(QueueKey key, [NotNullWhen(true)] out Action? action) {
-        action = null;
+        action = default;
         return GeneralActionQueue.TryGetValue(key, out ConcurrentQueue<Action>? queue)
                && queue.TryDequeue(out action);
     }
