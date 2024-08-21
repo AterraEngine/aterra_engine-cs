@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.Nexities.Systems;
+using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.DataCollector;
 using AterraCore.Contracts.OmniVault.Textures;
 using AterraCore.Contracts.OmniVault.World;
@@ -30,7 +31,8 @@ public class RenderThreadProcessor(
     IThreadingManager threadingManager,
     IDataCollector dataCollector,
     IRenderEventManager eventManager,
-    ILogicEventManager logicEventManager
+    ILogicEventManager logicEventManager,
+    IAssetInstanceAtlas instanceAtlas
 ) :  IRenderThreadProcessor {
     private ILogger Logger { get; } = logger.ForContext<RenderThreadProcessor>();
     public CancellationToken CancellationToken { get; set; }
@@ -99,7 +101,8 @@ public class RenderThreadProcessor(
         DrawText($"avgTPS : {dataCollector.TpsAverage:N2}", 0, 250, 32, Color.DarkBlue);
         
         DrawText($"DUCKS : {level.RawLevelData.ChildrenIDs.Count}",0, 300, 32, Color.DarkBlue);
-        DrawText($"ID : {level.RawLevelData.AssetId}",0, 350, 12, Color.DarkBlue);
+        DrawText($"entities : {instanceAtlas.TotalCount}",0, 350, 32, Color.DarkBlue);
+        DrawText($"ID : {level.RawLevelData.AssetId}",0, 400, 12, Color.DarkBlue);
     }
     
     public void RegisterEvents() {

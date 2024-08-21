@@ -5,6 +5,7 @@ using AterraCore.Common.Data;
 using CodeOfChaos.Extensions;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
 namespace AterraCore.Common.Types.Nexities;
@@ -17,7 +18,8 @@ public readonly struct PluginId :
     IAdditionOperators<PluginId, AssetName, AssetId>,
     IEquatable<PluginId> 
 {
-    public string Value { get; init; } = string.Empty;
+    public string Value { get; } = string.Empty;
+    private readonly int _hashCode;
     
     // -----------------------------------------------------------------------------------------------------------------
     // Constructors
@@ -28,11 +30,13 @@ public readonly struct PluginId :
             ? match.Groups[1].Value
             : throw new ArgumentException("Plugin Id could not be determined ")
         ;
+        _hashCode = ComputeHashCode();
     }
     
     // Only supposed to be used by AssetId
     internal PluginId(Group matchGroup) {
         Value = matchGroup.Value;
+        _hashCode = ComputeHashCode();
     }
     
     // -----------------------------------------------------------------------------------------------------------------
@@ -60,25 +64,34 @@ public readonly struct PluginId :
     // -----------------------------------------------------------------------------------------------------------------
     // Comparison Methods
     // -----------------------------------------------------------------------------------------------------------------
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator ==(PluginId left, PluginId right) => left.Equals(right);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator !=(PluginId left, PluginId right) => !left.Equals(right);
-    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator ==(PluginId left, string? right) => 
         right.IsNotNullOrEmpty() 
         && TryCreateNew(right!, out PluginId? output)
         && left.Equals(output)
     ;
-
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator !=(PluginId left, string? right) => 
         !right.IsNotNullOrEmpty() 
         && !TryCreateNew(right!, out PluginId? output)
         && !left.Equals(output)
     ;
-
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static AssetId operator +(PluginId left, AssetName right) => new(left, right);
-    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override bool Equals(object? obj) => obj is PluginId other && Equals(other);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool Equals(PluginId other) => Value.Equals(other.Value, StringComparison.InvariantCultureIgnoreCase);
     
-    public override int GetHashCode() => Value.GetHashCode();
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public override int GetHashCode() => _hashCode;
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private int ComputeHashCode() {
+        return StringComparer.OrdinalIgnoreCase.GetHashCode(Value);
+    }
 }

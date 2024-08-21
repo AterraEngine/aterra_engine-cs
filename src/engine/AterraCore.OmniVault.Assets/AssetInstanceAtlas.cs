@@ -51,7 +51,12 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetIn
         _assetsByTypes.AddOrUpdate(
             typeof(T),
             _ => [assetInstance.InstanceId],
-            (_, list) => { list.Add(assetInstance.InstanceId); return list; });
+            (_, list) => {
+                if (!list.Contains(assetInstance.InstanceId)) {
+                    list.Add(assetInstance.InstanceId);
+                }
+                return list; 
+            });
             
         if (registration.IsSingleton) {
             _singletonAssetInstances.TryAdd(assetInstance.AssetId, assetInstance.InstanceId);

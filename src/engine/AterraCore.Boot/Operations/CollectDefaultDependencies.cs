@@ -4,6 +4,7 @@
 using AterraCore.Contracts;
 using AterraCore.Contracts.Boot.Operations;
 using AterraCore.Contracts.FlexiPlug;
+using AterraCore.Contracts.Nexities.Entities.Pools;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.Textures;
 using AterraCore.Contracts.OmniVault.World;
@@ -15,6 +16,7 @@ using AterraCore.Contracts.Threading.Logic;
 using AterraCore.Contracts.Threading.Rendering;
 using AterraCore.FlexiPlug;
 using AterraCore.Loggers;
+using AterraCore.Nexities.Entities.Pools;
 using AterraCore.OmniVault.Assets;
 using AterraCore.OmniVault.DataCollector;
 using AterraCore.OmniVault.Textures;
@@ -72,6 +74,7 @@ public class CollectDefaultDependencies : IBootOperation {
             
             NewServiceDescriptor<IEntityTreeFactory, EntityTreeFactory>(ServiceLifetime.Singleton),
             NewServiceDescriptor<IEntityTreePools, EntityTreePools>(ServiceLifetime.Singleton),
+            NewServiceDescriptor<INexitiesEntityPools, NexitiesEntityPools>(ServiceLifetime.Singleton),
             #endregion
             ServiceDescriptor.Singleton(DataCollectorFactory.Create), 
         ];

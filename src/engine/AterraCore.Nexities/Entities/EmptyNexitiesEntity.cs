@@ -5,6 +5,6 @@ namespace AterraCore.Nexities.Entities;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class EmptyNexitiesEntity() : NexitiesEntity {
+public class EmptyNexitiesEntity : NexitiesEntity {
     protected override void ComponentOverwritten() {}
 }

@@ -4,6 +4,7 @@
 using AterraCore.Common.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
 namespace AterraCore.Common.Types.Nexities;
@@ -11,8 +12,9 @@ namespace AterraCore.Common.Types.Nexities;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public readonly struct AssetId : IEqualityOperators<AssetId, AssetId, bool>, IEquatable<AssetId>, IEqualityOperators<AssetId, PluginId, bool> {
-    public PluginId PluginId { get; init; }
-    public AssetName AssetName { get; init; }
+    public PluginId PluginId { get; }
+    public AssetName AssetName { get; }
+    private readonly int _hashCode;
 
     // -----------------------------------------------------------------------------------------------------------------
     // Constructors
@@ -20,16 +22,19 @@ public readonly struct AssetId : IEqualityOperators<AssetId, AssetId, bool>, IEq
     public AssetId(string pluginName, IEnumerable<string> nameSpace) {
         PluginId = new PluginId(pluginName);
         AssetName = new AssetName(nameSpace);
+        _hashCode = ComputeHashCode();
     }
     
     public AssetId(string pluginName, string nameSpace) {
         PluginId = new PluginId(pluginName);
         AssetName = new AssetName(nameSpace);
+        _hashCode = ComputeHashCode();
     }
     
     public AssetId(PluginId pluginId, AssetName assetName) {
         PluginId = pluginId;
         AssetName = assetName;
+        _hashCode = ComputeHashCode();
     }
 
     public AssetId(string assetId) {
@@ -65,18 +70,32 @@ public readonly struct AssetId : IEqualityOperators<AssetId, AssetId, bool>, IEq
     }
 
     public override string ToString() => $"{PluginId}:{string.Join('/', AssetName)}";
-    public override int GetHashCode() => HashCode.Combine(PluginId, AssetName);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public override int GetHashCode() => _hashCode;
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private int ComputeHashCode()
+    {
+        int hash = 17;
+        hash = hash * 31 + PluginId.GetHashCode();
+        hash = hash * 31 + AssetName.GetHashCode();
+        return hash;
+    }
     
     // -----------------------------------------------------------------------------------------------------------------
     // Comparison Methods
     // -----------------------------------------------------------------------------------------------------------------
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator ==(AssetId left, AssetId right) => left.Equals(right);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator !=(AssetId left, AssetId right) => !left.Equals(right); 
-    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator ==(AssetId left, PluginId right) => left.PluginId == right;
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator !=(AssetId left, PluginId right) => left.PluginId != right;
-    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override bool Equals(object? obj) => obj is AssetId other && Equals(other);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool Equals(AssetId other) =>
         PluginId.Equals(other.PluginId)
         && AssetName.Equals(other.AssetName)

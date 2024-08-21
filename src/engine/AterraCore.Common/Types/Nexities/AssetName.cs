@@ -5,6 +5,7 @@ using AterraCore.Common.Data;
 using CodeOfChaos.Extensions;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
 namespace AterraCore.Common.Types.Nexities;
@@ -16,8 +17,9 @@ public readonly struct AssetName :
     IEqualityOperators<AssetName, string, bool>,
     IEquatable<AssetName> 
 {
-    public IEnumerable<string> Values { get; init; } = [];
+    public IEnumerable<string> Values { get; } = [];
     public string Value => string.Join('/', Values);
+    private readonly int _hashCode;
     
     // -----------------------------------------------------------------------------------------------------------------
     // Constructors
@@ -28,6 +30,7 @@ public readonly struct AssetName :
             ? match.Groups[1].Value.Split('.', '/')
             : throw new ArgumentException("Plugin Id could not be determined ")
         ;
+        _hashCode = ComputeHashCode();
     }
     
     public AssetName(IEnumerable<string> values) {
@@ -36,11 +39,13 @@ public readonly struct AssetName :
             ? enumerable
             : throw new ArgumentException("Asset Name could not be determined")
         ;
+        _hashCode = ComputeHashCode();
     }
     
     // Only supposed to be used by AssetId
     internal AssetName(Group matchGroup) {
         Values = matchGroup.Value.Split('.', '/');
+        _hashCode = ComputeHashCode();
     }
     
     // -----------------------------------------------------------------------------------------------------------------
@@ -68,24 +73,37 @@ public readonly struct AssetName :
     // -----------------------------------------------------------------------------------------------------------------
     // Comparison Methods
     // -----------------------------------------------------------------------------------------------------------------
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator ==(AssetName left, AssetName right) => left.Equals(right);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator !=(AssetName left, AssetName right) => !left.Equals(right);
-    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator ==(AssetName left, string? right) => 
         right.IsNotNullOrEmpty() 
         && TryCreateNew(right!, out AssetName? output) 
         && left.Equals(output)
     ;
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator !=(AssetName left, string? right) => 
         !right.IsNotNullOrEmpty() 
         && !TryCreateNew(right!, out AssetName? output) 
         && !left.Equals(output)
     ;
-    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override bool Equals(object? obj) => obj is AssetName other && Equals(other);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool Equals(AssetName other) 
         => Values.SequenceEqual(other.Values, StringComparer.OrdinalIgnoreCase);
 
-    public override int GetHashCode() => Value.GetHashCode();
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public override int GetHashCode() => _hashCode;
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private int ComputeHashCode() {
+        return Values.Aggregate(
+            17, 
+            (current, value) => current * 31 + StringComparer.OrdinalIgnoreCase.GetHashCode(value)
+        );
+    }
 
 }
