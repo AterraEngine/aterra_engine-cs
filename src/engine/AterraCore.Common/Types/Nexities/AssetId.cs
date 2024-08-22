@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Data;
+using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Runtime.CompilerServices;
@@ -43,16 +44,27 @@ public readonly struct AssetId : IEqualityOperators<AssetId, AssetId, bool>, IEq
         _assetIdCache = GetAsString(PluginId, AssetName);
     }
 
+    
+    private static readonly ConcurrentDictionary<string, (PluginId, AssetName)> Cache = new();
+    private static (PluginId, AssetName) ValueFactory(string id) {
+        Match match = RegexLib.AssetId.Match(id);
+
+        Group pluginNameGroup = match.Groups[1];
+        Group namespaceGroup = match.Groups[2];
+
+        if (!pluginNameGroup.Success) throw new ArgumentException("Plugin Name could not be determined");
+        if (!namespaceGroup.Success) throw new ArgumentException("Namespace for the asset could not be determined");
+
+        return (new PluginId(pluginNameGroup.Value), new AssetName(namespaceGroup.Value));
+    }
     public AssetId(string assetId) {
-        Match match = RegexLib.AssetId.Match(assetId);
-        if (!match.Groups[1].Success) throw new ArgumentException("Plugin Name could not be determined ");
-        if (!match.Groups[2].Success) throw new ArgumentException("Namespace for the asset could not be determined");
-        
-        PluginId = new PluginId(match.Groups[1]);
-        AssetName = new AssetName(match.Groups[2]);
+        (PluginId, AssetName) tuple = Cache.GetOrAdd(assetId, ValueFactory);
+        PluginId = tuple.Item1;
+        AssetName = tuple.Item2;
         _hashCode = ComputeHashCode();
         _assetIdCache = GetAsString(PluginId, AssetName);
     }
+    
 
     // -----------------------------------------------------------------------------------------------------------------
     // Implicit Methods

@@ -14,7 +14,7 @@ public record struct AssetRegistration(
     Type Type
 ) {
     public IEnumerable<Type> InterfaceTypes { get; init; } = [];
-    public IEnumerable<Type> DerivedInterfaceTypes { get; } = GetAllInterfaces(Type);
+    public IEnumerable<Type> DerivedInterfaceTypes { get; } = GetAllInterfaces(Type).ToList();
 
     // Data from IAssetAttribute
     public CoreTags CoreTags { get; init; } = 0;

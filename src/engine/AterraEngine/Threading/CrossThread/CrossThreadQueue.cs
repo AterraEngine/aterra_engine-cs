@@ -20,6 +20,7 @@ public class CrossThreadQueue(ILogger logger) : ICrossThreadQueue {
     public ConcurrentQueue<TextureRegistrar> TextureRegistrarQueue { get; } = new();
     
     private ConcurrentDictionary<QueueKey, ConcurrentQueue<Action>> GeneralActionQueue { get; } = new();
+    public bool EntireQueueIsEmpty => GeneralActionQueue.IsEmpty;
    
     // -----------------------------------------------------------------------------------------------------------------
     // Methods

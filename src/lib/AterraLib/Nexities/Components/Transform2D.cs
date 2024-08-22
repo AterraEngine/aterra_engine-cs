@@ -28,7 +28,7 @@ public class Transform2D : NexitiesComponent, ITransform2D {
         }
     }
 
-    public float Rotation { get; set; } =0;
+    public float Rotation { get; set; } = 0;
 
     private Rectangle? _destinationRectangle;
     public Rectangle DestinationRectangle => _destinationRectangle ??= new Rectangle(Translation, Scale);

@@ -42,35 +42,33 @@ public class RenderThreadProcessor(
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
+    private bool WhileCondition => !WindowShouldClose()
+                                   || CancellationToken.IsCancellationRequested;
     public void Run() {
         mainWindow.Init();
         
-        try {
-            // Window is actually running now
-            while (!WindowShouldClose()) {
-                Update();
-                HandleQueue();
+        // Window is actually running now
+        while (WhileCondition) {
+            logicEventManager.InvokeUpdateFps(GetFPS());
+            Update();
+            HandleQueue();
             
-                // End of Tick
-                #region End Of Tick
-                while (_endOfTickActions.TryPop(out Action? action)) {
-                    action();
-                }
-                _endOfTickActions.Clear();
-                if (CancellationToken.IsCancellationRequested) break;
-                #endregion
+            // End of Tick
+            #region End Of Tick
+            while (_endOfTickActions.TryPop(out Action? action)) {
+                action();
             }
+            #endregion
         }
-        finally {
-            Logger.Information("Render Thread Closing");
-            CloseWindow();
-            threadingManager.CancelThreads();
-        }
+        
+        Logger.Information("Render Thread Closing");
+        CloseWindow();
+        threadingManager.CancelThreads();
     }
     
     private void Update() {
         if (!world.TryGetActiveLevel(out IActiveLevel? level)) return;
-        
+    
         BeginDrawing();
         ClearBackground(ClearColor);
 
@@ -83,8 +81,6 @@ public class RenderThreadProcessor(
         
         DrawUi(level);
         EndDrawing();
-        
-        logicEventManager.InvokeUpdateFps(GetFPS());
     }
     
     private void DrawUi(IActiveLevel level) {
@@ -99,6 +95,7 @@ public class RenderThreadProcessor(
         DrawText($"DUCKS : {level.RawLevelData.ChildrenIDs.Count}",0, 300, 32, Color.DarkBlue);
         DrawText($"entities : {instanceAtlas.TotalCount}",0, 350, 32, Color.DarkBlue);
         DrawText($"ID : {level.RawLevelData.AssetId}",0, 400, 12, Color.DarkBlue);
+        DrawText($"ID : {level.RawLevelData.InstanceId}",0, 425, 12, Color.DarkBlue);
     }
     
     public void RegisterEvents() {
@@ -116,6 +113,7 @@ public class RenderThreadProcessor(
             if (textureRecord.UnRegister) PushUnRegisterTexture(textureRecord);
             PushRegisterTexture(textureRecord);
         }
+        if (crossThreadQueue.EntireQueueIsEmpty) return;
         
         while (crossThreadQueue.TryDequeue(QueueKey.LogicToRender, out Action? action)) _endOfTickActions.Push(action); 
         while (crossThreadQueue.TryDequeue(QueueKey.MainToRender, out Action? action)) _endOfTickActions.Push(action); 

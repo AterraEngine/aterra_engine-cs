@@ -15,16 +15,16 @@ public abstract class NexitiesSystemWithParentsReversed<TParent, TChild> : Nexit
     where TParent : class, IAssetInstance 
     where TChild : class, IAssetInstance
 {
-    protected override IEnumerable<(TParent? Parent,TChild Child)> GetEntities(IActiveLevel level) {
+    protected override (TParent? Parent,TChild Child)[] GetEntities(IActiveLevel level) {
         if (BufferPopulated) return EntitiesBuffer;
         
-        foreach ((IAssetInstance? Parent, IAssetInstance Child) instance in level.ActiveEntityTree.GetAsFlatReverseWithParent()) {
-            var parent = instance.Parent as TParent;
-            if (instance.Child is TChild child) 
-                EntitiesBuffer.Add((parent, child));
-        }
+        var list = new List<(TParent? Parent, TChild Child)>();
+        foreach ((IAssetInstance? Parent, IAssetInstance Child) instance in level.ActiveEntityTree.GetAsFlatReverseWithParent())
+            if (instance.Child is TChild child)
+                list.Add((instance.Parent as TParent, child));
+        
         BufferPopulated = true;
-        return EntitiesBuffer;
+        return EntitiesBuffer = list.ToArray();
     }
     
 }

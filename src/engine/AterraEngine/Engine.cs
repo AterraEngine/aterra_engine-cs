@@ -50,8 +50,8 @@ public class Engine(
         if (!world.TryChangeActiveLevel(AssetIdLib.AterraCore.Entities.EmptyLevel)) throw new ApplicationException("Failed to change active level");
         
         // -------------------------------------------------------------------------------------------------------------
-        const int levelGenerations = 1;
         // const int levelGenerations = int.MaxValue;
+        const int levelGenerations = 1;
         for (int levelI = 0; levelI < levelGenerations; levelI++) {
             var levelInstanceId = Ulid.NewUlid();
             Logger.Information("level id {id}", levelInstanceId);
@@ -68,7 +68,7 @@ public class Engine(
                 });
             });
         
-            if (!instanceAtlas.TryCreate(AssetIdLib.AterraCore.Entities.Camera2D, out ICamera2D? camera2D)) return;
+            if (!instanceAtlas.TryCreate(AssetIdLib.AterraCore.Entities.Camera2D, out ICamera2D? camera2D)) continue;
             camera2D.RaylibCamera2D.Camera = camera2D.RaylibCamera2D.Camera with {
                 Target = new Vector2(0, 0),
                 Offset =  new Vector2(Raylib.GetScreenWidth() / 2f, Raylib.GetScreenHeight() / 2f),
@@ -77,12 +77,12 @@ public class Engine(
             };
             level.ChildrenIDs.TryAddFirst(camera2D.InstanceId);
         
-            if (!instanceAtlas.TryCreate("Workfloor:ActorDuckyPlayer", out IPlayer2D? player2D)) return;
+            if (!instanceAtlas.TryCreate("Workfloor:ActorDuckyPlayer", out IPlayer2D? player2D)) continue;
             player2D.Transform2D.Translation = new Vector2(5, 5);
             player2D.Transform2D.Scale = Vector2.One;
             level.ChildrenIDs.TryAddFirst(player2D.InstanceId);
         
-            if (!instanceAtlas.TryCreate("Workfloor:ActorDuckyHype", out IActor2D? playerAddendum)) return;
+            if (!instanceAtlas.TryCreate("Workfloor:ActorDuckyHype", out IActor2D? playerAddendum)) continue;
             playerAddendum.Transform2D.Translation = new Vector2(2,2);
             playerAddendum.Transform2D.Scale = Vector2.One;
             player2D.ChildrenIDs.TryAddFirst(playerAddendum.InstanceId);

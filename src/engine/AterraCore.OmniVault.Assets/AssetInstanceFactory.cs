@@ -7,10 +7,12 @@ using AterraCore.Contracts.OmniVault.Assets.Attributes;
 using AterraCore.DI;
 using JetBrains.Annotations;
 using Serilog;
+using System.Buffers;
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Security;
 #if !DEBUG
 using System.Security;
 #endif
@@ -66,20 +68,26 @@ public class AssetInstanceFactory(ILogger logger) : IAssetInstanceFactory {
         return lambda.Compile();
     }
 
+    private readonly ArrayPool<object> _parameterPool = ArrayPool<object>.Shared;
     public bool TryCreate<T>(AssetRegistration registration, Ulid predefinedUlid, [NotNullWhen(true)] out T? assetInstance) where T : class, IAssetInstance {
         assetInstance = null;
-        #if !DEBUG
+        object[] parameters = _parameterPool.Rent(registration.Constructor.GetParameters().Length);
+        
         try {
-        #endif
             Func<object[], object> constructorDelegate = _constructorCache.GetOrAdd(
-                registration.Type,
-                _ => CreateConstructorDelegate(registration.Constructor)
+                    registration.Type,
+                    ConstructorFactory
+                );
+            
+            // Pass the registration directly to avoid closure
+            Func<object>[] parameterActions = _actionsMap.GetOrAdd(
+                registration.AssetId,
+                ParameterFactory
             );
             
-            object[] parameters = _actionsMap
-                .GetOrAdd(registration.AssetId, _ => CreateParameterActions(registration))
-                .Select(action => action())
-                .ToArray();
+            for (int i = 0; i < parameterActions.Length; i++) {
+                parameters[i] = parameterActions[i]();
+            }
             
             if (constructorDelegate(parameters) is not T castedInstance) return false;
             assetInstance = castedInstance;
@@ -87,19 +95,24 @@ public class AssetInstanceFactory(ILogger logger) : IAssetInstanceFactory {
             assetInstance.InstanceId = predefinedUlid;
             
             return true;
-        #if !DEBUG
         }
         
         // TODO ADD LOGGING
-        catch (MethodAccessException e)         {logger.Error(e, "Caught MethodAccessException");}
-        catch (ArgumentException e)             {logger.Error(e, "Caught ArgumentException");}
-        catch (TargetInvocationException e)     {logger.Error(e, "Caught TargetInvocationException");}
-        catch (TargetParameterCountException e) {logger.Error(e, "Caught TargetParameterCountException");}
-        catch (NotSupportedException e)         {logger.Error(e, "Caught NotSupportedException");}
-        catch (SecurityException e)             {logger.Error(e, "Caught SecurityException");}
-        catch (Exception e)                     {logger.Error(e, "Caught unhandled error");}
-        return false;
-        #endif
+        catch (MethodAccessException e)         {logger.Error(e, "Caught MethodAccessException");return false;}
+        catch (ArgumentException e)             {logger.Error(e, "Caught ArgumentException");return false;}
+        catch (TargetInvocationException e)     {logger.Error(e, "Caught TargetInvocationException");return false;}
+        catch (TargetParameterCountException e) {logger.Error(e, "Caught TargetParameterCountException");return false;}
+        catch (NotSupportedException e)         {logger.Error(e, "Caught NotSupportedException");return false;}
+        catch (SecurityException e)             {logger.Error(e, "Caught SecurityException");return false;}
+        catch (Exception e)                     {logger.Error(e, "Caught unhandled error");return false;}
+        
+        finally {
+            // Return the array to the pool
+            _parameterPool.Return(parameters, clearArray: true);
+        }
+
+        Func<object[], object> ConstructorFactory(Type _) => CreateConstructorDelegate(registration.Constructor);
+        Func<object>[] ParameterFactory(AssetId _) => CreateParameterActions(registration);
     }
     
     public T Create<T>(AssetRegistration registration, Ulid predefinedUlid) where T : class, IAssetInstance {

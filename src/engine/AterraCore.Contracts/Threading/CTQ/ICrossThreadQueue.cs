@@ -12,6 +12,7 @@ namespace AterraCore.Contracts.Threading.CTQ;
 // ---------------------------------------------------------------------------------------------------------------------
 public interface ICrossThreadQueue {
     ConcurrentQueue<TextureRegistrar> TextureRegistrarQueue { get; }
+    bool EntireQueueIsEmpty { get; }
     
     bool TryDequeue(QueueKey key, [NotNullWhen(true)] out Action? action);
     bool TryEnqueue(QueueKey key, Action action);

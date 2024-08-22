@@ -18,31 +18,32 @@ public abstract class NexitiesSystemWithParents<TParent, TChild> : AssetInstance
     where TChild : class, IAssetInstance
 {
     protected bool BufferPopulated;
-    protected readonly List<(TParent? Parent,TChild Child)> EntitiesBuffer = [];
+    protected (TParent? Parent,TChild Child)[] EntitiesBuffer = [];
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public abstract void Tick(IActiveLevel level);
     public virtual void InvalidateCaches() {
-        EntitiesBuffer.Clear();
+        EntitiesBuffer = [];
         BufferPopulated = false;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     // Helper Methods
     // -----------------------------------------------------------------------------------------------------------------
-    protected virtual IEnumerable<(TParent? Parent,TChild Child)> GetEntities(IActiveLevel level) {
+    protected virtual (TParent? Parent,TChild Child)[] GetEntities(IActiveLevel level) {
         if (BufferPopulated) return EntitiesBuffer;
 
+        var list = new List<(TParent? Parent, TChild Child)>();
         foreach ((IAssetInstance? Parent, IAssetInstance Child) instance in level.ActiveEntityTree.GetAsFlatWithParent()) {
             var parent = instance.Parent as TParent;
             if (instance.Child is TChild child) 
-                EntitiesBuffer.Add((parent, child));
+                list.Add((parent, child));
         }
         
         BufferPopulated = true;
-        return EntitiesBuffer;
+        return EntitiesBuffer = list.ToArray();
     }
     
 }
