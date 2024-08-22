@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using AterraCore.Common.Types.Nexities;
+using AterraCore.Contracts.Nexities.Levels;
 using System.Diagnostics.CodeAnalysis;
 
 namespace AterraCore.Contracts.OmniVault.Assets;
@@ -31,4 +32,5 @@ public interface IAssetInstanceAtlas {
     T GetOrCreate<T>(AssetId assetId, Ulid? ulid = null) where T : class, IAssetInstance;
     
     IEnumerable<T> OfType<T>() where T : class, IAssetInstance;
+    IEnumerable<T> OfTag<T>(CoreTags level) where T : class, IAssetInstance;
 }

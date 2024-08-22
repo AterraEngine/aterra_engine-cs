@@ -17,40 +17,50 @@ namespace AterraCore.OmniVault.World;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
-public class AterraCoreWorld(IAssetInstanceAtlas instanceAtlas, ILogger logger, IActiveLevelFactory levelFactory, ICrossThreadQueue crossThreadQueue) : IAterraCoreWorld {
-    private IActiveLevel? ActiveLevel { get; set; }
-    
-    private readonly ReaderWriterLockSlim  _activeLevelLock = new();
+public class AterraCoreWorld(IAssetAtlas assetAtlas, IAssetInstanceAtlas instanceAtlas, ILogger logger, IActiveLevelFactory levelFactory, ICrossThreadQueue crossThreadQueue) : IAterraCoreWorld {
     private ILogger Logger { get; } = logger.ForContext<AterraCoreWorld>();
 
+    private readonly ReaderWriterLockSlim  _activeLevelLock = new();
+    private IActiveLevel? ActiveLevel { get; set; }
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public bool TryChangeActiveLevel(AssetId levelId) {
+    private void EmitActiveLevel(IActiveLevel activeLevel, IActiveLevel? oldLevel) {
+        IEnumerable<AssetId> oldTextureAssetIds = oldLevel?.TextureAssetIds.ToArray() ?? [];
+        IEnumerable<AssetId> newTextureAssetIds = activeLevel.TextureAssetIds.ToArray();
+            
+        foreach (AssetId dequeueAssetId in oldTextureAssetIds.Except(newTextureAssetIds)) 
+            crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar(dequeueAssetId, UnRegister : true ));
+        foreach (AssetId enqueueAssetId in newTextureAssetIds.Except(oldTextureAssetIds)) 
+            crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar(enqueueAssetId));
+    }
+
+    public bool TryChangeActiveLevel(AssetId levelId) => TryChangeActiveLevel(levelId, Ulid.NewUlid());
+    public bool TryChangeActiveLevel(INexitiesLevel2D levelInstance) => TryChangeActiveLevel(levelInstance.AssetId, levelInstance.InstanceId);
+    public bool TryChangeActiveLevel(AssetId levelId, Ulid levelInstanceId) {
         // Retrieve the old level, to make comparison with, in case of loading new assets
+        Logger.Information("Attempting to change level to {LevelId}, Instance {InstanceId}", levelId, levelInstanceId);
         TryGetActiveLevel(out IActiveLevel? oldLevel);
-        
         using (_activeLevelLock.Write()) {
-            if (ActiveLevel?.RawLevelData.AssetId == levelId) return false;
-            if(!instanceAtlas.TryGetOrCreateSingleton(levelId, out INexitiesLevel2D? level)) {
-                Logger.Warning("Failed to get or create level with ID: {LevelId}", levelId);
+            if (ActiveLevel is { RawLevelData.InstanceId : var knownInstanceId } && knownInstanceId == levelInstanceId) {
+                Logger.Warning("Can't change to the same level instance: {LevelId}", levelInstanceId);
+                return false;
+            }
+            if (!instanceAtlas.TryGetOrCreate(levelId, levelInstanceId, out INexitiesLevel2D? level)) {
+                Logger.Warning("Failed to get level by instance ULID: {LevelId}", levelInstanceId);
                 return false;
             }
             
+            Logger.Information("Successfully fetched or created level. Creating ActiveLevel instance now.");
             ActiveLevel = levelFactory.CreateLevel2D(level);
-            
-            IEnumerable<AssetId> oldTextureAssetIds = oldLevel?.TextureAssetIds.ToArray() ?? [];
-            IEnumerable<AssetId> newTextureAssetIds = ActiveLevel.TextureAssetIds.ToArray();
-            
-            foreach (AssetId dequeueAssetId in oldTextureAssetIds.Except(newTextureAssetIds)) 
-                crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar(dequeueAssetId, UnRegister : true ));
-            foreach (AssetId enqueueAssetId in newTextureAssetIds.Except(oldTextureAssetIds)) 
-                crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar(enqueueAssetId));
-            
-            return true;
         }
+        
+        EmitActiveLevel(ActiveLevel, oldLevel);
+        Logger.Information("Active Level successfully created.");
+        return true;
     }
-    
+
     public bool TryGetActiveLevel([NotNullWhen(true)] out IActiveLevel? level) {
         using (_activeLevelLock.Read()) {
             level = ActiveLevel;

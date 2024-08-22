@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Types.Nexities;
+using AterraCore.Contracts.Nexities.Levels;
 using System.Diagnostics.CodeAnalysis;
 
 namespace AterraCore.Contracts.OmniVault.World;
@@ -10,5 +11,8 @@ namespace AterraCore.Contracts.OmniVault.World;
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IAterraCoreWorld {
     bool TryChangeActiveLevel(AssetId levelId);
+    bool TryChangeActiveLevel(INexitiesLevel2D levelInstance);
+    bool TryChangeActiveLevel(AssetId levelId, Ulid levelInstanceId);
+    
     bool TryGetActiveLevel([NotNullWhen(true)] out IActiveLevel? level);
 }

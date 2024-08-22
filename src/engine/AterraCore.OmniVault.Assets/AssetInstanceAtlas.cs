@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.OmniVault.Assets;
+using CodeOfChaos.Extensions.Serilog;
 using JetBrains.Annotations;
 using Serilog;
 using System.Collections.Concurrent;
@@ -15,7 +16,7 @@ namespace AterraCore.OmniVault.Assets;
 [UsedImplicitly]
 public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetInstanceFactory factory) : IAssetInstanceAtlas {
     private readonly ConcurrentDictionary<Ulid, IAssetInstance> _assetInstances = new();
-    private readonly ConcurrentDictionary<Type, List<Ulid>> _assetsByTypes = new();
+    private readonly ConcurrentDictionary<Type, ConcurrentBag<Ulid>> _assetsByTypes = new();
     private readonly ConcurrentDictionary<AssetId, Ulid> _singletonAssetInstances = new();
     
     public int TotalCount => _assetInstances.Count;
@@ -47,15 +48,21 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetIn
                 : assetInstance
         );
         
-        _assetsByTypes.AddOrUpdate(
-            typeof(T),
-            _ => [assetInstance.InstanceId],
-            (_, list) => {
-                if (!list.Contains(assetInstance.InstanceId)) {
-                    list.Add(assetInstance.InstanceId);
+        foreach (Type implementedType in registration.DerivedInterfaceTypes) {
+            _assetsByTypes.AddOrUpdate(
+                implementedType,
+                _ => {
+                    var newList = new ConcurrentBag<Ulid>([assetInstance.InstanceId]);
+                    return newList;
+                },
+                (_, bag) => {
+                    // Check for duplicate entries
+                    if (bag.FirstOrDefault( ulid => ulid == assetInstance.InstanceId, Ulid.Empty) == Ulid.Empty) return bag;
+                    bag.Add(assetInstance.InstanceId);
+                    return bag;
                 }
-                return list; 
-            });
+            );
+        }
             
         if (registration.IsSingleton) {
             _singletonAssetInstances.TryAdd(assetInstance.AssetId, assetInstance.InstanceId);
@@ -115,9 +122,25 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetIn
     }
 
     public IEnumerable<T> OfType<T>() where T : class, IAssetInstance {
-        if (!_assetsByTypes.TryGetValue(typeof(T), out List<Ulid>? assetIds)) yield break;
+        HashSet<Ulid> alreadyYielded = [];
+        if (!_assetsByTypes.TryGetValue(typeof(T), out ConcurrentBag<Ulid>? assetIds)) yield break;
         foreach (Ulid assetId in assetIds) {
-            if (TryGet(assetId, out T? instance)) yield return instance;
+            if (TryGet(assetId, out T? instance) && alreadyYielded.Add(instance.InstanceId)) {
+                yield return instance;
+            }
         }
+    }
+    public IEnumerable<T> OfTag<T>(CoreTags tags) where T : class, IAssetInstance {
+        HashSet<Ulid> alreadyYielded = [];
+        if (!_assetsByTypes.TryGetValue(typeof(T), out ConcurrentBag<Ulid>? instanceIds)) yield break;
+        foreach (Ulid id in instanceIds) {
+            if (!_assetInstances.TryGetValue(id, out IAssetInstance? instance)) continue;
+            if (instance is not T convertedInstance) continue;
+            if (!assetAtlas.TryGetRegistration(instance.AssetId, out AssetRegistration registration)) continue;
+            
+            if (!alreadyYielded.Add(id)) continue;
+            if (registration.CoreTags.HasFlag(tags)) yield return convertedInstance;
+        }
+        
     }
 }

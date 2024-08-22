@@ -6,7 +6,7 @@ namespace AterraLib.Nexities.Entities;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Entity<INexitiesLevel2D>(AssetIdLib.AterraCore.Entities.EmptyLevel, CoreTags.Singleton)]
+[Entity<INexitiesLevel2D>(AssetIdLib.AterraCore.Entities.EmptyLevel, CoreTags.Level)]
 [UsedImplicitly]
 public class EmptyLevel(IDirectChildren children, ISystemIds systemIds) : NexitiesEntity(children, systemIds), INexitiesLevel2D {
     private IDirectChildren? _children = children;

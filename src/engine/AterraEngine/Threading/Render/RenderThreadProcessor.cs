@@ -92,9 +92,9 @@ public class RenderThreadProcessor(
         DrawText($"   FPS : {dataCollector.Fps}", 0, 0, 32, Color.DarkBlue);
         DrawText($"minFPS : {dataCollector.FpsMin}", 0, 50, 32, Color.DarkBlue);
         DrawText($"maxFPS : {dataCollector.FpsMax}", 0, 100, 32, Color.DarkBlue);
-        DrawText($"avgFPS : {dataCollector.FpsAverage:N2}", 0, 150, 32, Color.DarkBlue);
+        DrawText($"avgFPS : {dataCollector.FpsAverageString}", 0, 150, 32, Color.DarkBlue);
         DrawText($"   TPS : {dataCollector.Tps}", 0, 200, 32, Color.DarkBlue);
-        DrawText($"avgTPS : {dataCollector.TpsAverage:N2}", 0, 250, 32, Color.DarkBlue);
+        DrawText($"avgTPS : {dataCollector.TpsAverageString}", 0, 250, 32, Color.DarkBlue);
         
         DrawText($"DUCKS : {level.RawLevelData.ChildrenIDs.Count}",0, 300, 32, Color.DarkBlue);
         DrawText($"entities : {instanceAtlas.TotalCount}",0, 350, 32, Color.DarkBlue);

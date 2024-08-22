@@ -11,8 +11,10 @@ public interface IDataCollector {
     int FpsMin { get;}
     int FpsMax { get;}
     double FpsAverage { get; }
+    string FpsAverageString { get; }
     
     int Tps { get;}
     double TpsAverage { get; }
+    string TpsAverageString { get; }
     double DeltaTps { get;}
 }

@@ -17,6 +17,7 @@ public readonly struct AssetId : IEqualityOperators<AssetId, AssetId, bool>, IEq
     public PluginId PluginId { get; }
     public AssetName AssetName { get; }
     private readonly int _hashCode;
+    private readonly string _assetIdCache;
 
     // -----------------------------------------------------------------------------------------------------------------
     // Constructors
@@ -25,18 +26,21 @@ public readonly struct AssetId : IEqualityOperators<AssetId, AssetId, bool>, IEq
         PluginId = new PluginId(pluginName);
         AssetName = new AssetName(nameSpace);
         _hashCode = ComputeHashCode();
+        _assetIdCache = GetAsString(PluginId, AssetName);
     }
     
     public AssetId(string pluginName, string nameSpace) {
         PluginId = new PluginId(pluginName);
         AssetName = new AssetName(nameSpace);
         _hashCode = ComputeHashCode();
+        _assetIdCache = GetAsString(PluginId, AssetName);
     }
     
     public AssetId(PluginId pluginId, AssetName assetName) {
         PluginId = pluginId;
         AssetName = assetName;
         _hashCode = ComputeHashCode();
+        _assetIdCache = GetAsString(PluginId, AssetName);
     }
 
     public AssetId(string assetId) {
@@ -46,6 +50,8 @@ public readonly struct AssetId : IEqualityOperators<AssetId, AssetId, bool>, IEq
         
         PluginId = new PluginId(match.Groups[1]);
         AssetName = new AssetName(match.Groups[2]);
+        _hashCode = ComputeHashCode();
+        _assetIdCache = GetAsString(PluginId, AssetName);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -68,7 +74,8 @@ public readonly struct AssetId : IEqualityOperators<AssetId, AssetId, bool>, IEq
         return true;
     }
 
-    public override string ToString() => $"{PluginId}:{string.Join('/', AssetName)}";
+    private static string GetAsString(PluginId pluginId, AssetName assetName) => $"{pluginId}:{string.Join('/', assetName)}";
+    public override string ToString() => _assetIdCache;
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override int GetHashCode() => _hashCode;
 

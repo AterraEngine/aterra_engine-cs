@@ -32,10 +32,12 @@ public class MainLevelSystemIds : SystemIds {
     ];
 }
 
-[Entity<INexitiesLevel2D>("Workfloor:Levels/MainLevel", CoreTags.Singleton)]
+public interface IMainLevel : INexitiesLevel2D;
+
 [UsedImplicitly]
+[Entity("Workfloor:Levels/MainLevel", CoreTags.Level)]
 public class MainLevel(
     IDirectChildren assetTree, 
     MainLevelSystemIds systemIds
-) : EmptyLevel(assetTree, systemIds); 
+) : EmptyLevel(assetTree, systemIds), IMainLevel; 
 

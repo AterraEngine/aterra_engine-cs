@@ -80,6 +80,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraCore.OmniVault.DataCo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extensions", "src\lib\Extensions\Extensions.csproj", "{1001A63D-9E3A-4B3F-A4ED-921F29BDE49A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraCore.PoolCorp", "src\engine\AterraCore.PoolCorp\AterraCore.PoolCorp.csproj", "{2BD4E958-ED91-45E9-9DEE-A5A897238067}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -122,6 +124,7 @@ Global
 		{3929EFE1-4A08-4EC6-BFE0-0C0E9ED58C8C} = {291BFDE8-A431-4094-A9D7-415FBC474733}
 		{998355EF-DA9D-45D5-ABD3-6CB467D8BF20} = {291BFDE8-A431-4094-A9D7-415FBC474733}
 		{1001A63D-9E3A-4B3F-A4ED-921F29BDE49A} = {72601D4B-0D88-47AC-9217-34B2F6B46509}
+		{2BD4E958-ED91-45E9-9DEE-A5A897238067} = {F86D197F-7641-46CE-A43D-CFF48F84B9E6}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{0EE5AA16-BD73-46B5-9921-17CF895E4F52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -216,5 +219,9 @@ Global
 		{1001A63D-9E3A-4B3F-A4ED-921F29BDE49A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1001A63D-9E3A-4B3F-A4ED-921F29BDE49A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1001A63D-9E3A-4B3F-A4ED-921F29BDE49A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BD4E958-ED91-45E9-9DEE-A5A897238067}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BD4E958-ED91-45E9-9DEE-A5A897238067}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BD4E958-ED91-45E9-9DEE-A5A897238067}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BD4E958-ED91-45E9-9DEE-A5A897238067}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

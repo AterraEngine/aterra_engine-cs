@@ -83,7 +83,6 @@ public class AssetInstanceFactory(ILogger logger) : IAssetInstanceFactory {
             
             if (constructorDelegate(parameters) is not T castedInstance) return false;
             assetInstance = castedInstance;
-            
             assetInstance.AssetId = registration.AssetId;
             assetInstance.InstanceId = predefinedUlid;
             

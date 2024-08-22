@@ -7,13 +7,13 @@ namespace AterraCore.Common.Types.Nexities;
 // ---------------------------------------------------------------------------------------------------------------------
 [Flags]
 public enum CoreTags : ulong {
-    Undefined =    0,
-    Asset,
-    Component,
-    Entity,
-    System,
-    RenderSystem,
-    LogicSystem,
-    Texture,
-    Singleton,
+    Asset        = 1 << 0,
+    Component    = 1 << 1,
+    Entity       = 1 << 2,
+    System       = 1 << 3,
+    RenderSystem = 1 << 4,
+    LogicSystem  = 1 << 5,
+    Texture      = 1 << 6,
+    Singleton    = 1 << 7,
+    Level        = 1 << 8,
 }
