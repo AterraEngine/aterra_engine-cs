@@ -11,7 +11,7 @@ namespace AterraCore.Contracts.Threading.Logic;
 // ---------------------------------------------------------------------------------------------------------------------
 public interface ILogicEventManager {
     public event EventHandler<IChangeActiveLevelEventArgs>? EventChangeActiveLevel;
-    public event EventHandler<int>? EventActualTps;
+    public event EventHandler<int>? EventTps;
     public event EventHandler<double>? EventDeltaTps;
     public event EventHandler<int>? EventFps;
 
@@ -20,7 +20,7 @@ public interface ILogicEventManager {
     // -----------------------------------------------------------------------------------------------------------------
     public void InvokeChangeActiveLevel(AssetId assetId);
     public void InvokeChangeActiveLevel(IChangeActiveLevelEventArgs eventArgs);
-    public void InvokeUpdateActualTps(int actualTps);
+    public void InvokeUpdateTps(int actualTps);
     public void InvokeUpdateDeltaTps(double deltaTps);
     public void InvokeUpdateFps(int fps);
 }

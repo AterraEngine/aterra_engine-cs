@@ -33,7 +33,7 @@ public class LogicThreadProcessor(
     private bool IsRunning { get; set; } = true;
     public bool IsFinished { get; private set; }
 
-    private Stack<Action> EndOfTickActions { get; set; } = [];
+    private readonly Stack<Action> _endOfTickActions = [];
 
     private Stopwatch TickStopwatch { get; } = Stopwatch.StartNew();
     private Stopwatch TpsStopwatch { get; } = Stopwatch.StartNew();
@@ -85,10 +85,10 @@ public class LogicThreadProcessor(
     }
 
     private void RunEndOfTick() {
-        while (EndOfTickActions.TryPop(out Action? action)) {
+        while (_endOfTickActions.TryPop(out Action? action)) {
             action();
         }
-        EndOfTickActions.Clear();
+        _endOfTickActions.Clear();
     }
 
     private void SleepUntilEndOfTick() {
@@ -103,7 +103,7 @@ public class LogicThreadProcessor(
     private void CalculateActualTps() {
         if (TpsStopwatch.ElapsedMilliseconds < 1000) return;
         
-        eventManager.InvokeUpdateActualTps(_ticks);
+        eventManager.InvokeUpdateTps(_ticks);
         _ticks = 0;
         TpsStopwatch.Restart();
     }
@@ -114,9 +114,9 @@ public class LogicThreadProcessor(
     // Event Methods
     // -----------------------------------------------------------------------------------------------------------------
     public void RegisterEvents() {
-        eventManager.EventChangeActiveLevel += (_, args) => EndOfTickActions.Push(() => world.TryChangeActiveLevel(args.NewLevelId));
+        eventManager.EventChangeActiveLevel += (_, args) => _endOfTickActions.Push(() => world.TryChangeActiveLevel(args.NewLevelId));
         
-        eventManager.EventActualTps += (_, d) => Logger.Debug("TPS: {0}", d);
+        eventManager.EventTps += (_, d) => Logger.Debug("TPS: {0}", d);
         // eventManager.EventActualTps += (_, _) => Logger.Debug("Assets: {0}", EngineServices.GetService<IAssetInstanceAtlas>().TotalCount);
     }
 

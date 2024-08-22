@@ -39,8 +39,7 @@ public class Render2D(IAssetInstanceAtlas instanceAtlas) : NexitiesSystemWithPar
     // -----------------------------------------------------------------------------------------------------------------
     private static readonly Transform2D EmptyTransform2D = new();
     public override void Tick(IActiveLevel level) {
-        Span<(IHasTransform2D? Parent, IActor2D Child)> entitiesSpan = GetEntities(level);
-        foreach ((IHasTransform2D? parent, IActor2D? child) in entitiesSpan) {
+        foreach ((IHasTransform2D? parent, IActor2D? child) in GetEntities(level)) {
             ProcessChildEntities(
                 parent?.Transform2D ?? EmptyTransform2D, 
                 child

@@ -31,29 +31,29 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetIn
         }
 
         // check if it is a singleton and already exists
-        if (registration.IsSingleton
-            && _singletonAssetInstances.TryGetValue(registration.AssetId, out Ulid existingUlid)
-            && TryGet(existingUlid, out instance)) {
-            return true;
+        if (registration.IsSingleton) {
+            if (_singletonAssetInstances.TryGetValue(registration.AssetId, out Ulid existingUlid)
+                && TryGet(existingUlid, out instance)) {
+                return true;
+            }
         }
 
-        Ulid ulid = predefinedUlid ?? Ulid.NewUlid();
-        if (!factory.TryCreate(registration, ulid, out instance)) return false;
-        T assetInstance = instance;
+        if (!factory.TryCreate(registration, predefinedUlid ?? Ulid.NewUlid(), out instance)) return false;
         
         // Add or update directly
-        _assetInstances[assetInstance.InstanceId] = assetInstance;
+        _assetInstances[instance.InstanceId] = instance;
         
         foreach (Type implementedType in registration.DerivedInterfaceTypes) {
             _assetsByTypes
-                .GetOrAdd(implementedType, _ => new ConcurrentDictionary<Ulid, byte>())
-                .TryAdd(assetInstance.InstanceId, 0);
+                .GetOrAdd(implementedType, EmptyUlidBag)
+                .TryAdd(instance.InstanceId, 0);
         }
             
         if (registration.IsSingleton) 
-            _singletonAssetInstances.TryAdd(assetInstance.AssetId, assetInstance.InstanceId);
+            _singletonAssetInstances.TryAdd(instance.AssetId, instance.InstanceId);
         
         return true;
+        ConcurrentDictionary<Ulid, byte> EmptyUlidBag(Type _) => new();
     }
 
     public bool TryCreate<T>([NotNullWhen(true)] out T? instance, Ulid? predefinedUlid = null) where T : class, IAssetInstance =>

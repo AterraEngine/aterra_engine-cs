@@ -14,11 +14,13 @@ public class DataCollector : IDataCollector {
     public int FpsMin { get; internal set; }
     public int FpsMax { get; internal set; }
     public double FpsAverage { get; private set; }
-    public string FpsAverageString { get; private set; }
+    public string FpsAverageString { get; private set; } = string.Empty;
 
     public int Tps { get; internal set; }
+    public int TpsMin { get; internal set;}
+    public int TpsMax { get; internal set;}
     public double TpsAverage { get; private set; }
-    public string TpsAverageString { get; private set; }
+    public string TpsAverageString { get; private set; } = string.Empty;
 
     public double DeltaTps { get; internal set; }
     

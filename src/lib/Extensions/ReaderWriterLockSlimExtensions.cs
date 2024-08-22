@@ -10,37 +10,37 @@ public static class ReaderWriterLockSlimExtensions {
     // -----------------------------------------------------------------------------------------------------------------
     // Helper Class
     // -----------------------------------------------------------------------------------------------------------------
-    private readonly struct Releaser(Action releaseAction) : IDisposable {
-        public void Dispose() => releaseAction();
+    private readonly struct ReadReleaser(ReaderWriterLockSlim rwLock) : IDisposable {
+        public void Dispose() => rwLock.ExitReadLock();
     }
-    
-    // private const int InitialCapacity = 1024;
-    // private static readonly DefaultObjectPoolProvider ObjectPoolProvider = new();
-    // private static ObjectPool<Releaser>? _pool;
-    // public static ObjectPool<Releaser> Pool => 
-    //     _pool ??= ObjectPoolProvider.Create(new FactoryStackPooledObjectPolicy(InitialCapacity));
+    private readonly struct WriteReleaser(ReaderWriterLockSlim rwLock) : IDisposable {
+        public void Dispose() => rwLock.ExitWriteLock();
+    }
+    private readonly struct UpgradableReadReleaser(ReaderWriterLockSlim rwLock) : IDisposable {
+        public void Dispose() => rwLock.ExitUpgradeableReadLock();
+    }
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public static IDisposable Read(this ReaderWriterLockSlim rwLock) {
         rwLock.EnterReadLock();
-        return new Releaser(rwLock.ExitReadLock);
+        return new ReadReleaser(rwLock);
     }
 
     public static IDisposable Write(this ReaderWriterLockSlim rwLock) {
         rwLock.EnterWriteLock();
-        return new Releaser(rwLock.ExitWriteLock);
+        return new WriteReleaser(rwLock);
     }
 
     public static IDisposable UpgradeableRead(this ReaderWriterLockSlim rwLock) {
         rwLock.EnterUpgradeableReadLock();
-        return new Releaser(rwLock.ExitUpgradeableReadLock);
+        return new UpgradableReadReleaser(rwLock);
     }
     
     public static IDisposable? TryRead(this ReaderWriterLockSlim rwLock, int millisecondsTimeout, Action? onTimeout = null) {
         if (rwLock.TryEnterReadLock(millisecondsTimeout)) {
-            return new Releaser(rwLock.ExitReadLock);
+            return new ReadReleaser(rwLock);
         }
         onTimeout?.Invoke(); // Handle timeout scenario
         return null; 
@@ -48,7 +48,7 @@ public static class ReaderWriterLockSlimExtensions {
 
     public static IDisposable? TryWrite(this ReaderWriterLockSlim rwLock, int millisecondsTimeout, Action? onTimeout = null) {
         if (rwLock.TryEnterWriteLock(millisecondsTimeout)) {
-            return new Releaser(rwLock.ExitWriteLock);
+            return new WriteReleaser(rwLock);
         }
         onTimeout?.Invoke(); // Handle timeout scenario
         return null; 
@@ -56,7 +56,7 @@ public static class ReaderWriterLockSlimExtensions {
 
     public static IDisposable? TryUpgradeableRead(this ReaderWriterLockSlim rwLock, int millisecondsTimeout, Action? onTimeout = null) {
         if (rwLock.TryEnterUpgradeableReadLock(millisecondsTimeout)) {
-            return new Releaser(rwLock.ExitUpgradeableReadLock);
+            return new UpgradableReadReleaser(rwLock);
         }
         onTimeout?.Invoke(); // Handle timeout scenario
         return null; 

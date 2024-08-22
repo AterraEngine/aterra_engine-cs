@@ -37,7 +37,7 @@ public class RenderThreadProcessor(
     public CancellationToken CancellationToken { get; set; }
     
     private static Color ClearColor { get; } = new(0, 0, 0, 0);
-    private readonly Stack<Action> _endOfTickActions = [];
+    private readonly Stack<Action> _endOfFrameActions = [];
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
@@ -53,12 +53,8 @@ public class RenderThreadProcessor(
             Update();
             HandleQueue();
             
-            // End of Tick
-            #region End Of Tick
-            while (_endOfTickActions.TryPop(out Action? action)) {
-                action();
-            }
-            #endregion
+            // End of Frame
+            while (_endOfFrameActions.TryPop(out Action? action)) action();
         }
         
         Logger.Information("Render Thread Closing");
@@ -115,19 +111,19 @@ public class RenderThreadProcessor(
         }
         if (crossThreadQueue.EntireQueueIsEmpty) return;
         
-        while (crossThreadQueue.TryDequeue(QueueKey.LogicToRender, out Action? action)) _endOfTickActions.Push(action); 
-        while (crossThreadQueue.TryDequeue(QueueKey.MainToRender, out Action? action)) _endOfTickActions.Push(action); 
+        while (crossThreadQueue.TryDequeue(QueueKey.LogicToRender, out Action? action)) _endOfFrameActions.Push(action); 
+        while (crossThreadQueue.TryDequeue(QueueKey.MainToRender, out Action? action)) _endOfFrameActions.Push(action); 
     }
     
     private void PushRegisterTexture(TextureRegistrar textureRecord) {
-        _endOfTickActions.Push(() => {
+        _endOfFrameActions.Push(() => {
              textureAtlas.TryRegisterTexture(textureRecord.TextureAssetId);
              eventManager.InvokeClearSystemCaches();
         });
     }
     
     private void PushUnRegisterTexture(TextureRegistrar textureRecord) {
-        _endOfTickActions.Push(() => {
+        _endOfFrameActions.Push(() => {
             textureAtlas.TryUnRegisterTexture(textureRecord.TextureAssetId);
             eventManager.InvokeClearSystemCaches();
         });
