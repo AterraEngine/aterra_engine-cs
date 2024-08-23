@@ -7,6 +7,7 @@ using AterraCore.Contracts.Nexities.Components;
 using AterraCore.Contracts.Nexities.Levels;
 using AterraCore.Nexities.Components;
 using AterraCore.Nexities.Entities;
+using AterraCore.OmniVault.Assets.Attributes;
 using AterraLib.Nexities.Components;
 using AterraLib.Nexities.Entities;
 using JetBrains.Annotations;
@@ -38,6 +39,6 @@ public interface IMainLevel : INexitiesLevel2D;
 [Entity("Workfloor:Levels/MainLevel", CoreTags.Level)]
 public class MainLevel(
     IDirectChildren assetTree, 
-    MainLevelSystemIds systemIds
+    [InjectAs("01J5RA7EDMS1PRR1BMRN9XM9AA")] MainLevelSystemIds systemIds
 ) : EmptyLevel(assetTree, systemIds), IMainLevel; 
 

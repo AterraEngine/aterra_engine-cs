@@ -51,13 +51,16 @@ public class Engine(
         
         // -------------------------------------------------------------------------------------------------------------
         // const int levelGenerations = int.MaxValue;
+        // const int entitiesPerLevel = 1_000_000;
+        const int entitiesPerLevel = 10_000;
         const int levelGenerations = 1;
         for (int levelI = 0; levelI < levelGenerations; levelI++) {
             var levelInstanceId = Ulid.NewUlid();
             Logger.Information("level id {id}", levelInstanceId);
             if(!instanceAtlas.TryGetOrCreate("Workfloor:Levels/MainLevel",levelInstanceId, out INexitiesLevel2D? level)) return;
-            
-            const int a = 50;
+
+
+            int a = (int)(Math.Sqrt(entitiesPerLevel) / 2f);   
             int i = levelI + 1;
             Parallel.For(-a, a, k => {
                 Parallel.For(-a, a, j => {

@@ -3,7 +3,6 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.OmniVault.Assets;
-using CodeOfChaos.Extensions.Serilog;
 using JetBrains.Annotations;
 using Serilog;
 using System.Collections.Concurrent;
@@ -41,7 +40,8 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetIn
         if (!factory.TryCreate(registration, predefinedUlid ?? Ulid.NewUlid(), out instance)) return false;
         
         // Add or update directly
-        _assetInstances[instance.InstanceId] = instance;
+        T assetInstance = instance;
+        _assetInstances.AddOrUpdate(assetInstance.InstanceId, assetInstance, (_, _) => assetInstance);
         
         foreach (Type implementedType in registration.DerivedInterfaceTypes) {
             _assetsByTypes
