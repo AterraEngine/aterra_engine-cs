@@ -10,6 +10,7 @@ namespace AterraCore.Contracts.Boot.Logic.PluginLoading;
 public interface IPluginDto {
     IEnumerable<Type> Types { get; }
     PluginId PluginId { get; }
+    bool IsValid { get; }
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods

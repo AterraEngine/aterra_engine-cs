@@ -28,6 +28,7 @@ public static class Program {
             .SetLogger(logger)
             .RegisterAtlas(new XmlSchemaGenerator(logger))
             .RegisterAtlas(new TestConsoleTheme(logger))
+            .RegisterAtlas(new ProjectStats(logger))
             .CreateArgsParser();
 
         await parser.TryParseAsync(string.Join(' ', args));

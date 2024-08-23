@@ -14,11 +14,13 @@ public abstract class APluginDto : IPluginDto {
     // Once invalid, always invalid
     public abstract IEnumerable<Type> Types { get; }
     public abstract PluginId PluginId { get; }
+    public bool IsValid { get; private set; } = true;
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public void SetInvalid() {
+        IsValid = false;
     }
     
     public IEnumerable<(Type Type, T Attribute)> GetOfAttribute<T>() where T : Attribute {

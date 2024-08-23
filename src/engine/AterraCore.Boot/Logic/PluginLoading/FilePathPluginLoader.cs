@@ -9,6 +9,8 @@ namespace AterraCore.Boot.Logic.PluginLoading;
 // ---------------------------------------------------------------------------------------------------------------------
 // Support Code
 // ---------------------------------------------------------------------------------------------------------------------
+using ZipImporterAction = Action<IFilePathPluginLoader, IFilePathLoadedPluginDto, IPluginZipImporter<PluginConfigXml>>;
+using PluginAction = Action<IFilePathPluginLoader, IFilePathLoadedPluginDto>;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -20,27 +22,24 @@ public class FilePathPluginLoader(ILogger logger) : IFilePathPluginLoader {
     // -----------------------------------------------------------------------------------------------------------------
     // Public Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public IFilePathPluginLoader IterateOverValid(Action<IFilePathPluginLoader, IFilePathLoadedPluginDto> action) {
-        foreach (IFilePathLoadedPluginDto plugin in GetValidPlugins()) {
-            action(this, plugin);
-        }
+    public IFilePathPluginLoader IterateOverValid(PluginAction action) {
+        foreach (IFilePathLoadedPluginDto plugin in GetValidPlugins()) action(this, plugin);
         return this;
     }
     
     
-    public IFilePathPluginLoader IterateOverValidWithZipImporter(params Action<IFilePathPluginLoader, IFilePathLoadedPluginDto, IPluginZipImporter<PluginConfigXml>>[] actions) {
+    public IFilePathPluginLoader IterateOverValidWithZipImporter(params ZipImporterAction[] actions) {
         foreach (IFilePathLoadedPluginDto plugin in GetValidPlugins()) {
             using var zipImporter = new PluginZipImporter(plugin.FilePath, logger);
-            
-            // Just, I know this isn't "standard", but save yourself a "too long line headache"
-            //      Look at the params type of this method if you really want to know the type.
-            // ReSharper disable once SuggestVarOrType_Elsewhere
-            foreach (var action in actions) {
+            foreach (ZipImporterAction action in actions) {
                 action(this, plugin, zipImporter);
+                // Break away from the zip importer if plugin became invalid
+                if (!plugin.IsValid) break; 
             }
         }
         
         return this;
     }
-    public IEnumerable<IFilePathLoadedPluginDto> GetValidPlugins() => Plugins;
+    public IEnumerable<IFilePathLoadedPluginDto> GetValidPlugins() => 
+        Plugins.Where(plugin => plugin.IsValid);
 }
