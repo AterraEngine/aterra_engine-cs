@@ -84,6 +84,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraCore.PoolCorp", "src\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraCore.Attributes", "src\engine\AterraCore.Attributes\AterraCore.Attributes.csproj", "{3565866F-4BEB-4D93-8213-3E2013A2A1C4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraLibOverwrite", "src\lib\AterraLibOverwrite\AterraLibOverwrite.csproj", "{4176DA4F-6D93-46E3-B222-2CC209170BC2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -128,6 +130,7 @@ Global
 		{1001A63D-9E3A-4B3F-A4ED-921F29BDE49A} = {72601D4B-0D88-47AC-9217-34B2F6B46509}
 		{2BD4E958-ED91-45E9-9DEE-A5A897238067} = {F86D197F-7641-46CE-A43D-CFF48F84B9E6}
 		{3565866F-4BEB-4D93-8213-3E2013A2A1C4} = {042C6173-4125-4810-9F98-840C9038B966}
+		{4176DA4F-6D93-46E3-B222-2CC209170BC2} = {62ADC2B9-AB4C-4E7A-AADC-FD92209A4398}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{0EE5AA16-BD73-46B5-9921-17CF895E4F52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -230,5 +233,9 @@ Global
 		{3565866F-4BEB-4D93-8213-3E2013A2A1C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3565866F-4BEB-4D93-8213-3E2013A2A1C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3565866F-4BEB-4D93-8213-3E2013A2A1C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4176DA4F-6D93-46E3-B222-2CC209170BC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4176DA4F-6D93-46E3-B222-2CC209170BC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4176DA4F-6D93-46E3-B222-2CC209170BC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4176DA4F-6D93-46E3-B222-2CC209170BC2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

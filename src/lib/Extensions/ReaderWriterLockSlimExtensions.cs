@@ -16,8 +16,10 @@ public static class ReaderWriterLockSlimExtensions {
     private readonly struct WriteReleaser(ReaderWriterLockSlim rwLock) : IDisposable {
         public void Dispose() => rwLock.ExitWriteLock();
     }
-    private readonly struct UpgradableReadReleaser(ReaderWriterLockSlim rwLock) : IDisposable {
-        public void Dispose() => rwLock.ExitUpgradeableReadLock();
+
+    public readonly struct UpgradableReadReleaser(ReaderWriterLockSlim rwLock) : IDisposable {
+        public ReaderWriterLockSlim Lock { get; } = rwLock;
+        public void Dispose() => Lock.ExitUpgradeableReadLock();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -33,7 +35,7 @@ public static class ReaderWriterLockSlimExtensions {
         return new WriteReleaser(rwLock);
     }
 
-    public static IDisposable UpgradeableRead(this ReaderWriterLockSlim rwLock) {
+    public static UpgradableReadReleaser UpgradeableRead(this ReaderWriterLockSlim rwLock) {
         rwLock.EnterUpgradeableReadLock();
         return new UpgradableReadReleaser(rwLock);
     }

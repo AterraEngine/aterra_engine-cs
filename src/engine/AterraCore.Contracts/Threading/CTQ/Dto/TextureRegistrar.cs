@@ -10,5 +10,5 @@ namespace AterraCore.Contracts.Threading.CTQ.Dto;
 // ---------------------------------------------------------------------------------------------------------------------
 public record TextureRegistrar(
     AssetId TextureAssetId,
-    bool UnRegister = false
+    bool UnRegister
 );

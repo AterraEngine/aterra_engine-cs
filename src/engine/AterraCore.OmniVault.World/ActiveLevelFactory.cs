@@ -10,13 +10,14 @@ using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.OmniVault.World.EntityTree;
 using JetBrains.Annotations;
+using Raylib_cs;
 
 namespace AterraCore.OmniVault.World;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
-public class ActiveLevelFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreeFactory entityTreeFactory) : IActiveLevelFactory {
+public class ActiveLevelFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreeFactory entityTreeFactory, IAssetAtlas assetAtlas) : IActiveLevelFactory {
     public IActiveLevel CreateLevel2D(INexitiesLevel2D level2D) {
         IEntityNodeTree entityTree = entityTreeFactory.CreateFromRootId(level2D.InstanceId);
         List<IAssetInstance> entityTreeFlat = entityTree.GetAsFlat().ToList();
@@ -34,6 +35,7 @@ public class ActiveLevelFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreeFa
             TextureAssetIds = entityTreeFlat
                 .Where(asset => asset is IActor2D)
                 .Select(asset => ((IActor2D)asset).Sprite2D.TextureAssetId)
+                .Select(id => assetAtlas.TryGetRegistration(id, out AssetRegistration assetInstance) ? assetInstance.AssetId : id)
                 .Distinct()
                 .ToArray()
         };

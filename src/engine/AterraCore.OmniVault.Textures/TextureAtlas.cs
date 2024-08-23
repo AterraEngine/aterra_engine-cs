@@ -30,8 +30,9 @@ public class TextureAtlas(ILogger logger, IAssetInstanceAtlas instanceAtlas, IPl
             image = Raylib.LoadImage(filePath);
             return true;
         }
-
-        if (pluginAtlas.TryGetFileRawFromPluginZip(assetId.PluginId, filePath, out byte[]? rawImage)) return false;
+        if (!pluginAtlas.TryGetFileRawFromPluginZip(assetId.PluginId, filePath, out byte[]? rawImage)) return false;
+        
+        logger.Debug($"Loading image {assetId} && {filePath}");
         image = Raylib.LoadImageFromMemory(Path.GetExtension(filePath), rawImage );
         return true;
     }
@@ -51,12 +52,12 @@ public class TextureAtlas(ILogger logger, IAssetInstanceAtlas instanceAtlas, IPl
             
             Raylib.UnloadImage(image);
             Logger.Debug("Unloaded image {path}", textureAsset.ImagePath);
-            
+
             Raylib.GenTextureMipmaps(ref texture);
             return true;
         }
         catch (Exception ex) {
-            logger.Warning(ex, "Failed without proper exception catching");
+            logger.Warning(ex, "Failed without proper exception catching for id: {textureAssetId}", textureAssetId);
             return false;
         }
     }

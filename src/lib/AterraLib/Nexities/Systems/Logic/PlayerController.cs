@@ -25,8 +25,8 @@ public class PlayerController: NexitiesSystem<IPlayer2D> {
             if (Raylib.IsKeyDown(KeyboardKey.Q)) entity.Impulse2D.RotationOffset += .75f;
             if (Raylib.IsKeyDown(KeyboardKey.E)) entity.Impulse2D.RotationOffset -= .75f;
 
-            entity.Impulse2D.ScaleOffset = entity.Impulse2D.ScaleOffset with { X = Raylib.GetMouseWheelMove() };
-            entity.Impulse2D.ScaleOffset = entity.Impulse2D.ScaleOffset with { Y = Raylib.GetMouseWheelMove() };
+            entity.Impulse2D.ScaleOffset = entity.Impulse2D.ScaleOffset with { X = (int)Raylib.GetMouseWheelMove() * 4 };
+            entity.Impulse2D.ScaleOffset = entity.Impulse2D.ScaleOffset with { Y = (int)Raylib.GetMouseWheelMove() * 4 };
         }
     }
 }

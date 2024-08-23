@@ -8,6 +8,7 @@ using AterraCore.Contracts.FlexiPlug.Plugin;
 using CodeOfChaos.Extensions;
 using JetBrains.Annotations;
 using Serilog;
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.IO.Compression;
 
@@ -24,6 +25,8 @@ public class PluginAtlas(ILogger logger) : IPluginAtlas {
 
     private readonly HashSet<PluginId> _pluginIds = [];
     public IReadOnlySet<PluginId> PluginIds => _pluginIds;
+
+    private ImmutableDictionary<string, ZipArchive> _pluginZipArchive = ImmutableDictionary<string, ZipArchive>.Empty;
     
     public int TotalAssetCount => _totalAssetCountCache ??= Plugins.SelectMany(p => p.AssetTypes).Count();
 
@@ -70,25 +73,43 @@ public class PluginAtlas(ILogger logger) : IPluginAtlas {
         GetAssetRegistrations(pluginNameSpace, CoreTags.Component);
     #endregion
 
+    private bool TryGetOrCreateZipArchive(string filePath,[NotNullWhen(true)] out ZipArchive? zipArchive) {
+        zipArchive = default;
+        // ReSharper disable once SuggestVarOrType_SimpleTypes
+        if (_pluginZipArchive.TryGetValue(filePath, out zipArchive )) return false;
+        if (!File.Exists(filePath)) return false;
+        
+        zipArchive = ZipFile.OpenRead(filePath);
+        _pluginZipArchive = _pluginZipArchive.Add(filePath, zipArchive);
+        return true;
+    }
+    
     public bool TryGetFileRawFromPluginZip(
         PluginId pluginId, string internalFilePath, 
         [NotNullWhen(true)] out byte[]? bytes
     ) {
-        bytes = null;
+        bytes = default;
+        
         IPluginRecord? pluginRecord = Plugins.FirstOrDefault(p => p.PluginId == pluginId);
         if (pluginRecord is not { PluginBootDto.FilePath: var filePath } || !filePath.IsNotNullOrEmpty()) {
+            logger.Debug("plugin record did not exist {r}", pluginRecord);
             return false;
         }
-        
-        ZipArchive archive = ZipFile.OpenRead(filePath);
-        ZipArchiveEntry? fileEntry = archive.GetEntry(internalFilePath);
-        if (fileEntry is null) return false;
+        if (!TryGetOrCreateZipArchive(filePath, out ZipArchive? zipArchive)) {
+            logger.Debug("zip archive did not exist {r}", pluginRecord);
+            return false;
+        }
+        ZipArchiveEntry? fileEntry = zipArchive.GetEntry(internalFilePath);
+        if (fileEntry is null) {
+            logger.Debug("Could not attain filEntry {r}", pluginRecord);
+            return false;
+        }
         
         using var memoryStream = new MemoryStream();
         using Stream stream = fileEntry.Open();
         stream.CopyTo(memoryStream);
         bytes = memoryStream.ToArray();
         
-        return false;
+        return true;
     }
 }

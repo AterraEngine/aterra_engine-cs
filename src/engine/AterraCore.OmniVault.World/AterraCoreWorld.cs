@@ -33,7 +33,7 @@ public class AterraCoreWorld(IAssetAtlas assetAtlas, IAssetInstanceAtlas instanc
         foreach (AssetId dequeueAssetId in oldTextureAssetIds.Except(newTextureAssetIds)) 
             crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar(dequeueAssetId, UnRegister : true ));
         foreach (AssetId enqueueAssetId in newTextureAssetIds.Except(oldTextureAssetIds)) 
-            crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar(enqueueAssetId));
+            crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar(enqueueAssetId, UnRegister: false));
     }
 
     public bool TryChangeActiveLevel(AssetId levelId) => TryChangeActiveLevel(levelId, Ulid.NewUlid());

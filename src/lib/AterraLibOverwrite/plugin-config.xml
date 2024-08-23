@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pluginConfig xmlns="urn:aterra-engine:plugin-config">
+    <nameSpace>AterraLibOverwrite</nameSpace>
+    <nameReadable>AterraLib Overwrite</nameReadable>
+    <author>Andreas Sas</author>
+    <pluginVersion>0.0.0</pluginVersion>
+    <expectedGameVersion>0.0.0</expectedGameVersion>
+    <bins>
+        <bin file="AterraLibOverwrite.dll"/>
+    </bins>
+</pluginConfig>

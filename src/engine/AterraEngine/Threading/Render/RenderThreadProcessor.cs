@@ -106,6 +106,7 @@ public class RenderThreadProcessor(
     
     private void HandleQueue() {
         while (crossThreadQueue.TextureRegistrarQueue.TryDequeue(out TextureRegistrar? textureRecord)) {
+            Logger.Debug("{d}", textureRecord);
             if (textureRecord.UnRegister) PushUnRegisterTexture(textureRecord);
             PushRegisterTexture(textureRecord);
         }

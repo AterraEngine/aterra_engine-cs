@@ -1,0 +1,70 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    
+    <ItemGroup>
+        <Content Include="..\..\..\resources\aterra_engine-logo-reverse.png" CopyToOutputDirectory="Always">
+            <Link>assets\aterra_engine-logo-reverse.png</Link>
+        </Content>
+    </ItemGroup>
+
+    
+    <ItemGroup>
+      <ProjectReference Include="..\..\lib\AterraLib\AterraLib.csproj" />
+    </ItemGroup>
+
+    <Target Name="PackingToZip" AfterTargets="Build">
+        <!-- Delete the existing zip file if it exists -->
+        <!--    Else it is going to cause issues for the Wip down below -->
+        <Delete Files="$(OutDir)\package\$(MSBuildProjectName).zip" ContinueOnError="true"/>
+
+        <!-- Create directories needed -->
+        <MakeDir Directories="$(OutDir)\temp"/>
+        <MakeDir Directories="$(OutDir)\temp\bin"/>
+        <MakeDir Directories="$(OutDir)\temp\assets"/>
+        <MakeDir Directories="$(OutDir)\package"/>
+
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+        <!-- Copy necessary files to temp directory -->
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+        <!-- Bin - dll files -->
+        <ItemGroup>
+            <!-- Default dll of the project -->
+            <DllFiles Include="$(OutDir)\$(MSBuildProjectName).dll"/>
+            <!-- Add more dlls when needed -->
+
+            <!--  -->
+        </ItemGroup>
+        <Copy SourceFiles="@(DllFiles)" DestinationFiles="@(DllFiles->'$(OutDir)\temp\bin\%(Filename)%(Extension)')"/>
+
+        <!-- Assets - textures -->
+        <ItemGroup>
+            <!-- Add more dlls when needed -->
+            <AssetFiles Include="$(OutDir)\assets\aterra_engine-logo-reverse.png"/>
+            <!--  -->
+        </ItemGroup>
+        <Copy SourceFiles="@(AssetFiles)" DestinationFiles="@(AssetFiles->'$(OutDir)\temp\assets\%(Filename)%(Extension)')"/>
+
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+        <ItemGroup>
+            <ConfigFiles Include="plugin-config.xml"/>
+        </ItemGroup>
+        <!-- Copy config files to output directory -->
+        <Copy SourceFiles="@(ConfigFiles)" DestinationFiles="@(ConfigFiles->'$(OutDir)\temp\%(Filename)%(Extension)')"/>
+
+        <!-- Zip temp directory contents -->
+        <ZipDirectory SourceDirectory="$(OutDir)\temp"
+                      DestinationFile="$(OutDir)\package\$(MSBuildProjectName).zip"/>
+
+        <!-- Optionally, delete temp directory -->
+        <!--        <RemoveDir Directories="$(OutDir)\temp"/>-->
+    </Target>
+
+</Project>
