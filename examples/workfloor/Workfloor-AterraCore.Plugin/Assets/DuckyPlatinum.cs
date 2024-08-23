@@ -1,17 +1,14 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Attributes;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Components;
 using AterraCore.Contracts.Nexities.Entities;
 using AterraCore.Contracts.OmniVault.Textures;
-using AterraCore.Nexities.Components;
-using AterraCore.Nexities.Entities;
-using AterraCore.OmniVault.Assets.Attributes;
 using AterraCore.OmniVault.Textures;
 using AterraLib.Nexities.Components;
 using AterraLib.Nexities.Entities;
-using AterraLib.OmniVault.Textures;
 using JetBrains.Annotations;
 using Raylib_cs;
 using System.Numerics;
@@ -26,7 +23,7 @@ public interface IDuckyPlatinumActor : IActor2D;
 
 [Texture("Workfloor:TextureDuckyPlatinum")]
 [UsedImplicitly]
-public class TextureDuckyPlatinum : Texture2DAsset,ITextureDuckyPlatinum {
+public class TextureDuckyPlatinum : AbstractTexture2DAsset,ITextureDuckyPlatinum {
     public override string ImagePath { get; set; } = "assets/ducky-platinum.png";
     public override Vector2 Size { get; set; } = new (2048, 2048);
 }

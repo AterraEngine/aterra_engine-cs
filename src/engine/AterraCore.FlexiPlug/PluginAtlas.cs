@@ -2,7 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Types.Nexities;
-using AterraCore.Contracts.Boot.Logic.PluginLoading;
+using AterraCore.Contracts.Boot.Logic.PluginLoading.Dto;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug.Plugin;
 using CodeOfChaos.Extensions;
@@ -25,10 +25,10 @@ public class PluginAtlas(ILogger logger) : IPluginAtlas {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void ImportLoadedPluginDtos(Span<IPluginDto> plugins) {
-        foreach (IPluginDto plugin in plugins) {
+    public void ImportLoadedPluginDtos(Span<IPluginBootDto> plugins) {
+        foreach (IPluginBootDto plugin in plugins) {
             Plugins.AddLast(new PluginRecord {
-                PluginId = plugin.PluginId,
+                PluginId = plugin.PluginNameSpaceId,
                 Types = plugin.Types
             });
         }

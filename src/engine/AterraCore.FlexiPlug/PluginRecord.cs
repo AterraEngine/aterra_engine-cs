@@ -1,10 +1,10 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Attributes;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.FlexiPlug.Plugin;
 using AterraCore.Contracts.OmniVault.Assets;
-using AterraCore.Contracts.OmniVault.Assets.Attributes;
 using System.Reflection;
 
 namespace AterraCore.FlexiPlug;
@@ -22,13 +22,13 @@ public class PluginRecord : IPluginRecord {
                 typeof(IAssetInstance).IsAssignableFrom(t)
                 && t is { IsInterface: false, IsAbstract: false }
             )
-            .Select(t => new { Type = t, AssetAttibute = t.GetCustomAttribute<IAssetAttribute>(false) })
+            .Select(t => new { Type = t, AssetAttibute = t.GetCustomAttribute<AssetAttribute>(false) })
             .Where(box => box.AssetAttibute != null)
             .Select(box => new AssetTypeRecord(
                 box.Type,
                 box.AssetAttibute!,// We check in the where LINQ
-                box.Type.GetCustomAttributes<IOverridesAssetIdAttribute>(),
-                box.Type.GetCustomAttributes<IAssetTagAttribute>()
+                box.Type.GetCustomAttributes<OverridesAssetIdAttribute>(),
+                box.Type.GetCustomAttributes<AssetTagAttribute>()
             ))
             .ToDictionary(keySelector: record => record.Type, elementSelector: record => record)
         ).Values;

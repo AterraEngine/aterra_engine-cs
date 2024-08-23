@@ -1,8 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraCore.Contracts.Boot.Logic.PluginLoading;
+using AterraCore.Common.Types.Nexities;
+using JetBrains.Annotations;
+
+namespace AterraCore.Attributes;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IAssemblyLoadedPluginDto : IPluginDto;
+[AttributeUsage(AttributeTargets.Parameter, AllowMultiple = true)]
+[UsedImplicitly]
+public class ReferenceAsAttribute(string assetId) : Attribute {
+    public AssetId AssetId { get; } = assetId;
+}

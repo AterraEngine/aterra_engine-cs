@@ -1,13 +1,14 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Types.Nexities;
+using System.Diagnostics.CodeAnalysis;
 
-namespace AterraCore.Contracts.OmniVault.Assets.Attributes;
+namespace AterraCore.Contracts.Boot.Logic.PluginLoading.Dto;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-// ReSharper disable once InconsistentNaming
-public abstract class IReferenceAsAttribute : Attribute {
-    public abstract AssetId AssetId { get; }
+public interface IRawPluginBootDto {
+    string FilePath { get; }
+    bool TryGetChecksum([NotNullWhen(true)] out string? checksum);
 }

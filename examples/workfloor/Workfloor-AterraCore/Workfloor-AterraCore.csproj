@@ -53,7 +53,8 @@
 
         <!-- Define list of plugin files -->
         <ItemGroup>
-            <PluginFiles Include="..\..\..\examples\workfloor\Workfloor-AterraCore.Plugin\bin\Debug\net8.0\win-x64\package\Workfloor-AterraCore.Plugin.zip"/>
+            <PluginFiles Include="..\..\..\examples\workfloor\Workfloor-AterraCore.Plugin\bin\$(Configuration)\net8.0\win-x64\package\Workfloor-AterraCore.Plugin.zip"/>
+            <PluginFiles Include="..\..\..\src\lib\AterraLib\bin\$(Configuration)\net8.0\package\AterraLib.zip"/>
         </ItemGroup>
 
         <!-- Copy plugins to output directory -->

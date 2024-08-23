@@ -15,7 +15,6 @@ public static class Program {
     public static void Main(string[] args) {
         IEngineConfiguration config = new EngineConfiguration()
             .RegisterBootOperation<EngineConfigLoader>()
-            .RegisterBootOperation<RegisterAssemblyAsPlugin<AterraLibEntry>>()
             .RegisterBootOperation<CollectDefaultDependencies>()
             .RegisterBootOperation<PluginLoaderDefine>()
             .RegisterBootOperation<PluginLoaderPreChecks>()

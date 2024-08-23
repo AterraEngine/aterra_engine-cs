@@ -1,10 +1,10 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Attributes;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Entities;
 using AterraCore.Contracts.OmniVault.World;
-using AterraCore.FlexiPlug.Attributes;
 using AterraCore.Nexities.Systems;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;

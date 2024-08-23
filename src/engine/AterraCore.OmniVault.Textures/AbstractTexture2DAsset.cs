@@ -3,18 +3,18 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.OmniVault.Textures;
 using AterraCore.OmniVault.Assets;
-using AterraCore.OmniVault.Textures;
+using Raylib_cs;
+using System.Numerics;
 
-namespace AterraLib.OmniVault.Textures;
+namespace AterraCore.OmniVault.Textures;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Texture("AterraLib:OmniVault/Textures/Texture2DAsset")]
-public class Texture2DAsset : AssetInstance, ITexture2DAsset {
-    public virtual string ImagePath { get; set; } = string.Empty;
+public abstract class AbstractTexture2DAsset : AssetInstance, ITexture2DAsset {
+    public abstract string ImagePath { get; set; }
+    public abstract Vector2 Size { get; set; }
     private Texture2D? _texture;
     private bool _textureDefined;
-    public virtual Vector2 Size { get; set; }
 
     public bool TryGetTexture(out Texture2D texture) {
         texture = _texture ?? new Texture2D();

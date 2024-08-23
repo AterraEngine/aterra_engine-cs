@@ -1,10 +1,11 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Attributes;
 using AterraCore.Contracts.Boot.Logic.PluginLoading;
+using AterraCore.Contracts.Boot.Logic.PluginLoading.Dto;
 using AterraCore.Contracts.Boot.Operations;
 using AterraCore.Contracts.OmniVault.Assets;
-using AterraCore.FlexiPlug.Attributes;
 using CodeOfChaos.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,7 +18,7 @@ public class PluginExtractor : IBootOperation {
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public void Run(IBootComponents components) {
-        foreach (IPluginDto plugin in components.ValidPlugins) {
+        foreach (IPluginBootDto plugin in components.ValidPlugins) {
             #region Import Dynamic injectables from Assembly
             components.DynamicServices.AddLastRepeated(
             plugin.GetOfAttribute<InjectableAttribute>()
@@ -42,7 +43,7 @@ public class PluginExtractor : IBootOperation {
             #endregion
             #region Import Nexities Asset Factories from Assembly
             components.DynamicServices.AddLastRepeated(
-            plugin.GetOfAttribute<IAssetAttribute>()
+            plugin.GetOfAttribute<AssetAttribute>()
                 .SelectMany(tuple => tuple.Attribute.InterfaceTypes.Select(i => (tuple.Type, tuple.Attribute, Interface: i))
                     .Select(valueTuple => new ServiceDescriptor(
                         valueTuple.Interface,

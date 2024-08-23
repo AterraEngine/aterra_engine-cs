@@ -2,6 +2,8 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Boot.Logic.PluginLoading;
+using AterraCore.Boot.Logic.PluginLoading.Dto;
+using AterraCore.Contracts.Boot.Logic.PluginLoading.Dto;
 using AterraCore.Contracts.Boot.Operations;
 using AterraCore.Loggers;
 using CodeOfChaos.Extensions;
@@ -22,10 +24,12 @@ public class PluginLoaderDefine : IBootOperation {
         string pluginFolder = components.EngineConfigXml.LoadOrder.RootFolderRelative;
         
         components.PluginLoader.Plugins.AddLastRepeated(
-        components.EngineConfigXml.LoadOrder.Plugins.Select(
-                dto => new FilePathLoadedPluginDto(Path.Join(pluginFolder, dto.FilePath))
-            )
-        );
+            components.EngineConfigXml.LoadOrder.Plugins.Select(
+                dto => ((IRawPluginBootDto rawPluginBootDto, IPluginBootDto pluginBootDto))(
+                    new RawPluginBootDto(Path.Join(pluginFolder, dto.FilePath)),
+                    new PluginBootDto()
+                ))
+            );
         
         Logger.Information("Registered FilePathPluginLoader with {amount} possible plugins", components.PluginLoader.Plugins.Count);
     }

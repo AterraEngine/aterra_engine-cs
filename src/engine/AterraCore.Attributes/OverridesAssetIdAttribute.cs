@@ -1,11 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraCore.Contracts.OmniVault.Assets.Attributes;
+using AterraCore.Common.Types.Nexities;
+using JetBrains.Annotations;
+
+namespace AterraCore.Attributes;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-// ReSharper disable once InconsistentNaming
-public abstract class IInjectAsAttribute : Attribute {
-    public abstract Ulid Ulid { get; }
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+[UsedImplicitly]
+public class OverridesAssetIdAttribute(string assetId) : Attribute {
+    public AssetId AssetId { get; } = new(assetId);
 }

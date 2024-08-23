@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.ConfigFiles.EngineConfig;
 using AterraCore.Contracts.Boot.Logic.PluginLoading;
+using AterraCore.Contracts.Boot.Logic.PluginLoading.Dto;
 using AterraCore.Contracts.FlexiPlug;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,7 +18,7 @@ public record BootComponents(
     public LinkedList<ServiceDescriptor> StaticServices { get; } = [];
     public LinkedList<ServiceDescriptor> DynamicServices { get; } = [];
     
-    public LinkedList<IAssemblyLoadedPluginDto> AssemblyLoadedPlugins { get; } = [];
+    public LinkedList<IPluginBootDto> AssemblyLoadedPlugins { get; } = [];
     
     private EngineConfigXml? _engineConfigXml;
     public EngineConfigXml EngineConfigXml {
@@ -25,7 +26,7 @@ public record BootComponents(
         set => _engineConfigXml ??= value;
     }
 
-    public Span<IPluginDto> ValidPlugins => AssemblyLoadedPlugins
-        .Concat<IPluginDto>(PluginLoader.GetValidPlugins())
+    public Span<IPluginBootDto> ValidPlugins => AssemblyLoadedPlugins
+        .Concat(PluginLoader.GetValidPlugins().Select(t => t.pluginBootDto))
         .ToArray();
 }

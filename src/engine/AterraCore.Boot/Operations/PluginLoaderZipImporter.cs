@@ -24,28 +24,35 @@ public class PluginLoaderZipImporter : IBootOperation {
         components.PluginLoader.IterateOverValidWithZipImporter(
             #region Get Files & Config
             (_, plugin, zipImporter) => {
-                plugin.InternalFilePaths = zipImporter.GetFileNamesInZip();
+                // plugin.InternalFilePaths = zipImporter.GetFileNamesInZip();
                 if (!zipImporter.TryGetPluginConfig(out PluginConfigXml? pluginConfig)) {
                     plugin.SetInvalid();
                     Logger.Warning("Plugin config is invalid");
                     return;
                 }
-                
-                plugin.ConfigXml = pluginConfig;
-                Logger.Debug("Loaded ConfigXml for {plugin}", plugin.ConfigXml.NameSpace);
+                if (!plugin.TrySetPluginConfig(pluginConfig)) {
+                    plugin.SetInvalid();
+                    Logger.Warning("Plugin config could not be applied to the plugin");
+                    return;
+                }
+                Logger.Debug("Loaded ConfigXml for {plugin}", pluginConfig.NameSpace);
             },     
             #endregion
             #region Import Data
             (_, plugin, zipImporter) => {
                 // Correct paths
-                IEnumerable<FileDto> correctPaths = plugin.ConfigXml.Dlls
+                if (!plugin.TryGetPluginConfig(out PluginConfigXml? xml)) {
+                    plugin.SetInvalid();
+                    Logger.Warning("Failed to plugin Config");
+                    return;
+                }
+                
+                // Extract assembly(s)
+                IEnumerable<Assembly> assemblies = xml.Dlls
                     .Select(binDto => new FileDto{FilePath = Path
                         .Combine(Paths.Plugins.PluginBinFolder, binDto.FilePath)
                         .Replace("\\", "/")
-                    }); 
-                
-                // Extract assembly(s)
-                plugin.Assemblies.AddRange(correctPaths
+                    })
                     .Select(fileDto => {
                         if (zipImporter.TryGetDllAssembly(fileDto, out Assembly? assembly)) return assembly;
                         plugin.SetInvalid();
@@ -53,8 +60,9 @@ public class PluginLoaderZipImporter : IBootOperation {
                         return assembly;
                     })
                     .Where(assembly => assembly != null)
-                    .Select(assembly => assembly!)
-                );
+                    .Select(assembly => assembly!);
+                
+                plugin.UpdateAssemblies(assemblies);
             }
             #endregion
         );

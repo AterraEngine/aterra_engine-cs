@@ -14,7 +14,8 @@
         </exceptions>
     </boot>
     
-    <loadOrder relativeRootPath="plugins" aterraLib="0.0.0">
+    <loadOrder relativeRootPath="plugins">
+        <plugin file="AterraLib.zip"/>
         <plugin file="Workfloor-AterraCore.Plugin.zip"/>
     </loadOrder>
     

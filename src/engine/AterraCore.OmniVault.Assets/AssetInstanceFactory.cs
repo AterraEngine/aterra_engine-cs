@@ -1,9 +1,9 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Attributes;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.OmniVault.Assets;
-using AterraCore.Contracts.OmniVault.Assets.Attributes;
 using AterraCore.DI;
 using JetBrains.Annotations;
 using Serilog;
@@ -149,8 +149,8 @@ public class AssetInstanceFactory(ILogger logger) : IAssetInstanceFactory {
     private static bool IsBasicNexitiesAsset(ParameterInfo parameter) {
         Type paramType = parameter.ParameterType;
         return typeof(IAssetInstance).IsAssignableFrom(paramType)
-               && !parameter.GetCustomAttributes<IInjectAsAttribute>().Any()
-               && !parameter.GetCustomAttributes<IReferenceAsAttribute>().Any()
+               && !parameter.GetCustomAttributes<InjectAsAttribute>().Any()
+               && !parameter.GetCustomAttributes<ReferenceAsAttribute>().Any()
         ;
     }
     private static object CreateBasicNexitiesAsset(ParameterInfo parameter) {
@@ -164,12 +164,12 @@ public class AssetInstanceFactory(ILogger logger) : IAssetInstanceFactory {
     private static bool IsInjectedInstanceNexitiesAsset(ParameterInfo parameter) {
         Type paramType = parameter.ParameterType;
         return typeof(IAssetInstance).IsAssignableFrom(paramType)
-               && parameter.GetCustomAttributes<IInjectAsAttribute>().Any()
+               && parameter.GetCustomAttributes<InjectAsAttribute>().Any()
             ;
     }
     private static object CreateInjectedInstanceNexitiesAsset(ParameterInfo parameter) {
         IAssetInstanceAtlas instanceAtlas = EngineServices.GetAssetInstanceAtlas();
-        var injectAsValue = parameter.GetCustomAttribute<IInjectAsAttribute>()!;
+        var injectAsValue = parameter.GetCustomAttribute<InjectAsAttribute>()!;
         
         return instanceAtlas.GetOrCreate<IAssetInstance>(parameter.ParameterType, injectAsValue.Ulid);
     }
@@ -179,14 +179,14 @@ public class AssetInstanceFactory(ILogger logger) : IAssetInstanceFactory {
     private static bool IsReferencedAssetIdNexitiesAsset(ParameterInfo parameter) {
         Type paramType = parameter.ParameterType;
         return typeof(IAssetInstance).IsAssignableFrom(paramType)
-               && parameter.GetCustomAttributes<IReferenceAsAttribute>().Any()
+               && parameter.GetCustomAttributes<ReferenceAsAttribute>().Any()
             ;
     }
     private static object CreateReferencedAssetIdNexitiesAsset(ParameterInfo parameter) {
         IAssetInstanceAtlas instanceAtlas = EngineServices.GetAssetInstanceAtlas();
         IAssetAtlas assetAtlas = EngineServices.GetAssetAtlas();
         
-        var referenceAs = parameter.GetCustomAttribute<IReferenceAsAttribute>()!;
+        var referenceAs = parameter.GetCustomAttribute<ReferenceAsAttribute>()!;
         Type assetType = assetAtlas.GetAssetType(referenceAs.AssetId);
         
         return instanceAtlas.GetOrCreate<IAssetInstance>(assetType);

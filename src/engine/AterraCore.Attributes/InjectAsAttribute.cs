@@ -1,17 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Types.Nexities;
-using AterraCore.Contracts.Boot.Logic.PluginLoading;
-using System.Reflection;
+using JetBrains.Annotations;
+using System.Globalization;
 
-namespace AterraCore.Boot.Logic.PluginLoading;
+namespace AterraCore.Attributes;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class AssemblyLoadedPluginDto(Assembly assembly, PluginId pluginId) : APluginDto, IAssemblyLoadedPluginDto {
-    private Assembly Assembly { get; } = assembly;
-    private IEnumerable<Type>? _types;
-    public override IEnumerable<Type> Types => _types ??= Assembly.GetTypes();
-    public override PluginId PluginId => pluginId;
+[AttributeUsage(AttributeTargets.Parameter, AllowMultiple = true)]
+[UsedImplicitly]
+public class InjectAsAttribute(string ulid) : Attribute { 
+    public Ulid Ulid { get; } = Ulid.Parse(ulid, CultureInfo.InvariantCulture);
 }

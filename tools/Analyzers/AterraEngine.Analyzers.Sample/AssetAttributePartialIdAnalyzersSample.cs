@@ -3,12 +3,11 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedMember.Global
-
-using AterraCore.OmniVault.Assets.Attributes;
+using AterraCore.Attributes;
+using AterraCore.Nexities.Entities;
 
 namespace AterraEngine.Analyzer.Sample;
 
-using AterraCore.Nexities.Entities;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

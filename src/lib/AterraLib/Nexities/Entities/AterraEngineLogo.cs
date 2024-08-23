@@ -1,16 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Types.Nexities;
-using AterraCore.Contracts.OmniVault.Assets.Attributes;
-using JetBrains.Annotations;
+using AterraCore.OmniVault.Textures;
 
-namespace AterraCore.OmniVault.Assets.Attributes;
+namespace AterraLib.Nexities.Entities;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+[Texture("AterraLib:Textures/AterraEngineLogo")]
 [UsedImplicitly]
-public class OverridesAssetIdAttribute(string assetId) : IOverridesAssetIdAttribute {
-    public override AssetId AssetId { get; } = new(assetId);
+public class TextureAterraEngineLogo : AbstractTexture2DAsset {
+    public override string ImagePath { get; set; } = "assets/aterra_engine-logo.png";
+    public override Vector2 Size { get; set; } = new (1025, 1025);
 }

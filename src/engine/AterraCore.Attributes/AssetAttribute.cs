@@ -2,12 +2,22 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Types.Nexities;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace AterraCore.Contracts.OmniVault.Assets.Attributes;
+namespace AterraCore.Attributes;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-// ReSharper disable once InconsistentNaming
-public abstract class IOverridesAssetIdAttribute : Attribute {
-    public abstract AssetId AssetId { get; }
+[AttributeUsage(AttributeTargets.Class)]
+public class AssetAttribute(
+    string assetId,
+    CoreTags coreTags = CoreTags.Asset,
+    ServiceLifetime lifetime = ServiceLifetime.Transient,
+    params Type[] interfaceTypes
+    
+) : Attribute {
+    public AssetId AssetId { get; }= assetId;
+    public CoreTags CoreTags { get; } = coreTags;
+    public Type[] InterfaceTypes { get; } = interfaceTypes;
+    public ServiceLifetime Lifetime { get; } = lifetime ;
 }

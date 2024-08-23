@@ -19,6 +19,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\lib\Xml\Xml.csproj"/>
+        <ProjectReference Include="..\AterraCore.Attributes\AterraCore.Attributes.csproj" />
         <ProjectReference Include="..\AterraCore.Common\AterraCore.Common.csproj"/>
     </ItemGroup>
 
