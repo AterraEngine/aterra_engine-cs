@@ -48,6 +48,7 @@ public class Engine(
             }
         }
         if (!world.TryChangeActiveLevel(AssetIdLib.AterraCore.Entities.EmptyLevel)) throw new ApplicationException("Failed to change active level");
+        await Task.Delay(5_000);
         
         // -------------------------------------------------------------------------------------------------------------
         // const int levelGenerations = int.MaxValue;
@@ -90,7 +91,7 @@ public class Engine(
             playerAddendum.Transform2D.Scale = Vector2.One;
             player2D.ChildrenIDs.TryAddFirst(playerAddendum.InstanceId);
         
-            await Task.Delay(1_000);
+            // await Task.Delay(1_000);
             if (!world.TryChangeActiveLevel("Workfloor:Levels/MainLevel", level.InstanceId)) throw new ApplicationException($"Failed to change active level to {level.InstanceId}");
         }
         // -------------------------------------------------------------------------------------------------------------

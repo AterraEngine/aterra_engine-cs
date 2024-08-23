@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Types.Nexities;
+using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.Textures;
 using JetBrains.Annotations;
@@ -14,20 +15,33 @@ namespace AterraCore.OmniVault.Textures;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
-public class TextureAtlas(ILogger logger, IAssetInstanceAtlas instanceAtlas) : ITextureAtlas {
+public class TextureAtlas(ILogger logger, IAssetInstanceAtlas instanceAtlas, IPluginAtlas pluginAtlas) : ITextureAtlas {
     private ILogger Logger { get; } = logger.ForContext<TextureAtlas>();
     public IEnumerable<ITexture2DAsset> TextureAssets => instanceAtlas.OfType<ITexture2DAsset>();
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
+    private bool TryGetImage(AssetId assetId, string filePath, out Image image) {
+        image = new Image();
+        if (!pluginAtlas.PluginIds.Contains(assetId.PluginId)) {
+            if (!Path.Exists(filePath)) return false;
+            // Image is not part of a plugin, and can be loaded directly
+            image = Raylib.LoadImage(filePath);
+            return true;
+        }
+
+        if (pluginAtlas.TryGetFileRawFromPluginZip(assetId.PluginId, filePath, out byte[]? rawImage)) return false;
+        image = Raylib.LoadImageFromMemory(Path.GetExtension(filePath), rawImage );
+        return true;
+    }
+    
     #region Registering Texture to GPU
     public bool TryRegisterTexture(AssetId textureAssetId) {
         if (!instanceAtlas.TryGetOrCreateSingleton(textureAssetId, out ITexture2DAsset? textureAsset)) return false;
-        if (!Path.Exists(textureAsset.ImagePath)) return false;
-
+        
         try {
-            Image image = Raylib.LoadImage(textureAsset.ImagePath);
+            if (!TryGetImage(textureAssetId, textureAsset.ImagePath, out Image image)) return false;
             Logger.Debug("Loaded image {path}", textureAsset.ImagePath);
 
             Texture2D texture = Raylib.LoadTextureFromImage(image);

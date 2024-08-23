@@ -25,6 +25,8 @@ public class PluginBootDto : IPluginBootDto {
     
     public bool IsValid { get; private set; } = true;
 
+    public string FilePath { get; init; } = string.Empty;
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------

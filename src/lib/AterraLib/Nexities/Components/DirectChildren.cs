@@ -11,18 +11,18 @@ namespace AterraLib.Nexities.Components;
 [Component<IDirectChildren>(AssetIdLib.AterraCore.Components.DirectChildren)]
 [UsedImplicitly]
 public class DirectChildren : NexitiesComponent, IDirectChildren {
-    private readonly List<Ulid> _directChildren = new(12);
+    protected virtual List<Ulid> DirectChildIds { get; } = new(12);
     private readonly ReaderWriterLockSlim _rwLock = new();
     private int? _count;
     public int Count {
         get {
-            using (_rwLock.Read()) return _count ??= _directChildren.Count;
+            using (_rwLock.Read()) return _count ??= DirectChildIds.Count;
         }
     }
 
     public IReadOnlyCollection<Ulid> Children {
         get {
-            using (_rwLock.Read()) return _directChildren.AsReadOnly();
+            using (_rwLock.Read()) return DirectChildIds.AsReadOnly();
         }
     }
 
@@ -31,16 +31,16 @@ public class DirectChildren : NexitiesComponent, IDirectChildren {
     // -----------------------------------------------------------------------------------------------------------------
     public bool TryAddFirst(Ulid id) {
         using (_rwLock.Write()) {
-            if (_directChildren.Contains(id)) return false;
-            _directChildren.Insert(0, id);
+            if (DirectChildIds.Contains(id)) return false;
+            DirectChildIds.Insert(0, id);
             _count = null;
             return true;
         }
     }
     public bool TryAdd(Ulid id) {
         using (_rwLock.Write()) {
-            if (_directChildren.Contains(id)) return false;
-            _directChildren.Add(id);
+            if (DirectChildIds.Contains(id)) return false;
+            DirectChildIds.Add(id);
             _count = null;
             return true;
         }
@@ -48,9 +48,9 @@ public class DirectChildren : NexitiesComponent, IDirectChildren {
 
     public bool TryInsertBefore(Ulid id, Ulid before) {
         using (_rwLock.Write()) {
-            if (_directChildren.Contains(id) || !_directChildren.Contains(before)) return false;
-            int indexBefore = _directChildren.IndexOf(before);
-            _directChildren.Insert(
+            if (DirectChildIds.Contains(id) || !DirectChildIds.Contains(before)) return false;
+            int indexBefore = DirectChildIds.IndexOf(before);
+            DirectChildIds.Insert(
                 indexBefore == 0 ? indexBefore : indexBefore - 1,
                 id
             );
@@ -61,11 +61,11 @@ public class DirectChildren : NexitiesComponent, IDirectChildren {
     
     public bool TryInsertAfter(Ulid id, Ulid after) {
         using (_rwLock.Write()) {
-            if (_directChildren.Contains(id) || !_directChildren.Contains(after)) return false;
-            int indexAfter = _directChildren.IndexOf(after);
+            if (DirectChildIds.Contains(id) || !DirectChildIds.Contains(after)) return false;
+            int indexAfter = DirectChildIds.IndexOf(after);
 
-            _directChildren.Insert(
-                indexAfter == _directChildren.Count ? indexAfter : indexAfter + 1,
+            DirectChildIds.Insert(
+                indexAfter == DirectChildIds.Count ? indexAfter : indexAfter + 1,
                 id
             );
             

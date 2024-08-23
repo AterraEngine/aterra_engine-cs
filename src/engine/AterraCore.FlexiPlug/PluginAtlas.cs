@@ -8,6 +8,8 @@ using AterraCore.Contracts.FlexiPlug.Plugin;
 using CodeOfChaos.Extensions;
 using JetBrains.Annotations;
 using Serilog;
+using System.Diagnostics.CodeAnalysis;
+using System.IO.Compression;
 
 namespace AterraCore.FlexiPlug;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -19,6 +21,9 @@ public class PluginAtlas(ILogger logger) : IPluginAtlas {
 
     private int? _totalAssetCountCache;
     private LinkedList<IPluginRecord> Plugins { get; } = [];
+
+    private readonly HashSet<PluginId> _pluginIds = [];
+    public IReadOnlySet<PluginId> PluginIds => _pluginIds;
     
     public int TotalAssetCount => _totalAssetCountCache ??= Plugins.SelectMany(p => p.AssetTypes).Count();
 
@@ -29,8 +34,10 @@ public class PluginAtlas(ILogger logger) : IPluginAtlas {
         foreach (IPluginBootDto plugin in plugins) {
             Plugins.AddLast(new PluginRecord {
                 PluginId = plugin.PluginNameSpaceId,
-                Types = plugin.Types
+                Types = plugin.Types,
+                PluginBootDto = plugin
             });
+            _pluginIds.Add(plugin.PluginNameSpaceId);
         }
     }
     public void InvalidateAllCaches() => Plugins.IterateOver(plugin => plugin.InvalidateCaches());
@@ -46,8 +53,8 @@ public class PluginAtlas(ILogger logger) : IPluginAtlas {
                 .ConditionalWhere(filter != null, record => record.AssetAttribute.CoreTags.HasFlag(filter!))
                 .Select(record => new AssetRegistration(
                     AssetId: record.AssetAttribute.AssetId,
-                    Type:record.Type
-                    ) {
+                    Type: record.Type
+                ) {
                     InterfaceTypes = record.AssetAttribute.InterfaceTypes,
                     CoreTags = record.AssetAttribute.CoreTags,
                     StringTags = record.AssetTagAttributes.SelectMany(attribute => attribute.Tags),
@@ -56,10 +63,32 @@ public class PluginAtlas(ILogger logger) : IPluginAtlas {
             );
     }
 
-    public IEnumerable<AssetRegistration> GetEntityRegistrations(PluginId? pluginNameSpace = null) => 
+    public IEnumerable<AssetRegistration> GetEntityRegistrations(PluginId? pluginNameSpace = null) =>
         GetAssetRegistrations(pluginNameSpace, CoreTags.Entity);
 
     public IEnumerable<AssetRegistration> GetComponentRegistrations(PluginId? pluginNameSpace = null) =>
         GetAssetRegistrations(pluginNameSpace, CoreTags.Component);
     #endregion
+
+    public bool TryGetFileRawFromPluginZip(
+        PluginId pluginId, string internalFilePath, 
+        [NotNullWhen(true)] out byte[]? bytes
+    ) {
+        bytes = null;
+        IPluginRecord? pluginRecord = Plugins.FirstOrDefault(p => p.PluginId == pluginId);
+        if (pluginRecord is not { PluginBootDto.FilePath: var filePath } || !filePath.IsNotNullOrEmpty()) {
+            return false;
+        }
+        
+        ZipArchive archive = ZipFile.OpenRead(filePath);
+        ZipArchiveEntry? fileEntry = archive.GetEntry(internalFilePath);
+        if (fileEntry is null) return false;
+        
+        using var memoryStream = new MemoryStream();
+        using Stream stream = fileEntry.Open();
+        stream.CopyTo(memoryStream);
+        bytes = memoryStream.ToArray();
+        
+        return false;
+    }
 }

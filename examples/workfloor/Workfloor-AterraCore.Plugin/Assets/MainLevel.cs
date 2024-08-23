@@ -38,7 +38,18 @@ public interface IMainLevel : INexitiesLevel2D;
 [UsedImplicitly]
 [Entity("Workfloor:Levels/MainLevel", CoreTags.Level)]
 public class MainLevel(
-    IDirectChildren assetTree, 
+    IDirectChildren children,
     [InjectAs("01J5RA7EDMS1PRR1BMRN9XM9AA")] MainLevelSystemIds systemIds
-) : EmptyLevel(assetTree, systemIds), IMainLevel; 
+) : NexitiesEntity(children, systemIds), INexitiesLevel2D {
+    private IDirectChildren? _children = children;
+    public IDirectChildren ChildrenIDs => _children ??= GetComponent<IDirectChildren>();
+
+    private ISystemIds? _systemIds = systemIds;
+    public ISystemIds NexitiesSystemIds => _systemIds ??= GetComponent<ISystemIds>();
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    protected override void ComponentOverwritten() {}
+}
 

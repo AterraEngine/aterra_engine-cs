@@ -27,7 +27,7 @@ public class PluginLoaderDefine : IBootOperation {
             components.EngineConfigXml.LoadOrder.Plugins.Select(
                 dto => ((IRawPluginBootDto rawPluginBootDto, IPluginBootDto pluginBootDto))(
                     new RawPluginBootDto(Path.Join(pluginFolder, dto.FilePath)),
-                    new PluginBootDto()
+                    new PluginBootDto {FilePath = Path.Join(pluginFolder, dto.FilePath)}
                 ))
             );
         

@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Attributes;
 using AterraCore.Common.Types.Nexities;
+using AterraCore.Contracts.Boot.Logic.PluginLoading.Dto;
 using AterraCore.Contracts.FlexiPlug.Plugin;
 using AterraCore.Contracts.OmniVault.Assets;
 using System.Reflection;
@@ -32,6 +33,8 @@ public class PluginRecord : IPluginRecord {
             ))
             .ToDictionary(keySelector: record => record.Type, elementSelector: record => record)
         ).Values;
+
+    public IPluginBootDto PluginBootDto { get; init; } = null!;
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods

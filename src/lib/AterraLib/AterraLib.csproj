@@ -23,7 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="..\..\..\resources\aterra_engine-logo.png">
+      <Content Include="..\..\..\resources\aterra_engine-logo.png" CopyToOutputDirectory="Always">
         <Link>assets\aterra_engine-logo.png</Link>
       </Content>
     </ItemGroup>
@@ -49,12 +49,15 @@
             <DllFiles Include="$(OutDir)\$(MSBuildProjectName).dll"/>
             <!-- Add more dlls when needed -->
 
+            <!--  -->
         </ItemGroup>
         <Copy SourceFiles="@(DllFiles)" DestinationFiles="@(DllFiles->'$(OutDir)\temp\bin\%(Filename)%(Extension)')"/>
 
         <!-- Assets - textures -->
         <ItemGroup>
-             <AssetFiles Include="$(OutDir)assets\aterra_engine-logo.png"/>
+            <!-- Add more dlls when needed -->
+            <AssetFiles Include="$(OutDir)\assets\aterra_engine-logo.png"/>
+            <!--  -->
         </ItemGroup>
         <Copy SourceFiles="@(AssetFiles)" DestinationFiles="@(AssetFiles->'$(OutDir)\temp\assets\%(Filename)%(Extension)')"/>
 

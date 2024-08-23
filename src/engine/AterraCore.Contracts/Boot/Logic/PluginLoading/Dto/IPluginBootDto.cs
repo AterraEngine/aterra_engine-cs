@@ -12,6 +12,7 @@ namespace AterraCore.Contracts.Boot.Logic.PluginLoading.Dto;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IPluginBootDto {
+    string FilePath { get; }
     IReadOnlyCollection<Assembly> Assemblies { get; }
     IReadOnlyCollection<Type> Types { get; }
     PluginId PluginNameSpaceId { get; }

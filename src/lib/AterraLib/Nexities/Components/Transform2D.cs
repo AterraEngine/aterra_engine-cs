@@ -8,21 +8,20 @@ namespace AterraLib.Nexities.Components;
 [Component<ITransform2D>(AssetIdLib.AterraCore.Components.Transform2D)]
 [UsedImplicitly]
 public class Transform2D : NexitiesComponent, ITransform2D {
-
-    private Vector2 _translation = Vector2.Zero;
+    protected virtual Vector2 TranslationCache { get; set; } = Vector2.Zero;
     public Vector2 Translation {
-        get => _translation;
+        get => TranslationCache;
         set {
-            _translation = value;
+            TranslationCache = value;
             _destinationRectangle = null;
         }
     }
 
-    private Vector2 _scale = Vector2.One;
+    protected virtual Vector2 ScaleCache { get; set; } = Vector2.One;
     public Vector2 Scale {
-        get => _scale;
+        get => ScaleCache;
         set {
-            _scale = value;
+            ScaleCache = value;
             _destinationRectangle = null;
             _rotationOrigin = null;
         }
