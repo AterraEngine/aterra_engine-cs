@@ -1,12 +1,18 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Nexities.Levels;
+using System.Numerics;
 
-namespace AterraCore.Contracts.OmniVault.World;
+namespace AterraEngine.Threading.Render;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IActiveLevelFactory {
-    ActiveLevel CreateLevel2D(INexitiesLevel2D level2D);
+public partial class RenderThreadProcessor {
+    private void OnEventManagerOnEventWindowResized() {
+        if (world.ActiveLevel is not {Camera2DEntity: {} camera2DEntity}) return;
+        camera2DEntity.Camera = camera2DEntity.Camera with {
+            Offset = new Vector2(Raylib.GetScreenWidth() / 2f, Raylib.GetScreenHeight() / 2f)
+        };
+    }
 }

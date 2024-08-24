@@ -10,7 +10,6 @@ using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.OmniVault.World.EntityTree;
 using JetBrains.Annotations;
-using Raylib_cs;
 
 namespace AterraCore.OmniVault.World;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -18,7 +17,7 @@ namespace AterraCore.OmniVault.World;
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
 public class ActiveLevelFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreeFactory entityTreeFactory, IAssetAtlas assetAtlas) : IActiveLevelFactory {
-    public IActiveLevel CreateLevel2D(INexitiesLevel2D level2D) {
+    public ActiveLevel CreateLevel2D(INexitiesLevel2D level2D) {
         IEntityNodeTree entityTree = entityTreeFactory.CreateFromRootId(level2D.InstanceId);
         List<IAssetInstance> entityTreeFlat = entityTree.GetAsFlat().ToList();
 
@@ -28,8 +27,9 @@ public class ActiveLevelFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreeFa
         
         return new ActiveLevel {
             RawLevelData = level2D,
-            LogicSystems = GetNexitiesSystems(level2D.NexitiesSystemIds.LogicSystemIds),
-            RenderSystems = GetNexitiesSystems(level2D.NexitiesSystemIds.RenderSystemIds),
+            Logic = GetNexitiesSystems(level2D.NexitiesSystemIds.LogicSystemIds),
+            Render = GetNexitiesSystems(level2D.NexitiesSystemIds.RenderSystemIds),
+            Ui = GetNexitiesSystems(level2D.NexitiesSystemIds.UiSystemIds),
             ActiveEntityTree = entityTree,
             Camera2DEntity = camera2D,
             TextureAssetIds = entityTreeFlat

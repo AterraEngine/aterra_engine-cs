@@ -13,7 +13,7 @@ namespace AterraLib.Nexities.Systems.Logic;
 [Injectable<PlayerController>(ServiceLifetime.Singleton)]
 [UsedImplicitly]
 public class PlayerController: NexitiesSystem<IPlayer2D> {
-    public override void Tick(IActiveLevel level) {
+    public override void Tick(ActiveLevel level) {
         foreach (IPlayer2D entity in GetEntities(level)) {
             
             if (Raylib.IsKeyDown(KeyboardKey.W)) entity.Impulse2D.TranslationOffset = entity.Impulse2D.TranslationOffset with { Y = entity.Impulse2D.TranslationOffset.Y - .25f };

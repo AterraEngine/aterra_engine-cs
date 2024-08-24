@@ -14,14 +14,13 @@ using AterraCore.Contracts.Threading.Logic;
 using AterraCore.Contracts.Threading.Rendering;
 using JetBrains.Annotations;
 using Serilog;
-using static Raylib_cs.Raylib;
 
 namespace AterraEngine.Threading.Render;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
-public class RenderThreadProcessor(
+public partial class RenderThreadProcessor(
     ILogger logger,
     IMainWindow mainWindow,
     IAterraCoreWorld world,
@@ -32,7 +31,7 @@ public class RenderThreadProcessor(
     IRenderEventManager eventManager,
     ILogicEventManager logicEventManager,
     IAssetInstanceAtlas instanceAtlas
-) :  IRenderThreadProcessor {
+) : IRenderThreadProcessor {
     private ILogger Logger { get; } = logger.ForContext<RenderThreadProcessor>();
     public CancellationToken CancellationToken { get; set; }
     
@@ -42,73 +41,78 @@ public class RenderThreadProcessor(
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    private bool WhileCondition => !WindowShouldClose()
+    private bool WhileCondition => !Raylib.WindowShouldClose()
                                    || CancellationToken.IsCancellationRequested;
     public void Run() {
+        RegisterEvents();
         mainWindow.Init();
         
         // Window is actually running now
         while (WhileCondition) {
-            logicEventManager.InvokeUpdateFps(GetFPS());
+            logicEventManager.InvokeUpdateFps(Raylib.GetFPS());
             Update();
             HandleQueue();
             
-            // End of Frame
-            while (_endOfFrameActions.TryPop(out Action? action)) action();
+            while (_endOfFrameActions.TryPop(out Action? action))
+                action();
         }
         
         Logger.Information("Render Thread Closing");
-        CloseWindow();
+        Raylib.CloseWindow();
         threadingManager.CancelThreads();
     }
     
     private void Update() {
-        if (!world.TryGetActiveLevel(out IActiveLevel? level)) return;
+        if (world.ActiveLevel is not {
+                Camera2DEntity: var camera2DEntity,
+                RenderSystems: var renderSystems, 
+                // UiSystems: var uiSystems
+            } activeLevel) return;
     
-        BeginDrawing();
-        ClearBackground(ClearColor);
+        Raylib.BeginDrawing();
+        Raylib.ClearBackground(ClearColor);
 
-        if (level.Camera2DEntity is { Camera: var camera2D }) {
-            BeginMode2D(camera2D);
-            foreach (INexitiesSystem system in level.RenderSystems) 
-                system.Tick(level);
-            EndMode2D();
+        if (camera2DEntity is { Camera: var camera2D }) {
+            Raylib.BeginMode2D(camera2D);
+            foreach (INexitiesSystem system in renderSystems) 
+                system.Tick(activeLevel);
+            Raylib.EndMode2D();
+            
+            // foreach (INexitiesSystem system in uiSystems) {
+            //     system.Tick(activeLevel);
+            // }
         }
         
-        DrawUi(level);
-        EndDrawing();
+        DrawUi(activeLevel);
+        Raylib.EndDrawing();
+        
+        if (Raylib.IsWindowResized()) eventManager.InvokeWindowResized();
     }
     
-    private void DrawUi(IActiveLevel level) {
-        DrawRectangle(0, 0, 250, 50 * 9, Color.White);
-        DrawText($"   FPS : {dataCollector.Fps}", 0, 0, 32, Color.DarkBlue);
-        DrawText($"minFPS : {dataCollector.FpsMin}", 0, 50, 32, Color.DarkBlue);
-        DrawText($"maxFPS : {dataCollector.FpsMax}", 0, 100, 32, Color.DarkBlue);
-        DrawText($"avgFPS : {dataCollector.FpsAverageString}", 0, 150, 32, Color.DarkBlue);
-        DrawText($"   TPS : {dataCollector.Tps}", 0, 200, 32, Color.DarkBlue);
-        DrawText($"avgTPS : {dataCollector.TpsAverageString}", 0, 250, 32, Color.DarkBlue);
+    private void DrawUi(ActiveLevel level) {
+        Raylib.DrawRectangle(0, 0, 250, 50 * 9, Color.White);
         
-        DrawText($"DUCKS : {level.RawLevelData.ChildrenIDs.Count}",0, 300, 32, Color.DarkBlue);
-        DrawText($"entities : {instanceAtlas.TotalCount}",0, 350, 32, Color.DarkBlue);
-        DrawText($"ID : {level.RawLevelData.AssetId}",0, 400, 12, Color.DarkBlue);
-        DrawText($"ID : {level.RawLevelData.InstanceId}",0, 425, 12, Color.DarkBlue);
+        Raylib.DrawText($"   FPS : {dataCollector.Fps}", 0, 0, 32, Color.DarkBlue);
+        Raylib.DrawText($"minFPS : {dataCollector.FpsMin}", 0, 50, 32, Color.DarkBlue);
+        Raylib.DrawText($"maxFPS : {dataCollector.FpsMax}", 0, 100, 32, Color.DarkBlue);
+        Raylib.DrawText($"avgFPS : {dataCollector.FpsAverageString}", 0, 150, 32, Color.DarkBlue);
+        Raylib.DrawText($"   TPS : {dataCollector.Tps}", 0, 200, 32, Color.DarkBlue);
+        Raylib.DrawText($"avgTPS : {dataCollector.TpsAverageString}", 0, 250, 32, Color.DarkBlue);
+        Raylib.DrawText($" DUCKS : {level.RawLevelData.ChildrenIDs.Count}",0, 300, 32, Color.DarkBlue);
+        Raylib.DrawText($"entGlb : {instanceAtlas.TotalCount}",0, 350, 32, Color.DarkBlue);
+        Raylib.DrawText($" Asset : {level.RawLevelData.AssetId}",0, 400, 12, Color.DarkBlue);
+        Raylib.DrawText($"  Inst : {level.RawLevelData.InstanceId}",0, 425, 12, Color.DarkBlue);
     }
     
     public void RegisterEvents() {
-        eventManager.EventClearSystemCaches += OnEventManagerOnEventClearSystemCaches;
-    }
-    
-    private void OnEventManagerOnEventClearSystemCaches(object? _, EventArgs __) {
-        if (!world.TryGetActiveLevel(out IActiveLevel? level)) return;
-        foreach (INexitiesSystem system in level.RenderSystems) 
-            system.InvalidateCaches();
+        eventManager.EventClearSystemCaches += (_,_) => _endOfFrameActions.Push(OnEventManagerOnEventClearSystemCaches);
+        eventManager.EventWindowResized += (_,_) => _endOfFrameActions.Push(OnEventManagerOnEventWindowResized) ;
     }
     
     private void HandleQueue() {
         while (crossThreadQueue.TextureRegistrarQueue.TryDequeue(out TextureRegistrar? textureRecord)) {
-            Logger.Debug("{d}", textureRecord);
             if (textureRecord.UnRegister) PushUnRegisterTexture(textureRecord);
-            PushRegisterTexture(textureRecord);
+            else PushRegisterTexture(textureRecord);
         }
         if (crossThreadQueue.EntireQueueIsEmpty) return;
         
@@ -117,16 +121,20 @@ public class RenderThreadProcessor(
     }
     
     private void PushRegisterTexture(TextureRegistrar textureRecord) {
-        _endOfFrameActions.Push(() => {
-             textureAtlas.TryRegisterTexture(textureRecord.TextureAssetId);
-             eventManager.InvokeClearSystemCaches();
-        });
+        _endOfFrameActions.Push(RegisterTexture);
+        return;
+        void RegisterTexture() {
+            textureAtlas.TryRegisterTexture(textureRecord.TextureAssetId);
+            eventManager.InvokeClearSystemCaches();
+        }
     }
     
     private void PushUnRegisterTexture(TextureRegistrar textureRecord) {
-        _endOfFrameActions.Push(() => {
+        _endOfFrameActions.Push(UnregisterTexture);
+        return;
+        void UnregisterTexture() {
             textureAtlas.TryUnRegisterTexture(textureRecord.TextureAssetId);
             eventManager.InvokeClearSystemCaches();
-        });
+        }
     }
 }

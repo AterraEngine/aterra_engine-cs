@@ -38,6 +38,7 @@ public class AssetAtlas(ILogger logger) : IAssetAtlas {
             );
             return false;
         }
+        
         if (!_assetsByType.TryAdd(registration.Type, registration.AssetId)) {
             // The reason for this, is the class type is hard linked to an AssetId
             Logger.Warning(
@@ -48,7 +49,7 @@ public class AssetAtlas(ILogger logger) : IAssetAtlas {
         }
 
         foreach (Type interfaceType in registration.InterfaceTypes) {
-            // The reason for this, is the class type is soft linked to an AssetId, and can be overwritten
+            // The reason for this, is the class type is softly linked to an AssetId, and can be overwritten
             _assetsByType.AddOrUpdate(interfaceType, registration.AssetId);
             Logger.Information("Asset {AssetId} linked to the interface of {Type}", registration.AssetId, interfaceType.FullName);
         }

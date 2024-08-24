@@ -17,6 +17,10 @@ public class SystemIds : NexitiesComponent, ISystemIds {
     private IReadOnlyCollection<AssetId>? _renderSystemIdsCache;
     public IReadOnlyCollection<AssetId> RenderSystemIds => _renderSystemIdsCache ?? RenderSystems.AsReadOnly();
     
+    protected virtual AssetId[] UiSystems  { get; set; } = [];
+    private IReadOnlyCollection<AssetId>? _uiSystemIdsCache;
+    public IReadOnlyCollection<AssetId> UiSystemIds => _uiSystemIdsCache ?? UiSystems.AsReadOnly();
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -28,6 +32,11 @@ public class SystemIds : NexitiesComponent, ISystemIds {
     public void AppendRenderSystem(AssetId renderSystem) {
         RenderSystems = RenderSystems.Append(renderSystem).ToArray();
         _renderSystemIdsCache = null;
+    }
+    
+    public void AppendUiSystem(AssetId uiSystem) {
+        UiSystems = UiSystems.Append(uiSystem).ToArray();
+        _uiSystemIdsCache = null;
     }
 
 }

@@ -25,7 +25,7 @@ public class RandomImpulse : NexitiesSystemWithFilter<IActor2D> {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public override void Tick(IActiveLevel level) {
+    public override void Tick(ActiveLevel level) {
         foreach (IActor2D entity in GetEntities(level)) {
             entity.Impulse2D.TranslationOffset += new Vector2(
                 (2 * _random.NextSingle() - 1) * 10f,
@@ -45,7 +45,7 @@ public class RandomImpulse : NexitiesSystemWithFilter<IActor2D> {
 [UsedImplicitly]
 public class RandomImpulseCamera : NexitiesSystem<ICamera2D> {
     // -----------------------------------------------------------------------------------------------------------------
-    public override void Tick(IActiveLevel level) {
+    public override void Tick(ActiveLevel level) {
         foreach (ICamera2D entity in GetEntities(level)) {
             entity.Impulse2D.RotationOffset += -0.1f;
         }

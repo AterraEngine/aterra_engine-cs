@@ -21,6 +21,9 @@ public class EmptyLevelSystemIds : SystemIds {
     protected override AssetId[] RenderSystems { get; set; } = [
         AssetIdLib.AterraCore.SystemsRendering.Render2D
     ];
+    
+    protected override AssetId[] UiSystems { get; set; } = [
+    ];
 }
 
 [Component<DirectChildrenEmptyLevel>("AterraLib:Components/DirectChildrenEmptyLevel")]

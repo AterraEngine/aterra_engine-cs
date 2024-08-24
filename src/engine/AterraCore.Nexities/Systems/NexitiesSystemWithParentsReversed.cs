@@ -15,7 +15,7 @@ public abstract class NexitiesSystemWithParentsReversed<TParent, TChild> : Nexit
     where TParent : class, IAssetInstance 
     where TChild : class, IAssetInstance
 {
-    protected override (TParent? Parent,TChild Child)[] GetEntities(IActiveLevel level) {
+    protected override (TParent? Parent,TChild Child)[] GetEntities(ActiveLevel level) {
         if (BufferPopulated) return EntitiesBuffer;
         
         var list = new List<(TParent? Parent, TChild Child)>();

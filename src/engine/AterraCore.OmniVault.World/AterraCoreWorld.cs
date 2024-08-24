@@ -17,18 +17,18 @@ namespace AterraCore.OmniVault.World;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
-public class AterraCoreWorld(IAssetAtlas assetAtlas, IAssetInstanceAtlas instanceAtlas, ILogger logger, IActiveLevelFactory levelFactory, ICrossThreadQueue crossThreadQueue) : IAterraCoreWorld {
+public class AterraCoreWorld(IAssetInstanceAtlas instanceAtlas, ILogger logger, IActiveLevelFactory levelFactory, ICrossThreadQueue crossThreadQueue) : IAterraCoreWorld {
     private ILogger Logger { get; } = logger.ForContext<AterraCoreWorld>();
 
     private readonly ReaderWriterLockSlim  _activeLevelLock = new();
-    private IActiveLevel? ActiveLevel { get; set; }
+    public ActiveLevel? ActiveLevel { get; private set; }
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    private void EmitActiveLevel(IActiveLevel activeLevel, IActiveLevel? oldLevel) {
+    private void EmitActiveLevel(ActiveLevel? activeLevel, ActiveLevel? oldLevel) {
         IEnumerable<AssetId> oldTextureAssetIds = oldLevel?.TextureAssetIds.ToArray() ?? [];
-        IEnumerable<AssetId> newTextureAssetIds = activeLevel.TextureAssetIds.ToArray();
+        IEnumerable<AssetId> newTextureAssetIds = activeLevel?.TextureAssetIds.ToArray() ?? []; 
             
         foreach (AssetId dequeueAssetId in oldTextureAssetIds.Except(newTextureAssetIds)) 
             crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar(dequeueAssetId, UnRegister : true ));
@@ -41,7 +41,7 @@ public class AterraCoreWorld(IAssetAtlas assetAtlas, IAssetInstanceAtlas instanc
     public bool TryChangeActiveLevel(AssetId levelId, Ulid levelInstanceId) {
         // Retrieve the old level, to make comparison with, in case of loading new assets
         Logger.Information("Attempting to change level to {LevelId}, Instance {InstanceId}", levelId, levelInstanceId);
-        TryGetActiveLevel(out IActiveLevel? oldLevel);
+        TryGetActiveLevel(out ActiveLevel? oldLevel);
         using (_activeLevelLock.Write()) {
             if (ActiveLevel is { RawLevelData.InstanceId : var knownInstanceId } && knownInstanceId == levelInstanceId) {
                 Logger.Warning("Can't change to the same level instance: {LevelId}", levelInstanceId);
@@ -61,7 +61,7 @@ public class AterraCoreWorld(IAssetAtlas assetAtlas, IAssetInstanceAtlas instanc
         return true;
     }
 
-    public bool TryGetActiveLevel([NotNullWhen(true)] out IActiveLevel? level) {
+    public bool TryGetActiveLevel([NotNullWhen(true)] out ActiveLevel? level) {
         using (_activeLevelLock.Read()) {
             level = ActiveLevel;
             return level != null;

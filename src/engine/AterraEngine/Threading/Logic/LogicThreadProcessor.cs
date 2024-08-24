@@ -35,8 +35,8 @@ public class LogicThreadProcessor(
 
     private readonly Stack<Action> _endOfTickActions = [];
 
-    private Stopwatch TickStopwatch { get; } = Stopwatch.StartNew();
-    private Stopwatch TpsStopwatch { get; } = Stopwatch.StartNew();
+    private readonly Stopwatch _tickStopwatch = Stopwatch.StartNew();
+    private readonly Stopwatch _tpsStopwatch = Stopwatch.StartNew();
     private int _ticks;
     
     // -----------------------------------------------------------------------------------------------------------------
@@ -44,12 +44,14 @@ public class LogicThreadProcessor(
     // -----------------------------------------------------------------------------------------------------------------
     #region Run & Update
     public void Run() {
+        RegisterEvents();
+        
         try {
-            TpsStopwatch.Start();
+            _tpsStopwatch.Start();
 
             // Game engine is actually running now
             while (IsRunning) {
-                TickStopwatch.Restart();
+                _tickStopwatch.Restart();
 
                 // Call UPDATE LOOP
                 Update();
@@ -77,10 +79,10 @@ public class LogicThreadProcessor(
     }
 
     private void Update() {
-        if (!world.TryGetActiveLevel(out IActiveLevel? level)) return;
+        if (world.ActiveLevel is not { LogicSystems: var logicSystems } activeLevel) return;
         
-        foreach (INexitiesSystem logicSystem in level.LogicSystems) {
-            logicSystem.Tick(level);
+        foreach (INexitiesSystem logicSystem in logicSystems) {
+            logicSystem.Tick(activeLevel);
         }
     }
 
@@ -92,8 +94,8 @@ public class LogicThreadProcessor(
     }
 
     private void SleepUntilEndOfTick() {
-        TickStopwatch.Stop();
-        double deltaTps = TickStopwatch.Elapsed.TotalMilliseconds;
+        _tickStopwatch.Stop();
+        double deltaTps = _tickStopwatch.Elapsed.TotalMilliseconds;
         eventManager.InvokeUpdateDeltaTps(deltaTps);
         
         double sleepTime = MillisecondsPerTick - deltaTps;
@@ -101,11 +103,11 @@ public class LogicThreadProcessor(
     }
 
     private void CalculateActualTps() {
-        if (TpsStopwatch.ElapsedMilliseconds < 1000) return;
+        if (_tpsStopwatch.ElapsedMilliseconds < 1000) return;
         
         eventManager.InvokeUpdateTps(_ticks);
         _ticks = 0;
-        TpsStopwatch.Restart();
+        _tpsStopwatch.Restart();
     }
     
     #endregion

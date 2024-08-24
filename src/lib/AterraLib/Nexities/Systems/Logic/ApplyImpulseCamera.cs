@@ -15,7 +15,7 @@ namespace AterraLib.Nexities.Systems.Logic;
 public class ApplyImpulseCamera : NexitiesSystemWithFilter<ICamera2D> {
     protected override Predicate<ICamera2D> Filter { get; } = entity => !entity.Impulse2D.IsEmpty;
 
-    public override void Tick(IActiveLevel level) {
+    public override void Tick(ActiveLevel level) {
         foreach (ICamera2D entity in GetEntities(level)) {
             
             entity.RaylibCamera2D.Camera = entity.RaylibCamera2D.Camera with {

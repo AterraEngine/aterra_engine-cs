@@ -33,12 +33,14 @@ public class ThreadingManager(ILogger logger) : IThreadingManager {
             threadProcessor.CancellationToken = cts.Token;
             _cancellationTokens.Add(threadProcessor.CancellationToken);
             
-            // Add extra callbacks
-            threadProcessor.RegisterEvents();
-            
             // Actually spawn the thread
-            var logicThread = new Thread(threadProcessor.Run);
-            LogicThreadData = new ThreadData(cts, logicThread);
+            LogicThreadData = new ThreadData(
+                cts, 
+                new Thread(threadProcessor.Run) {
+                    Priority = ThreadPriority.Highest,
+                    Name = "ThreadLogic"
+                }
+            );
             LogicThreadData.Thread.Start();
 
             return true;
@@ -58,12 +60,14 @@ public class ThreadingManager(ILogger logger) : IThreadingManager {
             threadProcessor.CancellationToken = cts.Token;
             _cancellationTokens.Add(threadProcessor.CancellationToken);
             
-            // Add extra callbacks
-            threadProcessor.RegisterEvents();
-            
             // Actually spawn the thread
-            var renderThread = new Thread(threadProcessor.Run);
-            RenderThreadData = new ThreadData(cts, renderThread);
+            RenderThreadData = new ThreadData(
+                cts,
+                new Thread(threadProcessor.Run) {
+                    Priority = ThreadPriority.Highest,
+                    Name = "ThreadRender"
+                }
+            );
             RenderThreadData.Thread.Start();
             
             return true;

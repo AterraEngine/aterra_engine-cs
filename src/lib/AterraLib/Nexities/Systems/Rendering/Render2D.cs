@@ -42,7 +42,7 @@ public class Render2D(IAssetInstanceAtlas instanceAtlas, ILogger logger) : Nexit
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     private static readonly Transform2D EmptyTransform2D = new();
-    public override void Tick(IActiveLevel level) {
+    public override void Tick(ActiveLevel level) {
         foreach ((IHasTransform2D? parent, IActor2D? child) in GetEntities(level)) {
             ProcessChildEntities(
                 parent?.Transform2D ?? EmptyTransform2D, 

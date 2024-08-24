@@ -22,14 +22,15 @@ public class MainWindow : IMainWindow {
         
         SetConfigFlags(
             ConfigFlags.ResizableWindow
-            | ConfigFlags.Msaa4xHint
-            | ConfigFlags.InterlacedHint
-        // | ConfigFlags.UndecoratedWindow
-        // | ConfigFlags.MousePassthroughWindow
+            | ConfigFlags.Msaa4xHint // Enable Multi Sampling Anti Aliasing 4x (if available)
+            // | ConfigFlags.InterlacedHint
+            // | ConfigFlags.UndecoratedWindow
+            // | ConfigFlags.MousePassthroughWindow
+            // | ConfigFlags.TransparentWindow
         );
         
         InitWindow(Width, Height, Name);
-        SetWindowMonitor(1);// WArn dev stuff
+        // SetWindowMonitor(1);// WArn dev stuff
         
         IsInitialised = true;
     }
