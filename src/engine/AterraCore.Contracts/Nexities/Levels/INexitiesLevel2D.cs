@@ -11,5 +11,6 @@ namespace AterraCore.Contracts.Nexities.Levels;
 // ---------------------------------------------------------------------------------------------------------------------
 public interface INexitiesLevel2D : INexitiesEntity,
     IHasDirectChildren,
-    IHasSystemIds
-;
+    IHasSystemIds {
+    void OnLevelCreation();
+}

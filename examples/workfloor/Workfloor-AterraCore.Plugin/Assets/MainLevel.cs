@@ -54,5 +54,6 @@ public class MainLevel(
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     protected override void ComponentOverwritten() {}
+    public void OnLevelCreation() {}
 }
 

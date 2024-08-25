@@ -50,9 +50,11 @@ public class EmptyLevel(
     private ISystemIds? _systemIds = systemIds;
     public ISystemIds NexitiesSystemIds => _systemIds ??= GetComponent<ISystemIds>();
 
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     protected override void ComponentOverwritten() {}
+    public void OnLevelCreation() {}
 }
 
