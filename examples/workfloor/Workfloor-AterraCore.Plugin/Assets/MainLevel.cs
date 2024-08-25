@@ -25,7 +25,7 @@ public class MainLevelSystemIds : SystemIds {
         AssetIdLib.AterraCore.SystemsLogic.ApplyImpulse,
         AssetIdLib.AterraCore.SystemsLogic.ApplyImpulseCamera
     ];
-    
+
     protected override AssetId[] RenderSystems { get; set; } = [
         AssetIdLib.AterraCore.SystemsRendering.Render2D
     ];
@@ -54,4 +54,3 @@ public class MainLevel(
     protected override void ComponentOverwritten() {}
     public void OnLevelCreation() {}
 }
-

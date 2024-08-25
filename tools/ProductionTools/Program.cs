@@ -8,8 +8,8 @@ using CliArgsParser.Contracts;
 using ProductionTools.Commands;
 using Serilog;
 using Serilog.Core;
-namespace ProductionTools;
 
+namespace ProductionTools;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -21,7 +21,7 @@ public static class Program {
     private async static Task MainAsync(string[] args) {
         await using Logger logger = new LoggerConfiguration()
             .MinimumLevel.Verbose()
-            .DefaultSinkConsole() // Using the normal version of the Sink Console, else the empty lines get processed earlier.
+            .DefaultSinkConsole()// Using the normal version of the Sink Console, else the empty lines get processed earlier.
             .CreateLogger();
 
         IParser parser = new ParserConfiguration()

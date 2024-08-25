@@ -7,7 +7,6 @@ using Microsoft.Extensions.ObjectPool;
 using System.Collections.Concurrent;
 
 namespace AterraCore.Contracts.Nexities.Entities.Pools;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------

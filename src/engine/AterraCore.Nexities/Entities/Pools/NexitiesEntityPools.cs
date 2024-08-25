@@ -9,7 +9,6 @@ using Microsoft.Extensions.ObjectPool;
 using System.Collections.Concurrent;
 
 namespace AterraCore.Nexities.Entities.Pools;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -24,6 +23,6 @@ public class NexitiesEntityPools : INexitiesEntityPools {
         _componentPool ??= _objectPoolProvider.Create(new ComponentPoolPooledObjectPolicy(InitialCapacity));
 
     private ObjectPool<ConcurrentDictionary<Type, AssetId>>? _componentTypePool;
-    public ObjectPool<ConcurrentDictionary<Type, AssetId>> ComponentTypePool => 
+    public ObjectPool<ConcurrentDictionary<Type, AssetId>> ComponentTypePool =>
         _componentTypePool ??= _objectPoolProvider.Create(new ComponentTypePoolPooledObjectPolicy(InitialCapacity));
 }

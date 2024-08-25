@@ -39,7 +39,7 @@ namespace AterraCore.Boot.Operations;
 // ---------------------------------------------------------------------------------------------------------------------
 public class CollectDefaultDependencies : IBootOperation {
     private ILogger Logger { get; } = StartupLogger.CreateLogger(false).ForBootOperationContext(nameof(CollectDefaultDependencies));
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -52,7 +52,7 @@ public class CollectDefaultDependencies : IBootOperation {
             NewServiceDescriptor<ILogger>(EngineLogger.CreateLogger(components.EngineConfigXml.BootConfig.Logging.UseAsyncConsole)),
             NewServiceDescriptor<IMainWindow, MainWindow>(ServiceLifetime.Singleton),
             NewServiceDescriptor<IActiveLevelFactory, ActiveLevelFactory>(ServiceLifetime.Singleton),
-            
+
             NewServiceDescriptor<IThreadingManager, ThreadingManager>(ServiceLifetime.Singleton),
             NewServiceDescriptor<ICrossThreadQueue, CrossThreadQueue>(ServiceLifetime.Singleton),
             NewServiceDescriptor<ILogicEventManager, LogicEventManager>(ServiceLifetime.Singleton),
@@ -67,21 +67,20 @@ public class CollectDefaultDependencies : IBootOperation {
             NewServiceDescriptor<IAssetAtlas, AssetAtlas>(ServiceLifetime.Singleton),
             NewServiceDescriptor<IAssetInstanceAtlas, AssetInstanceAtlas>(ServiceLifetime.Singleton),
             NewServiceDescriptor<IAssetInstanceFactory, AssetInstanceFactory>(ServiceLifetime.Singleton),
-            
+
             NewServiceDescriptor<ITextureAtlas, TextureAtlas>(ServiceLifetime.Singleton),
-            
+
             NewServiceDescriptor<IAterraCoreWorld, AterraCoreWorld>(ServiceLifetime.Singleton),
-            
+
             NewServiceDescriptor<IEntityTreeFactory, EntityTreeFactory>(ServiceLifetime.Singleton),
             NewServiceDescriptor<IEntityTreePools, EntityTreePools>(ServiceLifetime.Singleton),
             NewServiceDescriptor<INexitiesEntityPools, NexitiesEntityPools>(ServiceLifetime.Singleton),
             NewServiceDescriptor<IDataCollectorFactory, DataCollectorFactory>(ServiceLifetime.Singleton),
-            ServiceDescriptor.Singleton<IDataCollector>(provider => provider.GetRequiredService<IDataCollectorFactory>().Create()), 
+            ServiceDescriptor.Singleton<IDataCollector>(provider => provider.GetRequiredService<IDataCollectorFactory>().Create()),
             #endregion
         ];
-        
+
         components.DefaultServices.AddLastRepeated(defaultDependencies);
 
     }
-    
 }

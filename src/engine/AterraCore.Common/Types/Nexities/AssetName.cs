@@ -14,15 +14,14 @@ namespace AterraCore.Common.Types.Nexities;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [StructLayout(LayoutKind.Sequential)]
-public readonly struct AssetName : 
+public readonly struct AssetName :
     IEqualityOperators<AssetName, AssetName, bool>,
     IEqualityOperators<AssetName, string, bool>,
-    IEquatable<AssetName> 
-{
+    IEquatable<AssetName> {
     public IEnumerable<string> Values { get; } = [];
     public string Value => string.Join('/', Values);
     private readonly int _hashCode;
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Constructors
     // -----------------------------------------------------------------------------------------------------------------
@@ -32,20 +31,20 @@ public readonly struct AssetName :
         Values = match.Groups[1].Value.Split('.', '/');
         _hashCode = ComputeHashCode();
     }
-    
+
     public AssetName(IEnumerable<string> values) {
         IEnumerable<string> enumerable = values as string[] ?? values.ToArray();
         if (!enumerable.All(value => RegexLib.AssetNamePartial.Match(value).Success)) throw new ArgumentException("Asset Name could not be determined");
         Values = enumerable;
         _hashCode = ComputeHashCode();
     }
-    
+
     // Only supposed to be used by AssetId
     internal AssetName(Group matchGroup) {
         Values = matchGroup.Value.Split('.', '/');
         _hashCode = ComputeHashCode();
     }
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Implicit Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -67,7 +66,7 @@ public readonly struct AssetName :
     }
 
     public override string ToString() => Value;
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Comparison Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -76,21 +75,19 @@ public readonly struct AssetName :
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator !=(AssetName left, AssetName right) => !left.Equals(right);
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator ==(AssetName left, string? right) => 
-        right.IsNotNullOrEmpty() 
-        && TryCreateNew(right!, out AssetName? output) 
-        && left.Equals(output)
-    ;
+    public static bool operator ==(AssetName left, string? right) =>
+        right.IsNotNullOrEmpty()
+        && TryCreateNew(right!, out AssetName? output)
+        && left.Equals(output);
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator !=(AssetName left, string? right) => 
-        !right.IsNotNullOrEmpty() 
-        && !TryCreateNew(right!, out AssetName? output) 
-        && !left.Equals(output)
-    ;
+    public static bool operator !=(AssetName left, string? right) =>
+        !right.IsNotNullOrEmpty()
+        && !TryCreateNew(right!, out AssetName? output)
+        && !left.Equals(output);
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override bool Equals(object? obj) => obj is AssetName other && Equals(other);
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool Equals(AssetName other) 
+    public bool Equals(AssetName other)
         => Values.SequenceEqual(other.Values, StringComparer.OrdinalIgnoreCase);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -99,9 +96,8 @@ public readonly struct AssetName :
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private int ComputeHashCode() {
         return Values.Aggregate(
-            17, 
-            (current, value) => current * 31 + StringComparer.OrdinalIgnoreCase.GetHashCode(value)
+            17,
+            func: (current, value) => current * 31 + StringComparer.OrdinalIgnoreCase.GetHashCode(value)
         );
     }
-
 }

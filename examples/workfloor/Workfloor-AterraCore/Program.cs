@@ -13,17 +13,17 @@ namespace Workfloor_AterraCore;
 public static class Program {
     public static void Main(string[] args) {
         IEngineConfiguration config = new EngineConfiguration()
-            .RegisterBootOperation<EngineConfigLoader>()
-            .RegisterBootOperation<CollectDefaultDependencies>()
-            .RegisterBootOperation<PluginLoaderDefine>()
-            .RegisterBootOperation<PluginLoaderPreChecks>()
-            .RegisterBootOperation<PluginLoaderZipImporter>()
-            .RegisterBootOperation<PluginExtractor>()
-            .RegisterBootOperation<BuildDependencies>()
-        ;
+                .RegisterBootOperation<EngineConfigLoader>()
+                .RegisterBootOperation<CollectDefaultDependencies>()
+                .RegisterBootOperation<PluginLoaderDefine>()
+                .RegisterBootOperation<PluginLoaderPreChecks>()
+                .RegisterBootOperation<PluginLoaderZipImporter>()
+                .RegisterBootOperation<PluginExtractor>()
+                .RegisterBootOperation<BuildDependencies>()
+            ;
 
         IEngine engine = config.BuildEngine();
-        
+
         // --- Engine is running ---
         // Actually startup the engine
         Task.Run(engine.Run)

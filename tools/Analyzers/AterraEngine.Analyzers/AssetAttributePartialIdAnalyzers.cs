@@ -8,8 +8,8 @@ using System.Linq;
 using AterraEngine.Analyzers.Extensions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
-namespace AterraEngine.Analyzers;
 
+namespace AterraEngine.Analyzers;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -102,8 +102,9 @@ public class AssetAttributePartialIdAnalyzers : DiagnosticAnalyzer {
     private static IEnumerable<ISymbol> GetAllSymbolsRecursively(INamespaceOrTypeSymbol symbol) {
         foreach (ISymbol memberSymbol in symbol.GetMembers()) {
             if (memberSymbol is INamespaceOrTypeSymbol namespaceOrTypeSymbol)
-                foreach (ISymbol child in GetAllSymbolsRecursively(namespaceOrTypeSymbol))
+                foreach (ISymbol child in GetAllSymbolsRecursively(namespaceOrTypeSymbol)) {
                     yield return child;
+                }
 
             yield return memberSymbol;
         }

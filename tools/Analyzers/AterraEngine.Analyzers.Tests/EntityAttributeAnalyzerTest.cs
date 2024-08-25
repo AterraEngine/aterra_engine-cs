@@ -1,10 +1,9 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using Verifier = Microsoft.CodeAnalysis.CSharp.Testing.XUnit.AnalyzerVerifier<AterraEngine.Analyzers.EntityAttributeAnalyzer>;
+using Verifier=Microsoft.CodeAnalysis.CSharp.Testing.XUnit.AnalyzerVerifier<AterraEngine.Analyzers.EntityAttributeAnalyzer>;
 
 namespace AterraEngine.Analyzer.Tests;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -28,7 +27,7 @@ public class EntityAttributeAnalyzerTest {
     public async Task Test_AnalyzeSymbol_WithAttribute_InstanceTypePooled(string code, int line, int column) {
         DiagnosticResult expected = Verifier.Diagnostic(EntityAttributeAnalyzer.DiagnosticId)
             .WithSeverity(DiagnosticSeverity.Warning)
-            .WithLocation(line, column); // Replace with the actual location
+            .WithLocation(line, column);// Replace with the actual location
 
         await Verifier.VerifyAnalyzerAsync(code, expected);
     }

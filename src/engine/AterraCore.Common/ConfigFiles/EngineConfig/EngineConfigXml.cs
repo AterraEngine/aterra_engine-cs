@@ -5,7 +5,6 @@ using AterraCore.Common.ConfigFiles.EngineConfig.Elements;
 using System.Xml.Serialization;
 
 namespace AterraCore.Common.ConfigFiles.EngineConfig;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------

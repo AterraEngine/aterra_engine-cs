@@ -22,9 +22,9 @@ public class ActiveLevelFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreeFa
         List<IAssetInstance> entityTreeFlat = entityTree.GetAsFlat().ToList();
 
         IRaylibCamera2D? camera2D = null;
-        if (entityTreeFlat.FirstOrDefault(asset => asset is ICamera2D) is ICamera2D possibleCamera )
+        if (entityTreeFlat.FirstOrDefault(asset => asset is ICamera2D) is ICamera2D possibleCamera)
             instanceAtlas.TryGet(possibleCamera.RaylibCamera2D.InstanceId, out camera2D);
-        
+
         return new ActiveLevel {
             RawLevelData = level2D,
             Logic = GetNexitiesSystems(level2D.NexitiesSystemIds.LogicSystemIds),
@@ -40,13 +40,14 @@ public class ActiveLevelFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreeFa
                 .ToArray()
         };
     }
-    
+
     private INexitiesSystem[] GetNexitiesSystems(IReadOnlyCollection<AssetId> systemIds) {
         var systems = new List<INexitiesSystem>(systemIds.Count);
-        foreach (AssetId assetId in systemIds)
-            if (instanceAtlas.TryGetOrCreate(assetId, null, out INexitiesSystem? instance)) 
+        foreach (AssetId assetId in systemIds) {
+            if (instanceAtlas.TryGetOrCreate(assetId, null, out INexitiesSystem? instance))
                 systems.Add(instance);
-        
+        }
+
         systems.TrimExcess();
         return systems.ToArray();
     }

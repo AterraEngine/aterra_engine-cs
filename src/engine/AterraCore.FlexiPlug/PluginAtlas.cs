@@ -28,7 +28,7 @@ public class PluginAtlas(ILogger logger) : IPluginAtlas {
     public IReadOnlySet<PluginId> PluginIds => _pluginIds;
 
     private ImmutableDictionary<string, ZipArchive> _pluginZipArchive = ImmutableDictionary<string, ZipArchive>.Empty;
-    
+
     public int TotalAssetCount => _totalAssetCountCache ??= Plugins.SelectMany(p => p.AssetTypes).Count();
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -51,18 +51,18 @@ public class PluginAtlas(ILogger logger) : IPluginAtlas {
         // Given this is only done once (during project startup), caching this seems a bit unnecessary.
         return Plugins
             // Filter down to only the plugin we need
-            .ConditionalWhere(pluginNameSpace != null, p => p.PluginId == (PluginId)pluginNameSpace!)
+            .ConditionalWhere(pluginNameSpace != null, predicate: p => p.PluginId == (PluginId)pluginNameSpace!)
             .SelectMany(p => p.AssetTypes
                 // Filter down to which Asset Tag we want
-                .ConditionalWhere(filter != null, record => record.AssetAttribute.CoreTags.HasFlag(filter!))
+                .ConditionalWhere(filter != null, predicate: record => record.AssetAttribute.CoreTags.HasFlag(filter!))
                 .Select(record => new AssetRegistration(
-                    AssetId: record.AssetAttribute.AssetId,
-                    Type: record.Type
+                    record.AssetAttribute.AssetId,
+                    record.Type
                 ) {
                     InterfaceTypes = record.AssetAttribute.InterfaceTypes,
                     CoreTags = record.AssetAttribute.CoreTags,
                     StringTags = record.AssetTagAttributes.SelectMany(attribute => attribute.Tags),
-                    OverridableAssetIds = record.OverwritesAssetIdAttributes.Select(attribute => attribute.AssetId),
+                    OverridableAssetIds = record.OverwritesAssetIdAttributes.Select(attribute => attribute.AssetId)
                 })
             );
     }
@@ -74,23 +74,23 @@ public class PluginAtlas(ILogger logger) : IPluginAtlas {
         GetAssetRegistrations(pluginNameSpace, CoreTags.Component);
     #endregion
 
-    private bool TryGetOrCreateZipArchive(string filePath,[NotNullWhen(true)] out ZipArchive? zipArchive) {
+    private bool TryGetOrCreateZipArchive(string filePath, [NotNullWhen(true)] out ZipArchive? zipArchive) {
         zipArchive = default;
         // ReSharper disable once SuggestVarOrType_SimpleTypes
-        if (_pluginZipArchive.TryGetValue(filePath, out zipArchive )) return false;
+        if (_pluginZipArchive.TryGetValue(filePath, out zipArchive)) return false;
         if (!File.Exists(filePath)) return false;
-        
+
         zipArchive = ZipFile.OpenRead(filePath);
         _pluginZipArchive = _pluginZipArchive.Add(filePath, zipArchive);
         return true;
     }
-    
+
     public bool TryGetFileRawFromPluginZip(
-        PluginId pluginId, string internalFilePath, 
+        PluginId pluginId, string internalFilePath,
         [NotNullWhen(true)] out byte[]? bytes
     ) {
         bytes = default;
-        
+
         IPluginRecord? pluginRecord = Plugins.FirstOrDefault(p => p.PluginId == pluginId);
         if (pluginRecord is not { PluginBootDto.FilePath: var filePath } || !filePath.IsNotNullOrEmpty()) {
             logger.Debug("plugin record did not exist {r}", pluginRecord);
@@ -105,12 +105,12 @@ public class PluginAtlas(ILogger logger) : IPluginAtlas {
             logger.Debug("Could not attain filEntry {r}", pluginRecord);
             return false;
         }
-        
+
         using var memoryStream = new MemoryStream();
         using Stream stream = fileEntry.Open();
         stream.CopyTo(memoryStream);
         bytes = memoryStream.ToArray();
-        
+
         return true;
     }
 }

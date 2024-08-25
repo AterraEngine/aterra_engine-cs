@@ -10,7 +10,8 @@ namespace AterraLib.Nexities.Components;
 public class Sprite2D : NexitiesComponent, ISprite2D {
     public virtual AssetId TextureAssetId { get; set; } = new();
 
-    private Rectangle _uvSelection  = new(0, 0, 1, 1);
+    private Rectangle _uvSelection = new(0, 0, 1, 1);
+
     public virtual Rectangle UvSelection {
         get => _uvSelection;
         set {
@@ -18,6 +19,6 @@ public class Sprite2D : NexitiesComponent, ISprite2D {
             UvAndSourceCalculated = null;
         }
     }
-    
-    public Rectangle? UvAndSourceCalculated { get; set; } 
+
+    public Rectangle? UvAndSourceCalculated { get; set; }
 }

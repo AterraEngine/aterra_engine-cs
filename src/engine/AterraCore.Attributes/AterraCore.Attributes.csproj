@@ -7,12 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="JetBrains.Annotations" Version="2024.2.0" />
-      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+        <PackageReference Include="JetBrains.Annotations" Version="2024.2.0"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\AterraCore.Common\AterraCore.Common.csproj" />
+        <ProjectReference Include="..\AterraCore.Common\AterraCore.Common.csproj"/>
     </ItemGroup>
 
 </Project>

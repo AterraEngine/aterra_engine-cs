@@ -11,13 +11,12 @@ namespace AterraCore.Nexities.Systems;
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
 public abstract class NexitiesSystemReversed<TEntity> : NexitiesSystem<TEntity>
-    where TEntity : IAssetInstance
-{
+    where TEntity : IAssetInstance {
     protected override IEnumerable<TEntity> GetEntities(ActiveLevel level) {
         if (BufferPopulated) return EntitiesBuffer;
-        
+
         foreach (IAssetInstance instance in level.ActiveEntityTree.GetAsFlatReverse()) {
-            if (instance is TEntity assetInstance) 
+            if (instance is TEntity assetInstance)
                 EntitiesBuffer.Add(assetInstance);
         }
 

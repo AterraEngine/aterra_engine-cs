@@ -18,20 +18,22 @@ public abstract class NexitiesEntity(params INexitiesComponent[] components) : A
     #region Pooled Dictionaries
     private static INexitiesEntityPools? _pools;
     private static INexitiesEntityPools Pools => _pools ??= EngineServices.GetService<INexitiesEntityPools>();
-    
+
     private readonly ConcurrentDictionary<AssetId, INexitiesComponent> _components = CreateDictionaryComponents(components);
     private readonly ConcurrentDictionary<Type, AssetId> _componentTypes = CreateDictionaryComponentTypes(components);
 
     private static ConcurrentDictionary<AssetId, INexitiesComponent> CreateDictionaryComponents(INexitiesComponent[] components) {
         ConcurrentDictionary<AssetId, INexitiesComponent> dict = Pools.ComponentPool.Get();
-        foreach (INexitiesComponent component in components) 
+        foreach (INexitiesComponent component in components) {
             dict.TryAdd(component.AssetId, component);
+        }
         return dict;
     }
     private static ConcurrentDictionary<Type, AssetId> CreateDictionaryComponentTypes(INexitiesComponent[] components) {
         ConcurrentDictionary<Type, AssetId> dict = Pools.ComponentTypePool.Get();
-        foreach (INexitiesComponent component in components) 
+        foreach (INexitiesComponent component in components) {
             dict.TryAdd(component.GetType(), component.AssetId);
+        }
         return dict;
     }
 
@@ -43,7 +45,7 @@ public abstract class NexitiesEntity(params INexitiesComponent[] components) : A
     // Abstract Methods
     // -----------------------------------------------------------------------------------------------------------------
     protected abstract void ComponentOverwritten();
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Component manipulation Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -75,7 +77,7 @@ public abstract class NexitiesEntity(params INexitiesComponent[] components) : A
         component = (T)nexitiesComponent;
         return true;
     }
-    
+
     public bool TryGetComponent<T>(AssetId assetId, [NotNullWhen(true)] out T? component) where T : INexitiesComponent {
         component = default;
         if (!TryGetComponent(assetId, out INexitiesComponent? nexitiesComponent)) return false;
@@ -83,31 +85,30 @@ public abstract class NexitiesEntity(params INexitiesComponent[] components) : A
         component = newComponent;
         return true;
     }
-    
+
     public bool TryGetComponent(AssetId assetId, [NotNullWhen(true)] out INexitiesComponent? component) =>
         _components.TryGetValue(assetId, out component);
     #endregion
     #region Try Add
-    public bool TryAddComponent(INexitiesComponent component) {
-        return _components.TryAdd(component.AssetId, component) 
-               && _componentTypes.TryAdd(component.GetType(), component.AssetId);
-    }
+    public bool TryAddComponent(INexitiesComponent component) =>
+        _components.TryAdd(component.AssetId, component)
+        && _componentTypes.TryAdd(component.GetType(), component.AssetId);
     #endregion
     #region Try Overwrite
     public bool TryOverwriteComponent(INexitiesComponent component) => TryOverwriteComponent(component, out _);
     public bool TryOverwriteComponent(INexitiesComponent component, [NotNullWhen(true)] out INexitiesComponent? oldComponent) {
         oldComponent = null;
         if (!_components.TryGetValue(component.AssetId, out oldComponent)
-            || !_componentTypes.TryGetValue(oldComponent.GetType(), out AssetId oldAssetId)) 
+            || !_componentTypes.TryGetValue(oldComponent.GetType(), out AssetId oldAssetId))
             return false;
         if (!_components.TryUpdate(component.AssetId, component, oldComponent)
             || !_componentTypes.TryUpdate(oldComponent.GetType(), component.AssetId, oldAssetId)) return false;
-        
+
         ComponentOverwritten();
         return true;
     }
     #endregion
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Cleanup
     // -----------------------------------------------------------------------------------------------------------------
@@ -116,7 +117,7 @@ public abstract class NexitiesEntity(params INexitiesComponent[] components) : A
         // Return the dictionaries to the pool
         Pools.ComponentPool.Return(_components);
         Pools.ComponentTypePool.Return(_componentTypes);
-        
+
         GC.SuppressFinalize(this);
     }
     #endregion

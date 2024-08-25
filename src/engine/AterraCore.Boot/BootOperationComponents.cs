@@ -16,10 +16,11 @@ public record BootComponents(
     public LinkedList<ServiceDescriptor> DefaultServices { get; } = [];
     public LinkedList<ServiceDescriptor> StaticServices { get; } = [];
     public LinkedList<ServiceDescriptor> DynamicServices { get; } = [];
-    
+
     public LinkedList<IPluginBootDto> AssemblyLoadedPlugins { get; } = [];
-    
+
     private EngineConfigXml? _engineConfigXml;
+
     public EngineConfigXml EngineConfigXml {
         get => _engineConfigXml!;
         set => _engineConfigXml ??= value;

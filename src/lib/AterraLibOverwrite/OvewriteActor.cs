@@ -7,7 +7,6 @@ using JetBrains.Annotations;
 using System.Numerics;
 
 namespace AterraLibOverwrite;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -16,5 +15,5 @@ namespace AterraLibOverwrite;
 [UsedImplicitly]
 public class TextureAterraEngineLogo : AbstractTexture2DAsset {
     public override string ImagePath { get; set; } = "assets/aterra_engine-logo-reverse.png";
-    public override Vector2 Size { get; set; } = new (1025, 1025);
+    public override Vector2 Size { get; set; } = new(1025, 1025);
 }

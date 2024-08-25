@@ -11,5 +11,5 @@ namespace AterraCore.Common.ConfigFiles.EngineConfig.Elements;
 public class GameDto {
     [XmlAttribute("version")] public string VersionValue { get; set; } = string.Empty;
     [XmlIgnore] private SemanticVersion? _versionCache;
-    [XmlIgnore] public SemanticVersion Version => _versionCache ??= VersionValue; // Implicit converted
+    [XmlIgnore] public SemanticVersion Version => _versionCache ??= VersionValue;// Implicit converted
 }

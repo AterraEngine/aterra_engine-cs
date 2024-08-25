@@ -19,6 +19,7 @@ public static class LoggerConfigurationExtensions {
     /// The output template used for formatting log messages.
     /// </summary>
     public const string OutputTemplateEngine = "[ {SourceContext,24} : {Timestamp:HH:mm:ss.fff} : {Level:u3}] | {Message:lj} {NewLine}{Exception}";
+
     public const string OutputTemplateStartup = "[ {IsBootOperation,-4}{SourceContext,20} : {Timestamp:HH:mm:ss.fff} : {Level:u3}] | {Message:lj} {NewLine}{Exception}";
 
     #region Theme
@@ -26,26 +27,26 @@ public static class LoggerConfigurationExtensions {
     /// Represents the theme configuration for the Serilog logger console sink.
     /// </summary>
     private static readonly AnsiConsoleTheme Theme = new(
-    new Dictionary<ConsoleThemeStyle, string> {
-        [ConsoleThemeStyle.Text] = AsFore("white"),
-        [ConsoleThemeStyle.SecondaryText] = AsFore("silver"),
-        [ConsoleThemeStyle.TertiaryText] = AsFore("gray"),
+        new Dictionary<ConsoleThemeStyle, string> {
+            [ConsoleThemeStyle.Text] = AsFore("white"),
+            [ConsoleThemeStyle.SecondaryText] = AsFore("silver"),
+            [ConsoleThemeStyle.TertiaryText] = AsFore("gray"),
 
-        [ConsoleThemeStyle.Invalid] = AsFore("gold"),
-        [ConsoleThemeStyle.Null] = AsFore("coral"),
-        [ConsoleThemeStyle.Name] = AsFore("slategray"),
-        [ConsoleThemeStyle.String] = AsFore("aqua"),
-        [ConsoleThemeStyle.Number] = AsFore("mediumpurple"),
-        [ConsoleThemeStyle.Boolean] = AsFore("coral"),
-        [ConsoleThemeStyle.Scalar] = AsFore("coral"),
+            [ConsoleThemeStyle.Invalid] = AsFore("gold"),
+            [ConsoleThemeStyle.Null] = AsFore("coral"),
+            [ConsoleThemeStyle.Name] = AsFore("slategray"),
+            [ConsoleThemeStyle.String] = AsFore("aqua"),
+            [ConsoleThemeStyle.Number] = AsFore("mediumpurple"),
+            [ConsoleThemeStyle.Boolean] = AsFore("coral"),
+            [ConsoleThemeStyle.Scalar] = AsFore("coral"),
 
-        [ConsoleThemeStyle.LevelVerbose] = AsFore("silver"),
-        [ConsoleThemeStyle.LevelDebug] = AsFore("rose"),
-        [ConsoleThemeStyle.LevelInformation] = AsFore("white"),
-        [ConsoleThemeStyle.LevelWarning] = AsFore("gold"),
-        [ConsoleThemeStyle.LevelError] = AsFore("white") + AsBack("rose"),
-        [ConsoleThemeStyle.LevelFatal] = AsFore("white") + AsBack("maroon")
-    });
+            [ConsoleThemeStyle.LevelVerbose] = AsFore("silver"),
+            [ConsoleThemeStyle.LevelDebug] = AsFore("rose"),
+            [ConsoleThemeStyle.LevelInformation] = AsFore("white"),
+            [ConsoleThemeStyle.LevelWarning] = AsFore("gold"),
+            [ConsoleThemeStyle.LevelError] = AsFore("white") + AsBack("rose"),
+            [ConsoleThemeStyle.LevelFatal] = AsFore("white") + AsBack("maroon")
+        });
     #endregion
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -65,8 +66,7 @@ public static class LoggerConfigurationExtensions {
             .Enrich.WithProperty("MachineName", Environment.MachineName)
             .Enrich.WithThreadId()
             .Enrich.WithMemoryUsage()
-            .Enrich.With(new TruncateSourceContextEnricher(17))
-        ;
+            .Enrich.With(new TruncateSourceContextEnricher(17));
 
     /// <summary>
     /// Adds an async file sink to the logger configuration for writing logs asynchronously.
@@ -79,9 +79,9 @@ public static class LoggerConfigurationExtensions {
             // Using Async Sink to write logs asynchronously 
             // to avoid any performance issues during gameplay
             .WriteTo.Async(lsc => lsc.File(
-            new CompactJsonFormatter(),
-            filePath,
-            rollingInterval: RollingInterval.Day
+                new CompactJsonFormatter(),
+                filePath,
+                rollingInterval: RollingInterval.Day
             ));
     }
 
@@ -93,8 +93,8 @@ public static class LoggerConfigurationExtensions {
     /// <returns>The updated <see cref="LoggerConfiguration"/> object.</returns>
     public static LoggerConfiguration DefaultSinkConsole(this LoggerConfiguration lc, string? outputTemplate = null) =>
         lc.WriteTo.Console(
-        theme: Theme,
-        outputTemplate: outputTemplate ?? OutputTemplateEngine
+            theme: Theme,
+            outputTemplate: outputTemplate ?? OutputTemplateEngine
         );
 
     /// <summary>
@@ -109,8 +109,8 @@ public static class LoggerConfigurationExtensions {
             // Using Async Sink to write logs asynchronously 
             // to avoid any performance issues during gameplay
             .WriteTo.Async(lsc => lsc.Console(
-            theme: Theme,
-            outputTemplate: outputTemplate ?? OutputTemplateEngine
+                theme: Theme,
+                outputTemplate: outputTemplate ?? OutputTemplateEngine
             ));
     }
 
@@ -125,8 +125,8 @@ public static class LoggerConfigurationExtensions {
             // Using Async Sink to write logs asynchronously 
             // to avoid any performance issues during gameplay
             .WriteTo.Console(
-            theme: Theme,
-            outputTemplate: outputTemplate ?? OutputTemplateEngine
+                theme: Theme,
+                outputTemplate: outputTemplate ?? OutputTemplateEngine
             );
 
     /// <summary>

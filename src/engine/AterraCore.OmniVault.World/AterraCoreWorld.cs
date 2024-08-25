@@ -20,20 +20,22 @@ namespace AterraCore.OmniVault.World;
 public class AterraCoreWorld(IAssetInstanceAtlas instanceAtlas, ILogger logger, IActiveLevelFactory levelFactory, ICrossThreadQueue crossThreadQueue) : IAterraCoreWorld {
     private ILogger Logger { get; } = logger.ForContext<AterraCoreWorld>();
 
-    private readonly ReaderWriterLockSlim  _activeLevelLock = new();
+    private readonly ReaderWriterLockSlim _activeLevelLock = new();
     public ActiveLevel? ActiveLevel { get; private set; }
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     private void EmitActiveLevel(ActiveLevel? activeLevel, ActiveLevel? oldLevel) {
         IEnumerable<AssetId> oldTextureAssetIds = oldLevel?.TextureAssetIds.ToArray() ?? [];
-        IEnumerable<AssetId> newTextureAssetIds = activeLevel?.TextureAssetIds.ToArray() ?? []; 
-            
-        foreach (AssetId dequeueAssetId in oldTextureAssetIds.Except(newTextureAssetIds)) 
-            crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar(dequeueAssetId, UnRegister : true ));
-        foreach (AssetId enqueueAssetId in newTextureAssetIds.Except(oldTextureAssetIds)) 
-            crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar(enqueueAssetId, UnRegister: false));
+        IEnumerable<AssetId> newTextureAssetIds = activeLevel?.TextureAssetIds.ToArray() ?? [];
+
+        foreach (AssetId dequeueAssetId in oldTextureAssetIds.Except(newTextureAssetIds)) {
+            crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar(dequeueAssetId, true));
+        }
+        foreach (AssetId enqueueAssetId in newTextureAssetIds.Except(oldTextureAssetIds)) {
+            crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar(enqueueAssetId, false));
+        }
     }
 
     public bool TryChangeActiveLevel(AssetId levelId) => TryChangeActiveLevel(levelId, Ulid.NewUlid());
@@ -51,11 +53,11 @@ public class AterraCoreWorld(IAssetInstanceAtlas instanceAtlas, ILogger logger, 
                 Logger.Warning("Failed to get level by instance ULID: {LevelId}", levelInstanceId);
                 return false;
             }
-            
+
             Logger.Information("Successfully fetched or created level. Creating ActiveLevel instance now.");
             ActiveLevel = levelFactory.CreateLevel2D(level);
         }
-        
+
         EmitActiveLevel(ActiveLevel, oldLevel);
         Logger.Information("Active Level successfully created.");
         return true;

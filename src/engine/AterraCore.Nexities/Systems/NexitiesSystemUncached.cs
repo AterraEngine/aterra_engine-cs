@@ -12,9 +12,8 @@ namespace AterraCore.Nexities.Systems;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
-public abstract class NexitiesSystemUnCached<TEntity> : AssetInstance, INexitiesSystem 
-    where TEntity : IAssetInstance
-{
+public abstract class NexitiesSystemUnCached<TEntity> : AssetInstance, INexitiesSystem
+    where TEntity : IAssetInstance {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -26,7 +25,7 @@ public abstract class NexitiesSystemUnCached<TEntity> : AssetInstance, INexities
     // -----------------------------------------------------------------------------------------------------------------
     protected IEnumerable<TEntity> GetEntities(ActiveLevel level) {
         foreach (IAssetInstance instance in level.ActiveEntityTree.GetAsFlat()) {
-            if (instance is TEntity assetInstance) 
+            if (instance is TEntity assetInstance)
                 yield return assetInstance;
         }
     }

@@ -22,9 +22,9 @@ public class DataCollectorFactory(ILogicEventManager logicEventManager) : IDataC
         logicEventManager.EventTps += (_, d) => dataCollector.TpsMin = Math.Min(dataCollector.FpsMin, d);
         logicEventManager.EventTps += (_, d) => dataCollector.TpsMax = Math.Max(dataCollector.FpsMax, d);
         logicEventManager.EventTps += (_, d) => dataCollector.UpdateTpsAverage(d);
-        
+
         logicEventManager.EventDeltaTps += (_, d) => dataCollector.DeltaTps = d;
-        
+
         logicEventManager.EventFps += (_, d) => dataCollector.Fps = d;
         logicEventManager.EventFps += (_, d) => dataCollector.FpsMin = Math.Min(dataCollector.FpsMin, d);
         logicEventManager.EventFps += (_, d) => dataCollector.FpsMax = Math.Max(dataCollector.FpsMax, d);

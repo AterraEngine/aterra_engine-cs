@@ -2,7 +2,6 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 namespace AterraCore.Common.Data;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -13,7 +12,7 @@ public static class AssetIdLib {
         #region Components
         public static class Components {
             private const string ThisClass = nameof(Components);
-            
+
             public const string DirectChildren = $"{ThisSection}:{ThisClass}/{nameof(DirectChildren)}";
             public const string RaylibCamera2D = $"{ThisSection}:{ThisClass}/{nameof(RaylibCamera2D)}";
             public const string Impulse2D = $"{ThisSection}:{ThisClass}/{nameof(Impulse2D)}";
@@ -26,8 +25,8 @@ public static class AssetIdLib {
         #endregion
         #region Entities
         public static class Entities {
-            private const string ThisClass = nameof(Entities); 
-            
+            private const string ThisClass = nameof(Entities);
+
             public const string Actor2D = $"{ThisSection}:{ThisClass}/{nameof(Actor2D)}";
             public const string Camera2D = $"{ThisSection}:{ThisClass}/{nameof(Camera2D)}";
             public const string EmptyEntity = $"{ThisSection}:{ThisClass}/{nameof(EmptyEntity)}";
@@ -41,7 +40,7 @@ public static class AssetIdLib {
         #region Systems - Logic
         public static class SystemsLogic {
             private const string ThisClass = nameof(SystemsLogic);
-            
+
             public const string ApplyImpulse = $"{ThisSection}:{ThisClass}/{nameof(ApplyImpulse)}";
             public const string ApplyImpulseCamera = $"{ThisSection}:{ThisClass}/{nameof(ApplyImpulseCamera)}";
             public const string PlayerController = $"{ThisSection}:{ThisClass}/{nameof(PlayerController)}";
@@ -51,7 +50,7 @@ public static class AssetIdLib {
         #region Systems - Rendering
         public static class SystemsRendering {
             private const string ThisClass = nameof(SystemsRendering);
-            
+
             public const string Render2D = $"{ThisSection}:{ThisClass}/{nameof(Render2D)}";
             public const string RenderHud = $"{ThisSection}:{ThisClass}/{nameof(RenderHud)}";
         }

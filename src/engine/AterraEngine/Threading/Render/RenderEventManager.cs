@@ -5,15 +5,14 @@ using AterraCore.Contracts.Threading.Rendering;
 using JetBrains.Annotations;
 
 namespace AterraEngine.Threading.Render;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
 public class RenderEventManager : IRenderEventManager {
-    public event EventHandler? EventWindowResized; 
+    public event EventHandler? EventWindowResized;
     public event EventHandler? EventClearSystemCaches;
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------

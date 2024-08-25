@@ -18,7 +18,7 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetIn
     private readonly ConcurrentDictionary<Ulid, IAssetInstance> _assetInstances = new();
     private readonly ConcurrentDictionary<Type, ConcurrentDictionary<Ulid, byte>> _assetsByTypes = new();
     private readonly ConcurrentDictionary<AssetId, Ulid> _singletonAssetInstances = new();
-    
+
     public int TotalCount => _assetInstances.Count;
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
@@ -39,22 +39,25 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetIn
         }
 
         if (!factory.TryCreate(registration, predefinedUlid ?? Ulid.NewUlid(), out instance)) return false;
-        
+
         // Add or update directly
         T assetInstance = instance;
-        _assetInstances.AddOrUpdate(assetInstance.InstanceId, assetInstance, (_, _) => assetInstance);
-        
+        _assetInstances.AddOrUpdate(assetInstance.InstanceId, assetInstance, updateValueFactory: (_, _) => assetInstance);
+
         foreach (Type implementedType in registration.DerivedInterfaceTypes) {
             _assetsByTypes
                 .GetOrAdd(implementedType, EmptyUlidBag)
                 .TryAdd(instance.InstanceId, 0);
         }
-            
-        if (registration.IsSingleton) 
+
+        if (registration.IsSingleton)
             _singletonAssetInstances.TryAdd(instance.AssetId, instance.InstanceId);
-        
+
         return true;
-        ConcurrentDictionary<Ulid, byte> EmptyUlidBag(Type _) => new();
+
+        ConcurrentDictionary<Ulid, byte> EmptyUlidBag(Type _) {
+            return new ConcurrentDictionary<Ulid, byte>();
+        }
     }
 
     public bool TryCreate<T>([NotNullWhen(true)] out T? instance, Ulid? predefinedUlid = null) where T : class, IAssetInstance =>
@@ -68,7 +71,7 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetIn
 
     public bool TryGet<T>(Ulid instanceId, [NotNullWhen(true)] out T? instance) where T : class, IAssetInstance {
         instance = default;
-        if (!_assetInstances.TryGetValue(instanceId, out IAssetInstance? assetInstance) 
+        if (!_assetInstances.TryGetValue(instanceId, out IAssetInstance? assetInstance)
             || assetInstance is not T convertedInstance) return false;
         instance = convertedInstance;
         return true;
@@ -81,11 +84,11 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetIn
 
     public bool TryGetOrCreate<T>(Type type, Ulid? ulid, [NotNullWhen(true)] out T? instance) where T : class, IAssetInstance =>
         ulid is not null && TryGet((Ulid)ulid, out instance)
-        || TryCreate(type, out instance, predefinedUlid: ulid);
+        || TryCreate(type, out instance, ulid);
 
     public bool TryGetOrCreate<T>(AssetId assetId, Ulid? ulid, [NotNullWhen(true)] out T? instance) where T : class, IAssetInstance =>
         ulid is not null && TryGet((Ulid)ulid, out instance)
-        || TryCreate(assetId, out instance, predefinedUlid: ulid);
+        || TryCreate(assetId, out instance, ulid);
 
     public bool TryGetOrCreateSingleton<T>(AssetId assetId, [NotNullWhen(true)] out T? instance) where T : class, IAssetInstance =>
         TryGetSingleton(assetId, out instance)
@@ -93,7 +96,7 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetIn
 
     public T GetOrCreate<T>(Type type, Ulid? ulid = null) where T : class, IAssetInstance {
         if (TryGetOrCreate(type, ulid, out T? instance)) return instance;
-        
+
         logger.Error("Asset instance could not be created from {t} as {ulid}", type, ulid);
         throw new ArgumentException($"Asset instance could not be created from {type} as {ulid}");
     }
@@ -116,10 +119,10 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetIn
         var alreadyYielded = new HashSet<Ulid>();
         if (!_assetsByTypes.TryGetValue(typeof(T), out ConcurrentDictionary<Ulid, byte>? instanceIds)) yield break;
         foreach (Ulid id in instanceIds.Keys) {
-            if (_assetInstances.TryGetValue(id, out IAssetInstance? instance) 
-                && instance is T convertedInstance 
-                && assetAtlas.TryGetRegistration(instance.AssetId, out AssetRegistration registration) 
-                && registration.CoreTags.HasFlag(tags) 
+            if (_assetInstances.TryGetValue(id, out IAssetInstance? instance)
+                && instance is T convertedInstance
+                && assetAtlas.TryGetRegistration(instance.AssetId, out AssetRegistration registration)
+                && registration.CoreTags.HasFlag(tags)
                 && alreadyYielded.Add(id)) {
                 yield return convertedInstance;
             }

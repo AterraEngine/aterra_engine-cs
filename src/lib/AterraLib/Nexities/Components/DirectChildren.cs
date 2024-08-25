@@ -4,7 +4,6 @@
 using Extensions;
 
 namespace AterraLib.Nexities.Components;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -14,15 +13,20 @@ public class DirectChildren : NexitiesComponent, IDirectChildren {
     protected virtual List<Ulid> DirectChildIds { get; } = new(12);
     private readonly ReaderWriterLockSlim _rwLock = new();
     private int? _count;
+
     public int Count {
         get {
-            using (_rwLock.Read()) return _count ??= DirectChildIds.Count;
+            using (_rwLock.Read()) {
+                return _count ??= DirectChildIds.Count;
+            }
         }
     }
 
     public IReadOnlyCollection<Ulid> Children {
         get {
-            using (_rwLock.Read()) return DirectChildIds.AsReadOnly();
+            using (_rwLock.Read()) {
+                return DirectChildIds.AsReadOnly();
+            }
         }
     }
 
@@ -58,7 +62,7 @@ public class DirectChildren : NexitiesComponent, IDirectChildren {
             return true;
         }
     }
-    
+
     public bool TryInsertAfter(Ulid id, Ulid after) {
         using (_rwLock.Write()) {
             if (DirectChildIds.Contains(id) || !DirectChildIds.Contains(after)) return false;
@@ -68,7 +72,7 @@ public class DirectChildren : NexitiesComponent, IDirectChildren {
                 indexAfter == DirectChildIds.Count ? indexAfter : indexAfter + 1,
                 id
             );
-            
+
             _count = null;
             return true;
         }

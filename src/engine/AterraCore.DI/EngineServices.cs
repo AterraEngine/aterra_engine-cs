@@ -12,7 +12,6 @@ using Serilog.Core;
 using System.Diagnostics.CodeAnalysis;
 
 namespace AterraCore.DI;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -24,7 +23,7 @@ public static class EngineServices {
     /// Provides access to various services in the AterraCore Engine.
     /// </summary>
     private static ServiceProvider ServiceProvider { get; set; } = null!;
-    
+
     /// <summary>
     /// Represents the logger used in the EngineServices class.
     /// </summary>
@@ -33,8 +32,8 @@ public static class EngineServices {
     /// <summary>
     /// Provides logging functionality for the application.
     /// </summary>
-    private static ILogger Logger => _logger ??= GetLogger().ForContext(Constants.SourceContextPropertyName, typeof(EngineServices)); 
-    
+    private static ILogger Logger => _logger ??= GetLogger().ForContext(Constants.SourceContextPropertyName, typeof(EngineServices));
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -58,7 +57,7 @@ public static class EngineServices {
         }
         catch (InvalidOperationException e) {
             string? typeName = typeof(T).FullName;// Get type name
-            Logger.ThrowFatal(e,"Service type of {TypeOfT} could not be found.", typeName);
+            Logger.ThrowFatal(e, "Service type of {TypeOfT} could not be found.", typeName);
             throw;
         }
     }

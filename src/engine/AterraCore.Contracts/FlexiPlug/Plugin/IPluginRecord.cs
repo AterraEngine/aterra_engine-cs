@@ -12,9 +12,9 @@ public interface IPluginRecord {
     public PluginId PluginId { get; }
     public IEnumerable<Type> Types { get; }
     public IEnumerable<AssetTypeRecord> AssetTypes { get; }
-    
+
     public IPluginBootDto PluginBootDto { get; }
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------

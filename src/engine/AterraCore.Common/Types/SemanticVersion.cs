@@ -22,11 +22,11 @@ namespace AterraCore.Common.Types;
 /// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public readonly struct SemanticVersion(int major, int minor, int patch, string? addendum = null) : IComparable<SemanticVersion>, IEquatable<SemanticVersion> {
-    [XmlIgnore] public int Major { get;} = major;
-    [XmlIgnore] public int Minor { get;} = minor;
-    [XmlIgnore] public int Patch { get;} = patch;
+    [XmlIgnore] public int Major { get; } = major;
+    [XmlIgnore] public int Minor { get; } = minor;
+    [XmlIgnore] public int Patch { get; } = patch;
     [XmlIgnore] public string Addendum { get; } = addendum ?? string.Empty;
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Constructors
     // -----------------------------------------------------------------------------------------------------------------
@@ -34,7 +34,7 @@ public readonly struct SemanticVersion(int major, int minor, int patch, string? 
     ///     Initializes a new instance of the SemanticVersion class using the specified version string.
     /// </summary>
     /// <param name="version">A string representing the version number.</param>
-    public SemanticVersion(string version) : this(0,0,0) {
+    public SemanticVersion(string version) : this(0, 0, 0) {
         Match match = RegexLib.SemanticVersion.Match(version);
         if (!match.Success) throw new ArgumentException("Invalid version format. Expected format: 'Major.Minor.Patch'");
 
@@ -46,13 +46,13 @@ public readonly struct SemanticVersion(int major, int minor, int patch, string? 
 
     public static readonly SemanticVersion Zero = new(0, 0, 0);
     public static readonly SemanticVersion Max = new(int.MaxValue, int.MaxValue, int.MaxValue);
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Implicit Methods
     // -----------------------------------------------------------------------------------------------------------------
     public static implicit operator SemanticVersion(string s) => new(s);
     public static implicit operator string(SemanticVersion assetId) => assetId.ToString();
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -68,14 +68,14 @@ public readonly struct SemanticVersion(int major, int minor, int patch, string? 
         if (!match.Success) return false;
 
         version = new SemanticVersion(
-            int.Parse(match.Groups[1].Value), 
-            int.Parse(match.Groups[2].Value), 
+            int.Parse(match.Groups[1].Value),
+            int.Parse(match.Groups[2].Value),
             int.Parse(match.Groups[3].Value),
             match.Groups[4].Success ? match.Groups[4].Value : string.Empty
         );
         return true;
-    } 
-    
+    }
+
     /// <summary>
     ///     Returns a string that represents the current object.
     /// </summary>

@@ -5,7 +5,6 @@ using AterraCore.Common.Types.Nexities;
 using JetBrains.Annotations;
 
 namespace AterraEngine.Tests.Core.Types.Types.Nexities;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -24,10 +23,10 @@ public class AssetIdTest {
     [InlineData("PluginName:Folder.Item", "PluginName", new[] { "Folder", "Item" })]
     public void AssetId_Creation_Test(string fullAssetId, string pluginName, string[] namespaces) {
         var assetIdRegex = new AssetId(fullAssetId);
-        Assert.Equal(pluginName,assetIdRegex.PluginId.Value);
-        Assert.Equal(namespaces,assetIdRegex.AssetName.Values);
+        Assert.Equal(pluginName, assetIdRegex.PluginId.Value);
+        Assert.Equal(namespaces, assetIdRegex.AssetName.Values);
     }
-    
+
     [Theory]
     [InlineData("pluginName:folder/")]
     [InlineData("pluginName:folder-")]
@@ -39,7 +38,7 @@ public class AssetIdTest {
     public void AssetId_CreateThrows_Test(string input) {
         Assert.Throws<ArgumentException>(() => new AssetId(input));
     }
-    
+
     [Theory]
     [InlineData("pluginName:folder/")]
     [InlineData("pluginName:folder-")]
@@ -59,27 +58,27 @@ public class AssetIdTest {
     public void AssetId_Equality_Test(string a, string b) {
         var assetA = new AssetId(a);
         var assetB = new AssetId(b);
-        
+
         Assert.Equal(assetA, assetB);
     }
-    
+
     [Theory]
     [InlineData("pluginName:folder/item", "PLUGINNAME:FOLDER/other")]
     public void AssetId_EqualityFail_Test(string a, string b) {
         var assetA = new AssetId(a);
         var assetB = new AssetId(b);
-        
+
         Assert.NotEqual(assetA, assetB);
     }
-    
-    
+
+
     [Theory]
-    [InlineData("pluginName:folder/item", "pluginName", "folder/item" )]
+    [InlineData("pluginName:folder/item", "pluginName", "folder/item")]
     public void AssetId_Plus_Test(string result, string pluginId, string assetName) {
         var left = new PluginId(pluginId);
         var right = new AssetName(assetName);
         AssetId newAsset = left + right;
-        
+
         Assert.Equal(result, newAsset.ToString());
     }
 }

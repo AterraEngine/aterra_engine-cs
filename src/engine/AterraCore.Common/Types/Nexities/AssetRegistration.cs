@@ -28,7 +28,7 @@ public record struct AssetRegistration(
 
     private ConstructorInfo? _constructor = null;
     public ConstructorInfo Constructor => _constructor ??= Type.GetConstructors().First();
-    
+
     private bool? _isSingleton;
     public bool IsSingleton => _isSingleton ??= CoreTags.HasFlag(CoreTags.Singleton);
 
@@ -41,14 +41,17 @@ public record struct AssetRegistration(
         typeQueue.Enqueue(type);
 
         while (typeQueue.TryDequeue(out Type? currentType)) {
-            foreach (Type @interface in currentType.GetInterfaces())
+            foreach (Type @interface in currentType.GetInterfaces()) {
                 if (!IsExcludedNamespace(@interface) && interfaces.Add(@interface)) typeQueue.Enqueue(@interface);
+            }
             if (currentType.BaseType != null) typeQueue.Enqueue(currentType.BaseType);
         }
-        
+
         return interfaces;
 
         // Helper method to check if a type's namespace should be excluded
-        bool IsExcludedNamespace(Type t) => t.Namespace != null && t.Namespace.StartsWith("System");
+        bool IsExcludedNamespace(Type t) {
+            return t.Namespace != null && t.Namespace.StartsWith("System");
+        }
     }
 }

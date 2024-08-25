@@ -5,8 +5,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-namespace AterraEngine.Analyzers.Extensions;
 
+namespace AterraEngine.Analyzers.Extensions;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------

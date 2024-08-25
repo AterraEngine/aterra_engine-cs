@@ -2,13 +2,12 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 namespace AterraCore.Contracts.Threading.Rendering;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IRenderEventManager {
-    public event EventHandler? EventWindowResized; 
-    public event EventHandler? EventClearSystemCaches; 
+    public event EventHandler? EventWindowResized;
+    public event EventHandler? EventClearSystemCaches;
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods

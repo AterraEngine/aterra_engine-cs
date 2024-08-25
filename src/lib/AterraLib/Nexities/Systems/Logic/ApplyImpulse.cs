@@ -5,7 +5,6 @@ using AterraCore.Contracts.OmniVault.World;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AterraLib.Nexities.Systems.Logic;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------

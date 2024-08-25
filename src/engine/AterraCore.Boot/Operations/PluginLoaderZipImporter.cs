@@ -36,7 +36,7 @@ public class PluginLoaderZipImporter : IBootOperation {
                     return;
                 }
                 Logger.Debug("Loaded ConfigXml for {plugin}", pluginConfig.NameSpace);
-            },     
+            },
             #endregion
             #region Import Data
             (_, plugin, zipImporter) => {
@@ -46,12 +46,13 @@ public class PluginLoaderZipImporter : IBootOperation {
                     Logger.Warning("Failed to plugin Config");
                     return;
                 }
-                
+
                 // Extract assembly(s)
                 IEnumerable<Assembly> assemblies = xml.Dlls
-                    .Select(binDto => new FileDto{FilePath = Path
-                        .Combine(Paths.Plugins.PluginBinFolder, binDto.FilePath)
-                        .Replace("\\", "/")
+                    .Select(binDto => new FileDto {
+                        FilePath = Path
+                            .Combine(Paths.Plugins.PluginBinFolder, binDto.FilePath)
+                            .Replace("\\", "/")
                     })
                     .Select(fileDto => {
                         if (zipImporter.TryGetDllAssembly(fileDto, out Assembly? assembly)) return assembly;
@@ -61,11 +62,10 @@ public class PluginLoaderZipImporter : IBootOperation {
                     })
                     .Where(assembly => assembly != null)
                     .Select(assembly => assembly!);
-                
+
                 plugin.UpdateAssemblies(assemblies);
             }
             #endregion
         );
     }
-
 }

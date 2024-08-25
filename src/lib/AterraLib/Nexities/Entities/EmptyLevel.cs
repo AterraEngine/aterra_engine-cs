@@ -4,7 +4,6 @@
 using AterraLib.Nexities.Components;
 
 namespace AterraLib.Nexities.Entities;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -17,11 +16,11 @@ public class EmptyLevelSystemIds : SystemIds {
         // "Workfloor:ApplyRandomImpulseCamera",
         AssetIdLib.AterraCore.SystemsLogic.ApplyImpulseCamera
     ];
-    
+
     protected override AssetId[] RenderSystems { get; set; } = [
         AssetIdLib.AterraCore.SystemsRendering.Render2D
     ];
-    
+
     protected override AssetId[] UiSystems { get; set; } = [
     ];
 }
@@ -41,12 +40,12 @@ public class DirectChildrenEmptyLevel(
 [Entity<INexitiesLevel2D>(AssetIdLib.AterraCore.Entities.EmptyLevel, CoreTags.Level)]
 [UsedImplicitly]
 public class EmptyLevel(
-    [InjectAs("01J601YXRRSCWGQQY63E9AFD0Q")] DirectChildrenEmptyLevel children, 
+    [InjectAs("01J601YXRRSCWGQQY63E9AFD0Q")] DirectChildrenEmptyLevel children,
     [InjectAs("01J6022W9XGTXC4J1B55SQSGT5")] EmptyLevelSystemIds systemIds
 ) : NexitiesEntity(children, systemIds), INexitiesLevel2D {
     private IDirectChildren? _children = children;
     public IDirectChildren ChildrenIDs => _children ??= GetComponent<IDirectChildren>();
-    
+
     private ISystemIds? _systemIds = systemIds;
     public ISystemIds NexitiesSystemIds => _systemIds ??= GetComponent<ISystemIds>();
 
@@ -57,4 +56,3 @@ public class EmptyLevel(
     protected override void ComponentOverwritten() {}
     public void OnLevelCreation() {}
 }
-

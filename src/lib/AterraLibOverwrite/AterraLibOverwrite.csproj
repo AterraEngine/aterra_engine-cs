@@ -6,16 +6,16 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
-    
+
     <ItemGroup>
         <Content Include="..\..\..\resources\aterra_engine-logo-reverse.png" CopyToOutputDirectory="Always">
             <Link>assets\aterra_engine-logo-reverse.png</Link>
         </Content>
     </ItemGroup>
 
-    
+
     <ItemGroup>
-      <ProjectReference Include="..\..\lib\AterraLib\AterraLib.csproj" />
+        <ProjectReference Include="..\..\lib\AterraLib\AterraLib.csproj"/>
     </ItemGroup>
 
     <Target Name="PackingToZip" AfterTargets="Build">

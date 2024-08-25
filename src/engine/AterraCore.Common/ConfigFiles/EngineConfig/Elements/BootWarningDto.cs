@@ -13,5 +13,4 @@ public class BootWarningDto {
     [XmlIgnore] public AssetId AssetId => StringAssetId!;
 
     public override int GetHashCode() => AssetId.GetHashCode();
-    
 }

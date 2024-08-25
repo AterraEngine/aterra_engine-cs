@@ -8,7 +8,7 @@ namespace AterraCore.Contracts.Nexities.Components;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface ISystemIds : INexitiesComponent {
-    public IReadOnlyCollection<AssetId> LogicSystemIds { get; } 
+    public IReadOnlyCollection<AssetId> LogicSystemIds { get; }
     public IReadOnlyCollection<AssetId> RenderSystemIds { get; }
     public IReadOnlyCollection<AssetId> UiSystemIds { get; }
 

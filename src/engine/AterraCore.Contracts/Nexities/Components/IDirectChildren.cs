@@ -8,7 +8,7 @@ namespace AterraCore.Contracts.Nexities.Components;
 public interface IDirectChildren : INexitiesComponent {
     int Count { get; }
     IReadOnlyCollection<Ulid> Children { get; }
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------

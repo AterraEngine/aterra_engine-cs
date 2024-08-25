@@ -12,13 +12,12 @@ using Xml;
 using Xml.Elements;
 
 namespace AterraCore.Boot.Logic.PluginLoading;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class PluginZipImporter(string zipPath, ILogger logger) : IPluginZipImporter<PluginConfigXml>, IDisposable {
     private ILogger Logger { get; } = logger.ForContext<PluginZipImporter>();
-    
+
     private readonly ZipArchive _archive = ZipFile.OpenRead(zipPath);
     private readonly XmlParser<PluginConfigXml> _pluginConfigParser = new(logger, XmlNameSpaces.ConfigPlugin, Paths.Xsd.XsdPluginConfigDto);
 
@@ -72,7 +71,8 @@ public class PluginZipImporter(string zipPath, ILogger logger) : IPluginZipImpor
         }
     }
 
-    public List<string> GetFileNamesInZip() { // TODO cleanup
+    public List<string> GetFileNamesInZip() {
+        // TODO cleanup
         var fileNames = new List<string>();
         try {
             fileNames.AddRange(_archive.Entries.Select(entry => entry.FullName));
@@ -98,6 +98,4 @@ public class PluginZipImporter(string zipPath, ILogger logger) : IPluginZipImpor
         bytes = memoryStream.ToArray();
         return true;
     }
-
-
 }

@@ -17,6 +17,6 @@ public interface IBootComponents {
     LinkedList<ServiceDescriptor> DynamicServices { get; }
     LinkedList<IPluginBootDto> AssemblyLoadedPlugins { get; }
     EngineConfigXml EngineConfigXml { get; set; }
-    
+
     Span<IPluginBootDto> ValidPlugins { get; }
 }

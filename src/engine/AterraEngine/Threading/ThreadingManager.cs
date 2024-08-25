@@ -9,7 +9,6 @@ using JetBrains.Annotations;
 using Serilog;
 
 namespace AterraEngine.Threading;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -18,24 +17,24 @@ public class ThreadingManager(ILogger logger) : IThreadingManager {
     private ILogger Logger { get; } = logger.ForContext<ThreadingManager>();
 
     private IThreadData? LogicThreadData { get; set; }
-    private IThreadData? RenderThreadData { get; set; } 
-    
+    private IThreadData? RenderThreadData { get; set; }
+
     private readonly List<CancellationToken> _cancellationTokens = [];
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public async Task<bool> TrySpawnLogicThreadAsync() {
         var cts = new CancellationTokenSource();
-        
+
         try {
             var threadProcessor = EngineServices.GetService<ILogicThreadProcessor>();
             threadProcessor.CancellationToken = cts.Token;
             _cancellationTokens.Add(threadProcessor.CancellationToken);
-            
+
             // Actually spawn the thread
             LogicThreadData = new ThreadData(
-                cts, 
+                cts,
                 new Thread(threadProcessor.Run) {
                     Priority = ThreadPriority.Highest,
                     Name = "ThreadLogic"
@@ -51,15 +50,15 @@ public class ThreadingManager(ILogger logger) : IThreadingManager {
             return false;
         }
     }
-    
+
     public async Task<bool> TrySpawnRenderThreadAsync() {
         var cts = new CancellationTokenSource();
-        
+
         try {
             var threadProcessor = EngineServices.GetService<IRenderThreadProcessor>();
             threadProcessor.CancellationToken = cts.Token;
             _cancellationTokens.Add(threadProcessor.CancellationToken);
-            
+
             // Actually spawn the thread
             RenderThreadData = new ThreadData(
                 cts,
@@ -69,7 +68,7 @@ public class ThreadingManager(ILogger logger) : IThreadingManager {
                 }
             );
             RenderThreadData.Thread.Start();
-            
+
             return true;
         }
         catch (Exception ex) {
@@ -78,7 +77,7 @@ public class ThreadingManager(ILogger logger) : IThreadingManager {
             return false;
         }
     }
-    
+
     public void CancelThreads() {
         LogicThreadData?.CancellationTokenSource.Cancel();
         RenderThreadData?.CancellationTokenSource.Cancel();
@@ -88,11 +87,9 @@ public class ThreadingManager(ILogger logger) : IThreadingManager {
             .Select(cancellationToken => cancellationToken.WaitHandle)
             .ToArray();
     }
-    
+
     public void JoinThreads() {
         LogicThreadData?.Thread.Join();
         RenderThreadData?.Thread.Join();
     }
-    
-
 }

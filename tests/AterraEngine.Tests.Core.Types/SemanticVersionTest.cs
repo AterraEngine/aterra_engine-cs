@@ -3,8 +3,8 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using JetBrains.Annotations;
-namespace AterraEngine.Tests.Core.Types;
 
+namespace AterraEngine.Tests.Core.Types;
 using AterraCore.Common.Types;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -12,7 +12,6 @@ using AterraCore.Common.Types;
 // ---------------------------------------------------------------------------------------------------------------------
 [TestSubject(typeof(SemanticVersion))]
 public class SemanticVersionTest {
-
     // Test for constructor with integer parameters and ToString method
     [Theory]
     [InlineData(1, 2, 3, "1.2.3")]

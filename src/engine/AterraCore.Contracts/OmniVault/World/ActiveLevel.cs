@@ -10,7 +10,6 @@ using System.Collections.Immutable;
 using System.Runtime.InteropServices;
 
 namespace AterraCore.Contracts.OmniVault.World;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -18,16 +17,16 @@ namespace AterraCore.Contracts.OmniVault.World;
 public readonly struct ActiveLevel {
     public INexitiesLevel2D RawLevelData { get; init; }
 
-    public IEnumerable<INexitiesSystem> Logic  { init => LogicSystems  = [..value]; }
+    public IEnumerable<INexitiesSystem> Logic { init => LogicSystems = [..value]; }
     public IEnumerable<INexitiesSystem> Render { init => RenderSystems = [..value]; }
-    public IEnumerable<INexitiesSystem> Ui     { init => UiSystems     = [..value]; }
-    
-    public ImmutableArray<INexitiesSystem> LogicSystems  { get; private init; }
+    public IEnumerable<INexitiesSystem> Ui { init => UiSystems = [..value]; }
+
+    public ImmutableArray<INexitiesSystem> LogicSystems { get; private init; }
     public ImmutableArray<INexitiesSystem> RenderSystems { get; private init; }
-    public ImmutableArray<INexitiesSystem> UiSystems     { get; private init; }
-    
+    public ImmutableArray<INexitiesSystem> UiSystems { get; private init; }
+
     public IEntityNodeTree ActiveEntityTree { get; init; }
-    public IRaylibCamera2D? Camera2DEntity  { get; init; }
+    public IRaylibCamera2D? Camera2DEntity { get; init; }
 
     public IEnumerable<AssetId> TextureAssetIds { get; init; }
 }

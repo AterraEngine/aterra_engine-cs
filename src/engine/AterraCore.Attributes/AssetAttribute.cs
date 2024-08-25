@@ -15,10 +15,9 @@ public class AssetAttribute(
     CoreTags coreTags = CoreTags.Asset,
     ServiceLifetime lifetime = ServiceLifetime.Transient,
     params Type[] interfaceTypes
-    
 ) : Attribute {
-    public AssetId AssetId { get; }= assetId;
+    public AssetId AssetId { get; } = assetId;
     public CoreTags CoreTags { get; } = coreTags;
     public Type[] InterfaceTypes { get; } = interfaceTypes;
-    public ServiceLifetime Lifetime { get; } = lifetime ;
+    public ServiceLifetime Lifetime { get; } = lifetime;
 }

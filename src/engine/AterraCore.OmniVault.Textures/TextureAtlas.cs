@@ -18,7 +18,7 @@ namespace AterraCore.OmniVault.Textures;
 public class TextureAtlas(ILogger logger, IAssetInstanceAtlas instanceAtlas, IPluginAtlas pluginAtlas) : ITextureAtlas {
     private ILogger Logger { get; } = logger.ForContext<TextureAtlas>();
     public IEnumerable<ITexture2DAsset> TextureAssets => instanceAtlas.OfType<ITexture2DAsset>();
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -31,16 +31,16 @@ public class TextureAtlas(ILogger logger, IAssetInstanceAtlas instanceAtlas, IPl
             return true;
         }
         if (!pluginAtlas.TryGetFileRawFromPluginZip(assetId.PluginId, filePath, out byte[]? rawImage)) return false;
-        
+
         logger.Debug($"Loading image {assetId} && {filePath}");
-        image = Raylib.LoadImageFromMemory(Path.GetExtension(filePath), rawImage );
+        image = Raylib.LoadImageFromMemory(Path.GetExtension(filePath), rawImage);
         return true;
     }
-    
+
     #region Registering Texture to GPU
     public bool TryRegisterTexture(AssetId textureAssetId) {
         if (!instanceAtlas.TryGetOrCreateSingleton(textureAssetId, out ITexture2DAsset? textureAsset)) return false;
-        
+
         try {
             if (!TryGetImage(textureAssetId, textureAsset.ImagePath, out Image image)) return false;
             Logger.Debug("Loaded image {path}", textureAsset.ImagePath);
@@ -49,7 +49,7 @@ public class TextureAtlas(ILogger logger, IAssetInstanceAtlas instanceAtlas, IPl
             if (!textureAsset.TrySetTexture(texture)) return false;
             textureAsset.Size = new Vector2(image.Width, image.Height);
             Logger.Debug("Assigned image {path} to asset {Ulid}", textureAsset.ImagePath, textureAsset.InstanceId);
-            
+
             Raylib.UnloadImage(image);
             Logger.Debug("Unloaded image {path}", textureAsset.ImagePath);
 
@@ -62,7 +62,7 @@ public class TextureAtlas(ILogger logger, IAssetInstanceAtlas instanceAtlas, IPl
         }
     }
     public bool TryUnRegisterTexture(AssetId textureAssetId) {
-        if(!instanceAtlas.TryGetSingleton(textureAssetId, out ITexture2DAsset? textureAsset)) return false;
+        if (!instanceAtlas.TryGetSingleton(textureAssetId, out ITexture2DAsset? textureAsset)) return false;
 
         try {
             if (!textureAsset.TryUnSetTexture(out Texture2D texture)) return false;

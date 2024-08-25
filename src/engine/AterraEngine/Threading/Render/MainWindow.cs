@@ -18,20 +18,20 @@ public class MainWindow : IMainWindow {
 
     public void Init() {
         // Necessary to write Raylib logs with Serilog
-        unsafe {Raylib.SetTraceLogCallback(RaylibLogger.GetPointer());}
-        
+        unsafe { Raylib.SetTraceLogCallback(RaylibLogger.GetPointer()); }
+
         Raylib.SetConfigFlags(
             ConfigFlags.ResizableWindow
-            | ConfigFlags.Msaa4xHint // Enable Multi Sampling Anti Aliasing 4x (if available)
+            | ConfigFlags.Msaa4xHint// Enable Multi Sampling Anti Aliasing 4x (if available)
             // | ConfigFlags.InterlacedHint
             // | ConfigFlags.UndecoratedWindow
             // | ConfigFlags.MousePassthroughWindow
             // | ConfigFlags.TransparentWindow
         );
-        
+
         Raylib.InitWindow(Width, Height, Name);
         // Raylib.SetWindowMonitor(1);// WArn dev stuff
-        
+
         IsInitialised = true;
     }
 }

@@ -5,7 +5,6 @@ using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Threading.Logic.EventDelegates;
 
 namespace AterraCore.Contracts.Threading.Logic;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------

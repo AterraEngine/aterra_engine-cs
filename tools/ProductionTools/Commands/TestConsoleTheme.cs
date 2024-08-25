@@ -4,8 +4,8 @@
 using CliArgsParser.Attributes;
 using JetBrains.Annotations;
 using Serilog;
-namespace ProductionTools.Commands;
 
+namespace ProductionTools.Commands;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------

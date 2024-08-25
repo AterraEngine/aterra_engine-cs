@@ -8,7 +8,6 @@ using System.Xml;
 using Xml.Contracts;
 
 namespace Xml;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -32,11 +31,11 @@ public class XsdGenerator<T>(ILogger logger) : IXsdGenerator {
 
             logger.Debug("Writing XML...");
             using var writer = XmlWriter.Create(
-            outputPath,
-            new XmlWriterSettings {
-                Indent = prettify,
-                Encoding = Encoding.UTF32
-            }
+                outputPath,
+                new XmlWriterSettings {
+                    Indent = prettify,
+                    Encoding = Encoding.UTF32
+                }
             );
 
             schemas[0].Write(writer);

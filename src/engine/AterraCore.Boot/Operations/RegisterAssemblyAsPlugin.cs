@@ -12,7 +12,7 @@ namespace AterraCore.Boot.Operations;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class RegisterAssemblyAsPlugin(Assembly assembly, PluginId pluginId) : IBootOperation {
-    private ILogger Logger { get; } = StartupLogger.CreateLogger(false).ForBootOperationContext<RegisterAssemblyAsPlugin>(); 
+    private ILogger Logger { get; } = StartupLogger.CreateLogger(false).ForBootOperationContext<RegisterAssemblyAsPlugin>();
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
@@ -22,7 +22,7 @@ public class RegisterAssemblyAsPlugin(Assembly assembly, PluginId pluginId) : IB
         var pluginDto = new PluginBootDto();
         pluginDto.UpdateAssemblies([assembly]);
         pluginDto.PluginNameSpaceId = pluginId;
-        
+
         components.AssemblyLoadedPlugins.AddLast(pluginDto);
     }
 }

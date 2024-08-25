@@ -29,14 +29,14 @@ public readonly struct AssetId : IEqualityOperators<AssetId, AssetId, bool>, IEq
         _hashCode = ComputeHashCode();
         _assetIdCache = GetAsString(PluginId, AssetName);
     }
-    
+
     public AssetId(string pluginName, string nameSpace) {
         PluginId = new PluginId(pluginName);
         AssetName = new AssetName(nameSpace);
         _hashCode = ComputeHashCode();
         _assetIdCache = GetAsString(PluginId, AssetName);
     }
-    
+
     public AssetId(PluginId pluginId, AssetName assetName) {
         PluginId = pluginId;
         AssetName = assetName;
@@ -44,7 +44,7 @@ public readonly struct AssetId : IEqualityOperators<AssetId, AssetId, bool>, IEq
         _assetIdCache = GetAsString(PluginId, AssetName);
     }
 
-    
+
     private static readonly ConcurrentDictionary<string, (PluginId, AssetName)> Cache = new();
     private static (PluginId, AssetName) ValueFactory(string id) {
         Match match = RegexLib.AssetId.Match(id);
@@ -64,7 +64,7 @@ public readonly struct AssetId : IEqualityOperators<AssetId, AssetId, bool>, IEq
         _hashCode = ComputeHashCode();
         _assetIdCache = GetAsString(PluginId, AssetName);
     }
-    
+
 
     // -----------------------------------------------------------------------------------------------------------------
     // Implicit Methods
@@ -98,14 +98,14 @@ public readonly struct AssetId : IEqualityOperators<AssetId, AssetId, bool>, IEq
         hash = hash * 31 + AssetName.GetHashCode();
         return hash;
     }
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Comparison Methods
     // -----------------------------------------------------------------------------------------------------------------
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator ==(AssetId left, AssetId right) => left.Equals(right);
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator !=(AssetId left, AssetId right) => !left.Equals(right); 
+    public static bool operator !=(AssetId left, AssetId right) => !left.Equals(right);
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator ==(AssetId left, PluginId right) => left.PluginId == right;
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -115,6 +115,5 @@ public readonly struct AssetId : IEqualityOperators<AssetId, AssetId, bool>, IEq
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool Equals(AssetId other) =>
         PluginId.Equals(other.PluginId)
-        && AssetName.Equals(other.AssetName)
-    ;
+        && AssetName.Equals(other.AssetName);
 }

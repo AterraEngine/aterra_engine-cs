@@ -9,19 +9,18 @@ using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 
 namespace AterraEngine.Threading.CrossThread;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
 public class CrossThreadQueue(ILogger logger) : ICrossThreadQueue {
     private ILogger Logger { get; } = logger.ForContext<CrossThreadQueue>();
-    
+
     public ConcurrentQueue<TextureRegistrar> TextureRegistrarQueue { get; } = new();
-    
+
     private ConcurrentDictionary<QueueKey, ConcurrentQueue<Action>> GeneralActionQueue { get; } = new();
     public bool EntireQueueIsEmpty => GeneralActionQueue.IsEmpty;
-   
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -30,10 +29,10 @@ public class CrossThreadQueue(ILogger logger) : ICrossThreadQueue {
         return GeneralActionQueue.TryGetValue(key, out ConcurrentQueue<Action>? queue)
                && queue.TryDequeue(out action);
     }
-    
+
     public bool TryEnqueue(QueueKey key, Action action) {
         try {
-            ConcurrentQueue<Action> queue = GeneralActionQueue.GetOrAdd(key, _ => new ConcurrentQueue<Action>());
+            ConcurrentQueue<Action> queue = GeneralActionQueue.GetOrAdd(key, valueFactory: _ => new ConcurrentQueue<Action>());
             queue.Enqueue(action);
             return true;
         }
@@ -43,4 +42,3 @@ public class CrossThreadQueue(ILogger logger) : ICrossThreadQueue {
         }
     }
 }
-

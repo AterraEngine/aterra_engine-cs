@@ -25,7 +25,7 @@ public class PluginLoaderPreChecks : IBootOperation {
                     plugin.SetInvalid();
                     Logger.Error($"Plugin file \"{rawData.FilePath}\" does not exist");
                 }
-            )       
+            )
             #endregion
             #region Check Uniqueness
             .IterateOverValid(
@@ -36,12 +36,12 @@ public class PluginLoaderPreChecks : IBootOperation {
                         return;
                     }
                     if (loader.Checksums.Add(checksum)) return;
-                    
+
                     plugin.SetInvalid();
                     Logger.Warning($"Plugin file \"{rawData.FilePath}\" checksum already exists");
                 }
             )
             #endregion
-        ;
-     }
+            ;
+    }
 }

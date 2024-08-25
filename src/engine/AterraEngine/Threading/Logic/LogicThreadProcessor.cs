@@ -12,7 +12,6 @@ using Serilog;
 using System.Diagnostics;
 
 namespace AterraEngine.Threading.Logic;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -27,9 +26,9 @@ public class LogicThreadProcessor(
     private ILogger Logger { get; } = logger.ForContext<LogicThreadProcessor>();
     public CancellationToken CancellationToken { get; set; }
 
-    private int TargetTicksPerSecond { get; set; } = 20; // TPS
+    private int TargetTicksPerSecond { get; set; } = 20;// TPS
     private double MillisecondsPerTick => 1000.0 / TargetTicksPerSecond;
-    
+
     private bool IsRunning { get; set; } = true;
     public bool IsFinished { get; private set; }
 
@@ -38,14 +37,14 @@ public class LogicThreadProcessor(
     private readonly Stopwatch _tickStopwatch = Stopwatch.StartNew();
     private readonly Stopwatch _tpsStopwatch = Stopwatch.StartNew();
     private int _ticks;
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Run Method
     // -----------------------------------------------------------------------------------------------------------------
     #region Run & Update
     public void Run() {
         RegisterEvents();
-        
+
         try {
             _tpsStopwatch.Start();
 
@@ -65,7 +64,7 @@ public class LogicThreadProcessor(
                 RunEndOfTick();
                 _ticks++;
                 if (!CancellationToken.IsCancellationRequested) continue;
-                
+
                 IsRunning = false;
                 break;
             }
@@ -80,7 +79,7 @@ public class LogicThreadProcessor(
 
     private void Update() {
         if (world.ActiveLevel is not { LogicSystems: var logicSystems } activeLevel) return;
-        
+
         foreach (INexitiesSystem logicSystem in logicSystems) {
             logicSystem.Tick(activeLevel);
         }
@@ -97,19 +96,18 @@ public class LogicThreadProcessor(
         _tickStopwatch.Stop();
         double deltaTps = _tickStopwatch.Elapsed.TotalMilliseconds;
         eventManager.InvokeUpdateDeltaTps(deltaTps);
-        
+
         double sleepTime = MillisecondsPerTick - deltaTps;
         if (sleepTime > 0) Thread.Sleep((int)sleepTime);
     }
 
     private void CalculateActualTps() {
         if (_tpsStopwatch.ElapsedMilliseconds < 1000) return;
-        
+
         eventManager.InvokeUpdateTps(_ticks);
         _ticks = 0;
         _tpsStopwatch.Restart();
     }
-    
     #endregion
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -117,7 +115,7 @@ public class LogicThreadProcessor(
     // -----------------------------------------------------------------------------------------------------------------
     public void RegisterEvents() {
         eventManager.EventChangeActiveLevel += (_, args) => _endOfTickActions.Push(() => world.TryChangeActiveLevel(args.NewLevelId));
-        
+
         eventManager.EventTps += (_, d) => Logger.Debug("TPS: {0}", d);
         // eventManager.EventActualTps += (_, _) => Logger.Debug("Assets: {0}", EngineServices.GetService<IAssetInstanceAtlas>().TotalCount);
     }
