@@ -39,7 +39,7 @@ public class MainLevelSystemIds : SystemIds {
 public interface IMainLevel : INexitiesLevel2D;
 
 [UsedImplicitly]
-[Entity("Workfloor:Levels/MainLevel", CoreTags.Level)]
+[Level("Workfloor:Levels/MainLevel")]
 public class MainLevel(
     IDirectChildren children,
     [InjectAs("01J5RA7EDMS1PRR1BMRN9XM9AA")] MainLevelSystemIds systemIds

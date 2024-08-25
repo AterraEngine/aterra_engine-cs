@@ -10,6 +10,9 @@ namespace AterraCore.Attributes;
 // ---------------------------------------------------------------------------------------------------------------------
 [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = true)]
 [UsedImplicitly]
-public class InjectAsAttribute(string ulid) : Attribute { 
-    public Ulid Ulid { get; } = Ulid.Parse(ulid, CultureInfo.InvariantCulture);
+public class InjectAsAttribute(string? ulid = null) : Attribute { 
+    public Ulid Ulid { get; } = ulid is not null ?
+        Ulid.Parse(ulid, CultureInfo.InvariantCulture)
+        : Ulid.NewUlid()    
+    ;
 }

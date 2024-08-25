@@ -8,7 +8,7 @@ using Serilog.Core;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-namespace AterraEngine.Renderer.RaylibCs;
+namespace AterraEngine.Threading.Render;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

@@ -1,5 +1,5 @@
 ﻿<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Workfloor AterraCore" type="RunExe" factoryName=".NET Executable">
+  <configuration default="false" name="Workfloor" type="RunExe" factoryName=".NET Executable">
     <option name="EXE_PATH" value="$PROJECT_DIR$/examples/workfloor/Workfloor-AterraCore/bin/Debug/net8.0/win-x64/Workfloor-AterraCore.exe" />
     <option name="PROGRAM_PARAMETERS" value="" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/examples/workfloor/Workfloor-AterraCore/bin/Debug/net8.0/win-x64" />

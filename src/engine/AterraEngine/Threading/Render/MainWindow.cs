@@ -3,8 +3,9 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.Renderer;
 using JetBrains.Annotations;
+using Raylib_cs;
 
-namespace AterraEngine.Renderer.RaylibCs;
+namespace AterraEngine.Threading.Render;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -18,9 +19,9 @@ public class MainWindow : IMainWindow {
 
     public void Init() {
         // Necessary to write Raylib logs with Serilog
-        unsafe {SetTraceLogCallback(RaylibLogger.GetPointer());}
+        unsafe {Raylib.SetTraceLogCallback(RaylibLogger.GetPointer());}
         
-        SetConfigFlags(
+        Raylib.SetConfigFlags(
             ConfigFlags.ResizableWindow
             | ConfigFlags.Msaa4xHint // Enable Multi Sampling Anti Aliasing 4x (if available)
             // | ConfigFlags.InterlacedHint
@@ -29,8 +30,8 @@ public class MainWindow : IMainWindow {
             // | ConfigFlags.TransparentWindow
         );
         
-        InitWindow(Width, Height, Name);
-        // SetWindowMonitor(1);// WArn dev stuff
+        Raylib.InitWindow(Width, Height, Name);
+        // Raylib.SetWindowMonitor(1);// WArn dev stuff
         
         IsInitialised = true;
     }
