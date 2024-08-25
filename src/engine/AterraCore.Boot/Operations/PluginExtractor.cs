@@ -2,7 +2,6 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Attributes;
-using AterraCore.Contracts.Boot.Logic.PluginLoading;
 using AterraCore.Contracts.Boot.Logic.PluginLoading.Dto;
 using AterraCore.Contracts.Boot.Operations;
 using AterraCore.Contracts.OmniVault.Assets;

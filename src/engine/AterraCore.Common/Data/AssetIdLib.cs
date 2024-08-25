@@ -16,14 +16,12 @@ public static class AssetIdLib {
             
             public const string DirectChildren = $"{ThisSection}:{ThisClass}/{nameof(DirectChildren)}";
             public const string RaylibCamera2D = $"{ThisSection}:{ThisClass}/{nameof(RaylibCamera2D)}";
-            public const string DirectParent = $"{ThisSection}:{ThisClass}/{nameof(DirectParent)}";
             public const string Impulse2D = $"{ThisSection}:{ThisClass}/{nameof(Impulse2D)}";
             public const string RaylibHudText = $"{ThisSection}:{ThisClass}/{nameof(RaylibHudText)}";
             public const string RaylibHudTextPro = $"{ThisSection}:{ThisClass}/{nameof(RaylibHudTextPro)}";
             public const string Sprite2D = $"{ThisSection}:{ThisClass}/{nameof(Sprite2D)}";
             public const string SystemIds = $"{ThisSection}:{ThisClass}/{nameof(SystemIds)}";
             public const string Transform2D = $"{ThisSection}:{ThisClass}/{nameof(Transform2D)}";
-            public const string Transform3D = $"{ThisSection}:{ThisClass}/{nameof(Transform3D)}";
         }
         #endregion
         #region Entities

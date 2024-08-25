@@ -1,7 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Types.Nexities;
+using AterraCore.Common.Data;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 

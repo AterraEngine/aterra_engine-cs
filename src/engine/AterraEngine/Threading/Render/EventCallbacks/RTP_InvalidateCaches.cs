@@ -2,7 +2,6 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.Nexities.Systems;
-using AterraCore.Contracts.OmniVault.World;
 
 namespace AterraEngine.Threading.Render;
 

@@ -3,7 +3,6 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.OmniVault.World;
 using Microsoft.Extensions.DependencyInjection;
-using System.Windows.Input;
 
 namespace AterraLib.Nexities.Systems.Logic;
 

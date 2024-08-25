@@ -2,7 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Attributes;
-using AterraCore.Common.Types.Nexities;
+using AterraCore.Common.Data;
 using AterraCore.Contracts.Nexities.Entities;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Nexities.Systems;

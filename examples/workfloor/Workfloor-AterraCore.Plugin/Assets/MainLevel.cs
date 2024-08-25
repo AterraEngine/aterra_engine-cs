@@ -6,10 +6,8 @@ using AterraCore.Common.Data;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Components;
 using AterraCore.Contracts.Nexities.Levels;
-using AterraCore.Nexities.Components;
 using AterraCore.Nexities.Entities;
 using AterraLib.Nexities.Components;
-using AterraLib.Nexities.Entities;
 using JetBrains.Annotations;
 
 namespace Workfloor_AterraCore.Plugin.Assets;
