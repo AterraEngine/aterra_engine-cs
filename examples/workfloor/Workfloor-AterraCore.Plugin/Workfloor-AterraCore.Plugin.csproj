@@ -10,10 +10,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\..\src\lib\AterraLib\AterraLib.csproj"/>
-        <ProjectReference Include="..\..\..\tools\AterraEngine.Analyzers\AterraEngine.Analyzers\AterraEngine.Analyzers.csproj">
-            <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-            <OutputItemType>Analyzer</OutputItemType>
-        </ProjectReference>
         <ProjectReference Include="..\Workfloor-AterraCore\Workfloor-AterraCore.csproj"/>
     </ItemGroup>
 

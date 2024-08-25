@@ -8,5 +8,5 @@ namespace AterraCore.Contracts.OmniVault.World;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IActiveLevelFactory {
-    ActiveLevel CreateLevel2D(INexitiesLevel2D level2D);
+    ActiveLevel CreateLevel2D(INexitiesLevel level2D);
 }

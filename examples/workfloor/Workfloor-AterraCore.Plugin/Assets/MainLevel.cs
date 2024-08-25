@@ -34,14 +34,14 @@ public class MainLevelSystemIds : SystemIds {
     ];
 }
 
-public interface IMainLevel : INexitiesLevel2D;
+public interface IMainLevel : INexitiesLevel;
 
 [UsedImplicitly]
 [Level("Workfloor:Levels/MainLevel")]
 public class MainLevel(
     IDirectChildren children,
     [InjectAs("01J5RA7EDMS1PRR1BMRN9XM9AA")] MainLevelSystemIds systemIds
-) : NexitiesEntity(children, systemIds), INexitiesLevel2D {
+) : NexitiesEntity(children, systemIds), INexitiesLevel {
     private IDirectChildren? _children = children;
     public IDirectChildren ChildrenIDs => _children ??= GetComponent<IDirectChildren>();
 

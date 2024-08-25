@@ -16,8 +16,13 @@ public class EntityTreeFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreePoo
     public IEntityNodeTree CreateFromRootId(Ulid rootInstanceId) => new EntityNodeTree(PopulateNodes(rootInstanceId), entityTreePools);
     public IEntityNodeTree CreateEmpty() => new EntityNodeTree(new EntityNode(), entityTreePools);
 
-    private EntityNode PopulateNodes(Ulid instanceId) {
-        if (!instanceAtlas.TryGet(instanceId, out IAssetInstance? instance)) throw new ArgumentException("Node was not a IAssetInstance");
+    /// <summary>
+    /// Populates the nodes in the entity node tree starting from the given root instance ID.
+    /// </summary>
+    /// <param name="rootInstanceId">The ULID of the root instance.</param>
+    /// <returns>The root entity node of the populated tree.</returns>
+    private EntityNode PopulateNodes(Ulid rootInstanceId) {
+        if (!instanceAtlas.TryGet(rootInstanceId, out IAssetInstance? instance)) throw new ArgumentException("Node was not a IAssetInstance");
 
         var rootNode = new EntityNode(instance);
         if (instance is not IHasDirectChildren) return rootNode;
@@ -25,7 +30,7 @@ public class EntityTreeFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreePoo
         using var stackPool = new PooledResource<Stack<(IEntityNode ParentNode, Ulid InstanceId)>>(entityTreePools.FactoryStack);
         Stack<(IEntityNode ParentNode, Ulid InstanceId)> stack = stackPool.Item;
 
-        stack.Push((rootNode, instanceId));
+        stack.Push((rootNode, rootInstanceId));
         while (stack.TryPop(out (IEntityNode ParentNode, Ulid InstanceId) node)) {
             (IEntityNode parentNode, Ulid ulid) = node;
 

@@ -15,9 +15,13 @@ namespace AterraCore.OmniVault.World;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
+/// <summary> The ActiveLevelFactory class is responsible for creating active levels based on the provided level data. </summary>
 [UsedImplicitly]
 public class ActiveLevelFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreeFactory entityTreeFactory, IAssetAtlas assetAtlas) : IActiveLevelFactory {
-    public ActiveLevel CreateLevel2D(INexitiesLevel2D level2D) {
+    /// <summary> Creates an instance of ActiveLevel using the provided INexitiesLevel as input.</summary>
+    /// <param name="level2D">The INexitiesLevel object representing the level.</param>
+    /// <returns>An instance of ActiveLevel.</returns>
+    public ActiveLevel CreateLevel2D(INexitiesLevel level2D) {
         IEntityNodeTree entityTree = entityTreeFactory.CreateFromRootId(level2D.InstanceId);
         List<IAssetInstance> entityTreeFlat = entityTree.GetAsFlat().ToList();
 
@@ -41,6 +45,11 @@ public class ActiveLevelFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreeFa
         };
     }
 
+    /// <summary>
+    /// Creates an instance of the ActiveLevel class from a given INexitiesLevel.
+    /// </summary>
+    /// <param name="systemIds">The INexitiesLevel instance to create the ActiveLevel from.</param>
+    /// <returns>An instance of the ActiveLevel with the specified properties populated.</returns>
     private INexitiesSystem[] GetNexitiesSystems(IReadOnlyCollection<AssetId> systemIds) {
         var systems = new List<INexitiesSystem>(systemIds.Count);
         foreach (AssetId assetId in systemIds) {

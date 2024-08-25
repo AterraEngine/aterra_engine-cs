@@ -3,7 +3,6 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.OmniVault.World;
 using Microsoft.Extensions.DependencyInjection;
-using Serilog;
 
 namespace AterraLib.Nexities.Systems.Logic;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -12,7 +11,7 @@ namespace AterraLib.Nexities.Systems.Logic;
 [System(AssetIdLib.AterraCore.SystemsLogic.CameraController, CoreTags.LogicSystem)]
 [Injectable<CameraController>(ServiceLifetime.Singleton)]
 [UsedImplicitly]
-public class CameraController(ILogger logger) : NexitiesSystem<ICamera2D> {
+public class CameraController : NexitiesSystem<ICamera2D> {
     public override void Tick(ActiveLevel level) {
         foreach (ICamera2D entity in GetEntities(level)) {
             if (Raylib.IsKeyDown(KeyboardKey.Down)) entity.Impulse2D.TranslationOffset = entity.Impulse2D.TranslationOffset with { Y = entity.Impulse2D.TranslationOffset.Y - .5f };

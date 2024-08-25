@@ -5,6 +5,9 @@
         <Nullable>enable</Nullable>
         <RootNamespace>AterraEngine.Analyzer.Sample</RootNamespace>
         <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+        
+        <NoWarn>CS9057</NoWarn> <!-- Add the NoWarn property to suppress the specific "compiled with a better version" warning -->
+        
     </PropertyGroup>
 
     <ItemGroup>

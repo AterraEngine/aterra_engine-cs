@@ -15,7 +15,7 @@ namespace AterraCore.Contracts.OmniVault.World;
 // ---------------------------------------------------------------------------------------------------------------------
 [StructLayout(LayoutKind.Sequential)]
 public readonly struct ActiveLevel {
-    public INexitiesLevel2D RawLevelData { get; init; }
+    public INexitiesLevel RawLevelData { get; init; }
 
     public IEnumerable<INexitiesSystem> Logic { init => LogicSystems = [..value]; }
     public IEnumerable<INexitiesSystem> Render { init => RenderSystems = [..value]; }

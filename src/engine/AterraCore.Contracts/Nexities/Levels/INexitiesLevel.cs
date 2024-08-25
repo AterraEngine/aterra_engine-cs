@@ -8,7 +8,7 @@ namespace AterraCore.Contracts.Nexities.Levels;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface INexitiesLevel2D : INexitiesEntity,
+public interface INexitiesLevel : INexitiesEntity,
     IHasDirectChildren,
     IHasSystemIds {
     void OnLevelCreation();

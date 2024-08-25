@@ -37,12 +37,12 @@ public class DirectChildrenEmptyLevel(
     ];
 }
 
-[Entity<INexitiesLevel2D>(AssetIdLib.AterraCore.Entities.EmptyLevel, CoreTags.Level)]
+[Entity<INexitiesLevel>(AssetIdLib.AterraCore.Entities.EmptyLevel, CoreTags.Level)]
 [UsedImplicitly]
 public class EmptyLevel(
     [InjectAs("01J601YXRRSCWGQQY63E9AFD0Q")] DirectChildrenEmptyLevel children,
     [InjectAs("01J6022W9XGTXC4J1B55SQSGT5")] EmptyLevelSystemIds systemIds
-) : NexitiesEntity(children, systemIds), INexitiesLevel2D {
+) : NexitiesEntity(children, systemIds), INexitiesLevel {
     private IDirectChildren? _children = children;
     public IDirectChildren ChildrenIDs => _children ??= GetComponent<IDirectChildren>();
 

@@ -58,7 +58,7 @@ public class Engine(
         for (int levelI = 0; levelI < levelGenerations; levelI++) {
             var levelInstanceId = Ulid.NewUlid();
             Logger.Information("level id {id}", levelInstanceId);
-            if (!instanceAtlas.TryGetOrCreate("Workfloor:Levels/MainLevel", levelInstanceId, out INexitiesLevel2D? level)) return;
+            if (!instanceAtlas.TryGetOrCreate("Workfloor:Levels/MainLevel", levelInstanceId, out INexitiesLevel? level)) return;
 
 
             int a = (int)(Math.Sqrt(entitiesPerLevel) / 2f);
