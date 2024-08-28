@@ -4,8 +4,7 @@
 using AterraCore.Common.ConfigFiles.EngineConfig;
 using AterraCore.Common.ConfigFiles.PluginConfig;
 using System.Diagnostics.CodeAnalysis;
-using CliArgsParser.Attributes;
-using CliArgsParser.Contracts;
+using CliArgsParser;
 using JetBrains.Annotations;
 using Serilog;
 using Xml;
@@ -18,11 +17,11 @@ namespace ProductionTools.Commands;
 // ---------------------------------------------------------------------------------------------------------------------
 [SuppressMessage("ReSharper", "AutoPropertyCanBeMadeGetOnly.Global")]
 [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
-public class ArgsOptions : IParameters {
-    [AutoArgValue("classname")] public string ClassName { get; set; } = null!;
-    [AutoArgFlag("prettify")] public bool Prettify { get; set; } = true;
-    [AutoArgValue("output")] public string? OutputFile { get; set; }
-    [AutoArgValue("folder")] public string? OutputFolder { get; set; }
+public class ArgsOptions : ICommandParameters {
+    [ArgValue("classname")] public string ClassName { get; set; } = null!;
+    [ArgFlag("prettify")] public bool Prettify { get; set; } = true;
+    [ArgValue("output")] public string? OutputFile { get; set; }
+    [ArgValue("folder")] public string? OutputFolder { get; set; }
 }
 
 public record XsdGeneratorRecord(
@@ -33,8 +32,7 @@ public record XsdGeneratorRecord(
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[CommandAtlas]
-public class XmlSchemaGenerator(ILogger logger) {
+public class XmlSchemaGenerator(ILogger logger) : ICommandAtlas {
     private readonly Dictionary<string, XsdGeneratorRecord> _dictionary = new() {
         { "engine-config", new XsdGeneratorRecord(new XsdGenerator<EngineConfigXml>(logger), XmlNameSpaces.ConfigEngine) },
         { "plugin-config", new XsdGeneratorRecord(new XsdGenerator<PluginConfigXml>(logger), XmlNameSpaces.ConfigPlugin) }

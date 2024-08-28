@@ -5,7 +5,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using AterraEngine.Analyzers.Extensions;
+using JetBrains.Annotations;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -15,24 +15,23 @@ namespace AterraEngine.Analyzers;
 // ---------------------------------------------------------------------------------------------------------------------
 public record CacheKey(string AssemblyName, string PartialId);
 
-public record CacheValue(List<Location> Locations, string PartialId);
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
+[UsedImplicitly]
 public class AssetAttributePartialIdAnalyzers : DiagnosticAnalyzer {
-    private const string DiagnosticId = "AE0002";
+    private const string DiagnosticId = "AE0001";
     private const string Category = "AssetId";
 
     private static readonly DiagnosticDescriptor Rule = new(
         DiagnosticId,
-        new LocalizableResourceString(nameof(Resources.AE0002Title), Resources.ResourceManager, typeof(Resources)),
-        new LocalizableResourceString(nameof(Resources.AE0002MessageFormat), Resources.ResourceManager, typeof(Resources)),
+        new LocalizableResourceString(nameof(Resources.AE0001Title), Resources.ResourceManager, typeof(Resources)),
+        new LocalizableResourceString(nameof(Resources.AE0001MessageFormat), Resources.ResourceManager, typeof(Resources)),
         Category,
         DiagnosticSeverity.Error,
         true,
-        new LocalizableResourceString(nameof(Resources.AE0002Description), Resources.ResourceManager, typeof(Resources))
+        new LocalizableResourceString(nameof(Resources.AE0001Description), Resources.ResourceManager, typeof(Resources))
     );
 
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = [Rule];
@@ -46,67 +45,77 @@ public class AssetAttributePartialIdAnalyzers : DiagnosticAnalyzer {
         context.RegisterSymbolAction(AnalyzeSymbol, SymbolKind.NamedType);
     }
 
-    private void AnalyzeSymbol(SymbolAnalysisContext context) {
-        ConcurrentDictionary<CacheKey, List<Location>> cachePartialIds = new();
+    private static void AnalyzeSymbol(SymbolAnalysisContext context) {
+        var cachePartialIds = new ConcurrentDictionary<CacheKey, List<Location>>();
+        INamespaceSymbol globalNamespace = context.Compilation.GlobalNamespace;
 
-        // Retrieve all the symbols in the global namespace
-        IEnumerable<AttributeData> attributes = context.Compilation.GlobalNamespace
+        IEnumerable<AttributeData> attributes = globalNamespace
             .GetMembers()
-            .SelectMany(GetAllSymbolsRecursively)
+            .SelectMany(GetAllSymbols)
             .OfType<INamedTypeSymbol>()
             .SelectMany(typeSymbol => typeSymbol.GetAttributes())
-            .Where(data => data.AttributeClass != null
-                           && InheritsFrom(data.AttributeClass, "AterraCore.Nexities.Assets.AssetAttribute")
-            );
+            .Where(data => data.AttributeClass != null &&
+                           InheritsFrom(data.AttributeClass, "AterraCore.Attributes.AssetAttribute"));
 
         foreach (AttributeData attribute in attributes) {
+            TypedConstant instanceTypeArg = GetInstanceTypeArg(attribute);
 
-            // Continue with the name of the argument
-            //      WAY TOO UGLY BUT IT WORKS SOMEHOW
-            TypedConstant instanceTypeArg = attribute.NamedArguments.Any(na => na.Key == "partialId")
-                                            && attribute.NamedArguments.Single(na => na.Key == "partialId").Value.Value is not null
-                ? attribute.NamedArguments.Single(na => na.Key == "partialId").Value
-                : attribute.ConstructorArguments.DefaultIfEmpty(new TypedConstant()).First();
+            if (instanceTypeArg.Value is not string partialId) continue;
 
-            var recordKey = new CacheKey(
-                context.Compilation.Assembly.Name,
-                (instanceTypeArg.Value as string)!.Replace("-", "")
-            );
-            Location location = attribute.ApplicationSyntaxReference?.GetSyntax().GetLocation()!;
+            var recordKey = new CacheKey(context.Compilation.Assembly.Name, partialId.Replace("-", ""));
+            Location? location = attribute.ApplicationSyntaxReference?.GetSyntax().GetLocation();
+
+            if (location == null) continue;
 
             List<Location> foundLocations = cachePartialIds.GetOrAdd(recordKey, [location]);
             if (!foundLocations.Contains(location)) foundLocations.Add(location);
         }
 
-        cachePartialIds
-            .Where(pair => pair.Value.Count > 1)
-            .IterateOver(pair => pair.Value.IterateOver(
-                location => context.ReportDiagnostic(Diagnostic.Create(
+        ReportDiagnostics(context, cachePartialIds);
+    }
+
+    private static TypedConstant GetInstanceTypeArg(AttributeData attribute) {
+        TypedConstant namedArg = attribute.NamedArguments.FirstOrDefault(na => na.Key == "assetId").Value;
+        return namedArg.IsNull ? attribute.ConstructorArguments.FirstOrDefault() : namedArg;
+    }
+
+    private static void ReportDiagnostics(SymbolAnalysisContext context, ConcurrentDictionary<CacheKey, List<Location>> cachePartialIds) {
+        foreach (KeyValuePair<CacheKey, List<Location>> pair in cachePartialIds.Where(pair => pair.Value.Count > 1)) {
+            foreach (Location location in pair.Value) {
+                string additionalLocations = string.Join(
+                    " ",
+                    pair.Value
+                        .Where(loc => loc != location)
+                        .Select(loc => $"{loc.SourceTree?.FilePath}:{loc.GetLineSpan().StartLinePosition.Line + 1}")
+                );
+
+                context.ReportDiagnostic(Diagnostic.Create(
                     Rule,
                     location,
                     pair.Key.PartialId,
-                    string.Join(' ', pair.Value.Where(loc => loc != location).Select(loc => loc.SourceTree?.FilePath))
-                ))
-            ));
+                    additionalLocations
+                ));
+            }
+        }
     }
 
     private static bool InheritsFrom(ITypeSymbol symbol, string baseTypeFullName) {
-        ITypeSymbol? baseType = symbol;
-        while (baseType != null) {
+        for (ITypeSymbol? baseType = symbol; baseType != null; baseType = baseType.BaseType)
             if (baseType.ToDisplayString().Equals(baseTypeFullName)) return true;
-            baseType = baseType.BaseType;
-        }
         return false;
     }
 
-    private static IEnumerable<ISymbol> GetAllSymbolsRecursively(INamespaceOrTypeSymbol symbol) {
-        foreach (ISymbol memberSymbol in symbol.GetMembers()) {
-            if (memberSymbol is INamespaceOrTypeSymbol namespaceOrTypeSymbol)
-                foreach (ISymbol child in GetAllSymbolsRecursively(namespaceOrTypeSymbol)) {
-                    yield return child;
-                }
+    private static IEnumerable<ISymbol> GetAllSymbols(INamespaceOrTypeSymbol rootSymbol) {
+        var symbolsStack = new Stack<INamespaceOrTypeSymbol>();
+        symbolsStack.Push(rootSymbol);
 
-            yield return memberSymbol;
+        while (symbolsStack.TryPop(out INamespaceOrTypeSymbol? symbol)) {
+            foreach (ISymbol member in symbol.GetMembers()) {
+                yield return member;
+                if (member is INamespaceOrTypeSymbol namespaceOrTypeSymbol) {
+                    symbolsStack.Push(namespaceOrTypeSymbol);
+                }
+            }
         }
     }
 }

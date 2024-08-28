@@ -1,8 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using CliArgsParser.Attributes;
-using CliArgsParser.Contracts;
+using CliArgsParser;
 using CodeOfChaos.Extensions.Serilog;
 using JetBrains.Annotations;
 using Serilog;
@@ -14,15 +13,14 @@ namespace ProductionTools.Commands;
 // ---------------------------------------------------------------------------------------------------------------------
 [SuppressMessage("ReSharper", "AutoPropertyCanBeMadeGetOnly.Global")]
 [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
-public class StatCountArgsOptions : IParameters {
-    [AutoArgValue("path")] public string Path { get; set; } = @"E:\Portfolio\internal\005-aterra_engine\0001-cs-aterra_engine";
+public class StatCountArgsOptions : ICommandParameters {
+    [ArgValue("path")] public string Path { get; set; } = @"E:\Portfolio\internal\005-aterra_engine\0001-cs-aterra_engine";
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[CommandAtlas]
-public class ProjectStats(ILogger logger) {
+public class ProjectStats(ILogger logger) : ICommandAtlas {
     // -----------------------------------------------------------------------------------------------------------------
     // Commands
     // -----------------------------------------------------------------------------------------------------------------

@@ -25,24 +25,15 @@
         </value>
     </resheader>
     <data name="AE0001Title" xml:space="preserve">
-        <value>Entity Cannot be instance type of Pooled</value>
+        <value>Duplicate AssetId</value>
     </data>
     <data name="AE0001MessageFormat" xml:space="preserve">
-        <value>A AssetInstanceType.Pooled cannot be used on an `Entity`. For pooled entities use a `PooledEntity`.</value>
+        <value>Duplicate AssetId '{0}' found at locations {1}</value>
     </data>
     <data name="AE0001Description" xml:space="preserve">
-        <value>Pooled Entities require a special attribute to be set on them, named `PooledEntityAttribute`.</value>
+        <value />
     </data>
     <data name="AE0001CodeFixTitle" xml:space="preserve">
-        <value>Use an EntityPooled Attribute</value>
-    </data>
-    <data name="AE0002Title" xml:space="preserve">
-        <value>Duplicate Partial Id</value>
-    </data>
-    <data name="AE0002Description" xml:space="preserve">
-        <value/>
-    </data>
-    <data name="AE0002MessageFormat" xml:space="preserve">
-        <value>Duplicate PartialId '{0}' found at locations {1}</value>
+        <value>Change the AssetId</value>
     </data>
 </root>

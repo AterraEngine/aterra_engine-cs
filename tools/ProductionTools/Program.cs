@@ -1,11 +1,9 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
 using AterraCore.Loggers;
 using CliArgsParser;
-using CliArgsParser.Contracts;
-using ProductionTools.Commands;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Core;
 
@@ -23,15 +21,23 @@ public static class Program {
             .MinimumLevel.Verbose()
             .DefaultSinkConsole()// Using the normal version of the Sink Console, else the empty lines get processed earlier.
             .CreateLogger();
+        
+        IServiceCollection serviceCollection = new ServiceCollection();
+        serviceCollection.AddSingleton<ILogger>(logger);
 
-        IParser parser = new ParserConfiguration()
-            .SetLogger(logger)
-            .RegisterAtlas(new XmlSchemaGenerator(logger))
-            .RegisterAtlas(new TestConsoleTheme(logger))
-            .RegisterAtlas(new ProjectStats(logger))
-            .CreateArgsParser();
+        serviceCollection.AddCliArgsParser(configuration =>
+            configuration
+                .SetConfig(new CliArgsParserConfig {
+                    Overridable = true,
+                    GenerateShortNames = true
+                })
+                .AddFromAssembly(typeof(Program).Assembly)
+        );
+        
+        ServiceProvider provider = serviceCollection.BuildServiceProvider();
+        var parser =  provider.GetRequiredService<IArgsParser>();
 
-        await parser.TryParseAsync(string.Join(' ', args));
+        await parser.ParseAsyncLinear(args);
     }
 
     public static void Main(string[] args) {

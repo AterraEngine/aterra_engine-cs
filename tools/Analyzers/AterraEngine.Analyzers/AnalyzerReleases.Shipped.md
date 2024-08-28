@@ -4,5 +4,4 @@
 
 Rule ID | Category | Severity | Notes
 --------|----------|----------|-----------------------------------------
-AE0001  | Naming   | Error    | Entity cannot be instance type of Pooled
-AE0002  | AssetId  | Error    | AssetAttributePartialIdAnalyzers
+AE0001  | AssetId  | Error    | Duplicate AssetId in same project

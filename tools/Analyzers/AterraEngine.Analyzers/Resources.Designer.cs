@@ -60,7 +60,7 @@ namespace AterraEngine.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use an EntityPooled Attribute.
+        ///   Looks up a localized string similar to Change the AssetId.
         /// </summary>
         internal static string AE0001CodeFixTitle {
             get {
@@ -69,7 +69,7 @@ namespace AterraEngine.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pooled Entities require a special attribute to be set on them, named `PooledEntityAttribute`..
+        ///   Looks up a localized string similar to .
         /// </summary>
         internal static string AE0001Description {
             get {
@@ -78,7 +78,7 @@ namespace AterraEngine.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A AssetInstanceType.Pooled cannot be used on an `Entity`. For pooled entities use a `PooledEntity`..
+        ///   Looks up a localized string similar to Duplicate AssetId &apos;{0}&apos; found at locations {1}.
         /// </summary>
         internal static string AE0001MessageFormat {
             get {
@@ -87,38 +87,11 @@ namespace AterraEngine.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Entity Cannot be instance type of Pooled.
+        ///   Looks up a localized string similar to Duplicate AssetId.
         /// </summary>
         internal static string AE0001Title {
             get {
                 return ResourceManager.GetString("AE0001Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        internal static string AE0002Description {
-            get {
-                return ResourceManager.GetString("AE0002Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Duplicate PartialId &apos;{0}&apos; found at locations {1}.
-        /// </summary>
-        internal static string AE0002MessageFormat {
-            get {
-                return ResourceManager.GetString("AE0002MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Duplicate Partial Id.
-        /// </summary>
-        internal static string AE0002Title {
-            get {
-                return ResourceManager.GetString("AE0002Title", resourceCulture);
             }
         }
     }

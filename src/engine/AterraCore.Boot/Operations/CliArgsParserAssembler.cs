@@ -1,29 +1,37 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Contracts.Boot.Logic.PluginLoading.Dto;
+using CliArgsParser;
 using AterraCore.Contracts.Boot.Operations;
-using AterraCore.DI;
 using AterraCore.Loggers;
+using System.Reflection;
 
 namespace AterraCore.Boot.Operations;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class BuildDependencies : IBootOperation {
-    private ILogger Logger { get; } = StartupLogger.CreateLogger(false).ForBootOperationContext<BuildDependencies>();
+public class CliArgsParserAssembler : IBootOperation {
+    private ILogger Logger { get; } = StartupLogger.CreateLogger(false).ForPluginLoaderContext("CliArgsParserAssembler");
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public void Run(IBootComponents components) {
-        Logger.Debug("Entered Build Service Provider");
+        Logger.Debug("Entered CliArgsParser Assembler");
+        
+        components.Services.AddCliArgsParser(configuration => {
+            configuration.SetConfig(new CliArgsParserConfig {
+                Overridable = true,
+                GenerateShortNames = true
+            });
 
-        var builder = new EngineServiceBuilder(Logger, components.Services);
-
-        builder.AssignFromServiceDescriptors(components.DefaultServices);
-        builder.AssignFromServiceDescriptors(components.DynamicServices);
-        builder.AssignFromServiceDescriptors(components.StaticServices);
-
-        builder.FinishBuilding();
+            foreach (IPluginBootDto pluginBootDto in components.ValidPlugins) {
+                foreach (Assembly assembly in pluginBootDto.Assemblies.ToList()) {
+                    configuration.AddFromAssembly(assembly);
+                }
+            }
+        });
+        
     }
 }

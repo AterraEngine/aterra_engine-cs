@@ -55,7 +55,7 @@ public class AterraCoreWorld(
             crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar(id, true));
         });
         Parallel.ForEach(newTextureAssetIds.Except(oldTextureAssetIds), id => {
-            crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar(id, true));
+            crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar(id, false));
         });
     }
 
@@ -72,7 +72,7 @@ public class AterraCoreWorld(
     /// <summary> Tries to change the active level in the AterraCoreWorld.  </summary>
     /// <param name="levelId">The ID of the level to change to.</param>
     /// <param name="levelInstanceId">The instance ID of the level to change to.</param>
-    /// <returns>True if the active level was successfully changed, false otherwise.</returns>
+    /// <returns>True if the active level was successfully changed, fal se otherwise.</returns>
     public bool TryChangeActiveLevel(AssetId levelId, Ulid levelInstanceId) {
         // Retrieve the old level, to make comparison with, in case of loading new assets
         Logger.Information("Attempting to change level to {LevelId}, Instance {InstanceId}", levelId, levelInstanceId);

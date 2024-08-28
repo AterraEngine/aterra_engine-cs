@@ -30,7 +30,7 @@ public class MainWindow : IMainWindow {
         );
 
         Raylib.InitWindow(Width, Height, Name);
-        // Raylib.SetWindowMonitor(1);// WArn dev stuff
+        Raylib.SetWindowMonitor(1);// WArn dev stuff
 
         IsInitialised = true;
     }
