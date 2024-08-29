@@ -30,10 +30,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="ConfigFiles\"/>
-    </ItemGroup>
-
-    <ItemGroup>
         <ProjectReference Include="..\..\lib\Xml\Xml.csproj"/>
     </ItemGroup>
 

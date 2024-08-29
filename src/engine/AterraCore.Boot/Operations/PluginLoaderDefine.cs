@@ -25,8 +25,8 @@ public class PluginLoaderDefine : IBootOperation {
         components.PluginLoader.Plugins.AddLastRepeated(
             components.EngineConfigXml.LoadOrder.Plugins.Select(
                 dto => ((IRawPluginBootDto rawPluginBootDto, IPluginBootDto pluginBootDto))(
-                    new RawPluginBootDto(Path.Join(pluginFolder, dto.FilePath)),
-                    new PluginBootDto { FilePath = Path.Join(pluginFolder, dto.FilePath) }
+                    new RawPluginBootDto(Path.Join(pluginFolder, dto.FileName)),
+                    new PluginBootDto { FilePath = Path.Join(pluginFolder, dto.FileName) }
                 ))
         );
 

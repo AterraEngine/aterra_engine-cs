@@ -1,7 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.ConfigFiles.EngineConfig;
+using AterraCore.Common.ConfigFiles;
 using AterraCore.Common.Data;
 using AterraCore.Contracts.Boot.Operations;
 using AterraCore.Loggers;

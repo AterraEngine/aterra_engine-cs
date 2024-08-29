@@ -1,23 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <engineConfig xmlns="urn:aterra-engine:engine-config">
-    <engine version="0.0.0"/>
-    <game version="0.0.0"/>
-    <boot>
-        <logging asyncConsole="true"/>
-        <exceptions>
-            <warning id="AterraEngineBoot:Warnings/UnstableFlexiPlugLoadOrder"/>
-            <warning id="AterraEngineBoot:Warnings/Undefined"/>
-            <warning id="AterraEngineBoot:Warnings/UnableToLoadEngineConfigFile"/>
-            <warning id="AterraEngineBoot:Warnings/EngineOverwritten"/>
-            <warning id="AterraEngineBoot:Warnings/NoPluginConfigXmlFound"/>
-            <error id="AterraEngineBoot:Warnings/UnstableBootOperationOrder"/>
-        </exceptions>
-    </boot>
-
+    <logging asyncConsole="true" outputFile=""/>
+    
     <loadOrder relativeRootPath="plugins">
         <plugin file="AterraLib.zip"/>
         <plugin file="AterraLibOverwrite.zip"/>
         <plugin file="Workfloor-AterraCore.Plugin.zip"/>
     </loadOrder>
-
 </engineConfig>

@@ -1,7 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.ConfigFiles.PluginConfig;
+using AterraCore.Common.ConfigFiles;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Boot.Logic.PluginLoading.Dto;
 using System.Diagnostics.CodeAnalysis;

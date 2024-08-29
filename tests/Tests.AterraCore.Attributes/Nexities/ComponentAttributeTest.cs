@@ -12,7 +12,7 @@ namespace Tests.AterraCore.Attributes.Nexities;
 [TestSubject(typeof(ComponentAttribute))]
 public class ComponentAttributeTest {
     // Test types and interfaces
-    [Component("test:asset", CoreTags.Component, ServiceLifetime.Scoped, typeof(ISampleInterface))]
+    [Component("test:asset", CoreTags.Component, ServiceLifetime.Scoped, typeof(ISampleInterface))] 
     private class ClassWithComponentAttribute : ISampleInterface;
 
     [Component<ISampleInterface>("test:generic.asset", CoreTags.Singleton, ServiceLifetime.Singleton)]

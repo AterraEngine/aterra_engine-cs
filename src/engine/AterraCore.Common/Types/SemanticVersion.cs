@@ -41,11 +41,11 @@ public readonly struct SemanticVersion(int major, int minor, int patch, string? 
         Major = int.Parse(match.Groups[1].Value);
         Minor = int.Parse(match.Groups[2].Value);
         Patch = int.Parse(match.Groups[3].Value);
-        Addendum = match.Groups[4].Success ? match.Groups[4].Value : string.Empty;
+        Addendum = match.Groups[4].Success && match.Groups[4].Value.IsNotNullOrEmpty() ? match.Groups[4].Value : string.Empty;
     }
 
-    public static readonly SemanticVersion Zero = new(0, 0, 0);
-    public static readonly SemanticVersion Max = new(int.MaxValue, int.MaxValue, int.MaxValue);
+    public static readonly SemanticVersion Zero = new(0, 0, 0, string.Empty);
+    public static readonly SemanticVersion Max = new(int.MaxValue, int.MaxValue, int.MaxValue, string.Empty);
 
     // -----------------------------------------------------------------------------------------------------------------
     // Implicit Methods
@@ -71,7 +71,7 @@ public readonly struct SemanticVersion(int major, int minor, int patch, string? 
             int.Parse(match.Groups[1].Value),
             int.Parse(match.Groups[2].Value),
             int.Parse(match.Groups[3].Value),
-            match.Groups[4].Success ? match.Groups[4].Value : string.Empty
+            match.Groups[4].Success && match.Groups[4].Value.IsNotNullOrEmpty() ? match.Groups[4].Value : string.Empty
         );
         return true;
     }
@@ -108,4 +108,6 @@ public readonly struct SemanticVersion(int major, int minor, int patch, string? 
     public static bool operator <(SemanticVersion left, SemanticVersion right) => left.CompareTo(right) < 0;
     public static bool operator ==(SemanticVersion left, SemanticVersion right) => left.Equals(right);
     public static bool operator !=(SemanticVersion left, SemanticVersion right) => !left.Equals(right);
+    public static bool operator <=(SemanticVersion left, SemanticVersion right) => left.Equals(right) || left.CompareTo(right) < 0;
+    public static bool operator >=(SemanticVersion left, SemanticVersion right) => left.Equals(right) || left.CompareTo(right) > 0;
 }

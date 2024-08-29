@@ -49,7 +49,7 @@ public class CollectDefaultDependencies : IBootOperation {
         List<ServiceDescriptor> dependencies = [
             #region Base AterraEngine
             NewServiceDescriptor<IEngine, Engine>(ServiceLifetime.Singleton),
-            NewServiceDescriptor<ILogger>(EngineLogger.CreateLogger(components.EngineConfigXml.BootConfig.Logging.UseAsyncConsole)),
+            NewServiceDescriptor<ILogger>(EngineLogger.CreateLogger(components.EngineConfigXml.LoggingConfig.UseAsyncConsole)),
             NewServiceDescriptor<IMainWindow, MainWindow>(ServiceLifetime.Singleton),
             NewServiceDescriptor<IActiveLevelFactory, ActiveLevelFactory>(ServiceLifetime.Singleton),
 

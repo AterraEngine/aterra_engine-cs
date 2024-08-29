@@ -1,12 +1,11 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.ConfigFiles.PluginConfig;
+using AterraCore.Common.ConfigFiles;
 using AterraCore.Common.Data;
 using AterraCore.Contracts.Boot.Operations;
 using AterraCore.Loggers;
 using System.Reflection;
-using Xml.Elements;
 
 namespace AterraCore.Boot.Operations;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -49,15 +48,14 @@ public class PluginLoaderZipImporter : IBootOperation {
 
                 // Extract assembly(s)
                 IEnumerable<Assembly> assemblies = xml.Dlls
-                    .Select(binDto => new FileDto {
-                        FilePath = Path
-                            .Combine(Paths.Plugins.PluginBinFolder, binDto.FilePath)
-                            .Replace("\\", "/")
-                    })
-                    .Select(fileDto => {
-                        if (zipImporter.TryGetDllAssembly(fileDto, out Assembly? assembly)) return assembly;
+                    .Select(binDto => Path
+                        .Combine(Paths.Plugins.PluginBinFolder, binDto.FileName)
+                        .Replace("\\", "/")
+                    )
+                    .Select(filePath => {
+                        if (zipImporter.TryGetDllAssembly(filePath, out Assembly? assembly)) return assembly;
                         plugin.SetInvalid();
-                        Logger.Warning("Failed to load assembly {file}", fileDto.FilePath);
+                        Logger.Warning("Failed to load assembly {file}", filePath);
                         return assembly;
                     })
                     .Where(assembly => assembly != null)

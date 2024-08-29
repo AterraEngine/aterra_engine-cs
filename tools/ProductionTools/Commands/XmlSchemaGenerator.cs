@@ -1,8 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.ConfigFiles.EngineConfig;
-using AterraCore.Common.ConfigFiles.PluginConfig;
+using AterraCore.Common.ConfigFiles;
 using System.Diagnostics.CodeAnalysis;
 using JetBrains.Annotations;
 using Xml;

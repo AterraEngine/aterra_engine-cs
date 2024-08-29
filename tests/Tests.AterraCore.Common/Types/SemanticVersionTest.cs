@@ -80,24 +80,6 @@ public class SemanticVersionTest {
         Assert.Throws<ArgumentException>(() => new SemanticVersion(version));
     }
 
-    // // Test for ReadXml method
-    // [Theory]
-    // [InlineData("<SemanticVersion>1.2.3</SemanticVersion>", 1, 2, 3)]
-    // [InlineData("<SemanticVersion>10.20.30</SemanticVersion>", 10, 20, 30)]
-    // public void TestReadXml_ValidString(string xmlContent, int major, int minor, int patch) {
-    //     var xmlReader = XmlReader.Create(new StringReader(xmlContent));
-    //     SemanticVersion semanticVersion = SemanticVersion.Zero;
-    //
-    //     while (xmlReader.Read()) {
-    //         if (xmlReader.NodeType != XmlNodeType.Element) continue;
-    //         if (xmlReader.Name == "SemanticVersion") semanticVersion.ReadXml(xmlReader);
-    //     }
-    //
-    //     Assert.Equal(major, semanticVersion.Major);
-    //     Assert.Equal(minor, semanticVersion.Minor);
-    //     Assert.Equal(patch, semanticVersion.Patch);
-    // }
-
     // Test for equality (==)
     [Theory]
     [InlineData(1, 1, 1, 1, 1, 1)]
@@ -140,5 +122,145 @@ public class SemanticVersionTest {
         var versionA = new SemanticVersion(majorA, minorA, patchA);
         var versionB = new SemanticVersion(majorB, minorB, patchB);
         Assert.True(versionA > versionB);
+    }
+    // Test for CompareTo
+    [Theory]
+    [InlineData(1, 2, 3, 1, 2, 4, -1)]
+    [InlineData(1, 2, 3, 1, 2, 2, 1)]
+    [InlineData(1, 2, 3, 1, 2, 3, 0)]
+    public void TestCompareTo(int majorA, int minorA, int patchA, int majorB, int minorB, int patchB, int expected) {
+        var versionA = new SemanticVersion(majorA, minorA, patchA);
+        var versionB = new SemanticVersion(majorB, minorB, patchB);
+        Assert.Equal(expected, versionA.CompareTo(versionB));
+    }
+    
+    // Test for CompareTo method with Addendum comparison
+    [Theory]
+    [InlineData(1, 2, 3, "alpha", 1, 2, 3, null, 1)]
+    [InlineData(1, 2, 3, null, 1, 2, 3, "alpha", -1)]
+    [InlineData(1, 2, 3, "alpha", 1, 2, 3, "alpha", 0)]
+    public void TestCompareToWithAddendum(int majorA, int minorA, int patchA, string? addendumA, int majorB, int minorB, int patchB, string? addendumB, int expected)
+    {
+        var versionA = new SemanticVersion(majorA, minorA, patchA, addendumA);
+        var versionB = new SemanticVersion(majorB, minorB, patchB, addendumB);
+        Assert.Equal(expected, versionA.CompareTo(versionB));
+    }
+    
+    
+    // Test for implicit string conversion
+    [Theory]
+    [InlineData("1.2.3", 1, 2, 3)]
+    public void TestImplicitStringConversion(string versionString, int major, int minor, int patch) {
+        SemanticVersion version = versionString;
+        Assert.Equal(major, version.Major);
+        Assert.Equal(minor, version.Minor);
+        Assert.Equal(patch, version.Patch);
+    }
+
+    // Test for implicit SemanticVersion conversion
+    [Theory]
+    [InlineData(1, 2, 3, "1.2.3")]
+    public void TestImplicitSemanticVersionConversion(int major, int minor, int patch, string expected) {
+        var version = new SemanticVersion(major, minor, patch);
+        string versionString = version;
+        Assert.Equal(expected, versionString);
+    }
+
+    // Test for TryParse
+    [Theory]
+    [InlineData("1.2.3", true, 1, 2, 3)]
+    [InlineData("invalid", false, 0, 0, 0)]
+    public void TestTryParse(string input, bool expectedResult, int expectedMajor, int expectedMinor, int expectedPatch) {
+        bool result = SemanticVersion.TryParse(input, out var version);
+        Assert.Equal(expectedResult, result);
+        if (expectedResult) {
+            Assert.Equal(expectedMajor, version.Major);
+            Assert.Equal(expectedMinor, version.Minor);
+            Assert.Equal(expectedPatch, version.Patch);
+        }
+        else {
+            Assert.Equal(SemanticVersion.Zero, version);
+        }
+    }
+
+    // Test for Equals
+    [Theory]
+    [InlineData(1, 1, 1, true)]
+    [InlineData(1, 2, 3, false)]
+    public void TestEquals(int major, int minor, int patch, bool expected) {
+        var versionA = new SemanticVersion(1, 1, 1);
+        var versionB = new SemanticVersion(major, minor, patch);
+        Assert.Equal(expected, versionA.Equals(versionB));
+    }
+
+    // Test for GetHashCode
+    [Fact]
+    public void TestGetHashCode() {
+        var versionA = new SemanticVersion(1, 2, 3);
+        var versionB = new SemanticVersion(1, 2, 3);
+        Assert.Equal(versionA.GetHashCode(), versionB.GetHashCode());
+    }
+
+    // Test for Default Constructor
+    [Fact]
+    public void TestDefaultConstructor() {
+        var version = new SemanticVersion();
+        Assert.Equal(0, version.Major);
+        Assert.Equal(0, version.Minor);
+        Assert.Equal(0, version.Patch);
+        Assert.Null(version.Addendum);
+    }
+    
+    // Test for Equals(object)
+    [Theory]
+    [InlineData(1, 2, 3, true)]
+    [InlineData(1, 2, 4, false)]
+    public void TestObjectEquals(int major, int minor, int patch, bool expected) {
+        var versionA = new SemanticVersion(1, 2, 3);
+        // ReSharper disable once RedundantCast
+        object versionB = (object)new SemanticVersion(major, minor, patch);
+        Assert.Equal(expected, versionA.Equals(versionB));
+    }
+
+    // Test for less than or equal operator (<=)
+    [Theory]
+    [InlineData(1, 2, 3, 1, 2, 3, true)]
+    [InlineData(1, 2, 3, 1, 2, 4, true)]
+    [InlineData(1, 2, 4, 1, 2, 3, false)]
+    public void TestLessThanOrEqualOperator(int majorA, int minorA, int patchA, int majorB, int minorB, int patchB, bool expected)
+    {
+        var versionA = new SemanticVersion(majorA, minorA, patchA);
+        var versionB = new SemanticVersion(majorB, minorB, patchB);
+        Assert.Equal(expected, versionA <= versionB);
+    }
+
+    // Test for greater than or equal operator (>=)
+    [Theory]
+    [InlineData(1, 2, 3, 1, 2, 3, true)]
+    [InlineData(1, 2, 4, 1, 2, 3, true)]
+    [InlineData(1, 2, 3, 1, 2, 4, false)]
+    public void TestGreaterThanOrEqualOperator(int majorA, int minorA, int patchA, int majorB, int minorB, int patchB, bool expected)
+    {
+        var versionA = new SemanticVersion(majorA, minorA, patchA);
+        var versionB = new SemanticVersion(majorB, minorB, patchB);
+        Assert.Equal(expected, versionA >= versionB);
+    }
+
+    [Fact]
+    public void TestMax() {
+        SemanticVersion max = SemanticVersion.Max;
+        Assert.Equal(int.MaxValue, max.Major);
+        Assert.Equal(int.MaxValue, max.Minor);
+        Assert.Equal(int.MaxValue, max.Patch);
+        Assert.Equal(string.Empty, max.Addendum);
+    }
+    
+    [Fact]
+    public void TestZero() {
+        SemanticVersion zeo = SemanticVersion.Zero;
+        Assert.Equal(0, zeo.Major);
+        Assert.Equal(0, zeo.Minor);
+        Assert.Equal(0, zeo.Patch);
+        Assert.Equal(string.Empty, zeo.Addendum);
     }
 }
