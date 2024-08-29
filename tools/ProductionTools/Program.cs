@@ -2,9 +2,8 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Loggers;
-using CliArgsParser;
 using Microsoft.Extensions.DependencyInjection;
-using Serilog;
+using ProductionTools.Repo;
 using Serilog.Core;
 
 namespace ProductionTools;
@@ -24,6 +23,7 @@ public static class Program {
 
         IServiceCollection serviceCollection = new ServiceCollection();
         serviceCollection.AddSingleton<ILogger>(logger);
+        serviceCollection.AddSingleton<ProjectStatsRepo>();
 
         serviceCollection.AddCliArgsParser(configuration =>
             configuration

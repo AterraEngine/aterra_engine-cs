@@ -22,19 +22,9 @@ public class PluginExtractor : IBootOperation {
             components.DynamicServices.AddLastRepeated(
                 plugin.GetOfAttribute<InjectableAttribute>()
                     .Where(tuple => !tuple.Attribute.IsStatic)
+                    .SelectMany(tuple => tuple.Attribute.Interfaces.Select(@interface => (tuple.Type, tuple.Attribute, Interface:@interface )) )
                     .Select(tuple => new ServiceDescriptor(
-                        tuple.Attribute.Interface,
-                        tuple.Type,
-                        tuple.Attribute.Lifetime
-                    ))
-            );
-            #endregion
-            #region Import Static injectables from Assembly
-            components.StaticServices.AddLastRepeated(
-                plugin.GetOfAttribute<InjectableAttribute>()
-                    .Where(tuple => tuple.Attribute.IsStatic)
-                    .Select(tuple => new ServiceDescriptor(
-                        tuple.Attribute.Interface,
+                        tuple.Interface,
                         tuple.Type,
                         tuple.Attribute.Lifetime
                     ))

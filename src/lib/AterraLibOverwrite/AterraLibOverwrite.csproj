@@ -18,6 +18,13 @@
         <ProjectReference Include="..\..\lib\AterraLib\AterraLib.csproj"/>
     </ItemGroup>
 
+
+    <ItemGroup>
+      <PackageReference Include="JetBrains.Annotations" Version="2024.2.0" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
+    </ItemGroup>
+
     <Target Name="PackingToZip" AfterTargets="Build">
         <!-- Delete the existing zip file if it exists -->
         <!--    Else it is going to cause issues for the Wip down below -->

@@ -56,7 +56,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nexities", "Nexities", "{85
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FlexiPlug", "FlexiPlug", "{75CB17E9-4777-4066-A3B7-1B8CBA4A0D4F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common - Contracts", "Common - Contracts", "{042C6173-4125-4810-9F98-840C9038B966}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Shared", ".Shared", "{042C6173-4125-4810-9F98-840C9038B966}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraCore.Boot", "src\engine\AterraCore.Boot\AterraCore.Boot.csproj", "{0B74C51E-3BF7-43C4-B7B8-D8BC4587C641}"
 EndProject
