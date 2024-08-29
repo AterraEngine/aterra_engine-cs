@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace Tests.AterraCore.Attributes;
@@ -10,15 +11,15 @@ namespace Tests.AterraCore.Attributes;
 [TestSubject(typeof(InjectAsAttribute))]
 public class InjectAsAttributeTests {
     // Sample class and methods for testing
+    [ExcludeFromCodeCoverage]
     private class ClassWithMethodInjection {
-        public static void MethodWithInjection([InjectAs("01F8MECHZX3TBDSZ7T1R7Q3Q3E")] string _) {}
-
-        public static void MethodWithMultipleInjections([InjectAs("01F8MECHZX3TBDSZ7T1R7Q3Q3E")] [InjectAs] string _) {}
+        [ExcludeFromCodeCoverage] public static void MethodWithInjection([InjectAs("01F8MECHZX3TBDSZ7T1R7Q3Q3E")] string _) {}
+        [ExcludeFromCodeCoverage] public static void MethodWithMultipleInjections([InjectAs("01F8MECHZX3TBDSZ7T1R7Q3Q3E")] [InjectAs] string _) {}
     }
     
     [Fact]
     public void InjectAsAttribute_ShouldInitializeWithUlid() {
-        string ulidString = "01F8MECHZX3TBDSZ7T1R7Q3Q3E";
+        const string ulidString = "01F8MECHZX3TBDSZ7T1R7Q3Q3E";
         
         var attribute = new InjectAsAttribute(ulidString);
 
