@@ -50,13 +50,12 @@ public abstract class NexitiesEntity(params INexitiesComponent[] components) : A
 
     private INexitiesComponent[]? _components;
     public IReadOnlyCollection<INexitiesComponent> Components => (_components ??= _componentsById.Values.ToArray()).AsReadOnly();
-    
+
     private AssetId[]? _componentIds;
     public IReadOnlyCollection<AssetId> ComponentAssetIds => (_componentIds ??= _componentsById.Keys.ToArray()).AsReadOnly();
-    
+
     private Ulid[]? _componentUlids;
     public IReadOnlyCollection<Ulid> ComponentInstanceIds => (_componentUlids ??= _componentsByInstanceId.Keys.ToArray()).AsReadOnly();
-    
     #endregion
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -95,7 +94,7 @@ public abstract class NexitiesEntity(params INexitiesComponent[] components) : A
         component = default;
         if (!_componentsByType.TryGetValue(typeof(T), out AssetId assetId)) return false;
         if (!_componentsById.TryGetValue(assetId, out INexitiesComponent? nexitiesComponent)) return false;
-        
+
         component = (T)nexitiesComponent;
         return true;
     }
@@ -118,7 +117,7 @@ public abstract class NexitiesEntity(params INexitiesComponent[] components) : A
             _componentsById.TryRemove(component.AssetId, out _);
             return false;
         }
-        
+
         ClearCaches();
         return true;
     }

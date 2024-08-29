@@ -21,7 +21,7 @@ public static class Program {
             .MinimumLevel.Verbose()
             .DefaultSinkConsole()// Using the normal version of the Sink Console, else the empty lines get processed earlier.
             .CreateLogger();
-        
+
         IServiceCollection serviceCollection = new ServiceCollection();
         serviceCollection.AddSingleton<ILogger>(logger);
 
@@ -33,9 +33,9 @@ public static class Program {
                 })
                 .AddFromAssembly(typeof(Program).Assembly)
         );
-        
+
         ServiceProvider provider = serviceCollection.BuildServiceProvider();
-        var parser =  provider.GetRequiredService<IArgsParser>();
+        var parser = provider.GetRequiredService<IArgsParser>();
 
         await parser.ParseAsyncLinear(args);
     }

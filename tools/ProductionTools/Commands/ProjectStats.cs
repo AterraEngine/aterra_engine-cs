@@ -32,7 +32,7 @@ public class ProjectStats(ILogger logger) : ICommandAtlas {
         string[] searchPatterns = { "*.cs", "*.xsd" };
         var filePaths = new ConcurrentBag<string>();
 
-        Parallel.ForEach(searchPatterns, pattern => {
+        Parallel.ForEach(searchPatterns, body: pattern => {
             foreach (string file in Directory.GetFiles(args.Path, pattern, SearchOption.AllDirectories)) {
                 filePaths.Add(file);
             }
@@ -41,16 +41,16 @@ public class ProjectStats(ILogger logger) : ICommandAtlas {
         int totalLineCount = 0;
         int totalFileCount = filePaths.Count;
 
-        await Parallel.ForEachAsync(filePaths, async (filepath, ct) => {
+        await Parallel.ForEachAsync(filePaths, body: async (filepath, ct) => {
             Interlocked.Add(ref totalLineCount, (await File.ReadAllLinesAsync(filepath, ct)).Length);
         });
 
-        string fileTypes = string.Join(" & ", searchPatterns.Select(p => p.Replace("*","")));
+        string fileTypes = string.Join(" & ", searchPatterns.Select(p => p.Replace("*", "")));
         var builder = new ValuedStringBuilder();
         builder.AppendLine("Stats");
         builder.AppendLineValued($"- Files ({fileTypes}) : ", totalFileCount);
         builder.AppendLineValued($"- Lines ({fileTypes}) : ", totalLineCount);
-        
+
         logger.Information(builder.ToString(), builder.ValuesToArray());
 
 

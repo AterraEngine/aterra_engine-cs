@@ -22,7 +22,10 @@ namespace AterraCore.OmniVault.World;
 /// </summary>
 [UsedImplicitly]
 public class AterraCoreWorld(
-    IAssetInstanceAtlas instanceAtlas, ILogger logger, IActiveLevelFactory levelFactory, ICrossThreadQueue crossThreadQueue
+    IAssetInstanceAtlas instanceAtlas,
+    ILogger logger,
+    IActiveLevelFactory levelFactory,
+    ICrossThreadQueue crossThreadQueue
 ) : IAterraCoreWorld {
     /// <summary>
     /// Represents a Logger used for logging information and messages.
@@ -33,6 +36,7 @@ public class AterraCoreWorld(
     /// Represents the lock object used to synchronize access to the active level in the AterraCoreWorld class.
     /// </summary>
     private readonly ReaderWriterLockSlim _activeLevelLock = new();
+
     /// <summary>
     /// Represents the current active level.
     /// </summary>
@@ -51,10 +55,10 @@ public class AterraCoreWorld(
         IEnumerable<AssetId> oldTextureAssetIds = oldLevel?.TextureAssetIds.ToArray() ?? [];
         IEnumerable<AssetId> newTextureAssetIds = activeLevel?.TextureAssetIds.ToArray() ?? [];
 
-        Parallel.ForEach(oldTextureAssetIds.Except(newTextureAssetIds), id => {
+        Parallel.ForEach(oldTextureAssetIds.Except(newTextureAssetIds), body: id => {
             crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar(id, true));
         });
-        Parallel.ForEach(newTextureAssetIds.Except(oldTextureAssetIds), id => {
+        Parallel.ForEach(newTextureAssetIds.Except(oldTextureAssetIds), body: id => {
             crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar(id, false));
         });
     }
@@ -95,7 +99,7 @@ public class AterraCoreWorld(
         Logger.Information("Active Level successfully created.");
         return true;
     }
-    
+
     /// <summary> Attempts to retrieve the current active level </summary>
     /// <param name="level">An out parameter to store the active level, if successful.</param>
     /// <returns>True if the active level is successfully retrieved; otherwise, false.</returns>

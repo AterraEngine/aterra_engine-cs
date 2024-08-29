@@ -12,7 +12,7 @@ namespace AterraCore.Contracts.Boot;
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IBootComponents {
     IServiceCollection Services { get; }
-    
+
     IFilePathPluginLoader PluginLoader { get; }
     LinkedList<ServiceDescriptor> DefaultServices { get; }
     LinkedList<ServiceDescriptor> StaticServices { get; }

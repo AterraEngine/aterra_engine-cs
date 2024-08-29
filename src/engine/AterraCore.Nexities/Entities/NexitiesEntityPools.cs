@@ -31,7 +31,6 @@ public class NexitiesEntityPools : INexitiesEntityPools {
         }
     }
     #endregion
-
     #region ComponentsByTypePool
     private ObjectPool<ConcurrentDictionary<Type, AssetId>>? _componentsByTypePool;
     public ObjectPool<ConcurrentDictionary<Type, AssetId>> ComponentsByTypePool =>
@@ -45,12 +44,11 @@ public class NexitiesEntityPools : INexitiesEntityPools {
         }
     }
     #endregion
-
     #region ComponentsByInstanceIdPool
     private ObjectPool<ConcurrentDictionary<Ulid, AssetId>>? _componentsByInstanceIdPool;
     public ObjectPool<ConcurrentDictionary<Ulid, AssetId>> ComponentsByInstanceIdPool =>
         _componentsByInstanceIdPool ??= _objectPoolProvider.Create(new ComponentsByInstanceIdPoolPolicy(InitialCapacity));
-    
+
     private class ComponentsByInstanceIdPoolPolicy(int capacity) : PooledObjectPolicy<ConcurrentDictionary<Ulid, AssetId>> {
         public override ConcurrentDictionary<Ulid, AssetId> Create() => new(4, capacity);
         public override bool Return(ConcurrentDictionary<Ulid, AssetId> obj) {

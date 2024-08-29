@@ -31,7 +31,7 @@
         <value>Duplicate AssetId '{0}' found at locations {1}</value>
     </data>
     <data name="AE0001Description" xml:space="preserve">
-        <value />
+        <value/>
     </data>
     <data name="AE0001CodeFixTitle" xml:space="preserve">
         <value>Change the AssetId</value>

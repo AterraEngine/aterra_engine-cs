@@ -14,7 +14,7 @@ public record BootComponents(
     IFilePathPluginLoader PluginLoader
 ) : IBootComponents {
     public IServiceCollection Services { get; } = new ServiceCollection();
-    
+
     public LinkedList<ServiceDescriptor> DefaultServices { get; } = [];
     public LinkedList<ServiceDescriptor> StaticServices { get; } = [];
     public LinkedList<ServiceDescriptor> DynamicServices { get; } = [];

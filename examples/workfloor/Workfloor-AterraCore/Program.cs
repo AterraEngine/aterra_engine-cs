@@ -32,6 +32,6 @@ public static class Program {
         // --- Engine is running ---
         // Actually startup the engine
         if (!args.IsEmpty()) await argsParser.ParseAsyncLinear(args);
-        else                 await engine.Run();
+        else await engine.Run();
     }
 }

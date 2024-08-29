@@ -101,7 +101,8 @@ public class AssetAttributePartialIdAnalyzers : DiagnosticAnalyzer {
 
     private static bool InheritsFrom(ITypeSymbol symbol, string baseTypeFullName) {
         for (ITypeSymbol? baseType = symbol; baseType != null; baseType = baseType.BaseType)
-            if (baseType.ToDisplayString().Equals(baseTypeFullName)) return true;
+            if (baseType.ToDisplayString().Equals(baseTypeFullName))
+                return true;
         return false;
     }
 
