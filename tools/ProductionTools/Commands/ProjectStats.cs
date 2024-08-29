@@ -14,7 +14,7 @@ namespace ProductionTools.Commands;
 [SuppressMessage("ReSharper", "AutoPropertyCanBeMadeGetOnly.Global")]
 [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
 public class StatCountArgsOptions : ICommandParameters {
-    [ArgValue("path")] public string Path { get; set; } = @"E:\Portfolio\internal\005-aterra_engine\0001-cs-aterra_engine";
+    [ArgValue("path")] public string Path { get; set; } = "../../../../../../";
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -42,8 +42,8 @@ public class ProjectStats(ILogger logger, ProjectStatsRepo repo) : ICommandAtlas
         int totalCharCount = charCounts.Sum();
         int totalFileCount = filePaths.Count;
         
-        logger.Information($"Stats : Files ({fileTypes}) : ", totalFileCount);
-        logger.Information($"Stats : Lines ({fileTypes}) : ", totalLineCount);
-        logger.Information($"Stats : Chars ({fileTypes}) : ", totalCharCount);
+        logger.Information("Stats : Files ({fileTypes}) : {count}",fileTypes, totalFileCount);
+        logger.Information("Stats : Lines ({fileTypes}) : {count}",fileTypes, totalLineCount);
+        logger.Information("Stats : Chars ({fileTypes}) : {count}",fileTypes, totalCharCount);
     }
 }
