@@ -6,5 +6,5 @@ namespace AterraCore.Nexities.Entities;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class EmptyNexitiesEntity : NexitiesEntity {
-    protected override void ComponentOverwritten() {}
+    protected override void ClearCaches() {}
 }

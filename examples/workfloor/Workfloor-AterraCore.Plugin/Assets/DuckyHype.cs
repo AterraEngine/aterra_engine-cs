@@ -45,8 +45,3 @@ public class DuckyHypeActor(
     IDirectChildren childEntities,
     IImpulse2D impulse2D
 ) : Actor2D(transform2D, sprite2D, childEntities, impulse2D), IDuckyHypeActor;
-
-
-[Entity("Workfloor:ActorDuckyHype")]
-[UsedImplicitly]
-public class DuckyHypeActor2(ITransform2D transform2D, ISprite2D sprite2D, IDirectChildren children, IImpulse2D impulse2D) : Actor2D(transform2D, sprite2D, children, impulse2D);

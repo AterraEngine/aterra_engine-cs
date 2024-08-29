@@ -5,6 +5,7 @@ using CliArgsParser;
 using CodeOfChaos.Extensions.Serilog;
 using JetBrains.Annotations;
 using Serilog;
+using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 
 namespace ProductionTools.Commands;
@@ -28,22 +29,29 @@ public class ProjectStats(ILogger logger) : ICommandAtlas {
     [UsedImplicitly]
     public async Task StatsCounter(StatCountArgsOptions args) {
 
-        string[] filePaths = Directory.GetFiles(args.Path, "*.cs", SearchOption.AllDirectories);
-        int totalLineCount = 0;
-        int totalFileCountCs = filePaths.Length;
+        string[] searchPatterns = { "*.cs", "*.xsd" };
+        var filePaths = new ConcurrentBag<string>();
 
-        await Parallel.ForEachAsync(
-            filePaths, body: async (filepath, ct) => {
-                Interlocked.Add(ref totalLineCount, (await File.ReadAllLinesAsync(filepath, ct)).Length);
+        Parallel.ForEach(searchPatterns, pattern => {
+            foreach (string file in Directory.GetFiles(args.Path, pattern, SearchOption.AllDirectories)) {
+                filePaths.Add(file);
             }
-        );
+        });
 
+        int totalLineCount = 0;
+        int totalFileCount = filePaths.Count;
+
+        await Parallel.ForEachAsync(filePaths, async (filepath, ct) => {
+            Interlocked.Add(ref totalLineCount, (await File.ReadAllLinesAsync(filepath, ct)).Length);
+        });
+
+        string fileTypes = string.Join(" & ", searchPatterns.Select(p => p.Replace("*","")));
         var builder = new ValuedStringBuilder();
         builder.AppendLine("Stats");
-        builder.AppendLineValued("- Files (.cs) : ", totalFileCountCs);
-        builder.AppendLineValued("- Lines (.cs) : ", totalLineCount);
-
-        logger.Information(builder);
+        builder.AppendLineValued($"- Files ({fileTypes}) : ", totalFileCount);
+        builder.AppendLineValued($"- Lines ({fileTypes}) : ", totalLineCount);
+        
+        logger.Information(builder.ToString(), builder.ValuesToArray());
 
 
     }

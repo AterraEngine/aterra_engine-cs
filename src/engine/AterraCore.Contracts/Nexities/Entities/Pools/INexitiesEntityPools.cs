@@ -11,6 +11,7 @@ namespace AterraCore.Contracts.Nexities.Entities.Pools;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface INexitiesEntityPools {
-    ObjectPool<ConcurrentDictionary<AssetId, INexitiesComponent>> ComponentPool { get; }
-    ObjectPool<ConcurrentDictionary<Type, AssetId>> ComponentTypePool { get; }
+    ObjectPool<ConcurrentDictionary<AssetId, INexitiesComponent>> ComponentsByIdPool { get; }
+    ObjectPool<ConcurrentDictionary<Type, AssetId>> ComponentsByTypePool { get; }
+    ObjectPool<ConcurrentDictionary<Ulid, AssetId>> ComponentsByInstanceIdPool { get; }
 }

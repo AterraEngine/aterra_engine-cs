@@ -14,7 +14,7 @@ public class Hud(IDirectChildren children) : NexitiesEntity(children), IHud {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    protected override void ComponentOverwritten() {
+    protected override void ClearCaches() {
         _children = null;
     }
 }

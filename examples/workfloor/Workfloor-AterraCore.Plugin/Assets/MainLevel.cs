@@ -51,6 +51,6 @@ public class MainLevel(
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    protected override void ComponentOverwritten() {}
+    protected override void ClearCaches() {}
     public void OnLevelCreation() {}
 }

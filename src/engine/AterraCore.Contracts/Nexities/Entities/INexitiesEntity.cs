@@ -13,6 +13,7 @@ namespace AterraCore.Contracts.Nexities.Entities;
 public interface INexitiesEntity : IAssetInstance {
     IReadOnlyCollection<INexitiesComponent> Components { get; }
     IReadOnlyCollection<AssetId> ComponentAssetIds { get; }
+    public IReadOnlyCollection<Ulid> ComponentInstanceIds { get; }
 
     T GetComponent<T>(AssetId assetId) where T : INexitiesComponent;
     T GetComponent<T>() where T : INexitiesComponent;

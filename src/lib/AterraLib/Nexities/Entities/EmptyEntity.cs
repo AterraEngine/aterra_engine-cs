@@ -11,5 +11,5 @@ public class EmptyEntity : NexitiesEntity, IEmptyEntity {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    protected override void ComponentOverwritten() {}
+    protected override void ClearCaches() {}
 }

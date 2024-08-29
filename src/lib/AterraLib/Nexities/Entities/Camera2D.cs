@@ -15,7 +15,7 @@ public class Camera2D(IImpulse2D impulse2D, IRaylibCamera2D raylibCamera2D) : Ne
     private IRaylibCamera2D? _raylibCamera2D = raylibCamera2D;
     public IRaylibCamera2D RaylibCamera2D => _raylibCamera2D ??= GetComponent<IRaylibCamera2D>();
 
-    protected override void ComponentOverwritten() {
+    protected override void ClearCaches() {
         _impulse2D = null;
         _raylibCamera2D = null;
     }

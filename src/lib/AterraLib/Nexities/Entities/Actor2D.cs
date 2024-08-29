@@ -25,7 +25,7 @@ public class Actor2D(ITransform2D transform2D, ISprite2D sprite2D, IDirectChildr
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    protected override void ComponentOverwritten() {
+    protected override void ClearCaches() {
         _transform2D = null;
         _sprite2D = null;
         _children = null;

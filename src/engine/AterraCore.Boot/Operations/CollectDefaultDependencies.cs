@@ -17,7 +17,7 @@ using AterraCore.Contracts.Threading.Logic;
 using AterraCore.Contracts.Threading.Rendering;
 using AterraCore.FlexiPlug;
 using AterraCore.Loggers;
-using AterraCore.Nexities.Entities.Pools;
+using AterraCore.Nexities.Entities;
 using AterraCore.OmniVault.Assets;
 using AterraCore.OmniVault.DataCollector;
 using AterraCore.OmniVault.Textures;
