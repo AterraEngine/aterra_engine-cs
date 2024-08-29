@@ -11,12 +11,17 @@ namespace Tests.AterraCore.Common.Data;
 public class AssetRegistrationTest {
     // Sample types for testing
     private class SampleAsset : ISampleInterface;
+
     private class SecondSampleAsset : ISampleInterface;
+
     private class SingletonAsset : ISampleInterface;
+
     private class DerivedAsset : SampleAsset, IDerivedInterface;
+
     private interface ISampleInterface;
+
     private interface IDerivedInterface : ISampleInterface;
-    
+
     [Fact]
     public void Constructor_ShouldInitializePropertiesCorrectly() {
         var assetId = new AssetId("test:sample.asset");
@@ -53,7 +58,7 @@ public class AssetRegistrationTest {
         ConstructorInfo expectedConstructor = type.GetConstructors().First();
         Assert.Equal(expectedConstructor, registration.Constructor);
     }
-    
+
     [Fact]
     public void Constructor_InterfacesInit() {
         Type type = typeof(SampleAsset);
@@ -67,7 +72,7 @@ public class AssetRegistrationTest {
 
         Type[] expectedInterfaces = [typeof(ISampleInterface), typeof(IDerivedInterface)];
         Assert.Subset(new HashSet<Type>(expectedInterfaces), new HashSet<Type>(registration.DerivedInterfaceTypes));
-        
+
     }
 
     [Fact]
@@ -91,7 +96,7 @@ public class AssetRegistrationTest {
         Assert.True(registrationWithSingleton.IsSingleton);
         Assert.False(registrationWithoutSingleton.IsSingleton);
     }
-    
+
 
     [Fact]
     public void DerivedInterfaceTypes_ShouldContainCorrectInterfaces() {
@@ -105,7 +110,7 @@ public class AssetRegistrationTest {
         Type[] expectedInterfaces = [typeof(ISampleInterface), typeof(IDerivedInterface)];
         Assert.Subset(new HashSet<Type>(expectedInterfaces), new HashSet<Type>(registration.DerivedInterfaceTypes));
     }
-    
+
     [Fact]
     public void InterfaceTypes_ShouldInitializeToEmpty() {
         var registration = new AssetRegistration(
@@ -119,7 +124,7 @@ public class AssetRegistrationTest {
     [Fact]
     public void AssetId_Property_ShouldReturnCorrectValue() {
         var assetId = new AssetId("test:sample.asset");
-            
+
         var registration = new AssetRegistration(
             assetId,
             typeof(SampleAsset)
@@ -139,7 +144,7 @@ public class AssetRegistrationTest {
 
         Assert.Equal(type, registration.Type);
     }
-    
+
     [Fact]
     public void Type_Property_Set() {
         Type type = typeof(SampleAsset);
@@ -154,7 +159,7 @@ public class AssetRegistrationTest {
 
         Assert.Equal(typeNew, registration.Type);
     }
-    
+
     [Fact]
     public void AssetId_Property_Set() {
         var idNew = new AssetId("test:sample.asset.new");
@@ -167,6 +172,6 @@ public class AssetRegistrationTest {
 
         registration.AssetId = idNew;
 
-        Assert.Equal(idNew,registration.AssetId);
+        Assert.Equal(idNew, registration.AssetId);
     }
 }

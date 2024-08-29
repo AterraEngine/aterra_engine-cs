@@ -22,9 +22,9 @@ public class PluginConfigXml {
     [XmlIgnore] public SemanticVersion PluginVersion => _pluginVersionCache ??= new SemanticVersion(PluginVersionValue);
     [XmlIgnore] private SemanticVersion? _gameVersionCache;
     [XmlIgnore] public SemanticVersion GameVersion => _gameVersionCache ??= new SemanticVersion(GameVersionValue);
-    
+
     [XmlIgnore] public IEnumerable<BinDto> Dlls => BinDtos;
-    
+
     // For reasons, I shall use nested classes
     // Yes these reasons are undefined
     public class BinDto {

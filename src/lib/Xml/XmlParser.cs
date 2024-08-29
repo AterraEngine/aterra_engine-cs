@@ -1,18 +1,16 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
 using Serilog;
 using System.Text;
 using System.Xml;
 using System.Xml.Schema;
-using Xml.Contracts;
 
 namespace Xml;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class XmlParser<T>(ILogger logger, string nameSpace, string xsdPath) : IConfigXmlParser<T> where T : new() {
+public class XmlParser<T>(ILogger logger, string nameSpace, string xsdPath) where T : new() {
     private readonly XmlReaderSettings _readerSettings = DefineReaderSettings(logger, nameSpace, xsdPath);
     private readonly XmlSerializer _serializer = new(typeof(T), nameSpace);
 

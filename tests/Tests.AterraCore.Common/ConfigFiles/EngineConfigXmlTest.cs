@@ -13,7 +13,7 @@ public class EngineConfigXmlTest {
     [Fact]
     public void EngineConfigXml_ShouldInitializeWithDefaultValues() {
         var configXml = new EngineConfigXml();
-        
+
         Assert.NotNull(configXml.LoggingConfig);
         Assert.NotNull(configXml.LoadOrder);
         Assert.Equal(Paths.Plugins.Folder, configXml.LoadOrder.RootFolderRelative);

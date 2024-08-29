@@ -14,11 +14,11 @@ public class InjectAsAttributeTests {
         [ExcludeFromCodeCoverage] public static void MethodWithInjection([InjectAs("01F8MECHZX3TBDSZ7T1R7Q3Q3E")] string _) {}
         [ExcludeFromCodeCoverage] public static void MethodWithMultipleInjections([InjectAs("01F8MECHZX3TBDSZ7T1R7Q3Q3E")] [InjectAs] string _) {}
     }
-    
+
     [Fact]
     public void InjectAsAttribute_ShouldInitializeWithUlid() {
         const string ulidString = "01F8MECHZX3TBDSZ7T1R7Q3Q3E";
-        
+
         var attribute = new InjectAsAttribute(ulidString);
 
         Assert.Equal(Ulid.Parse(ulidString, CultureInfo.InvariantCulture), attribute.Ulid);

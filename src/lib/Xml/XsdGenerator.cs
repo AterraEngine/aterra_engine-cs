@@ -5,26 +5,26 @@
 using Serilog;
 using System.Text;
 using System.Xml;
-using Xml.Contracts;
+using System.Xml.Schema;
 
 namespace Xml;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class XsdGenerator<T>(ILogger logger) : IXsdGenerator {
-    private readonly Type _type = typeof(T);
+public class XsdGenerator(ILogger logger) {
+    public void GenerateXsd<T>(string nameSpace, bool prettify, string outputPath) => GenerateXsd(typeof(T), nameSpace, prettify, outputPath);
+    public void GenerateXsd(Type type, string nameSpace, bool prettify, string outputPath) {
 
-    public void GenerateXsd(string nameSpace, bool prettify, string outputPath) {
-
-        logger.Information("Generating XML Schema (XSD) for object type: {Name}.", _type.FullName);
+        logger.Information("Generating XML Schema (XSD) for object type: {Name}.", type.FullName);
 
         var importer = new XmlReflectionImporter(null, nameSpace);
         var schemas = new XmlSchemas();
         var exporter = new XmlSchemaExporter(schemas);
+        XmlSchema validSchema = schemas[0];
 
         try {
             logger.Debug("Importing type mapping...");
-            XmlTypeMapping map = importer.ImportTypeMapping(_type);
+            XmlTypeMapping map = importer.ImportTypeMapping(type);
 
             logger.Debug("Exporting type mapping...");
             exporter.ExportTypeMapping(map);
@@ -38,7 +38,7 @@ public class XsdGenerator<T>(ILogger logger) : IXsdGenerator {
                 }
             );
 
-            schemas[0].Write(writer);
+            validSchema.Write(writer);
             logger.Information("XML Schema (XSD) generated successfully at {Path}.", outputPath);
         }
         catch (Exception ex) {

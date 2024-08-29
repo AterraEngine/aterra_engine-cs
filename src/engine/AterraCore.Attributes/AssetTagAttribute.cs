@@ -12,4 +12,3 @@ namespace AterraCore.Attributes;
 public class AssetTagAttribute(params string[] tags) : Attribute {
     public string[] Tags { get; } = !tags.IsEmpty() ? tags : throw new ArgumentException("Tags cannot be empty.");
 }
-

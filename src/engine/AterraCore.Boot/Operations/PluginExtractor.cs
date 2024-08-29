@@ -22,7 +22,7 @@ public class PluginExtractor : IBootOperation {
             components.DynamicServices.AddLastRepeated(
                 plugin.GetOfAttribute<InjectableAttribute>()
                     .Where(tuple => !tuple.Attribute.IsStatic)
-                    .SelectMany(tuple => tuple.Attribute.Interfaces.Select(@interface => (tuple.Type, tuple.Attribute, Interface:@interface )) )
+                    .SelectMany(tuple => tuple.Attribute.Interfaces.Select(@interface => (tuple.Type, tuple.Attribute, Interface: @interface)))
                     .Select(tuple => new ServiceDescriptor(
                         tuple.Interface,
                         tuple.Type,

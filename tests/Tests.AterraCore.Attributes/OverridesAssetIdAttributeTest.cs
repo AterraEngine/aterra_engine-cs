@@ -16,7 +16,7 @@ public class OverridesAssetIdAttributeTests {
     [OverridesAssetId("test:first.override.asset.id")]
     [OverridesAssetId("test:second.override.asset.id")]
     private class ClassWithMultipleOverridesAssetId;
-    
+
     [Fact]
     public void OverridesAssetIdAttribute_ShouldInitializeCorrectly() {
         const string assetId = "test:overridden.asset.id";

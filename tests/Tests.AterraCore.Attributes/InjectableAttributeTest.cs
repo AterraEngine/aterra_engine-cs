@@ -11,7 +11,9 @@ namespace Tests.AterraCore.Attributes;
 public class InjectableAttributeTests {
     // Sample interfaces for testing
     private interface ISampleInterface1;
+
     private interface ISampleInterface2;
+
     private interface ISampleInterface3;
 
     // Sample classes with InjectableAttribute for testing

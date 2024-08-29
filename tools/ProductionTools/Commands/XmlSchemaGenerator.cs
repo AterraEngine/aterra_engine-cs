@@ -5,7 +5,6 @@ using AterraCore.Common.ConfigFiles;
 using System.Diagnostics.CodeAnalysis;
 using JetBrains.Annotations;
 using Xml;
-using Xml.Contracts;
 using AterraCore.Common.Data;
 
 namespace ProductionTools.Commands;
@@ -22,17 +21,19 @@ public class ArgsOptions : ICommandParameters {
 }
 
 public record XsdGeneratorRecord(
-    IXsdGenerator Generator,
-    string NameSpace
+    string NameSpace,
+    Type Type
 );
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class XmlSchemaGenerator(ILogger logger) : ICommandAtlas {
+    private readonly XsdGenerator _xsdGenerator = new(logger);
+
     private readonly Dictionary<string, XsdGeneratorRecord> _dictionary = new() {
-        { "engine-config", new XsdGeneratorRecord(new XsdGenerator<EngineConfigXml>(logger), XmlNameSpaces.ConfigEngine) },
-        { "plugin-config", new XsdGeneratorRecord(new XsdGenerator<PluginConfigXml>(logger), XmlNameSpaces.ConfigPlugin) }
+        { "engine-config", new XsdGeneratorRecord(XmlNameSpaces.ConfigEngine, typeof(EngineConfigXml)) },
+        { "plugin-config", new XsdGeneratorRecord(XmlNameSpaces.ConfigPlugin, typeof(PluginConfigXml)) }
     };
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -55,7 +56,8 @@ public class XmlSchemaGenerator(ILogger logger) : ICommandAtlas {
         logger.Information("Generating XML Schema for {ClassName} with output path {Path}.",
             className, outputPath);
 
-        record.Generator.GenerateXsd(
+        _xsdGenerator.GenerateXsd(
+            record.Type,
             record.NameSpace,
             argsOptions.Prettify,
             outputPath

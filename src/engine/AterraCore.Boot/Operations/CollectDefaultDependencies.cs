@@ -77,23 +77,23 @@ public class CollectDefaultDependencies : IBootOperation {
             NewServiceDescriptor<IDataCollectorFactory, DataCollectorFactory>(ServiceLifetime.Singleton),
             ServiceDescriptor.Singleton<IDataCollector>(provider => provider.GetRequiredService<IDataCollectorFactory>().Create()),
             #endregion
-   
+
         ];
-        
+
         #region PoolCorp
         IEnumerable<ServiceDescriptor> enumerable = Assembly.Load("AterraCore.PoolCorp")
-            .GetTypes()
-            .Select(type => (type, Attributes: type.GetCustomAttributes<InjectableAttribute>()))
-            .Where(tuple => tuple.type is { IsClass: true, IsAbstract: false } && tuple.Attributes.Any())
-            .SelectMany(tuple => tuple.Attributes
-                .SelectMany(attribute => attribute.Interfaces.Select(@interface => (tuple.type, attribute, Interface:@interface )) )
-            )
-            .Select(tuple => new ServiceDescriptor(
-                tuple.Interface,
-                tuple.type,
-                tuple.attribute.Lifetime
-            ))
-        ;
+                .GetTypes()
+                .Select(type => (type, Attributes: type.GetCustomAttributes<InjectableAttribute>()))
+                .Where(tuple => tuple.type is { IsClass: true, IsAbstract: false } && tuple.Attributes.Any())
+                .SelectMany(tuple => tuple.Attributes
+                    .SelectMany(attribute => attribute.Interfaces.Select(@interface => (tuple.type, attribute, Interface: @interface)))
+                )
+                .Select(tuple => new ServiceDescriptor(
+                    tuple.Interface,
+                    tuple.type,
+                    tuple.attribute.Lifetime
+                ))
+            ;
         dependencies.AddRange(enumerable);
         #endregion
 

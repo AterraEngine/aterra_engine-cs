@@ -55,18 +55,18 @@ public class PluginConfigXmlTest {
     [Fact]
     public void PluginConfigXml_ShouldDeserializeFromXmlCorrectly() {
         const string xml = """
-        <pluginConfig>
-            <nameSpace>TestNamespace</nameSpace>
-            <nameReadable>Test Plugin</nameReadable>
-            <author>Test Author</author>
-            <pluginVersion>1.0.0</pluginVersion>
-            <expectedGameVersion>1.2.3</expectedGameVersion>
-            <bins>
-                <bin file="file1.dll" />
-                <bin file="file2.dll" />
-            </bins>
-        </pluginConfig>
-        """;
+            <pluginConfig>
+                <nameSpace>TestNamespace</nameSpace>
+                <nameReadable>Test Plugin</nameReadable>
+                <author>Test Author</author>
+                <pluginVersion>1.0.0</pluginVersion>
+                <expectedGameVersion>1.2.3</expectedGameVersion>
+                <bins>
+                    <bin file="file1.dll" />
+                    <bin file="file2.dll" />
+                </bins>
+            </pluginConfig>
+            """;
 
         var serializer = new XmlSerializer(typeof(PluginConfigXml));
         using var stringReader = new StringReader(xml);

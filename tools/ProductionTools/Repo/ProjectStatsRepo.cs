@@ -4,7 +4,6 @@
 using System.Collections.Concurrent;
 
 namespace ProductionTools.Repo;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -12,13 +11,13 @@ public class ProjectStatsRepo(ILogger logger) {
     #region GetAllFilePaths
     public ConcurrentBag<string> GetAllFilePaths(string basePath, string[] searchPatterns) {
         var filePaths = new ConcurrentBag<string>();
-        
+
         Parallel.ForEach(searchPatterns, body: pattern => {
             foreach (string file in Directory.GetFiles(basePath, pattern, SearchOption.AllDirectories)) {
                 filePaths.Add(file);
             }
         });
-        
+
         logger.Debug($"Found {filePaths.Count} file entries");
         return filePaths;
     }
@@ -28,8 +27,8 @@ public class ProjectStatsRepo(ILogger logger) {
         await GetAllLineCountsAsync(GetAllFilePaths(basePath, searchPatterns), cancellationToken);
     public async Task<ConcurrentBag<int>> GetAllLineCountsAsync(IEnumerable<string> filePaths, CancellationToken cancellationToken = default) {
         var lineCounts = new ConcurrentBag<int>();
-        
-        await Parallel.ForEachAsync(filePaths, cancellationToken, async (filepath, ct) => {
+
+        await Parallel.ForEachAsync(filePaths, cancellationToken, body: async (filepath, ct) => {
                 lineCounts.Add((await File.ReadAllLinesAsync(filepath, ct)).Length);
             }
         );
@@ -42,9 +41,9 @@ public class ProjectStatsRepo(ILogger logger) {
         await GetAllCharCountsAsync(GetAllFilePaths(basePath, searchPatterns), cancellationToken);
     public async Task<ConcurrentBag<int>> GetAllCharCountsAsync(IEnumerable<string> filePaths, CancellationToken cancellationToken = default) {
         var charCounts = new ConcurrentBag<int>();
-        
+
         await Parallel.ForEachAsync(filePaths, cancellationToken,
-            async (filepath, token) => {
+            body: async (filepath, token) => {
                 using var reader = new StreamReader(filepath);
                 while (await reader.ReadLineAsync(token) is {} line) {
                     charCounts.Add(line.Length);
