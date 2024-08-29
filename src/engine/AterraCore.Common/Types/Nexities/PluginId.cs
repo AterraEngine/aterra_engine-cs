@@ -26,7 +26,7 @@ public readonly struct PluginId :
     // Constructors
     // -----------------------------------------------------------------------------------------------------------------
     public PluginId(string value) {
-        Match match = RegexLib.PluginId.Match(value);
+        Match match = RegexLib.AssetPartial.Match(value);
         if (!match.Groups[1].Success) throw new ArgumentException("Plugin Id could not be determined ");
         Value = match.Groups[1].Value;
         _hashCode = ComputeHashCode();
@@ -48,7 +48,7 @@ public readonly struct PluginId :
     // Helper Methods
     // -----------------------------------------------------------------------------------------------------------------
     public static bool TryCreateNew(string value, [NotNullWhen(true)] out PluginId? output) {
-        Match match = RegexLib.PluginId.Match(value);
+        Match match = RegexLib.AssetPartial.Match(value);
         if (!match.Groups[1].Success) {
             output = null;
             return false;

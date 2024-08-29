@@ -1,10 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Types.Nexities;
-using JetBrains.Annotations;
-
-namespace AterraEngine.Tests.Core.Types.Types.Nexities;
+namespace Tests.AterraCore.Common.Types.Nexities;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -21,8 +18,42 @@ public class AssetIdTest {
     [InlineData("PLUGINNAME:FOLDER_ANOTHER/ITEM", "PLUGINNAME", new[] { "FOLDER_ANOTHER", "ITEM" })]
     [InlineData("PLUGINNAME:FOLDER_ANOTHER.ITEM", "PLUGINNAME", new[] { "FOLDER_ANOTHER", "ITEM" })]
     [InlineData("PluginName:Folder.Item", "PluginName", new[] { "Folder", "Item" })]
-    public void AssetId_Creation_Test(string fullAssetId, string pluginName, string[] namespaces) {
+    public void AssetIdCreationTest(string fullAssetId, string pluginName, string[] namespaces) {
         var assetIdRegex = new AssetId(fullAssetId);
+        Assert.Equal(pluginName, assetIdRegex.PluginId.Value);
+        Assert.Equal(namespaces, assetIdRegex.AssetName.Values);
+    }
+
+    [Theory]
+    [InlineData("pluginName", "folder/item", "pluginName", new[] { "folder", "item" })]
+    [InlineData("plugin_Name", "folder/item", "plugin_Name", new[] { "folder", "item" })]
+    [InlineData("plugin_Name", "folder_another/item", "plugin_Name", new[] { "folder_another", "item" })]
+    [InlineData("pluginName", "folder_another/item", "pluginName", new[] { "folder_another", "item" })]
+    [InlineData("PLUGINNAME", "FOLDER/ITEM", "PLUGINNAME", new[] { "FOLDER", "ITEM" })]
+    [InlineData("PLUGIN_NAME", "FOLDER/ITEM", "PLUGIN_NAME", new[] { "FOLDER", "ITEM" })]
+    [InlineData("PLUGIN_NAME", "FOLDER_ANOTHER/ITEM", "PLUGIN_NAME", new[] { "FOLDER_ANOTHER", "ITEM" })]
+    [InlineData("PLUGINNAME", "FOLDER_ANOTHER/ITEM", "PLUGINNAME", new[] { "FOLDER_ANOTHER", "ITEM" })]
+    [InlineData("PLUGINNAME", "FOLDER_ANOTHER.ITEM", "PLUGINNAME", new[] { "FOLDER_ANOTHER", "ITEM" })]
+    [InlineData("PluginName", "Folder.Item", "PluginName", new[] { "Folder", "Item" })]
+    public void AssetIdThoughFullStringsCreationTest(string pluginId, string assetName, string pluginName, string[] namespaces) {
+        var assetIdRegex = new AssetId(pluginId, assetName);
+        Assert.Equal(pluginName, assetIdRegex.PluginId.Value);
+        Assert.Equal(namespaces, assetIdRegex.AssetName.Values);
+    }
+
+
+    [Theory]
+    [InlineData("pluginName", new[] { "folder", "item" }, "pluginName", new[] { "folder", "item" })]
+    [InlineData("plugin_Name", new[] { "folder", "item" }, "plugin_Name", new[] { "folder", "item" })]
+    [InlineData("plugin_Name", new[] { "folder_another", "item" }, "plugin_Name", new[] { "folder_another", "item" })]
+    [InlineData("pluginName", new[] { "folder_another", "item" }, "pluginName", new[] { "folder_another", "item" })]
+    [InlineData("PLUGINNAME", new[] { "FOLDER", "ITEM" }, "PLUGINNAME", new[] { "FOLDER", "ITEM" })]
+    [InlineData("PLUGIN_NAME", new[] { "FOLDER", "ITEM" }, "PLUGIN_NAME", new[] { "FOLDER", "ITEM" })]
+    [InlineData("PLUGIN_NAME", new[] { "FOLDER_ANOTHER", "ITEM" }, "PLUGIN_NAME", new[] { "FOLDER_ANOTHER", "ITEM" })]
+    [InlineData("PLUGINNAME", new[] { "FOLDER_ANOTHER", "ITEM" }, "PLUGINNAME", new[] { "FOLDER_ANOTHER", "ITEM" })]
+    [InlineData("PluginName", new[] { "Folder", "Item" }, "PluginName", new[] { "Folder", "Item" })]
+    public void AssetIdThoughStringPartsCreationTest(string pluginId, IEnumerable<string> assetName, string pluginName, string[] namespaces) {
+        var assetIdRegex = new AssetId(pluginId, assetName);
         Assert.Equal(pluginName, assetIdRegex.PluginId.Value);
         Assert.Equal(namespaces, assetIdRegex.AssetName.Values);
     }
@@ -35,7 +66,7 @@ public class AssetIdTest {
     [InlineData("pluginName/folder/")]
     [InlineData("pluginName_:alpha")]
     [InlineData("pluginName-:alpha")]
-    public void AssetId_CreateThrows_Test(string input) {
+    public void AssetIdCreateThrowsTest(string input) {
         Assert.Throws<ArgumentException>(() => new AssetId(input));
     }
 
@@ -47,7 +78,7 @@ public class AssetIdTest {
     [InlineData("pluginName/folder/")]
     [InlineData("pluginName_:alpha")]
     [InlineData("pluginName-:alpha")]
-    public void AssetId_CreateFails_Test(string input) {
+    public void AssetIdCreateFailsTest(string input) {
         Assert.False(AssetId.TryCreateNew(input, out AssetId? output));
         Assert.Null(output);
     }
@@ -55,7 +86,7 @@ public class AssetIdTest {
 
     [Theory]
     [InlineData("pluginName:folder/item", "PLUGINNAME:FOLDER/ITEM")]
-    public void AssetId_Equality_Test(string a, string b) {
+    public void AssetIdEqualityTest(string a, string b) {
         var assetA = new AssetId(a);
         var assetB = new AssetId(b);
 

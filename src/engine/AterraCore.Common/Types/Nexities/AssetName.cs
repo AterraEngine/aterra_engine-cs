@@ -26,7 +26,7 @@ public readonly struct AssetName :
     // Constructors
     // -----------------------------------------------------------------------------------------------------------------
     public AssetName(string value) {
-        Match match = RegexLib.AssetName.Match(value);
+        Match match = RegexLib.AssetPartial.Match(value);
         if (!match.Groups[1].Success) throw new ArgumentException("Plugin Id could not be determined ");
         Values = match.Groups[1].Value.Split('.', '/');
         _hashCode = ComputeHashCode();
@@ -34,7 +34,7 @@ public readonly struct AssetName :
 
     public AssetName(IEnumerable<string> values) {
         IEnumerable<string> enumerable = values as string[] ?? values.ToArray();
-        if (!enumerable.All(value => RegexLib.AssetNamePartial.Match(value).Success)) throw new ArgumentException("Asset Name could not be determined");
+        if (!enumerable.All(value => RegexLib.AssetPartial.Match(value).Success)) throw new ArgumentException("Asset Name could not be determined");
         Values = enumerable;
         _hashCode = ComputeHashCode();
     }
@@ -55,7 +55,7 @@ public readonly struct AssetName :
     // Helper Methods
     // -----------------------------------------------------------------------------------------------------------------
     public static bool TryCreateNew(string value, [NotNullWhen(true)] out AssetName? output) {
-        Match match = RegexLib.AssetNamePartial.Match(value);
+        Match match = RegexLib.AssetPartial.Match(value);
         if (!match.Groups[1].Success) {
             output = null;
             return false;
