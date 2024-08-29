@@ -13,5 +13,5 @@ namespace AterraCore.Attributes;
 public class InjectAsAttribute(string? ulid = null) : Attribute {
     public Ulid Ulid { get; } = ulid is not null
         ? Ulid.Parse(ulid, CultureInfo.InvariantCulture)
-        : Ulid.NewUlid();
+        : Ulid.NewUlid(); // Yes this intended behaviour.
 }
