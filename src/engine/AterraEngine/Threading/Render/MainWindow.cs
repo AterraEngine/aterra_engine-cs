@@ -24,7 +24,7 @@ public class MainWindow : IMainWindow {
             ConfigFlags.ResizableWindow
             | ConfigFlags.Msaa4xHint// Enable Multi Sampling Anti Aliasing 4x (if available)
             // | ConfigFlags.InterlacedHint
-            // | ConfigFlags.UndecoratedWindow
+            | ConfigFlags.UndecoratedWindow
             // | ConfigFlags.MousePassthroughWindow
             // | ConfigFlags.TransparentWindow
         );

@@ -81,7 +81,7 @@ public class CollectDefaultDependencies : IBootOperation {
         ];
 
         #region PoolCorp
-        IEnumerable<ServiceDescriptor> enumerable = Assembly.Load("AterraCore.PoolCorp")
+        IEnumerable<ServiceDescriptor> enumerable = Assembly.Load("AterraCore.PoolCorps")
                 .GetTypes()
                 .Select(type => (type, Attributes: type.GetCustomAttributes<InjectableAttribute>()))
                 .Where(tuple => tuple.type is { IsClass: true, IsAbstract: false } && tuple.Attributes.Any())

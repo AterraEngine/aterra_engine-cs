@@ -43,7 +43,7 @@ public class Render2D(IAssetInstanceAtlas instanceAtlas, ILogger logger) : Nexit
     // -----------------------------------------------------------------------------------------------------------------
     private static readonly Transform2D EmptyTransform2D = new();
     public override void Tick(ActiveLevel level) {
-        foreach ((IHasTransform2D? parent, IActor2D? child) in GetEntities(level)) {
+        foreach ((IHasTransform2D? parent, IActor2D? child) in GetEntities(level).AsSpan()) {
             ProcessChildEntities(
                 parent?.Transform2D ?? EmptyTransform2D,
                 child
@@ -66,14 +66,14 @@ public class Render2D(IAssetInstanceAtlas instanceAtlas, ILogger logger) : Nexit
             child.Sprite2D.UvSelection.Position,
             child.Sprite2D.UvSelection.Size * textureSize
         );
-
+        
         Raylib.DrawTexturePro(
             texture2D,
             sourceRect,
             destRect,
             combinedRotationOrigin,
             combinedRotation,
-            Color.White
+            child.Sprite2D.Shade
         );
     }
 }

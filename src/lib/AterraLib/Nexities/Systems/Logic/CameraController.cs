@@ -14,8 +14,8 @@ namespace AterraLib.Nexities.Systems.Logic;
 public class CameraController : NexitiesSystem<ICamera2D> {
     public override void Tick(ActiveLevel level) {
         foreach (ICamera2D entity in GetEntities(level)) {
-            if (Raylib.IsKeyDown(KeyboardKey.Down)) entity.Impulse2D.TranslationOffset = entity.Impulse2D.TranslationOffset with { Y = entity.Impulse2D.TranslationOffset.Y - .5f };
-            if (Raylib.IsKeyDown(KeyboardKey.Up)) entity.Impulse2D.TranslationOffset = entity.Impulse2D.TranslationOffset with { Y = entity.Impulse2D.TranslationOffset.Y + .5f };
+            if (Raylib.IsKeyDown(KeyboardKey.Down)) entity.Impulse2D.TranslationOffset = entity.Impulse2D.TranslationOffset with { Y = entity.Impulse2D.TranslationOffset.Y + .5f };
+            if (Raylib.IsKeyDown(KeyboardKey.Up)) entity.Impulse2D.TranslationOffset = entity.Impulse2D.TranslationOffset with { Y = entity.Impulse2D.TranslationOffset.Y - .5f };
 
             if (Raylib.IsKeyDown(KeyboardKey.Left)) entity.Impulse2D.TranslationOffset = entity.Impulse2D.TranslationOffset with { X = entity.Impulse2D.TranslationOffset.X - .5f };
             if (Raylib.IsKeyDown(KeyboardKey.Right)) entity.Impulse2D.TranslationOffset = entity.Impulse2D.TranslationOffset with { X = entity.Impulse2D.TranslationOffset.X + .5f };

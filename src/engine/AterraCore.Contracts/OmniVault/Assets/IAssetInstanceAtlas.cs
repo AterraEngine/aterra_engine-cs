@@ -23,10 +23,12 @@ public interface IAssetInstanceAtlas {
     bool TryGet<T>(Ulid instanceId, [NotNullWhen(true)] out T? instance) where T : class, IAssetInstance;
     bool TryGetSingleton<T>(AssetId assetId, [NotNullWhen(true)] out T? instance) where T : class, IAssetInstance;
 
-    bool TryGetOrCreate<T>(Type type, Ulid? ulid, [NotNullWhen(true)] out T? instance) where T : class, IAssetInstance;
-    bool TryGetOrCreate<T>(AssetId assetId, Ulid? ulid, [NotNullWhen(true)] out T? instance) where T : class, IAssetInstance;
-
-    bool TryGetOrCreateSingleton<T>(AssetId assetId, [NotNullWhen(true)] out T? instance) where T : class, IAssetInstance;
+    bool TryGetOrCreate<T>(Type type, [NotNullWhen(true)] out T? instance, Ulid? ulid = null) where T : class, IAssetInstance;
+    bool TryGetOrCreate<T>(AssetId assetId, [NotNullWhen(true)] out T? instance, Ulid? ulid = null) where T : class, IAssetInstance;
+    bool TryGetOrCreate<T>(AssetId assetId, [NotNullWhen(true)] out T? instance, Action<T> afterCreation, Ulid? ulid = null) where T : class, IAssetInstance;
+ 
+    bool TryGetOrCreateSingleton<T>(AssetId assetId, [NotNullWhen(true)] out T? instance, Ulid? ulid = null) where T : class, IAssetInstance;
+    bool TryGetOrCreateSingleton<T>(AssetId assetId, [NotNullWhen(true)] out T? instance, Action<T> afterCreation, Ulid? ulid = null) where T : class, IAssetInstance;
 
     T GetOrCreate<T>(Type type, Ulid? ulid = null) where T : class, IAssetInstance;
     T GetOrCreate<T>(AssetId assetId, Ulid? ulid = null) where T : class, IAssetInstance;

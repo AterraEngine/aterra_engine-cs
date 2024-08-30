@@ -54,5 +54,5 @@ public class EmptyLevel(
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     protected override void ClearCaches() {}
-    public void OnLevelCreation() {}
+    public void OnLevelFirstCreation() {}
 }

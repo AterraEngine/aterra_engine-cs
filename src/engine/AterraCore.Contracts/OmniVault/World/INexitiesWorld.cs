@@ -14,13 +14,9 @@ public interface IAterraCoreWorld {
     /// Represents the current active level.
     /// </summary>
     ActiveLevel? ActiveLevel { get; }
-
-    /// <summary> Tries to change the active level in the AterraCoreWorld. </summary>
-    /// <param name="levelId">The ID of the level to change to.</param>
-    /// <returns>True if the active level was successfully changed, false otherwise.</returns>
-    bool TryChangeActiveLevel(AssetId levelId);
+    
     bool TryChangeActiveLevel(INexitiesLevel levelInstance);
-    bool TryChangeActiveLevel(AssetId levelId, Ulid levelInstanceId);
+    bool TryChangeActiveLevel(AssetId levelId, Ulid? levelInstanceId = null);
 
     bool TryGetActiveLevel([NotNullWhen(true)] out ActiveLevel? level);
 }

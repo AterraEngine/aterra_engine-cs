@@ -9,7 +9,7 @@ using JetBrains.Annotations;
 using Microsoft.Extensions.ObjectPool;
 using System.Collections.Concurrent;
 
-namespace AterraCore.PoolCorp;
+namespace AterraCore.PoolCorps;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------

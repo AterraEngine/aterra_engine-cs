@@ -63,11 +63,6 @@ public class AterraCoreWorld(
         });
     }
 
-    /// <summary> Tries to change the active level in the AterraCoreWorld. </summary>
-    /// <param name="levelId">The ID of the level to change to.</param>
-    /// <returns>True if the active level was successfully changed, false otherwise.</returns>
-    public bool TryChangeActiveLevel(AssetId levelId) => TryChangeActiveLevel(levelId, Ulid.NewUlid());
-
     /// <summary>  Tries to change the active level in the AterraCoreWorld. </summary>
     /// <param name="levelInstance">The instance of a level to set the active level to.</param>
     /// <returns> Returns true if the active level was successfully changed, false otherwise.</returns>
@@ -77,7 +72,7 @@ public class AterraCoreWorld(
     /// <param name="levelId">The ID of the level to change to.</param>
     /// <param name="levelInstanceId">The instance ID of the level to change to.</param>
     /// <returns>True if the active level was successfully changed, fal se otherwise.</returns>
-    public bool TryChangeActiveLevel(AssetId levelId, Ulid levelInstanceId) {
+    public bool TryChangeActiveLevel(AssetId levelId, Ulid? levelInstanceId = null) {
         // Retrieve the old level, to make comparison with, in case of loading new assets
         Logger.Information("Attempting to change level to {LevelId}, Instance {InstanceId}", levelId, levelInstanceId);
         TryGetActiveLevel(out ActiveLevel? oldLevel);
@@ -86,7 +81,13 @@ public class AterraCoreWorld(
                 Logger.Warning("Can't change to the same level instance: {LevelId}", levelInstanceId);
                 return false;
             }
-            if (!instanceAtlas.TryGetOrCreate(levelId, levelInstanceId, out INexitiesLevel? level)) {
+            
+            if (!instanceAtlas.TryGetOrCreateSingleton(
+                levelId, 
+                out INexitiesLevel? level,
+                nexitiesLevel => nexitiesLevel.OnLevelFirstCreation(), 
+                levelInstanceId
+            )) {
                 Logger.Warning("Failed to get level by instance ULID: {LevelId}", levelInstanceId);
                 return false;
             }

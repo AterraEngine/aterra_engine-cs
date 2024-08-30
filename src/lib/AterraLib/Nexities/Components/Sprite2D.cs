@@ -19,6 +19,8 @@ public class Sprite2D : NexitiesComponent, ISprite2D {
             UvAndSourceCalculated = null;
         }
     }
+    
+    public Color Shade { get; set; } = Color.White;
 
     public Rectangle? UvAndSourceCalculated { get; set; }
 }

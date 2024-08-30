@@ -82,27 +82,45 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetIn
         return _singletonAssetInstances.TryGetValue(assetId, out Ulid ulid) && TryGet(ulid, out instance);
     }
 
-    public bool TryGetOrCreate<T>(Type type, Ulid? ulid, [NotNullWhen(true)] out T? instance) where T : class, IAssetInstance =>
-        ulid is not null && TryGet((Ulid)ulid, out instance)
-        || TryCreate(type, out instance, ulid);
+    public bool TryGetOrCreate<T>(Type type, [NotNullWhen(true)] out T? instance, Ulid? ulid = null) where T : class, IAssetInstance {
+        instance = null;
+        if (ulid is {} ulidCasted && TryGet(ulidCasted, out instance)) return true;
+        return assetAtlas.TryGetAssetId(type, out AssetId assetId) 
+               && TryCreate(assetId, out instance, ulid);
+    }
 
-    public bool TryGetOrCreate<T>(AssetId assetId, Ulid? ulid, [NotNullWhen(true)] out T? instance) where T : class, IAssetInstance =>
+    public bool TryGetOrCreate<T>(AssetId assetId, [NotNullWhen(true)] out T? instance, Ulid? ulid = null) where T : class, IAssetInstance =>
         ulid is not null && TryGet((Ulid)ulid, out instance)
         || TryCreate(assetId, out instance, ulid);
+    
+    public bool TryGetOrCreate<T>(AssetId assetId, [NotNullWhen(true)] out T? instance, Action<T> afterCreation, Ulid? ulid = null) where T : class, IAssetInstance {
+        if (ulid is not null && TryGet((Ulid)ulid, out instance)) return true;
+        if (!TryCreate(assetId, out instance, ulid)) return false;
+        afterCreation(instance);
+        return true;
+    }
 
-    public bool TryGetOrCreateSingleton<T>(AssetId assetId, [NotNullWhen(true)] out T? instance) where T : class, IAssetInstance =>
+    public bool TryGetOrCreateSingleton<T>(AssetId assetId, [NotNullWhen(true)] out T? instance, Ulid? ulid = null) where T : class, IAssetInstance =>
         TryGetSingleton(assetId, out instance)
-        || TryCreate(assetId, out instance);
+        || TryCreate(assetId, out instance, ulid);
+
+    public bool TryGetOrCreateSingleton<T>(AssetId assetId, [NotNullWhen(true)] out T? instance, Action<T> afterCreation, Ulid? ulid = null) where T : class, IAssetInstance {
+        if (TryGetSingleton(assetId, out instance)) return true;
+        if (!TryCreate(assetId, out instance, ulid)) return false;
+
+        afterCreation(instance);
+        return true;
+    }
 
     public T GetOrCreate<T>(Type type, Ulid? ulid = null) where T : class, IAssetInstance {
-        if (TryGetOrCreate(type, ulid, out T? instance)) return instance;
+        if (TryGetOrCreate(type, out T? instance, ulid)) return instance;
 
         logger.Error("Asset instance could not be created from {t} as {ulid}", type, ulid);
         throw new ArgumentException($"Asset instance could not be created from {type} as {ulid}");
     }
 
     public T GetOrCreate<T>(AssetId assetId, Ulid? ulid = null) where T : class, IAssetInstance {
-        if (!TryGetOrCreate(assetId, ulid, out T? instance)) throw new ArgumentException($"Asset Id {ulid} not found");
+        if (!TryGetOrCreate(assetId, out T? instance, ulid)) throw new ArgumentException($"Asset Id {ulid} not found");
         return instance;
     }
 

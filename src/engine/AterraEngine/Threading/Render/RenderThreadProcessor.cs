@@ -78,10 +78,6 @@ public partial class RenderThreadProcessor(
                 system.Tick(activeLevel);
             }
             Raylib.EndMode2D();
-
-            // foreach (INexitiesSystem system in uiSystems) {
-            //     system.Tick(activeLevel);
-            // }
         }
 
         DrawUi(activeLevel);
@@ -91,18 +87,18 @@ public partial class RenderThreadProcessor(
     }
 
     private void DrawUi(ActiveLevel level) {
-        Raylib.DrawRectangle(0, 0, 250, 50 * 9, Color.White);
+        Raylib.DrawRectangle(0, 0, 250, 50 * 9, new Color(0,0,0, 127));
 
-        Raylib.DrawText($"   FPS : {dataCollector.Fps}", 0, 0, 32, Color.DarkBlue);
-        Raylib.DrawText($"minFPS : {dataCollector.FpsMin}", 0, 50, 32, Color.DarkBlue);
-        Raylib.DrawText($"maxFPS : {dataCollector.FpsMax}", 0, 100, 32, Color.DarkBlue);
-        Raylib.DrawText($"avgFPS : {dataCollector.FpsAverageString}", 0, 150, 32, Color.DarkBlue);
-        Raylib.DrawText($"   TPS : {dataCollector.Tps}", 0, 200, 32, Color.DarkBlue);
-        Raylib.DrawText($"avgTPS : {dataCollector.TpsAverageString}", 0, 250, 32, Color.DarkBlue);
-        Raylib.DrawText($" DUCKS : {level.RawLevelData.ChildrenIDs.Count}", 0, 300, 32, Color.DarkBlue);
-        Raylib.DrawText($"entGlb : {instanceAtlas.TotalCount}", 0, 350, 32, Color.DarkBlue);
-        Raylib.DrawText($" Asset : {level.RawLevelData.AssetId}", 0, 400, 12, Color.DarkBlue);
-        Raylib.DrawText($"  Inst : {level.RawLevelData.InstanceId}", 0, 425, 12, Color.DarkBlue);
+        Raylib.DrawText($"   FPS : {dataCollector.Fps}", 0, 0, 32, Color.LightGray);
+        Raylib.DrawText($"minFPS : {dataCollector.FpsMin}", 0, 50, 32, Color.LightGray);
+        Raylib.DrawText($"maxFPS : {dataCollector.FpsMax}", 0, 100, 32, Color.LightGray);
+        Raylib.DrawText($"avgFPS : {dataCollector.FpsAverageString}", 0, 150, 32, Color.LightGray);
+        Raylib.DrawText($"   TPS : {dataCollector.Tps}", 0, 200, 32, Color.LightGray);
+        Raylib.DrawText($"avgTPS : {dataCollector.TpsAverageString}", 0, 250, 32, Color.LightGray);
+        Raylib.DrawText($" DUCKS : {level.RawLevelData.ChildrenIDs.Count}", 0, 300, 32, Color.LightGray);
+        Raylib.DrawText($"entGlb : {instanceAtlas.TotalCount}", 0, 350, 32, Color.LightGray);
+        Raylib.DrawText($" Asset : {level.RawLevelData.AssetId}", 0, 400, 12, Color.LightGray);
+        Raylib.DrawText($"  Inst : {level.RawLevelData.InstanceId}", 0, 425, 12, Color.LightGray);
     }
 
     public void RegisterEvents() {

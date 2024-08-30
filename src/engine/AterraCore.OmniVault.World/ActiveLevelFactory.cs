@@ -53,7 +53,7 @@ public class ActiveLevelFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreeFa
     private INexitiesSystem[] GetNexitiesSystems(IReadOnlyCollection<AssetId> systemIds) {
         var systems = new List<INexitiesSystem>(systemIds.Count);
         foreach (AssetId assetId in systemIds) {
-            if (instanceAtlas.TryGetOrCreate(assetId, null, out INexitiesSystem? instance))
+            if (instanceAtlas.TryGetOrCreate(assetId, out INexitiesSystem? instance, null))
                 systems.Add(instance);
         }
 

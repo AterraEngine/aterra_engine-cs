@@ -74,7 +74,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraCore.OmniVault.DataCo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extensions", "src\lib\Extensions\Extensions.csproj", "{1001A63D-9E3A-4B3F-A4ED-921F29BDE49A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraCore.PoolCorp", "src\engine\AterraCore.PoolCorp\AterraCore.PoolCorp.csproj", "{2BD4E958-ED91-45E9-9DEE-A5A897238067}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraCore.PoolCorps", "src\engine\AterraCore.PoolCorps\AterraCore.PoolCorps.csproj", "{2BD4E958-ED91-45E9-9DEE-A5A897238067}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraCore.Attributes", "src\engine\AterraCore.Attributes\AterraCore.Attributes.csproj", "{3565866F-4BEB-4D93-8213-3E2013A2A1C4}"
 EndProject
