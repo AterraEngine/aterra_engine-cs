@@ -1,61 +1,94 @@
 name: User Story
-description: Template for creating user stories
-title: "[UserStory]: "
-labels: ["user-story"]
-projects: ["AterraEngine/1"]
+description: Template for creating basic user stories
+title: '[UserStory]: '
 assignees:
   - AndreasSasDev
-
+labels:
+  - user-story
 body:
   - type: markdown
     attributes:
-      value: |
-        ### User Story
+      value: >+
+        ### AterraEngine : User Story
 
-        Please fill out the details of the user story below.
+        During development of the AterraEngine we don't adhere to true Scrum
+        practices, becasue as a solo dev, that isn't really feasible / sane for
+        me. 
+
+        What we do keep however, is the user stories. They are a clear way to
+        communicate what we should be doing, and what the limited scope of this
+        is.
+
+
+        Don't fret too much on getting it all right, just follow the example and
+        you'll be fine
+
+
+        ---
 
   - type: input
-    id: role
+    id: who
     attributes:
-      label: Role
+      label: Who
       description: Who is this feature for? (e.g., As a GameDev, As an EngineDev)
       placeholder: ex. As a GameDev
     validations:
       required: true
-
   - type: input
-    id: feature
+    id: what
     attributes:
-      label: Feature
-      description: What is the feature or functionality needed? (e.g., I want to have a framework for ...)
+      label: What
+      description: >-
+        What is the feature or functionality needed? (e.g., I want to have a
+        framework for ...)
       placeholder: ex. I want to be able to log in
     validations:
       required: true
-
   - type: input
-    id: benefit
+    id: why
     attributes:
-      label: Benefit
-      description: Why is this feature important? What value does it add? (e.g., So that I can access my account)
+      label: Why
+      description: >-
+        Why is this feature important? What value does it add? (e.g., So that I
+        can access my account)
       placeholder: ex. So that I can access my account
     validations:
       required: true
-      
   - type: textarea
     id: additional-context
     attributes:
       label: Additional Context
-      description: Provide any other context, links, or details about the feature. (Optional)
+      description: >-
+        Provide any other context, links, or details about the feature.
+        (Optional)
       placeholder: ex. Screenshots, diagrams, or other references
-    validations:
-      required: false
-
-  - type: textarea
-    id: acceptance-criteria
+  - type: markdown
     attributes:
-      label: Acceptance Criteria
-      description: Define the requirements that this story should meet when it is delivered. (Optional but recommended)
-      placeholder: ex. Given that I am on the login page, When I enter my credentials, Then I should be redirected to the dashboard
-    validations:
-      required: false
+      value: |-
+        ---
+        # Acceptance Criteria
 
+         Please define the acceptance criteria from both the user and developer perspectives.
+  - type: textarea
+    id: acceptance-criteria-user
+    attributes:
+      label: User-Side Criteria
+      description: >-
+        Define the requirements that this story should meet when it is
+        delivered. (Optional but recommended)
+      placeholder: >-
+        ex. Given that I am on the login page, When I enter my credentials, Then
+        I should be redirected to the dashboard
+  - type: textarea
+    id: acceptance-criteria-dev
+    attributes:
+      label: Dev-Side Criteria
+      description: >-
+        Define the requirements that the dev should keep to. (Only fill this out
+        if you are the dev)
+      value: '*No Dev requirements defined*'
+  - type: markdown
+    attributes:
+      value: >-
+        This template was generated with [Issue Forms
+        Creator](https://issue-forms-creator.netlify.app)
