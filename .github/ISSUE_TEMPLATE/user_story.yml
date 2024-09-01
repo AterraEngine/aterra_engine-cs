@@ -89,6 +89,29 @@ body:
       value: '*No Dev requirements defined*'
   - type: markdown
     attributes:
+      value: |-
+        <br>
+
+        ---
+        <br>
+  - type: checkboxes
+    id: ducky
+    attributes:
+      label: Ducky awareness
+      description: We all know we forget to do this, but it has to be done.
+      options:
+        - label: >-
+            I hereby accept that this issue form might be thrown into the void
+            by the developer. This isn't out of maliciousness or anything like
+            that. Most likely they just forgot that this was a thing, and
+            already implemented it, or have decided they are going to push it
+            down the sprint cycles, untill the great ducky in the sky forces
+            them to work on this issue.
+          required: true
+        - label: I'm a ducky
+          required: false
+  - type: markdown
+    attributes:
       value: >-
         This template was generated with [Issue Forms
         Creator](https://issue-forms-creator.netlify.app)
