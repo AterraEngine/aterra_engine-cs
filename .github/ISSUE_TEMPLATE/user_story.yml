@@ -2,9 +2,11 @@ name: User Story
 description: Template for creating basic user stories
 title: '[UserStory]: '
 assignees:
-  - AndreasSasDev
+  - AndreasSas
 labels:
   - user-story
+projects:
+  - AterraEngine/1
 body:
   - type: markdown
     attributes:
@@ -86,7 +88,6 @@ body:
       description: >-
         Define the requirements that the dev should keep to. (Only fill this out
         if you are the dev)
-      value: '*No Dev requirements defined*'
   - type: markdown
     attributes:
       value: |-
