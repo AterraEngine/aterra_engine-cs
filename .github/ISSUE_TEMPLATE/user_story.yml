@@ -1,6 +1,6 @@
 name: User Story
 description: Template for creating basic user stories
-title: '[UserStory]: '
+title: 'UserStory | '
 assignees:
   - AndreasSas
 labels:
