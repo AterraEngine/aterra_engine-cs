@@ -1,11 +1,3 @@
-﻿---
-name: User Story | Plain
-about: Template for creating user stories
-title: "[UserStory] Title"
-labels: user-story
-assignees: 'AndreasSasDev'
----
-
 ## Description 
 
 **As a** [role]
