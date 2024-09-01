@@ -1,8 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.OmniVault.Assets;
-using AterraCore.Contracts.OmniVault.Assets.Attributes;
+using AterraCore.Attributes;
 
 namespace AterraCore.Contracts.FlexiPlug.Plugin;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -10,7 +9,7 @@ namespace AterraCore.Contracts.FlexiPlug.Plugin;
 // ---------------------------------------------------------------------------------------------------------------------
 public record AssetTypeRecord(
     Type Type,
-    IAssetAttribute AssetAttribute,
-    IEnumerable<IOverridesAssetIdAttribute> OverwritesAssetIdAttributes,
-    IEnumerable<IAssetTagAttribute> AssetTagAttributes
+    AssetAttribute AssetAttribute,
+    IEnumerable<OverridesAssetIdAttribute> OverwritesAssetIdAttributes,
+    IEnumerable<AssetTagAttribute> AssetTagAttributes
 );

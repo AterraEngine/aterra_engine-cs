@@ -5,7 +5,6 @@ using AterraCore.Contracts.OmniVault.World.EntityTree;
 using Microsoft.Extensions.ObjectPool;
 
 namespace AterraCore.OmniVault.World.EntityTree.Pools;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------

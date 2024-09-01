@@ -6,6 +6,5 @@ namespace AterraCore.Contracts.Renderer;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IMainWindow {
-    public bool IsInitialised { get; }
     public void Init();
 }

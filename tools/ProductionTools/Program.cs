@@ -1,15 +1,12 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
 using AterraCore.Loggers;
-using CliArgsParser;
-using CliArgsParser.Contracts;
-using ProductionTools.Commands;
-using Serilog;
+using Microsoft.Extensions.DependencyInjection;
+using ProductionTools.Repo;
 using Serilog.Core;
-namespace ProductionTools;
 
+namespace ProductionTools;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -21,16 +18,26 @@ public static class Program {
     private async static Task MainAsync(string[] args) {
         await using Logger logger = new LoggerConfiguration()
             .MinimumLevel.Verbose()
-            .DefaultSinkConsole() // Using the normal version of the Sink Console, else the empty lines get processed earlier.
+            .DefaultSinkConsole()// Using the normal version of the Sink Console, else the empty lines get processed earlier.
             .CreateLogger();
 
-        IParser parser = new ParserConfiguration()
-            .SetLogger(logger)
-            .RegisterAtlas(new XmlSchemaGenerator(logger))
-            .RegisterAtlas(new TestConsoleTheme(logger))
-            .CreateArgsParser();
+        IServiceCollection serviceCollection = new ServiceCollection();
+        serviceCollection.AddSingleton<ILogger>(logger);
+        serviceCollection.AddSingleton<ProjectStatsRepo>();
 
-        await parser.TryParseAsync(string.Join(' ', args));
+        serviceCollection.AddCliArgsParser(configuration =>
+            configuration
+                .SetConfig(new CliArgsParserConfig {
+                    Overridable = true,
+                    GenerateShortNames = true
+                })
+                .AddFromAssembly(typeof(Program).Assembly)
+        );
+
+        ServiceProvider provider = serviceCollection.BuildServiceProvider();
+        var parser = provider.GetRequiredService<IArgsParser>();
+
+        await parser.ParseAsyncLinear(args);
     }
 
     public static void Main(string[] args) {

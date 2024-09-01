@@ -2,23 +2,21 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using AterraCore.Common.ConfigFiles.PluginConfig;
+using AterraCore.Common.ConfigFiles;
 using AterraCore.Common.Data;
 using AterraCore.Contracts.FlexiPlug;
 using System.Diagnostics.CodeAnalysis;
 using System.IO.Compression;
 using System.Reflection;
 using Xml;
-using Xml.Elements;
 
 namespace AterraCore.Boot.Logic.PluginLoading;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class PluginZipImporter(string zipPath, ILogger logger) : IPluginZipImporter<PluginConfigXml>, IDisposable {
     private ILogger Logger { get; } = logger.ForContext<PluginZipImporter>();
-    
+
     private readonly ZipArchive _archive = ZipFile.OpenRead(zipPath);
     private readonly XmlParser<PluginConfigXml> _pluginConfigParser = new(logger, XmlNameSpaces.ConfigPlugin, Paths.Xsd.XsdPluginConfigDto);
 
@@ -51,28 +49,29 @@ public class PluginZipImporter(string zipPath, ILogger logger) : IPluginZipImpor
 
     }
 
-    public bool TryGetDllAssembly(FileDto binDto, [NotNullWhen(true)] out Assembly? assembly) {
+    public bool TryGetDllAssembly(string filePath, [NotNullWhen(true)] out Assembly? assembly) {
         assembly = null;
 
         try {
-            string filePathFix = binDto.FilePath.Replace("\\", "/");
+            string filePathFix = filePath.Replace("\\", "/");
 
             if (!TryGetFileBytesFromZip(filePathFix, out byte[]? assemblyBytes)) {
-                Logger.Warning("Could not get bytes for assembly file of {assemblyNameInZip} from {zipPath}", binDto.FilePath, zipPath);
+                Logger.Warning("Could not get bytes for assembly file of {assemblyNameInZip} from {zipPath}", filePath, zipPath);
                 return false;
             }
 
             assembly = Assembly.Load(assemblyBytes);
-            Logger.Information("Assembly file of {assemblyNameInZip} from {zipPath} successfully loaded", binDto.FilePath, zipPath);
+            Logger.Information("Assembly file of {assemblyNameInZip} from {zipPath} successfully loaded", filePath, zipPath);
             return true;
         }
         catch (Exception e) {
-            Logger.Warning("Failed to load assembly {assemblyNameInZip} from {zipPath}, {e}", binDto.FilePath, zipPath, e);
+            Logger.Warning("Failed to load assembly {assemblyNameInZip} from {zipPath}, {e}", filePath, zipPath, e);
             return false;
         }
     }
 
-    public List<string> GetFileNamesInZip() { // TODO cleanup
+    public List<string> GetFileNamesInZip() {
+        // TODO cleanup
         var fileNames = new List<string>();
         try {
             fileNames.AddRange(_archive.Entries.Select(entry => entry.FullName));
@@ -98,6 +97,4 @@ public class PluginZipImporter(string zipPath, ILogger logger) : IPluginZipImpor
         bytes = memoryStream.ToArray();
         return true;
     }
-
-
 }

@@ -8,4 +8,3 @@ namespace AterraCore.Contracts.Nexities.Components;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface INexitiesComponent : IAssetInstance;
-

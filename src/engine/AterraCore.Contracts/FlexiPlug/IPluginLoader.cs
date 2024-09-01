@@ -1,21 +1,28 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.ConfigFiles.PluginConfig;
-using AterraCore.Contracts.Boot.Logic.PluginLoading;
+using AterraCore.Common.ConfigFiles;
+using AterraCore.Contracts.Boot.Logic.PluginLoading.Dto;
 
 namespace AterraCore.Contracts.FlexiPlug;
+
+// ---------------------------------------------------------------------------------------------------------------------
+// Support Code
+// ---------------------------------------------------------------------------------------------------------------------
+using ZipImporterAction=Action<IFilePathPluginLoader, IPluginBootDto, IPluginZipImporter<PluginConfigXml>>;
+using PluginAction=Action<IFilePathPluginLoader, IRawPluginBootDto, IPluginBootDto>;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IFilePathPluginLoader {
-    public LinkedList<IFilePathLoadedPluginDto> Plugins { get; }
+    public LinkedList<(IRawPluginBootDto rawPluginBootDto, IPluginBootDto pluginBootDto)> Plugins { get; }
     public HashSet<string> Checksums { get; }
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public IFilePathPluginLoader IterateOverValid(Action<IFilePathPluginLoader, IFilePathLoadedPluginDto> action);
-    public IFilePathPluginLoader IterateOverValidWithZipImporter(params Action<IFilePathPluginLoader, IFilePathLoadedPluginDto, IPluginZipImporter<PluginConfigXml>>[] actions);
-    public IEnumerable<IFilePathLoadedPluginDto> GetValidPlugins();
+    public IFilePathPluginLoader IterateOverValid(PluginAction action);
+    public IFilePathPluginLoader IterateOverValidWithZipImporter(params ZipImporterAction[] actions);
+    public IEnumerable<(IRawPluginBootDto rawPluginBootDto, IPluginBootDto pluginBootDto)> GetValidPlugins();
 }

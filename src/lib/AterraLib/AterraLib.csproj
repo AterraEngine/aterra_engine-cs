@@ -7,19 +7,77 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\engine\AterraCore.Contracts\AterraCore.Contracts.csproj" />
-      <ProjectReference Include="..\..\engine\AterraCore.FlexiPlug\AterraCore.FlexiPlug.csproj" />
-      <ProjectReference Include="..\..\engine\AterraCore.Nexities\AterraCore.Nexities.csproj" />
-      <ProjectReference Include="..\..\engine\AterraCore.OmniVault.Textures\AterraCore.OmniVault.Textures.csproj" />
-      <ProjectReference Include="..\Extensions\Extensions.csproj" />
+        <ProjectReference Include="..\..\engine\AterraCore.Attributes\AterraCore.Attributes.csproj"/>
+        <ProjectReference Include="..\..\engine\AterraCore.Contracts\AterraCore.Contracts.csproj"/>
+        <ProjectReference Include="..\..\engine\AterraCore.Nexities\AterraCore.Nexities.csproj"/>
+        <ProjectReference Include="..\..\engine\AterraCore.OmniVault.Textures\AterraCore.OmniVault.Textures.csproj"/>
+        <ProjectReference Include="..\..\lib\Extensions\Extensions.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Nexities\" />
+        <Folder Include="Nexities\"/>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Ulid" Version="1.3.4" />
+        <PackageReference Include="JetBrains.Annotations" Version="2024.2.0"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1"/>
+        <PackageReference Include="Ulid" Version="1.3.4"/>
     </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="..\..\..\resources\aterra_engine-logo.png" CopyToOutputDirectory="Always">
+            <Link>assets\aterra_engine-logo.png</Link>
+        </Content>
+    </ItemGroup>
+
+    <Target Name="PackingToZip" AfterTargets="Build">
+        <!-- Delete the existing zip file if it exists -->
+        <!--    Else it is going to cause issues for the Wip down below -->
+        <Delete Files="$(OutDir)\package\$(MSBuildProjectName).zip" ContinueOnError="true"/>
+
+        <!-- Create directories needed -->
+        <MakeDir Directories="$(OutDir)\temp"/>
+        <MakeDir Directories="$(OutDir)\temp\bin"/>
+        <MakeDir Directories="$(OutDir)\temp\assets"/>
+        <MakeDir Directories="$(OutDir)\package"/>
+
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+        <!-- Copy necessary files to temp directory -->
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+        <!-- Bin - dll files -->
+        <ItemGroup>
+            <!-- Default dll of the project -->
+            <DllFiles Include="$(OutDir)\$(MSBuildProjectName).dll"/>
+            <!-- Add more dlls when needed -->
+
+            <!--  -->
+        </ItemGroup>
+        <Copy SourceFiles="@(DllFiles)" DestinationFiles="@(DllFiles->'$(OutDir)\temp\bin\%(Filename)%(Extension)')"/>
+
+        <!-- Assets - textures -->
+        <ItemGroup>
+            <!-- Add more dlls when needed -->
+            <AssetFiles Include="$(OutDir)\assets\aterra_engine-logo.png"/>
+            <!--  -->
+        </ItemGroup>
+        <Copy SourceFiles="@(AssetFiles)" DestinationFiles="@(AssetFiles->'$(OutDir)\temp\assets\%(Filename)%(Extension)')"/>
+
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+        <ItemGroup>
+            <ConfigFiles Include="plugin-config.xml"/>
+        </ItemGroup>
+        <!-- Copy config files to output directory -->
+        <Copy SourceFiles="@(ConfigFiles)" DestinationFiles="@(ConfigFiles->'$(OutDir)\temp\%(Filename)%(Extension)')"/>
+
+        <!-- Zip temp directory contents -->
+        <ZipDirectory SourceDirectory="$(OutDir)\temp"
+                      DestinationFile="$(OutDir)\package\$(MSBuildProjectName).zip"/>
+
+        <!-- Optionally, delete temp directory -->
+        <!--        <RemoveDir Directories="$(OutDir)\temp"/>-->
+    </Target>
 
 </Project>

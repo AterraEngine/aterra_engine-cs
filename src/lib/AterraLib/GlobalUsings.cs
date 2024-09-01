@@ -1,4 +1,5 @@
-﻿global using AterraCore.Common.Data;
+﻿global using AterraCore.Attributes;
+global using AterraCore.Common.Data;
 global using AterraCore.Common.Types.Nexities;
 global using AterraCore.Contracts.Nexities.Components;
 global using AterraCore.Contracts.Nexities.Entities;

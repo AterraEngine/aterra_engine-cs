@@ -14,13 +14,13 @@ namespace AterraCore.DI;
 /// The Dependency Injection Builder for the Aterra Engine.
 /// </summary>
 /// <param name="logger"></param>
-public class EngineServiceBuilder(ILogger logger) : IEngineServiceBuilder {
+public class EngineServiceBuilder(ILogger logger, IServiceCollection? collection = null) : IEngineServiceBuilder {
     private ILogger Logger { get; } = logger.ForContext<EngineServiceBuilder>();
-    
+
     /// <summary>
     /// Represents a builder for configuring and building the service collection in the AterraCore engine.
     /// </summary>
-    public IServiceCollection ServiceCollection { get; } = new ServiceCollection();
+    public IServiceCollection ServiceCollection { get; } = collection ?? new ServiceCollection();
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
@@ -37,7 +37,7 @@ public class EngineServiceBuilder(ILogger logger) : IEngineServiceBuilder {
             serviceDescriptor.ImplementationType ?? serviceDescriptor.ImplementationInstance ?? serviceDescriptor.ServiceType
         );
     }
-    
+
     /// <summary>
     /// Assigns multiple <see cref="ServiceDescriptor"/> objects to the <see cref="IServiceCollection"/> of the <see cref="EngineServiceBuilder"/>.
     /// </summary>

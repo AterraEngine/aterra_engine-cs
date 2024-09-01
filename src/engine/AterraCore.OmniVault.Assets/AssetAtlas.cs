@@ -1,6 +1,8 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Attributes;
+using AterraCore.Common.Data;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.OmniVault.Assets;
 using CodeOfChaos.Extensions;
@@ -14,9 +16,10 @@ namespace AterraCore.OmniVault.Assets;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
+[Injectable<IAssetAtlas>]
 public class AssetAtlas(ILogger logger) : IAssetAtlas {
     private ILogger Logger { get; } = logger.ForContext<AssetAtlas>();
-    
+
     private readonly ConcurrentDictionary<AssetId, AssetRegistration> _assetsById = new();
     private readonly ConcurrentDictionary<Type, AssetId> _assetsByType = new();
 
@@ -38,6 +41,7 @@ public class AssetAtlas(ILogger logger) : IAssetAtlas {
             );
             return false;
         }
+
         if (!_assetsByType.TryAdd(registration.Type, registration.AssetId)) {
             // The reason for this, is the class type is hard linked to an AssetId
             Logger.Warning(
@@ -48,7 +52,7 @@ public class AssetAtlas(ILogger logger) : IAssetAtlas {
         }
 
         foreach (Type interfaceType in registration.InterfaceTypes) {
-            // The reason for this, is the class type is soft linked to an AssetId, and can be overwritten
+            // The reason for this, is the class type is softly linked to an AssetId, and can be overwritten
             _assetsByType.AddOrUpdate(interfaceType, registration.AssetId);
             Logger.Information("Asset {AssetId} linked to the interface of {Type}", registration.AssetId, interfaceType.FullName);
         }
@@ -64,19 +68,19 @@ public class AssetAtlas(ILogger logger) : IAssetAtlas {
                 Logger.Warning("String Tag of {tag} could not be assigned to {assetId}", stringTag, registration.AssetId);
             }
         }
-        
+
         // Assign overloads
         foreach (AssetId overridableAssetId in registration.OverridableAssetIds) {
-            if (!_assetsById.TryGetValue(overridableAssetId, out AssetRegistration comparisonValue )) continue;
+            if (!_assetsById.TryGetValue(overridableAssetId, out AssetRegistration comparisonValue)) continue;
             if (!_assetsById.TryUpdate(overridableAssetId, registration, comparisonValue)) continue;
-          
+
             logger.Information(
                 "Assigned asset {AssetId} to overwrite {overridableAssetId}",
                 registration.AssetId,
                 overridableAssetId
-            ); 
+            );
         }
-        
+
         Logger.Information(
             "Assigned asset {AssetId} of Type {AssetTypeName}",
             registration.AssetId, registration.Type.FullName
@@ -121,11 +125,9 @@ public class AssetAtlas(ILogger logger) : IAssetAtlas {
         type = registration.InterfaceTypes;
         return true;
     }
-    public bool TryUpdateRegistration(ref AssetRegistration registration) {
-        return _assetsById.TryGetValue(registration.AssetId, out AssetRegistration oldRegistration)
-               && _assetsById.TryUpdate(registration.AssetId, registration, oldRegistration);
-
-    }
+    public bool TryUpdateRegistration(ref AssetRegistration registration) =>
+        _assetsById.TryGetValue(registration.AssetId, out AssetRegistration oldRegistration)
+        && _assetsById.TryUpdate(registration.AssetId, registration, oldRegistration);
 
     public bool TryGetAssetId<T>(out AssetId assetId) => TryGetAssetId(typeof(T), out assetId);
     public bool TryGetAssetId(Type type, out AssetId assetId) => _assetsByType.TryGetValue(type, out assetId);

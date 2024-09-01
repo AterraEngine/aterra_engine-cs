@@ -1,12 +1,11 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.ConfigFiles.PluginConfig;
+using AterraCore.Common.ConfigFiles;
 using AterraCore.Common.Data;
 using AterraCore.Contracts.Boot.Operations;
 using AterraCore.Loggers;
 using System.Reflection;
-using Xml.Elements;
 
 namespace AterraCore.Boot.Operations;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -24,40 +23,47 @@ public class PluginLoaderZipImporter : IBootOperation {
         components.PluginLoader.IterateOverValidWithZipImporter(
             #region Get Files & Config
             (_, plugin, zipImporter) => {
-                plugin.InternalFilePaths = zipImporter.GetFileNamesInZip();
+                // plugin.InternalFilePaths = zipImporter.GetFileNamesInZip();
                 if (!zipImporter.TryGetPluginConfig(out PluginConfigXml? pluginConfig)) {
                     plugin.SetInvalid();
                     Logger.Warning("Plugin config is invalid");
                     return;
                 }
-                
-                plugin.ConfigXml = pluginConfig;
-                Logger.Debug("Loaded ConfigXml for {plugin}", plugin.ConfigXml.NameSpace);
-            },     
+                if (!plugin.TrySetPluginConfig(pluginConfig)) {
+                    plugin.SetInvalid();
+                    Logger.Warning("Plugin config could not be applied to the plugin");
+                    return;
+                }
+                Logger.Debug("Loaded ConfigXml for {plugin}", pluginConfig.NameSpace);
+            },
             #endregion
             #region Import Data
             (_, plugin, zipImporter) => {
                 // Correct paths
-                IEnumerable<FileDto> correctPaths = plugin.ConfigXml.Dlls
-                    .Select(binDto => new FileDto{FilePath = Path
-                        .Combine(Paths.Plugins.PluginBinFolder, binDto.FilePath)
-                        .Replace("\\", "/")
-                    }); 
-                
+                if (!plugin.TryGetPluginConfig(out PluginConfigXml? xml)) {
+                    plugin.SetInvalid();
+                    Logger.Warning("Failed to plugin Config");
+                    return;
+                }
+
                 // Extract assembly(s)
-                plugin.Assemblies.AddRange(correctPaths
-                    .Select(fileDto => {
-                        if (zipImporter.TryGetDllAssembly(fileDto, out Assembly? assembly)) return assembly;
+                IEnumerable<Assembly> assemblies = xml.Dlls
+                    .Select(binDto => Path
+                        .Combine(Paths.Plugins.PluginBinFolder, binDto.FileName)
+                        .Replace("\\", "/")
+                    )
+                    .Select(filePath => {
+                        if (zipImporter.TryGetDllAssembly(filePath, out Assembly? assembly)) return assembly;
                         plugin.SetInvalid();
-                        Logger.Warning("Failed to load assembly {file}", fileDto.FilePath);
+                        Logger.Warning("Failed to load assembly {file}", filePath);
                         return assembly;
                     })
                     .Where(assembly => assembly != null)
-                    .Select(assembly => assembly!)
-                );
+                    .Select(assembly => assembly!);
+
+                plugin.UpdateAssemblies(assemblies);
             }
             #endregion
         );
     }
-
 }

@@ -5,35 +5,39 @@ using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.OmniVault.Assets;
+using JetBrains.Annotations;
 
 namespace AterraCore.Nexities.Systems;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class NexitiesSystem<TEntity> : AssetInstance, INexitiesSystem 
-    where TEntity : IAssetInstance
-{
-    private readonly List<TEntity> _entitiesBuffer = [];
-    protected virtual Predicate<TEntity> Filter { get; } = _ => true;
+[UsedImplicitly]
+public abstract class NexitiesSystem<TEntity> : AssetInstance, INexitiesSystem
+    where TEntity : IAssetInstance {
+    protected bool BufferPopulated;
+    protected readonly List<TEntity> EntitiesBuffer = [];
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public abstract void Tick(IActiveLevel level);
+    public abstract void Tick(ActiveLevel level);
+    public virtual void InvalidateCaches() {
+        EntitiesBuffer.Clear();
+        BufferPopulated = false;
+    }
 
     // -----------------------------------------------------------------------------------------------------------------
     // Helper Methods
     // -----------------------------------------------------------------------------------------------------------------
-    protected IEnumerable<TEntity> GetEntities(IActiveLevel level) {
-        if (_entitiesBuffer.Count != 0) return _entitiesBuffer;
-        
-        _entitiesBuffer.Clear(); // Reuse the buffer instead of allocating a new one
-        
+    protected virtual IEnumerable<TEntity> GetEntities(ActiveLevel level) {
+        if (BufferPopulated) return EntitiesBuffer;
+
         foreach (IAssetInstance instance in level.ActiveEntityTree.GetAsFlat()) {
-            if (instance is TEntity assetInstance && Filter(assetInstance)) 
-                _entitiesBuffer.Add(assetInstance);
+            if (instance is TEntity assetInstance)
+                EntitiesBuffer.Add(assetInstance);
         }
-        
-        return _entitiesBuffer;
+
+        BufferPopulated = true;
+        return EntitiesBuffer;
     }
 }

@@ -2,32 +2,37 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.OmniVault.World;
-using AterraCore.FlexiPlug.Attributes;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AterraLib.Nexities.Systems.Logic;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [System(AssetIdLib.AterraCore.SystemsLogic.PlayerController, CoreTags.LogicSystem)]
 [Injectable<PlayerController>(ServiceLifetime.Singleton)]
 [UsedImplicitly]
-public class PlayerController: NexitiesSystem<IPlayer2D> {
-    public override void Tick(IActiveLevel level) {
+public class PlayerController : NexitiesSystem<IPlayer2D> {
+    public override void Tick(ActiveLevel level) {
+        float x = 0f;
+        float y = 0f;
+        float rotation = 0f;
+
+        if (Raylib.IsKeyDown(KeyboardKey.W)) y -= .25f;
+        if (Raylib.IsKeyDown(KeyboardKey.S)) y += .25f;
+
+        if (Raylib.IsKeyDown(KeyboardKey.A)) x -= .25f;
+        if (Raylib.IsKeyDown(KeyboardKey.D)) x += .25f;
+
+        if (Raylib.IsKeyDown(KeyboardKey.Q)) rotation += .75f;
+        if (Raylib.IsKeyDown(KeyboardKey.E)) rotation -= .75f;
+
+        float xScale = Raylib.GetMouseWheelMove() * 4;
+        float yScale = Raylib.GetMouseWheelMove() * 4;
+
         foreach (IPlayer2D entity in GetEntities(level)) {
-            
-            if (Raylib.IsKeyDown(KeyboardKey.W)) entity.Impulse2D.TranslationOffset = entity.Impulse2D.TranslationOffset with { Y = entity.Impulse2D.TranslationOffset.Y - 10 };
-            if (Raylib.IsKeyDown(KeyboardKey.S)) entity.Impulse2D.TranslationOffset = entity.Impulse2D.TranslationOffset with { Y = entity.Impulse2D.TranslationOffset.Y + 10 };
-        
-            if (Raylib.IsKeyDown(KeyboardKey.A)) entity.Impulse2D.TranslationOffset = entity.Impulse2D.TranslationOffset with { X = entity.Impulse2D.TranslationOffset.X - 10 };
-            if (Raylib.IsKeyDown(KeyboardKey.D)) entity.Impulse2D.TranslationOffset = entity.Impulse2D.TranslationOffset with { X = entity.Impulse2D.TranslationOffset.X + 10 };
-
-            if (Raylib.IsKeyDown(KeyboardKey.Q)) entity.Impulse2D.RotationOffset += 1;
-            if (Raylib.IsKeyDown(KeyboardKey.E)) entity.Impulse2D.RotationOffset -= 1;
-
-            entity.Impulse2D.ScaleOffset = entity.Impulse2D.ScaleOffset with { X = Raylib.GetMouseWheelMove() * 100 };
-            entity.Impulse2D.ScaleOffset = entity.Impulse2D.ScaleOffset with { Y = Raylib.GetMouseWheelMove() * 100 };
+            entity.Impulse2D.TranslationOffset += new Vector2(x, y);
+            entity.Impulse2D.RotationOffset += rotation;
+            entity.Impulse2D.ScaleOffset += new Vector2(xScale, yScale);
         }
     }
 }

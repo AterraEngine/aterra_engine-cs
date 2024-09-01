@@ -18,28 +18,30 @@ public class PluginLoaderPreChecks : IBootOperation {
         Logger.Debug("Entered Plugin Loader Pre Checks");
 
         components.PluginLoader
-      
             #region Check FilePath exists
             .IterateOverValid(
-                (_, plugin) => {
-                    if (File.Exists(plugin.FilePath)) return;
+                (_, rawData, plugin) => {
+                    if (File.Exists(rawData.FilePath)) return;
                     plugin.SetInvalid();
-                    Logger.Error($"Plugin file \"{plugin.FilePath}\" does not exist");
-                }
-            )       
-            #endregion
-
-            #region Check Uniqueness
-            .IterateOverValid(
-                (loader, plugin) => {
-                    if (loader.Checksums.Contains(plugin.CheckSum)) {
-                        plugin.SetInvalid();
-                        Logger.Warning($"Plugin file \"{plugin.FilePath}\" checksum already exists");
-                    }
-                    loader.Checksums.Add(plugin.CheckSum);
+                    Logger.Error($"Plugin file \"{rawData.FilePath}\" does not exist");
                 }
             )
             #endregion
-        ;
-     }
+            #region Check Uniqueness
+            .IterateOverValid(
+                (loader, rawData, plugin) => {
+                    if (!rawData.TryGetChecksum(out string? checksum)) {
+                        plugin.SetInvalid();
+                        Logger.Warning($"Plugin file \"{rawData.FilePath}\" checksum could not be computed");
+                        return;
+                    }
+                    if (loader.Checksums.Add(checksum)) return;
+
+                    plugin.SetInvalid();
+                    Logger.Warning($"Plugin file \"{rawData.FilePath}\" checksum already exists");
+                }
+            )
+            #endregion
+            ;
+    }
 }

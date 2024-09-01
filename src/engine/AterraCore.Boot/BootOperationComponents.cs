@@ -1,8 +1,8 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.ConfigFiles.EngineConfig;
-using AterraCore.Contracts.Boot.Logic.PluginLoading;
+using AterraCore.Common.ConfigFiles;
+using AterraCore.Contracts.Boot.Logic.PluginLoading.Dto;
 using AterraCore.Contracts.FlexiPlug;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,19 +13,22 @@ namespace AterraCore.Boot;
 public record BootComponents(
     IFilePathPluginLoader PluginLoader
 ) : IBootComponents {
+    public IServiceCollection Services { get; } = new ServiceCollection();
+
     public LinkedList<ServiceDescriptor> DefaultServices { get; } = [];
     public LinkedList<ServiceDescriptor> StaticServices { get; } = [];
     public LinkedList<ServiceDescriptor> DynamicServices { get; } = [];
-    
-    public LinkedList<IAssemblyLoadedPluginDto> AssemblyLoadedPlugins { get; } = [];
-    
+
+    public LinkedList<IPluginBootDto> AssemblyLoadedPlugins { get; } = [];
+
     private EngineConfigXml? _engineConfigXml;
+
     public EngineConfigXml EngineConfigXml {
         get => _engineConfigXml!;
         set => _engineConfigXml ??= value;
     }
 
-    public Span<IPluginDto> ValidPlugins => AssemblyLoadedPlugins
-        .Concat<IPluginDto>(PluginLoader.GetValidPlugins())
+    public Span<IPluginBootDto> ValidPlugins => AssemblyLoadedPlugins
+        .Concat(PluginLoader.GetValidPlugins().Select(t => t.pluginBootDto))
         .ToArray();
 }

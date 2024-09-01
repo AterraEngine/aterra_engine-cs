@@ -15,35 +15,35 @@ namespace AterraCore.Boot;
 // ---------------------------------------------------------------------------------------------------------------------
 public class EngineConfiguration(ILogger? logger = null) : IEngineConfiguration {
     private ILogger Logger { get; } = GetStartupLogger(logger);
-    
+
     private LinkedList<IBootOperation> OrderOfBootOperations { get; } = [];
 
     private BootComponents? _components;
     private BootComponents Components => _components ??= new BootComponents(
-        PluginLoader:new FilePathPluginLoader(Logger)
+        PluginLoader: new FilePathPluginLoader(Logger)
     );
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Helper Methods
     // -----------------------------------------------------------------------------------------------------------------
     #region StartupLogger Helper
     private static ILogger? _startupLogger;
-    private static ILogger GetStartupLogger(ILogger? logger) => 
-        logger ?? ( _startupLogger ??= StartupLogger.CreateLogger(false).ForContext<EngineConfiguration>());
+    private static ILogger GetStartupLogger(ILogger? logger) =>
+        logger ?? (_startupLogger ??= StartupLogger.CreateLogger(false).ForContext<EngineConfiguration>());
     #endregion
 
     #region LogOrderOfBootOperations
     private void LogOrderOfBootOperations() {
         var builder = new ValuedStringBuilder();
         builder.AppendLine("Order of Boot Operations:");
-       
+
         foreach (IBootOperation operation in OrderOfBootOperations) {
             builder.AppendLineValued("- ", operation.GetType().FullName);
         }
-        Logger.Information(builder); 
+        Logger.Information(builder);
     }
     #endregion
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -54,17 +54,17 @@ public class EngineConfiguration(ILogger? logger = null) : IEngineConfiguration 
         return this;
     }
     #endregion
-    
+
     #region BuildEngine
     public IEngine BuildEngine() {
         // Log operation order
         LogOrderOfBootOperations();
-        
+
         //  Run all the boot operations
         OrderOfBootOperations.IterateOver(
             operation => operation.Run(Components)
         );
-        
+
         // Populate Plugin Atlas with plugin list
         //      Is a singleton anyway, so doesn't matter when we assign this data
         Logger.Information("Preloading the Engine {i} plugins", Components.ValidPlugins.Length);
