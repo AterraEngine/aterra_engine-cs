@@ -18,8 +18,8 @@ body:
     id: role
     attributes:
       label: Role
-      description: Who is this feature for? (e.g., As a customer, As an admin)
-      placeholder: ex. As a customer
+      description: Who is this feature for? (e.g., As a GameDev, As an EngineDev)
+      placeholder: ex. As a GameDev
     validations:
       required: true
 
@@ -27,12 +27,12 @@ body:
     id: feature
     attributes:
       label: Feature
-      description: What is the feature or functionality needed? (e.g., I want to be able to log in)
+      description: What is the feature or functionality needed? (e.g., I want to have a framework for ...)
       placeholder: ex. I want to be able to log in
     validations:
       required: true
 
-  - type: textarea
+  - type: input
     id: benefit
     attributes:
       label: Benefit
@@ -40,6 +40,15 @@ body:
       placeholder: ex. So that I can access my account
     validations:
       required: true
+      
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Provide any other context, links, or details about the feature. (Optional)
+      placeholder: ex. Screenshots, diagrams, or other references
+    validations:
+      required: false
 
   - type: textarea
     id: acceptance-criteria
@@ -50,20 +59,3 @@ body:
     validations:
       required: false
 
-  - type: textarea
-    id: additional-context
-    attributes:
-      label: Additional Context
-      description: Provide any other context, links, or details about the feature. (Optional)
-      placeholder: ex. Screenshots, diagrams, or other references
-    validations:
-      required: false
-
-  - type: checkboxes
-    id: code-of-conduct
-    attributes:
-      label: Code of Conduct
-      description: By submitting this issue, you agree to follow our [Code of Conduct](https://example.com).
-      options:
-        - label: I agree to follow this project's Code of Conduct
-          required: true
