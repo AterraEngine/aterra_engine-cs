@@ -28,32 +28,20 @@ body:
 
         ---
 
-  - type: input
-    id: who
+  - type: textarea
+    id: who-what-why
     attributes:
-      label: Who
-      description: Who is this feature for? (e.g., As a GameDev, As an EngineDev)
-      placeholder: ex. As a GameDev
-    validations:
-      required: true
-  - type: input
-    id: what
-    attributes:
-      label: What
+      label: The Who - What - Why of it all
       description: >-
-        What is the feature or functionality needed? (e.g., I want to have a
-        framework for ...)
-      placeholder: ex. I want to be able to log in
-    validations:
-      required: true
-  - type: input
-    id: why
-    attributes:
-      label: Why
-      description: >-
-        Why is this feature important? What value does it add? (e.g., So that I
-        can access my account)
-      placeholder: ex. So that I can access my account
+        Who is this feature for? (e.g., As a GameDev, As an EngineDev) What is
+        the feature or functionality needed? (e.g., I want to have a framework
+        for ...) Why is this feature important? What value does it add? (e.g.,
+        So that I can access my account)
+      placeholder: '**As a** ...  **I want to** ... **So that** ...'
+      value: |-
+        **As a** ... 
+        **I want to** ...
+        **So that** ...
     validations:
       required: true
   - type: textarea
@@ -111,6 +99,11 @@ body:
           required: true
         - label: I'm a ducky
           required: false
+  - type: markdown
+    attributes:
+      value: >-
+        This template was generated with [Issue Forms
+        Creator](https://issue-forms-creator.netlify.app)
   - type: markdown
     attributes:
       value: >-
