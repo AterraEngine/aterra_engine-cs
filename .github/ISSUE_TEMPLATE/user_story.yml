@@ -97,7 +97,7 @@ body:
             down the sprint cycles, untill the great ducky in the sky forces
             them to work on this issue.
           required: true
-        - label: I'm a ducky
+        - label: I am a ducky
           required: false
   - type: markdown
     attributes:
