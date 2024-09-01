@@ -1,0 +1,96 @@
+name: Developer Story
+description: Template for creating Developer stories
+title: 'DevStory | '
+assignees:
+  - AndreasSas
+labels:
+  - dev-story
+projects:
+  - AterraEngine/1
+body:
+  - type: markdown
+    attributes:
+      value: >+
+        ### AterraEngine : Developer Story
+
+        During development of the AterraEngine we don't adhere to true Scrum
+        practices, becasue as a solo dev, that isn't really feasible / sane for
+        me. 
+
+        What we do keep however, is the user stories. They are a clear way to
+        communicate what we should be doing, and what the limited scope of this
+        is.
+        
+
+        Don't fret too much on getting it all right, just follow the example and
+        you'll be fine
+
+
+        ---
+
+  - type: textarea
+    id: who-what-why
+    attributes:
+      label: The Who - What - Why of it all
+      description: >-
+        Who is this feature for? (e.g., As a GameDev, As an EngineDev) What is
+        the feature or functionality needed? (e.g., I want to have a framework
+        for ...) Why is this feature important? What value does it add? (e.g.,
+        So that I can access my account)
+      placeholder: '**As a** ...  **I want to** ... **So that** ...'
+      value: |-
+        **As a** ... 
+        **I want to** ...
+        **So that** ...
+    validations:
+      required: true
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: >-
+        Provide any other context, links, or details about the feature.
+        (Optional)
+      placeholder: ex. Screenshots, diagrams, or other references
+  - type: markdown
+    attributes:
+      value: |-
+        ---
+        # Acceptance Criteria
+
+         Please define the acceptance criteria from the developer's perspective.
+  - type: textarea
+    id: acceptance-criteria-dev
+    attributes:
+      label: Dev-Side Criteria
+      description: >-
+        Define the requirements that the dev should keep to. (Only fill this out
+        if you are the dev)
+  - type: markdown
+    attributes:
+      value: |-
+        <br>
+
+        ---
+        <br>
+  - type: checkboxes
+    id: ducky
+    attributes:
+      label: Ducky awareness
+      description: We all know we forget to do this, but it has to be done.
+      options:
+        - label: >-
+            I hereby accept that this issue form might be thrown into the void
+            by the developer. This isn't out of maliciousness or anything like
+            that. Most likely they just forgot that this was a thing, and
+            already implemented it, or have decided they are going to push it
+            down the sprint cycles, untill the great ducky in the sky forces
+            them to work on this issue.
+          required: true
+        - label: I am a ducky
+          required: false
+  - type: markdown
+    attributes:
+      value: >-
+        This template was generated with [Issue Forms
+        Creator](https://issue-forms-creator.netlify.app)
