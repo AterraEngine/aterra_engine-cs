@@ -90,7 +90,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.AterraCore.Common", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraCore.ConfigMancer", "src\engine\AterraCore.ConfigMancer\AterraCore.ConfigMancer.csproj", "{40C95DA4-8206-4235-B41A-41DC064EEC1B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraLib.Contracts", "src\engine\AterraLib.Contracts\AterraLib.Contracts.csproj", "{64B7F5B2-0CDA-4D59-ADA0-BBBE9362DC3A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraLib.Contracts", "src\lib\AterraLib.Contracts\AterraLib.Contracts.csproj", "{64B7F5B2-0CDA-4D59-ADA0-BBBE9362DC3A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
