@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.Data;
 using AterraCore.Common.Types;
 using System.Xml.Serialization;
 
@@ -8,7 +9,7 @@ namespace AterraCore.Common.ConfigFiles;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[XmlRoot("pluginConfig")]
+[XmlRoot("pluginConfig", Namespace = XmlNameSpaces.ConfigPlugin)]
 public class PluginConfigXml {
     [XmlElement("nameSpace")] public string NameSpace { get; set; } = null!;
     [XmlElement("nameReadable")] public string NameReadable { get; set; } = null!;

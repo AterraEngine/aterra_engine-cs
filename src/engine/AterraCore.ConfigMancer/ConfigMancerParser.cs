@@ -8,7 +8,7 @@ using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.PoolCorps;
 using JetBrains.Annotations;
 using Serilog;
-using System.Collections.Immutable;
+using System.Collections.Frozen;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Xml;
@@ -20,13 +20,13 @@ namespace AterraCore.ConfigMancer;
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
 public class ConfigMancerParser(IPluginAtlas pluginAtlas, ILogger logger, IXmlPools xmlPools) : IConfigMancerParser {
-    private readonly ImmutableDictionary<string, ConfigMancerValueRecord> _parsableTypes = pluginAtlas.Plugins
+    private readonly FrozenDictionary<string, ConfigMancerValueRecord> _parsableTypes = pluginAtlas.Plugins
         .SelectMany(plugin => plugin.Types)
         .SelectMany(type => type
             .GetCustomAttributes<ConfigMancerElementAttribute>()
             .Select(attribute => new ConfigMancerValueRecord(type, attribute, XmlRootElementName(type)))
         )
-        .ToImmutableDictionary(record => record.RootName)
+        .ToFrozenDictionary(record => record.RootName)
     ;
 
     // -----------------------------------------------------------------------------------------------------------------

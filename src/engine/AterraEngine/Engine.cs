@@ -22,8 +22,9 @@ namespace AterraEngine;
 [UsedImplicitly]
 public class Engine(
     ILogger logger,
-    IAssetAtlas assetAtlas,
     IPluginAtlas pluginAtlas,
+    IAssetAtlas assetAtlas,
+    IAssetAtlasPopulator assetAtlasPopulator,
     IAterraCoreWorld world,
     IThreadingManager threadingManager
 ) : IEngine {
@@ -54,36 +55,15 @@ public class Engine(
         Logger.Information("{@c}", aterraLibConfig);
         
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
         Task<bool> logicTask = threadingManager.TrySpawnLogicThreadAsync();
         Task<bool> renderTask = threadingManager.TrySpawnRenderThreadAsync();
 
         await Task.WhenAll(logicTask, renderTask);
         if (!logicTask.Result) throw new ApplicationException("Failed to start LogicThread ");
         if (!renderTask.Result) throw new ApplicationException("Failed to start RenderThread ");
-
-        foreach (AssetRegistration assetRegistration in pluginAtlas.GetAssetRegistrations()) {
-            if (!assetAtlas.TryAssignAsset(assetRegistration, out AssetId? _)) {
-                Logger.Warning("Type {Type} could not be assigned as an asset", assetRegistration.Type);
-            }
-        }
+        
+        assetAtlasPopulator.PopulateAssetAtlas();
+        
         if (!world.TryChangeActiveLevel(AssetIdLib.AterraCore.Entities.EmptyLevel)) throw new ApplicationException("Failed to change active level");
         await Task.Delay(1_000);
         if (!world.TryChangeActiveLevel("Workfloor:Levels/DragonDucksLevel")) throw new ApplicationException("Failed to change active level to");

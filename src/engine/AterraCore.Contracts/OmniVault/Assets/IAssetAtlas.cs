@@ -15,7 +15,6 @@ public interface IAssetAtlas {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    bool TryAssignAsset(AssetRegistration registration, [NotNullWhen(true)] out AssetId? assetId);
     IEnumerable<AssetId> GetAllAssetsOfCoreTag(CoreTags coreTag);
     IEnumerable<AssetId> GetAllAssetsOfStringTag(string stringTag);
     IEnumerable<AssetId> GetAllAssetsOfPlugin(string pluginId);
@@ -27,6 +26,4 @@ public interface IAssetAtlas {
     bool TryGetAssetId(Type type, out AssetId assetId);
     bool TryGetAssetId<T>(out AssetId assetId);
     bool TryGetInterfaceTypes(AssetId assetId, out IEnumerable<Type> type);
-
-    bool TryUpdateRegistration(ref AssetRegistration registration);
 }

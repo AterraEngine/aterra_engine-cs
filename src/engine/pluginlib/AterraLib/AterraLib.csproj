@@ -14,7 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Content Include="..\..\..\resources\aterra_engine-logo.png" CopyToOutputDirectory="Always">
+        <Content Include="..\..\..\..\resources\aterra_engine-logo.png" CopyToOutputDirectory="Always">
             <Link>assets\aterra_engine-logo.png</Link>
         </Content>
     </ItemGroup>
