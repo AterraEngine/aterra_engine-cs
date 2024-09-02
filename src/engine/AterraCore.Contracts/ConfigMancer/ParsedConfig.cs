@@ -29,7 +29,5 @@ public readonly struct ParsedConfigs(IDictionary<AssetId, object> parsedConfig) 
         return true;
     }
     
-    public int Count() {
-        return _parsedConfig.Keys.Count();
-    }
+    public int Count() => _parsedConfig.Keys.Count();
 }
