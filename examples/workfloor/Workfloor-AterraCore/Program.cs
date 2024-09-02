@@ -16,15 +16,15 @@ namespace Workfloor_AterraCore;
 public static class Program {
     public async static Task Main(string[] args) {
         IEngineConfiguration config = new EngineConfiguration()
-                .RegisterBootOperation<EngineConfigLoader>()
-                .RegisterBootOperation<CollectDependencies>()
-                .RegisterBootOperation<PluginLoaderDefine>()
-                .RegisterBootOperation<PluginLoaderPreChecks>()
-                .RegisterBootOperation<PluginLoaderZipImporter>()
-                .RegisterBootOperation<PluginExtractor>()
-                .RegisterBootOperation<CliArgsParserAssembler>()
-                .RegisterBootOperation<BuildDependencies>()
-            ;
+            .RegisterBootOperation<EngineConfigLoader>()
+            .RegisterBootOperation<CollectDependencies>()
+            .RegisterBootOperation<PluginLoaderDefine>()
+            .RegisterBootOperation<PluginLoaderPreChecks>()
+            .RegisterBootOperation<PluginLoaderZipImporter>()
+            .RegisterBootOperation<PluginExtractor>()
+            .RegisterBootOperation<CliArgsParserAssembler>()
+            .RegisterBootOperation<BuildDependencies>()
+        ;
 
         IEngine engine = config.BuildEngine();
         var argsParser = EngineServices.GetService<IArgsParser>();
