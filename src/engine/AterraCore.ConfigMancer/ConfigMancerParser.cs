@@ -41,7 +41,7 @@ public class ConfigMancerParser(IPluginAtlas pluginAtlas, ILogger logger) : ICon
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    private static bool TryDeserializeWithAttributes(Type type, XmlNode node, [NotNullWhen(true)] out dynamic? deserialized) {
+    private static bool TryDeserializeWithAttributes(Type type, XmlNode node, [NotNullWhen(true)] out object? deserialized) {
         var serializer = new XmlSerializer(type, new XmlRootAttribute(node.LocalName) { Namespace = node.NamespaceURI });
         using var reader = new StringReader(node.OuterXml);
         deserialized = serializer.Deserialize(reader) ?? null;
@@ -50,7 +50,7 @@ public class ConfigMancerParser(IPluginAtlas pluginAtlas, ILogger logger) : ICon
     
     public bool TryParse(string filePath, out ParsedConfigs parsedConfigs) {
         parsedConfigs = default;
-        var parsedObjects = new Dictionary<AssetId, dynamic>();
+        var parsedObjects = new Dictionary<AssetId, object>();
         
         logger.Debug("{t}", _parsableTypes);
 
@@ -68,10 +68,10 @@ public class ConfigMancerParser(IPluginAtlas pluginAtlas, ILogger logger) : ICon
 
             while (queue.TryDequeue(out XmlNode? node)) {
                 if (_parsableTypes.TryGetValue(node.Name, out ConfigMancerValueRecord? record)
-                    && TryDeserializeWithAttributes(record.Type, node, out dynamic? deserialized)
+                    && TryDeserializeWithAttributes(record.Type, node, out object? deserialized)
                     && parsedObjects.TryAdd(record.ElementAttribute.AssetId, deserialized)
                 ) {
-                    logger.Debug("{type} parsed", record?.Type);
+                    logger.Debug("{type} parsed", record.Type);
                     continue;
                 }
             
