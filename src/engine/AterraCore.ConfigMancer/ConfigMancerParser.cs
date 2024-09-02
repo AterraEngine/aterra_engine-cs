@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Attributes;
 using AterraCore.Attributes.ConfigMancer;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.ConfigMancer;

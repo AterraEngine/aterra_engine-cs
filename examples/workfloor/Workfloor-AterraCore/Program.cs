@@ -17,7 +17,8 @@ public static class Program {
     public async static Task Main(string[] args) {
         IEngineConfiguration config = new EngineConfiguration()
             .RegisterBootOperation<EngineConfigLoader>()
-            .RegisterBootOperation<CollectDependencies>()
+            .RegisterBootOperation<CollectDependenciesByAttribute>() // Do these first, because the manual ones might overwrite
+            .RegisterBootOperation<CollectDependenciesManually>()
             .RegisterBootOperation<PluginLoaderDefine>()
             .RegisterBootOperation<PluginLoaderPreChecks>()
             .RegisterBootOperation<PluginLoaderZipImporter>()
