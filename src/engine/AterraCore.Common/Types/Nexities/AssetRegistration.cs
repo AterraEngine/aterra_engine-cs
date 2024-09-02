@@ -29,6 +29,9 @@ public record struct AssetRegistration(
     private ConstructorInfo? _constructor = null;
     public ConstructorInfo Constructor => _constructor ??= Type.GetConstructors().First();
 
+    public int? _paramLength = null;
+    public int ConstructorParamLength => _paramLength ?? Constructor.GetParameters().Length;
+
     private bool? _isSingleton;
     public bool IsSingleton => _isSingleton ??= CoreTags.HasFlag(CoreTags.Singleton);
 

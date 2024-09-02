@@ -67,9 +67,7 @@ public class CollectDependencies : IBootOperation {
             NewServiceDescriptor<IPluginAtlas, PluginAtlas>(ServiceLifetime.Singleton),
             #endregion
             #region OmniVault
-            NewServiceDescriptor<AssetAtlas, AssetAtlas>(ServiceLifetime.Singleton),
-            ServiceDescriptor.Singleton<IAssetAtlas>(provider => provider.GetRequiredService<AssetAtlas>()),
-            NewServiceDescriptor<IAssetAtlasPopulator, AssetAtlasPopulator>(ServiceLifetime.Singleton),
+            NewServiceDescriptor<IAssetAtlas, AssetAtlas>(ServiceLifetime.Singleton),
             NewServiceDescriptor<IAssetInstanceAtlas, AssetInstanceAtlas>(ServiceLifetime.Singleton),
             NewServiceDescriptor<IAssetInstanceFactory, AssetInstanceFactory>(ServiceLifetime.Singleton),
 

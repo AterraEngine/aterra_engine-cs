@@ -2,15 +2,11 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Data;
-using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts;
 using AterraCore.Contracts.ConfigMancer;
-using AterraCore.Contracts.FlexiPlug;
-using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading;
 using AterraCore.DI;
-using AterraLib;
 using AterraLib.Contracts;
 using JetBrains.Annotations;
 using Serilog;
@@ -22,9 +18,6 @@ namespace AterraEngine;
 [UsedImplicitly]
 public class Engine(
     ILogger logger,
-    IPluginAtlas pluginAtlas,
-    IAssetAtlas assetAtlas,
-    IAssetAtlasPopulator assetAtlasPopulator,
     IAterraCoreWorld world,
     IThreadingManager threadingManager
 ) : IEngine {
@@ -61,8 +54,6 @@ public class Engine(
         await Task.WhenAll(logicTask, renderTask);
         if (!logicTask.Result) throw new ApplicationException("Failed to start LogicThread ");
         if (!renderTask.Result) throw new ApplicationException("Failed to start RenderThread ");
-        
-        assetAtlasPopulator.PopulateAssetAtlas();
         
         if (!world.TryChangeActiveLevel(AssetIdLib.AterraCore.Entities.EmptyLevel)) throw new ApplicationException("Failed to change active level");
         await Task.Delay(1_000);
