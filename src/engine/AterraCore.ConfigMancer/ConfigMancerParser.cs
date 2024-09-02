@@ -5,6 +5,7 @@ using AterraCore.Attributes.ConfigMancer;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.ConfigMancer;
 using AterraCore.Contracts.FlexiPlug;
+using AterraCore.Contracts.PoolCorps;
 using JetBrains.Annotations;
 using Serilog;
 using System.Collections.Immutable;
@@ -18,7 +19,7 @@ namespace AterraCore.ConfigMancer;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
-public class ConfigMancerParser(IPluginAtlas pluginAtlas, ILogger logger) : IConfigMancerParser {
+public class ConfigMancerParser(IPluginAtlas pluginAtlas, ILogger logger, IXmlPools xmlPools) : IConfigMancerParser {
     private readonly ImmutableDictionary<string, ConfigMancerValueRecord> _parsableTypes = pluginAtlas.Plugins
         .SelectMany(plugin => plugin.Types)
         .SelectMany(type => type
@@ -45,6 +46,7 @@ public class ConfigMancerParser(IPluginAtlas pluginAtlas, ILogger logger) : ICon
     public bool TryParse(string filePath, out ParsedConfigs parsedConfigs) {
         parsedConfigs = default;
         var parsedObjects = new Dictionary<AssetId, object>();
+        Queue<XmlNode> queue = xmlPools.XmlNodeQueuePool.Get();
 
         try {
             var xmlDoc = new XmlDocument();
@@ -54,25 +56,30 @@ public class ConfigMancerParser(IPluginAtlas pluginAtlas, ILogger logger) : ICon
                 logger.Warning("Failed find any data in the XML file {path}", filePath);
                 return false;
             }
-
-            var queue = new Queue<XmlNode>(xmlDoc.DocumentElement.ChildNodes.Cast<XmlNode>());
+            
+            foreach (XmlNode node in xmlDoc.DocumentElement.ChildNodes) {
+                queue.Enqueue(node);
+            }
 
             while (queue.TryDequeue(out XmlNode? node)) {
                 if (_parsableTypes.TryGetValue(node.Name, out ConfigMancerValueRecord? record)
                     && TryDeserializeWithAttributes(record.Type, node, out object? deserialized)
                     && parsedObjects.TryAdd(record.ElementAttribute.AssetId, deserialized)
                 ) continue;
-                
-                foreach (XmlNode n in node.ChildNodes) 
+
+                foreach (XmlNode n in node.ChildNodes)
                     queue.Enqueue(n);
             }
-            
+
             parsedConfigs = new ParsedConfigs(parsedObjects);
             return true;
         }
         catch (Exception ex) {
             logger.Error(ex, "Failed to parse XML file, {path}", filePath);
             return false;
+        }
+        finally {
+            xmlPools.XmlNodeQueuePool.Return(queue);
         }
     }
 }
