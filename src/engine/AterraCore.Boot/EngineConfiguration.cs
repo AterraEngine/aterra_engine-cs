@@ -37,9 +37,9 @@ public class EngineConfiguration(ILogger? logger = null) : IEngineConfiguration 
         var builder = new ValuedStringBuilder();
         builder.AppendLine("Order of Boot Operations:");
 
-        foreach (IBootOperation operation in OrderOfBootOperations) {
+        foreach (IBootOperation operation in OrderOfBootOperations) 
             builder.AppendLineValued("- ", operation.GetType().FullName);
-        }
+        
         Logger.Information(builder);
     }
     #endregion
@@ -66,7 +66,8 @@ public class EngineConfiguration(ILogger? logger = null) : IEngineConfiguration 
         );
 
         // Populate Plugin Atlas with plugin list
-        //      Is a singleton anyway, so doesn't matter when we assign this data
+        //      It is REQUIRED that the plugin atlas is assembled before the engine,
+        //      This is because a lot of DI classes rely on the data in PluginAtlas being there already
         Logger.Information("Preloading the Engine {i} plugins", Components.ValidPlugins.Length);
         EngineServices.GetPluginAtlas().ImportLoadedPluginDtos(Components.ValidPlugins);
 
