@@ -19,7 +19,7 @@ public class PluginExtractor : IBootOperation {
     public void Run(IBootComponents components) {
         foreach (IPluginBootDto plugin in components.ValidPlugins) {
             #region Import Dynamic injectables from Assembly
-            components.DynamicServices.AddLastRepeated(
+            components.ServiceDescriptors.AddLastRepeated(
                 plugin.GetOfAttribute<InjectableAttribute>()
                     .Where(tuple => !tuple.Attribute.IsStatic)
                     .SelectMany(tuple => tuple.Attribute.Interfaces.Select(@interface => (tuple.Type, tuple.Attribute, Interface: @interface)))
@@ -31,7 +31,7 @@ public class PluginExtractor : IBootOperation {
             );
             #endregion
             #region Import Nexities Asset Factories from Assembly
-            components.DynamicServices.AddLastRepeated(
+            components.ServiceDescriptors.AddLastRepeated(
                 plugin.GetOfAttribute<AssetAttribute>()
                     .SelectMany(tuple => tuple.Attribute.InterfaceTypes.Select(i => (tuple.Type, tuple.Attribute, Interface: i))
                         .Select(valueTuple => new ServiceDescriptor(

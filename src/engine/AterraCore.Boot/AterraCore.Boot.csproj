@@ -26,6 +26,7 @@
         <ProjectReference Include="..\AterraCore.OmniVault.Textures\AterraCore.OmniVault.Textures.csproj"/>
         <ProjectReference Include="..\AterraCore.OmniVault.World\AterraCore.OmniVault.World.csproj"/>
         <ProjectReference Include="..\AterraCore.PoolCorps\AterraCore.PoolCorps.csproj" />
+        <ProjectReference Include="..\AterraCore.ConfigMancer\AterraCore.ConfigMancer.csproj" />
         <ProjectReference Include="..\AterraEngine\AterraEngine.csproj"/>
     </ItemGroup>
 

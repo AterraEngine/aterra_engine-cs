@@ -14,9 +14,7 @@ public interface IBootComponents {
     IServiceCollection Services { get; }
 
     IFilePathPluginLoader PluginLoader { get; }
-    LinkedList<ServiceDescriptor> DefaultServices { get; }
-    LinkedList<ServiceDescriptor> StaticServices { get; }
-    LinkedList<ServiceDescriptor> DynamicServices { get; }
+    LinkedList<ServiceDescriptor> ServiceDescriptors { get; }
     LinkedList<IPluginBootDto> AssemblyLoadedPlugins { get; }
     EngineConfigXml EngineConfigXml { get; set; }
 

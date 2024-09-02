@@ -7,5 +7,6 @@
     <expectedGameVersion>0.0.0</expectedGameVersion>
     <bins>
         <bin file="AterraLib.dll"/>
+        <bin file="AterraLib.Contracts.dll"/>
     </bins>
 </pluginConfig>

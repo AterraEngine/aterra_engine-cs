@@ -11,6 +11,7 @@
         <ProjectReference Include="..\..\engine\AterraCore.Contracts\AterraCore.Contracts.csproj"/>
         <ProjectReference Include="..\..\engine\AterraCore.Nexities\AterraCore.Nexities.csproj"/>
         <ProjectReference Include="..\..\engine\AterraCore.OmniVault.Textures\AterraCore.OmniVault.Textures.csproj"/>
+        <ProjectReference Include="..\..\engine\AterraLib.Contracts\AterraLib.Contracts.csproj" />
         <ProjectReference Include="..\..\lib\Extensions\Extensions.csproj"/>
     </ItemGroup>
 
@@ -50,6 +51,7 @@
         <ItemGroup>
             <!-- Default dll of the project -->
             <DllFiles Include="$(OutDir)\$(MSBuildProjectName).dll"/>
+            <DllFiles Include="$(OutDir)\$(MSBuildProjectName).Contracts.dll"/>
             <!-- Add more dlls when needed -->
 
             <!--  -->
