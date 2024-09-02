@@ -56,4 +56,10 @@ public static class AssetIdLib {
         }
         #endregion
     }
+
+    public static class AterraLib {
+        private const string ThisSection = nameof(AterraLib);
+        public const string ConfigMancer = $"{ThisSection}:{nameof(ConfigMancer)}";
+    }
+    
 }

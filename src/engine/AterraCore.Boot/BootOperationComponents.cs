@@ -15,9 +15,7 @@ public record BootComponents(
 ) : IBootComponents {
     public IServiceCollection Services { get; } = new ServiceCollection();
 
-    public LinkedList<ServiceDescriptor> DefaultServices { get; } = [];
-    public LinkedList<ServiceDescriptor> StaticServices { get; } = [];
-    public LinkedList<ServiceDescriptor> DynamicServices { get; } = [];
+    public LinkedList<ServiceDescriptor> ServiceDescriptors { get; } = [];
 
     public LinkedList<IPluginBootDto> AssemblyLoadedPlugins { get; } = [];
 

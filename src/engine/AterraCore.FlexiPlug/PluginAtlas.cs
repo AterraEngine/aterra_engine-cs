@@ -22,21 +22,22 @@ public class PluginAtlas(ILogger logger) : IPluginAtlas {
     private ILogger Logger => logger.ForContext<PluginAtlas>();
 
     private int? _totalAssetCountCache;
-    private LinkedList<IPluginRecord> Plugins { get; } = [];
+    private LinkedList<IPluginRecord> _plugins = [];
+    public IReadOnlyCollection<IPluginRecord> Plugins => [.._plugins];
 
     private readonly HashSet<PluginId> _pluginIds = [];
     public IReadOnlySet<PluginId> PluginIds => _pluginIds;
 
     private ImmutableDictionary<string, ZipArchive> _pluginZipArchive = ImmutableDictionary<string, ZipArchive>.Empty;
 
-    public int TotalAssetCount => _totalAssetCountCache ??= Plugins.SelectMany(p => p.AssetTypes).Count();
+    public int TotalAssetCount => _totalAssetCountCache ??= _plugins.SelectMany(p => p.AssetTypes).Count();
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public void ImportLoadedPluginDtos(Span<IPluginBootDto> plugins) {
         foreach (IPluginBootDto plugin in plugins) {
-            Plugins.AddLast(new PluginRecord {
+            _plugins.AddLast(new PluginRecord {
                 PluginId = plugin.PluginNameSpaceId,
                 Types = plugin.Types,
                 PluginBootDto = plugin
@@ -44,12 +45,12 @@ public class PluginAtlas(ILogger logger) : IPluginAtlas {
             _pluginIds.Add(plugin.PluginNameSpaceId);
         }
     }
-    public void InvalidateAllCaches() => Plugins.IterateOver(plugin => plugin.InvalidateCaches());
+    public void InvalidateAllCaches() => _plugins.IterateOver(plugin => plugin.InvalidateCaches());
 
     #region Get Registrations
     public IEnumerable<AssetRegistration> GetAssetRegistrations(PluginId? pluginNameSpace = null, CoreTags? filter = null) {
         // Given this is only done once (during project startup), caching this seems a bit unnecessary.
-        return Plugins
+        return _plugins
             // Filter down to only the plugin we need
             .ConditionalWhere(pluginNameSpace != null, predicate: p => p.PluginId == (PluginId)pluginNameSpace!)
             .SelectMany(p => p.AssetTypes
@@ -91,7 +92,7 @@ public class PluginAtlas(ILogger logger) : IPluginAtlas {
     ) {
         bytes = default;
 
-        IPluginRecord? pluginRecord = Plugins.FirstOrDefault(p => p.PluginId == pluginId);
+        IPluginRecord? pluginRecord = _plugins.FirstOrDefault(p => p.PluginId == pluginId);
         if (pluginRecord is not { PluginBootDto.FilePath: var filePath } || !filePath.IsNotNullOrEmpty()) {
             logger.Debug("plugin record did not exist {r}", pluginRecord);
             return false;

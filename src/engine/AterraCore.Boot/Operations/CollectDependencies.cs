@@ -23,6 +23,8 @@ using AterraCore.OmniVault.Textures;
 using AterraCore.OmniVault.World;
 using AterraCore.OmniVault.World.EntityTree;
 using AterraCore.OmniVault.World.EntityTree.Pools;
+using AterraCore.ConfigMancer;
+using AterraCore.Contracts.ConfigMancer;
 using AterraEngine;
 using AterraEngine.Threading;
 using AterraEngine.Threading.CrossThread;
@@ -37,8 +39,8 @@ namespace AterraCore.Boot.Operations;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class CollectDefaultDependencies : IBootOperation {
-    private ILogger Logger { get; } = StartupLogger.CreateLogger(false).ForBootOperationContext(nameof(CollectDefaultDependencies));
+public class CollectDependencies : IBootOperation {
+    private ILogger Logger { get; } = StartupLogger.CreateLogger(false).ForBootOperationContext(nameof(CollectDependencies));
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
@@ -59,6 +61,7 @@ public class CollectDefaultDependencies : IBootOperation {
             NewServiceDescriptor<IRenderEventManager, RenderEventManager>(ServiceLifetime.Singleton),
             NewServiceDescriptor<ILogicThreadProcessor, LogicThreadProcessor>(ServiceLifetime.Singleton),
             NewServiceDescriptor<IRenderThreadProcessor, RenderThreadProcessor>(ServiceLifetime.Singleton),
+            NewServiceDescriptor<IConfigMancerParser, ConfigMancerParser>(ServiceLifetime.Singleton),
             #endregion
             #region PluginLoading
             NewServiceDescriptor<IPluginAtlas, PluginAtlas>(ServiceLifetime.Singleton),
@@ -97,7 +100,7 @@ public class CollectDefaultDependencies : IBootOperation {
         dependencies.AddRange(enumerable);
         #endregion
 
-        components.DefaultServices.AddLastRepeated(dependencies);
+        components.ServiceDescriptors.AddLastRepeated(dependencies);
 
     }
 }

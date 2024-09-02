@@ -10,6 +10,7 @@ namespace AterraCore.Common.Data;
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 public static class Paths {
     public const string ConfigEngine = "engine-config.xml";
+    public const string ConfigGame = "game-config.xml";
 
     public static class Logs {
         public const string Folder = "logs";

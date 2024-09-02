@@ -4,7 +4,7 @@
 using AterraCore.Attributes;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Components;
-using AterraCore.Contracts.Nexities.Entities.Pools;
+using AterraCore.Contracts.PoolCorps;
 using JetBrains.Annotations;
 using Microsoft.Extensions.ObjectPool;
 using System.Collections.Concurrent;

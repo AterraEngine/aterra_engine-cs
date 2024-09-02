@@ -67,6 +67,7 @@
         <!-- Define list of special config files -->
         <ItemGroup>
             <ConfigFiles Include="engine-config.xml"/>
+            <ConfigFiles Include="game-config.xml"/>
         </ItemGroup>
 
         <!-- Copy config files to output directory -->

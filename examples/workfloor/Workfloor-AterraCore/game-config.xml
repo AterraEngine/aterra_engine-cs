@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<gameConfig xmlns="urn:aterra-engine:game-config">
+    <configs>
+        <aterraLib xmlns="urn:aterra-engine:game-config:aterra-lib">
+            <somePupperty>Something TTS Related</somePupperty>
+        </aterraLib>
+    </configs>
+</gameConfig>

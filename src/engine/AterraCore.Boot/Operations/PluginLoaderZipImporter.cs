@@ -61,6 +61,7 @@ public class PluginLoaderZipImporter : IBootOperation {
                     .Where(assembly => assembly != null)
                     .Select(assembly => assembly!);
 
+
                 plugin.UpdateAssemblies(assemblies);
             }
             #endregion

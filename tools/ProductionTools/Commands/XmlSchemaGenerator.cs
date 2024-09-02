@@ -6,6 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using JetBrains.Annotations;
 using Xml;
 using AterraCore.Common.Data;
+using AterraLib;
 
 namespace ProductionTools.Commands;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -33,7 +34,9 @@ public class XmlSchemaGenerator(ILogger logger) : ICommandAtlas {
 
     private readonly Dictionary<string, XsdGeneratorRecord> _dictionary = new() {
         { "engine-config", new XsdGeneratorRecord(XmlNameSpaces.ConfigEngine, typeof(EngineConfigXml)) },
-        { "plugin-config", new XsdGeneratorRecord(XmlNameSpaces.ConfigPlugin, typeof(PluginConfigXml)) }
+        { "plugin-config", new XsdGeneratorRecord(XmlNameSpaces.ConfigPlugin, typeof(PluginConfigXml)) },
+        { "game-config", new XsdGeneratorRecord(XmlNameSpaces.ConfigGame, typeof(GameConfigXml)) },
+        { "game-config-aterralib", new XsdGeneratorRecord(XmlNameSpaces.ConfigGameAterraLib, typeof(AterraLibGameConfig)) },
     };
 
     // -----------------------------------------------------------------------------------------------------------------

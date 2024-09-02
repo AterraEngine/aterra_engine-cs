@@ -4,6 +4,7 @@
 using AterraCore.Common.Data;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Boot.Logic.PluginLoading.Dto;
+using AterraCore.Contracts.FlexiPlug.Plugin;
 using System.Diagnostics.CodeAnalysis;
 
 namespace AterraCore.Contracts.FlexiPlug;
@@ -12,6 +13,7 @@ namespace AterraCore.Contracts.FlexiPlug;
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IPluginAtlas {
     public int TotalAssetCount { get; }
+    public IReadOnlyCollection<IPluginRecord> Plugins { get;}
     public IReadOnlySet<PluginId> PluginIds { get; }
 
     // -----------------------------------------------------------------------------------------------------------------

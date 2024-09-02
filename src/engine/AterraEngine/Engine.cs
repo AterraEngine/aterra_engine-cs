@@ -4,10 +4,14 @@
 using AterraCore.Common.Data;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts;
+using AterraCore.Contracts.ConfigMancer;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading;
+using AterraCore.DI;
+using AterraLib;
+using AterraLib.Contracts;
 using JetBrains.Annotations;
 using Serilog;
 
@@ -31,6 +35,44 @@ public class Engine(
     public async Task Run() {
         Logger.Information("Entered AterraEngine");
 
+
+        var reflectiXml = EngineServices.GetService<IConfigMancerParser>();
+        
+        if (!reflectiXml.TryParse(Paths.ConfigGame, out ParsedConfigs parsedConfigs)) {
+            Logger.Error("Config could not be parsed from {path}", Paths.ConfigGame);
+            throw new ApplicationException("Config could not be parsed");
+        }
+        
+        Logger.Information("Loaded {elements} reflecti xml elements", parsedConfigs.Count());
+        Logger.Information("{@elements}", parsedConfigs.Count());
+        
+        // Now try filtering by type
+        if (!parsedConfigs.TryGetConfig(AssetIdLib.AterraLib.ConfigMancer, out IAterraLibGameConfig? aterraLibConfig)) {
+            Logger.Error("Config was not setup correctly. Couldn't find {key} in parsed configurations", typeof(AterraLibGameConfig));
+            throw new ApplicationException("Config was not setup correctly");
+        }
+        
+        Logger.Information("{@c}", aterraLibConfig);
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         Task<bool> logicTask = threadingManager.TrySpawnLogicThreadAsync();
         Task<bool> renderTask = threadingManager.TrySpawnRenderThreadAsync();
 
