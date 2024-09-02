@@ -22,7 +22,7 @@ namespace Workfloor_AterraCore.Plugin.Assets.Systems.Logic;
 [System("Workfloor:Systems/LevelSwitch", CoreTags.LogicSystem)]
 [Injectable<LevelSwitch>(ServiceLifetime.Singleton)]
 [UsedImplicitly]
-public class LevelSwitch(IAterraCoreWorld world, IAssetAtlas assetAtlas, ILogger logger, IAssetInstanceAtlas instanceAtlas) : AssetInstance, INexitiesSystem {
+public class LevelSwitch(IAterraCoreWorld world, IAssetAtlas assetAtlas, ILogger logger) : AssetInstance, INexitiesSystem {
     private List<AssetId>? _levelsCache;
     private List<AssetId> Levels => _levelsCache ??= assetAtlas.GetAllAssetsOfCoreTag(CoreTags.Level).ToList();
 

@@ -5,20 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\..\engine\AterraCore.Attributes\AterraCore.Attributes.csproj"/>
-        <ProjectReference Include="..\..\engine\AterraCore.Contracts\AterraCore.Contracts.csproj"/>
-        <ProjectReference Include="..\..\engine\AterraCore.Nexities\AterraCore.Nexities.csproj"/>
-        <ProjectReference Include="..\..\engine\AterraCore.OmniVault.Textures\AterraCore.OmniVault.Textures.csproj"/>
-        <ProjectReference Include="..\..\engine\AterraLib.Contracts\AterraLib.Contracts.csproj" />
-        <ProjectReference Include="..\..\lib\Extensions\Extensions.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <Folder Include="Nexities\"/>
-    </ItemGroup>
-
+    
     <ItemGroup>
         <PackageReference Include="JetBrains.Annotations" Version="2024.2.0"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0"/>
@@ -30,6 +17,15 @@
         <Content Include="..\..\..\resources\aterra_engine-logo.png" CopyToOutputDirectory="Always">
             <Link>assets\aterra_engine-logo.png</Link>
         </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\lib\Extensions\Extensions.csproj" />
+      <ProjectReference Include="..\..\AterraCore.Attributes\AterraCore.Attributes.csproj" />
+      <ProjectReference Include="..\..\AterraCore.Contracts\AterraCore.Contracts.csproj" />
+      <ProjectReference Include="..\..\AterraCore.Nexities\AterraCore.Nexities.csproj" />
+      <ProjectReference Include="..\..\AterraCore.OmniVault.Textures\AterraCore.OmniVault.Textures.csproj" />
+      <ProjectReference Include="..\AterraLib.Contracts\AterraLib.Contracts.csproj" />
     </ItemGroup>
 
     <Target Name="PackingToZip" AfterTargets="Build">

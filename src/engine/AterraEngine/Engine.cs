@@ -48,7 +48,6 @@ public class Engine(
         
         // Now try filtering by type
         if (!parsedConfigs.TryGetConfig(AssetIdLib.AterraLib.ConfigMancer, out IAterraLibGameConfig? aterraLibConfig)) {
-            Logger.Error("Config was not setup correctly. Couldn't find {key} in parsed configurations", typeof(AterraLibGameConfig));
             throw new ApplicationException("Config was not setup correctly");
         }
         

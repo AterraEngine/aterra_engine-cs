@@ -7,22 +7,18 @@
         <Nullable>enable</Nullable>
         <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     </PropertyGroup>
-
+    
     <ItemGroup>
-        <ProjectReference Include="..\..\..\src\lib\AterraLib\AterraLib.csproj"/>
-        <ProjectReference Include="..\Workfloor-AterraCore\Workfloor-AterraCore.csproj"/>
+        <ProjectReference Include="..\..\..\src\engine\AterraCore.Attributes\AterraCore.Attributes.csproj" />
+        <ProjectReference Include="..\..\..\src\engine\AterraCore.Common\AterraCore.Common.csproj" />
+        <ProjectReference Include="..\..\..\src\engine\AterraCore.Contracts\AterraCore.Contracts.csproj" />
+        <ProjectReference Include="..\..\..\src\engine\AterraCore.OmniVault.Assets\AterraCore.OmniVault.Assets.csproj" />
+        <ProjectReference Include="..\..\..\src\engine\AterraCore.OmniVault.Textures\AterraCore.OmniVault.Textures.csproj" />
+        <ProjectReference Include="..\..\..\src\engine\pluginlib\AterraLib\AterraLib.csproj" />
         <ProjectReference Include="..\..\..\tools\Analyzers\AterraEngine.Analyzers\AterraEngine.Analyzers.csproj">
             <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
             <OutputItemType>Analyzer</OutputItemType>
         </ProjectReference>
-    </ItemGroup>
-
-
-    <ItemGroup>
-        <ProjectReference Include="..\..\..\src\engine\AterraCore.Contracts\AterraCore.Contracts.csproj"/>
-        <ProjectReference Include="..\..\..\src\engine\AterraCore.FlexiPlug\AterraCore.FlexiPlug.csproj"/>
-        <ProjectReference Include="..\..\..\src\engine\AterraCore.Nexities\AterraCore.Nexities.csproj"/>
-        <ProjectReference Include="..\..\..\src\engine\AterraEngine\AterraEngine.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
