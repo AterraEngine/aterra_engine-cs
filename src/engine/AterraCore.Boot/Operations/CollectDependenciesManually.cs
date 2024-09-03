@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.ConfigFiles;
 using AterraCore.Contracts;
 using AterraCore.Contracts.Boot.Operations;
 using AterraCore.Contracts.FlexiPlug;
@@ -78,6 +79,7 @@ public class CollectDependenciesManually : IBootOperation {
             NewServiceDescriptor<IDataCollectorFactory, DataCollectorFactory>(ServiceLifetime.Singleton),
             ServiceDescriptor.Singleton<IDataCollector>(provider => provider.GetRequiredService<IDataCollectorFactory>().Create()),
             #endregion
+             ServiceDescriptor.Singleton(components.EngineConfigXml), 
         ];
 
         components.ServiceDescriptors.AddLastRepeated(dependencies);

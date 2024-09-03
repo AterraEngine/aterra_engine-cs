@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.ConfigFiles;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Boot.Logic.PluginLoading.Dto;
 
@@ -14,6 +15,7 @@ public interface IPluginRecord {
     public IEnumerable<AssetTypeRecord> AssetTypes { get; }
 
     public IPluginBootDto PluginBootDto { get; }
+    public PluginConfigXml PluginConfigXml { get; }
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods

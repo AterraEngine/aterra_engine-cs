@@ -44,9 +44,9 @@ public class ConfigMancerParser(IPluginAtlas pluginAtlas, ILogger logger, IXmlPo
         return deserialized != null;
     }
     
-    public bool TryParse(string filePath, out ParsedConfigs parsedConfigs) {
+    public bool TryParseGameConfig(string filePath, out ParsedConfigs parsedConfigs) {
         parsedConfigs = default;
-        var parsedObjects = new Dictionary<AssetId, object>();
+        var parsedObjects = new Dictionary<Type, object>();
         Queue<XmlNode> queue = xmlPools.XmlNodeQueuePool.Get();
 
         try {
@@ -65,7 +65,7 @@ public class ConfigMancerParser(IPluginAtlas pluginAtlas, ILogger logger, IXmlPo
             while (queue.TryDequeue(out XmlNode? node)) {
                 if (_parsableTypes.TryGetValue(node.Name, out ConfigMancerValueRecord? record)
                     && TryDeserializeWithAttributes(record.Type, node, out object? deserialized)
-                    && parsedObjects.TryAdd(record.ElementAttribute.AssetId, deserialized)
+                    && parsedObjects.TryAdd(record.Type, deserialized)
                 ) continue;
 
                 foreach (XmlNode n in node.ChildNodes)
@@ -83,4 +83,5 @@ public class ConfigMancerParser(IPluginAtlas pluginAtlas, ILogger logger, IXmlPo
             xmlPools.XmlNodeQueuePool.Return(queue);
         }
     }
+
 }

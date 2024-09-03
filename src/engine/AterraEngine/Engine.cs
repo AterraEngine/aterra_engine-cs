@@ -32,16 +32,16 @@ public class Engine(
 
         var reflectiXml = EngineServices.GetService<IConfigMancerParser>();
         
-        if (!reflectiXml.TryParse(Paths.ConfigGame, out ParsedConfigs parsedConfigs)) {
+        if (!reflectiXml.TryParseGameConfig(Paths.ConfigGame, out ParsedConfigs parsedConfigs)) {
             Logger.Error("Config could not be parsed from {path}", Paths.ConfigGame);
             throw new ApplicationException("Config could not be parsed");
         }
         
-        Logger.Information("Loaded {elements} reflecti xml elements", parsedConfigs.Count());
-        Logger.Information("{@elements}", parsedConfigs.Count());
+        Logger.Information("Loaded {elements} reflecti xml elements", parsedConfigs.Count);
+        Logger.Information("{@elements}", parsedConfigs.Count);
         
         // Now try filtering by type
-        if (!parsedConfigs.TryGetConfig(AssetIdLib.AterraLib.ConfigMancer, out IAterraLibGameConfig? aterraLibConfig)) {
+        if (!parsedConfigs.TryGetConfig(out IAterraLibGameConfig? aterraLibConfig)) {
             throw new ApplicationException("Config was not setup correctly");
         }
         
@@ -57,7 +57,7 @@ public class Engine(
         
         if (!world.TryChangeActiveLevel(AssetIdLib.AterraCore.Entities.EmptyLevel)) throw new ApplicationException("Failed to change active level");
         await Task.Delay(1_000);
-        if (!world.TryChangeActiveLevel("Workfloor:Levels/DragonDucksLevel")) throw new ApplicationException("Failed to change active level to");
+        if (!world.TryChangeActiveLevel("Workfloor:Levels/MainLevel")) throw new ApplicationException("Failed to change active level to");
      
         // -------------------------------------------------------------------------------------------------------------
 

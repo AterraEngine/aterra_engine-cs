@@ -7,5 +7,5 @@ namespace AterraCore.Contracts.ConfigMancer;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IConfigMancerParser {
-    bool TryParse(string filePath, out ParsedConfigs parsedConfigs);
+    bool TryParseGameConfig(string filePath, out ParsedConfigs parsedConfigs);
 }
