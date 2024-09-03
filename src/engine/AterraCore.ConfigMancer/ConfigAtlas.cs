@@ -1,11 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Attributes;
 using AterraCore.Common.ConfigFiles;
 using AterraCore.Common.Data;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.ConfigMancer;
 using AterraCore.Contracts.FlexiPlug;
+using JetBrains.Annotations;
 using System.Collections.Frozen;
 
 namespace AterraCore.ConfigMancer;
@@ -13,7 +15,9 @@ namespace AterraCore.ConfigMancer;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class ConfigAtlas(IConfigMancerParser configMancerParser, EngineConfigXml engineConfigXml, IPluginAtlas pluginAtlas) {
+[UsedImplicitly]
+[Injectable<ConfigAtlas, IConfigAtlas>]
+public class ConfigAtlas(IConfigMancerParser configMancerParser, EngineConfigXml engineConfigXml, IPluginAtlas pluginAtlas) : IConfigAtlas {
     public EngineConfigXml EngineConfigXml { get; } = engineConfigXml;
     public FrozenDictionary<PluginId, PluginConfigXml> PluginConfigXmls { get; } = pluginAtlas.Plugins.ToFrozenDictionary(
         plugin => plugin.PluginId,

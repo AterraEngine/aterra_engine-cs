@@ -6,7 +6,6 @@ using AterraCore.Contracts;
 using AterraCore.Contracts.ConfigMancer;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading;
-using AterraCore.DI;
 using AterraLib.Contracts;
 using JetBrains.Annotations;
 using Serilog;
@@ -19,6 +18,7 @@ namespace AterraEngine;
 public class Engine(
     ILogger logger,
     IAterraCoreWorld world,
+    IConfigAtlas configAtlas,
     IThreadingManager threadingManager
 ) : IEngine {
     private ILogger Logger { get; } = logger.ForContext<Engine>();
@@ -28,23 +28,10 @@ public class Engine(
     // -----------------------------------------------------------------------------------------------------------------
     public async Task Run() {
         Logger.Information("Entered AterraEngine");
-
-
-        var reflectiXml = EngineServices.GetService<IConfigMancerParser>();
         
-        if (!reflectiXml.TryParseGameConfig(Paths.ConfigGame, out ParsedConfigs parsedConfigs)) {
-            Logger.Error("Config could not be parsed from {path}", Paths.ConfigGame);
-            throw new ApplicationException("Config could not be parsed");
-        }
-        
-        Logger.Information("Loaded {elements} reflecti xml elements", parsedConfigs.Count);
-        Logger.Information("{@elements}", parsedConfigs.Count);
-        
-        // Now try filtering by type
-        if (!parsedConfigs.TryGetConfig(out IAterraLibGameConfig? aterraLibConfig)) {
+        if (!configAtlas.GameConfigs.TryGetConfig(out IAterraLibGameConfig? aterraLibConfig)) {
             throw new ApplicationException("Config was not setup correctly");
         }
-        
         Logger.Information("{@c}", aterraLibConfig);
         
         

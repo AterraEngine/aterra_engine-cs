@@ -2,8 +2,10 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Attributes;
+using AterraCore.ConfigMancer;
 using AterraCore.Contracts.Boot.Operations;
 using AterraCore.Loggers;
+using AterraCore.PoolCorps;
 using CodeOfChaos.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -21,13 +23,13 @@ public class CollectDependenciesByAttribute : IBootOperation {
     public void Run(IBootComponents components) {
         Logger.Debug("Entered Collection of Dependencies");
 
-        List<string> assemblyNames = [
-            "AterraCore.PoolCorps"
+        List<Assembly> assemblies = [
+            typeof(XmlPools).Assembly,
+            typeof(ConfigAtlas).Assembly
         ];
         
-        IEnumerable<ServiceDescriptor> dependencies = assemblyNames
-            .SelectMany(assemblyName => Assembly
-                .Load(assemblyName)
+        IEnumerable<ServiceDescriptor> dependencies = assemblies
+            .SelectMany(assembly => assembly
                 .GetTypes()
                 .Select(type => (type, Attributes: type.GetCustomAttributes<InjectableAttribute>()))
                 .Where(tuple => tuple.type is { IsClass: true, IsAbstract: false } && tuple.Attributes.Any())

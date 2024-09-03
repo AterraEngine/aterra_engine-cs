@@ -2,8 +2,6 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Attributes;
-using AterraCore.Attributes.ConfigMancer;
-using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.ConfigMancer;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.PoolCorps;
@@ -20,13 +18,12 @@ namespace AterraCore.ConfigMancer;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
+[Injectable<ConfigMancerParser, IConfigMancerParser>]
 public class ConfigMancerParser(IPluginAtlas pluginAtlas, ILogger logger, IXmlPools xmlPools) : IConfigMancerParser {
     private readonly FrozenDictionary<string, ConfigMancerValueRecord> _parsableTypes = pluginAtlas.Plugins
         .SelectMany(plugin => plugin.Types)
-        .SelectMany(type => type
-            .GetCustomAttributes<ConfigMancerElementAttribute>()
-            .Select(attribute => new ConfigMancerValueRecord(type, attribute, XmlRootElementName(type)))
-        )
+        .Where(type => typeof(IConfigMancerElement).IsAssignableFrom(type))
+        .Select(type =>  new ConfigMancerValueRecord(type, XmlRootElementName(type)))
         .ToFrozenDictionary(record => record.RootName)
     ;
 

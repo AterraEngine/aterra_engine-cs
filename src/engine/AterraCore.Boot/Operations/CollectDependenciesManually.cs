@@ -1,7 +1,6 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.ConfigFiles;
 using AterraCore.Contracts;
 using AterraCore.Contracts.Boot.Operations;
 using AterraCore.Contracts.FlexiPlug;
@@ -23,8 +22,6 @@ using AterraCore.OmniVault.Textures;
 using AterraCore.OmniVault.World;
 using AterraCore.OmniVault.World.EntityTree;
 using AterraCore.OmniVault.World.EntityTree.Pools;
-using AterraCore.ConfigMancer;
-using AterraCore.Contracts.ConfigMancer;
 using AterraEngine;
 using AterraEngine.Threading;
 using AterraEngine.Threading.CrossThread;
@@ -60,7 +57,6 @@ public class CollectDependenciesManually : IBootOperation {
             NewServiceDescriptor<IRenderEventManager, RenderEventManager>(ServiceLifetime.Singleton),
             NewServiceDescriptor<ILogicThreadProcessor, LogicThreadProcessor>(ServiceLifetime.Singleton),
             NewServiceDescriptor<IRenderThreadProcessor, RenderThreadProcessor>(ServiceLifetime.Singleton),
-            NewServiceDescriptor<IConfigMancerParser, ConfigMancerParser>(ServiceLifetime.Singleton),
             #endregion
             #region PluginLoading
             NewServiceDescriptor<IPluginAtlas, PluginAtlas>(ServiceLifetime.Singleton),
@@ -79,7 +75,7 @@ public class CollectDependenciesManually : IBootOperation {
             NewServiceDescriptor<IDataCollectorFactory, DataCollectorFactory>(ServiceLifetime.Singleton),
             ServiceDescriptor.Singleton<IDataCollector>(provider => provider.GetRequiredService<IDataCollectorFactory>().Create()),
             #endregion
-             ServiceDescriptor.Singleton(components.EngineConfigXml), 
+            ServiceDescriptor.Singleton(components.EngineConfigXml), 
         ];
 
         components.ServiceDescriptors.AddLastRepeated(dependencies);
