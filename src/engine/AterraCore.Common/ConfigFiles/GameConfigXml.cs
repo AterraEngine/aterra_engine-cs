@@ -1,13 +1,14 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.Data;
 using System.Xml.Serialization;
 
 namespace AterraCore.Common.ConfigFiles;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[XmlRoot("gameConfig")]
+[XmlRoot("gameConfig", Namespace = XmlNameSpaces.ConfigGame)]
 public class GameConfigXml {
     [XmlAnyElement("configs")] 
     public List<string> Configs { get; set; } = [];

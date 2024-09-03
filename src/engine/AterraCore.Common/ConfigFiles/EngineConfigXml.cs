@@ -8,7 +8,7 @@ namespace AterraCore.Common.ConfigFiles;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[XmlRoot("engineConfig")]
+[XmlRoot("engineConfig", Namespace = XmlNameSpaces.ConfigEngine)]
 public class EngineConfigXml {
     [XmlElement("logging")] public LoggingConfigDto LoggingConfig { get; set; } = new();
     [XmlElement("loadOrder")] public LoadOrderDto LoadOrder { get; set; } = new();

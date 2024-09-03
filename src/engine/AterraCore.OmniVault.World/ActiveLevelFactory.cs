@@ -10,6 +10,7 @@ using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.OmniVault.World.EntityTree;
 using JetBrains.Annotations;
+using System.Collections.Frozen;
 
 namespace AterraCore.OmniVault.World;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -41,7 +42,7 @@ public class ActiveLevelFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreeFa
                 .Select(asset => ((IActor2D)asset).Sprite2D.TextureAssetId)
                 .Select(id => assetAtlas.TryGetRegistration(id, out AssetRegistration assetInstance) ? assetInstance.AssetId : id)
                 .Distinct()
-                .ToArray()
+                .ToFrozenSet()
         };
     }
 
@@ -52,10 +53,9 @@ public class ActiveLevelFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreeFa
     /// <returns>An instance of the ActiveLevel with the specified properties populated.</returns>
     private INexitiesSystem[] GetNexitiesSystems(IReadOnlyCollection<AssetId> systemIds) {
         var systems = new List<INexitiesSystem>(systemIds.Count);
-        foreach (AssetId assetId in systemIds) {
-            if (instanceAtlas.TryGetOrCreate(assetId, out INexitiesSystem? instance, null))
+        foreach (AssetId assetId in systemIds)
+            if (instanceAtlas.TryGetOrCreate(assetId, out INexitiesSystem? instance))
                 systems.Add(instance);
-        }
 
         systems.TrimExcess();
         return systems.ToArray();

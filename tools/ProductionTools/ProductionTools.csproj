@@ -10,6 +10,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\src\engine\AterraEngine\AterraEngine.csproj"/>
+        <ProjectReference Include="..\..\src\engine\pluginlib\AterraLib\AterraLib.csproj" />
     </ItemGroup>
 
     <ItemGroup>

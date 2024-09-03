@@ -1,14 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Attributes.ConfigMancer;
-using AterraCore.Common.Types.Nexities;
+using AterraCore.Attributes;
 using AterraCore.Contracts.ConfigMancer;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.PoolCorps;
 using JetBrains.Annotations;
 using Serilog;
-using System.Collections.Immutable;
+using System.Collections.Frozen;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Xml;
@@ -19,14 +18,13 @@ namespace AterraCore.ConfigMancer;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
+[Injectable<ConfigMancerParser, IConfigMancerParser>]
 public class ConfigMancerParser(IPluginAtlas pluginAtlas, ILogger logger, IXmlPools xmlPools) : IConfigMancerParser {
-    private readonly ImmutableDictionary<string, ConfigMancerValueRecord> _parsableTypes = pluginAtlas.Plugins
+    private readonly FrozenDictionary<string, ConfigMancerValueRecord> _parsableTypes = pluginAtlas.Plugins
         .SelectMany(plugin => plugin.Types)
-        .SelectMany(type => type
-            .GetCustomAttributes<ConfigMancerElementAttribute>()
-            .Select(attribute => new ConfigMancerValueRecord(type, attribute, XmlRootElementName(type)))
-        )
-        .ToImmutableDictionary(record => record.RootName)
+        .Where(type => typeof(IConfigMancerElement).IsAssignableFrom(type))
+        .Select(type =>  new ConfigMancerValueRecord(type, XmlRootElementName(type)))
+        .ToFrozenDictionary(record => record.RootName)
     ;
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -43,9 +41,9 @@ public class ConfigMancerParser(IPluginAtlas pluginAtlas, ILogger logger, IXmlPo
         return deserialized != null;
     }
     
-    public bool TryParse(string filePath, out ParsedConfigs parsedConfigs) {
+    public bool TryParseGameConfig(string filePath, out ParsedConfigs parsedConfigs) {
         parsedConfigs = default;
-        var parsedObjects = new Dictionary<AssetId, object>();
+        var parsedObjects = new Dictionary<Type, object>();
         Queue<XmlNode> queue = xmlPools.XmlNodeQueuePool.Get();
 
         try {
@@ -64,7 +62,7 @@ public class ConfigMancerParser(IPluginAtlas pluginAtlas, ILogger logger, IXmlPo
             while (queue.TryDequeue(out XmlNode? node)) {
                 if (_parsableTypes.TryGetValue(node.Name, out ConfigMancerValueRecord? record)
                     && TryDeserializeWithAttributes(record.Type, node, out object? deserialized)
-                    && parsedObjects.TryAdd(record.ElementAttribute.AssetId, deserialized)
+                    && parsedObjects.TryAdd(record.Type, deserialized)
                 ) continue;
 
                 foreach (XmlNode n in node.ChildNodes)
@@ -82,4 +80,5 @@ public class ConfigMancerParser(IPluginAtlas pluginAtlas, ILogger logger, IXmlPo
             xmlPools.XmlNodeQueuePool.Return(queue);
         }
     }
+
 }

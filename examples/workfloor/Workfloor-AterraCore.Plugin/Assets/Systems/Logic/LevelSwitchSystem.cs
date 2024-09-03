@@ -4,7 +4,6 @@
 using AterraCore.Attributes;
 using AterraCore.Common.Data;
 using AterraCore.Common.Types.Nexities;
-using AterraCore.Contracts.Nexities.Levels;
 using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World;
@@ -22,7 +21,7 @@ namespace Workfloor_AterraCore.Plugin.Assets.Systems.Logic;
 [System("Workfloor:Systems/LevelSwitch", CoreTags.LogicSystem)]
 [Injectable<LevelSwitch>(ServiceLifetime.Singleton)]
 [UsedImplicitly]
-public class LevelSwitch(IAterraCoreWorld world, IAssetAtlas assetAtlas, ILogger logger, IAssetInstanceAtlas instanceAtlas) : AssetInstance, INexitiesSystem {
+public class LevelSwitch(IAterraCoreWorld world, IAssetAtlas assetAtlas, ILogger logger) : AssetInstance, INexitiesSystem {
     private List<AssetId>? _levelsCache;
     private List<AssetId> Levels => _levelsCache ??= assetAtlas.GetAllAssetsOfCoreTag(CoreTags.Level).ToList();
 

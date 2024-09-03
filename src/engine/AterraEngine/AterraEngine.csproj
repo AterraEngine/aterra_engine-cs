@@ -19,13 +19,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\lib\AterraLib\AterraLib.csproj"/>
         <ProjectReference Include="..\..\lib\Xml\Xml.csproj"/>
         <ProjectReference Include="..\AterraCore.Contracts\AterraCore.Contracts.csproj"/>
         <ProjectReference Include="..\AterraCore.DI\AterraCore.DI.csproj"/>
         <ProjectReference Include="..\AterraCore.FlexiPlug\AterraCore.FlexiPlug.csproj"/>
         <ProjectReference Include="..\AterraCore.Nexities\AterraCore.Nexities.csproj"/>
         <ProjectReference Include="..\AterraCore.Common\AterraCore.Common.csproj"/>
+        <ProjectReference Include="..\pluginlib\AterraLib.Contracts\AterraLib.Contracts.csproj" />
     </ItemGroup>
 
     <ItemGroup>

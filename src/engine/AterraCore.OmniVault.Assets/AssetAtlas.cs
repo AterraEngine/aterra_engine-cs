@@ -1,14 +1,16 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Attributes;
 using AterraCore.Common.Data;
 using AterraCore.Common.Types.Nexities;
+using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.OmniVault.Assets;
+using AterraCore.DI;
 using CodeOfChaos.Extensions;
+using Extensions;
 using JetBrains.Annotations;
 using Serilog;
-using System.Collections.Concurrent;
+using System.Collections.Frozen;
 using System.Diagnostics.CodeAnalysis;
 
 namespace AterraCore.OmniVault.Assets;
@@ -16,80 +18,95 @@ namespace AterraCore.OmniVault.Assets;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
-[Injectable<IAssetAtlas>]
-public class AssetAtlas(ILogger logger) : IAssetAtlas {
-    private ILogger Logger { get; } = logger.ForContext<AssetAtlas>();
-
-    private readonly ConcurrentDictionary<AssetId, AssetRegistration> _assetsById = new();
-    private readonly ConcurrentDictionary<Type, AssetId> _assetsByType = new();
-
-    private readonly ConcurrentDictionary<CoreTags, ConcurrentBag<AssetId>> _coreTaggedAssets = new ConcurrentDictionary<CoreTags, ConcurrentBag<AssetId>>().PopulateWithEmpties();
-    private readonly ConcurrentDictionary<string, ConcurrentBag<AssetId>> _stringTaggedAssets = new();
+public class AssetAtlas(IPluginAtlas pluginAtlas) : IAssetAtlas {
+    private readonly FrozenDictionary<AssetId, AssetRegistration> _assetsById = AssembleAssetsById(pluginAtlas);
+    private readonly FrozenDictionary<Type, AssetId> _assetsByType = AssembleAssetsByType(pluginAtlas);
+    private readonly FrozenDictionary<CoreTags, FrozenSet<AssetId>> _coreTaggedAssets  = AssembleCoreTaggedAssets(pluginAtlas);
+    private readonly FrozenDictionary<string, FrozenSet<AssetId>> _stringTaggedAssets = AssembleStringTaggedAssets(pluginAtlas);
 
     public int TotalCount => _assetsById.Count;
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Constructor Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    #region Special constructor methods
+    private static FrozenDictionary<AssetId, AssetRegistration> AssembleAssetsById(IPluginAtlas pluginAtlas) {
+        Dictionary<AssetId, AssetRegistration> assetsById = new();
+        ILogger logger = EngineServices.GetLogger();
+
+        foreach (AssetRegistration registration in pluginAtlas.GetAssetRegistrations()) {
+            if (!assetsById.TryAdd(registration.AssetId, registration)) {
+                logger.Warning(
+                    "Asset with ID: {AssetId} already exists with type {ExistingAssetType}. Cannot assign a new asset with the same ID.",
+                    registration.AssetId, assetsById[registration.AssetId].Type.FullName
+                );
+                continue;
+            }
+            // Assign overloads
+            foreach (AssetId overridableAssetId in registration.OverridableAssetIds) {
+                assetsById.AddOrUpdate(overridableAssetId, registration);
+
+                logger.Debug(
+                    "Assigned asset {AssetId} to overwrite {overridableAssetId}",
+                    registration.AssetId,
+                    overridableAssetId
+                );
+            }
+        }
+        return assetsById.ToFrozenDictionary();
+    }
+    private static FrozenDictionary<Type, AssetId> AssembleAssetsByType(IPluginAtlas pluginAtlas) {
+        Dictionary<Type, AssetId> assetsByType = new();
+        ILogger logger = EngineServices.GetLogger();
+
+        foreach (AssetRegistration registration in pluginAtlas.GetAssetRegistrations()) {
+            if (!assetsByType.TryAdd(registration.Type, registration.AssetId)) {
+                // The reason for this, is the class type is hard linked to an AssetId
+                logger.Warning(
+                    "Asset with ID: {AssetId} Cannot assign a new asset because it's {Type} is already assigned to another asset.",
+                    registration.AssetId, registration.Type.FullName
+                );
+                continue;
+            }
+
+            foreach (Type interfaceType in registration.InterfaceTypes) {
+                // The reason for this, is the class type is softly linked to an AssetId, and can be overwritten
+                assetsByType.AddOrUpdate(interfaceType, registration.AssetId);
+                logger.Information("Asset {AssetId} linked to the interface of {Type}", registration.AssetId, interfaceType.FullName);
+            }
+        }
+        return assetsByType.ToFrozenDictionary();
+    }
+    private static FrozenDictionary<CoreTags, FrozenSet<AssetId>> AssembleCoreTaggedAssets(IPluginAtlas pluginAtlas) {
+        Dictionary<CoreTags, HashSet<AssetId>> coreTaggedAssets = new Dictionary<CoreTags, HashSet<AssetId>>()
+            .PopulateWithEmpties<Dictionary<CoreTags, HashSet<AssetId>>, CoreTags, HashSet<AssetId>>();
+
+        foreach (AssetRegistration registration in pluginAtlas.GetAssetRegistrations()) {
+            // After Everything is said and done with the assigning, start assigning the Core tags and string tags
+            foreach (CoreTags tag in Enum.GetValuesAsUnderlyingType<CoreTags>()) {
+                if (!registration.CoreTags.HasFlag(tag)) continue;
+                coreTaggedAssets.TryAdd(tag, []);
+                coreTaggedAssets[tag].Add(registration.AssetId);
+            }
+        }
+        return coreTaggedAssets.ToFrozenDictionary(pair => pair.Key, pair => pair.Value.ToFrozenSet());
+    }
+    private static FrozenDictionary<string, FrozenSet<AssetId>> AssembleStringTaggedAssets(IPluginAtlas pluginAtlas) {
+        Dictionary<string, HashSet<AssetId>> stringTaggedAssets = new();
+
+        foreach (AssetRegistration registration in pluginAtlas.GetAssetRegistrations()) {
+            foreach (string stringTag in registration.StringTags) {
+                stringTaggedAssets.TryAdd(stringTag, []);
+                stringTaggedAssets[stringTag].Add(registration.AssetId);
+            }
+        }
+        return stringTaggedAssets.ToFrozenDictionary(pair => pair.Key, pair => pair.Value.ToFrozenSet());
+    }
+    #endregion
+
     // ------------------------------------------------------------------------------------------------------------- ----
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public bool TryAssignAsset(AssetRegistration registration, [NotNullWhen(true)] out AssetId? assetId) {
-        assetId = null;
-
-        // Assigns the asset to the dict
-        if (!_assetsById.TryAdd(registration.AssetId, registration)) {
-            Logger.Warning(
-                "Asset with ID: {AssetId} already exists with type {ExistingAssetType}. Cannot assign a new asset with the same ID.",
-                registration.AssetId, _assetsById[registration.AssetId].Type.FullName
-            );
-            return false;
-        }
-
-        if (!_assetsByType.TryAdd(registration.Type, registration.AssetId)) {
-            // The reason for this, is the class type is hard linked to an AssetId
-            Logger.Warning(
-                "Asset with ID: {AssetId} Cannot assign a new asset because it's {Type} is already assigned to another asset.",
-                registration.AssetId, registration.Type.FullName
-            );
-            return false;
-        }
-
-        foreach (Type interfaceType in registration.InterfaceTypes) {
-            // The reason for this, is the class type is softly linked to an AssetId, and can be overwritten
-            _assetsByType.AddOrUpdate(interfaceType, registration.AssetId);
-            Logger.Information("Asset {AssetId} linked to the interface of {Type}", registration.AssetId, interfaceType.FullName);
-        }
-
-        // After Everything is said and done with the assigning, start assigning the Core tags and string tags
-        foreach (CoreTags tag in Enum.GetValuesAsUnderlyingType<CoreTags>()) {
-            if (!registration.CoreTags.HasFlag(tag)) continue;
-            _coreTaggedAssets.TryAddToBagOrCreateBag(tag, registration.AssetId);
-        }
-
-        foreach (string stringTag in registration.StringTags) {
-            if (!_stringTaggedAssets.TryAddToBagOrCreateBag(stringTag, registration.AssetId)) {
-                Logger.Warning("String Tag of {tag} could not be assigned to {assetId}", stringTag, registration.AssetId);
-            }
-        }
-
-        // Assign overloads
-        foreach (AssetId overridableAssetId in registration.OverridableAssetIds) {
-            if (!_assetsById.TryGetValue(overridableAssetId, out AssetRegistration comparisonValue)) continue;
-            if (!_assetsById.TryUpdate(overridableAssetId, registration, comparisonValue)) continue;
-
-            logger.Information(
-                "Assigned asset {AssetId} to overwrite {overridableAssetId}",
-                registration.AssetId,
-                overridableAssetId
-            );
-        }
-
-        Logger.Information(
-            "Assigned asset {AssetId} of Type {AssetTypeName}",
-            registration.AssetId, registration.Type.FullName
-        );
-
-        assetId = registration.AssetId;
-        return true;
-    }
-
     public IEnumerable<AssetId> GetAllAssetsOfCoreTag(CoreTags coreTag) =>
         Enum.GetValues<CoreTags>()
             .Where(tag => coreTag.HasFlag(tag))
@@ -97,7 +114,7 @@ public class AssetAtlas(ILogger logger) : IAssetAtlas {
             .ToArray();
 
     public IEnumerable<AssetId> GetAllAssetsOfStringTag(string stringTag) =>
-        _stringTaggedAssets.TryGetValue(stringTag, out ConcurrentBag<AssetId>? bag) ? bag : [];
+        _stringTaggedAssets.TryGetValue(stringTag, out FrozenSet<AssetId>? bag) ? bag : [];
 
     public IEnumerable<AssetId> GetAllAssetsOfPlugin(string pluginId) => _assetsById
         .Where(pair => pair.Key.PluginId == pluginId)
@@ -125,9 +142,6 @@ public class AssetAtlas(ILogger logger) : IAssetAtlas {
         type = registration.InterfaceTypes;
         return true;
     }
-    public bool TryUpdateRegistration(ref AssetRegistration registration) =>
-        _assetsById.TryGetValue(registration.AssetId, out AssetRegistration oldRegistration)
-        && _assetsById.TryUpdate(registration.AssetId, registration, oldRegistration);
 
     public bool TryGetAssetId<T>(out AssetId assetId) => TryGetAssetId(typeof(T), out assetId);
     public bool TryGetAssetId(Type type, out AssetId assetId) => _assetsByType.TryGetValue(type, out assetId);

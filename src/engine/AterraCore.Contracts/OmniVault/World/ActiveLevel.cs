@@ -6,6 +6,7 @@ using AterraCore.Contracts.Nexities.Components;
 using AterraCore.Contracts.Nexities.Levels;
 using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.World.EntityTree;
+using System.Collections.Frozen;
 using System.Collections.Immutable;
 using System.Runtime.InteropServices;
 
@@ -28,5 +29,5 @@ public readonly struct ActiveLevel {
     public IEntityNodeTree ActiveEntityTree { get; init; }
     public IRaylibCamera2D? Camera2DEntity { get; init; }
 
-    public IEnumerable<AssetId> TextureAssetIds { get; init; }
+    public FrozenSet<AssetId> TextureAssetIds { get; init; }
 }

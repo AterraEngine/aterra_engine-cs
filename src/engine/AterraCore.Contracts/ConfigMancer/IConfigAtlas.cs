@@ -1,16 +1,17 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.ConfigFiles;
 using AterraCore.Common.Types.Nexities;
+using System.Collections.Frozen;
 
-namespace AterraCore.Attributes.ConfigMancer;
+namespace AterraCore.Contracts.ConfigMancer;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[AttributeUsage(AttributeTargets.Class)]
-public class ConfigMancerElementAttribute(
-    string assetId
-) : Attribute {
-    public AssetId AssetId { get; } = assetId;
+public interface IConfigAtlas {
+    EngineConfigXml EngineConfigXml { get; }
+    FrozenDictionary<PluginId, PluginConfigXml> PluginConfigXmls { get; }
+    ParsedConfigs GameConfigs { get; }
 }

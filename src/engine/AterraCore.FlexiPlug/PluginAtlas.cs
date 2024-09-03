@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.ConfigFiles;
 using AterraCore.Common.Data;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Boot.Logic.PluginLoading.Dto;
@@ -40,7 +41,10 @@ public class PluginAtlas(ILogger logger) : IPluginAtlas {
             _plugins.AddLast(new PluginRecord {
                 PluginId = plugin.PluginNameSpaceId,
                 Types = plugin.Types,
-                PluginBootDto = plugin
+                PluginBootDto = plugin,
+                PluginConfigXml = plugin.TryGetPluginConfig(out PluginConfigXml? config)
+                    ? config
+                    : new PluginConfigXml()
             });
             _pluginIds.Add(plugin.PluginNameSpaceId);
         }

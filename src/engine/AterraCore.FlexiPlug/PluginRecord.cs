@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Attributes;
+using AterraCore.Common.ConfigFiles;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Boot.Logic.PluginLoading.Dto;
 using AterraCore.Contracts.FlexiPlug.Plugin;
@@ -14,7 +15,7 @@ namespace AterraCore.FlexiPlug;
 // ---------------------------------------------------------------------------------------------------------------------
 public class PluginRecord : IPluginRecord {
     public PluginId PluginId { get; init; }
-    public IEnumerable<Type> Types { get; init; } = [];// DON'T invalidate this !!!
+    public required IEnumerable<Type> Types { get; init; } // DON'T invalidate this !!!
 
     private Dictionary<Type, AssetTypeRecord>? _assetTypeRecords;
     public IEnumerable<AssetTypeRecord> AssetTypes => (
@@ -34,7 +35,8 @@ public class PluginRecord : IPluginRecord {
             .ToDictionary(keySelector: record => record.Type, elementSelector: record => record)
     ).Values;
 
-    public IPluginBootDto PluginBootDto { get; init; } = null!;
+    public required IPluginBootDto PluginBootDto { get; init; }
+    public required PluginConfigXml PluginConfigXml { get; init; }
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
