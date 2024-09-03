@@ -28,7 +28,7 @@ public class ConfigAtlas(IConfigMancerParser configMancerParser, EngineConfigXml
     public ParsedConfigs GameConfigs {
         get {
             if (_gameConfigs is not null) return _gameConfigs ?? ParsedConfigs.Empty;
-            if (configMancerParser.TryParseGameConfig(Paths.ConfigGame, out ParsedConfigs parsedConfigs)) return _gameConfigs ??= parsedConfigs;
+            if (configMancerParser.TryParseGameConfig(EngineConfigXml.Paths?.GameConfigPath ?? Paths.ConfigGame, out ParsedConfigs parsedConfigs)) return _gameConfigs ??= parsedConfigs;
             return _gameConfigs ??= ParsedConfigs.Empty;
         }
     }

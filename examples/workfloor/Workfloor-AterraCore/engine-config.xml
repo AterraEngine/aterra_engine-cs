@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <engineConfig xmlns="urn:aterra-engine:engine-config">
     <logging asyncConsole="true" outputFile=""/>
+    
+<!--    <paths>-->
+<!--        <gameConfig>game-config.xml</gameConfig>-->
+<!--    </paths>-->
 
-    <loadOrder relativeRootPath="plugins">
+    <loadOrder relativeRootPath="plugins" enforcePluginIdUniqueness="false">
         <plugin file="AterraLib.zip"/>
         <plugin file="AterraLibOverwrite.zip"/>
         <plugin file="Workfloor-AterraCore.Plugin.zip"/>
