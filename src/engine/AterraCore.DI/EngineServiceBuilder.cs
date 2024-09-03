@@ -14,6 +14,7 @@ namespace AterraCore.DI;
 /// The Dependency Injection Builder for the Aterra Engine.
 /// </summary>
 /// <param name="logger"></param>
+/// <param name="collection">A pre-made service collection.</param>
 public class EngineServiceBuilder(ILogger logger, IServiceCollection? collection = null) : IEngineServiceBuilder {
     private ILogger Logger { get; } = logger.ForContext<EngineServiceBuilder>();
 
