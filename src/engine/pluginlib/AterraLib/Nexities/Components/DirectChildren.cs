@@ -7,7 +7,7 @@ namespace AterraLib.Nexities.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Component<IDirectChildren>(AssetIdLib.AterraCore.Components.DirectChildren)]
+[Component<IDirectChildren>(AssetIdLib.AterraLib.Components.DirectChildren)]
 [UsedImplicitly]
 public class DirectChildren : NexitiesComponent, IDirectChildren {
     protected virtual List<Ulid> DirectChildIds { get; } = new(12);

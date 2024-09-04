@@ -44,7 +44,7 @@ public class EngineConfigXmlTest {
 
         Assert.Contains("<engineConfig", xml);
         Assert.Contains("<logging asyncConsole=\"false\" outputFile=\"log.txt\" />", xml);
-        Assert.Contains("<loadOrder relativeRootPath=\"plugins\">", xml);
+        Assert.Contains("<loadOrder relativeRootPath=\"plugins\"", xml);
         Assert.Contains("<plugin file=\"plugin1.dll\" />", xml);
         Assert.Contains("<plugin file=\"plugin2.dll\" />", xml);
     }

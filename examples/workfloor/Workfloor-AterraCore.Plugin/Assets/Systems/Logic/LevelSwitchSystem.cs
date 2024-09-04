@@ -18,7 +18,7 @@ namespace Workfloor_AterraCore.Plugin.Assets.Systems.Logic;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[System("Workfloor:Systems/LevelSwitch", CoreTags.LogicSystem)]
+[System(WorkfloorIdLib.SystemsLogic.LevelSwitch, CoreTags.LogicSystem)]
 [Injectable<LevelSwitch>(ServiceLifetime.Singleton)]
 [UsedImplicitly]
 public class LevelSwitch(IAterraCoreWorld world, IAssetAtlas assetAtlas, ILogger logger) : AssetInstance, INexitiesSystem {

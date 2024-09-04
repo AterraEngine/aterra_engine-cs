@@ -8,7 +8,7 @@ namespace AterraLib.Nexities.Systems.Logic;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[System(AssetIdLib.AterraCore.SystemsLogic.PlayerController, CoreTags.LogicSystem)]
+[System(AssetIdLib.AterraLib.SystemsLogic.PlayerController, CoreTags.LogicSystem)]
 [Injectable<PlayerController>(ServiceLifetime.Singleton)]
 [UsedImplicitly]
 public class PlayerController : NexitiesSystem<IPlayer2D> {

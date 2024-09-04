@@ -17,7 +17,7 @@ namespace Workfloor_AterraCore.Plugin.Assets.Levels.Fractals;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
-[Level("Workfloor:Levels/SierpinskiLevel", CoreTags.Level)]
+[Level(WorkfloorIdLib.Levels.FractalSierpinski, CoreTags.Level)]
 public class SierpinskiLevel(
     IDirectChildren children,
     [InjectAs("01J5RA7EDMS1PRR1BMRN9XM9AA")] MainLevelSystemIds systemIds,
@@ -63,7 +63,7 @@ public class SierpinskiLevel(
             operationQueue.Enqueue((mid31, mid23, p3, depth - 1));
         }
 
-        if (!instanceAtlas.TryCreate(AssetIdLib.AterraCore.Entities.Camera2D, out ICamera2D? camera2D)) return;
+        if (!instanceAtlas.TryCreate(AssetIdLib.AterraLib.Entities.Camera2D, out ICamera2D? camera2D)) return;
         camera2D.RaylibCamera2D.Camera = camera2D.RaylibCamera2D.Camera with {
             Target = new Vector2(0, 0),
             Offset = new Vector2(Raylib.GetScreenWidth() / 2f, Raylib.GetScreenHeight() / 2f),

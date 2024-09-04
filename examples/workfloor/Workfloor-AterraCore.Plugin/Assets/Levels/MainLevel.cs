@@ -22,17 +22,17 @@ namespace Workfloor_AterraCore.Plugin.Assets.Levels;
 [UsedImplicitly]
 public class MainLevelSystemIds : SystemIds {
     protected override AssetId[] LogicSystems { get; set; } = [
-        AssetIdLib.AterraCore.SystemsLogic.PlayerController,
-        AssetIdLib.AterraCore.SystemsLogic.CameraController,
+        AssetIdLib.AterraLib.SystemsLogic.PlayerController,
+        AssetIdLib.AterraLib.SystemsLogic.CameraController,
         "Workfloor:Systems/LevelSwitch",
         // "Workfloor:ApplyRandomImpulse",
         // "Workfloor:ApplyRandomImpulseCamera",
-        AssetIdLib.AterraCore.SystemsLogic.ApplyImpulse,
-        AssetIdLib.AterraCore.SystemsLogic.ApplyImpulseCamera
+        AssetIdLib.AterraLib.SystemsLogic.ApplyImpulse,
+        AssetIdLib.AterraLib.SystemsLogic.ApplyImpulseCamera
     ];
 
     protected override AssetId[] RenderSystems { get; set; } = [
-        AssetIdLib.AterraCore.SystemsRendering.Render2D
+        AssetIdLib.AterraLib.SystemsRendering.Render2D
     ];
 
     protected override AssetId[] UiSystems { get; set; } = [
@@ -40,7 +40,7 @@ public class MainLevelSystemIds : SystemIds {
 }
 
 [UsedImplicitly]
-[Level("Workfloor:Levels/MainLevel", CoreTags.Level)]
+[Level(WorkfloorIdLib.Levels.Main, CoreTags.Level)]
 public class MainLevel(
     IDirectChildren children,
     [InjectAs("01J5RA7EDMS1PRR1BMRN9XM9AA")] MainLevelSystemIds systemIds,
@@ -70,7 +70,7 @@ public class MainLevel(
             });
         });
 
-        if (!instanceAtlas.TryCreate(AssetIdLib.AterraCore.Entities.Camera2D, out ICamera2D? camera2D)) return;
+        if (!instanceAtlas.TryCreate(AssetIdLib.AterraLib.Entities.Camera2D, out ICamera2D? camera2D)) return;
         camera2D.RaylibCamera2D.Camera = camera2D.RaylibCamera2D.Camera with {
             Target = new Vector2(0, 0),
             Offset = new Vector2(Raylib.GetScreenWidth() / 2f, Raylib.GetScreenHeight() / 2f),

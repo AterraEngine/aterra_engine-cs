@@ -7,13 +7,13 @@ using AterraCore.Contracts.Nexities.Entities;
 using AterraLib.Nexities.Entities;
 using JetBrains.Annotations;
 
-namespace Workfloor_AterraCore.Plugin.Assets;
+namespace Workfloor_AterraCore.Plugin.Assets.Entities;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IDuckyPlayerActor : IPlayer2D;
 
-[Entity("Workfloor:ActorDuckyPlayer")]
+[Entity(WorkfloorIdLib.Entities.DuckyPlayer)]
 [UsedImplicitly]
 public class DuckyPlayerActor(
     ITransform2D transform2D,

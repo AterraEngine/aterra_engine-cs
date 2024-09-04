@@ -6,7 +6,7 @@
 <!--        <gameConfig>game-config.xml</gameConfig>-->
 <!--    </paths>-->
 
-    <loadOrder relativeRootPath="plugins" enforcePluginIdUniqueness="false">
+    <loadOrder relativeRootPath="plugins" enforcePluginIdUniqueness="true">
         <plugin file="AterraLib.zip"/>
         <plugin file="AterraLibOverwrite.zip"/>
         <plugin file="Workfloor-AterraCore.Plugin.zip"/>

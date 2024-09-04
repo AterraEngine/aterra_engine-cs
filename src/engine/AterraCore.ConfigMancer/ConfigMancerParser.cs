@@ -2,6 +2,8 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Attributes;
+using AterraCore.Common.ConfigFiles;
+using AterraCore.Common.Data;
 using AterraCore.Contracts.ConfigMancer;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.PoolCorps;
@@ -12,6 +14,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Serialization;
+using Xml;
 
 namespace AterraCore.ConfigMancer;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -23,10 +26,13 @@ public class ConfigMancerParser(IPluginAtlas pluginAtlas, ILogger logger, IXmlPo
     private readonly FrozenDictionary<string, ConfigMancerValueRecord> _parsableTypes = pluginAtlas.Plugins
         .SelectMany(plugin => plugin.Types)
         .Where(type => typeof(IConfigMancerElement).IsAssignableFrom(type))
-        .Select(type =>  new ConfigMancerValueRecord(type, XmlRootElementName(type)))
+        .Select(type =>  new ConfigMancerValueRecord(type, XmlRootElementName(type), type.GetCustomAttributes<XmlRootAttribute>().First()))
         .ToFrozenDictionary(record => record.RootName)
     ;
-
+    
+    private XmlParser<GameConfigXml>? _gameConfigParser;
+    private XmlParser<GameConfigXml> GameConfigParser => _gameConfigParser ??= new XmlParser<GameConfigXml>(logger, XmlNameSpaces.ConfigGame, Paths.Xsd.XsdGameConfigDto );
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -47,20 +53,17 @@ public class ConfigMancerParser(IPluginAtlas pluginAtlas, ILogger logger, IXmlPo
         Queue<XmlNode> queue = xmlPools.XmlNodeQueuePool.Get();
 
         try {
-            var xmlDoc = new XmlDocument();
-            xmlDoc.Load(filePath);
-
-            if (xmlDoc.DocumentElement is null) {
+            if (!GameConfigParser.TryDeserializeFromFile(filePath, out GameConfigXml? configDto)) {
                 logger.Warning("Failed find any data in the XML file {path}", filePath);
                 return false;
             }
             
-            foreach (XmlNode node in xmlDoc.DocumentElement.ChildNodes) {
+            foreach (XmlNode node in configDto.Configs) {
                 queue.Enqueue(node);
             }
 
             while (queue.TryDequeue(out XmlNode? node)) {
-                if (_parsableTypes.TryGetValue(node.Name, out ConfigMancerValueRecord? record)
+                if (_parsableTypes.TryGetValue(node.Name, out ConfigMancerValueRecord? record) 
                     && TryDeserializeWithAttributes(record.Type, node, out object? deserialized)
                     && parsedObjects.TryAdd(record.Type, deserialized)
                 ) continue;

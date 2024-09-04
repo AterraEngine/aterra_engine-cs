@@ -12,7 +12,6 @@ using AterraCore.Nexities.Entities;
 using AterraLib.Nexities.Components;
 using JetBrains.Annotations;
 using Raylib_cs;
-using Serilog;
 using System.Numerics;
 
 namespace Workfloor_AterraCore.Plugin.Assets.Levels;
@@ -23,17 +22,17 @@ namespace Workfloor_AterraCore.Plugin.Assets.Levels;
 [UsedImplicitly]
 public class BlobLevelSystemIds : SystemIds {
     protected override AssetId[] LogicSystems { get; set; } = [
-        AssetIdLib.AterraCore.SystemsLogic.PlayerController,
-        AssetIdLib.AterraCore.SystemsLogic.CameraController,
+        AssetIdLib.AterraLib.SystemsLogic.PlayerController,
+        AssetIdLib.AterraLib.SystemsLogic.CameraController,
         "Workfloor:ApplyRandomImpulse",
         "Workfloor:Systems/LevelSwitch",
         // "Workfloor:ApplyRandomImpulseCamera",
-        AssetIdLib.AterraCore.SystemsLogic.ApplyImpulse,
-        AssetIdLib.AterraCore.SystemsLogic.ApplyImpulseCamera
+        AssetIdLib.AterraLib.SystemsLogic.ApplyImpulse,
+        AssetIdLib.AterraLib.SystemsLogic.ApplyImpulseCamera
     ];
 
     protected override AssetId[] RenderSystems { get; set; } = [
-        AssetIdLib.AterraCore.SystemsRendering.Render2D
+        AssetIdLib.AterraLib.SystemsRendering.Render2D
     ];
 
     protected override AssetId[] UiSystems { get; set; } = [
@@ -41,12 +40,10 @@ public class BlobLevelSystemIds : SystemIds {
 }
 
 [UsedImplicitly]
-[Level("Workfloor:Levels/BlobLevel", CoreTags.Level)]
+[Level(WorkfloorIdLib.Levels.Blob, CoreTags.Level)]
 public class BlobLevel(
     IDirectChildren children,
     [InjectAs] BlobLevelSystemIds systemIds,
-    
-    ILogger logger,
     IAssetInstanceAtlas instanceAtlas
 ) : NexitiesEntity(children, systemIds), INexitiesLevel {
     private IDirectChildren? _children = children;
@@ -72,7 +69,7 @@ public class BlobLevel(
             });
         });
 
-        if (!instanceAtlas.TryCreate(AssetIdLib.AterraCore.Entities.Camera2D, out ICamera2D? camera2D)) return;
+        if (!instanceAtlas.TryCreate(AssetIdLib.AterraLib.Entities.Camera2D, out ICamera2D? camera2D)) return;
         camera2D.RaylibCamera2D.Camera = camera2D.RaylibCamera2D.Camera with {
             Target = new Vector2(0, 0),
             Offset = new Vector2(Raylib.GetScreenWidth() / 2f, Raylib.GetScreenHeight() / 2f),
