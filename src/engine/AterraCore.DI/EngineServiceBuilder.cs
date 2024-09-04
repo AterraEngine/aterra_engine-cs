@@ -42,8 +42,10 @@ public class EngineServiceBuilder(ILogger logger, IServiceCollection? collection
     /// Assigns multiple <see cref="ServiceDescriptor"/> objects to the <see cref="IServiceCollection"/> of the <see cref="EngineServiceBuilder"/>.
     /// </summary>
     /// <param name="services">The collection of <see cref="ServiceDescriptor"/> objects.</param>
-    public void AssignFromServiceDescriptors(IEnumerable<ServiceDescriptor> services) =>
-        services.IterateOver(AssignFromServiceDescriptor);
+    public void AssignFromServiceDescriptors(IEnumerable<ServiceDescriptor> services) {
+        foreach (ServiceDescriptor serviceDescriptor in services) 
+            AssignFromServiceDescriptor(serviceDescriptor);
+    }
 
     /// <summary>
     /// Finishes building the engine service builder by building all services and logging the completion.

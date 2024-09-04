@@ -49,7 +49,9 @@ public class PluginAtlas(ILogger logger) : IPluginAtlas {
             _pluginIds.Add(plugin.PluginNameSpaceId);
         }
     }
-    public void InvalidateAllCaches() => _plugins.IterateOver(plugin => plugin.InvalidateCaches());
+    public void InvalidateAllCaches() {
+        foreach (IPluginRecord plugin in _plugins) plugin.InvalidateCaches();
+    }
 
     #region Get Registrations
     public IEnumerable<AssetRegistration> GetAssetRegistrations(PluginId? pluginNameSpace = null, CoreTags? filter = null) {

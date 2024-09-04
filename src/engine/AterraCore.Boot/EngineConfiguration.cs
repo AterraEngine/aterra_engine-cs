@@ -61,9 +61,8 @@ public class EngineConfiguration(ILogger? logger = null) : IEngineConfiguration 
         LogOrderOfBootOperations();
 
         //  Run all the boot operations
-        OrderOfBootOperations.IterateOver(
-            operation => operation.Run(Components)
-        );
+        foreach (IBootOperation operation in OrderOfBootOperations)
+            operation.Run(Components);
 
         // Populate Plugin Atlas with plugin list
         //      It is REQUIRED that the plugin atlas is assembled before the engine,
