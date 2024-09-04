@@ -33,9 +33,10 @@
     </ItemGroup>
     
     <ItemGroup>
-        <Content Include=".\Resources\*.*">
+        <ResFiles Include=".\Resources\*.*"/>
+        <Content Include="@(ResFiles)">
             <Link>Resources\%(Filename)%(Extension)</Link>
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
 

@@ -26,6 +26,7 @@ public static class Paths {
         public const string Folder = "plugins";
         public const string PluginConfig = "plugin-config.xml";
         public const string PluginBinFolder = "bin";
+        public const string BundlerTempFolder = "temp";
     }
 
     public static class Xsd {
