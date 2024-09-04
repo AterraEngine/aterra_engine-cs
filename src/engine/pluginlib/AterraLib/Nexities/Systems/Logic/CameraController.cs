@@ -8,7 +8,7 @@ namespace AterraLib.Nexities.Systems.Logic;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[System(AssetIdLib.AterraCore.SystemsLogic.CameraController, CoreTags.LogicSystem)]
+[System(AssetIdLib.AterraLib.SystemsLogic.CameraController, CoreTags.LogicSystem)]
 [Injectable<CameraController>(ServiceLifetime.Singleton)]
 [UsedImplicitly]
 public class CameraController : NexitiesSystem<ICamera2D> {

@@ -7,7 +7,7 @@ namespace AterraLib.Nexities.Entities;
 // ---------------------------------------------------------------------------------------------------------------------
 [Serializable]
 [UsedImplicitly]
-[Entity<IActor2D>(AssetIdLib.AterraCore.Entities.Actor2D)]
+[Entity<IActor2D>(AssetIdLib.AterraLib.Entities.Actor2D)]
 public class Actor2D(ITransform2D transform2D, ISprite2D sprite2D, IDirectChildren children, IImpulse2D impulse2D)
     : NexitiesEntity(transform2D, sprite2D, children, impulse2D), IActor2D {
     private ITransform2D? _transform2D = transform2D;

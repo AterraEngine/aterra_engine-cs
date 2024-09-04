@@ -10,15 +10,16 @@ using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Nexities.Entities;
 using JetBrains.Annotations;
 using Raylib_cs;
+using System.Collections.Concurrent;
 using System.Numerics;
 
-namespace Workfloor_AterraCore.Plugin.Assets.Levels.Fractals;
+namespace Workfloor_AterraCore.Plugin.Levels.Fractals;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
-[Level("Workfloor:Levels/ChaosFractalLevel", CoreTags.Level)]
-public class ChaosFractalLevel(
+[Level(WorkfloorIdLib.Levels.FractalDragon, CoreTags.Level)]
+public class DragonDucksLevel(
     IDirectChildren children,
     [InjectAs("01J5RA7EDMS1PRR1BMRN9XM9AA")] MainLevelSystemIds systemIds,
     
@@ -29,41 +30,45 @@ public class ChaosFractalLevel(
 
     private ISystemIds? _systemIds = systemIds;
     public ISystemIds NexitiesSystemIds => _systemIds ??= GetComponent<ISystemIds>();
-
+    
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     protected override void ClearCaches() {}
     public void OnLevelFirstCreation() {
-        const uint sierpinskiDepth = 11;
-        const float sierpinskiSize = 2500f;
-        
-        var p1TopVertex = new Vector2(0, (float)(sierpinskiSize / Math.Sqrt(3f)));
-        var p2BottomLeft = new Vector2(-sierpinskiSize / 2, 0);
-        var p3BottomRight = new Vector2(sierpinskiSize / 2, 0);
+        const int iterations = 16;
+        var startVector = new Vector2(-100, 0);
+        var endVector = new Vector2(100, 0);
 
-        var operationQueue = new Queue<(Vector2, Vector2, Vector2, uint)>();
-        operationQueue.Enqueue((p1TopVertex, p2BottomLeft, p3BottomRight, sierpinskiDepth));
+        var entityPool = new ConcurrentStack<IActor2D>();
+        Parallel.For(0, 100_000, _ => {
+            if (!instanceAtlas.TryCreate(WorkfloorIdLib.Entities.DuckyPlatinum, out IActor2D? newDucky)) return;
+            entityPool.Push(newDucky);
+        });
+
+        var operationQueue = new Queue<(Vector2, Vector2, int)>();
+        operationQueue.Enqueue((startVector, endVector, iterations));
         
-        while (operationQueue.TryDequeue(out (Vector2, Vector2, Vector2, uint) tuple)) {
-            (Vector2 p1, Vector2 p2, Vector2 p3, uint depth) = tuple;
+        while (operationQueue.TryDequeue(out (Vector2, Vector2, int) tuple)) {
+            (Vector2 start, Vector2 end, int depth) = tuple;
+            
             if (depth == 0) {
-                if (!instanceAtlas.TryCreate("Workfloor:ActorDuckyPlatinum", out IActor2D? newDucky)) return;
-                newDucky.Transform2D.Translation = (p1 + p2 + p3) / 3;
-                if (!ChildrenIDs.TryAdd(newDucky.InstanceId)) throw new ApplicationException("Entity could not be added");
+                if (!entityPool.TryPop(out IActor2D? entity) || !instanceAtlas.TryCreate(WorkfloorIdLib.Entities.DuckyPlatinum, out entity)) continue;
+                entity.Transform2D.Translation = (start + end) / 2;
+                if (!ChildrenIDs.TryAdd(entity.InstanceId)) throw new ApplicationException("Entity could not be added");
                 continue;
             }
 
-            Vector2 mid12 = new Vector2((float)Math.Sin(p1.X), (float)Math.Sin(p2.Y)) * (p1 + p2) ;
-            Vector2 mid23 = new Vector2((float)Math.Sin(p2.X), (float)Math.Sin(p3.Y)) * (p2 + p3) ;
-            Vector2 mid31 = new Vector2((float)Math.Sin(p3.X), (float)Math.Sin(p1.Y)) * (p3 + p1) ;
+            Vector2 mid = (start + end) / 2;
+            var perp = new Vector2(mid.Y - start.Y, start.X - mid.X); // Perpendicular vector
+            mid += perp;
 
-            operationQueue.Enqueue((p1, mid12, mid31, depth - 1));
-            operationQueue.Enqueue((mid12, p2, mid23, depth - 1));
-            operationQueue.Enqueue((mid31, mid23, p3, depth - 1));
+            operationQueue.Enqueue((start, mid, depth - 1));
+            operationQueue.Enqueue((mid, end, depth - 1));
         }
-
-        if (!instanceAtlas.TryCreate(AssetIdLib.AterraCore.Entities.Camera2D, out ICamera2D? camera2D)) return;
+        
+        if (!instanceAtlas.TryCreate(AssetIdLib.AterraLib.Entities.Camera2D, out ICamera2D? camera2D)) return;
         camera2D.RaylibCamera2D.Camera = camera2D.RaylibCamera2D.Camera with {
             Target = new Vector2(0, 0),
             Offset = new Vector2(Raylib.GetScreenWidth() / 2f, Raylib.GetScreenHeight() / 2f),

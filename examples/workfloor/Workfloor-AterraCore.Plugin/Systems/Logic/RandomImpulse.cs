@@ -10,11 +10,11 @@ using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using System.Numerics;
 
-namespace Workfloor_AterraCore.Plugin.Assets;
+namespace Workfloor_AterraCore.Plugin.Systems.Logic;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[System("Workfloor:ApplyRandomImpulse", CoreTags.LogicSystem)]
+[System(WorkfloorIdLib.SystemsLogic.RandomImpulse, CoreTags.LogicSystem)]
 [Injectable<RandomImpulse>(ServiceLifetime.Singleton)]
 [UsedImplicitly]
 public class RandomImpulse : NexitiesSystemWithFilter<IActor2D> {

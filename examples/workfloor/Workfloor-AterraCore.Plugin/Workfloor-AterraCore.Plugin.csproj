@@ -22,28 +22,24 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="CodeOfChaos.Extensions" Version="0.6.0"/>
+        <PackageReference Include="CodeOfChaos.Extensions" Version="0.7.0" />
         <PackageReference Include="CodeOfChaos.Extensions.DependencyInjection" Version="0.1.1"/>
-        <PackageReference Include="CodeOfChaos.Extensions.Serilog" Version="0.3.1" />
+        <PackageReference Include="CodeOfChaos.Extensions.Serilog" Version="0.4.0" />
         <PackageReference Include="JetBrains.Annotations" Version="2024.2.0"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1"/>
         <PackageReference Include="Microsoft.Extensions.ObjectPool.DependencyInjection" Version="8.8.0"/>
         <PackageReference Include="Ulid" Version="1.3.4"/>
     </ItemGroup>
-
+    
     <ItemGroup>
-        <Content Include="..\..\..\src\xsd\*.xsd">
-            <Link>xsd\%(Filename)%(Extension)</Link>
-        </Content>
-        <Content Remove="..\..\..\src\xsd\**"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <Content Include="Data\*.xml">
+        <ResFiles Include=".\Resources\*.*"/>
+        <Content Include="@(ResFiles)">
+            <Link>Resources\%(Filename)%(Extension)</Link>
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
+
 
     <Target Name="PackingToZip" AfterTargets="Build">
         <!-- Delete the existing zip file if it exists -->
@@ -52,8 +48,8 @@
 
         <!-- Create directories needed -->
         <MakeDir Directories="$(OutDir)\temp"/>
+        <MakeDir Directories="$(OutDir)\temp\resources"/>
         <MakeDir Directories="$(OutDir)\temp\bin"/>
-        <MakeDir Directories="$(OutDir)\temp\res"/>
         <MakeDir Directories="$(OutDir)\package"/>
 
         <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
@@ -69,12 +65,14 @@
         </ItemGroup>
         <Copy SourceFiles="@(DllFiles)" DestinationFiles="@(DllFiles->'$(OutDir)\temp\bin\%(Filename)%(Extension)')"/>
 
-        <!-- Assets - xml markup files of instances of assets -->
-        <!--        <ItemGroup>-->
-        <!--             <AssetFiles Include="$(OutDir)Data\actor.xml"/>-->
-        <!--        </ItemGroup>-->
-        <!--        <Copy SourceFiles="@(AssetFiles)" DestinationFiles="@(AssetFiles->'$(OutDir)\temp\assets\%(Filename)%(Extension)')"/>-->
-
+        <!-- Resources -->
+        <ItemGroup>
+            <!-- Add more a when needed -->
+            <ResourceFiles Include="$(OutDir)\Resources\*.*"/>
+            <!--  -->
+        </ItemGroup>
+        <Copy SourceFiles="@(ResourceFiles)" DestinationFiles="@(ResourceFiles->'$(OutDir)\temp\resources\%(Filename)%(Extension)')"/>
+        
         <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 
         <ItemGroup>

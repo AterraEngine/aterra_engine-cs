@@ -6,7 +6,7 @@ namespace AterraLib.Nexities.Entities;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
-[Entity<IEmptyEntity>(AssetIdLib.AterraCore.Entities.EmptyEntity)]
+[Entity<IEmptyEntity>(AssetIdLib.AterraLib.Entities.EmptyEntity)]
 public class EmptyEntity : NexitiesEntity, IEmptyEntity {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods

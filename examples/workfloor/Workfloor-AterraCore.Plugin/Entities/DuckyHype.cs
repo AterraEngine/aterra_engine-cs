@@ -13,7 +13,7 @@ using JetBrains.Annotations;
 using Raylib_cs;
 using System.Numerics;
 
-namespace Workfloor_AterraCore.Plugin.Assets;
+namespace Workfloor_AterraCore.Plugin.Entities;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -23,21 +23,21 @@ public interface ISpriteDuckyHype : ISprite2D;
 
 public interface IDuckyHypeActor : IActor2D;
 
-[Texture("Workfloor:TextureDuckyHype")]
+[Texture(WorkfloorIdLib.Components.TextureDuckyHype)]
 [UsedImplicitly]
 public class TextureDuckyHype : AbstractTexture2DAsset, ITextureDuckyHype {
-    public override string ImagePath { get; set; } = "assets/ducky-hype.png";
+    public override string ImagePath { get; set; } = "resources/ducky-hype.png";
     public override Vector2 Size { get; set; } = new(2048, 2048);
 }
 
-[Component<SpriteDuckyHype>("Workfloor:SpriteDuckyHype")]
+[Component<SpriteDuckyHype>(WorkfloorIdLib.Components.SpriteDuckyHype)]
 [UsedImplicitly]
 public class SpriteDuckyHype : Sprite2D, ISpriteDuckyHype {
-    public override AssetId TextureAssetId { get; set; } = new("Workfloor:TextureDuckyHype");
+    public override AssetId TextureAssetId { get; set; } = WorkfloorIdLib.Components.TextureDuckyHype;
     public override Rectangle UvSelection { get; set; } = new(0, 0, 1, 1);
 }
 
-[Entity("Workfloor:ActorDuckyHype")]
+[Entity(WorkfloorIdLib.Entities.DuckyHype)]
 [UsedImplicitly]
 public class DuckyHypeActor(
     ITransform2D transform2D,

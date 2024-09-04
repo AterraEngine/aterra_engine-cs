@@ -37,22 +37,22 @@ public class Engine(
         
         Task<bool> logicTask = threadingManager.TrySpawnLogicThreadAsync();
         Task<bool> renderTask = threadingManager.TrySpawnRenderThreadAsync();
-
+        
         await Task.WhenAll(logicTask, renderTask);
         if (!logicTask.Result) throw new ApplicationException("Failed to start LogicThread ");
         if (!renderTask.Result) throw new ApplicationException("Failed to start RenderThread ");
         
-        if (!world.TryChangeActiveLevel(AssetIdLib.AterraCore.Entities.EmptyLevel)) throw new ApplicationException("Failed to change active level");
+        if (!world.TryChangeActiveLevel(AssetIdLib.AterraLib.Entities.EmptyLevel)) throw new ApplicationException("Failed to change active level");
         await Task.Delay(1_000);
-        if (!world.TryChangeActiveLevel("Workfloor:Levels/MainLevel")) throw new ApplicationException("Failed to change active level to");
-     
+        if (!world.TryChangeActiveLevel("Workfloor:Levels/Main")) throw new ApplicationException("Failed to change active level to");
+        
         // -------------------------------------------------------------------------------------------------------------
-
+        
         // Block main thread until all sub threads have been cancelled
         WaitHandle[] waitHandles = threadingManager.GetWaitHandles();
         WaitHandle.WaitAll(waitHandles);
         Logger.Information("Child Threads have been cancelled");
-
+        
         threadingManager.JoinThreads();// wait until all threads are done
         Logger.Information("Exiting AterraEngine");
     }

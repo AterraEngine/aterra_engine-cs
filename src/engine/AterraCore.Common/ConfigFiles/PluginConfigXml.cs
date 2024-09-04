@@ -18,6 +18,8 @@ public class PluginConfigXml {
     [XmlElement("expectedGameVersion")] public string GameVersionValue { get; set; } = string.Empty;
     [XmlArray("bins")]
     [XmlArrayItem("bin", typeof(BinDto))] public BinDto[] BinDtos { get; set; } = [];
+    [XmlArray("resources")]
+    [XmlArrayItem("res", typeof(ResourceDto))] public ResourceDto[] ResourceDtos { get; set; } = [];
 
     [XmlIgnore] private SemanticVersion? _pluginVersionCache;
     [XmlIgnore] public SemanticVersion PluginVersion => _pluginVersionCache ??= new SemanticVersion(PluginVersionValue);
@@ -30,5 +32,9 @@ public class PluginConfigXml {
     // Yes these reasons are undefined
     public class BinDto {
         [XmlAttribute("file")] public required string FileName { get; set; }
+    }
+    public class ResourceDto {
+        [XmlAttribute("externalPath")] public required string ExternalFilePath { get; set; }
+        [XmlAttribute("internalPath")] public required string InternalFilePath { get; set; }
     }
 }

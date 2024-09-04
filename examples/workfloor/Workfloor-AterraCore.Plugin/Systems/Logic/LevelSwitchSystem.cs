@@ -13,12 +13,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Raylib_cs;
 using Serilog;
 
-namespace Workfloor_AterraCore.Plugin.Assets.Systems.Logic;
+namespace Workfloor_AterraCore.Plugin.Systems.Logic;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[System("Workfloor:Systems/LevelSwitch", CoreTags.LogicSystem)]
+[System(WorkfloorIdLib.SystemsLogic.LevelSwitch, CoreTags.LogicSystem)]
 [Injectable<LevelSwitch>(ServiceLifetime.Singleton)]
 [UsedImplicitly]
 public class LevelSwitch(IAterraCoreWorld world, IAssetAtlas assetAtlas, ILogger logger) : AssetInstance, INexitiesSystem {

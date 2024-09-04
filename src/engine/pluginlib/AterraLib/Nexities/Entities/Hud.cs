@@ -6,7 +6,7 @@ namespace AterraLib.Nexities.Entities;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
-[Entity<IHud>(AssetIdLib.AterraCore.Entities.Hud)]
+[Entity<IHud>(AssetIdLib.AterraLib.Entities.Hud)]
 public class Hud(IDirectChildren children) : NexitiesEntity(children), IHud {
     private IDirectChildren? _children = children;
     public IDirectChildren ChildrenIDs => _children ??= GetComponent<IDirectChildren>();

@@ -23,6 +23,7 @@ public static class EngineServices {
     /// Provides access to various services in the AterraCore Engine.
     /// </summary>
     private static ServiceProvider ServiceProvider { get; set; } = null!;
+    private static IServiceCollection? _serviceCollection;
 
     /// <summary>
     /// Represents the logger used in the EngineServices class.
@@ -43,6 +44,7 @@ public static class EngineServices {
     /// <param name="serviceCollection">The service collection.</param>
     public static void BuildServiceProvider(IServiceCollection serviceCollection) {
         ServiceProvider = serviceCollection.BuildServiceProvider();
+        _serviceCollection = serviceCollection;
     }
 
     /// <summary>
@@ -56,8 +58,19 @@ public static class EngineServices {
             return ServiceProvider.GetRequiredService<T>();
         }
         catch (InvalidOperationException e) {
-            string? typeName = typeof(T).FullName;// Get type name
-            Logger.ThrowFatal(e, "Service type of {TypeOfT} could not be found.", typeName);
+            Type type = typeof(T);
+
+            ServiceDescriptor? serviceDescriptor = _serviceCollection?.FirstOrDefault(descriptor => descriptor.ServiceType == type );
+            if (serviceDescriptor?.ImplementationType?.GetConstructors().FirstOrDefault() is not {} constructor) {
+                throw Logger.ThrowFatal(e, "Service type of {TypeOfT} could not be found.", type.FullName);
+            }
+            
+            IEnumerable<Type> paramTypes = constructor.GetParameters().Select(p => p.ParameterType);
+            foreach (Type paramType in paramTypes) {
+                if (ServiceProvider.GetService(paramType) is not null) continue;
+                throw Logger.ThrowFatal(e, "Service type of {paramType} could not be found while resolving {TypeOfT}", paramType.FullName, type.FullName);
+            }
+            
             throw;
         }
     }

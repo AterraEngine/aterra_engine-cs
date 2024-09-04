@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <pluginConfig xmlns="urn:aterra-engine:plugin-config">
-    <nameSpace>WorkfloorAterraEngine</nameSpace>
+    <nameSpace>Workfloor</nameSpace>
     <nameReadable>Workfloor Experiments</nameReadable>
     <author>Andreas Sas</author>
     <pluginVersion>0.0.0</pluginVersion>
@@ -8,4 +8,8 @@
     <bins>
         <bin file="Workfloor-AterraCore.Plugin.dll"/>
     </bins>
+    <resources>
+        <res externalPath="Resources/ducky-hype.png" internalPath="resources/ducky-hype.png"/>
+        <res externalPath="Resources/ducky-platinum.png" internalPath="resources/ducky-platinum.png"/>
+    </resources>
 </pluginConfig>

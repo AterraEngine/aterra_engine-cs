@@ -6,8 +6,9 @@ namespace AterraCore.Common.Data;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public static class AssetIdLib {
-    public static class AterraCore {
-        private const string ThisSection = nameof(AterraCore);
+    public static class AterraLib {
+        private const string ThisSection = nameof(AterraLib);
+        public const string ConfigMancer = $"{ThisSection}:{nameof(ConfigMancer)}";
 
         #region Components
         public static class Components {
@@ -56,10 +57,4 @@ public static class AssetIdLib {
         }
         #endregion
     }
-
-    public static class AterraLib {
-        private const string ThisSection = nameof(AterraLib);
-        public const string ConfigMancer = $"{ThisSection}:{nameof(ConfigMancer)}";
-    }
-    
 }

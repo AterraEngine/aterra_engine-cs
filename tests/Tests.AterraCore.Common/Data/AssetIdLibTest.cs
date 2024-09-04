@@ -9,39 +9,39 @@ namespace Tests.AterraCore.Common.Data;
 public class AssetIdLibTest {
     [Fact]
     public void TestComponentConstants() {
-        Assert.Equal("AterraCore:Components/DirectChildren", AssetIdLib.AterraCore.Components.DirectChildren);
-        Assert.Equal("AterraCore:Components/RaylibCamera2D", AssetIdLib.AterraCore.Components.RaylibCamera2D);
-        Assert.Equal("AterraCore:Components/Impulse2D", AssetIdLib.AterraCore.Components.Impulse2D);
-        Assert.Equal("AterraCore:Components/RaylibHudText", AssetIdLib.AterraCore.Components.RaylibHudText);
-        Assert.Equal("AterraCore:Components/RaylibHudTextPro", AssetIdLib.AterraCore.Components.RaylibHudTextPro);
-        Assert.Equal("AterraCore:Components/Sprite2D", AssetIdLib.AterraCore.Components.Sprite2D);
-        Assert.Equal("AterraCore:Components/SystemIds", AssetIdLib.AterraCore.Components.SystemIds);
-        Assert.Equal("AterraCore:Components/Transform2D", AssetIdLib.AterraCore.Components.Transform2D);
+        Assert.Equal("AterraLib:Components/DirectChildren", AssetIdLib.AterraLib.Components.DirectChildren);
+        Assert.Equal("AterraLib:Components/RaylibCamera2D", AssetIdLib.AterraLib.Components.RaylibCamera2D);
+        Assert.Equal("AterraLib:Components/Impulse2D", AssetIdLib.AterraLib.Components.Impulse2D);
+        Assert.Equal("AterraLib:Components/RaylibHudText", AssetIdLib.AterraLib.Components.RaylibHudText);
+        Assert.Equal("AterraLib:Components/RaylibHudTextPro", AssetIdLib.AterraLib.Components.RaylibHudTextPro);
+        Assert.Equal("AterraLib:Components/Sprite2D", AssetIdLib.AterraLib.Components.Sprite2D);
+        Assert.Equal("AterraLib:Components/SystemIds", AssetIdLib.AterraLib.Components.SystemIds);
+        Assert.Equal("AterraLib:Components/Transform2D", AssetIdLib.AterraLib.Components.Transform2D);
     }
 
     [Fact]
     public void TestEntityConstants() {
-        Assert.Equal("AterraCore:Entities/Actor2D", AssetIdLib.AterraCore.Entities.Actor2D);
-        Assert.Equal("AterraCore:Entities/Camera2D", AssetIdLib.AterraCore.Entities.Camera2D);
-        Assert.Equal("AterraCore:Entities/EmptyEntity", AssetIdLib.AterraCore.Entities.EmptyEntity);
-        Assert.Equal("AterraCore:Entities/EmptySprite", AssetIdLib.AterraCore.Entities.EmptySprite);
-        Assert.Equal("AterraCore:Entities/EmptyLevel", AssetIdLib.AterraCore.Entities.EmptyLevel);
-        Assert.Equal("AterraCore:Entities/Hud", AssetIdLib.AterraCore.Entities.Hud);
-        Assert.Equal("AterraCore:Entities/Player2D", AssetIdLib.AterraCore.Entities.Player2D);
-        Assert.Equal("AterraCore:Entities/LevelRoot", AssetIdLib.AterraCore.Entities.LevelRoot);
+        Assert.Equal("AterraLib:Entities/Actor2D", AssetIdLib.AterraLib.Entities.Actor2D);
+        Assert.Equal("AterraLib:Entities/Camera2D", AssetIdLib.AterraLib.Entities.Camera2D);
+        Assert.Equal("AterraLib:Entities/EmptyEntity", AssetIdLib.AterraLib.Entities.EmptyEntity);
+        Assert.Equal("AterraLib:Entities/EmptySprite", AssetIdLib.AterraLib.Entities.EmptySprite);
+        Assert.Equal("AterraLib:Entities/EmptyLevel", AssetIdLib.AterraLib.Entities.EmptyLevel);
+        Assert.Equal("AterraLib:Entities/Hud", AssetIdLib.AterraLib.Entities.Hud);
+        Assert.Equal("AterraLib:Entities/Player2D", AssetIdLib.AterraLib.Entities.Player2D);
+        Assert.Equal("AterraLib:Entities/LevelRoot", AssetIdLib.AterraLib.Entities.LevelRoot);
     }
 
     [Fact]
     public void TestSystemsLogicConstants() {
-        Assert.Equal("AterraCore:SystemsLogic/ApplyImpulse", AssetIdLib.AterraCore.SystemsLogic.ApplyImpulse);
-        Assert.Equal("AterraCore:SystemsLogic/ApplyImpulseCamera", AssetIdLib.AterraCore.SystemsLogic.ApplyImpulseCamera);
-        Assert.Equal("AterraCore:SystemsLogic/PlayerController", AssetIdLib.AterraCore.SystemsLogic.PlayerController);
-        Assert.Equal("AterraCore:SystemsLogic/CameraController", AssetIdLib.AterraCore.SystemsLogic.CameraController);
+        Assert.Equal("AterraLib:SystemsLogic/ApplyImpulse", AssetIdLib.AterraLib.SystemsLogic.ApplyImpulse);
+        Assert.Equal("AterraLib:SystemsLogic/ApplyImpulseCamera", AssetIdLib.AterraLib.SystemsLogic.ApplyImpulseCamera);
+        Assert.Equal("AterraLib:SystemsLogic/PlayerController", AssetIdLib.AterraLib.SystemsLogic.PlayerController);
+        Assert.Equal("AterraLib:SystemsLogic/CameraController", AssetIdLib.AterraLib.SystemsLogic.CameraController);
     }
 
     [Fact]
     public void TestSystemsRenderingConstants() {
-        Assert.Equal("AterraCore:SystemsRendering/Render2D", AssetIdLib.AterraCore.SystemsRendering.Render2D);
-        Assert.Equal("AterraCore:SystemsRendering/RenderHud", AssetIdLib.AterraCore.SystemsRendering.RenderHud);
+        Assert.Equal("AterraLib:SystemsRendering/Render2D", AssetIdLib.AterraLib.SystemsRendering.Render2D);
+        Assert.Equal("AterraLib:SystemsRendering/RenderHud", AssetIdLib.AterraLib.SystemsRendering.RenderHud);
     }
 }

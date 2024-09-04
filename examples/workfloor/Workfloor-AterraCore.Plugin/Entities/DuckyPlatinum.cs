@@ -13,7 +13,7 @@ using JetBrains.Annotations;
 using Raylib_cs;
 using System.Numerics;
 
-namespace Workfloor_AterraCore.Plugin.Assets;
+namespace Workfloor_AterraCore.Plugin.Entities;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -23,21 +23,21 @@ public interface ISpriteDuckyPlatinum : ISprite2D;
 
 public interface IDuckyPlatinumActor : IActor2D;
 
-[Texture("Workfloor:TextureDuckyPlatinum")]
+[Texture(WorkfloorIdLib.Components.TextureDuckyPlatinum)]
 [UsedImplicitly]
 public class TextureDuckyPlatinum : AbstractTexture2DAsset, ITextureDuckyPlatinum {
-    public override string ImagePath { get; set; } = "assets/ducky-platinum.png";
+    public override string ImagePath { get; set; } = "resources/ducky-platinum.png";
     public override Vector2 Size { get; set; } = new(2048, 2048);
 }
 
-[Component<SpriteDuckyPlatinum>("Workfloor:SpriteDuckyPlatinum")]
+[Component<SpriteDuckyPlatinum>(WorkfloorIdLib.Components.SpriteDuckyPlatinum)]
 [UsedImplicitly]
 public class SpriteDuckyPlatinum : Sprite2D, ISpriteDuckyPlatinum {
-    public override AssetId TextureAssetId { get; set; } = new("Workfloor:TextureDuckyPlatinum");
+    public override AssetId TextureAssetId { get; set; } = WorkfloorIdLib.Components.TextureDuckyPlatinum;
     public override Rectangle UvSelection { get; set; } = new(0, 0, 1, 1);
 }
 
-[Entity("Workfloor:ActorDuckyPlatinum")]
+[Entity(WorkfloorIdLib.Entities.DuckyPlatinum)]
 [UsedImplicitly]
 public class DuckyPlatinumActor(
     ITransform2D transform2D,
