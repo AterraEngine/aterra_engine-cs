@@ -13,7 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Raylib_cs;
 using Serilog;
 
-namespace Workfloor_AterraCore.Plugin.Assets.Systems.Logic;
+namespace Workfloor_AterraCore.Plugin.Systems.Logic;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

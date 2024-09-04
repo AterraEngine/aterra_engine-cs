@@ -13,7 +13,7 @@ namespace AterraCore.PoolCorps;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
-[Injectable<XmlPools, IXmlPools>]
+[Injectable<IXmlPools>]
 public class XmlPools : IXmlPools {
     private const int InitialCapacity = 24;
     private readonly DefaultObjectPoolProvider _objectPoolProvider = new();

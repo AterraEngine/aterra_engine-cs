@@ -7,7 +7,7 @@ using AterraCore.Contracts.Nexities.Entities;
 using AterraLib.Nexities.Entities;
 using JetBrains.Annotations;
 
-namespace Workfloor_AterraCore.Plugin.Assets.Entities;
+namespace Workfloor_AterraCore.Plugin.Entities;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------

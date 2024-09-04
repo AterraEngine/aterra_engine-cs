@@ -17,7 +17,7 @@ public class CliArgsParserAssembler : IBootOperation {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public IBootComponents Run(IBootComponents components) {
+    public void Run(IBootComponents components) {
         Logger.Debug("Entered CliArgsParser Assembler");
 
         components.Services.AddCliArgsParser(configuration => {
@@ -32,7 +32,5 @@ public class CliArgsParserAssembler : IBootOperation {
                 }
             }
         });
-
-        return components;
     }
 }

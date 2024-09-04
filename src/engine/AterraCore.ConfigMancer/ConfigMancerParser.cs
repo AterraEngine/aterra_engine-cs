@@ -21,11 +21,11 @@ namespace AterraCore.ConfigMancer;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
-[Injectable<ConfigMancerParser, IConfigMancerParser>]
+[Injectable<IConfigMancerParser>]
 public class ConfigMancerParser(IPluginAtlas pluginAtlas, ILogger logger, IXmlPools xmlPools) : IConfigMancerParser {
     private readonly FrozenDictionary<string, ConfigMancerValueRecord> _parsableTypes = pluginAtlas.Plugins
         .SelectMany(plugin => plugin.Types)
-        .Where(type => typeof(IConfigMancerElement).IsAssignableFrom(type))
+        .Where(type => typeof(IConfigMancerElement).IsAssignableFrom(type) && type is { IsClass: true, IsAbstract: false })
         .Select(type =>  new ConfigMancerValueRecord(type, XmlRootElementName(type), type.GetCustomAttributes<XmlRootAttribute>().First()))
         .ToFrozenDictionary(record => record.RootName)
     ;

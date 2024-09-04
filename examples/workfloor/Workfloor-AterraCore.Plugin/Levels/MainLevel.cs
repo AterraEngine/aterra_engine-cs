@@ -14,7 +14,7 @@ using JetBrains.Annotations;
 using Raylib_cs;
 using System.Numerics;
 
-namespace Workfloor_AterraCore.Plugin.Assets.Levels;
+namespace Workfloor_AterraCore.Plugin.Levels;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -24,7 +24,7 @@ public class MainLevelSystemIds : SystemIds {
     protected override AssetId[] LogicSystems { get; set; } = [
         AssetIdLib.AterraLib.SystemsLogic.PlayerController,
         AssetIdLib.AterraLib.SystemsLogic.CameraController,
-        "Workfloor:Systems/LevelSwitch",
+        WorkfloorIdLib.SystemsLogic.LevelSwitch,
         // "Workfloor:ApplyRandomImpulse",
         // "Workfloor:ApplyRandomImpulseCamera",
         AssetIdLib.AterraLib.SystemsLogic.ApplyImpulse,
@@ -63,7 +63,7 @@ public class MainLevel(
         int a = (int)(Math.Sqrt(entitiesPerLevel) / 2f);
         Parallel.For((long)-a, a, body: k => {
             Parallel.For((long)-a, a, body: j => {
-                if (!instanceAtlas.TryCreate(j % 2 == 0 ? "Workfloor:ActorDuckyHype" : "Workfloor:ActorDuckyPlatinum", out IActor2D? newDucky)) return;
+                if (!instanceAtlas.TryCreate(j % 2 == 0 ? WorkfloorIdLib.Entities.DuckyHype : WorkfloorIdLib.Entities.DuckyPlatinum, out IActor2D? newDucky)) return;
                 newDucky.Transform2D.Translation = new Vector2(j, k);
                 newDucky.Transform2D.Scale = Vector2.One;
                 if (!ChildrenIDs.TryAdd(newDucky.InstanceId)) throw new ApplicationException("Entity could not be added");
@@ -79,12 +79,12 @@ public class MainLevel(
         };
         ChildrenIDs.TryAddFirst(camera2D.InstanceId);
 
-        if (!instanceAtlas.TryCreate("Workfloor:ActorDuckyPlayer", out IPlayer2D? player2D)) return;
+        if (!instanceAtlas.TryCreate(WorkfloorIdLib.Entities.DuckyPlayer, out IPlayer2D? player2D)) return;
         player2D.Transform2D.Translation = new Vector2(5, 5);
         player2D.Transform2D.Scale = Vector2.One;
         ChildrenIDs.TryAddFirst(player2D.InstanceId);
         
-        if (!instanceAtlas.TryCreate("Workfloor:ActorDuckyHype", out IActor2D? playerAddendum)) return;
+        if (!instanceAtlas.TryCreate(WorkfloorIdLib.Entities.DuckyHype, out IActor2D? playerAddendum)) return;
         playerAddendum.Transform2D.Translation = new Vector2(2, 2);
         playerAddendum.Transform2D.Scale = Vector2.One;
         player2D.ChildrenIDs.TryAddFirst(playerAddendum.InstanceId);

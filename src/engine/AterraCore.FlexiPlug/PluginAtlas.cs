@@ -82,11 +82,12 @@ public class PluginAtlas(ILogger logger) : IPluginAtlas {
     private bool TryGetOrCreateZipArchive(string filePath, [NotNullWhen(true)] out ZipArchive? zipArchive) {
         zipArchive = default;
         // ReSharper disable once SuggestVarOrType_SimpleTypes
-        if (_pluginZipArchive.TryGetValue(filePath, out zipArchive)) return false;
+        if (_pluginZipArchive.TryGetValue(filePath, out zipArchive)) return true;
+        
         if (!File.Exists(filePath)) return false;
-
         zipArchive = ZipFile.OpenRead(filePath);
         _pluginZipArchive = _pluginZipArchive.Add(filePath, zipArchive);
+
         return true;
     }
 
@@ -102,12 +103,12 @@ public class PluginAtlas(ILogger logger) : IPluginAtlas {
             return false;
         }
         if (!TryGetOrCreateZipArchive(filePath, out ZipArchive? zipArchive)) {
-            logger.Debug("zip archive did not exist {r}", pluginRecord);
+            logger.Debug("zip archive did not exist {r}", filePath);
             return false;
         }
         ZipArchiveEntry? fileEntry = zipArchive.GetEntry(internalFilePath);
         if (fileEntry is null) {
-            logger.Debug("Could not attain filEntry {r}", pluginRecord);
+            logger.Debug("Could not attain file Entry {r}", internalFilePath);
             return false;
         }
 

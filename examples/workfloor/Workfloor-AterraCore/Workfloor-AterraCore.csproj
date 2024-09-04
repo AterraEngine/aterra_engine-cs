@@ -39,13 +39,6 @@
         </Content>
     </ItemGroup>
 
-    <ItemGroup>
-        <Content Include="Assets\*.png">
-            <Link>assets\%(Filename)%(Extension)</Link>
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-    </ItemGroup>
-
     <Target Name="AddingPlugins" AfterTargets="Build">
         <!-- Create output directories -->
         <RemoveDir Directories="$(OutDir)plugins"/>

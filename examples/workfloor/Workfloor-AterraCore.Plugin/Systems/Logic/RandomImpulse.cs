@@ -10,7 +10,7 @@ using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using System.Numerics;
 
-namespace Workfloor_AterraCore.Plugin.Assets.Systems.Logic;
+namespace Workfloor_AterraCore.Plugin.Systems.Logic;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------

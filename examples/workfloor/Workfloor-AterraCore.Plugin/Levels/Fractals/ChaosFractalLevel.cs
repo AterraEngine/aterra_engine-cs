@@ -10,16 +10,15 @@ using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Nexities.Entities;
 using JetBrains.Annotations;
 using Raylib_cs;
-using System.Collections.Concurrent;
 using System.Numerics;
 
-namespace Workfloor_AterraCore.Plugin.Assets.Levels.Fractals;
+namespace Workfloor_AterraCore.Plugin.Levels.Fractals;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
-[Level(WorkfloorIdLib.Levels.FractalBarnsley, CoreTags.Level)]
-public class BarnsleyFernLevel(
+[Level(WorkfloorIdLib.Levels.FractalChaos, CoreTags.Level)]
+public class ChaosFractalLevel(
     IDirectChildren children,
     [InjectAs("01J5RA7EDMS1PRR1BMRN9XM9AA")] MainLevelSystemIds systemIds,
     
@@ -36,22 +35,32 @@ public class BarnsleyFernLevel(
     // -----------------------------------------------------------------------------------------------------------------
     protected override void ClearCaches() {}
     public void OnLevelFirstCreation() {
-        const int iterations = 1_000_000;
-        var point = new Vector2(0, 0);
+        const uint sierpinskiDepth = 11;
+        const float sierpinskiSize = 2500f;
+        
+        var p1TopVertex = new Vector2(0, (float)(sierpinskiSize / Math.Sqrt(3f)));
+        var p2BottomLeft = new Vector2(-sierpinskiSize / 2, 0);
+        var p3BottomRight = new Vector2(sierpinskiSize / 2, 0);
 
-        var entityPool = new ConcurrentStack<IActor2D>();
-        Parallel.For(0, iterations / 100, _ => {
-            if (!instanceAtlas.TryCreate("Workfloor:ActorDuckyPlatinum", out IActor2D? newDucky)) return;
-            entityPool.Push(newDucky);
-        });
+        var operationQueue = new Queue<(Vector2, Vector2, Vector2, uint)>();
+        operationQueue.Enqueue((p1TopVertex, p2BottomLeft, p3BottomRight, sierpinskiDepth));
+        
+        while (operationQueue.TryDequeue(out (Vector2, Vector2, Vector2, uint) tuple)) {
+            (Vector2 p1, Vector2 p2, Vector2 p3, uint depth) = tuple;
+            if (depth == 0) {
+                if (!instanceAtlas.TryCreate(WorkfloorIdLib.Entities.DuckyPlatinum, out IActor2D? newDucky)) return;
+                newDucky.Transform2D.Translation = (p1 + p2 + p3) / 3;
+                if (!ChildrenIDs.TryAdd(newDucky.InstanceId)) throw new ApplicationException("Entity could not be added");
+                continue;
+            }
 
-        for (int i = 0; i < iterations; i++) {
-            point = ApplyBarnsleyFernTransform(point);
+            Vector2 mid12 = new Vector2((float)Math.Sin(p1.X), (float)Math.Sin(p2.Y)) * (p1 + p2) ;
+            Vector2 mid23 = new Vector2((float)Math.Sin(p2.X), (float)Math.Sin(p3.Y)) * (p2 + p3) ;
+            Vector2 mid31 = new Vector2((float)Math.Sin(p3.X), (float)Math.Sin(p1.Y)) * (p3 + p1) ;
 
-            if (i % 100 != 0) continue;
-            if (!entityPool.TryPop(out IActor2D? entity) || !instanceAtlas.TryCreate("Workfloor:ActorDuckyPlatinum", out entity)) return;
-            entity.Transform2D.Translation = point * 10f;
-            if (!ChildrenIDs.TryAdd(entity.InstanceId)) throw new ApplicationException("Entity could not be added");
+            operationQueue.Enqueue((p1, mid12, mid31, depth - 1));
+            operationQueue.Enqueue((mid12, p2, mid23, depth - 1));
+            operationQueue.Enqueue((mid31, mid23, p3, depth - 1));
         }
 
         if (!instanceAtlas.TryCreate(AssetIdLib.AterraLib.Entities.Camera2D, out ICamera2D? camera2D)) return;
@@ -62,16 +71,5 @@ public class BarnsleyFernLevel(
             Zoom = 10
         };
         ChildrenIDs.TryAddFirst(camera2D.InstanceId);
-    }
-    
-    private static Vector2 ApplyBarnsleyFernTransform(Vector2 point) {
-        double rand = new Random().NextDouble();
-
-        return rand switch {
-            < 0.01 => new Vector2(0, 0.16f * point.Y),
-            < 0.86 => new Vector2(0.85f * point.X + 0.04f * point.Y, -0.04f * point.X + 0.85f * point.Y + 1.6f),
-            < 0.93 => new Vector2(0.2f * point.X - 0.26f * point.Y, 0.23f * point.X + 0.22f * point.Y + 1.6f),
-            _      => new Vector2(-0.15f * point.X + 0.28f * point.Y, 0.26f * point.X + 0.24f * point.Y + 0.44f)
-        };
     }
 }
