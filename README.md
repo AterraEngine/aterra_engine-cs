@@ -16,7 +16,6 @@ AterraEngine is built around a flexible data-driven design. Key components inclu
 - **Plugins and loadorder**: Allowing players to define their own load order of plugins built by the gamedevs or modders.
 
 ## 📜 License
-📜 License
 AterraEngine is licensed under the GPL-3.0 license.
 
 > Note: The AterraEngine logo and ducky sprites included in this project are © AndreasSas, and may not be used without explicit permission.
