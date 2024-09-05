@@ -71,13 +71,12 @@ public class PluginZipImporter(string zipPath, ILogger logger) : IPluginZipImpor
     }
 
     public List<string> GetFileNamesInZip() {
-        // TODO cleanup
         var fileNames = new List<string>();
         try {
             fileNames.AddRange(_archive.Entries.Select(entry => entry.FullName));
         }
         catch (Exception e) {
-            Logger.Warning("Failed to retrieve file names from {zipPath}, {e}", zipPath, e);
+            Logger.Warning(e, "Failed to retrieve file names from {zipPath}", zipPath);
         }
         return fileNames;
     }

@@ -32,7 +32,4 @@ public class ConfigAtlas(IConfigMancerParser configMancerParser, EngineConfigXml
             return _gameConfigs ??= ParsedConfigs.Empty;
         }
     }
-    
-    // Todo add a feature to add new configs to the ParsedConfig, based on the plugins that are loaded
-    //      Issue with this is how to handle plugins that have updated themselves
 }
