@@ -23,10 +23,7 @@ public class Render2D(IAssetInstanceAtlas instanceAtlas, ILogger logger) : Nexit
     // -----------------------------------------------------------------------------------------------------------------
     private (Vector2 Size, Texture2D texture2D) GetTextureAsset(AssetId textureAssetId) {
         if (_texturesCache.TryGetValue(textureAssetId, out (Vector2 Size, Texture2D texture2D) cacheHit)) return cacheHit;
-        if (!instanceAtlas.TryGetOrCreateSingleton(textureAssetId, out ITexture2DAsset? textureAsset)) {
-            logger.Error($"Asset {textureAssetId} not found");
-            return (Vector2.One, new Texture2D());
-        }
+        if (!instanceAtlas.TryGetOrCreateSingleton(textureAssetId, out ITexture2DAsset? textureAsset)) return (Vector2.One, new Texture2D());
 
         (Vector2 Size, Texture2D) newValue = (textureAsset.Size, textureAsset.GetTexture());
         _texturesCache = _texturesCache.SetItem(textureAssetId, newValue);

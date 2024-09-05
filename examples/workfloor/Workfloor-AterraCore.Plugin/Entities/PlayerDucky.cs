@@ -17,7 +17,7 @@ public interface IDuckyPlayerActor : IPlayer2D;
 [UsedImplicitly]
 public class DuckyPlayerActor(
     ITransform2D transform2D,
-    [InjectAs("01J5RA7EDMS1PRR1BMRN9XM9BU")] SpriteDuckyPlatinum sprite2D,
+    [InjectAs] SpriteDuckyPlatinum sprite2D,
     IDirectChildren childEntities,
     IImpulse2D impulse2D
 ) : Player2D(transform2D, sprite2D, childEntities, impulse2D), IDuckyPlayerActor;

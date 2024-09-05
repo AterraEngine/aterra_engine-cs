@@ -21,7 +21,7 @@ public class AssetIdTest {
     public void AssetIdCreationTest(string fullAssetId, string pluginName, string[] namespaces) {
         var assetIdRegex = new AssetId(fullAssetId);
         Assert.Equal(pluginName, assetIdRegex.PluginId.Value);
-        Assert.Equal(namespaces, assetIdRegex.AssetName.Values);
+        Assert.Equal(namespaces, assetIdRegex.NameSpace.Values);
     }
 
     [Theory]
@@ -38,7 +38,7 @@ public class AssetIdTest {
     public void AssetIdThoughFullStringsCreationTest(string pluginId, string assetName, string pluginName, string[] namespaces) {
         var assetIdRegex = new AssetId(pluginId, assetName);
         Assert.Equal(pluginName, assetIdRegex.PluginId.Value);
-        Assert.Equal(namespaces, assetIdRegex.AssetName.Values);
+        Assert.Equal(namespaces, assetIdRegex.NameSpace.Values);
     }
 
 
@@ -55,7 +55,7 @@ public class AssetIdTest {
     public void AssetIdThoughStringPartsCreationTest(string pluginId, IEnumerable<string> assetName, string pluginName, string[] namespaces) {
         var assetIdRegex = new AssetId(pluginId, assetName);
         Assert.Equal(pluginName, assetIdRegex.PluginId.Value);
-        Assert.Equal(namespaces, assetIdRegex.AssetName.Values);
+        Assert.Equal(namespaces, assetIdRegex.NameSpace.Values);
     }
 
     [Theory]
@@ -107,7 +107,7 @@ public class AssetIdTest {
     [InlineData("pluginName:folder/item", "pluginName", "folder/item")]
     public void AssetId_Plus_Test(string result, string pluginId, string assetName) {
         var left = new PluginId(pluginId);
-        var right = new AssetName(assetName);
+        var right = new NameSpace(assetName);
         AssetId newAsset = left + right;
 
         Assert.Equal(result, newAsset.ToString());

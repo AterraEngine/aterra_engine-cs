@@ -41,7 +41,7 @@ public class SpriteDuckyPlatinum : Sprite2D, ISpriteDuckyPlatinum {
 [UsedImplicitly]
 public class DuckyPlatinumActor(
     ITransform2D transform2D,
-    [InjectAs("01J5RA7EDMS1PRR1BMRN9XM9BU")] SpriteDuckyPlatinum sprite2D,
+    [InjectAs] SpriteDuckyPlatinum sprite2D,
     IDirectChildren childEntities,
     IImpulse2D impulse2D
 ) : Actor2D(transform2D, sprite2D, childEntities, impulse2D), IDuckyPlatinumActor;

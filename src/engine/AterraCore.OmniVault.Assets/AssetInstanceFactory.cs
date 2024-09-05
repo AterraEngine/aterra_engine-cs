@@ -141,6 +141,7 @@ public class AssetInstanceFactory(ILogger logger, IPluginAtlas pluginAtlas) : IA
         }
         catch (Exception e) when (e is MethodAccessException or ArgumentException or TargetInvocationException or TargetParameterCountException or NotSupportedException or SecurityException) {
             logger.Error(e, $"Caught {e.GetType().Name}");
+            throw;
             return false;
         }
         finally {

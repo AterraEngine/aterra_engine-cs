@@ -105,9 +105,9 @@ public class PluginIdTest {
     [Fact]
     public void AdditionOperator_ShouldCombinePluginIdAndAssetName() {
         var pluginId = new PluginId("plugin1");
-        var assetName = new AssetName("asset1");
+        var nameSpace = new NameSpace("asset1");
 
-        AssetId assetId = pluginId + assetName;
+        AssetId assetId = pluginId + nameSpace;
 
         Assert.Equal("plugin1:asset1", assetId);
     }

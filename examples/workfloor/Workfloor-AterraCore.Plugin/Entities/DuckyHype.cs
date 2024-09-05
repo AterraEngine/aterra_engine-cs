@@ -41,7 +41,7 @@ public class SpriteDuckyHype : Sprite2D, ISpriteDuckyHype {
 [UsedImplicitly]
 public class DuckyHypeActor(
     ITransform2D transform2D,
-    [InjectAs("01J5RA7EDMS1PRR1BMRN9XM9BT")] SpriteDuckyHype sprite2D,
+    [InjectAs] SpriteDuckyHype sprite2D,
     IDirectChildren childEntities,
     IImpulse2D impulse2D
 ) : Actor2D(transform2D, sprite2D, childEntities, impulse2D), IDuckyHypeActor;

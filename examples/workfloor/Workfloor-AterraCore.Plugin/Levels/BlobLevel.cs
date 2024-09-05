@@ -24,8 +24,8 @@ public class BlobLevelSystemIds : SystemIds {
     protected override AssetId[] LogicSystems { get; set; } = [
         AssetIdLib.AterraLib.SystemsLogic.PlayerController,
         AssetIdLib.AterraLib.SystemsLogic.CameraController,
-        "Workfloor:ApplyRandomImpulse",
-        "Workfloor:Systems/LevelSwitch",
+        WorkfloorIdLib.SystemsLogic.RandomImpulse,
+        WorkfloorIdLib.SystemsLogic.LevelSwitch,
         // "Workfloor:ApplyRandomImpulseCamera",
         AssetIdLib.AterraLib.SystemsLogic.ApplyImpulse,
         AssetIdLib.AterraLib.SystemsLogic.ApplyImpulseCamera

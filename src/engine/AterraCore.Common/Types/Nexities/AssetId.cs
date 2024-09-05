@@ -15,56 +15,36 @@ namespace AterraCore.Common.Types.Nexities;
 // ---------------------------------------------------------------------------------------------------------------------
 [StructLayout(LayoutKind.Sequential)]
 public readonly struct AssetId : IEqualityOperators<AssetId, AssetId, bool>, IEquatable<AssetId>, IEqualityOperators<AssetId, PluginId, bool> {
-    public PluginId PluginId { get; }
-    public AssetName AssetName { get; }
+    public readonly PluginId PluginId;
+    public readonly NameSpace NameSpace;
     private readonly int _hashCode;
-    private readonly string _assetIdCache;
+    private readonly ReadOnlyMemory<char> _assetIdCache;
+    private static readonly ConcurrentDictionary<string, (PluginId pluginId, NameSpace assetName, ReadOnlyMemory<char> cache)> Cache = new();
 
     // -----------------------------------------------------------------------------------------------------------------
     // Constructors
     // -----------------------------------------------------------------------------------------------------------------
-    public AssetId(string pluginName, IEnumerable<string> nameSpace) {
-        PluginId = new PluginId(pluginName);
-        AssetName = new AssetName(nameSpace);
-        _hashCode = ComputeHashCode();
-        _assetIdCache = GetAsString(PluginId, AssetName);
-    }
+    public AssetId(string pluginName, IEnumerable<string> nameSpace) : this(new PluginId(pluginName), new NameSpace(nameSpace)) {}
 
-    public AssetId(string pluginName, string nameSpace) {
-        PluginId = new PluginId(pluginName);
-        AssetName = new AssetName(nameSpace);
-        _hashCode = ComputeHashCode();
-        _assetIdCache = GetAsString(PluginId, AssetName);
-    }
+    public AssetId(string pluginName, string nameSpace) : this(new PluginId(pluginName), new NameSpace(nameSpace)) {}
 
-    public AssetId(PluginId pluginId, AssetName assetName) {
+    public AssetId(PluginId pluginId, NameSpace assetName) {
         PluginId = pluginId;
-        AssetName = assetName;
+        NameSpace = assetName;
         _hashCode = ComputeHashCode();
-        _assetIdCache = GetAsString(PluginId, AssetName);
+        _assetIdCache = GetOrAddCache(pluginId, assetName).cache;
     }
 
-
-    private static readonly ConcurrentDictionary<string, (PluginId, AssetName)> Cache = new();
-    private static (PluginId, AssetName) ValueFactory(string id) {
-        Match match = RegexLib.AssetId.Match(id);
-
-        Group pluginNameGroup = match.Groups[1];
-        Group namespaceGroup = match.Groups[2];
-
-        if (!pluginNameGroup.Success) throw new ArgumentException("Plugin Name could not be determined");
-        if (!namespaceGroup.Success) throw new ArgumentException("Namespace for the asset could not be determined");
-
-        return (new PluginId(pluginNameGroup.Value), new AssetName(namespaceGroup.Value));
-    }
     public AssetId(string assetId) {
-        (PluginId, AssetName) tuple = Cache.GetOrAdd(assetId, ValueFactory);
-        PluginId = tuple.Item1;
-        AssetName = tuple.Item2;
+        (PluginId pluginId, NameSpace assetName, ReadOnlyMemory<char> cache) = Cache.GetOrAdd(assetId, id => {
+            (PluginId pluginId, NameSpace assetName) = ParseAssetId(id);
+            return (pluginId, assetName, GetAsMemory(pluginId, assetName));
+        });
+        PluginId = pluginId;
+        NameSpace = assetName;
         _hashCode = ComputeHashCode();
-        _assetIdCache = GetAsString(PluginId, AssetName);
+        _assetIdCache = cache;
     }
-
 
     // -----------------------------------------------------------------------------------------------------------------
     // Implicit Methods
@@ -77,43 +57,60 @@ public readonly struct AssetId : IEqualityOperators<AssetId, AssetId, bool>, IEq
     // -----------------------------------------------------------------------------------------------------------------
     public static bool TryCreateNew(string assetId, [NotNullWhen(true)] out AssetId? output) {
         Match match = RegexLib.AssetId.Match(assetId);
-        if (!match.Groups[1].Success || !match.Groups[2].Success) {
+        if (!match.Success) {
             output = null;
             return false;
         }
 
-        output = new AssetId(new PluginId(match.Groups[1]), new AssetName(match.Groups[2]));
+        output = new AssetId(new PluginId(match.Groups[1]), new NameSpace(match.Groups[2]));
         return true;
     }
 
-    private static string GetAsString(PluginId pluginId, AssetName assetName) => $"{pluginId}:{string.Join('/', assetName)}";
-    public override string ToString() => _assetIdCache;
+    private static (PluginId, NameSpace) ParseAssetId(string id) {
+        Match match = RegexLib.AssetId.Match(id);
+        if (!match.Success) throw new ArgumentException("Invalid assetId format");
+
+        return (new PluginId(match.Groups[1]), new NameSpace(match.Groups[2]));
+    }
+
+    private static (PluginId, NameSpace, ReadOnlyMemory<char> cache) GetOrAddCache(PluginId pluginId, NameSpace assetName) {
+        string key = pluginId.Value + ':' + string.Join('/', assetName);
+        return Cache.GetOrAdd(key, _ => (pluginId, assetName, GetAsMemory(pluginId, assetName)));
+    }
+
+    private static ReadOnlyMemory<char> GetAsMemory(PluginId pluginId, NameSpace assetName) {
+        string key = pluginId.Value + ':' + string.Join('/', assetName);
+        return new ReadOnlyMemory<char>(key.ToArray(), 0, key.Length);
+    }
+    
+    public override string ToString() => _assetIdCache.ToString();
+    
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override int GetHashCode() => _hashCode;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private int ComputeHashCode() {
-        int hash = 17;
-        hash = hash * 31 + PluginId.GetHashCode();
-        hash = hash * 31 + AssetName.GetHashCode();
-        return hash;
-    }
+    private int ComputeHashCode() => HashCode.Combine(PluginId, NameSpace);
 
     // -----------------------------------------------------------------------------------------------------------------
     // Comparison Methods
     // -----------------------------------------------------------------------------------------------------------------
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator ==(AssetId left, AssetId right) => left.Equals(right);
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator !=(AssetId left, AssetId right) => !left.Equals(right);
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator ==(AssetId left, PluginId right) => left.PluginId == right;
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator !=(AssetId left, PluginId right) => left.PluginId != right;
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override bool Equals(object? obj) => obj is AssetId other && Equals(other);
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool Equals(AssetId other) =>
         PluginId.Equals(other.PluginId)
-        && AssetName.Equals(other.AssetName);
+        && NameSpace.Equals(other.NameSpace);
 }
