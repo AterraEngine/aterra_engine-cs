@@ -85,15 +85,15 @@ public class AterraCoreWorld(
             }
 
             INexitiesLevel? level = instanceAtlas.OfAssetId<INexitiesLevel>(levelId).FirstOrDefault();
-            
+
             if (level == null && !instanceAtlas.TryGetOrCreateSingleton(
                     levelId,
                     out level,
-                    nexitiesLevel => nexitiesLevel.OnLevelFirstCreation(),
+                    afterCreation: nexitiesLevel => nexitiesLevel.OnLevelFirstCreation(),
                     levelInstanceId
                 )) {
                 Logger.Warning("Failed to get level by instance ULID: {LevelId}", levelInstanceId);
-                return false; 
+                return false;
             }
 
             Logger.Information("Successfully fetched or created level. Creating ActiveLevel instance now.");

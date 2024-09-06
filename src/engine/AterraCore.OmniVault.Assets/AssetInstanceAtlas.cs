@@ -32,7 +32,7 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetIn
         }
 
         // check if it is a singleton and already exists
-        if (registration.IsSingleton 
+        if (registration.IsSingleton
             && _singletonAssetInstances.TryGetValue(registration.AssetId, out Ulid existingUlid)) {
             return TryGet(existingUlid, out instance);
         }
@@ -50,8 +50,9 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetIn
         foreach (Type implementedType in registration.DerivedInterfaceTypes.Concat([registration.Type])) {
             if (_assetsByTypes.TryGetValue(implementedType, out ConcurrentDictionary<Ulid, byte>? bag)) {
                 bag.TryAdd(instance.InstanceId, 0);
-            } else {
-                _assetsByTypes.TryAdd(implementedType,new ConcurrentDictionary<Ulid, byte> {[instance.InstanceId] = 0});
+            }
+            else {
+                _assetsByTypes.TryAdd(implementedType, new ConcurrentDictionary<Ulid, byte> { [instance.InstanceId] = 0 });
             }
         }
 
@@ -85,19 +86,19 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetIn
 
     public bool TryGetOrCreate<T>(Type type, [NotNullWhen(true)] out T? instance, Ulid? ulid = null) where T : class, IAssetInstance {
         instance = null;
-        return ulid is { } ulidCasted && TryGet(ulidCasted, out instance)
-               || assetAtlas.TryGetAssetId(type, out AssetId assetId) 
+        return ulid is {} ulidCasted && TryGet(ulidCasted, out instance)
+               || assetAtlas.TryGetAssetId(type, out AssetId assetId)
                && TryCreate(assetId, out instance, ulid);
     }
 
     public bool TryGetOrCreate<T>(AssetId assetId, [NotNullWhen(true)] out T? instance, Ulid? ulid = null) where T : class, IAssetInstance =>
         ulid is not null && TryGet((Ulid)ulid, out instance)
         || TryCreate(assetId, out instance, ulid);
-    
+
     public bool TryGetOrCreate<T>(AssetId assetId, [NotNullWhen(true)] out T? instance, Action<T> afterCreation, Ulid? ulid = null) where T : class, IAssetInstance {
-        if ((ulid is not {} ulidCasted || !TryGet(ulidCasted, out instance)) 
+        if ((ulid is not {} ulidCasted || !TryGet(ulidCasted, out instance))
             && !TryCreate(assetId, out instance, ulid)) return false;
-       
+
         afterCreation(instance);
         return true;
     }
