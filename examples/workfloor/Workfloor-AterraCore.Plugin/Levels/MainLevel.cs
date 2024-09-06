@@ -28,10 +28,10 @@ public class MainLevelSystemIds : SystemIds {
         // "Workfloor:ApplyRandomImpulse",
         // "Workfloor:ApplyRandomImpulseCamera",
         AssetIdLib.AterraLib.SystemsLogic.ApplyImpulse,
+        AssetIdLib.AterraLib.SystemsLogic.ApplyImpulseCamera,
     ];
 
     protected override AssetId[] RenderSystems { get; set; } = [
-        AssetIdLib.AterraLib.SystemsLogic.ApplyImpulseCamera,
         AssetIdLib.AterraLib.SystemsRendering.Render2D,
         AssetIdLib.AterraLib.SystemsRendering.RaylibKeyHandler,
     ];

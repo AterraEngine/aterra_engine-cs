@@ -5,6 +5,7 @@ using AterraCore.Common.Data;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.PoolCorps;
+using CodeOfChaos.Extensions.Serilog;
 using JetBrains.Annotations;
 using Serilog;
 using System.Collections.Concurrent;
@@ -47,7 +48,7 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetIn
             }
         }
 
-        foreach (Type implementedType in registration.DerivedInterfaceTypes) {
+        foreach (Type implementedType in registration.DerivedInterfaceTypes.Concat([registration.Type])) {
             if (_assetsByTypes.TryGetValue(implementedType, out ConcurrentDictionary<Ulid, byte>? bag)) {
                 bag.TryAdd(instance.InstanceId, 0);
             } else {
@@ -150,5 +151,21 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetIn
         }
         ulidPools.UlidHashSetPool.Return(alreadyYielded);
 
+    }
+    public IEnumerable<T> OfAssetId<T>(AssetId assetId) where T : class, IAssetInstance {
+        if (!assetAtlas.TryGetAssetType(assetId, out Type? type)) {
+            logger.Debug("No type found");
+            yield break;
+        }
+        if (!_assetsByTypes.TryGetValue(type, out ConcurrentDictionary<Ulid, byte>? assetIds)) {
+            logger.Debug("No Previously created found");
+            yield break;
+        }
+        foreach (Ulid instanceId in assetIds.Keys) {
+            logger.Debug(" {u}", instanceId);
+            if (!TryGet(instanceId, out T? instance)) continue;
+            logger.Debug("Found the instance");
+            yield return instance;
+        }
     }
 }

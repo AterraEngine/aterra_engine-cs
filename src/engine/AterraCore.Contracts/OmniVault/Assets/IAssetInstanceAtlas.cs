@@ -35,4 +35,5 @@ public interface IAssetInstanceAtlas {
 
     IEnumerable<T> OfType<T>() where T : class, IAssetInstance;
     IEnumerable<T> OfTag<T>(CoreTags level) where T : class, IAssetInstance;
+    IEnumerable<T> OfAssetId<T>(AssetId assetId) where T : class, IAssetInstance;
 }

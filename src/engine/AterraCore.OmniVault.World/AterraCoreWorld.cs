@@ -7,6 +7,7 @@ using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading.CrossThread;
 using AterraCore.Contracts.Threading.CrossThread.Dto;
+using CodeOfChaos.Extensions.Serilog;
 using Extensions;
 using JetBrains.Annotations;
 using Serilog;
@@ -25,7 +26,8 @@ public class AterraCoreWorld(
     IAssetInstanceAtlas instanceAtlas,
     ILogger logger,
     IActiveLevelFactory levelFactory,
-    ICrossThreadQueue crossThreadQueue
+    ICrossThreadQueue crossThreadQueue,
+    ICrossThreadTickData crossThreadTickData
 ) : IAterraCoreWorld {
     /// <summary>
     /// Represents a Logger used for logging information and messages.
@@ -81,19 +83,22 @@ public class AterraCoreWorld(
                 Logger.Warning("Can't change to the same level instance: {LevelId}", levelInstanceId);
                 return false;
             }
+
+            INexitiesLevel? level = instanceAtlas.OfAssetId<INexitiesLevel>(levelId).FirstOrDefault();
             
-            if (!instanceAtlas.TryGetOrCreateSingleton(
-                levelId, 
-                out INexitiesLevel? level,
-                nexitiesLevel => nexitiesLevel.OnLevelFirstCreation(), 
-                levelInstanceId
-            )) {
+            if (level == null && !instanceAtlas.TryGetOrCreateSingleton(
+                    levelId,
+                    out level,
+                    nexitiesLevel => nexitiesLevel.OnLevelFirstCreation(),
+                    levelInstanceId
+                )) {
                 Logger.Warning("Failed to get level by instance ULID: {LevelId}", levelInstanceId);
-                return false;
+                return false; 
             }
 
             Logger.Information("Successfully fetched or created level. Creating ActiveLevel instance now.");
             ActiveLevel = levelFactory.CreateLevel2D(level);
+            crossThreadTickData.Clear();
         }
 
         EmitActiveLevel(ActiveLevel, oldLevel);

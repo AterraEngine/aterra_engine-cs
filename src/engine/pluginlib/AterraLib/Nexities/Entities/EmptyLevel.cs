@@ -11,10 +11,10 @@ namespace AterraLib.Nexities.Entities;
 [UsedImplicitly]
 public class EmptyLevelSystemIds : SystemIds {
     protected override AssetId[] LogicSystems { get; set; } = [
-        AssetIdStringLib.AterraLib.SystemsLogic.CameraController,
+        // AssetIdStringLib.AterraLib.SystemsLogic.CameraController,
         // "Workfloor:ApplyRandomImpulse",
         // "Workfloor:ApplyRandomImpulseCamera",
-        AssetIdStringLib.AterraLib.SystemsLogic.ApplyImpulseCamera
+        // AssetIdStringLib.AterraLib.SystemsLogic.ApplyImpulseCamera
     ];
 
     protected override AssetId[] RenderSystems { get; set; } = [

@@ -7,12 +7,9 @@ namespace AterraLib.Nexities.Systems.Logic;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[System(AssetIdStringLib.AterraLib.SystemsLogic.ApplyImpulseCamera, CoreTags.RenderThread)]
-[Singleton<ApplyImpulseCamera>]
+[System(AssetIdStringLib.AterraLib.SystemsLogic.ApplyImpulseCamera, CoreTags.LogicThread)]
 [UsedImplicitly]
-public class ApplyImpulseCamera : NexitiesSystemWithFilter<ICamera2D> {
-    protected override Predicate<ICamera2D> Filter { get; } = entity => entity.Impulse2D.IsEmpty;
-
+public class ApplyImpulseCamera : NexitiesSystem<ICamera2D> {
     public override void Tick(ActiveLevel level) {
         foreach (ICamera2D entity in GetEntities(level)) {
             Vector2 scaledTranslationOffset = entity.RaylibCamera2D.Camera.Zoom != 0
