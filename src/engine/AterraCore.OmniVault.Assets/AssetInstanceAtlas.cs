@@ -17,7 +17,7 @@ namespace AterraCore.OmniVault.Assets;
 [UsedImplicitly]
 public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetInstanceFactory factory, IUlidPools ulidPools) : IAssetInstanceAtlas {
     private readonly ConcurrentDictionary<Ulid, IAssetInstance> _assetInstances = new();
-    private readonly ConcurrentDictionary<Type, ConcurrentDictionary<Ulid, byte>> _assetsByTypes = new();
+    private readonly ConcurrentDictionary<Type,  Lazy<ConcurrentDictionary<Ulid, byte>>> _assetsByTypes = new();
     private readonly ConcurrentDictionary<AssetId, Ulid> _singletonAssetInstances = new();
 
     public int TotalCount => _assetInstances.Count;
@@ -47,13 +47,9 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetIn
             }
         }
 
-        foreach (Type implementedType in registration.DerivedInterfaceTypes.Concat([registration.Type])) {
-            if (_assetsByTypes.TryGetValue(implementedType, out ConcurrentDictionary<Ulid, byte>? bag)) {
-                bag.TryAdd(instance.InstanceId, 0);
-            }
-            else {
-                _assetsByTypes.TryAdd(implementedType, new ConcurrentDictionary<Ulid, byte> { [instance.InstanceId] = 0 });
-            }
+        foreach (var implementedType in registration.DerivedInterfaceTypes.Concat(new[] { registration.Type })) {
+            var lazyBag = _assetsByTypes.GetOrAdd(implementedType, _ => new Lazy<ConcurrentDictionary<Ulid, byte>>(() => new ConcurrentDictionary<Ulid, byte>()));
+            lazyBag.Value.TryAdd(instance.InstanceId, 0);
         }
 
         if (registration.IsSingleton)
@@ -129,8 +125,8 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetIn
 
     public IEnumerable<T> OfType<T>() where T : class, IAssetInstance {
         HashSet<Ulid> alreadyYielded = ulidPools.UlidHashSetPool.Get();
-        if (!_assetsByTypes.TryGetValue(typeof(T), out ConcurrentDictionary<Ulid, byte>? assetIds)) yield break;
-        foreach (Ulid assetId in assetIds.Keys) {
+        if (!_assetsByTypes.TryGetValue(typeof(T), out Lazy<ConcurrentDictionary<Ulid, byte>>? assetIds)) yield break;
+        foreach (Ulid assetId in assetIds.Value.Keys) {
             if (TryGet(assetId, out T? instance) && alreadyYielded.Add(instance.InstanceId)) {
                 yield return instance;
             }
@@ -139,8 +135,8 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetIn
     }
     public IEnumerable<T> OfTag<T>(CoreTags tags) where T : class, IAssetInstance {
         HashSet<Ulid> alreadyYielded = ulidPools.UlidHashSetPool.Get();
-        if (!_assetsByTypes.TryGetValue(typeof(T), out ConcurrentDictionary<Ulid, byte>? instanceIds)) yield break;
-        foreach (Ulid id in instanceIds.Keys) {
+        if (!_assetsByTypes.TryGetValue(typeof(T), out Lazy<ConcurrentDictionary<Ulid, byte>>? instanceIds)) yield break;
+        foreach (Ulid id in instanceIds.Value.Keys) {
             if (_assetInstances.TryGetValue(id, out IAssetInstance? instance)
                 && instance is T convertedInstance
                 && assetAtlas.TryGetRegistration(instance.AssetId, out AssetRegistration registration)
@@ -157,11 +153,11 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetIn
             logger.Debug("No type found");
             yield break;
         }
-        if (!_assetsByTypes.TryGetValue(type, out ConcurrentDictionary<Ulid, byte>? assetIds)) {
+        if (!_assetsByTypes.TryGetValue(type, out Lazy<ConcurrentDictionary<Ulid, byte>>? assetIds)) {
             logger.Debug("No Previously created found");
             yield break;
         }
-        foreach (Ulid instanceId in assetIds.Keys) {
+        foreach (Ulid instanceId in assetIds.Value.Keys) {
             logger.Debug(" {u}", instanceId);
             if (!TryGet(instanceId, out T? instance)) continue;
             logger.Debug("Found the instance");

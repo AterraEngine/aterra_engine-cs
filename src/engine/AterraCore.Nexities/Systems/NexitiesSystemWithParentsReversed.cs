@@ -4,7 +4,6 @@
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World;
 using JetBrains.Annotations;
-using Microsoft.Extensions.ObjectPool;
 
 namespace AterraCore.Nexities.Systems;
 // ---------------------------------------------------------------------------------------------------------------------
