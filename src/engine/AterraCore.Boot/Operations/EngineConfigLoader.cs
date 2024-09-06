@@ -26,7 +26,7 @@ public class EngineConfigLoader : IBootOperation {
     [UsedImplicitly] public EngineConfigLoader(string? configFilePath = null) {
         _configFilePath = configFilePath;
     }
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -44,7 +44,7 @@ public class EngineConfigLoader : IBootOperation {
             : _configFilePath!;
 
         if (!configXmlParser.TryDeserializeFromFile(filepath, out EngineConfigXml? configDto)) {
-            throw Logger.ThrowError<ConfigurationException>("Failed to load Engine Config");
+            throw Logger.ThrowError<ApplicationException>("Failed to load Engine Config");
         }
         components.EngineConfigXml = configDto;
 

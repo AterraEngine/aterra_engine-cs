@@ -26,7 +26,7 @@ public interface IAssetInstanceAtlas {
     bool TryGetOrCreate<T>(Type type, [NotNullWhen(true)] out T? instance, Ulid? ulid = null) where T : class, IAssetInstance;
     bool TryGetOrCreate<T>(AssetId assetId, [NotNullWhen(true)] out T? instance, Ulid? ulid = null) where T : class, IAssetInstance;
     bool TryGetOrCreate<T>(AssetId assetId, [NotNullWhen(true)] out T? instance, Action<T> afterCreation, Ulid? ulid = null) where T : class, IAssetInstance;
- 
+
     bool TryGetOrCreateSingleton<T>(AssetId assetId, [NotNullWhen(true)] out T? instance, Ulid? ulid = null) where T : class, IAssetInstance;
     bool TryGetOrCreateSingleton<T>(AssetId assetId, [NotNullWhen(true)] out T? instance, Action<T> afterCreation, Ulid? ulid = null) where T : class, IAssetInstance;
 
@@ -35,4 +35,5 @@ public interface IAssetInstanceAtlas {
 
     IEnumerable<T> OfType<T>() where T : class, IAssetInstance;
     IEnumerable<T> OfTag<T>(CoreTags level) where T : class, IAssetInstance;
+    IEnumerable<T> OfAssetId<T>(AssetId assetId) where T : class, IAssetInstance;
 }

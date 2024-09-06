@@ -8,7 +8,7 @@ namespace AterraLib.Nexities.Systems.Logic;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[System(AssetIdLib.AterraLib.SystemsLogic.ApplyImpulse, CoreTags.LogicSystem)]
+[System(AssetIdStringLib.AterraLib.SystemsLogic.ApplyImpulse, CoreTags.LogicThread)]
 [Injectable<ApplyImpulse>(ServiceLifetime.Singleton)]
 [UsedImplicitly]
 public class ApplyImpulse : NexitiesSystemUnCachedWithFilter<IActor2D> {

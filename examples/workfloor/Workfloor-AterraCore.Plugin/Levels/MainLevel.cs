@@ -32,7 +32,8 @@ public class MainLevelSystemIds : SystemIds {
     ];
 
     protected override AssetId[] RenderSystems { get; set; } = [
-        AssetIdLib.AterraLib.SystemsRendering.Render2D
+        AssetIdLib.AterraLib.SystemsRendering.Render2D,
+        AssetIdLib.AterraLib.SystemsRendering.RaylibKeyHandler
     ];
 
     protected override AssetId[] UiSystems { get; set; } = [
@@ -44,7 +45,6 @@ public class MainLevelSystemIds : SystemIds {
 public class MainLevel(
     IDirectChildren children,
     [InjectAs("01J5RA7EDMS1PRR1BMRN9XM9AA")] MainLevelSystemIds systemIds,
-    
     IAssetInstanceAtlas instanceAtlas
 ) : NexitiesEntity(children, systemIds), INexitiesLevel {
     private IDirectChildren? _children = children;
@@ -59,7 +59,7 @@ public class MainLevel(
     protected override void ClearCaches() {}
     public void OnLevelFirstCreation() {
         const int entitiesPerLevel = 10_000;
-            
+
         int a = (int)(Math.Sqrt(entitiesPerLevel) / 2f);
         Parallel.For((long)-a, a, body: k => {
             Parallel.For((long)-a, a, body: j => {
@@ -70,7 +70,7 @@ public class MainLevel(
             });
         });
 
-        if (!instanceAtlas.TryCreate(AssetIdLib.AterraLib.Entities.Camera2D, out ICamera2D? camera2D)) return;
+        if (!instanceAtlas.TryCreate(AssetIdStringLib.AterraLib.Entities.Camera2D, out ICamera2D? camera2D)) return;
         camera2D.RaylibCamera2D.Camera = camera2D.RaylibCamera2D.Camera with {
             Target = new Vector2(0, 0),
             Offset = new Vector2(Raylib.GetScreenWidth() / 2f, Raylib.GetScreenHeight() / 2f),
@@ -83,11 +83,11 @@ public class MainLevel(
         player2D.Transform2D.Translation = new Vector2(5, 5);
         player2D.Transform2D.Scale = Vector2.One;
         ChildrenIDs.TryAddFirst(player2D.InstanceId);
-        
+
         if (!instanceAtlas.TryCreate(WorkfloorIdLib.Entities.DuckyHype, out IActor2D? playerAddendum)) return;
         playerAddendum.Transform2D.Translation = new Vector2(2, 2);
         playerAddendum.Transform2D.Scale = Vector2.One;
         player2D.ChildrenIDs.TryAddFirst(playerAddendum.InstanceId);
-        
+
     }
 }

@@ -11,7 +11,6 @@ using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.OmniVault.World.EntityTree;
 using AterraCore.Contracts.Renderer;
 using AterraCore.Contracts.Threading;
-using AterraCore.Contracts.Threading.CTQ;
 using AterraCore.Contracts.Threading.Logic;
 using AterraCore.Contracts.Threading.Rendering;
 using AterraCore.FlexiPlug;
@@ -46,17 +45,11 @@ public class CollectDependenciesManually : IBootOperation {
 
         List<ServiceDescriptor> dependencies = [
             #region Base AterraEngine
-            NewServiceDescriptor<IEngine, Engine>(ServiceLifetime.Singleton),
             NewServiceDescriptor<ILogger>(EngineLogger.CreateLogger(components.EngineConfigXml.LoggingConfig.UseAsyncConsole)),
-            NewServiceDescriptor<IMainWindow, MainWindow>(ServiceLifetime.Singleton),
+
             NewServiceDescriptor<IActiveLevelFactory, ActiveLevelFactory>(ServiceLifetime.Singleton),
 
-            NewServiceDescriptor<IThreadingManager, ThreadingManager>(ServiceLifetime.Singleton),
-            NewServiceDescriptor<ICrossThreadQueue, CrossThreadQueue>(ServiceLifetime.Singleton),
-            NewServiceDescriptor<ILogicEventManager, LogicEventManager>(ServiceLifetime.Singleton),
-            NewServiceDescriptor<IRenderEventManager, RenderEventManager>(ServiceLifetime.Singleton),
-            NewServiceDescriptor<ILogicThreadProcessor, LogicThreadProcessor>(ServiceLifetime.Singleton),
-            NewServiceDescriptor<IRenderThreadProcessor, RenderThreadProcessor>(ServiceLifetime.Singleton),
+            // NewServiceDescriptor<ICrossThreadQueue, CrossThreadQueue>(ServiceLifetime.Singleton),
             #endregion
             #region PluginLoading
             NewServiceDescriptor<IPluginAtlas, PluginAtlas>(ServiceLifetime.Singleton),
@@ -75,7 +68,7 @@ public class CollectDependenciesManually : IBootOperation {
             NewServiceDescriptor<IDataCollectorFactory, DataCollectorFactory>(ServiceLifetime.Singleton),
             ServiceDescriptor.Singleton<IDataCollector>(provider => provider.GetRequiredService<IDataCollectorFactory>().Create()),
             #endregion
-            ServiceDescriptor.Singleton(components.EngineConfigXml), 
+            ServiceDescriptor.Singleton(components.EngineConfigXml)
         ];
 
         components.ServiceDescriptors.AddLastRepeated(dependencies);

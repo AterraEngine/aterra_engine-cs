@@ -1,18 +1,20 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Threading.CTQ.Dto;
+using AterraCore.Contracts.Threading.CrossThread;
+using Raylib_cs;
 using System.Collections.Concurrent;
-using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
 
-namespace AterraCore.Contracts.Threading.CTQ;
+namespace AterraLib.Contracts;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ICrossThreadQueue {
-    ConcurrentQueue<TextureRegistrar> TextureRegistrarQueue { get; }
-    bool EntireQueueIsEmpty { get; }
-
-    bool TryDequeue(QueueKey key, [NotNullWhen(true)] out Action? action);
-    bool TryEnqueue(QueueKey key, Action action);
+public interface ITickDataInput : ITickDataHolder {
+    ConcurrentStack<KeyboardKey> KeyboardKeyPressed { get; }
+    ConcurrentStack<KeyboardKey> KeyboardKeyPressedRepeated { get; }
+    ConcurrentStack<KeyboardKey> KeyboardKeyReleased { get; }
+    ConcurrentStack<KeyboardKey> KeyboardKeyDown { get; }
+    ConcurrentStack<MouseButton> MouseButtonDown { get; }
+    ConcurrentStack<Vector2> MouseWheelMovement { get; }
 }

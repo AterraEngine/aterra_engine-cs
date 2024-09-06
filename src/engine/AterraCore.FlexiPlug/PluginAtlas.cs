@@ -85,7 +85,7 @@ public class PluginAtlas(ILogger logger) : IPluginAtlas {
         zipArchive = default;
         // ReSharper disable once SuggestVarOrType_SimpleTypes
         if (_pluginZipArchive.TryGetValue(filePath, out zipArchive)) return true;
-        
+
         if (!File.Exists(filePath)) return false;
         zipArchive = ZipFile.OpenRead(filePath);
         _pluginZipArchive = _pluginZipArchive.Add(filePath, zipArchive);

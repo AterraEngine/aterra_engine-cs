@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Attributes;
 using AterraCore.Contracts.Renderer;
 using JetBrains.Annotations;
 
@@ -9,12 +10,11 @@ namespace AterraEngine.Threading.Render;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
+[Singleton<IMainWindow>]
 public class MainWindow : IMainWindow {
     private static int Width => 1000;
     private static int Height => 1000;
     private static string Name => "AterraEngine - Test";
-
-    public bool IsInitialised { get; private set; }
 
     public void Init() {
         // Necessary to write Raylib logs with Serilog
@@ -24,7 +24,7 @@ public class MainWindow : IMainWindow {
             ConfigFlags.ResizableWindow
             | ConfigFlags.Msaa4xHint// Enable Multi Sampling Anti Aliasing 4x (if available)
             // | ConfigFlags.InterlacedHint
-            | ConfigFlags.UndecoratedWindow
+            // | ConfigFlags.UndecoratedWindow
             // | ConfigFlags.MousePassthroughWindow
             // | ConfigFlags.TransparentWindow
         );
@@ -32,6 +32,5 @@ public class MainWindow : IMainWindow {
         Raylib.InitWindow(Width, Height, Name);
         Raylib.SetWindowMonitor(1);
 
-        IsInitialised = true;
     }
 }

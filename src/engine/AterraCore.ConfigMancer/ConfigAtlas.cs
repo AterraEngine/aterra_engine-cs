@@ -11,20 +11,20 @@ using JetBrains.Annotations;
 using System.Collections.Frozen;
 
 namespace AterraCore.ConfigMancer;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
-[Injectable<ConfigAtlas, IConfigAtlas>]
+[Singleton<ConfigAtlas, IConfigAtlas>]
 public class ConfigAtlas(IConfigMancerParser configMancerParser, EngineConfigXml engineConfigXml, IPluginAtlas pluginAtlas) : IConfigAtlas {
     public EngineConfigXml EngineConfigXml { get; } = engineConfigXml;
     public FrozenDictionary<PluginId, PluginConfigXml> PluginConfigXmls { get; } = pluginAtlas.Plugins.ToFrozenDictionary(
-        plugin => plugin.PluginId,
-        plugin => plugin.PluginConfigXml
+        keySelector: plugin => plugin.PluginId,
+        elementSelector: plugin => plugin.PluginConfigXml
     );
-    
+
     private ParsedConfigs? _gameConfigs;
+
     public ParsedConfigs GameConfigs {
         get {
             if (_gameConfigs is not null) return _gameConfigs ?? ParsedConfigs.Empty;

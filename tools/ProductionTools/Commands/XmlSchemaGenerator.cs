@@ -36,7 +36,7 @@ public class XmlSchemaGenerator(ILogger logger) : ICommandAtlas {
         { "engine-config", new XsdGeneratorRecord(XmlNameSpaces.ConfigEngine, typeof(EngineConfigXml)) },
         { "plugin-config", new XsdGeneratorRecord(XmlNameSpaces.ConfigPlugin, typeof(PluginConfigXml)) },
         { "game-config", new XsdGeneratorRecord(XmlNameSpaces.ConfigGame, typeof(GameConfigXml)) },
-        { "game-config-aterralib", new XsdGeneratorRecord(XmlNameSpaces.ConfigGameAterraLib, typeof(AterraLibGameConfig)) },
+        { "game-config-aterralib", new XsdGeneratorRecord(XmlNameSpaces.ConfigGameAterraLib, typeof(AterraLibGameConfig)) }
     };
 
     // -----------------------------------------------------------------------------------------------------------------

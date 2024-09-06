@@ -1,17 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Nexities.Systems;
-
-namespace AterraEngine.Threading.Render;
+namespace AterraCore.Common.Data;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public partial class RenderThreadProcessor {
-    private void OnEventManagerOnEventClearSystemCaches() {
-        if (world.ActiveLevel is not { RenderSystems: var renderSystems }) return;
-        foreach (INexitiesSystem system in renderSystems) {
-            system.InvalidateCaches();
-        }
+public static class AssetTagStringLib {
+    public static class AterraLib {
+        private const string ThisSection = nameof(AterraLib);
+        public const string PlayerInputTickData = $"#{ThisSection}:{nameof(PlayerInputTickData)}";
     }
 }

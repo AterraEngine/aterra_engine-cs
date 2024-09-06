@@ -5,7 +5,7 @@ namespace AterraLib.Nexities.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Component<ISystemIds>(AssetIdLib.AterraLib.Components.SystemIds)]
+[Component<ISystemIds>(AssetIdStringLib.AterraLib.Components.SystemIds)]
 [UsedImplicitly]
 public class SystemIds : NexitiesComponent, ISystemIds {
     protected virtual AssetId[] LogicSystems { get; set; } = [];

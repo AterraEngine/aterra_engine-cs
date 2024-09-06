@@ -21,7 +21,7 @@ namespace AterraCore.OmniVault.Assets;
 public class AssetAtlas(IPluginAtlas pluginAtlas) : IAssetAtlas {
     private readonly FrozenDictionary<AssetId, AssetRegistration> _assetsById = AssembleAssetsById(pluginAtlas);
     private readonly FrozenDictionary<Type, AssetId> _assetsByType = AssembleAssetsByType(pluginAtlas);
-    private readonly FrozenDictionary<CoreTags, FrozenSet<AssetId>> _coreTaggedAssets  = AssembleCoreTaggedAssets(pluginAtlas);
+    private readonly FrozenDictionary<CoreTags, FrozenSet<AssetId>> _coreTaggedAssets = AssembleCoreTaggedAssets(pluginAtlas);
     private readonly FrozenDictionary<string, FrozenSet<AssetId>> _stringTaggedAssets = AssembleStringTaggedAssets(pluginAtlas);
 
     public int TotalCount => _assetsById.Count;
@@ -89,7 +89,7 @@ public class AssetAtlas(IPluginAtlas pluginAtlas) : IAssetAtlas {
                 coreTaggedAssets[tag].Add(registration.AssetId);
             }
         }
-        return coreTaggedAssets.ToFrozenDictionary(pair => pair.Key, pair => pair.Value.ToFrozenSet());
+        return coreTaggedAssets.ToFrozenDictionary(keySelector: pair => pair.Key, elementSelector: pair => pair.Value.ToFrozenSet());
     }
     private static FrozenDictionary<string, FrozenSet<AssetId>> AssembleStringTaggedAssets(IPluginAtlas pluginAtlas) {
         Dictionary<string, HashSet<AssetId>> stringTaggedAssets = new();
@@ -100,7 +100,7 @@ public class AssetAtlas(IPluginAtlas pluginAtlas) : IAssetAtlas {
                 stringTaggedAssets[stringTag].Add(registration.AssetId);
             }
         }
-        return stringTaggedAssets.ToFrozenDictionary(pair => pair.Key, pair => pair.Value.ToFrozenSet());
+        return stringTaggedAssets.ToFrozenDictionary(keySelector: pair => pair.Key, elementSelector: pair => pair.Value.ToFrozenSet());
     }
     #endregion
 

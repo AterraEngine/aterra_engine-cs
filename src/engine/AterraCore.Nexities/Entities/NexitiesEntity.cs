@@ -72,7 +72,7 @@ public abstract class NexitiesEntity(params INexitiesComponent[] components) : A
     // -----------------------------------------------------------------------------------------------------------------
     #region Get & TryGet Components
     public T GetComponent<T>(AssetId assetId) where T : INexitiesComponent {
-        if (_componentsById.TryGetValue(assetId, out INexitiesComponent? component) 
+        if (_componentsById.TryGetValue(assetId, out INexitiesComponent? component)
             && component is T typedComponent) return typedComponent;
         throw new ArgumentException($"Component with assetId {assetId} not found or is of incorrect type");
     }
@@ -118,11 +118,11 @@ public abstract class NexitiesEntity(params INexitiesComponent[] components) : A
     public bool TryOverwriteComponent(INexitiesComponent component) => TryOverwriteComponent(component, out _);
     public bool TryOverwriteComponent(INexitiesComponent component, [NotNullWhen(true)] out INexitiesComponent? oldComponent) {
         if (!_componentsById.TryGetValue(component.AssetId, out oldComponent)
-            || !_componentsById.TryUpdate(component.AssetId, component, oldComponent) 
-            || !_componentsByType.TryUpdate(oldComponent.GetType(), component.AssetId, oldComponent.AssetId) 
+            || !_componentsById.TryUpdate(component.AssetId, component, oldComponent)
+            || !_componentsByType.TryUpdate(oldComponent.GetType(), component.AssetId, oldComponent.AssetId)
             || !_componentsByInstanceId.TryRemove(oldComponent.InstanceId, out _)
             || !_componentsByInstanceId.TryAdd(component.InstanceId, component.AssetId)) return false;
-        
+
         ClearCaches();
         return true;
     }

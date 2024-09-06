@@ -14,7 +14,7 @@ namespace AterraCore.PoolCorps;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
-[Injectable<NexitiesEntityPools, INexitiesEntityPools>]
+[Singleton<NexitiesEntityPools, INexitiesEntityPools>]
 public class NexitiesEntityPools : INexitiesEntityPools {
     // Small initial capacity as entities usually don't hold many components.
     private const int InitialCapacity = 12;

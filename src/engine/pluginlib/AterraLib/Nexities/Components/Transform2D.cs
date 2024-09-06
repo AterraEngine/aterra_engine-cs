@@ -5,7 +5,7 @@ namespace AterraLib.Nexities.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Component<ITransform2D>(AssetIdLib.AterraLib.Components.Transform2D)]
+[Component<ITransform2D>(AssetIdStringLib.AterraLib.Components.Transform2D)]
 [UsedImplicitly]
 public class Transform2D : NexitiesComponent, ITransform2D {
     protected virtual Vector2 TranslationCache { get; set; } = Vector2.Zero;

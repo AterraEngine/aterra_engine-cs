@@ -12,7 +12,7 @@ namespace AterraCore.Common.ConfigFiles;
 public class EngineConfigXml {
     [XmlElement("logging")] public LoggingConfigDto LoggingConfig { get; set; } = new();
     [XmlElement("paths")] public PathsDto? Paths { get; set; }
-    
+
     [XmlElement("loadOrder")] public LoadOrderDto LoadOrder { get; set; } = new();
 
     // For reasons, I shall use nested classes
@@ -20,9 +20,9 @@ public class EngineConfigXml {
     public class LoadOrderDto {
         [XmlAttribute("relativeRootPath")] public string RootFolderRelative { get; set; } = Data.Paths.Plugins.Folder;
         [XmlAttribute("enforcePluginIdUniqueness")] public bool EnforcePluginIdUniqueness { get; set; }
-        
+
         [XmlElement("plugin")] public PluginDto[] Plugins { get; set; } = [];
-        
+
         public class PluginDto {
             [XmlAttribute("file")] public required string FileName { get; set; }
         }

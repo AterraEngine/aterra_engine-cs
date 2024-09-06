@@ -11,14 +11,14 @@ namespace AterraLib.Nexities.Entities;
 [UsedImplicitly]
 public class EmptyLevelSystemIds : SystemIds {
     protected override AssetId[] LogicSystems { get; set; } = [
-        AssetIdLib.AterraLib.SystemsLogic.CameraController,
+        // AssetIdStringLib.AterraLib.SystemsLogic.CameraController,
         // "Workfloor:ApplyRandomImpulse",
         // "Workfloor:ApplyRandomImpulseCamera",
-        AssetIdLib.AterraLib.SystemsLogic.ApplyImpulseCamera
+        // AssetIdStringLib.AterraLib.SystemsLogic.ApplyImpulseCamera
     ];
 
     protected override AssetId[] RenderSystems { get; set; } = [
-        AssetIdLib.AterraLib.SystemsRendering.Render2D
+        AssetIdStringLib.AterraLib.SystemsRendering.Render2D
     ];
 
     protected override AssetId[] UiSystems { get; set; } = [
@@ -37,7 +37,7 @@ public class DirectChildrenEmptyLevel(
     ];
 }
 
-[Entity<INexitiesLevel>(AssetIdLib.AterraLib.Entities.EmptyLevel, CoreTags.Level)]
+[Entity<INexitiesLevel>(AssetIdStringLib.AterraLib.Entities.EmptyLevel, CoreTags.Level)]
 [UsedImplicitly]
 public class EmptyLevel(
     [InjectAs("01J601YXRRSCWGQQY63E9AFD0Q")] DirectChildrenEmptyLevel children,

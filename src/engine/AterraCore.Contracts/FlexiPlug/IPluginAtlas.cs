@@ -13,7 +13,7 @@ namespace AterraCore.Contracts.FlexiPlug;
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IPluginAtlas {
     public int TotalAssetCount { get; }
-    public IReadOnlyCollection<IPluginRecord> Plugins { get;}
+    public IReadOnlyCollection<IPluginRecord> Plugins { get; }
     public IReadOnlySet<PluginId> PluginIds { get; }
 
     // -----------------------------------------------------------------------------------------------------------------

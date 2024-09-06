@@ -5,7 +5,7 @@ namespace AterraLib.Nexities.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Component<ISprite2D>(AssetIdLib.AterraLib.Components.Sprite2D)]
+[Component<ISprite2D>(AssetIdStringLib.AterraLib.Components.Sprite2D)]
 [UsedImplicitly]
 public class Sprite2D : NexitiesComponent, ISprite2D {
     public virtual AssetId TextureAssetId { get; set; } = new();
@@ -19,7 +19,7 @@ public class Sprite2D : NexitiesComponent, ISprite2D {
             UvAndSourceCalculated = null;
         }
     }
-    
+
     public Color Shade { get; set; } = Color.White;
 
     public Rectangle? UvAndSourceCalculated { get; set; }

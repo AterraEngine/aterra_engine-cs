@@ -14,7 +14,7 @@ public interface IAterraCoreWorld {
     /// Represents the current active level.
     /// </summary>
     ActiveLevel? ActiveLevel { get; }
-    
+
     bool TryChangeActiveLevel(INexitiesLevel levelInstance);
     bool TryChangeActiveLevel(AssetId levelId, Ulid? levelInstanceId = null);
 

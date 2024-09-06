@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Attributes;
 using AterraCore.Contracts.Threading.Rendering;
 using JetBrains.Annotations;
 
@@ -9,6 +10,7 @@ namespace AterraEngine.Threading.Render;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
+[Singleton<IRenderEventManager>]
 public class RenderEventManager : IRenderEventManager {
     public event EventHandler? EventWindowResized;
     public event EventHandler? EventClearSystemCaches;

@@ -11,6 +11,6 @@ namespace AterraCore.Common.ConfigFiles;
 // ---------------------------------------------------------------------------------------------------------------------
 [XmlRoot("gameConfig", Namespace = XmlNameSpaces.ConfigGame)]
 public class GameConfigXml {
-    [XmlAnyElement("configs")] 
+    [XmlAnyElement("configs")]
     public List<XmlNode> Configs { get; set; } = [];
 }

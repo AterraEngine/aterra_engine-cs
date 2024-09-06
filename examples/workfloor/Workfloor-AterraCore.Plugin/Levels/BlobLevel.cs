@@ -24,15 +24,16 @@ public class BlobLevelSystemIds : SystemIds {
     protected override AssetId[] LogicSystems { get; set; } = [
         AssetIdLib.AterraLib.SystemsLogic.PlayerController,
         AssetIdLib.AterraLib.SystemsLogic.CameraController,
-        WorkfloorIdLib.SystemsLogic.RandomImpulse,
         WorkfloorIdLib.SystemsLogic.LevelSwitch,
+        WorkfloorIdLib.SystemsLogic.RandomImpulse,
         // "Workfloor:ApplyRandomImpulseCamera",
         AssetIdLib.AterraLib.SystemsLogic.ApplyImpulse,
         AssetIdLib.AterraLib.SystemsLogic.ApplyImpulseCamera
     ];
 
     protected override AssetId[] RenderSystems { get; set; } = [
-        AssetIdLib.AterraLib.SystemsRendering.Render2D
+        AssetIdStringLib.AterraLib.SystemsRendering.Render2D,
+        AssetIdLib.AterraLib.SystemsRendering.RaylibKeyHandler
     ];
 
     protected override AssetId[] UiSystems { get; set; } = [
@@ -58,7 +59,7 @@ public class BlobLevel(
     protected override void ClearCaches() {}
     public void OnLevelFirstCreation() {
         const int entitiesPerLevel = 10_000;
-            
+
         int a = (int)(Math.Sqrt(entitiesPerLevel) / 2f);
         Parallel.For((long)-a, a, body: k => {
             Parallel.For((long)-a, a, body: j => {
@@ -69,7 +70,7 @@ public class BlobLevel(
             });
         });
 
-        if (!instanceAtlas.TryCreate(AssetIdLib.AterraLib.Entities.Camera2D, out ICamera2D? camera2D)) return;
+        if (!instanceAtlas.TryCreate(AssetIdStringLib.AterraLib.Entities.Camera2D, out ICamera2D? camera2D)) return;
         camera2D.RaylibCamera2D.Camera = camera2D.RaylibCamera2D.Camera with {
             Target = new Vector2(0, 0),
             Offset = new Vector2(Raylib.GetScreenWidth() / 2f, Raylib.GetScreenHeight() / 2f),
@@ -77,16 +78,5 @@ public class BlobLevel(
             Zoom = 10
         };
         ChildrenIDs.TryAddFirst(camera2D.InstanceId);
-
-        if (!instanceAtlas.TryCreate(WorkfloorIdLib.Entities.DuckyPlayer, out IPlayer2D? player2D)) return;
-        player2D.Transform2D.Translation = new Vector2(5, 5);
-        player2D.Transform2D.Scale = Vector2.One;
-        ChildrenIDs.TryAddFirst(player2D.InstanceId);
-        
-        if (!instanceAtlas.TryCreate(WorkfloorIdLib.Entities.DuckyHype, out IActor2D? playerAddendum)) return;
-        playerAddendum.Transform2D.Translation = new Vector2(2, 2);
-        playerAddendum.Transform2D.Scale = Vector2.One;
-        player2D.ChildrenIDs.TryAddFirst(playerAddendum.InstanceId);
-        
     }
 }

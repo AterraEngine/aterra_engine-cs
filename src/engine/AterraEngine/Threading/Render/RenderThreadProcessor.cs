@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Attributes;
 using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.DataCollector;
@@ -8,19 +9,21 @@ using AterraCore.Contracts.OmniVault.Textures;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Renderer;
 using AterraCore.Contracts.Threading;
-using AterraCore.Contracts.Threading.CTQ;
-using AterraCore.Contracts.Threading.CTQ.Dto;
+using AterraCore.Contracts.Threading.CrossThread;
+using AterraCore.Contracts.Threading.CrossThread.Dto;
 using AterraCore.Contracts.Threading.Logic;
 using AterraCore.Contracts.Threading.Rendering;
 using JetBrains.Annotations;
 using Serilog;
+using System.Numerics;
 
 namespace AterraEngine.Threading.Render;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
-public partial class RenderThreadProcessor(
+[Singleton<IRenderThreadProcessor>]
+public class RenderThreadProcessor(
     ILogger logger,
     IMainWindow mainWindow,
     IAterraCoreWorld world,
@@ -87,7 +90,7 @@ public partial class RenderThreadProcessor(
     }
 
     private void DrawUi(ActiveLevel level) {
-        Raylib.DrawRectangle(0, 0, 250, 50 * 9, new Color(0,0,0, 127));
+        Raylib.DrawRectangle(0, 0, 250, 50 * 9, new Color(0, 0, 0, 127));
 
         Raylib.DrawText($"   FPS : {dataCollector.Fps}", 0, 0, 32, Color.LightGray);
         Raylib.DrawText($"minFPS : {dataCollector.FpsMin}", 0, 50, 32, Color.LightGray);
@@ -135,5 +138,22 @@ public partial class RenderThreadProcessor(
             textureAtlas.TryUnRegisterTexture(textureRecord.TextureAssetId);
             eventManager.InvokeClearSystemCaches();
         }
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Events
+    // -----------------------------------------------------------------------------------------------------------------
+    private void OnEventManagerOnEventClearSystemCaches() {
+        if (world.ActiveLevel is not { RenderSystems: var renderSystems }) return;
+        foreach (INexitiesSystem system in renderSystems) {
+            system.InvalidateCaches();
+        }
+    }
+
+    private void OnEventManagerOnEventWindowResized() {
+        if (world.ActiveLevel is not { Camera2DEntity: {} camera2DEntity }) return;
+        camera2DEntity.Camera = camera2DEntity.Camera with {
+            Offset = new Vector2(Raylib.GetScreenWidth() / 2f, Raylib.GetScreenHeight() / 2f)
+        };
     }
 }

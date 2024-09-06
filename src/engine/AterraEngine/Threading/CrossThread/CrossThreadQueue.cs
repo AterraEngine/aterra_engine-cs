@@ -1,24 +1,28 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Threading.CTQ;
-using AterraCore.Contracts.Threading.CTQ.Dto;
+using AterraCore.Attributes;
+using AterraCore.Contracts.Threading.CrossThread;
+using AterraCore.Contracts.Threading.CrossThread.Dto;
 using JetBrains.Annotations;
 using Serilog;
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
 
 namespace AterraEngine.Threading.CrossThread;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
+[Singleton<ICrossThreadQueue>]
 public class CrossThreadQueue(ILogger logger) : ICrossThreadQueue {
     private ILogger Logger { get; } = logger.ForContext<CrossThreadQueue>();
 
     public ConcurrentQueue<TextureRegistrar> TextureRegistrarQueue { get; } = new();
 
     private ConcurrentDictionary<QueueKey, ConcurrentQueue<Action>> GeneralActionQueue { get; } = new();
+
     public bool EntireQueueIsEmpty => GeneralActionQueue.IsEmpty;
 
     // -----------------------------------------------------------------------------------------------------------------

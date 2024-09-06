@@ -7,16 +7,15 @@ using JetBrains.Annotations;
 using Microsoft.Extensions.ObjectPool;
 
 namespace AterraCore.PoolCorps;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
-[Injectable<IUlidPools>]
+[Singleton<IUlidPools>]
 public class UlidPools : IUlidPools {
     private const int InitialCapacity = 24;
     private readonly DefaultObjectPoolProvider _objectPoolProvider = new();
-    
+
     #region XmlNodeQueuePool
     private ObjectPool<HashSet<Ulid>>? _ulidHashSetPool;
     public ObjectPool<HashSet<Ulid>> UlidHashSetPool =>

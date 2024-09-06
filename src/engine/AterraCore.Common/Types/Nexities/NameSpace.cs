@@ -18,7 +18,6 @@ public readonly struct NameSpace :
     IEqualityOperators<NameSpace, NameSpace, bool>,
     IEqualityOperators<NameSpace, string, bool>,
     IEquatable<NameSpace> {
-
     public IReadOnlyList<string> Values { get; }
     private readonly int _hashCode;
     private readonly ReadOnlyMemory<char> _valueMemory;
@@ -33,7 +32,7 @@ public readonly struct NameSpace :
             Match match = RegexLib.AssetPartial.Match(value);
             if (!match.Success) throw new ArgumentException("Invalid Asset Name format.");
 
-            Values = match.Groups[1].Value.Split(['.','/','\\'], StringSplitOptions.RemoveEmptyEntries);
+            Values = match.Groups[1].Value.Split(['.', '/', '\\'], StringSplitOptions.RemoveEmptyEntries);
             _valueMemory = GetAsMemory(Values);
             _hashCode = ComputeHashCode();
             Cache[value] = this;
@@ -66,7 +65,7 @@ public readonly struct NameSpace :
 
     // Only supposed to be used by AssetId
     internal NameSpace(Group matchGroup) {
-        Values = matchGroup.Value.Split(['.','/','\\'], StringSplitOptions.RemoveEmptyEntries);
+        Values = matchGroup.Value.Split(['.', '/', '\\'], StringSplitOptions.RemoveEmptyEntries);
         _valueMemory = GetAsMemory(Values);
         _hashCode = ComputeHashCode();
         Cache[matchGroup.Value] = this;
