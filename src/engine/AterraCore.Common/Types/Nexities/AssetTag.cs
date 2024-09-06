@@ -36,7 +36,7 @@ public readonly struct AssetTag : IEqualityOperators<AssetTag, AssetTag, bool>, 
     }
 
     public AssetTag(string assetId) {
-        (PluginId pluginId, NameSpace assetName, ReadOnlyMemory<char> cache) = Cache.GetOrAdd(assetId, id => {
+        (PluginId pluginId, NameSpace assetName, ReadOnlyMemory<char> cache) = Cache.GetOrAdd(assetId, valueFactory: id => {
             (PluginId pluginId, NameSpace assetName) = ParseAssetTag(id);
             return (pluginId, assetName, GetAsMemory(pluginId, assetName));
         });
@@ -75,16 +75,16 @@ public readonly struct AssetTag : IEqualityOperators<AssetTag, AssetTag, bool>, 
 
     private static (PluginId, NameSpace, ReadOnlyMemory<char> cache) GetOrAddCache(PluginId pluginId, NameSpace assetName) {
         string key = pluginId.Value + ':' + string.Join('/', assetName);
-        return Cache.GetOrAdd(key, _ => (pluginId, assetName, GetAsMemory(pluginId, assetName)));
+        return Cache.GetOrAdd(key, valueFactory: _ => (pluginId, assetName, GetAsMemory(pluginId, assetName)));
     }
 
     private static ReadOnlyMemory<char> GetAsMemory(PluginId pluginId, NameSpace assetName) {
         string key = pluginId.Value + ':' + string.Join('/', assetName);
         return new ReadOnlyMemory<char>(key.ToArray(), 0, key.Length);
     }
-    
+
     public override string ToString() => _assetIdCache.ToString();
-    
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override int GetHashCode() => _hashCode;
 

@@ -29,7 +29,7 @@ public class CollectDependenciesByAttribute : IBootOperation {
             typeof(ConfigAtlas).Assembly,
             typeof(Engine).Assembly
         ];
-        
+
         IEnumerable<ServiceDescriptor> dependencies = assemblies
             .SelectMany(assembly => assembly
                 .GetTypes()

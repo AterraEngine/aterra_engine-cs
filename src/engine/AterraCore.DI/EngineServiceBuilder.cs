@@ -44,8 +44,9 @@ public class EngineServiceBuilder(ILogger logger, IServiceCollection? collection
     /// </summary>
     /// <param name="services">The collection of <see cref="ServiceDescriptor"/> objects.</param>
     public void AssignFromServiceDescriptors(IEnumerable<ServiceDescriptor> services) {
-        foreach (ServiceDescriptor serviceDescriptor in services) 
+        foreach (ServiceDescriptor serviceDescriptor in services) {
             AssignFromServiceDescriptor(serviceDescriptor);
+        }
     }
 
     /// <summary>

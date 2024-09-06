@@ -68,7 +68,7 @@ public class CollectDependenciesManually : IBootOperation {
             NewServiceDescriptor<IDataCollectorFactory, DataCollectorFactory>(ServiceLifetime.Singleton),
             ServiceDescriptor.Singleton<IDataCollector>(provider => provider.GetRequiredService<IDataCollectorFactory>().Create()),
             #endregion
-            ServiceDescriptor.Singleton(components.EngineConfigXml), 
+            ServiceDescriptor.Singleton(components.EngineConfigXml)
         ];
 
         components.ServiceDescriptors.AddLastRepeated(dependencies);

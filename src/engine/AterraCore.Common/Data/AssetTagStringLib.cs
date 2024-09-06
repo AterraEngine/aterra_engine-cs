@@ -2,7 +2,6 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 namespace AterraCore.Common.Data;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -11,5 +10,4 @@ public static class AssetTagStringLib {
         private const string ThisSection = nameof(AterraLib);
         public const string PlayerInputTickData = $"#{ThisSection}:{nameof(PlayerInputTickData)}";
     }
-
 }

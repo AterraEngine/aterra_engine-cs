@@ -4,7 +4,6 @@
 using JetBrains.Annotations;
 
 namespace Extensions;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -24,8 +23,7 @@ public static class DictionaryExtensions {
     public static TDictionary PopulateWithEmpties<TDictionary, TKey, TValue>(this TDictionary dictionary)
         where TDictionary : IDictionary<TKey, TValue>
         where TValue : new()
-        where TKey : Enum 
-    {
+        where TKey : Enum {
 
         foreach (TKey key in Enum.GetValues(typeof(TKey))) {
             dictionary.TryAdd(key, new TValue());

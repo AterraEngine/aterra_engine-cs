@@ -17,7 +17,6 @@ using Raylib_cs;
 using Serilog;
 
 namespace Workfloor_AterraCore.Plugin.Systems.Logic;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -26,37 +25,37 @@ namespace Workfloor_AterraCore.Plugin.Systems.Logic;
 [UsedImplicitly]
 public class LevelSwitch(IAterraCoreWorld world, IAssetAtlas assetAtlas, ILogger logger, ICrossThreadTickData crossThreadTickData) : AssetInstance, INexitiesSystem {
     private List<AssetId>? _levelsCache;
-    private List<AssetId> Levels => _levelsCache ??= assetAtlas.GetAllAssetsOfCoreTag(CoreTags.Level).WhereNot(id => id == AssetIdLib.AterraLib.Entities.EmptyLevel ).ToList();
+    private List<AssetId> Levels => _levelsCache ??= assetAtlas.GetAllAssetsOfCoreTag(CoreTags.Level).WhereNot(id => id == AssetIdLib.AterraLib.Entities.EmptyLevel).ToList();
 
     public void InvalidateCaches() {
-        _levelsCache = null; 
+        _levelsCache = null;
     }
     public void Tick(ActiveLevel level) {
         if (!crossThreadTickData.TryGet(AssetTagLib.AterraLib.PlayerInputTickData, out ITickDataInput? playerInputTickData)) return;
 
         AssetId currentLevelId = level.RawLevelData.AssetId;
         int currentLevelPos = Levels.IndexOf(currentLevelId);
-        
+
         KeyboardKey[] keyMovements = playerInputTickData.KeyboardKeyDown.ToHashSet().ToArray();
-        
+
         for (int i = keyMovements.Length - 1; i >= 0; i--) {
             AssetId newLevelId;
-            
+
             // ReSharper disable once SwitchStatementMissingSomeEnumCasesNoDefault
             switch (keyMovements[i]) {
-                case KeyboardKey.KpSubtract :
+                case KeyboardKey.KpSubtract:
                     logger.Warning("PRESSED MINUS");
                     if (currentLevelPos == 0) return;
-            
-                    newLevelId = Levels[currentLevelPos-1];
+
+                    newLevelId = Levels[currentLevelPos - 1];
                     if (newLevelId == level.RawLevelData.AssetId) return;
                     world.TryChangeActiveLevel(newLevelId);
                     break;
-                case KeyboardKey.KpAdd : 
+                case KeyboardKey.KpAdd:
                     logger.Warning("PRESSED PLUS");
                     if (currentLevelPos == Levels.Count - 1) return;
-            
-                    newLevelId = Levels[currentLevelPos+1];
+
+                    newLevelId = Levels[currentLevelPos + 1];
                     if (newLevelId == level.RawLevelData.AssetId) return;
                     world.TryChangeActiveLevel(newLevelId);
                     break;
@@ -64,4 +63,3 @@ public class LevelSwitch(IAterraCoreWorld world, IAssetAtlas assetAtlas, ILogger
         }
     }
 }
-    

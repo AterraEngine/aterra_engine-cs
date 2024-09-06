@@ -33,6 +33,7 @@ public class PluginConfigXml {
     public class BinDto {
         [XmlAttribute("file")] public required string FileName { get; set; }
     }
+
     public class ResourceDto {
         [XmlAttribute("externalPath")] public required string ExternalFilePath { get; set; }
         [XmlAttribute("internalPath")] public required string InternalFilePath { get; set; }

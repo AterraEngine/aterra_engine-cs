@@ -12,6 +12,6 @@ public interface ISprite2D : INexitiesComponent {
     public AssetId TextureAssetId { get; set; }
     public Rectangle UvSelection { get; set; }
     public Color Shade { get; set; }
-    
+
     public Rectangle? UvAndSourceCalculated { get; set; }
 }

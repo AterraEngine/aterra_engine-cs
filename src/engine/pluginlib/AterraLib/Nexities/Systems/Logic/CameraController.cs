@@ -17,24 +17,40 @@ namespace AterraLib.Nexities.Systems.Logic;
 public class CameraController(ICrossThreadTickData crossThreadTickData, ILogger logger) : NexitiesSystem<ICamera2D> {
     public override void Tick(ActiveLevel level) {
         if (!crossThreadTickData.TryGet(AssetTagLib.AterraLib.PlayerInputTickData, out ITickDataInput? playerInputTickData)) return;
-        
+
         float translationX = 0.0f;
         float translationY = 0.0f;
         float rotationOffset = 0f;
         float scaleX = 1f;
-        
+
         KeyboardKey[] keyMovements = playerInputTickData.KeyboardKeyDown.ToHashSet().ToArray();
         for (int i = keyMovements.Length - 1; i >= 0; i--) {
             // ReSharper disable once SwitchStatementMissingSomeEnumCasesNoDefault
             switch (keyMovements[i]) {
-                case KeyboardKey.Up: translationY -= 1f ; break;
-                case KeyboardKey.Down: translationY += 1f ; break;
-                case KeyboardKey.Left: translationX -= 1f ; break;
-                case KeyboardKey.Right:translationX += 1f ; break;
-                case KeyboardKey.Z: rotationOffset += 1f; break;
-                case KeyboardKey.X: rotationOffset -= 1f; break;
-                case KeyboardKey.PageUp: scaleX += .1f; break;
-                case KeyboardKey.PageDown: scaleX -= .1f; break;
+                case KeyboardKey.Up:
+                    translationY -= 1f;
+                    break;
+                case KeyboardKey.Down:
+                    translationY += 1f;
+                    break;
+                case KeyboardKey.Left:
+                    translationX -= 1f;
+                    break;
+                case KeyboardKey.Right:
+                    translationX += 1f;
+                    break;
+                case KeyboardKey.Z:
+                    rotationOffset += 1f;
+                    break;
+                case KeyboardKey.X:
+                    rotationOffset -= 1f;
+                    break;
+                case KeyboardKey.PageUp:
+                    scaleX += .1f;
+                    break;
+                case KeyboardKey.PageDown:
+                    scaleX -= .1f;
+                    break;
             }
         }
         //

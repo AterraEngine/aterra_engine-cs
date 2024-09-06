@@ -28,7 +28,7 @@ public class AssetRegistrationTest {
         Type type = typeof(SampleAsset);
         const CoreTags coreTags = CoreTags.Singleton;
         string[] stringTags = ["Tag1", "Tag2"];
-        AssetId[] overridableAssetIds = [new AssetId("test:base.asset")];
+        AssetId[] overridableAssetIds = [new("test:base.asset")];
 
         var registration = new AssetRegistration(
             assetId,

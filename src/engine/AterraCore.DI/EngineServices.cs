@@ -60,17 +60,17 @@ public static class EngineServices {
         catch (InvalidOperationException e) {
             Type type = typeof(T);
 
-            ServiceDescriptor? serviceDescriptor = _serviceCollection?.FirstOrDefault(descriptor => descriptor.ServiceType == type );
+            ServiceDescriptor? serviceDescriptor = _serviceCollection?.FirstOrDefault(descriptor => descriptor.ServiceType == type);
             if (serviceDescriptor?.ImplementationType?.GetConstructors().FirstOrDefault() is not {} constructor) {
                 throw Logger.ThrowFatal(e, "Service type of {TypeOfT} could not be found.", type.FullName);
             }
-            
+
             IEnumerable<Type> paramTypes = constructor.GetParameters().Select(p => p.ParameterType);
             foreach (Type paramType in paramTypes) {
                 if (ServiceProvider.GetService(paramType) is not null) continue;
                 throw Logger.ThrowFatal(e, "Service type of {paramType} could not be found while resolving {TypeOfT}", paramType.FullName, type.FullName);
             }
-            
+
             throw;
         }
     }

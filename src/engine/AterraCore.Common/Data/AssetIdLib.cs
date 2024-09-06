@@ -13,14 +13,14 @@ public static class AssetIdLib {
 
         #region Components
         public static class Components {
-            public static readonly AssetId DirectChildren =  AssetIdStringLib.AterraLib.Components.DirectChildren;
-            public static readonly AssetId RaylibCamera2D =  AssetIdStringLib.AterraLib.Components.RaylibCamera2D;
-            public static readonly AssetId Impulse2D =  AssetIdStringLib.AterraLib.Components.Impulse2D;
-            public static readonly AssetId RaylibHudText =  AssetIdStringLib.AterraLib.Components.RaylibHudText;
-            public static readonly AssetId RaylibHudTextPro =  AssetIdStringLib.AterraLib.Components.RaylibHudTextPro;
-            public static readonly AssetId Sprite2D =  AssetIdStringLib.AterraLib.Components.Sprite2D;
-            public static readonly AssetId SystemIds =  AssetIdStringLib.AterraLib.Components.SystemIds;
-            public static readonly AssetId Transform2D =  AssetIdStringLib.AterraLib.Components.Transform2D;
+            public static readonly AssetId DirectChildren = AssetIdStringLib.AterraLib.Components.DirectChildren;
+            public static readonly AssetId RaylibCamera2D = AssetIdStringLib.AterraLib.Components.RaylibCamera2D;
+            public static readonly AssetId Impulse2D = AssetIdStringLib.AterraLib.Components.Impulse2D;
+            public static readonly AssetId RaylibHudText = AssetIdStringLib.AterraLib.Components.RaylibHudText;
+            public static readonly AssetId RaylibHudTextPro = AssetIdStringLib.AterraLib.Components.RaylibHudTextPro;
+            public static readonly AssetId Sprite2D = AssetIdStringLib.AterraLib.Components.Sprite2D;
+            public static readonly AssetId SystemIds = AssetIdStringLib.AterraLib.Components.SystemIds;
+            public static readonly AssetId Transform2D = AssetIdStringLib.AterraLib.Components.Transform2D;
         }
         #endregion
         #region Entities

@@ -29,16 +29,16 @@ using TConstructor=Func<object[], object>;
 [UsedImplicitly]
 public class AssetInstanceFactory(ILogger logger, IPluginAtlas pluginAtlas) : IAssetInstanceFactory {
     private readonly FrozenDictionary<AssetId, TActionsArray> _actionsMap = AssembleParameterActions(pluginAtlas);
-    private readonly FrozenDictionary<Type, TConstructor> _constructorCache  = AssembleConstructorDelegates(pluginAtlas);
+    private readonly FrozenDictionary<Type, TConstructor> _constructorCache = AssembleConstructorDelegates(pluginAtlas);
     private static readonly ArrayPool<object> ParameterPool = ArrayPool<object>.Shared;
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Constructor Methods
     // -----------------------------------------------------------------------------------------------------------------
     #region Special constructor methods
     private static FrozenDictionary<AssetId, TActionsArray> AssembleParameterActions(IPluginAtlas pluginAtlas) {
         Dictionary<AssetId, TActionsArray> actionMap = new();
-        
+
         foreach (AssetRegistration registration in pluginAtlas.GetAssetRegistrations()) {
             ParameterInfo[] parameters = registration.Constructor.GetParameters();
 
@@ -53,15 +53,15 @@ public class AssetInstanceFactory(ILogger logger, IPluginAtlas pluginAtlas) : IA
                     _ => () => CreateUnknown(parameter)
                 };
             }
-            
-            actionMap.Add( registration.AssetId, actions );
+
+            actionMap.Add(registration.AssetId, actions);
         }
-        
+
         return actionMap.ToFrozenDictionary();
     }
     private static FrozenDictionary<Type, TConstructor> AssembleConstructorDelegates(IPluginAtlas pluginAtlas) {
         Dictionary<Type, TConstructor> constructorCache = new();
-        
+
         foreach (AssetRegistration registration in pluginAtlas.GetAssetRegistrations()) {
             ConstructorInfo constructorInfo = registration.Constructor;
             ParameterExpression parametersArray = Expression.Parameter(typeof(object[]), "args");
@@ -74,14 +74,14 @@ public class AssetInstanceFactory(ILogger logger, IPluginAtlas pluginAtlas) : IA
 
             NewExpression newExpression = Expression.New(constructorInfo, parameterExpressions);
             Expression<TConstructor> lambda = Expression.Lambda<TConstructor>(Expression.Convert(newExpression, typeof(object)), parametersArray);
-            
+
             constructorCache.Add(registration.Type, lambda.Compile());
         }
-        
+
         return constructorCache.ToFrozenDictionary();
     }
     #endregion
-    
+
     #region Not a Nexities Asset
     private static object CreateUnknown(ParameterInfo parameter) {
         Type paramType = parameter.ParameterType;
@@ -118,7 +118,7 @@ public class AssetInstanceFactory(ILogger logger, IPluginAtlas pluginAtlas) : IA
         return instanceAtlas.GetOrCreate<IAssetInstance>(paramType, injectAsValue.Ulid);
     }
     #endregion
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     //  Methods
     // -----------------------------------------------------------------------------------------------------------------

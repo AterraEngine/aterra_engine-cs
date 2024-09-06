@@ -63,7 +63,7 @@ public class Render2D(IAssetInstanceAtlas instanceAtlas, ILogger logger) : Nexit
             child.Sprite2D.UvSelection.Position,
             child.Sprite2D.UvSelection.Size * textureSize
         );
-        
+
         Raylib.DrawTexturePro(
             texture2D,
             sourceRect,

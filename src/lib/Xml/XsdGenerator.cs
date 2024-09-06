@@ -20,7 +20,7 @@ public class XsdGenerator(ILogger logger) {
         var importer = new XmlReflectionImporter(null, nameSpace);
         var schemas = new XmlSchemas();
         var exporter = new XmlSchemaExporter(schemas);
-       
+
         try {
             logger.Debug("Importing type mapping...");
             XmlTypeMapping map = importer.ImportTypeMapping(type);

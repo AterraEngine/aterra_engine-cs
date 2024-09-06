@@ -8,7 +8,6 @@ using Microsoft.Extensions.ObjectPool;
 using System.Xml;
 
 namespace AterraCore.PoolCorps;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -17,7 +16,7 @@ namespace AterraCore.PoolCorps;
 public class XmlPools : IXmlPools {
     private const int InitialCapacity = 24;
     private readonly DefaultObjectPoolProvider _objectPoolProvider = new();
-    
+
     #region XmlNodeQueuePool
     private ObjectPool<Queue<XmlNode>>? _xmlNodeQueuePool;
     public ObjectPool<Queue<XmlNode>> XmlNodeQueuePool =>

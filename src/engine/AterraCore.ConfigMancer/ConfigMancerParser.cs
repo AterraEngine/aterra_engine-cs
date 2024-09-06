@@ -26,27 +26,26 @@ public class ConfigMancerParser(IPluginAtlas pluginAtlas, ILogger logger, IXmlPo
     private readonly FrozenDictionary<string, ConfigMancerValueRecord> _parsableTypes = pluginAtlas.Plugins
         .SelectMany(plugin => plugin.Types)
         .Where(type => typeof(IConfigMancerElement).IsAssignableFrom(type) && type is { IsClass: true, IsAbstract: false })
-        .Select(type =>  new ConfigMancerValueRecord(type, XmlRootElementName(type), type.GetCustomAttributes<XmlRootAttribute>().First()))
-        .ToFrozenDictionary(record => record.RootName)
-    ;
-    
+        .Select(type => new ConfigMancerValueRecord(type, XmlRootElementName(type), type.GetCustomAttributes<XmlRootAttribute>().First()))
+        .ToFrozenDictionary(record => record.RootName);
+
     private XmlParser<GameConfigXml>? _gameConfigParser;
-    private XmlParser<GameConfigXml> GameConfigParser => _gameConfigParser ??= new XmlParser<GameConfigXml>(logger, XmlNameSpaces.ConfigGame, Paths.Xsd.XsdGameConfigDto );
-    
+    private XmlParser<GameConfigXml> GameConfigParser => _gameConfigParser ??= new XmlParser<GameConfigXml>(logger, XmlNameSpaces.ConfigGame, Paths.Xsd.XsdGameConfigDto);
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    private static string XmlRootElementName(Type type) => 
-        type.GetCustomAttributes<XmlRootAttribute>().FirstOrDefault()?.ElementName 
+    private static string XmlRootElementName(Type type) =>
+        type.GetCustomAttributes<XmlRootAttribute>().FirstOrDefault()?.ElementName
         ?? char.ToLowerInvariant(type.Name[0]) + type.Name[1..];
-    
+
     private static bool TryDeserializeWithAttributes(Type type, XmlNode node, [NotNullWhen(true)] out object? deserialized) {
         var serializer = new XmlSerializer(type, new XmlRootAttribute(node.LocalName) { Namespace = node.NamespaceURI });
         using var reader = new StringReader(node.OuterXml);
-        deserialized = serializer.Deserialize(reader) ?? null; // If extracted, make a try catch, or a better TryDeserialize...
+        deserialized = serializer.Deserialize(reader) ?? null;// If extracted, make a try catch, or a better TryDeserialize...
         return deserialized != null;
     }
-    
+
     public bool TryParseGameConfig(string filePath, out ParsedConfigs parsedConfigs) {
         parsedConfigs = default;
         var parsedObjects = new Dictionary<Type, object>();
@@ -57,19 +56,20 @@ public class ConfigMancerParser(IPluginAtlas pluginAtlas, ILogger logger, IXmlPo
                 logger.Warning("Failed find any data in the XML file {path}", filePath);
                 return false;
             }
-            
+
             foreach (XmlNode node in configDto.Configs) {
                 queue.Enqueue(node);
             }
 
             while (queue.TryDequeue(out XmlNode? node)) {
-                if (_parsableTypes.TryGetValue(node.Name, out ConfigMancerValueRecord? record) 
+                if (_parsableTypes.TryGetValue(node.Name, out ConfigMancerValueRecord? record)
                     && TryDeserializeWithAttributes(record.Type, node, out object? deserialized)
                     && parsedObjects.TryAdd(record.Type, deserialized)
                 ) continue;
 
-                foreach (XmlNode n in node.ChildNodes)
+                foreach (XmlNode n in node.ChildNodes) {
                     queue.Enqueue(n);
+                }
             }
 
             parsedConfigs = new ParsedConfigs(parsedObjects);
@@ -83,5 +83,4 @@ public class ConfigMancerParser(IPluginAtlas pluginAtlas, ILogger logger, IXmlPo
             xmlPools.XmlNodeQueuePool.Return(queue);
         }
     }
-
 }

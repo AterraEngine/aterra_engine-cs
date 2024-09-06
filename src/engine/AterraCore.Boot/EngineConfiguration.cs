@@ -37,9 +37,10 @@ public class EngineConfiguration(ILogger? logger = null) : IEngineConfiguration 
         var builder = new ValuedStringBuilder();
         builder.AppendLine("Order of Boot Operations:");
 
-        foreach (IBootOperation operation in OrderOfBootOperations) 
+        foreach (IBootOperation operation in OrderOfBootOperations) {
             builder.AppendLineValued("- ", operation.GetType().FullName);
-        
+        }
+
         Logger.Information(builder);
     }
     #endregion
@@ -61,8 +62,9 @@ public class EngineConfiguration(ILogger? logger = null) : IEngineConfiguration 
         LogOrderOfBootOperations();
 
         //  Run all the boot operations
-        foreach (IBootOperation operation in OrderOfBootOperations)
+        foreach (IBootOperation operation in OrderOfBootOperations) {
             operation.Run(Components);
+        }
 
         // Populate Plugin Atlas with plugin list
         //      It is REQUIRED that the plugin atlas is assembled before the engine,

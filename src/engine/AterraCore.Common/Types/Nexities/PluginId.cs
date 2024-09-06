@@ -19,7 +19,6 @@ public readonly struct PluginId :
     IEqualityOperators<PluginId, string, bool>,
     IAdditionOperators<PluginId, NameSpace, AssetId>,
     IEquatable<PluginId> {
-
     public string Value { get; }
     private readonly int _hashCode;
 
@@ -32,7 +31,7 @@ public readonly struct PluginId :
         if (!Cache.TryGetValue(value, out PluginId existing)) {
             Match match = RegexLib.AssetPartial.Match(value);
             if (!match.Success) throw new ArgumentException("Invalid Plugin Id format.");
-            
+
             Value = match.Groups[1].Value;
             _hashCode = ComputeHashCode();
             Cache[Value] = this;

@@ -9,9 +9,9 @@ namespace AterraLib.Nexities.Systems.CrossThreadDataHolders;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class TickDataInput : ITickDataInput {
-    public ConcurrentStack<KeyboardKey> KeyboardKeyDown {get;} = [];
-    public ConcurrentStack<MouseButton> MouseButtonDown {get;} = [];
-    public ConcurrentStack<Vector2> MouseWheelMovement {get;} = [];
+    public ConcurrentStack<KeyboardKey> KeyboardKeyDown { get; } = [];
+    public ConcurrentStack<MouseButton> MouseButtonDown { get; } = [];
+    public ConcurrentStack<Vector2> MouseWheelMovement { get; } = [];
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods

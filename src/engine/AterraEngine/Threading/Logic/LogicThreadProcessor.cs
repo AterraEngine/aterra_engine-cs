@@ -29,7 +29,7 @@ public class LogicThreadProcessor(
     private ILogger Logger { get; } = logger.ForContext<LogicThreadProcessor>();
     public CancellationToken CancellationToken { get; set; }
 
-    private const int TargetTicksPerSecond = 20; // TPS
+    private const int TargetTicksPerSecond = 20;// TPS
     private const double MillisecondsPerTick = 1000.0 / TargetTicksPerSecond;
 
     private bool IsRunning { get; set; } = true;
@@ -90,8 +90,8 @@ public class LogicThreadProcessor(
             action();
         }
         _endOfTickActions.Clear();
-        
-        crossThreadTickData.Clear(); // Clear for the end of the tick
+
+        crossThreadTickData.Clear();// Clear for the end of the tick
     }
 
     private void SleepUntilEndOfTick() {

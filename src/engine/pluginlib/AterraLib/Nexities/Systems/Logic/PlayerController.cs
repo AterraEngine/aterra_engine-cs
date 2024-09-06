@@ -27,29 +27,43 @@ public class PlayerController(ICrossThreadTickData crossThreadTickData) : Nexiti
         for (int i = keyMovements.Length - 1; i >= 0; i--) {
             // ReSharper disable once SwitchStatementMissingSomeEnumCasesNoDefault
             switch (keyMovements[i]) {
-                case KeyboardKey.W : y -= .25f; break;
-                case KeyboardKey.S : y += .25f; break;
-                case KeyboardKey.A : x -= .25f; break;
-                case KeyboardKey.D : x += .25f; break;
-                case KeyboardKey.Q : rotation += .75f; break;
-                case KeyboardKey.E : rotation -= .75f; break;
+                case KeyboardKey.W:
+                    y -= .25f;
+                    break;
+                case KeyboardKey.S:
+                    y += .25f;
+                    break;
+                case KeyboardKey.A:
+                    x -= .25f;
+                    break;
+                case KeyboardKey.D:
+                    x += .25f;
+                    break;
+                case KeyboardKey.Q:
+                    rotation += .75f;
+                    break;
+                case KeyboardKey.E:
+                    rotation -= .75f;
+                    break;
             }
         }
 
         Vector2[] mouseWheelMovements = playerInputTickData.MouseWheelMovement.ToArray();
         for (int i = mouseWheelMovements.Length - 1; i >= 0; i--) {
             // ReSharper disable once SwitchStatementHandlesSomeKnownEnumValuesWithDefault
-            switch (mouseWheelMovements[i] ) {
+            switch (mouseWheelMovements[i]) {
                 case { X: var scaleX, Y: 0f }: {
                     scale.Y += scaleX;
                     scale.X += scaleX;
                     break;
                 }
+
                 case { X: 0f, Y: var scaleY }: {
                     scale.Y += scaleY;
                     scale.X += scaleY;
                     break;
                 }
+
                 case var result: {
                     scale += result;
                     break;

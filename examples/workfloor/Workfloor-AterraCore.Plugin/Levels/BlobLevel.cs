@@ -28,12 +28,12 @@ public class BlobLevelSystemIds : SystemIds {
         WorkfloorIdLib.SystemsLogic.RandomImpulse,
         // "Workfloor:ApplyRandomImpulseCamera",
         AssetIdLib.AterraLib.SystemsLogic.ApplyImpulse,
-        AssetIdLib.AterraLib.SystemsLogic.ApplyImpulseCamera,
+        AssetIdLib.AterraLib.SystemsLogic.ApplyImpulseCamera
     ];
 
     protected override AssetId[] RenderSystems { get; set; } = [
         AssetIdStringLib.AterraLib.SystemsRendering.Render2D,
-        AssetIdLib.AterraLib.SystemsRendering.RaylibKeyHandler,
+        AssetIdLib.AterraLib.SystemsRendering.RaylibKeyHandler
     ];
 
     protected override AssetId[] UiSystems { get; set; } = [
@@ -43,7 +43,7 @@ public class BlobLevelSystemIds : SystemIds {
 [UsedImplicitly]
 [Level(WorkfloorIdLib.Levels.Blob, CoreTags.Level)]
 public class BlobLevel(
-    IDirectChildren children, 
+    IDirectChildren children,
     [InjectAs] BlobLevelSystemIds systemIds,
     IAssetInstanceAtlas instanceAtlas
 ) : NexitiesEntity(children, systemIds), INexitiesLevel {
@@ -59,7 +59,7 @@ public class BlobLevel(
     protected override void ClearCaches() {}
     public void OnLevelFirstCreation() {
         const int entitiesPerLevel = 10_000;
-            
+
         int a = (int)(Math.Sqrt(entitiesPerLevel) / 2f);
         Parallel.For((long)-a, a, body: k => {
             Parallel.For((long)-a, a, body: j => {
