@@ -13,8 +13,8 @@ public class CoreTagsTest {
         Assert.Equal((ulong)1 << 1, (ulong)CoreTags.Component);
         Assert.Equal((ulong)1 << 2, (ulong)CoreTags.Entity);
         Assert.Equal((ulong)1 << 3, (ulong)CoreTags.System);
-        Assert.Equal((ulong)1 << 4, (ulong)CoreTags.RenderSystem);
-        Assert.Equal((ulong)1 << 5, (ulong)CoreTags.LogicSystem);
+        Assert.Equal((ulong)1 << 4, (ulong)CoreTags.RenderThread);
+        Assert.Equal((ulong)1 << 5, (ulong)CoreTags.LogicThread);
         Assert.Equal((ulong)1 << 6, (ulong)CoreTags.Texture);
         Assert.Equal((ulong)1 << 7, (ulong)CoreTags.Singleton);
         Assert.Equal((ulong)1 << 8, (ulong)CoreTags.Level);

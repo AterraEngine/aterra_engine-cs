@@ -1,11 +1,12 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Attributes;
 using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading;
-using AterraCore.Contracts.Threading.CTQ;
-using AterraCore.Contracts.Threading.CTQ.Dto;
+using AterraCore.Contracts.Threading.CrossThread;
+using AterraCore.Contracts.Threading.CrossThread.Dto;
 using AterraCore.Contracts.Threading.Logic;
 using JetBrains.Annotations;
 using Serilog;
@@ -16,21 +17,22 @@ namespace AterraEngine.Threading.Logic;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
+[Singleton<ILogicThreadProcessor>]
 public class LogicThreadProcessor(
     ILogger logger,
     IAterraCoreWorld world,
     ILogicEventManager eventManager,
     ICrossThreadQueue crossThreadQueue,
-    IThreadingManager threadingManager
+    IThreadingManager threadingManager,
+    ICrossThreadTickData crossThreadTickData
 ) : ILogicThreadProcessor {
     private ILogger Logger { get; } = logger.ForContext<LogicThreadProcessor>();
     public CancellationToken CancellationToken { get; set; }
 
-    private int TargetTicksPerSecond { get; set; } = 20;// TPS
-    private double MillisecondsPerTick => 1000.0 / TargetTicksPerSecond;
+    private const int TargetTicksPerSecond = 20; // TPS
+    private const double MillisecondsPerTick = 1000.0 / TargetTicksPerSecond;
 
     private bool IsRunning { get; set; } = true;
-    public bool IsFinished { get; private set; }
 
     private readonly Stack<Action> _endOfTickActions = [];
 
@@ -55,13 +57,12 @@ public class LogicThreadProcessor(
                 // Call UPDATE LOOP
                 Update();
                 HandleQueue();
+                RunEndOfTick();
 
                 // Wait until the end of the Tick cycle
                 SleepUntilEndOfTick();
                 CalculateActualTps();
 
-                // End of Tick
-                RunEndOfTick();
                 _ticks++;
                 if (!CancellationToken.IsCancellationRequested) continue;
 
@@ -70,7 +71,6 @@ public class LogicThreadProcessor(
             }
         }
         finally {
-            IsFinished = true;
             IsRunning = false;
             threadingManager.CancelThreads();
             Logger.Information("Logic Thread Closing");
@@ -90,6 +90,8 @@ public class LogicThreadProcessor(
             action();
         }
         _endOfTickActions.Clear();
+        
+        crossThreadTickData.Clear(); // Clear for the end of the tick
     }
 
     private void SleepUntilEndOfTick() {
@@ -121,11 +123,7 @@ public class LogicThreadProcessor(
     }
 
     private void HandleQueue() {
-        while (crossThreadQueue.TryDequeue(QueueKey.MainToLogic, out Action? action)) {
-            action.Invoke();
-        }
-        while (crossThreadQueue.TryDequeue(QueueKey.RenderToLogic, out Action? action)) {
-            action.Invoke();
-        }
+        while (crossThreadQueue.TryDequeue(QueueKey.MainToLogic, out Action? action)) action.Invoke();
+        while (crossThreadQueue.TryDequeue(QueueKey.RenderToLogic, out Action? action)) action.Invoke();
     }
 }

@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Attributes;
 using AterraCore.Common.Data;
 using AterraCore.Contracts;
 using AterraCore.Contracts.ConfigMancer;
@@ -15,6 +16,7 @@ namespace AterraEngine;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
+[Singleton<IEngine, Engine>]
 public class Engine(
     ILogger logger,
     IAterraCoreWorld world,
@@ -42,7 +44,7 @@ public class Engine(
         if (!logicTask.Result) throw new ApplicationException("Failed to start LogicThread ");
         if (!renderTask.Result) throw new ApplicationException("Failed to start RenderThread ");
         
-        if (!world.TryChangeActiveLevel(AssetIdLib.AterraLib.Entities.EmptyLevel)) throw new ApplicationException("Failed to change active level");
+        if (!world.TryChangeActiveLevel(AssetIdStringLib.AterraLib.Entities.EmptyLevel)) throw new ApplicationException("Failed to change active level");
         await Task.Delay(1_000);
         if (!world.TryChangeActiveLevel("Workfloor:Levels/Main")) throw new ApplicationException("Failed to change active level to");
         

@@ -13,7 +13,7 @@ namespace AterraLib.Nexities.Systems.Rendering;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[System(AssetIdLib.AterraLib.SystemsRendering.Render2D, CoreTags.RenderSystem)]
+[System(AssetIdStringLib.AterraLib.SystemsRendering.Render2D, CoreTags.RenderThread)]
 [UsedImplicitly]
 public class Render2D(IAssetInstanceAtlas instanceAtlas, ILogger logger) : NexitiesSystemWithParentsReversed<IHasTransform2D, IActor2D> {
     private ImmutableDictionary<AssetId, (Vector2 Size, Texture2D texture2D)> _texturesCache = ImmutableDictionary<AssetId, (Vector2 Size, Texture2D texture2D)>.Empty;

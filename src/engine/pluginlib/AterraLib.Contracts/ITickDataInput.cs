@@ -1,13 +1,18 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Types.Nexities;
+using AterraCore.Contracts.Threading.CrossThread;
+using Raylib_cs;
+using System.Collections.Concurrent;
+using System.Numerics;
 
-namespace AterraCore.Contracts.Threading.CTQ.Dto;
+namespace AterraLib.Contracts;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public record TextureRegistrar(
-    AssetId TextureAssetId,
-    bool UnRegister
-);
+public interface ITickDataInput : ITickDataHolder {
+    ConcurrentStack<KeyboardKey> KeyboardKeyDown {get;}
+    ConcurrentStack<MouseButton> MouseButtonDown {get;}
+    ConcurrentStack<Vector2> MouseWheelMovement {get;}
+}

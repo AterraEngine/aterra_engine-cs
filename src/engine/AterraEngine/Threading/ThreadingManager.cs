@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Attributes;
 using AterraCore.Contracts.Threading;
 using AterraCore.Contracts.Threading.Logic;
 using AterraCore.Contracts.Threading.Rendering;
@@ -13,6 +14,7 @@ namespace AterraEngine.Threading;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
+[Singleton<IThreadingManager>]
 public class ThreadingManager(ILogger logger) : IThreadingManager {
     private ILogger Logger { get; } = logger.ForContext<ThreadingManager>();
 

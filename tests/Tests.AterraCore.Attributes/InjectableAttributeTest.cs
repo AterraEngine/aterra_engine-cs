@@ -17,7 +17,7 @@ public class InjectableAttributeTests {
     private interface ISampleInterface3;
 
     // Sample classes with InjectableAttribute for testing
-    [Injectable(ServiceLifetime.Scoped, true, typeof(ISampleInterface1))]
+    [Injectable(ServiceLifetime.Scoped, typeof(ISampleInterface1))]
     private class ClassWithInjectableAttribute : ISampleInterface1;
 
     [Injectable<ISampleInterface1, ISampleInterface2, ISampleInterface3>(ServiceLifetime.Singleton)]
@@ -26,46 +26,40 @@ public class InjectableAttributeTests {
     [Fact]
     public void InjectableAttribute_ShouldInitializeWithTypeInterfaces() {
         // Arrange
-        var serviceLifetime = ServiceLifetime.Scoped;
-        bool isStatic = true;
-        Type[] interfaces = { typeof(ISampleInterface1), typeof(ISampleInterface2) };
+        const ServiceLifetime serviceLifetime = ServiceLifetime.Scoped;
+        Type[] interfaces = [typeof(ISampleInterface1), typeof(ISampleInterface2)];
 
         // Act
-        var attribute = new InjectableAttribute(serviceLifetime, isStatic, interfaces);
+        var attribute = new InjectableAttribute(serviceLifetime, interfaces);
 
         // Assert
         Assert.Equal(serviceLifetime, attribute.Lifetime);
-        Assert.Equal(isStatic, attribute.IsStatic);
         Assert.Equal(interfaces, attribute.Interfaces);
     }
 
     [Fact]
     public void InjectableAttribute_Generic_ShouldInitializeWithSingleInterface() {
         // Arrange
-        var serviceLifetime = ServiceLifetime.Singleton;
-        bool isStatic = true;
+        const ServiceLifetime serviceLifetime = ServiceLifetime.Singleton;
 
         // Act
-        var attribute = new InjectableAttribute<ISampleInterface1>(serviceLifetime, isStatic);
+        var attribute = new InjectableAttribute<ISampleInterface1>(serviceLifetime);
 
         // Assert
         Assert.Equal(serviceLifetime, attribute.Lifetime);
-        Assert.Equal(isStatic, attribute.IsStatic);
-        Assert.Equal(new[] { typeof(ISampleInterface1) }, attribute.Interfaces);
+        Assert.Equal([typeof(ISampleInterface1)], attribute.Interfaces);
     }
 
     [Fact]
     public void InjectableAttribute_Generic_ShouldInitializeWithMultipleInterfaces() {
         // Arrange
-        var serviceLifetime = ServiceLifetime.Transient;
-        bool isStatic = false;
+        const ServiceLifetime serviceLifetime = ServiceLifetime.Transient;
 
         // Act
-        var attribute = new InjectableAttribute<ISampleInterface1, ISampleInterface2, ISampleInterface3>(serviceLifetime, isStatic);
+        var attribute = new InjectableAttribute<ISampleInterface1, ISampleInterface2, ISampleInterface3>(serviceLifetime);
 
         // Assert
         Assert.Equal(serviceLifetime, attribute.Lifetime);
-        Assert.Equal(isStatic, attribute.IsStatic);
         Assert.Equal([typeof(ISampleInterface1), typeof(ISampleInterface2), typeof(ISampleInterface3)], attribute.Interfaces);
     }
 
@@ -78,7 +72,6 @@ public class InjectableAttributeTests {
         // Assert
         Assert.NotNull(attribute);
         Assert.Equal(ServiceLifetime.Scoped, attribute.Lifetime);
-        Assert.True(attribute.IsStatic);
         Assert.Equal([typeof(ISampleInterface1)], attribute.Interfaces);
     }
 
@@ -91,7 +84,6 @@ public class InjectableAttributeTests {
         // Assert
         Assert.NotNull(attribute);
         Assert.Equal(ServiceLifetime.Singleton, attribute.Lifetime);
-        Assert.False(attribute.IsStatic);
         Assert.Equal([typeof(ISampleInterface1), typeof(ISampleInterface2), typeof(ISampleInterface3)], attribute.Interfaces);
     }
 }

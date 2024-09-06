@@ -54,7 +54,7 @@ public class BarnsleyFernLevel(
             if (!ChildrenIDs.TryAdd(entity.InstanceId)) throw new ApplicationException("Entity could not be added");
         }
 
-        if (!instanceAtlas.TryCreate(AssetIdLib.AterraLib.Entities.Camera2D, out ICamera2D? camera2D)) return;
+        if (!instanceAtlas.TryCreate(AssetIdStringLib.AterraLib.Entities.Camera2D, out ICamera2D? camera2D)) return;
         camera2D.RaylibCamera2D.Camera = camera2D.RaylibCamera2D.Camera with {
             Target = new Vector2(0, 0),
             Offset = new Vector2(Raylib.GetScreenWidth() / 2f, Raylib.GetScreenHeight() / 2f),

@@ -19,6 +19,7 @@
     <ItemGroup>
         <ProjectReference Include="..\..\lib\Xml\Xml.csproj"/>
         <ProjectReference Include="..\AterraCore.DI\AterraCore.DI.csproj"/>
+        <ProjectReference Include="..\AterraCore.FlexiPlug\AterraCore.FlexiPlug.csproj" />
         <ProjectReference Include="..\AterraCore.Loggers\AterraCore.Loggers.csproj"/>
         <ProjectReference Include="..\AterraCore.Common\AterraCore.Common.csproj"/>
         <ProjectReference Include="..\AterraCore.Contracts\AterraCore.Contracts.csproj"/>

@@ -16,7 +16,7 @@ namespace AterraCore.ConfigMancer;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
-[Injectable<ConfigAtlas, IConfigAtlas>]
+[Singleton<ConfigAtlas, IConfigAtlas>]
 public class ConfigAtlas(IConfigMancerParser configMancerParser, EngineConfigXml engineConfigXml, IPluginAtlas pluginAtlas) : IConfigAtlas {
     public EngineConfigXml EngineConfigXml { get; } = engineConfigXml;
     public FrozenDictionary<PluginId, PluginConfigXml> PluginConfigXmls { get; } = pluginAtlas.Plugins.ToFrozenDictionary(

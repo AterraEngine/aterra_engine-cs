@@ -21,7 +21,7 @@ namespace AterraCore.ConfigMancer;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
-[Injectable<IConfigMancerParser>]
+[Singleton<IConfigMancerParser>]
 public class ConfigMancerParser(IPluginAtlas pluginAtlas, ILogger logger, IXmlPools xmlPools) : IConfigMancerParser {
     private readonly FrozenDictionary<string, ConfigMancerValueRecord> _parsableTypes = pluginAtlas.Plugins
         .SelectMany(plugin => plugin.Types)

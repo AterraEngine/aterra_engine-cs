@@ -12,7 +12,7 @@ namespace AterraCore.PoolCorps;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
-[Injectable<IUlidPools>]
+[Singleton<IUlidPools>]
 public class UlidPools : IUlidPools {
     private const int InitialCapacity = 24;
     private readonly DefaultObjectPoolProvider _objectPoolProvider = new();

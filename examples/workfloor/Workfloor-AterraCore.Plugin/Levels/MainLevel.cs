@@ -28,11 +28,12 @@ public class MainLevelSystemIds : SystemIds {
         // "Workfloor:ApplyRandomImpulse",
         // "Workfloor:ApplyRandomImpulseCamera",
         AssetIdLib.AterraLib.SystemsLogic.ApplyImpulse,
-        AssetIdLib.AterraLib.SystemsLogic.ApplyImpulseCamera
     ];
 
     protected override AssetId[] RenderSystems { get; set; } = [
-        AssetIdLib.AterraLib.SystemsRendering.Render2D
+        AssetIdLib.AterraLib.SystemsLogic.ApplyImpulseCamera,
+        AssetIdLib.AterraLib.SystemsRendering.Render2D,
+        AssetIdLib.AterraLib.SystemsRendering.RaylibKeyHandler,
     ];
 
     protected override AssetId[] UiSystems { get; set; } = [
@@ -70,7 +71,7 @@ public class MainLevel(
             });
         });
 
-        if (!instanceAtlas.TryCreate(AssetIdLib.AterraLib.Entities.Camera2D, out ICamera2D? camera2D)) return;
+        if (!instanceAtlas.TryCreate(AssetIdStringLib.AterraLib.Entities.Camera2D, out ICamera2D? camera2D)) return;
         camera2D.RaylibCamera2D.Camera = camera2D.RaylibCamera2D.Camera with {
             Target = new Vector2(0, 0),
             Offset = new Vector2(Raylib.GetScreenWidth() / 2f, Raylib.GetScreenHeight() / 2f),

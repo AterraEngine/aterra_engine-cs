@@ -16,7 +16,7 @@ public class LevelAttribute(
     params Type[] interfaceTypes
 ) : AssetAttribute(
     assetId,
-    coreTags,
+    coreTags | CoreTags.Singleton,
     lifetime,
     interfaceTypes
 );

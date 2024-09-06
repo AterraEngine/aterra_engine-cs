@@ -3,13 +3,11 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Attributes;
 using AterraCore.Common.Data;
-using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Components;
 using AterraCore.Contracts.Nexities.Entities;
 using AterraCore.Contracts.Nexities.Levels;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Nexities.Entities;
-using AterraLib.Nexities.Components;
 using JetBrains.Annotations;
 using Raylib_cs;
 using System.Numerics;
@@ -18,32 +16,11 @@ namespace Workfloor_AterraCore.Plugin.Levels;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Component("Workfloor:BlobLevelSystemIds")]
-[UsedImplicitly]
-public class BlobLevelSystemIds : SystemIds {
-    protected override AssetId[] LogicSystems { get; set; } = [
-        AssetIdLib.AterraLib.SystemsLogic.PlayerController,
-        AssetIdLib.AterraLib.SystemsLogic.CameraController,
-        WorkfloorIdLib.SystemsLogic.RandomImpulse,
-        WorkfloorIdLib.SystemsLogic.LevelSwitch,
-        // "Workfloor:ApplyRandomImpulseCamera",
-        AssetIdLib.AterraLib.SystemsLogic.ApplyImpulse,
-        AssetIdLib.AterraLib.SystemsLogic.ApplyImpulseCamera
-    ];
-
-    protected override AssetId[] RenderSystems { get; set; } = [
-        AssetIdLib.AterraLib.SystemsRendering.Render2D
-    ];
-
-    protected override AssetId[] UiSystems { get; set; } = [
-    ];
-}
-
 [UsedImplicitly]
 [Level(WorkfloorIdLib.Levels.Blob, CoreTags.Level)]
 public class BlobLevel(
     IDirectChildren children,
-    [InjectAs] BlobLevelSystemIds systemIds,
+    [InjectAs("01J5RA7EDMS1PRR1BMRN9XM9AA")] MainLevelSystemIds systemIds,
     IAssetInstanceAtlas instanceAtlas
 ) : NexitiesEntity(children, systemIds), INexitiesLevel {
     private IDirectChildren? _children = children;
@@ -69,7 +46,7 @@ public class BlobLevel(
             });
         });
 
-        if (!instanceAtlas.TryCreate(AssetIdLib.AterraLib.Entities.Camera2D, out ICamera2D? camera2D)) return;
+        if (!instanceAtlas.TryCreate(AssetIdStringLib.AterraLib.Entities.Camera2D, out ICamera2D? camera2D)) return;
         camera2D.RaylibCamera2D.Camera = camera2D.RaylibCamera2D.Camera with {
             Target = new Vector2(0, 0),
             Offset = new Vector2(Raylib.GetScreenWidth() / 2f, Raylib.GetScreenHeight() / 2f),

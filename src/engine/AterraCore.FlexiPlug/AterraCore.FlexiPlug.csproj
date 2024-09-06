@@ -22,7 +22,6 @@
         <ProjectReference Include="..\..\lib\Xml\Xml.csproj"/>
         <ProjectReference Include="..\AterraCore.Contracts\AterraCore.Contracts.csproj"/>
         <ProjectReference Include="..\AterraCore.Common\AterraCore.Common.csproj"/>
-        <ProjectReference Include="..\AterraCore.Nexities\AterraCore.Nexities.csproj"/>
     </ItemGroup>
 
     <ItemGroup>

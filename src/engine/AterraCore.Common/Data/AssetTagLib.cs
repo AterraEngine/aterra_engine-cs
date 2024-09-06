@@ -1,12 +1,16 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraLib.Nexities.Entities;
+using AterraCore.Common.Types.Nexities;
+
+namespace AterraCore.Common.Data;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Serializable]
-[UsedImplicitly]
-[Entity<IActor2D>(AssetIdStringLib.AterraLib.Entities.Player2D)]
-public class Player2D(ITransform2D transform2D, ISprite2D sprite2D, IDirectChildren childEntities, IImpulse2D impulse2D)
-    : Actor2D(transform2D, sprite2D, childEntities, impulse2D), IPlayer2D;
+public static class AssetTagLib {
+    public static class AterraLib {
+        public static readonly AssetTag PlayerInputTickData = AssetTagStringLib.AterraLib.PlayerInputTickData;
+    }
+
+}

@@ -1,18 +1,19 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Threading.CTQ.Dto;
-using System.Collections.Concurrent;
+using AterraCore.Common.Types.Nexities;
 using System.Diagnostics.CodeAnalysis;
 
-namespace AterraCore.Contracts.Threading.CTQ;
+namespace AterraCore.Contracts.Threading.CrossThread;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ICrossThreadQueue {
-    ConcurrentQueue<TextureRegistrar> TextureRegistrarQueue { get; }
-    bool EntireQueueIsEmpty { get; }
-
-    bool TryDequeue(QueueKey key, [NotNullWhen(true)] out Action? action);
-    bool TryEnqueue(QueueKey key, Action action);
+public interface ICrossThreadTickData {
+    
+    bool TryRegister<T>(AssetTag key, T tickDataHolder) where T : class, ITickDataHolder;
+    bool TryGet<T>(AssetTag key, [NotNullWhen(true)] out T? tickDataHolder) where T : class, ITickDataHolder;
+    bool TryGetOrRegister<T>(AssetTag key, [NotNullWhen(true)] out T? tickDataHolder) where T : class, ITickDataHolder, new();
+    
+    void Clear();
 }

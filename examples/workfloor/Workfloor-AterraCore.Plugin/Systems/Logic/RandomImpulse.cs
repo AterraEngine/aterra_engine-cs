@@ -14,7 +14,7 @@ namespace Workfloor_AterraCore.Plugin.Systems.Logic;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[System(WorkfloorIdLib.SystemsLogic.RandomImpulse, CoreTags.LogicSystem)]
+[System(WorkfloorIdLib.SystemsLogic.RandomImpulse, CoreTags.LogicThread)]
 [Injectable<RandomImpulse>(ServiceLifetime.Singleton)]
 [UsedImplicitly]
 public class RandomImpulse : NexitiesSystemWithFilter<IActor2D> {
@@ -40,7 +40,7 @@ public class RandomImpulse : NexitiesSystemWithFilter<IActor2D> {
     }
 }
 
-[System("Workfloor:ApplyRandomImpulseCamera", CoreTags.LogicSystem)]
+[System("Workfloor:ApplyRandomImpulseCamera", CoreTags.LogicThread)]
 [Injectable<RandomImpulseCamera>(ServiceLifetime.Singleton)]
 [UsedImplicitly]
 public class RandomImpulseCamera : NexitiesSystem<ICamera2D> {

@@ -1,23 +1,26 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Attributes;
-using AterraCore.Contracts.Threading.Rendering;
-using JetBrains.Annotations;
+using AterraLib.Contracts;
+using System.Collections.Concurrent;
 
-namespace AterraEngine.Threading.Render;
+namespace AterraLib.Nexities.Systems.CrossThreadDataHolders;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[UsedImplicitly]
-[Singleton<IRenderEventManager>]
-public class RenderEventManager : IRenderEventManager {
-    public event EventHandler? EventWindowResized;
-    public event EventHandler? EventClearSystemCaches;
+public class TickDataInput : ITickDataInput {
+    public ConcurrentStack<KeyboardKey> KeyboardKeyDown {get;} = [];
+    public ConcurrentStack<MouseButton> MouseButtonDown {get;} = [];
+    public ConcurrentStack<Vector2> MouseWheelMovement {get;} = [];
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void InvokeWindowResized() => EventWindowResized?.Invoke(this, EventArgs.Empty);
-    public void InvokeClearSystemCaches() => EventClearSystemCaches?.Invoke(this, EventArgs.Empty);
+    public void Clear() {
+        KeyboardKeyDown.Clear();
+        MouseButtonDown.Clear();
+        MouseWheelMovement.Clear();
+    }
+
+    public bool IsEmpty => KeyboardKeyDown.IsEmpty && MouseButtonDown.IsEmpty && MouseWheelMovement.IsEmpty;
 }

@@ -41,3 +41,6 @@ public abstract class NexitiesSystem<TEntity> : AssetInstance, INexitiesSystem
         return EntitiesBuffer;
     }
 }
+
+[UsedImplicitly]
+public abstract class NexitiesSystem : NexitiesSystem<IAssetInstance>;
