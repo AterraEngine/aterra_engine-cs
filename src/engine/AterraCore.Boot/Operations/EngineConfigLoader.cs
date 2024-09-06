@@ -26,6 +26,7 @@ public class EngineConfigLoader : IBootOperation {
     [UsedImplicitly] public EngineConfigLoader(string? configFilePath = null) {
         _configFilePath = configFilePath;
     }
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
