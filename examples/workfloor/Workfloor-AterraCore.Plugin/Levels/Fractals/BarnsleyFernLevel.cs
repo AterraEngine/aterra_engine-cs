@@ -49,13 +49,13 @@ public class BarnsleyFernLevel(
 
             if (i % 100 != 0) continue;
             if (!entityPool.TryPop(out IActor2D? entity) || !instanceAtlas.TryCreate(WorkfloorIdLib.Entities.DuckyPlatinum, out entity)) return;
-            entity.Transform2D.Translation = point * 10f;
+            entity.Transform2D.Translation = new Vector2(point.X * 10f, point.Y * -10f);
             if (!ChildrenIDs.TryAdd(entity.InstanceId)) throw new ApplicationException("Entity could not be added");
         }
 
         if (!instanceAtlas.TryCreate(AssetIdStringLib.AterraLib.Entities.Camera2D, out ICamera2D? camera2D)) return;
         camera2D.RaylibCamera2D.Camera = camera2D.RaylibCamera2D.Camera with {
-            Target = new Vector2(0, 0),
+            Target = new Vector2(0, -50),
             Offset = new Vector2(Raylib.GetScreenWidth() / 2f, Raylib.GetScreenHeight() / 2f),
             Rotation = 0,
             Zoom = 10

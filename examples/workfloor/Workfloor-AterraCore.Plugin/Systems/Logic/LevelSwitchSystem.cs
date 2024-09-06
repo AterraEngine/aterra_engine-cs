@@ -36,7 +36,7 @@ public class LevelSwitch(IAterraCoreWorld world, IAssetAtlas assetAtlas, ILogger
         AssetId currentLevelId = level.RawLevelData.AssetId;
         int currentLevelPos = Levels.IndexOf(currentLevelId);
 
-        KeyboardKey[] keyMovements = playerInputTickData.KeyboardKeyDown.ToHashSet().ToArray();
+        KeyboardKey[] keyMovements = playerInputTickData.KeyboardKeyPressed.ToHashSet().ToArray();
 
         for (int i = keyMovements.Length - 1; i >= 0; i--) {
             AssetId newLevelId;

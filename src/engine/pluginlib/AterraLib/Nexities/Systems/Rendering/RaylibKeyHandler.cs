@@ -18,9 +18,12 @@ public class RaylibKeyHandler(ICrossThreadTickData crossThreadTickData) : Nexiti
     public override void Tick(ActiveLevel level) {
         if (!crossThreadTickData.TryGetOrRegister(AssetTagLib.AterraLib.PlayerInputTickData, out TickDataInput? playerInputTickData)) return;
 
-        playerInputTickData.KeyboardKeyDown.PushRange(
-            KeyboardKeys.Where(key => Raylib.IsKeyDown(key)).ToArray()
-        );
+        foreach (KeyboardKey key in KeyboardKeys) {
+            if (Raylib.IsKeyPressed(key)) playerInputTickData.KeyboardKeyPressed.Push(key);
+            if (Raylib.IsKeyPressedRepeat(key)) playerInputTickData.KeyboardKeyPressedRepeated.Push(key);
+            if (Raylib.IsKeyReleased(key)) playerInputTickData.KeyboardKeyReleased.Push(key);
+            if (Raylib.IsKeyDown(key)) playerInputTickData.KeyboardKeyDown.Push(key);
+        }
 
         playerInputTickData.MouseButtonDown.PushRange(
             MouseButtons.Where(button => Raylib.IsMouseButtonDown(button)).ToArray()

@@ -9,6 +9,9 @@ namespace AterraLib.Nexities.Systems.CrossThreadDataHolders;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class TickDataInput : ITickDataInput {
+    public ConcurrentStack<KeyboardKey> KeyboardKeyPressed { get; } = [];
+    public ConcurrentStack<KeyboardKey> KeyboardKeyPressedRepeated { get; } = [];
+    public ConcurrentStack<KeyboardKey> KeyboardKeyReleased { get; } = [];
     public ConcurrentStack<KeyboardKey> KeyboardKeyDown { get; } = [];
     public ConcurrentStack<MouseButton> MouseButtonDown { get; } = [];
     public ConcurrentStack<Vector2> MouseWheelMovement { get; } = [];
@@ -17,10 +20,18 @@ public class TickDataInput : ITickDataInput {
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public void Clear() {
+        KeyboardKeyPressed.Clear();
+        KeyboardKeyPressedRepeated.Clear();
+        KeyboardKeyReleased.Clear();
         KeyboardKeyDown.Clear();
         MouseButtonDown.Clear();
         MouseWheelMovement.Clear();
     }
 
-    public bool IsEmpty => KeyboardKeyDown.IsEmpty && MouseButtonDown.IsEmpty && MouseWheelMovement.IsEmpty;
+    public bool IsEmpty => KeyboardKeyPressed.IsEmpty
+                           && KeyboardKeyPressedRepeated.IsEmpty
+                           && KeyboardKeyReleased.IsEmpty
+                           && KeyboardKeyDown.IsEmpty
+                           && MouseButtonDown.IsEmpty
+                           && MouseWheelMovement.IsEmpty;
 }

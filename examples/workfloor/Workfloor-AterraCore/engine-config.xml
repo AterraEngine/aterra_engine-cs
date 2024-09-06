@@ -8,7 +8,7 @@
 
     <loadOrder relativeRootPath="plugins" enforcePluginIdUniqueness="true">
         <plugin file="AterraLib.zip"/>
-        <plugin file="AterraLibOverwrite.zip"/>
+<!--        <plugin file="AterraLibOverwrite.zip"/>-->
         <plugin file="Workfloor-AterraCore.Plugin.zip"/>
     </loadOrder>
 </engineConfig>
