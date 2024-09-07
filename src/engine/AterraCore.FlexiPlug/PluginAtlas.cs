@@ -29,6 +29,9 @@ public class PluginAtlas(ILogger logger) : IPluginAtlas {
     private readonly HashSet<PluginId> _pluginIds = [];
     public IReadOnlySet<PluginId> PluginIds => _pluginIds;
 
+    private ImmutableArray<PluginId>? _pluginIdsByOrder;
+    public ImmutableArray<PluginId> PluginIdsByOrder => _pluginIdsByOrder ??= [.._plugins.Select(record => record.PluginId)];
+
     private ImmutableDictionary<string, ZipArchive> _pluginZipArchive = ImmutableDictionary<string, ZipArchive>.Empty;
 
     public int TotalAssetCount => _totalAssetCountCache ??= _plugins.SelectMany(p => p.AssetTypes).Count();
@@ -51,6 +54,7 @@ public class PluginAtlas(ILogger logger) : IPluginAtlas {
     }
     public void InvalidateAllCaches() {
         foreach (IPluginRecord plugin in _plugins) plugin.InvalidateCaches();
+        _pluginIdsByOrder = null;
     }
 
     #region Get Registrations
@@ -104,10 +108,12 @@ public class PluginAtlas(ILogger logger) : IPluginAtlas {
             logger.Debug("plugin record did not exist {r}", pluginRecord);
             return false;
         }
+        
         if (!TryGetOrCreateZipArchive(filePath, out ZipArchive? zipArchive)) {
             logger.Debug("zip archive did not exist {r}", filePath);
             return false;
         }
+        
         ZipArchiveEntry? fileEntry = zipArchive.GetEntry(internalFilePath);
         if (fileEntry is null) {
             logger.Debug("Could not attain file Entry {r}", internalFilePath);
@@ -120,5 +126,14 @@ public class PluginAtlas(ILogger logger) : IPluginAtlas {
         bytes = memoryStream.ToArray();
 
         return true;
+    }
+
+    public bool IsEarlierInTheLoadOrder(PluginId first, PluginId second) {
+        if(!_pluginIds.Contains(first) || !_pluginIds.Contains(second)) return false;
+        return PluginIdsByOrder.IndexOf(first) < PluginIdsByOrder.IndexOf(second);
+    }
+    public bool IsLaterInTheLoadOrder(PluginId first, PluginId second) {
+        if(!_pluginIds.Contains(first) || !_pluginIds.Contains(second)) return false;
+        return PluginIdsByOrder.IndexOf(first) < PluginIdsByOrder.IndexOf(second);
     }
 }

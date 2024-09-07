@@ -5,6 +5,7 @@ using AterraCore.Common.Data;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Boot.Logic.PluginLoading.Dto;
 using AterraCore.Contracts.FlexiPlug.Plugin;
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 
 namespace AterraCore.Contracts.FlexiPlug;
@@ -15,6 +16,7 @@ public interface IPluginAtlas {
     public int TotalAssetCount { get; }
     public IReadOnlyCollection<IPluginRecord> Plugins { get; }
     public IReadOnlySet<PluginId> PluginIds { get; }
+    public ImmutableArray<PluginId> PluginIdsByOrder { get; }
 
     // -----------------------------------------------------------------------------------------------------------------
     // Constructor or population Methods
@@ -30,4 +32,7 @@ public interface IPluginAtlas {
     public IEnumerable<AssetRegistration> GetComponentRegistrations(PluginId? pluginNameSpace = null);
 
     public bool TryGetFileRawFromPluginZip(PluginId pluginId, string internalFilePath, [NotNullWhen(true)] out byte[]? bytes);
+
+    public bool IsEarlierInTheLoadOrder(PluginId first, PluginId second);
+    public bool IsLaterInTheLoadOrder(PluginId first, PluginId second);
 }

@@ -10,6 +10,7 @@ using CodeOfChaos.Extensions;
 using Extensions;
 using JetBrains.Annotations;
 using Serilog;
+using System.Collections.Concurrent;
 using System.Collections.Frozen;
 using System.Diagnostics.CodeAnalysis;
 
@@ -31,7 +32,7 @@ public class AssetAtlas(IPluginAtlas pluginAtlas) : IAssetAtlas {
     // -----------------------------------------------------------------------------------------------------------------
     #region Special constructor methods
     private static FrozenDictionary<AssetId, AssetRegistration> AssembleAssetsById(IPluginAtlas pluginAtlas) {
-        Dictionary<AssetId, AssetRegistration> assetsById = new();
+        ConcurrentDictionary<AssetId, AssetRegistration> assetsById = new();
         ILogger logger = EngineServices.GetLogger();
 
         foreach (AssetRegistration registration in pluginAtlas.GetAssetRegistrations()) {
@@ -44,6 +45,13 @@ public class AssetAtlas(IPluginAtlas pluginAtlas) : IAssetAtlas {
             }
             // Assign overloads
             foreach (AssetId overridableAssetId in registration.OverridableAssetIds) {
+                if (assetsById.TryAdd(overridableAssetId, registration)) continue;
+                AssetRegistration oldRegistration = assetsById[overridableAssetId];
+                
+                pluginAtlas.IsLaterInTheLoadOrder(oldRegistration.AssetId.PluginId, registration.AssetId.PluginId);
+                // TODO End Of Day
+                // if (oldRegistration.AssetId.PluginId )
+                
                 assetsById.AddOrUpdate(overridableAssetId, registration);
 
                 logger.Debug(
@@ -56,7 +64,7 @@ public class AssetAtlas(IPluginAtlas pluginAtlas) : IAssetAtlas {
         return assetsById.ToFrozenDictionary();
     }
     private static FrozenDictionary<Type, AssetId> AssembleAssetsByType(IPluginAtlas pluginAtlas) {
-        Dictionary<Type, AssetId> assetsByType = new();
+        ConcurrentDictionary<Type, AssetId> assetsByType = new();
         ILogger logger = EngineServices.GetLogger();
 
         foreach (AssetRegistration registration in pluginAtlas.GetAssetRegistrations()) {
