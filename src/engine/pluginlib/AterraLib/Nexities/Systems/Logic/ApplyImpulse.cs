@@ -16,7 +16,7 @@ public class ApplyImpulse : NexitiesSystemUnCachedWithFilter<IActor2D> {
     public override void Tick(ActiveLevel level) {
         foreach (IActor2D entity in GetEntities(level)) {
             entity.Transform2D.Translation += entity.Impulse2D.TranslationOffset;
-            entity.Transform2D.Scale += entity.Impulse2D.ScaleOffset;
+            entity.Transform2D.Scale *= entity.Impulse2D.ScaleOffset;
             entity.Transform2D.Rotation += entity.Impulse2D.RotationOffset;
 
             entity.Impulse2D.Clear();

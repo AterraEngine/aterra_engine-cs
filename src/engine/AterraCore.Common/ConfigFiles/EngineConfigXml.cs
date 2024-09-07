@@ -12,9 +12,13 @@ namespace AterraCore.Common.ConfigFiles;
 public class EngineConfigXml {
     [XmlElement("logging")] public LoggingConfigDto LoggingConfig { get; set; } = new();
     [XmlElement("paths")] public PathsDto? Paths { get; set; }
+    [XmlElement("window")] public WindowDto Window { get; set; } = new();
 
     [XmlElement("loadOrder")] public LoadOrderDto LoadOrder { get; set; } = new();
-
+    
+    // -----------------------------------------------------------------------------------------------------------------
+    // Nested classes
+    // -----------------------------------------------------------------------------------------------------------------
     // For reasons, I shall use nested classes
     // Yes these reasons are undefined
     public class LoadOrderDto {
@@ -35,5 +39,12 @@ public class EngineConfigXml {
 
     public class PathsDto {
         [XmlElement("gameConfig")] public string? GameConfigPath { get; set; }
+    }
+
+    public class WindowDto {
+        [XmlAttribute("monitorId")] public int MonitorId { get; set; } 
+        [XmlAttribute("width")] public int Width { get; set; } = 1000; 
+        [XmlAttribute("height")] public int Height { get; set; } = 1000;
+        [XmlAttribute("name")] public string Name { get; set; } = "AterraEngine";
     }
 }

@@ -5,7 +5,6 @@ using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading.CrossThread;
 using AterraLib.Contracts;
 using Microsoft.Extensions.DependencyInjection;
-using Serilog;
 
 namespace AterraLib.Nexities.Systems.Logic;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -21,7 +20,7 @@ public class PlayerController(ICrossThreadTickData crossThreadTickData) : Nexiti
         float x = 0f;
         float y = 0f;
         float rotation = 0f;
-        Vector2 scale = Vector2.Zero;
+        Vector2 scale = Vector2.One;
 
         KeyboardKey[] keyMovements = playerInputTickData.KeyboardKeyDown.ToArray();
         for (int i = keyMovements.Length - 1; i >= 0; i--) {
@@ -50,22 +49,24 @@ public class PlayerController(ICrossThreadTickData crossThreadTickData) : Nexiti
 
         Vector2[] mouseWheelMovements = playerInputTickData.MouseWheelMovement.ToArray();
         for (int i = mouseWheelMovements.Length - 1; i >= 0; i--) {
-            // ReSharper disable once SwitchStatementHandlesSomeKnownEnumValuesWithDefault
             switch (mouseWheelMovements[i]) {
+                case { X: 0f, Y: 0f } : break;
+                
                 case { X: var scaleX, Y: 0f }: {
-                    scale.Y += scaleX;
-                    scale.X += scaleX;
+                    scale.Y = 1 + 0.1f * MathF.Sign(scaleX);
+                    scale.X = 1 + 0.1f * MathF.Sign(scaleX);
                     break;
                 }
 
                 case { X: 0f, Y: var scaleY }: {
-                    scale.Y += scaleY;
-                    scale.X += scaleY;
+                    scale.Y = 1 + 0.1f * MathF.Sign(scaleY);
+                    scale.X = 1 + 0.1f * MathF.Sign(scaleY);
                     break;
                 }
 
-                case var result: {
-                    scale += result;
+                case { X: var scaleX, Y: var scaleY }: {
+                    scale.Y = 1 + 0.1f * MathF.Sign(scaleY);
+                    scale.X = 1 + 0.1f * MathF.Sign(scaleX);
                     break;
                 }
             }

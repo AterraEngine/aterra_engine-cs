@@ -29,8 +29,9 @@ public class RaylibKeyHandler(ICrossThreadTickData crossThreadTickData) : Nexiti
             MouseButtons.Where(button => Raylib.IsMouseButtonDown(button)).ToArray()
         );
 
-        playerInputTickData.MouseWheelMovement.Push(
-            Raylib.GetMouseWheelMoveV()
-        );
+        Vector2 mouseWheelMovement = Raylib.GetMouseWheelMoveV();
+        playerInputTickData.MouseWheelMovement.Push(mouseWheelMovement);
+        // if (mouseWheelMovement.X != 0f && mouseWheelMovement.Y != 0f)
+        //     playerInputTickData.MouseWheelMovement.Push(mouseWheelMovement);
     }
 }

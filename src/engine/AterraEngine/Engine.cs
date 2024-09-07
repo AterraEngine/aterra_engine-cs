@@ -45,7 +45,7 @@ public class Engine(
         if (!renderTask.Result) throw new ApplicationException("Failed to start RenderThread ");
 
         if (!world.TryChangeActiveLevel(AssetIdStringLib.AterraLib.Entities.EmptyLevel)) throw new ApplicationException("Failed to change active level");
-        await Task.Delay(10_000);
+        await Task.Delay(1_000);
         if (!world.TryChangeActiveLevel("Workfloor:Levels/Main")) throw new ApplicationException("Failed to change active level to");
 
         // -------------------------------------------------------------------------------------------------------------
