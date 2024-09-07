@@ -3,13 +3,14 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using JetBrains.Annotations;
 using System.Collections.Frozen;
+using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 
 namespace AterraCore.Contracts.ConfigMancer;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public readonly struct ParsedConfigs(IDictionary<Type, object> parsedConfig) {
+public readonly struct FrozenParsedConfigs(IEnumerable<KeyValuePair<Type, object>> parsedConfig) : IParsedConfigs {
     // Expands the original dictionary to include their interfaces as well.
     private readonly FrozenDictionary<Type, object> _parsedConfig = parsedConfig
         .SelectMany(pair => pair.Key.GetInterfaces()
@@ -19,11 +20,13 @@ public readonly struct ParsedConfigs(IDictionary<Type, object> parsedConfig) {
         )
         .ToFrozenDictionary();
 
+    public int Count => _parsedConfig.Count;
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Constructors
     // -----------------------------------------------------------------------------------------------------------------
-    [UsedImplicitly] public ParsedConfigs() : this(new Dictionary<Type, object>()) {}
-    public static readonly ParsedConfigs Empty = new();
+    [UsedImplicitly] public FrozenParsedConfigs() : this(new Dictionary<Type, object>()) {}
+    public static FrozenParsedConfigs Empty => new();
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
@@ -37,6 +40,6 @@ public readonly struct ParsedConfigs(IDictionary<Type, object> parsedConfig) {
         value = casted;
         return true;
     }
+    public IReadOnlyDictionary<Type, object> AsReadOnlyDictionary() => _parsedConfig.AsReadOnly();
 
-    public int Count => _parsedConfig.Keys.Length;
 }

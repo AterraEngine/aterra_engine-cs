@@ -12,5 +12,13 @@ namespace AterraCore.Contracts.ConfigMancer;
 public interface IConfigAtlas {
     EngineConfigXml EngineConfigXml { get; }
     FrozenDictionary<PluginId, PluginConfigXml> PluginConfigXmls { get; }
-    ParsedConfigs GameConfigs { get; }
+    IParsedConfigs GameConfigs { get; }
+    ParsedConfigs GameConfigsAsUnFrozen { get; }
+    FrozenParsedConfigs GameConfigsAsFrozen { get; }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    public FrozenParsedConfigs ConvertInternalGameConfigToFrozen();
+    public ParsedConfigs ConvertInternalGameConfigToUnFrozen();
 }
