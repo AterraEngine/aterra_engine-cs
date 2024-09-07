@@ -25,8 +25,6 @@ public class MainLevelSystemIds : SystemIds {
         AssetIdLib.AterraLib.SystemsLogic.PlayerController,
         AssetIdLib.AterraLib.SystemsLogic.CameraController,
         WorkfloorIdLib.SystemsLogic.LevelSwitch,
-        // "Workfloor:ApplyRandomImpulse",
-        // "Workfloor:ApplyRandomImpulseCamera",
         AssetIdLib.AterraLib.SystemsLogic.ApplyImpulse,
         AssetIdLib.AterraLib.SystemsLogic.ApplyImpulseCamera
     ];

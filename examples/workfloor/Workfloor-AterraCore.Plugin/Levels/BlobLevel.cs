@@ -64,7 +64,7 @@ public class BlobLevel(
         Parallel.For((long)-a, a, body: k => {
             Parallel.For((long)-a, a, body: j => {
                 if (!instanceAtlas.TryCreate(j % 2 == 0 ? WorkfloorIdLib.Entities.DuckyHype : WorkfloorIdLib.Entities.DuckyPlatinum, out IActor2D? newDucky)) return;
-                newDucky.Transform2D.Translation = new Vector2(j, k);
+                newDucky.Transform2D.Translation = new Vector2(0, 0);
                 newDucky.Transform2D.Scale = Vector2.One;
                 if (!ChildrenIDs.TryAdd(newDucky.InstanceId)) throw new ApplicationException("Entity could not be added");
             });
