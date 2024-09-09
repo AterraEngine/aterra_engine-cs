@@ -15,7 +15,7 @@ public class EngineConfigXml {
     [XmlElement("window")] public WindowDto Window { get; set; } = new();
 
     [XmlElement("loadOrder")] public LoadOrderDto LoadOrder { get; set; } = new();
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Nested classes
     // -----------------------------------------------------------------------------------------------------------------
@@ -42,8 +42,8 @@ public class EngineConfigXml {
     }
 
     public class WindowDto {
-        [XmlAttribute("monitorId")] public int MonitorId { get; set; } 
-        [XmlAttribute("width")] public int Width { get; set; } = 1000; 
+        [XmlAttribute("monitorId")] public int MonitorId { get; set; }
+        [XmlAttribute("width")] public int Width { get; set; } = 1000;
         [XmlAttribute("height")] public int Height { get; set; } = 1000;
         [XmlAttribute("name")] public string Name { get; set; } = "AterraEngine";
     }

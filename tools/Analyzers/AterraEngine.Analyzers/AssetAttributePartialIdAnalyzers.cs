@@ -55,7 +55,7 @@ public class AssetAttributePartialIdAnalyzers : DiagnosticAnalyzer {
             .OfType<INamedTypeSymbol>()
             .SelectMany(typeSymbol => typeSymbol.GetAttributes())
             .Where(data => data.AttributeClass != null &&
-                           InheritsFrom(data.AttributeClass, "AterraCore.Attributes.AssetAttribute"));
+                InheritsFrom(data.AttributeClass, "AterraCore.Attributes.AssetAttribute"));
 
         foreach (AttributeData attribute in attributes) {
             TypedConstant instanceTypeArg = GetInstanceTypeArg(attribute);

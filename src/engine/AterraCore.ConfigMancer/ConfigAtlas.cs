@@ -46,27 +46,27 @@ public class ConfigAtlas(
         FrozenParsedConfigs configs = _gameConfigs switch {
             FrozenParsedConfigs frozenConfigs => frozenConfigs,
             ParsedConfigs parsedConfigs => new FrozenParsedConfigs(parsedConfigs.AsReadOnlyDictionary()),
-            
+
             null => FrozenParsedConfigs.Empty,
             _ => FrozenParsedConfigs.Empty
         };
-        
+
         _gameConfigs = configs;
         return configs;
     }
-    
+
     public ParsedConfigs ConvertInternalGameConfigToUnFrozen() {
         ParsedConfigs configs = _gameConfigs switch {
             ParsedConfigs parsedConfigs => parsedConfigs,
             FrozenParsedConfigs frozenConfigs => new ParsedConfigs(frozenConfigs.AsReadOnlyDictionary()),
-            
+
             null => ParsedConfigs.Empty,
             _ => ParsedConfigs.Empty
         };
-        
+
         _gameConfigs = configs;
         return configs;
     }
     #endregion
-    
+
 }

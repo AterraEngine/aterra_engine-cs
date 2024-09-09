@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Attributes;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.OmniVault.Assets;
@@ -15,6 +16,7 @@ namespace AterraCore.OmniVault.Textures;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
+[Singleton<ITextureAtlas>]
 public class TextureAtlas(ILogger logger, IAssetInstanceAtlas instanceAtlas, IPluginAtlas pluginAtlas) : ITextureAtlas {
     private ILogger Logger { get; } = logger.ForContext<TextureAtlas>();
     public IEnumerable<ITexture2DAsset> TextureAssets => instanceAtlas.OfType<ITexture2DAsset>();

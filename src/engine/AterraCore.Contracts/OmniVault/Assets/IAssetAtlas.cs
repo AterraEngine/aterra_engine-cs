@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Data;
 using AterraCore.Common.Types.Nexities;
+using System.Collections.Frozen;
 using System.Diagnostics.CodeAnalysis;
 
 namespace AterraCore.Contracts.OmniVault.Assets;
@@ -10,6 +11,11 @@ namespace AterraCore.Contracts.OmniVault.Assets;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IAssetAtlas {
+    FrozenDictionary<AssetId, AssetRegistration> AssetsById { get; }
+    FrozenDictionary<Type, AssetId> AssetsByType { get; }
+    FrozenDictionary<CoreTags, FrozenSet<AssetId>> CoreTaggedAssets { get; }
+    FrozenDictionary<string, FrozenSet<AssetId>> StringTaggedAssets { get; }
+
     int TotalCount { get; }
 
     // -----------------------------------------------------------------------------------------------------------------

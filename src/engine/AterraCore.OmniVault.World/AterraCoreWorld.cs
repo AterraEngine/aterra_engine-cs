@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Attributes;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Levels;
 using AterraCore.Contracts.OmniVault.Assets;
@@ -22,6 +23,7 @@ namespace AterraCore.OmniVault.World;
 /// This class is responsible for managing the active level and changing levels in the game.
 /// </summary>
 [UsedImplicitly]
+[Singleton<IAterraCoreWorld>]
 public class AterraCoreWorld(
     IAssetInstanceAtlas instanceAtlas,
     ILogger logger,

@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Attributes;
 using AterraCore.Common.Data;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.OmniVault.Assets;
@@ -15,9 +16,10 @@ namespace AterraCore.OmniVault.Assets;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
+[Singleton<IAssetInstanceAtlas>]
 public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetInstanceFactory factory, IUlidPools ulidPools) : IAssetInstanceAtlas {
     private readonly ConcurrentDictionary<Ulid, IAssetInstance> _assetInstances = new();
-    private readonly ConcurrentDictionary<Type,  Lazy<ConcurrentDictionary<Ulid, byte>>> _assetsByTypes = new();
+    private readonly ConcurrentDictionary<Type, Lazy<ConcurrentDictionary<Ulid, byte>>> _assetsByTypes = new();
     private readonly ConcurrentDictionary<AssetId, Ulid> _singletonAssetInstances = new();
 
     public int TotalCount => _assetInstances.Count;
@@ -47,8 +49,8 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetIn
             }
         }
 
-        foreach (var implementedType in registration.DerivedInterfaceTypes.Concat(new[] { registration.Type })) {
-            var lazyBag = _assetsByTypes.GetOrAdd(implementedType, _ => new Lazy<ConcurrentDictionary<Ulid, byte>>(() => new ConcurrentDictionary<Ulid, byte>()));
+        foreach (Type? implementedType in registration.DerivedInterfaceTypes.Concat(new[] { registration.Type })) {
+            Lazy<ConcurrentDictionary<Ulid, byte>>? lazyBag = _assetsByTypes.GetOrAdd(implementedType, valueFactory: _ => new Lazy<ConcurrentDictionary<Ulid, byte>>(() => new ConcurrentDictionary<Ulid, byte>()));
             lazyBag.Value.TryAdd(instance.InstanceId, 0);
         }
 
@@ -64,7 +66,7 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetIn
     public bool TryCreate<T>(Type type, [NotNullWhen(true)] out T? instance, Ulid? predefinedUlid = null) where T : class, IAssetInstance {
         instance = null;
         return assetAtlas.TryGetAssetId(type, out AssetId assetId)
-               && TryCreate(assetId, out instance, predefinedUlid);
+            && TryCreate(assetId, out instance, predefinedUlid);
     }
 
     public bool TryGet<T>(Ulid instanceId, [NotNullWhen(true)] out T? instance) where T : class, IAssetInstance {
@@ -83,8 +85,8 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetIn
     public bool TryGetOrCreate<T>(Type type, [NotNullWhen(true)] out T? instance, Ulid? ulid = null) where T : class, IAssetInstance {
         instance = null;
         return ulid is {} ulidCasted && TryGet(ulidCasted, out instance)
-               || assetAtlas.TryGetAssetId(type, out AssetId assetId)
-               && TryCreate(assetId, out instance, ulid);
+            || assetAtlas.TryGetAssetId(type, out AssetId assetId)
+            && TryCreate(assetId, out instance, ulid);
     }
 
     public bool TryGetOrCreate<T>(AssetId assetId, [NotNullWhen(true)] out T? instance, Ulid? ulid = null) where T : class, IAssetInstance =>

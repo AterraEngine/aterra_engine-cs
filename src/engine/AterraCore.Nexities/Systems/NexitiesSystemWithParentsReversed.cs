@@ -13,7 +13,7 @@ namespace AterraCore.Nexities.Systems;
 public abstract class NexitiesSystemWithParentsReversed<TParent, TChild> : NexitiesSystemWithParents<TParent, TChild>
     where TParent : class, IAssetInstance
     where TChild : class, IAssetInstance {
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -28,7 +28,7 @@ public abstract class NexitiesSystemWithParentsReversed<TParent, TChild> : Nexit
         BufferPopulated = true;
         list.TrimExcess();
         EntitiesBuffer = list.ToArray();
-        
+
         ParentChildPool.Return(list);
         return EntitiesBuffer;
     }

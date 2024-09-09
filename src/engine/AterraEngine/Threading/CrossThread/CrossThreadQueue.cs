@@ -31,7 +31,7 @@ public class CrossThreadQueue(ILogger logger) : ICrossThreadQueue {
     public bool TryDequeue(QueueKey key, [NotNullWhen(true)] out Action? action) {
         action = default;
         return GeneralActionQueue.TryGetValue(key, out ConcurrentQueue<Action>? queue)
-               && queue.TryDequeue(out action);
+            && queue.TryDequeue(out action);
     }
 
     public bool TryEnqueue(QueueKey key, Action action) {

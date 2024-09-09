@@ -85,8 +85,8 @@ public class XmlParser<T>(ILogger logger, string nameSpace, string xsdPath) wher
         var settings = new XmlReaderSettings {
             ValidationType = ValidationType.Schema,
             ValidationFlags = XmlSchemaValidationFlags.ProcessInlineSchema
-                              | XmlSchemaValidationFlags.ProcessSchemaLocation
-                              | XmlSchemaValidationFlags.ReportValidationWarnings,
+                | XmlSchemaValidationFlags.ProcessSchemaLocation
+                | XmlSchemaValidationFlags.ReportValidationWarnings,
             Schemas = schemas
         };
 

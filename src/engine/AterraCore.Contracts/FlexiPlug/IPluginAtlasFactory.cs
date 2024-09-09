@@ -1,15 +1,10 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Diagnostics.CodeAnalysis;
-
-namespace AterraCore.Contracts.ConfigMancer;
+namespace AterraCore.Contracts.FlexiPlug;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IParsedConfigs {
-    int Count { get; }
-
-    bool TryGetConfig<T>([NotNullWhen(true)] out T? value) where T : class;
-    IReadOnlyDictionary<Type, object> AsReadOnlyDictionary();
+public interface IPluginAtlasFactory {
+    public IPluginAtlas GetAtlas();
 }

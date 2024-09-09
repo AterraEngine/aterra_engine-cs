@@ -1,15 +1,10 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Diagnostics.CodeAnalysis;
-
-namespace AterraCore.Contracts.ConfigMancer;
+namespace AterraCore.Contracts.OmniVault.Assets;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IParsedConfigs {
-    int Count { get; }
-
-    bool TryGetConfig<T>([NotNullWhen(true)] out T? value) where T : class;
-    IReadOnlyDictionary<Type, object> AsReadOnlyDictionary();
+public interface IAssetAtlasFactory {
+    IAssetAtlas GetAtlas();
 }

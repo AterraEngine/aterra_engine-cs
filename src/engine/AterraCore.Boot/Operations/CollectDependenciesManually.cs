@@ -1,34 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts;
 using AterraCore.Contracts.Boot.Operations;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.DataCollector;
-using AterraCore.Contracts.OmniVault.Textures;
-using AterraCore.Contracts.OmniVault.World;
-using AterraCore.Contracts.OmniVault.World.EntityTree;
-using AterraCore.Contracts.Renderer;
-using AterraCore.Contracts.Threading;
-using AterraCore.Contracts.Threading.Logic;
-using AterraCore.Contracts.Threading.Rendering;
-using AterraCore.FlexiPlug;
 using AterraCore.Loggers;
-using AterraCore.OmniVault.Assets;
-using AterraCore.OmniVault.DataCollector;
-using AterraCore.OmniVault.Textures;
-using AterraCore.OmniVault.World;
-using AterraCore.OmniVault.World.EntityTree;
-using AterraCore.OmniVault.World.EntityTree.Pools;
-using AterraEngine;
-using AterraEngine.Threading;
-using AterraEngine.Threading.CrossThread;
-using AterraEngine.Threading.Logic;
-using AterraEngine.Threading.Render;
 using CodeOfChaos.Extensions;
 using Microsoft.Extensions.DependencyInjection;
-using static CodeOfChaos.Extensions.DependencyInjection.ServiceDescriptorExtension;
 
 namespace AterraCore.Boot.Operations;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -43,35 +22,14 @@ public class CollectDependenciesManually : IBootOperation {
     public void Run(IBootComponents components) {
         Logger.Debug("Entered Collection of Dependencies");
 
-        List<ServiceDescriptor> dependencies = [
-            #region Base AterraEngine
-            NewServiceDescriptor<ILogger>(EngineLogger.CreateLogger(components.EngineConfigXml.LoggingConfig.UseAsyncConsole)),
-
-            NewServiceDescriptor<IActiveLevelFactory, ActiveLevelFactory>(ServiceLifetime.Singleton),
-
-            // NewServiceDescriptor<ICrossThreadQueue, CrossThreadQueue>(ServiceLifetime.Singleton),
-            #endregion
-            #region PluginLoading
-            NewServiceDescriptor<IPluginAtlas, PluginAtlas>(ServiceLifetime.Singleton),
-            #endregion
-            #region OmniVault
-            NewServiceDescriptor<IAssetAtlas, AssetAtlas>(ServiceLifetime.Singleton),
-            NewServiceDescriptor<IAssetInstanceAtlas, AssetInstanceAtlas>(ServiceLifetime.Singleton),
-            NewServiceDescriptor<IAssetInstanceFactory, AssetInstanceFactory>(ServiceLifetime.Singleton),
-
-            NewServiceDescriptor<ITextureAtlas, TextureAtlas>(ServiceLifetime.Singleton),
-
-            NewServiceDescriptor<IAterraCoreWorld, AterraCoreWorld>(ServiceLifetime.Singleton),
-
-            NewServiceDescriptor<IEntityTreeFactory, EntityTreeFactory>(ServiceLifetime.Singleton),
-            NewServiceDescriptor<IEntityTreePools, EntityTreePools>(ServiceLifetime.Singleton),
-            NewServiceDescriptor<IDataCollectorFactory, DataCollectorFactory>(ServiceLifetime.Singleton),
+        components.ServiceDescriptors.AddLastRepeated([
+            ServiceDescriptor.Singleton(EngineLogger.CreateLogger(components.EngineConfigXml.LoggingConfig.UseAsyncConsole)),
+            ServiceDescriptor.Singleton<IPluginAtlas>(provider => provider.GetRequiredService<IPluginAtlasFactory>().GetAtlas()),
+            ServiceDescriptor.Singleton<IAssetAtlas>(provider => provider.GetRequiredService<IAssetAtlasFactory>().GetAtlas()),
             ServiceDescriptor.Singleton<IDataCollector>(provider => provider.GetRequiredService<IDataCollectorFactory>().Create()),
-            #endregion
-            ServiceDescriptor.Singleton(components.EngineConfigXml)
-        ];
-
-        components.ServiceDescriptors.AddLastRepeated(dependencies);
+            ServiceDescriptor.Singleton(components.EngineConfigXml),
+            ServiceDescriptor.Singleton(components)
+        ]);
 
     }
 }
