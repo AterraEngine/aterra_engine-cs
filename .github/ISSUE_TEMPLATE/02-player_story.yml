@@ -5,6 +5,7 @@ assignees:
   - AndreasSas
 labels:
   - player-story
+  - enhancement
 projects:
   - AterraEngine/1
 body:
