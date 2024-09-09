@@ -66,12 +66,6 @@ public class EngineConfiguration(ILogger? logger = null) : IEngineConfiguration 
             operation.Run(Components);
         }
 
-        // Populate Plugin Atlas with plugin list
-        //      It is REQUIRED that the plugin atlas is assembled before the engine,
-        //      This is because a lot of DI classes rely on the data in PluginAtlas being there already
-        Logger.Information("Preloading the Engine {i} plugins", Components.ValidPlugins.Length);
-        EngineServices.GetPluginAtlas().ImportLoadedPluginDtos(Components.ValidPlugins);
-
         // Create the Actual Engine
         //  Should be the last step
         IEngine engine = EngineServices.GetEngine();

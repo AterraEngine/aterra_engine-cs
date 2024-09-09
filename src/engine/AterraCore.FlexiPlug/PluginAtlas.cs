@@ -1,15 +1,14 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.ConfigFiles;
 using AterraCore.Common.Data;
 using AterraCore.Common.Types.Nexities;
-using AterraCore.Contracts.Boot.Logic.PluginLoading.Dto;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug.Plugin;
 using CodeOfChaos.Extensions;
-using JetBrains.Annotations;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using System.Collections.Frozen;
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.IO.Compression;
@@ -18,49 +17,25 @@ namespace AterraCore.FlexiPlug;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[UsedImplicitly]
-public class PluginAtlas(ILogger logger) : IPluginAtlas {
-    private ILogger Logger => logger.ForContext<PluginAtlas>();
+public class PluginAtlas(IServiceProvider provider) : IPluginAtlas {
+    private readonly ILogger _logger = provider.GetRequiredService<ILogger>().ForContext<PluginAtlas>();
+
+    public IReadOnlyCollection<IPluginRecord> Plugins { get; init; } = [];
+    public FrozenSet<PluginId> PluginIds { get; init; } = new HashSet<PluginId>().ToFrozenSet();
+    public ImmutableArray<PluginId> PluginIdsByOrder { get; init; } = [];
 
     private int? _totalAssetCountCache;
-    private LinkedList<IPluginRecord> _plugins = [];
-    public IReadOnlyCollection<IPluginRecord> Plugins => [.._plugins];
-
-    private readonly HashSet<PluginId> _pluginIds = [];
-    public IReadOnlySet<PluginId> PluginIds => _pluginIds;
-
-    private ImmutableArray<PluginId>? _pluginIdsByOrder;
-    public ImmutableArray<PluginId> PluginIdsByOrder => _pluginIdsByOrder ??= [.._plugins.Select(record => record.PluginId)];
-
+    public int TotalAssetCount => _totalAssetCountCache ??= Plugins.SelectMany(p => p.AssetTypes).Count();
+    
     private ImmutableDictionary<string, ZipArchive> _pluginZipArchive = ImmutableDictionary<string, ZipArchive>.Empty;
-
-    public int TotalAssetCount => _totalAssetCountCache ??= _plugins.SelectMany(p => p.AssetTypes).Count();
-
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void ImportLoadedPluginDtos(Span<IPluginBootDto> plugins) {
-        foreach (IPluginBootDto plugin in plugins) {
-            _plugins.AddLast(new PluginRecord {
-                PluginId = plugin.PluginNameSpaceId,
-                Types = plugin.Types,
-                PluginBootDto = plugin,
-                PluginConfigXml = plugin.TryGetPluginConfig(out PluginConfigXml? config)
-                    ? config
-                    : new PluginConfigXml()
-            });
-            _pluginIds.Add(plugin.PluginNameSpaceId);
-        }
-    }
-    public void InvalidateAllCaches() {
-        foreach (IPluginRecord plugin in _plugins) plugin.InvalidateCaches();
-        _pluginIdsByOrder = null;
-    }
-
     #region Get Registrations
     public IEnumerable<AssetRegistration> GetAssetRegistrations(PluginId? pluginNameSpace = null, CoreTags? filter = null) {
         // Given this is only done once (during project startup), caching this seems a bit unnecessary.
-        return _plugins
+        return Plugins
             // Filter down to only the plugin we need
             .ConditionalWhere(pluginNameSpace != null, predicate: p => p.PluginId == (PluginId)pluginNameSpace!)
             .SelectMany(p => p.AssetTypes
@@ -103,20 +78,20 @@ public class PluginAtlas(ILogger logger) : IPluginAtlas {
     ) {
         bytes = default;
 
-        IPluginRecord? pluginRecord = _plugins.FirstOrDefault(p => p.PluginId == pluginId);
+        IPluginRecord? pluginRecord = Plugins.FirstOrDefault(p => p.PluginId == pluginId);
         if (pluginRecord is not { PluginBootDto.FilePath: var filePath } || !filePath.IsNotNullOrEmpty()) {
-            logger.Debug("plugin record did not exist {r}", pluginRecord);
+            _logger.Debug("plugin record did not exist {r}", pluginRecord);
             return false;
         }
         
         if (!TryGetOrCreateZipArchive(filePath, out ZipArchive? zipArchive)) {
-            logger.Debug("zip archive did not exist {r}", filePath);
+            _logger.Debug("zip archive did not exist {r}", filePath);
             return false;
         }
         
         ZipArchiveEntry? fileEntry = zipArchive.GetEntry(internalFilePath);
         if (fileEntry is null) {
-            logger.Debug("Could not attain file Entry {r}", internalFilePath);
+            _logger.Debug("Could not attain file Entry {r}", internalFilePath);
             return false;
         }
 
@@ -128,12 +103,15 @@ public class PluginAtlas(ILogger logger) : IPluginAtlas {
         return true;
     }
 
-    public bool IsEarlierInTheLoadOrder(PluginId first, PluginId second) {
-        if(!_pluginIds.Contains(first) || !_pluginIds.Contains(second)) return false;
-        return PluginIdsByOrder.IndexOf(first) < PluginIdsByOrder.IndexOf(second);
+    public bool IsLoadedBefore(PluginId left, PluginId right) {
+        int l = PluginIdsByOrder.IndexOf(left);
+        int r = PluginIdsByOrder.IndexOf(right);
+        return l != -1 && r != -1 && l < r;
     }
-    public bool IsLaterInTheLoadOrder(PluginId first, PluginId second) {
-        if(!_pluginIds.Contains(first) || !_pluginIds.Contains(second)) return false;
-        return PluginIdsByOrder.IndexOf(first) < PluginIdsByOrder.IndexOf(second);
+    
+    public bool IsLoadedAfter(PluginId left, PluginId right) {
+        int l = PluginIdsByOrder.IndexOf(left);
+        int r = PluginIdsByOrder.IndexOf(right);
+        return l != -1 && r != -1 && l > r;
     }
 }

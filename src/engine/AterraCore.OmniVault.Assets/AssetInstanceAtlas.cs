@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Attributes;
 using AterraCore.Common.Data;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.OmniVault.Assets;
@@ -15,6 +16,7 @@ namespace AterraCore.OmniVault.Assets;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
+[Singleton<IAssetInstanceAtlas>]
 public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetInstanceFactory factory, IUlidPools ulidPools) : IAssetInstanceAtlas {
     private readonly ConcurrentDictionary<Ulid, IAssetInstance> _assetInstances = new();
     private readonly ConcurrentDictionary<Type,  Lazy<ConcurrentDictionary<Ulid, byte>>> _assetsByTypes = new();

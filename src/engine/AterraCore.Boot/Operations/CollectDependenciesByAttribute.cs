@@ -4,7 +4,9 @@
 using AterraCore.Attributes;
 using AterraCore.ConfigMancer;
 using AterraCore.Contracts.Boot.Operations;
+using AterraCore.FlexiPlug;
 using AterraCore.Loggers;
+using AterraCore.OmniVault.Assets;
 using AterraCore.PoolCorps;
 using AterraEngine;
 using CodeOfChaos.Extensions;
@@ -27,7 +29,9 @@ public class CollectDependenciesByAttribute : IBootOperation {
         List<Assembly> assemblies = [
             typeof(XmlPools).Assembly,
             typeof(ConfigAtlas).Assembly,
-            typeof(Engine).Assembly
+            typeof(Engine).Assembly,
+            typeof(PluginAtlas).Assembly,
+            typeof(AssetAtlas).Assembly
         ];
 
         IEnumerable<ServiceDescriptor> dependencies = assemblies

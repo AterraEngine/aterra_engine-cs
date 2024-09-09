@@ -27,6 +27,7 @@ using TConstructor=Func<object[], object>;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
+[Singleton<IAssetInstanceFactory>]
 public class AssetInstanceFactory(ILogger logger, IPluginAtlas pluginAtlas) : IAssetInstanceFactory {
     private readonly FrozenDictionary<AssetId, TActionsArray> _actionsMap = AssembleParameterActions(pluginAtlas);
     private readonly FrozenDictionary<Type, TConstructor> _constructorCache = AssembleConstructorDelegates(pluginAtlas);
