@@ -18,7 +18,10 @@ public class EmptyLevelSystemIds : SystemIds {
     ];
 
     protected override AssetId[] RenderSystems { get; set; } = [
-        AssetIdStringLib.AterraLib.SystemsRendering.Render2D
+        AssetIdLib.AterraLib.SystemsRendering.Render2DPrepForProps,
+        AssetIdLib.AterraLib.SystemsRendering.Render2DPrepForActors,
+        AssetIdLib.AterraLib.SystemsRendering.Render2D,
+        AssetIdLib.AterraLib.SystemsRendering.Render2DEndOfFrame,
     ];
 
     protected override AssetId[] UiSystems { get; set; } = [

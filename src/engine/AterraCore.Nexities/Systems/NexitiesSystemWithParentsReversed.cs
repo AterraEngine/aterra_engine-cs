@@ -17,12 +17,14 @@ public abstract class NexitiesSystemWithParentsReversed<TParent, TChild> : Nexit
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    protected override (TParent? Parent, TChild Child)[] GetEntities(ActiveLevel level) {
+    protected override (TParent? Parent, TChild Child, int zIndex)[] GetEntities(ActiveLevel level) {
         if (BufferPopulated) return EntitiesBuffer;
 
-        List<(TParent? Parent, TChild Child)> list = ParentChildPool.Get();
-        foreach ((IAssetInstance? Parent, IAssetInstance Child) instance in level.ActiveEntityTree.GetAsFlatReverseWithParent()) {
-            if (instance.Child is TChild child) list.Add((instance.Parent as TParent, child));
+        List<(TParent? Parent, TChild Child, int zIndex)> list = ParentChildPool.Get();
+        int zIndex = 0;
+        foreach ((IAssetInstance? parent, IAssetInstance childInstance) in level.ActiveEntityTree.GetAsFlatReverseWithParent()) {
+            int i = zIndex++;
+            if (childInstance is TChild child) list.Add((parent as TParent, child, i));
         }
 
         BufferPopulated = true;

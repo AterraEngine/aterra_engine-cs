@@ -54,7 +54,9 @@ public static class AssetIdStringLib {
             private const string ThisClass = nameof(SystemsRendering);
 
             public const string Render2D = $"{ThisSection}:{ThisClass}/{nameof(Render2D)}";
-            public const string Render2DPrep = $"{ThisSection}:{ThisClass}/{nameof(Render2DPrep)}";
+            public const string Render2DPrepForProps = $"{ThisSection}:{ThisClass}/{nameof(Render2DPrepForProps)}";
+            public const string Render2DPrepForActors = $"{ThisSection}:{ThisClass}/{nameof(Render2DPrepForActors)}";
+            public const string Render2DEndOfFrame = $"{ThisSection}:{ThisClass}/{nameof(Render2DEndOfFrame)}";
             public const string RenderHud = $"{ThisSection}:{ThisClass}/{nameof(RenderHud)}";
             public const string RaylibKeyHandler = $"{ThisSection}:{ThisClass}/{nameof(RaylibKeyHandler)}";
         }

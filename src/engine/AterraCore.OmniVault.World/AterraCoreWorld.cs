@@ -8,7 +8,6 @@ using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading.CrossThread;
 using AterraCore.Contracts.Threading.CrossThread.Dto;
-using CodeOfChaos.Extensions.Serilog;
 using Extensions;
 using JetBrains.Annotations;
 using Serilog;

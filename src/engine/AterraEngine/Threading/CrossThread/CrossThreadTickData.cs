@@ -4,7 +4,6 @@
 using AterraCore.Attributes;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Threading.CrossThread;
-using AterraCore.Contracts.Threading.Logic;
 using JetBrains.Annotations;
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;

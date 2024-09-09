@@ -8,14 +8,15 @@ using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading.CrossThread;
 using AterraLib.Nexities.Components;
 using AterraLib.Nexities.Systems.CrossThreadDataHolders;
+using System.Collections.Immutable;
 
 namespace AterraLib.Nexities.Systems.Rendering;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[System(AssetIdStringLib.AterraLib.SystemsRendering.Render2DPrepForProps, CoreTags.RenderThread)]
+[System(AssetIdStringLib.AterraLib.SystemsRendering.Render2DPrepForActors, CoreTags.RenderThread)]
 [UsedImplicitly]
-public class Render2DPrepForProps(IAssetInstanceAtlas instanceAtlas, ICrossThreadTickData crossThreadTickData, ITextureAtlas textureAtlas) : NexitiesSystemWithParentsReversed<IHasTransform2D, IProp2D> {
+public class Render2DPrepForActors(IAssetInstanceAtlas instanceAtlas, ICrossThreadTickData crossThreadTickData) : NexitiesSystemWithParentsReversed<IHasTransform2D, IActor2D> {
     // -----------------------------------------------------------------------------------------------------------------
     // Helper Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -35,9 +36,8 @@ public class Render2DPrepForProps(IAssetInstanceAtlas instanceAtlas, ICrossThrea
     // -----------------------------------------------------------------------------------------------------------------
     public override void Tick(ActiveLevel level) {
         if (!crossThreadTickData.TryGetOrRegister(AssetTagLib.AterraLib.RenderableData, out RenderableData? renderableDataDto)) return;
-        if (renderableDataDto.PropsProcessed) return;
 
-        foreach ((IHasTransform2D? parent, IProp2D child, int zIndex) in GetEntities(level).AsSpan()) {
+        foreach ((IHasTransform2D? parent, IActor2D child, int zIndex) in GetEntities(level).AsSpan()) {
             (Vector2 size, Texture2D texture2D) = GetTextureAsset(child.Sprite2D.TextureAssetId,renderableDataDto);
 
             ITransform2D parentTransform = parent?.Transform2D ?? EmptyTransform2D;
@@ -53,7 +53,7 @@ public class Render2DPrepForProps(IAssetInstanceAtlas instanceAtlas, ICrossThrea
                 child.Sprite2D.UvSelection.Position,
                 child.Sprite2D.UvSelection.Size * size
             );
-            renderableDataDto.WritePropToRenderCache((
+            renderableDataDto.WriteActorToRenderCache((
                 texture2D, 
                 sourceRect,
                 destRect,
@@ -62,7 +62,5 @@ public class Render2DPrepForProps(IAssetInstanceAtlas instanceAtlas, ICrossThrea
                 child.Sprite2D.Shade
             ), zIndex);
         }
-
-        renderableDataDto.PropsProcessed = true;
     }
 }

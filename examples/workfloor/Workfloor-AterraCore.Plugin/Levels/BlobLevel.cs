@@ -32,9 +32,11 @@ public class BlobLevelSystemIds : SystemIds {
     ];
 
     protected override AssetId[] RenderSystems { get; set; } = [
-        AssetIdStringLib.AterraLib.SystemsRendering.Render2DPrep,
-        AssetIdStringLib.AterraLib.SystemsRendering.Render2D,
-        AssetIdLib.AterraLib.SystemsRendering.RaylibKeyHandler
+        AssetIdLib.AterraLib.SystemsRendering.Render2DPrepForProps,
+        AssetIdLib.AterraLib.SystemsRendering.Render2DPrepForActors,
+        AssetIdLib.AterraLib.SystemsRendering.Render2D,
+        AssetIdLib.AterraLib.SystemsRendering.RaylibKeyHandler,
+        AssetIdLib.AterraLib.SystemsRendering.Render2DEndOfFrame,
     ];
 
     protected override AssetId[] UiSystems { get; set; } = [
@@ -62,7 +64,7 @@ public class BlobLevel(
         const int entitiesPerLevel = 10_000;
 
         int a = (int)(Math.Sqrt(entitiesPerLevel) / 2f);
-        Parallel.For((long)-a, a, body: k => {
+        Parallel.For((long)-a, a, body: _ => {
             Parallel.For((long)-a, a, body: j => {
                 string entityId = j % 2 == 0 ? WorkfloorIdLib.Entities.ActorDuckyHype : WorkfloorIdLib.Entities.ActorDuckyPlatinum;
                 if (!instanceAtlas.TryCreate(entityId, out IActor2D? newDucky)) throw new ApplicationException("Entity could not be created");

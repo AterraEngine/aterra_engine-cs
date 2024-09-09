@@ -4,7 +4,6 @@
 using AterraCore.Attributes;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Components;
-using AterraCore.Contracts.Nexities.Entities;
 using AterraCore.Contracts.OmniVault.Textures;
 using AterraCore.OmniVault.Textures;
 using AterraLib.Nexities.Components;

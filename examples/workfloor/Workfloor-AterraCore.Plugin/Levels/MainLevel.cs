@@ -6,6 +6,7 @@ using AterraCore.Common.Data;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Components;
 using AterraCore.Contracts.Nexities.Entities;
+using AterraCore.Contracts.Nexities.Entities.QuickHands;
 using AterraCore.Contracts.Nexities.Levels;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Nexities.Entities;
@@ -30,9 +31,11 @@ public class MainLevelSystemIds : SystemIds {
     ];
 
     protected override AssetId[] RenderSystems { get; set; } = [
-        AssetIdLib.AterraLib.SystemsRendering.Render2DPrep,
+        AssetIdLib.AterraLib.SystemsRendering.Render2DPrepForProps,
+        AssetIdLib.AterraLib.SystemsRendering.Render2DPrepForActors,
         AssetIdLib.AterraLib.SystemsRendering.Render2D,
-        AssetIdLib.AterraLib.SystemsRendering.RaylibKeyHandler
+        AssetIdLib.AterraLib.SystemsRendering.RaylibKeyHandler,
+        AssetIdLib.AterraLib.SystemsRendering.Render2DEndOfFrame,
     ];
 
     protected override AssetId[] UiSystems { get; set; } = [
@@ -84,7 +87,7 @@ public class MainLevel(
         player2D.Transform2D.Scale = Vector2.One;
         ChildrenIDs.TryAddFirst(player2D.InstanceId);
 
-        if (!instanceAtlas.TryCreate(WorkfloorIdLib.Entities.PropDuckyHype, out IProp2D? playerAddendum)) throw new ApplicationException("Entity could not be created");
+        if (!instanceAtlas.TryCreate(WorkfloorIdLib.Entities.ActorDuckyHype, out IHasTransform2D? playerAddendum)) throw new ApplicationException("Entity could not be created");
         playerAddendum.Transform2D.Translation = new Vector2(2, 2);
         playerAddendum.Transform2D.Scale = Vector2.One;
         player2D.ChildrenIDs.TryAddFirst(playerAddendum.InstanceId);
