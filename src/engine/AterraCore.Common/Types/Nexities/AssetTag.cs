@@ -74,12 +74,12 @@ public readonly struct AssetTag : IEqualityOperators<AssetTag, AssetTag, bool>, 
     }
 
     private static (PluginId, NameSpace, ReadOnlyMemory<char> cache) GetOrAddCache(PluginId pluginId, NameSpace assetName) {
-        string key = pluginId.Value + ':' + string.Join('/', assetName);
+        string key = '#' + pluginId.Value + ':' + string.Join('/', assetName);
         return GlobalCache.GetOrAdd(key, valueFactory: _ => (pluginId, assetName, GetAsMemory(pluginId, assetName)));
     }
 
     private static ReadOnlyMemory<char> GetAsMemory(PluginId pluginId, NameSpace assetName) {
-        string key = pluginId.Value + ':' + string.Join('/', assetName);
+        string key = '#' + pluginId.Value + ':' + string.Join('/', assetName);
         return new ReadOnlyMemory<char>(key.ToArray(), 0, key.Length);
     }
 

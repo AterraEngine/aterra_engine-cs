@@ -14,7 +14,11 @@ namespace AterraCore.Common.Types.Nexities;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [StructLayout(LayoutKind.Sequential)]
-public readonly struct AssetId : IEqualityOperators<AssetId, AssetId, bool>, IEquatable<AssetId>, IEqualityOperators<AssetId, PluginId, bool> {
+public readonly struct AssetId :
+    IEqualityOperators<AssetId, AssetId, bool>,
+    IEquatable<AssetId>, 
+    IEqualityOperators<AssetId, PluginId, bool>
+{
     public readonly PluginId PluginId;
     public readonly NameSpace NameSpace;
     private readonly int _hashCode;
