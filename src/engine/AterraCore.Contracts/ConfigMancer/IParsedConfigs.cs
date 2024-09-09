@@ -10,6 +10,6 @@ namespace AterraCore.Contracts.ConfigMancer;
 public interface IParsedConfigs {
     int Count { get; }
 
-    bool TryGetConfig<T>([NotNullWhen(true)] out T? value) where T : class;
-    IReadOnlyDictionary<Type, object> AsReadOnlyDictionary();
+    bool TryGetConfig<T>([NotNullWhen(true)] out T? value) where T : IConfigMancerElement;
+    IReadOnlyDictionary<Type, IConfigMancerElement> AsReadOnlyDictionary();
 }

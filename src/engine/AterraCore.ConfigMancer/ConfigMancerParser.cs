@@ -39,16 +39,16 @@ public class ConfigMancerParser(IPluginAtlas pluginAtlas, ILogger logger, IXmlPo
         type.GetCustomAttributes<XmlRootAttribute>().FirstOrDefault()?.ElementName
         ?? char.ToLowerInvariant(type.Name[0]) + type.Name[1..];
 
-    private static bool TryDeserializeWithAttributes(Type type, XmlNode node, [NotNullWhen(true)] out object? deserialized) {
+    private static bool TryDeserializeWithAttributes(Type type, XmlNode node, [NotNullWhen(true)] out IConfigMancerElement? deserialized) {
         var serializer = new XmlSerializer(type, new XmlRootAttribute(node.LocalName) { Namespace = node.NamespaceURI });
         using var reader = new StringReader(node.OuterXml);
-        deserialized = serializer.Deserialize(reader) ?? null;// If extracted, make a try catch, or a better TryDeserialize...
+        deserialized = serializer.Deserialize(reader) as IConfigMancerElement;// If extracted, make a try catch, or a better TryDeserialize...
         return deserialized != null;
     }
 
     public bool TryParseGameConfig(string filePath, out FrozenParsedConfigs parsedConfigs) {
         parsedConfigs = default;
-        var parsedObjects = new Dictionary<Type, object>();
+        var parsedObjects = new Dictionary<Type, IConfigMancerElement>();
         Queue<XmlNode> queue = xmlPools.XmlNodeQueuePool.Get();
 
         try {
@@ -63,7 +63,7 @@ public class ConfigMancerParser(IPluginAtlas pluginAtlas, ILogger logger, IXmlPo
 
             while (queue.TryDequeue(out XmlNode? node)) {
                 if (_parsableTypes.TryGetValue(node.Name, out ConfigMancerValueRecord? record)
-                    && TryDeserializeWithAttributes(record.Type, node, out object? deserialized)
+                    && TryDeserializeWithAttributes(record.Type, node, out IConfigMancerElement? deserialized)
                     && parsedObjects.TryAdd(record.Type, deserialized)
                 ) continue;
 

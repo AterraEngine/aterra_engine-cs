@@ -17,25 +17,25 @@ namespace AterraCore.Common.Types.Nexities;
 public readonly struct NameSpace :
     IEqualityOperators<NameSpace, NameSpace, bool>,
     IEqualityOperators<NameSpace, string, bool>,
-    IEquatable<NameSpace> {
+    IEquatable<NameSpace> 
+{
     public IReadOnlyList<string> Values { get; }
     private readonly int _hashCode;
     private readonly ReadOnlyMemory<char> _valueMemory;
 
-    private static readonly ConcurrentDictionary<string, NameSpace> Cache = new();
-
+    private static readonly ConcurrentDictionary<string, NameSpace> GlobalCache = new();
     // -----------------------------------------------------------------------------------------------------------------
     // Constructors
     // -----------------------------------------------------------------------------------------------------------------
     public NameSpace(string value) {
-        if (!Cache.TryGetValue(value, out NameSpace existing)) {
+        if (!GlobalCache.TryGetValue(value, out NameSpace existing)) {
             Match match = RegexLib.AssetPartial.Match(value);
             if (!match.Success) throw new ArgumentException("Invalid Asset Name format.");
 
             Values = match.Groups[1].Value.Split(['.', '/', '\\'], StringSplitOptions.RemoveEmptyEntries);
             _valueMemory = GetAsMemory(Values);
             _hashCode = ComputeHashCode();
-            Cache[value] = this;
+            GlobalCache[value] = this;
         }
         else {
             Values = existing.Values;
@@ -50,7 +50,7 @@ public readonly struct NameSpace :
             throw new ArgumentException("Invalid Asset Name format.");
 
         string joined = string.Join('/', valueArray);
-        if (Cache.TryGetValue(joined, out NameSpace existing)) {
+        if (GlobalCache.TryGetValue(joined, out NameSpace existing)) {
             Values = existing.Values;
             _valueMemory = existing._valueMemory;
             _hashCode = existing._hashCode;
@@ -59,7 +59,7 @@ public readonly struct NameSpace :
             Values = valueArray;
             _valueMemory = GetAsMemory(valueArray);
             _hashCode = ComputeHashCode();
-            Cache[joined] = this;
+            GlobalCache[joined] = this;
         }
     }
 
@@ -68,7 +68,7 @@ public readonly struct NameSpace :
         Values = matchGroup.Value.Split(['.', '/', '\\'], StringSplitOptions.RemoveEmptyEntries);
         _valueMemory = GetAsMemory(Values);
         _hashCode = ComputeHashCode();
-        Cache[matchGroup.Value] = this;
+        GlobalCache[matchGroup.Value] = this;
     }
 
     // -----------------------------------------------------------------------------------------------------------------

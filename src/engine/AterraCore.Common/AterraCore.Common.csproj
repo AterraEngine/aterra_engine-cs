@@ -33,8 +33,4 @@
         <ProjectReference Include="..\..\lib\Xml\Xml.csproj"/>
     </ItemGroup>
 
-    <ItemGroup>
-        <Folder Include="Types\ConfigMancer\"/>
-    </ItemGroup>
-
 </Project>

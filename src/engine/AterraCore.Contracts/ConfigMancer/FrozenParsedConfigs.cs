@@ -3,19 +3,19 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using JetBrains.Annotations;
 using System.Collections.Frozen;
-using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 
 namespace AterraCore.Contracts.ConfigMancer;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public readonly struct FrozenParsedConfigs(IEnumerable<KeyValuePair<Type, object>> parsedConfig) : IParsedConfigs {
+public readonly struct FrozenParsedConfigs(IEnumerable<KeyValuePair<Type, IConfigMancerElement>> parsedConfig) : IParsedConfigs {
     // Expands the original dictionary to include their interfaces as well.
-    private readonly FrozenDictionary<Type, object> _parsedConfig = parsedConfig
-        .SelectMany(pair => pair.Key.GetInterfaces()
+    private readonly FrozenDictionary<Type, IConfigMancerElement> _parsedConfig = parsedConfig
+        .SelectMany(
+            pair => pair.Key.GetInterfaces()
                 .Where(t => typeof(IConfigMancerElement).IsAssignableFrom(t) && t != typeof(IConfigMancerElement))
-                .Select(t => new KeyValuePair<Type, object>(t, pair.Value))
+                .Select(t => new KeyValuePair<Type, IConfigMancerElement>(t, pair.Value))
                 .Append(pair)// Don't forget to include the original pair as well
         )
         .ToFrozenDictionary();
@@ -25,21 +25,21 @@ public readonly struct FrozenParsedConfigs(IEnumerable<KeyValuePair<Type, object
     // -----------------------------------------------------------------------------------------------------------------
     // Constructors
     // -----------------------------------------------------------------------------------------------------------------
-    [UsedImplicitly] public FrozenParsedConfigs() : this(new Dictionary<Type, object>()) {}
+    [UsedImplicitly] public FrozenParsedConfigs() : this(new Dictionary<Type, IConfigMancerElement>()) {}
     public static FrozenParsedConfigs Empty => new();
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public bool TryGetConfig<T>([NotNullWhen(true)] out T? value) where T : class {
-        value = null;
+    public bool TryGetConfig<T>([NotNullWhen(true)] out T? value) where T : IConfigMancerElement {
+        value = default;
         Type type = typeof(T);
 
-        if (!_parsedConfig.TryGetValue(type, out object? obj) || obj is not T casted) return false;
+        if (!_parsedConfig.TryGetValue(type, out IConfigMancerElement? obj) || obj is not T casted) return false;
 
         value = casted;
         return true;
     }
-    public IReadOnlyDictionary<Type, object> AsReadOnlyDictionary() => _parsedConfig.AsReadOnly();
+    public IReadOnlyDictionary<Type, IConfigMancerElement> AsReadOnlyDictionary() => _parsedConfig.AsReadOnly();
 
 }

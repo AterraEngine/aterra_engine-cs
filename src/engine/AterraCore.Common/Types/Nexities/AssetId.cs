@@ -19,7 +19,7 @@ public readonly struct AssetId : IEqualityOperators<AssetId, AssetId, bool>, IEq
     public readonly NameSpace NameSpace;
     private readonly int _hashCode;
     private readonly ReadOnlyMemory<char> _assetIdCache;
-    private static readonly ConcurrentDictionary<string, (PluginId pluginId, NameSpace assetName, ReadOnlyMemory<char> cache)> Cache = new();
+    private static readonly ConcurrentDictionary<string, (PluginId pluginId, NameSpace assetName, ReadOnlyMemory<char> cache)> GlobalCache = new();
 
     // -----------------------------------------------------------------------------------------------------------------
     // Constructors
@@ -36,7 +36,7 @@ public readonly struct AssetId : IEqualityOperators<AssetId, AssetId, bool>, IEq
     }
 
     public AssetId(string assetId) {
-        (PluginId pluginId, NameSpace assetName, ReadOnlyMemory<char> cache) = Cache.GetOrAdd(assetId, valueFactory: id => {
+        (PluginId pluginId, NameSpace assetName, ReadOnlyMemory<char> cache) = GlobalCache.GetOrAdd(assetId, valueFactory: id => {
             (PluginId pluginId, NameSpace assetName) = ParseAssetId(id);
             return (pluginId, assetName, GetAsMemory(pluginId, assetName));
         });
@@ -75,7 +75,7 @@ public readonly struct AssetId : IEqualityOperators<AssetId, AssetId, bool>, IEq
 
     private static (PluginId, NameSpace, ReadOnlyMemory<char> cache) GetOrAddCache(PluginId pluginId, NameSpace assetName) {
         string key = pluginId.Value + ':' + string.Join('/', assetName);
-        return Cache.GetOrAdd(key, valueFactory: _ => (pluginId, assetName, GetAsMemory(pluginId, assetName)));
+        return GlobalCache.GetOrAdd(key, valueFactory: _ => (pluginId, assetName, GetAsMemory(pluginId, assetName)));
     }
 
     private static ReadOnlyMemory<char> GetAsMemory(PluginId pluginId, NameSpace assetName) {
