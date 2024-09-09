@@ -29,7 +29,7 @@ public readonly struct PluginId :
     // -----------------------------------------------------------------------------------------------------------------
     public PluginId(string value) {
         if (!Cache.TryGetValue(value, out PluginId existing)) {
-            Match match = RegexLib.AssetPartial.Match(value);
+            Match match = RegexLib.PluginId.Match(value);
             if (!match.Success) throw new ArgumentException("Invalid Plugin Id format.");
 
             Value = match.Groups[1].Value;
@@ -58,7 +58,7 @@ public readonly struct PluginId :
     // Helper Methods
     // -----------------------------------------------------------------------------------------------------------------
     public static bool TryCreateNew(string value, [NotNullWhen(true)] out PluginId? output) {
-        Match match = RegexLib.AssetPartial.Match(value);
+        Match match = RegexLib.PluginId.Match(value);
         if (!match.Success) {
             output = null;
             return false;

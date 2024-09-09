@@ -15,7 +15,7 @@ public class SystemAttributeTest {
     [System("test:asset", CoreTags.System, ServiceLifetime.Scoped, typeof(ISampleInterface))]
     private class ClassWithSystemAttribute : ISampleInterface;
 
-    [System<ISampleInterface>("test:generic.asset", CoreTags.Singleton, ServiceLifetime.Singleton)]
+    [System<ISampleInterface>("test:generic/asset", CoreTags.Singleton, ServiceLifetime.Singleton)]
     private class ClassWithGenericSystemAttribute : ISampleInterface;
 
     private interface ISampleInterface;
@@ -24,7 +24,7 @@ public class SystemAttributeTest {
 
     [Fact]
     public void SystemAttribute_ShouldInitializeCorrectly() {
-        const string assetId = "test:sample.asset";
+        const string assetId = "test:sample/asset";
         const CoreTags coreTags = CoreTags.Singleton | CoreTags.System;
         const ServiceLifetime lifetime = ServiceLifetime.Singleton;
         Type[] interfaceTypes = [typeof(ISampleInterface)];
@@ -39,7 +39,7 @@ public class SystemAttributeTest {
 
     [Fact]
     public void SystemAttribute_Generic_ShouldInitializeCorrectly() {
-        const string assetId = "test:sample.generic";
+        const string assetId = "test:sample/generic";
         const CoreTags coreTags = CoreTags.System;
         const ServiceLifetime lifetime = ServiceLifetime.Scoped;
 
@@ -53,7 +53,7 @@ public class SystemAttributeTest {
 
     [Fact]
     public void SystemAttribute_Generic_MultipleInterfaces_ShouldInitializeCorrectly() {
-        const string assetId = "test:sample.multiple";
+        const string assetId = "test:sample/multiple";
         const CoreTags coreTags = CoreTags.Singleton | CoreTags.System;
         const ServiceLifetime lifetime = ServiceLifetime.Transient;
 
@@ -84,7 +84,7 @@ public class SystemAttributeTest {
         var attribute = (SystemAttribute)type.GetCustomAttribute(typeof(SystemAttribute))!;
 
         Assert.NotNull(attribute);
-        Assert.Equal(new AssetId("test:generic.asset"), attribute.AssetId);
+        Assert.Equal(new AssetId("test:generic/asset"), attribute.AssetId);
         Assert.True(attribute.CoreTags.HasFlag(CoreTags.Singleton));
         Assert.Equal(ServiceLifetime.Singleton, attribute.Lifetime);
         Assert.Equal([typeof(ISampleInterface)], attribute.InterfaceTypes);

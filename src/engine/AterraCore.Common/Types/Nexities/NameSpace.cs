@@ -29,10 +29,10 @@ public readonly struct NameSpace :
     // -----------------------------------------------------------------------------------------------------------------
     public NameSpace(string value) {
         if (!GlobalCache.TryGetValue(value, out NameSpace existing)) {
-            Match match = RegexLib.AssetPartial.Match(value);
+            Match match = RegexLib.Namespaces.Match(value);
             if (!match.Success) throw new ArgumentException("Invalid Asset Name format.");
 
-            Values = match.Groups[1].Value.Split(['.', '/', '\\'], StringSplitOptions.RemoveEmptyEntries);
+            Values = match.Groups[1].Value.Split('/', StringSplitOptions.RemoveEmptyEntries);
             _valueMemory = GetAsMemory(Values);
             _hashCode = ComputeHashCode();
             GlobalCache[value] = this;
@@ -46,7 +46,7 @@ public readonly struct NameSpace :
 
     public NameSpace(IEnumerable<string> values) {
         string[] valueArray = values.ToArray();
-        if (!valueArray.All(value => RegexLib.AssetPartial.IsMatch(value)))
+        if (!valueArray.All(value => RegexLib.Namespaces.IsMatch(value)))
             throw new ArgumentException("Invalid Asset Name format.");
 
         string joined = string.Join('/', valueArray);
@@ -65,7 +65,7 @@ public readonly struct NameSpace :
 
     // Only supposed to be used by AssetId
     internal NameSpace(Group matchGroup) {
-        Values = matchGroup.Value.Split(['.', '/', '\\'], StringSplitOptions.RemoveEmptyEntries);
+        Values = matchGroup.Value.Split('/', StringSplitOptions.RemoveEmptyEntries);
         _valueMemory = GetAsMemory(Values);
         _hashCode = ComputeHashCode();
         GlobalCache[matchGroup.Value] = this;
@@ -81,7 +81,7 @@ public readonly struct NameSpace :
     // Helper Methods
     // -----------------------------------------------------------------------------------------------------------------
     public static bool TryCreateNew(string value, [NotNullWhen(true)] out NameSpace? output) {
-        Match match = RegexLib.AssetPartial.Match(value);
+        Match match = RegexLib.Namespaces.Match(value);
         if (!match.Success) {
             output = null;
             return false;

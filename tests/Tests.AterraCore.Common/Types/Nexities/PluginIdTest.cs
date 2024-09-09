@@ -11,8 +11,6 @@ public class PluginIdTest {
     [InlineData("plugin1")]
     [InlineData("plugin_name")]
     [InlineData("plugin-name")]
-    [InlineData("plugin1/plugin2")]
-    [InlineData("plugin.name")]
     public void TryCreateNew_ValidString_ReturnsTrue(string value) {
         bool result = PluginId.TryCreateNew(value, out PluginId? pluginId);
 
@@ -32,6 +30,8 @@ public class PluginIdTest {
     [InlineData("plugin1_")]
     [InlineData("plugin1-")]
     [InlineData("/plugin2")]
+    [InlineData("plugin.name")]
+    [InlineData("plugin1/plugin2")]
     public void TryCreateNew_InvalidString_ReturnsFalse(string value) {
         bool result = PluginId.TryCreateNew(value, out PluginId? pluginId);
 

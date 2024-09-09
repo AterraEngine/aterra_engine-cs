@@ -38,7 +38,7 @@ public class NameSpaceTests {
 
     [Theory]
     [InlineData("ns1/ns2", "ns1", "ns2")]
-    [InlineData("ns1.ns2", "ns1", "ns2")]
+    [InlineData("ns1/ns2/ns3", "ns1", "ns2", "ns3")]
     public void Constructor_WithString_InitializesCorrectly(string value, params string[] expectedValues) {
         // Act
         var assetName = new NameSpace(value);
@@ -70,8 +70,10 @@ public class NameSpaceTests {
 
     [Theory]
     [InlineData("ns1/ns2", "ns1/ns2", true)]
-    [InlineData("ns1.ns2", "ns1/ns2", true)]
+    [InlineData("ns1-ns2", "ns1/ns2", false)]
     [InlineData("ns1/ns2", "ns3/ns4", false)]
+    [InlineData("ns1-A/ns2", "ns1-a/ns2", true)]
+    [InlineData("alpha", "ALPHA", true)]
     public void EqualityOperators_ShouldWorkCorrectly(string value1, string value2, bool areEqual) {
         // Arrange
         var assetName1 = new NameSpace(value1);
@@ -95,7 +97,7 @@ public class NameSpaceTests {
 
     [Theory]
     [InlineData("ns1/ns2")]
-    [InlineData("ns1.ns2")]
+    [InlineData("ns1-ns2")]
     public void GetHashCode_ShouldBeConsistent(string value) {
         // Arrange
         var assetName1 = new NameSpace(value);
@@ -112,6 +114,7 @@ public class NameSpaceTests {
     [Theory]
     [InlineData(new[] { "ns1", "ns2" }, "ns1/ns2")]
     [InlineData(new[] { "ns1", "ns2", "ns3" }, "ns1/ns2/ns3")]
+    [InlineData(new[] { "ns1-alpha", "ns2", "ns3" }, "ns1-alpha/ns2/ns3")]
     public void ToString_ShouldReturnCorrectFormat(string[] values, string expectedString) {
         // Arrange
         var assetName = new NameSpace(values);

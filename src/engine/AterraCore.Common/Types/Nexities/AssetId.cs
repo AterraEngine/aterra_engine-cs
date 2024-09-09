@@ -56,11 +56,9 @@ public readonly struct AssetId : IEqualityOperators<AssetId, AssetId, bool>, IEq
     // Helper Methods
     // -----------------------------------------------------------------------------------------------------------------
     public static bool TryCreateNew(string assetId, [NotNullWhen(true)] out AssetId? output) {
+        output = null;
         Match match = RegexLib.AssetId.Match(assetId);
-        if (!match.Success) {
-            output = null;
-            return false;
-        }
+        if (!match.Success) return false;
 
         output = new AssetId(new PluginId(match.Groups[1]), new NameSpace(match.Groups[2]));
         return true;

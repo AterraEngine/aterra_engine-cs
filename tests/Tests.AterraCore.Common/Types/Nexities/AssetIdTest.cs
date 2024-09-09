@@ -16,8 +16,6 @@ public class AssetIdTest {
     [InlineData("PLUGIN_NAME:FOLDER/ITEM", "PLUGIN_NAME", new[] { "FOLDER", "ITEM" })]
     [InlineData("PLUGIN_NAME:FOLDER_ANOTHER/ITEM", "PLUGIN_NAME", new[] { "FOLDER_ANOTHER", "ITEM" })]
     [InlineData("PLUGINNAME:FOLDER_ANOTHER/ITEM", "PLUGINNAME", new[] { "FOLDER_ANOTHER", "ITEM" })]
-    [InlineData("PLUGINNAME:FOLDER_ANOTHER.ITEM", "PLUGINNAME", new[] { "FOLDER_ANOTHER", "ITEM" })]
-    [InlineData("PluginName:Folder.Item", "PluginName", new[] { "Folder", "Item" })]
     public void AssetIdCreationTest(string fullAssetId, string pluginName, string[] namespaces) {
         var assetIdRegex = new AssetId(fullAssetId);
         Assert.Equal(pluginName, assetIdRegex.PluginId.Value);
@@ -33,8 +31,6 @@ public class AssetIdTest {
     [InlineData("PLUGIN_NAME", "FOLDER/ITEM", "PLUGIN_NAME", new[] { "FOLDER", "ITEM" })]
     [InlineData("PLUGIN_NAME", "FOLDER_ANOTHER/ITEM", "PLUGIN_NAME", new[] { "FOLDER_ANOTHER", "ITEM" })]
     [InlineData("PLUGINNAME", "FOLDER_ANOTHER/ITEM", "PLUGINNAME", new[] { "FOLDER_ANOTHER", "ITEM" })]
-    [InlineData("PLUGINNAME", "FOLDER_ANOTHER.ITEM", "PLUGINNAME", new[] { "FOLDER_ANOTHER", "ITEM" })]
-    [InlineData("PluginName", "Folder.Item", "PluginName", new[] { "Folder", "Item" })]
     public void AssetIdThoughFullStringsCreationTest(string pluginId, string assetName, string pluginName, string[] namespaces) {
         var assetIdRegex = new AssetId(pluginId, assetName);
         Assert.Equal(pluginName, assetIdRegex.PluginId.Value);
@@ -66,6 +62,8 @@ public class AssetIdTest {
     [InlineData("pluginName/folder/")]
     [InlineData("pluginName_:alpha")]
     [InlineData("pluginName-:alpha")]
+    [InlineData("PluginName:Folder.Item")]
+    [InlineData("PLUGINNAME:FOLDER_ANOTHER.ITEM")]
     public void AssetIdCreateThrowsTest(string input) {
         Assert.Throws<ArgumentException>(() => new AssetId(input));
     }
@@ -78,6 +76,9 @@ public class AssetIdTest {
     [InlineData("pluginName/folder/")]
     [InlineData("pluginName_:alpha")]
     [InlineData("pluginName-:alpha")]
+    [InlineData("PluginName:Folder.Item")]
+    [InlineData(@"pluginName:folder\")]
+    [InlineData(@"pluginName\folder\")]
     public void AssetIdCreateFailsTest(string input) {
         Assert.False(AssetId.TryCreateNew(input, out AssetId? output));
         Assert.Null(output);
