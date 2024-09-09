@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Attributes;
 using AterraCore.Common.Types;
 using AterraCore.Contracts.Nexities.Entities.QuickHands;
 using AterraCore.Contracts.OmniVault.Assets;
@@ -12,6 +13,7 @@ namespace AterraCore.OmniVault.World.EntityTree;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
+[Singleton<IEntityTreeFactory>]
 public class EntityTreeFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreePools entityTreePools) : IEntityTreeFactory {
     public IEntityNodeTree CreateFromRootId(Ulid rootInstanceId) => new EntityNodeTree(PopulateNodes(rootInstanceId), entityTreePools);
     public IEntityNodeTree CreateEmpty() => new EntityNodeTree(new EntityNode(), entityTreePools);

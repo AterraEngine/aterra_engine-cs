@@ -14,13 +14,13 @@ namespace AterraCore.OmniVault.Assets;
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
 public class AssetAtlas(IServiceProvider provider) : IAssetAtlas {
-    public FrozenDictionary<AssetId, AssetRegistration> AssetsById {get; internal init;} = null!;
-    public FrozenDictionary<Type, AssetId> AssetsByType {get; internal init;} = null!;
-    public FrozenDictionary<CoreTags, FrozenSet<AssetId>> CoreTaggedAssets {get; internal init;} = null!;
-    public FrozenDictionary<string, FrozenSet<AssetId>> StringTaggedAssets {get; internal init;} = null!;
+    public FrozenDictionary<AssetId, AssetRegistration> AssetsById { get; internal init; } = null!;
+    public FrozenDictionary<Type, AssetId> AssetsByType { get; internal init; } = null!;
+    public FrozenDictionary<CoreTags, FrozenSet<AssetId>> CoreTaggedAssets { get; internal init; } = null!;
+    public FrozenDictionary<string, FrozenSet<AssetId>> StringTaggedAssets { get; internal init; } = null!;
 
     public int TotalCount => AssetsById.Count;
-    
+
     // ------------------------------------------------------------------------------------------------------------- ----
     // Methods
     // -----------------------------------------------------------------------------------------------------------------

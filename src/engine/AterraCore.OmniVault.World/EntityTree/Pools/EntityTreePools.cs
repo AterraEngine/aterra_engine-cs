@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Attributes;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World.EntityTree;
 using JetBrains.Annotations;
@@ -11,6 +12,7 @@ namespace AterraCore.OmniVault.World.EntityTree.Pools;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
+[Singleton<IEntityTreePools>]
 public class EntityTreePools : IEntityTreePools {
     private const int InitialCapacity = 1024;
     private readonly DefaultObjectPoolProvider _objectPoolProvider = new();

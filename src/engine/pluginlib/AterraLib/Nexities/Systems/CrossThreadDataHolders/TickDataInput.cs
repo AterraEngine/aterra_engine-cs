@@ -29,9 +29,9 @@ public class TickDataInput : ITickDataInput {
     }
 
     public bool IsEmpty => KeyboardKeyPressed.IsEmpty
-                           && KeyboardKeyPressedRepeated.IsEmpty
-                           && KeyboardKeyReleased.IsEmpty
-                           && KeyboardKeyDown.IsEmpty
-                           && MouseButtonDown.IsEmpty
-                           && MouseWheelMovement.IsEmpty;
+        && KeyboardKeyPressedRepeated.IsEmpty
+        && KeyboardKeyReleased.IsEmpty
+        && KeyboardKeyDown.IsEmpty
+        && MouseButtonDown.IsEmpty
+        && MouseWheelMovement.IsEmpty;
 }

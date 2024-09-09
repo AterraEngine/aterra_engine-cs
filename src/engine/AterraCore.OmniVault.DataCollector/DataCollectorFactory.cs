@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Attributes;
 using AterraCore.Contracts.OmniVault.DataCollector;
 using AterraCore.Contracts.Threading.Logic;
 using JetBrains.Annotations;
@@ -10,6 +11,7 @@ namespace AterraCore.OmniVault.DataCollector;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
+[Singleton<IDataCollectorFactory>]
 public class DataCollectorFactory(ILogicEventManager logicEventManager) : IDataCollectorFactory {
     public IDataCollector Create() {
         var dataCollector = new DataCollector();

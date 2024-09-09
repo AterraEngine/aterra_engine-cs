@@ -21,7 +21,7 @@ public readonly struct FrozenParsedConfigs(IEnumerable<KeyValuePair<Type, object
         .ToFrozenDictionary();
 
     public int Count => _parsedConfig.Count;
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Constructors
     // -----------------------------------------------------------------------------------------------------------------

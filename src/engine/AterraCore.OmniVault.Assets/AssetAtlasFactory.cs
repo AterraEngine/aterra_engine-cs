@@ -15,13 +15,12 @@ using System.Collections.Concurrent;
 using System.Collections.Frozen;
 
 namespace AterraCore.OmniVault.Assets;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [Singleton<IAssetAtlasFactory>]
 [UsedImplicitly]
-public class AssetAtlasFactory(IServiceProvider provider, IPluginAtlas pluginAtlas) : IAssetAtlasFactory  {
+public class AssetAtlasFactory(IServiceProvider provider, IPluginAtlas pluginAtlas) : IAssetAtlasFactory {
     private readonly ILogger _logger = EngineServices.GetLogger();
 
     private readonly ConcurrentDictionary<AssetId, AssetRegistration> _assetsById = new();
@@ -46,7 +45,7 @@ public class AssetAtlasFactory(IServiceProvider provider, IPluginAtlas pluginAtl
                 elementSelector: pair => pair.Value.ToFrozenSet()
             ),
             StringTaggedAssets = _stringTaggedAssets.ToFrozenDictionary(
-                keySelector: pair => pair.Key, 
+                keySelector: pair => pair.Key,
                 elementSelector: pair => pair.Value.ToFrozenSet()
             )
         };
@@ -56,7 +55,7 @@ public class AssetAtlasFactory(IServiceProvider provider, IPluginAtlas pluginAtl
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     private void AssembleAssetsById() {
-        Parallel.ForEach(pluginAtlas.GetAssetRegistrations(), registration => {
+        Parallel.ForEach(pluginAtlas.GetAssetRegistrations(), body: registration => {
             if (!_assetsById.TryAdd(registration.AssetId, registration)) {
                 _logger.Warning(
                     "Asset with ID: {AssetId} already exists with type {ExistingAssetType}. Cannot assign a new asset with the same ID.",
@@ -80,10 +79,10 @@ public class AssetAtlasFactory(IServiceProvider provider, IPluginAtlas pluginAtl
         });
     }
     private void AssembleAssetsByType() {
-        Parallel.ForEach(pluginAtlas.GetAssetRegistrations(), registration => {
+        Parallel.ForEach(pluginAtlas.GetAssetRegistrations(), body: registration => {
             if (!_assetsByType.TryAdd(registration.Type, registration.AssetId)) {
                 // The reason for this, is the class type is hard linked to an AssetId
-               _logger.Warning(
+                _logger.Warning(
                     "Asset with ID: {AssetId} Cannot assign a new asset because it's {Type} is already assigned to another asset.",
                     registration.AssetId, registration.Type.FullName
                 );
@@ -96,7 +95,7 @@ public class AssetAtlasFactory(IServiceProvider provider, IPluginAtlas pluginAtl
                     _logger.Information("Asset {AssetId} linked to the interface of {Type}", registration.AssetId, interfaceType.FullName);
                     continue;
                 }
-                
+
                 if (!_assetsById.TryGetValue(oldAssetId, out AssetRegistration oldRegistration)) continue;
                 if (pluginAtlas.IsLoadedAfter(oldRegistration.AssetId.PluginId, registration.AssetId.PluginId)) continue;
                 _assetsByType.TryUpdate(interfaceType, registration.AssetId, oldAssetId);
@@ -104,18 +103,18 @@ public class AssetAtlasFactory(IServiceProvider provider, IPluginAtlas pluginAtl
         });
     }
     private void AssembleCoreTaggedAssets() {
-        Parallel.ForEach(pluginAtlas.GetAssetRegistrations(), registration => {
+        Parallel.ForEach(pluginAtlas.GetAssetRegistrations(), body: registration => {
             // After Everything is said and done with the assigning, start assigning the Core tags and string tags
             foreach (CoreTags tag in Enum.GetValuesAsUnderlyingType<CoreTags>()) {
                 if (!registration.CoreTags.HasFlag(tag)) continue;
-                if ( _coreTaggedAssets.TryAdd(tag, [registration.AssetId])) continue;
+                if (_coreTaggedAssets.TryAdd(tag, [registration.AssetId])) continue;
                 if (!_coreTaggedAssets.TryGetValue(tag, out ConcurrentBag<AssetId>? assets)) continue;
                 assets.Add(registration.AssetId);
             }
         });
     }
     private void AssembleStringTaggedAssets() {
-        Parallel.ForEach(pluginAtlas.GetAssetRegistrations(), registration => {
+        Parallel.ForEach(pluginAtlas.GetAssetRegistrations(), body: registration => {
             foreach (string stringTag in registration.StringTags) {
                 if (_stringTaggedAssets.TryAdd(stringTag, [registration.AssetId])) continue;
                 if (!_stringTaggedAssets.TryGetValue(stringTag, out ConcurrentBag<AssetId>? assets)) continue;

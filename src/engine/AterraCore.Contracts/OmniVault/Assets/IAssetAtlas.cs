@@ -11,11 +11,11 @@ namespace AterraCore.Contracts.OmniVault.Assets;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IAssetAtlas {
-    FrozenDictionary<AssetId, AssetRegistration> AssetsById {get;}
-    FrozenDictionary<Type, AssetId> AssetsByType {get;}
-    FrozenDictionary<CoreTags, FrozenSet<AssetId>> CoreTaggedAssets {get;}
-    FrozenDictionary<string, FrozenSet<AssetId>> StringTaggedAssets {get;}
-    
+    FrozenDictionary<AssetId, AssetRegistration> AssetsById { get; }
+    FrozenDictionary<Type, AssetId> AssetsByType { get; }
+    FrozenDictionary<CoreTags, FrozenSet<AssetId>> CoreTaggedAssets { get; }
+    FrozenDictionary<string, FrozenSet<AssetId>> StringTaggedAssets { get; }
+
     int TotalCount { get; }
 
     // -----------------------------------------------------------------------------------------------------------------

@@ -45,7 +45,7 @@ public class RenderThreadProcessor(
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     private bool WhileCondition => !Raylib.WindowShouldClose()
-                                   || CancellationToken.IsCancellationRequested;
+        || CancellationToken.IsCancellationRequested;
     public void Run() {
         RegisterEvents();
         mainWindow.Init();

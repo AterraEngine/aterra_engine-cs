@@ -95,7 +95,7 @@ public class AssetInstanceFactory(ILogger logger, IPluginAtlas pluginAtlas) : IA
     private static bool IsBasicNexitiesAsset(ParameterInfo parameter) {
         Type paramType = parameter.ParameterType;
         return typeof(IAssetInstance).IsAssignableFrom(paramType)
-               && !parameter.GetCustomAttributes<InjectAsAttribute>().Any()
+            && !parameter.GetCustomAttributes<InjectAsAttribute>().Any()
             ;
     }
     private static object CreateBasicNexitiesAsset(ParameterInfo parameter) {
@@ -108,7 +108,7 @@ public class AssetInstanceFactory(ILogger logger, IPluginAtlas pluginAtlas) : IA
     private static bool IsInjectedInstanceNexitiesAsset(ParameterInfo parameter) {
         Type paramType = parameter.ParameterType;
         return typeof(IAssetInstance).IsAssignableFrom(paramType)
-               && parameter.GetCustomAttributes<InjectAsAttribute>().Any()
+            && parameter.GetCustomAttributes<InjectAsAttribute>().Any()
             ;
     }
     private static object CreateInjectedInstanceNexitiesAsset(ParameterInfo parameter) {

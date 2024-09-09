@@ -18,12 +18,12 @@ public abstract class NexitiesSystemWithParents<TParent, TChild> : AssetInstance
     where TChild : class, IAssetInstance {
     protected bool BufferPopulated;
     protected (TParent? Parent, TChild Child)[] EntitiesBuffer = [];
-    
+
     #region Reusable Pool
     private readonly DefaultObjectPoolProvider _objectPoolProvider = new();
     private ObjectPool<List<(TParent? Parent, TChild Child)>>? _parentChildPool;
     protected ObjectPool<List<(TParent? Parent, TChild Child)>> ParentChildPool =>
-        _parentChildPool ??= _objectPoolProvider.Create(new ComponentsByIdPoolPolicy(1024*64));
+        _parentChildPool ??= _objectPoolProvider.Create(new ComponentsByIdPoolPolicy(1024 * 64));
 
     private class ComponentsByIdPoolPolicy(int capacity) : PooledObjectPolicy<List<(TParent? Parent, TChild Child)>> {
         public override List<(TParent? Parent, TChild Child)> Create() => new(capacity);
@@ -59,7 +59,7 @@ public abstract class NexitiesSystemWithParents<TParent, TChild> : AssetInstance
         BufferPopulated = true;
         list.TrimExcess();
         EntitiesBuffer = list.ToArray();
-        
+
         ParentChildPool.Return(list);
         return EntitiesBuffer;
     }

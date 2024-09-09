@@ -50,8 +50,8 @@ public class PlayerController(ICrossThreadTickData crossThreadTickData) : Nexiti
         Vector2[] mouseWheelMovements = playerInputTickData.MouseWheelMovement.ToArray();
         for (int i = mouseWheelMovements.Length - 1; i >= 0; i--) {
             switch (mouseWheelMovements[i]) {
-                case { X: 0f, Y: 0f } : break;
-                
+                case { X: 0f, Y: 0f }: break;
+
                 case { X: var scaleX, Y: 0f }: {
                     scale.Y = 1 + 0.1f * MathF.Sign(scaleX);
                     scale.X = 1 + 0.1f * MathF.Sign(scaleX);

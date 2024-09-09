@@ -13,7 +13,6 @@ using System.Collections.Frozen;
 using System.Collections.Immutable;
 
 namespace AterraCore.FlexiPlug;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -27,7 +26,7 @@ public class PluginAtlasFactory(IServiceProvider provider, IBootComponents bootC
     public IPluginAtlas GetAtlas() {
         LinkedList<IPluginRecord> plugins = new();
         HashSet<PluginId> pluginIds = [];
-        
+
         foreach (IPluginBootDto dto in bootComponents.ValidPlugins) {
             plugins.AddLast(new PluginRecord {
                 PluginId = dto.PluginNameSpaceId,
@@ -39,7 +38,7 @@ public class PluginAtlasFactory(IServiceProvider provider, IBootComponents bootC
             });
             pluginIds.Add(dto.PluginNameSpaceId);
         }
-        
+
         ImmutableArray<PluginId> pluginIdsByOrder = [..plugins.Select(record => record.PluginId)];
 
         var pluginAtlas = new PluginAtlas(provider) {
@@ -50,5 +49,5 @@ public class PluginAtlasFactory(IServiceProvider provider, IBootComponents bootC
 
         return pluginAtlas;
     }
-    
+
 }

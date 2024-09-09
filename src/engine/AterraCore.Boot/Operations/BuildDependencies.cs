@@ -4,7 +4,6 @@
 using AterraCore.Contracts.Boot.Operations;
 using AterraCore.DI;
 using AterraCore.Loggers;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace AterraCore.Boot.Operations;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -20,9 +19,8 @@ public class BuildDependencies : IBootOperation {
         Logger.Debug("Entered Build Service Provider");
 
         var builder = new EngineServiceBuilder(Logger, components.Services);
-        
+
         builder.AssignFromServiceDescriptors(components.ServiceDescriptors);
-        components.Services.AddSingleton(components);
 
         builder.FinishBuilding();
     }

@@ -27,7 +27,7 @@ public class MainWindow(IConfigAtlas configAtlas) : IMainWindow {
         );
 
         Raylib.InitWindow(
-            configAtlas.EngineConfigXml.Window.Width, 
+            configAtlas.EngineConfigXml.Window.Width,
             configAtlas.EngineConfigXml.Window.Height,
             configAtlas.EngineConfigXml.Window.Name
         );

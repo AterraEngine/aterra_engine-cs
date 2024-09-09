@@ -26,9 +26,9 @@ public class PluginAtlas(IServiceProvider provider) : IPluginAtlas {
 
     private int? _totalAssetCountCache;
     public int TotalAssetCount => _totalAssetCountCache ??= Plugins.SelectMany(p => p.AssetTypes).Count();
-    
+
     private ImmutableDictionary<string, ZipArchive> _pluginZipArchive = ImmutableDictionary<string, ZipArchive>.Empty;
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -83,12 +83,12 @@ public class PluginAtlas(IServiceProvider provider) : IPluginAtlas {
             _logger.Debug("plugin record did not exist {r}", pluginRecord);
             return false;
         }
-        
+
         if (!TryGetOrCreateZipArchive(filePath, out ZipArchive? zipArchive)) {
             _logger.Debug("zip archive did not exist {r}", filePath);
             return false;
         }
-        
+
         ZipArchiveEntry? fileEntry = zipArchive.GetEntry(internalFilePath);
         if (fileEntry is null) {
             _logger.Debug("Could not attain file Entry {r}", internalFilePath);
@@ -108,7 +108,7 @@ public class PluginAtlas(IServiceProvider provider) : IPluginAtlas {
         int r = PluginIdsByOrder.IndexOf(right);
         return l != -1 && r != -1 && l < r;
     }
-    
+
     public bool IsLoadedAfter(PluginId left, PluginId right) {
         int l = PluginIdsByOrder.IndexOf(left);
         int r = PluginIdsByOrder.IndexOf(right);
