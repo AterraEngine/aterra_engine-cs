@@ -36,7 +36,6 @@ public class BlobLevelSystemIds : SystemIds {
         AssetIdLib.AterraLib.SystemsRendering.Render2DPrepForActors,
         AssetIdLib.AterraLib.SystemsRendering.Render2D,
         AssetIdLib.AterraLib.SystemsRendering.RaylibKeyHandler,
-        AssetIdLib.AterraLib.SystemsRendering.Render2DEndOfFrame,
     ];
 
     protected override AssetId[] UiSystems { get; set; } = [

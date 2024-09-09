@@ -15,7 +15,7 @@ namespace AterraLib.Nexities.Systems.Rendering;
 // ---------------------------------------------------------------------------------------------------------------------
 [System(AssetIdStringLib.AterraLib.SystemsRendering.Render2DPrepForProps, CoreTags.RenderThread)]
 [UsedImplicitly]
-public class Render2DPrepForProps(IAssetInstanceAtlas instanceAtlas, ICrossThreadTickData crossThreadTickData, ITextureAtlas textureAtlas) : NexitiesSystemWithParentsReversed<IHasTransform2D, IProp2D> {
+public class Render2DPrepForProps(IAssetInstanceAtlas instanceAtlas, ICrossThreadTickData crossThreadTickData) : NexitiesSystemWithParentsReversed<IHasTransform2D, IProp2D> {
     // -----------------------------------------------------------------------------------------------------------------
     // Helper Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -53,14 +53,14 @@ public class Render2DPrepForProps(IAssetInstanceAtlas instanceAtlas, ICrossThrea
                 child.Sprite2D.UvSelection.Position,
                 child.Sprite2D.UvSelection.Size * size
             );
-            renderableDataDto.WritePropToRenderCache((
+            renderableDataDto.AddToRenderCache(zIndex,(
                 texture2D, 
                 sourceRect,
                 destRect,
                 combinedRotationOrigin,
                 combinedRotation,
                 child.Sprite2D.Shade
-            ), zIndex);
+            ));
         }
 
         renderableDataDto.PropsProcessed = true;

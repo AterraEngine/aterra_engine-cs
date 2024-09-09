@@ -31,9 +31,7 @@ public class Render2D(ICrossThreadTickData crossThreadTickData) : NexitiesSystem
     public override void Tick(ActiveLevel level) {
         if (!crossThreadTickData.TryGet(AssetTagLib.AterraLib.RenderableData, out RenderableData? renderableDataDto)) return;
 
-        ReadOnlySpan<RenderCacheTuple> renderCache = renderableDataDto.GetOrderedRenderCacheReversed();
-        for (int i = renderCache.Length - 1; i >= 0; i--) {
-            RenderCacheTuple tuple = renderCache[i];
+        foreach (RenderCacheTuple tuple in renderableDataDto.GetOrderedRenderCache()) {
             Raylib.DrawTexturePro(tuple.texture, tuple.source, tuple.dest, tuple.origin, tuple.rotation, tuple.tint);
         }
     }
