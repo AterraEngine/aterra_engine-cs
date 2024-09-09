@@ -5,6 +5,7 @@ using AterraCore.Attributes;
 using AterraCore.Common.Data;
 using AterraCore.Contracts.Nexities.Components;
 using AterraCore.Contracts.Nexities.Entities;
+using AterraCore.Contracts.Nexities.Entities.QuickHands;
 using AterraCore.Contracts.Nexities.Levels;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Nexities.Entities;
@@ -38,9 +39,9 @@ public class BarnsleyFernLevel(
         const int iterations = 1_000_000;
         var point = new Vector2(0, 0);
 
-        var entityPool = new ConcurrentStack<IActor2D>();
+        var entityPool = new ConcurrentStack<IHasTransform2D>();
         Parallel.For(0, iterations / 100, body: _ => {
-            if (!instanceAtlas.TryCreate(WorkfloorIdLib.Entities.DuckyPlatinum, out IActor2D? newDucky)) return;
+            if (!instanceAtlas.TryCreate(WorkfloorIdLib.Entities.PropDuckyPlatinum, out IHasTransform2D? newDucky)) throw new ApplicationException("Entity could not be created");
             entityPool.Push(newDucky);
         });
 
@@ -48,12 +49,12 @@ public class BarnsleyFernLevel(
             point = ApplyBarnsleyFernTransform(point);
 
             if (i % 100 != 0) continue;
-            if (!entityPool.TryPop(out IActor2D? entity) || !instanceAtlas.TryCreate(WorkfloorIdLib.Entities.DuckyPlatinum, out entity)) return;
+            if (!entityPool.TryPop(out IHasTransform2D? entity) || !instanceAtlas.TryCreate(WorkfloorIdLib.Entities.PropDuckyPlatinum, out entity)) throw new ApplicationException("Entity could not be created");
             entity.Transform2D.Translation = new Vector2(point.X * 10f, point.Y * -10f);
             if (!ChildrenIDs.TryAdd(entity.InstanceId)) throw new ApplicationException("Entity could not be added");
         }
 
-        if (!instanceAtlas.TryCreate(AssetIdStringLib.AterraLib.Entities.Camera2D, out ICamera2D? camera2D)) return;
+        if (!instanceAtlas.TryCreate(AssetIdStringLib.AterraLib.Entities.Camera2D, out ICamera2D? camera2D)) throw new ApplicationException("Entity could not be created");
         camera2D.RaylibCamera2D.Camera = camera2D.RaylibCamera2D.Camera with {
             Target = new Vector2(0, -50),
             Offset = new Vector2(Raylib.GetScreenWidth() / 2f, Raylib.GetScreenHeight() / 2f),

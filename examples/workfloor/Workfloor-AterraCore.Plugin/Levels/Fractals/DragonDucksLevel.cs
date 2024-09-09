@@ -40,9 +40,9 @@ public class DragonDucksLevel(
         var startVector = new Vector2(-100, 0);
         var endVector = new Vector2(100, 0);
 
-        var entityPool = new ConcurrentStack<IActor2D>();
+        var entityPool = new ConcurrentStack<IProp2D>();
         Parallel.For(0, 100_000, body: _ => {
-            if (!instanceAtlas.TryCreate(WorkfloorIdLib.Entities.DuckyPlatinum, out IActor2D? newDucky)) return;
+            if (!instanceAtlas.TryCreate(WorkfloorIdLib.Entities.PropDuckyPlatinum, out IProp2D? newDucky)) return;
             entityPool.Push(newDucky);
         });
 
@@ -53,7 +53,7 @@ public class DragonDucksLevel(
             (Vector2 start, Vector2 end, int depth) = tuple;
 
             if (depth == 0) {
-                if (!entityPool.TryPop(out IActor2D? entity) || !instanceAtlas.TryCreate(WorkfloorIdLib.Entities.DuckyPlatinum, out entity)) continue;
+                if (!entityPool.TryPop(out IProp2D? entity) || !instanceAtlas.TryCreate(WorkfloorIdLib.Entities.PropDuckyPlatinum, out entity)) continue;
                 entity.Transform2D.Translation = (start + end) / 2;
                 if (!ChildrenIDs.TryAdd(entity.InstanceId)) throw new ApplicationException("Entity could not be added");
                 continue;
@@ -67,7 +67,7 @@ public class DragonDucksLevel(
             operationQueue.Enqueue((mid, end, depth - 1));
         }
 
-        if (!instanceAtlas.TryCreate(AssetIdStringLib.AterraLib.Entities.Camera2D, out ICamera2D? camera2D)) return;
+        if (!instanceAtlas.TryCreate(AssetIdStringLib.AterraLib.Entities.Camera2D, out ICamera2D? camera2D)) throw new ApplicationException("Entity could not be created");
         camera2D.RaylibCamera2D.Camera = camera2D.RaylibCamera2D.Camera with {
             Target = new Vector2(0, 0),
             Offset = new Vector2(Raylib.GetScreenWidth() / 2f, Raylib.GetScreenHeight() / 2f),

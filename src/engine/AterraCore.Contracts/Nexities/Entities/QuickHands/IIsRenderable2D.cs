@@ -1,15 +1,9 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Types.Nexities;
+namespace AterraCore.Contracts.Nexities.Entities.QuickHands;
 
-namespace AterraCore.Common.Data;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public static class AssetTagLib {
-    public static class AterraLib {
-        public static readonly AssetTag PlayerInputTickData = AssetTagStringLib.AterraLib.PlayerInputTickData;
-        public static readonly AssetTag RenderableData = AssetTagStringLib.AterraLib.RenderableData;
-    }
-}
+public interface IIsRenderable2D : INexitiesEntity, IHasTransform2D , IHasSprite2D , IHasDirectChildren;

@@ -5,6 +5,7 @@ using AterraCore.Attributes;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Components;
 using AterraCore.Contracts.Nexities.Entities;
+using AterraCore.Contracts.Nexities.Entities.QuickHands;
 using AterraCore.Contracts.Nexities.Levels;
 using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.Assets;
@@ -40,8 +41,8 @@ public class ActiveLevelFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreeFa
             ActiveEntityTree = entityTree,
             Camera2DEntity = camera2D,
             TextureAssetIds = entityTreeFlat
-                .Where(asset => asset is IActor2D)
-                .Select(asset => ((IActor2D)asset).Sprite2D.TextureAssetId)
+                .Where(asset => asset is IIsRenderable2D)
+                .Select(asset => ((IIsRenderable2D)asset).Sprite2D.TextureAssetId)
                 .Select(id => assetAtlas.TryGetRegistration(id, out AssetRegistration assetInstance) ? assetInstance.AssetId : id)
                 .Distinct()
                 .ToFrozenSet()

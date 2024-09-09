@@ -36,6 +36,7 @@ public static class AssetIdStringLib {
             public const string Hud = $"{ThisSection}:{ThisClass}/{nameof(Hud)}";
             public const string Player2D = $"{ThisSection}:{ThisClass}/{nameof(Player2D)}";
             public const string LevelRoot = $"{ThisSection}:{ThisClass}/{nameof(LevelRoot)}";
+            public const string Prop2D = $"{ThisSection}:{ThisClass}/{nameof(Prop2D)}";
         }
         #endregion
         #region Systems - Logic
@@ -53,6 +54,7 @@ public static class AssetIdStringLib {
             private const string ThisClass = nameof(SystemsRendering);
 
             public const string Render2D = $"{ThisSection}:{ThisClass}/{nameof(Render2D)}";
+            public const string Render2DPrep = $"{ThisSection}:{ThisClass}/{nameof(Render2DPrep)}";
             public const string RenderHud = $"{ThisSection}:{ThisClass}/{nameof(RenderHud)}";
             public const string RaylibKeyHandler = $"{ThisSection}:{ThisClass}/{nameof(RaylibKeyHandler)}";
         }

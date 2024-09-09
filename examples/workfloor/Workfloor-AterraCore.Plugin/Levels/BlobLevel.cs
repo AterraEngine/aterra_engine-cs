@@ -32,6 +32,7 @@ public class BlobLevelSystemIds : SystemIds {
     ];
 
     protected override AssetId[] RenderSystems { get; set; } = [
+        AssetIdStringLib.AterraLib.SystemsRendering.Render2DPrep,
         AssetIdStringLib.AterraLib.SystemsRendering.Render2D,
         AssetIdLib.AterraLib.SystemsRendering.RaylibKeyHandler
     ];
@@ -63,14 +64,15 @@ public class BlobLevel(
         int a = (int)(Math.Sqrt(entitiesPerLevel) / 2f);
         Parallel.For((long)-a, a, body: k => {
             Parallel.For((long)-a, a, body: j => {
-                if (!instanceAtlas.TryCreate(j % 2 == 0 ? WorkfloorIdLib.Entities.DuckyHype : WorkfloorIdLib.Entities.DuckyPlatinum, out IActor2D? newDucky)) return;
+                string entityId = j % 2 == 0 ? WorkfloorIdLib.Entities.ActorDuckyHype : WorkfloorIdLib.Entities.ActorDuckyPlatinum;
+                if (!instanceAtlas.TryCreate(entityId, out IActor2D? newDucky)) throw new ApplicationException("Entity could not be created");
                 newDucky.Transform2D.Translation = new Vector2(0, 0);
                 newDucky.Transform2D.Scale = Vector2.One;
                 if (!ChildrenIDs.TryAdd(newDucky.InstanceId)) throw new ApplicationException("Entity could not be added");
             });
         });
 
-        if (!instanceAtlas.TryCreate(AssetIdStringLib.AterraLib.Entities.Camera2D, out ICamera2D? camera2D)) return;
+        if (!instanceAtlas.TryCreate(AssetIdStringLib.AterraLib.Entities.Camera2D, out ICamera2D? camera2D)) throw new ApplicationException("Entity could not be created");
         camera2D.RaylibCamera2D.Camera = camera2D.RaylibCamera2D.Camera with {
             Target = new Vector2(0, 0),
             Offset = new Vector2(Raylib.GetScreenWidth() / 2f, Raylib.GetScreenHeight() / 2f),

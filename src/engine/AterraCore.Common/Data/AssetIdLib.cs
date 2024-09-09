@@ -33,6 +33,7 @@ public static class AssetIdLib {
             public static readonly AssetId Hud = AssetIdStringLib.AterraLib.Entities.Hud;
             public static readonly AssetId Player2D = AssetIdStringLib.AterraLib.Entities.Player2D;
             public static readonly AssetId LevelRoot = AssetIdStringLib.AterraLib.Entities.LevelRoot;
+            public static readonly AssetId Prop2D = AssetIdStringLib.AterraLib.Entities.Prop2D;
         }
         #endregion
         #region Systems - Logic
@@ -46,6 +47,7 @@ public static class AssetIdLib {
         #region Systems - Rendering
         public static class SystemsRendering {
             public static readonly AssetId Render2D = AssetIdStringLib.AterraLib.SystemsRendering.Render2D;
+            public static readonly AssetId Render2DPrep = AssetIdStringLib.AterraLib.SystemsRendering.Render2DPrep;
             public static readonly AssetId RenderHud = AssetIdStringLib.AterraLib.SystemsRendering.RenderHud;
             public static readonly AssetId RaylibKeyHandler = AssetIdStringLib.AterraLib.SystemsRendering.RaylibKeyHandler;
         }

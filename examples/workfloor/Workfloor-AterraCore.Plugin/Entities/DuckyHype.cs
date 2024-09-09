@@ -4,7 +4,6 @@
 using AterraCore.Attributes;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Components;
-using AterraCore.Contracts.Nexities.Entities;
 using AterraCore.Contracts.OmniVault.Textures;
 using AterraCore.OmniVault.Textures;
 using AterraLib.Nexities.Components;
@@ -21,8 +20,6 @@ public interface ITextureDuckyHype : ITexture2DAsset;
 
 public interface ISpriteDuckyHype : ISprite2D;
 
-public interface IDuckyHypeActor : IActor2D;
-
 [Texture(WorkfloorIdLib.Components.TextureDuckyHype)]
 [UsedImplicitly]
 public class TextureDuckyHype : AbstractTexture2DAsset, ITextureDuckyHype {
@@ -37,11 +34,19 @@ public class SpriteDuckyHype : Sprite2D, ISpriteDuckyHype {
     public override Rectangle UvSelection { get; set; } = new(0, 0, 1, 1);
 }
 
-[Entity(WorkfloorIdLib.Entities.DuckyHype)]
+[Entity(WorkfloorIdLib.Entities.PropDuckyHype)]
+[UsedImplicitly]
+public class DuckyHypeProp(
+    ITransform2D transform2D,
+    [InjectAs] SpriteDuckyHype sprite2D,
+    IDirectChildren childEntities
+) : Prop2D(transform2D, sprite2D, childEntities);
+
+[Entity(WorkfloorIdLib.Entities.ActorDuckyHype)]
 [UsedImplicitly]
 public class DuckyHypeActor(
     ITransform2D transform2D,
     [InjectAs] SpriteDuckyHype sprite2D,
     IDirectChildren childEntities,
     IImpulse2D impulse2D
-) : Actor2D(transform2D, sprite2D, childEntities, impulse2D), IDuckyHypeActor;
+) : Actor2D(transform2D, sprite2D, childEntities, impulse2D);

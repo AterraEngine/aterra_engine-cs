@@ -7,5 +7,4 @@ namespace AterraCore.Contracts.Nexities.Entities;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IActor2D : IIsRenderable2D,
-    IHasImpulse2D;
+public interface IProp2D : IIsRenderable2D;
