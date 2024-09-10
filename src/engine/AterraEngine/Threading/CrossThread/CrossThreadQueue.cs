@@ -8,7 +8,6 @@ using JetBrains.Annotations;
 using Serilog;
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
-using System.Numerics;
 
 namespace AterraEngine.Threading.CrossThread;
 // ---------------------------------------------------------------------------------------------------------------------

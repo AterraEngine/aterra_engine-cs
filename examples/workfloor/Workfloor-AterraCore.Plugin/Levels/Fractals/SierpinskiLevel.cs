@@ -47,8 +47,9 @@ public class SierpinskiLevel(
         while (operationQueue.TryDequeue(out (Vector2, Vector2, Vector2, uint) tuple)) {
             (Vector2 p1, Vector2 p2, Vector2 p3, uint depth) = tuple;
             if (depth == 0) {
-                if (!instanceAtlas.TryCreate(WorkfloorIdLib.Entities.DuckyPlatinum, out IActor2D? newDucky)) throw new ApplicationException("Entity could not be created");
-                newDucky.Transform2D.Translation = (p1 + p2 + p3) / 3;
+                if (!instanceAtlas.TryCreate(WorkfloorIdLib.Entities.PropDuckyPlatinum, out IProp2D? newDucky)) throw new ApplicationException("Entity could not be created");
+                Vector2 vector = (p1 + p2 + p3) / 3f;
+                newDucky.Transform2D.Translation = vector with {Y = -vector.Y} ;
                 if (!ChildrenIDs.TryAdd(newDucky.InstanceId)) throw new ApplicationException("Entity could not be added");
                 continue;
             }
@@ -62,7 +63,7 @@ public class SierpinskiLevel(
             operationQueue.Enqueue((mid31, mid23, p3, depth - 1));
         }
 
-        if (!instanceAtlas.TryCreate(AssetIdStringLib.AterraLib.Entities.Camera2D, out ICamera2D? camera2D)) return;
+        if (!instanceAtlas.TryCreate(AssetIdStringLib.AterraLib.Entities.Camera2D, out ICamera2D? camera2D)) throw new ApplicationException("Entity could not be created");
         camera2D.RaylibCamera2D.Camera = camera2D.RaylibCamera2D.Camera with {
             Target = new Vector2(0, 0),
             Offset = new Vector2(Raylib.GetScreenWidth() / 2f, Raylib.GetScreenHeight() / 2f),

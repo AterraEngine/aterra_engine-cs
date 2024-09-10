@@ -14,7 +14,6 @@ public readonly struct FrozenParsedConfigs(IEnumerable<KeyValuePair<Type, IConfi
     private readonly FrozenDictionary<Type, IConfigMancerElement> _parsedConfig = parsedConfig
         .SelectMany(
             pair => pair.Key.GetInterfaces()
-                .Where(t => typeof(IConfigMancerElement).IsAssignableFrom(t) && t != typeof(IConfigMancerElement))
                 .Select(t => new KeyValuePair<Type, IConfigMancerElement>(t, pair.Value))
                 .Append(pair)// Don't forget to include the original pair as well
         )

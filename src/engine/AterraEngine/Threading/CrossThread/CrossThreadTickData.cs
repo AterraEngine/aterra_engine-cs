@@ -4,7 +4,6 @@
 using AterraCore.Attributes;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Threading.CrossThread;
-using AterraCore.Contracts.Threading.Logic;
 using JetBrains.Annotations;
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
@@ -44,10 +43,21 @@ public class CrossThreadTickData : ICrossThreadTickData {
         tickDataHolder = null;
         return false;
     }
-
-    public void Clear() {
+    
+    public void ClearOnLogicTick() {
         foreach (ITickDataHolder holder in _tickDataHolders.Values) {
-            holder.Clear();
+            holder.ClearOnLogicTick();
+        }
+    }
+
+    public void ClearOnLevelChange() {
+        foreach (ITickDataHolder holder in _tickDataHolders.Values) {
+            holder.ClearOnLevelChange();
+        }
+    }
+    public void ClearOnRenderFrame() {
+        foreach (ITickDataHolder holder in _tickDataHolders.Values) {
+            holder.ClearOnRenderFrame();
         }
     }
 }

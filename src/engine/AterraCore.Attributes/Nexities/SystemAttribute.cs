@@ -16,7 +16,7 @@ public class SystemAttribute(
     params Type[] interfaceTypes
 ) : AssetAttribute(
     assetId,
-    coreTags | CoreTags.System,
+    coreTags,
     lifetime,
     interfaceTypes
 );

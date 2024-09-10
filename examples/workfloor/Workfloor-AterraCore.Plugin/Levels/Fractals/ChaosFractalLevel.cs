@@ -5,6 +5,7 @@ using AterraCore.Attributes;
 using AterraCore.Common.Data;
 using AterraCore.Contracts.Nexities.Components;
 using AterraCore.Contracts.Nexities.Entities;
+using AterraCore.Contracts.Nexities.Entities.QuickHands;
 using AterraCore.Contracts.Nexities.Levels;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Nexities.Entities;
@@ -47,7 +48,7 @@ public class ChaosFractalLevel(
         while (operationQueue.TryDequeue(out (Vector2, Vector2, Vector2, uint) tuple)) {
             (Vector2 p1, Vector2 p2, Vector2 p3, uint depth) = tuple;
             if (depth == 0) {
-                if (!instanceAtlas.TryCreate(WorkfloorIdLib.Entities.DuckyPlatinum, out IActor2D? newDucky)) return;
+                if (!instanceAtlas.TryCreate(WorkfloorIdLib.Entities.PropDuckyPlatinum, out IHasTransform2D? newDucky)) throw new ApplicationException("Entity could not be created");
                 newDucky.Transform2D.Translation = (p1 + p2 + p3) / 3;
                 if (!ChildrenIDs.TryAdd(newDucky.InstanceId)) throw new ApplicationException("Entity could not be added");
                 continue;
@@ -62,7 +63,7 @@ public class ChaosFractalLevel(
             operationQueue.Enqueue((mid31, mid23, p3, depth - 1));
         }
 
-        if (!instanceAtlas.TryCreate(AssetIdStringLib.AterraLib.Entities.Camera2D, out ICamera2D? camera2D)) return;
+        if (!instanceAtlas.TryCreate(AssetIdStringLib.AterraLib.Entities.Camera2D, out ICamera2D? camera2D)) throw new ApplicationException("Entity could not be created");
         camera2D.RaylibCamera2D.Camera = camera2D.RaylibCamera2D.Camera with {
             Target = new Vector2(0, 0),
             Offset = new Vector2(Raylib.GetScreenWidth() / 2f, Raylib.GetScreenHeight() / 2f),

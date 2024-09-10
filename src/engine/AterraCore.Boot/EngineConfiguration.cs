@@ -6,7 +6,6 @@ using AterraCore.Contracts;
 using AterraCore.Contracts.Boot.Operations;
 using AterraCore.DI;
 using AterraCore.Loggers;
-using CodeOfChaos.Extensions;
 using CodeOfChaos.Extensions.Serilog;
 
 namespace AterraCore.Boot;

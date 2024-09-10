@@ -8,7 +8,6 @@ using AterraCore.Loggers;
 using CodeOfChaos.Extensions;
 using CodeOfChaos.Extensions.Serilog;
 using JetBrains.Annotations;
-using System.Configuration;
 using Xml;
 
 namespace AterraCore.Boot.Operations;

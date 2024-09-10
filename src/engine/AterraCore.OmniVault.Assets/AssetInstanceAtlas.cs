@@ -49,8 +49,8 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetIn
             }
         }
 
-        foreach (Type? implementedType in registration.DerivedInterfaceTypes.Concat(new[] { registration.Type })) {
-            Lazy<ConcurrentDictionary<Ulid, byte>>? lazyBag = _assetsByTypes.GetOrAdd(implementedType, valueFactory: _ => new Lazy<ConcurrentDictionary<Ulid, byte>>(() => new ConcurrentDictionary<Ulid, byte>()));
+        foreach (Type? implementedType in registration.DerivedInterfaceTypes.Concat([registration.Type])) {
+            Lazy<ConcurrentDictionary<Ulid, byte>> lazyBag = _assetsByTypes.GetOrAdd(implementedType, valueFactory: _ => new Lazy<ConcurrentDictionary<Ulid, byte>>(() => new ConcurrentDictionary<Ulid, byte>()));
             lazyBag.Value.TryAdd(instance.InstanceId, 0);
         }
 

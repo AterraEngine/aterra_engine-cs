@@ -22,8 +22,10 @@ public static class WorkfloorIdLib {
     public static class Entities {
         private const string ThisClass = nameof(Entities);
 
-        public const string DuckyHype = $"{ThisSection}:{ThisClass}/{nameof(DuckyHype)}";
-        public const string DuckyPlatinum = $"{ThisSection}:{ThisClass}/{nameof(DuckyPlatinum)}";
+        public const string ActorDuckyHype = $"{ThisSection}:{ThisClass}/{nameof(ActorDuckyHype)}";
+        public const string ActorDuckyPlatinum = $"{ThisSection}:{ThisClass}/{nameof(ActorDuckyPlatinum)}";
+        public const string PropDuckyHype = $"{ThisSection}:{ThisClass}/{nameof(PropDuckyHype)}";
+        public const string PropDuckyPlatinum = $"{ThisSection}:{ThisClass}/{nameof(PropDuckyPlatinum)}";
         public const string DuckyPlayer = $"{ThisSection}:{ThisClass}/{nameof(DuckyPlayer)}";
     }
     #endregion

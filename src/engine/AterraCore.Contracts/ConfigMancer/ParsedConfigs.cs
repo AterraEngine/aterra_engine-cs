@@ -13,9 +13,8 @@ public readonly struct ParsedConfigs(IEnumerable<KeyValuePair<Type, IConfigMance
     // Expands the original dictionary to include their interfaces as well.
     private readonly ConcurrentDictionary<Type, IConfigMancerElement> _parsedConfig = new(parsedConfig
         .SelectMany(pair => pair.Key.GetInterfaces()
-                .Where(t => typeof(IConfigMancerElement).IsAssignableFrom(t) && t != typeof(IConfigMancerElement))
-                .Select(t => new KeyValuePair<Type, IConfigMancerElement>(t, pair.Value))
-                .Append(pair)// Don't forget to include the original pair as well
+            .Select(t => new KeyValuePair<Type, IConfigMancerElement>(t, pair.Value))
+            .Append(pair)// Don't forget to include the original pair as well
         ));
 
     public int Count => _parsedConfig.Count;

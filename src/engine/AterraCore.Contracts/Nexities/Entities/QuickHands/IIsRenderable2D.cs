@@ -1,13 +1,9 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraCore.Contracts.Threading.CrossThread;
+namespace AterraCore.Contracts.Nexities.Entities.QuickHands;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ITickDataHolder {
-    void ClearOnLevelChange();
-    void ClearOnLogicTick();
-    void ClearOnRenderFrame();
-    bool IsEmpty { get; }
-}
+public interface IIsRenderable2D : INexitiesEntity, IHasTransform2D , IHasSprite2D , IHasDirectChildren;

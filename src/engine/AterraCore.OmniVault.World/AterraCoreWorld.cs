@@ -8,7 +8,6 @@ using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading.CrossThread;
 using AterraCore.Contracts.Threading.CrossThread.Dto;
-using CodeOfChaos.Extensions.Serilog;
 using Extensions;
 using JetBrains.Annotations;
 using Serilog;
@@ -100,7 +99,7 @@ public class AterraCoreWorld(
 
             Logger.Information("Successfully fetched or created level. Creating ActiveLevel instance now.");
             ActiveLevel = levelFactory.CreateLevel2D(level);
-            crossThreadTickData.Clear();
+            crossThreadTickData.ClearOnLevelChange();
         }
 
         EmitActiveLevel(ActiveLevel, oldLevel);

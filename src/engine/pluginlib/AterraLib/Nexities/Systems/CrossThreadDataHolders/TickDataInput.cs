@@ -19,7 +19,7 @@ public class TickDataInput : ITickDataInput {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void Clear() {
+    private void ClearCaches() {
         KeyboardKeyPressed.Clear();
         KeyboardKeyPressedRepeated.Clear();
         KeyboardKeyReleased.Clear();
@@ -27,6 +27,10 @@ public class TickDataInput : ITickDataInput {
         MouseButtonDown.Clear();
         MouseWheelMovement.Clear();
     }
+
+    public void ClearOnLevelChange() => ClearCaches();
+    public void ClearOnLogicTick() => ClearCaches();
+    public void ClearOnRenderFrame() {}
 
     public bool IsEmpty => KeyboardKeyPressed.IsEmpty
         && KeyboardKeyPressedRepeated.IsEmpty

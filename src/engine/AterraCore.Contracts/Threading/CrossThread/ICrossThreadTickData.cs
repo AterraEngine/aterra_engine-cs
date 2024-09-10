@@ -13,5 +13,7 @@ public interface ICrossThreadTickData {
     bool TryGet<T>(AssetTag key, [NotNullWhen(true)] out T? tickDataHolder) where T : class, ITickDataHolder;
     bool TryGetOrRegister<T>(AssetTag key, [NotNullWhen(true)] out T? tickDataHolder) where T : class, ITickDataHolder, new();
 
-    void Clear();
+    void ClearOnLevelChange();
+    void ClearOnLogicTick();
+    void ClearOnRenderFrame();
 }

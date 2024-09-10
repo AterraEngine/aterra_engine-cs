@@ -4,7 +4,6 @@
 using AterraCore.Attributes;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Components;
-using AterraCore.Contracts.Nexities.Entities;
 using AterraCore.Contracts.OmniVault.Textures;
 using AterraCore.OmniVault.Textures;
 using AterraLib.Nexities.Components;
@@ -21,8 +20,6 @@ public interface ITextureDuckyPlatinum : ITexture2DAsset;
 
 public interface ISpriteDuckyPlatinum : ISprite2D;
 
-public interface IDuckyPlatinumActor : IActor2D;
-
 [Texture(WorkfloorIdLib.Components.TextureDuckyPlatinum)]
 [UsedImplicitly]
 public class TextureDuckyPlatinum : AbstractTexture2DAsset, ITextureDuckyPlatinum {
@@ -37,11 +34,19 @@ public class SpriteDuckyPlatinum : Sprite2D, ISpriteDuckyPlatinum {
     public override Rectangle UvSelection { get; set; } = new(0, 0, 1, 1);
 }
 
-[Entity(WorkfloorIdLib.Entities.DuckyPlatinum)]
+[Entity(WorkfloorIdLib.Entities.PropDuckyPlatinum)]
+[UsedImplicitly]
+public class DuckyPlatinumProp(
+    ITransform2D transform2D,
+    [InjectAs] SpriteDuckyPlatinum sprite2D,
+    IDirectChildren childEntities
+) : Prop2D(transform2D, sprite2D, childEntities);
+
+[Entity(WorkfloorIdLib.Entities.ActorDuckyPlatinum)]
 [UsedImplicitly]
 public class DuckyPlatinumActor(
     ITransform2D transform2D,
     [InjectAs] SpriteDuckyPlatinum sprite2D,
     IDirectChildren childEntities,
     IImpulse2D impulse2D
-) : Actor2D(transform2D, sprite2D, childEntities, impulse2D), IDuckyPlatinumActor;
+) : Actor2D(transform2D, sprite2D, childEntities,impulse2D);

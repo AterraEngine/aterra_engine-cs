@@ -10,5 +10,6 @@ namespace AterraCore.Common.Data;
 public static class AssetTagLib {
     public static class AterraLib {
         public static readonly AssetTag PlayerInputTickData = AssetTagStringLib.AterraLib.PlayerInputTickData;
+        public static readonly AssetTag RenderableData = AssetTagStringLib.AterraLib.RenderableData;
     }
 }
