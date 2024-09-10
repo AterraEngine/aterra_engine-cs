@@ -43,10 +43,21 @@ public class CrossThreadTickData : ICrossThreadTickData {
         tickDataHolder = null;
         return false;
     }
-
-    public void Clear() {
+    
+    public void ClearOnLogicTick() {
         foreach (ITickDataHolder holder in _tickDataHolders.Values) {
-            holder.Clear();
+            holder.ClearOnLogicTick();
+        }
+    }
+
+    public void ClearOnLevelChange() {
+        foreach (ITickDataHolder holder in _tickDataHolders.Values) {
+            holder.ClearOnLevelChange();
+        }
+    }
+    public void ClearOnRenderFrame() {
+        foreach (ITickDataHolder holder in _tickDataHolders.Values) {
+            holder.ClearOnRenderFrame();
         }
     }
 }

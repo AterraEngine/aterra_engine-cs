@@ -91,7 +91,7 @@ public class LogicThreadProcessor(
         }
         _endOfTickActions.Clear();
 
-        crossThreadTickData.Clear();// Clear for the end of the tick
+        crossThreadTickData.ClearOnLogicTick();// Clear for the end of the tick
     }
 
     private void SleepUntilEndOfTick() {

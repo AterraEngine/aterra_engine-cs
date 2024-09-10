@@ -6,6 +6,8 @@ namespace AterraCore.Contracts.Threading.CrossThread;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface ITickDataHolder {
-    void Clear();
+    void ClearOnLevelChange();
+    void ClearOnLogicTick();
+    void ClearOnRenderFrame();
     bool IsEmpty { get; }
 }

@@ -33,7 +33,8 @@ public class RenderThreadProcessor(
     IDataCollector dataCollector,
     IRenderEventManager eventManager,
     ILogicEventManager logicEventManager,
-    IAssetInstanceAtlas instanceAtlas
+    IAssetInstanceAtlas instanceAtlas,
+    ICrossThreadTickData crossThreadTickData
 ) : IRenderThreadProcessor {
     private ILogger Logger { get; } = logger.ForContext<RenderThreadProcessor>();
     public CancellationToken CancellationToken { get; set; }
@@ -58,6 +59,8 @@ public class RenderThreadProcessor(
 
             while (_endOfFrameActions.TryPop(out Action? action))
                 action();
+            
+            crossThreadTickData.ClearOnRenderFrame();
         }
 
         Logger.Information("Render Thread Closing");

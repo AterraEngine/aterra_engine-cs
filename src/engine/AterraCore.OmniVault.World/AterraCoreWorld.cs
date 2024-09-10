@@ -99,7 +99,7 @@ public class AterraCoreWorld(
 
             Logger.Information("Successfully fetched or created level. Creating ActiveLevel instance now.");
             ActiveLevel = levelFactory.CreateLevel2D(level);
-            crossThreadTickData.Clear();
+            crossThreadTickData.ClearOnLevelChange();
         }
 
         EmitActiveLevel(ActiveLevel, oldLevel);
