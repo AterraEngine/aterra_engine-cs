@@ -61,6 +61,7 @@ public class MainLevel(
             Parallel.For((long)-a, a, body: j => {
                 string entityId = j % 2 == 0 ? WorkfloorIdLib.Entities.PropDuckyHype : WorkfloorIdLib.Entities.PropDuckyPlatinum;
                 if (!instanceAtlas.TryCreate(entityId, out IProp2D? newDucky)) throw new ApplicationException("Entity could not be created");
+
                 newDucky.Transform2D.Translation = new Vector2(j, k);
                 newDucky.Transform2D.Scale = Vector2.One;
                 if (!ChildrenIDs.TryAdd(newDucky.InstanceId)) throw new ApplicationException("Entity could not be added");
@@ -68,20 +69,24 @@ public class MainLevel(
         });
 
         if (!instanceAtlas.TryCreate(StringAssetIdLib.AterraLib.Entities.Camera2D, out ICamera2D? camera2D)) throw new ApplicationException("Entity could not be created");
+
         camera2D.RaylibCamera2D.Camera = camera2D.RaylibCamera2D.Camera with {
             Target = new Vector2(0, 0),
             Offset = new Vector2(Raylib.GetScreenWidth() / 2f, Raylib.GetScreenHeight() / 2f),
             Rotation = 0,
             Zoom = 10
         };
+
         ChildrenIDs.TryAddFirst(camera2D.InstanceId);
 
         if (!instanceAtlas.TryCreate(WorkfloorIdLib.Entities.DuckyPlayer, out IPlayer2D? player2D)) throw new ApplicationException("Entity could not be created");
+
         player2D.Transform2D.Translation = new Vector2(5, 5);
         player2D.Transform2D.Scale = Vector2.One;
         ChildrenIDs.TryAddFirst(player2D.InstanceId);
 
         if (!instanceAtlas.TryCreate(WorkfloorIdLib.Entities.ActorDuckyHype, out IHasTransform2D? playerAddendum)) throw new ApplicationException("Entity could not be created");
+
         playerAddendum.Transform2D.Translation = new Vector2(2, 2);
         playerAddendum.Transform2D.Scale = Vector2.One;
         player2D.ChildrenIDs.TryAddFirst(playerAddendum.InstanceId);

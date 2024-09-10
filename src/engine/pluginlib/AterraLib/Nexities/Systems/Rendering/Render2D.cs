@@ -20,6 +20,7 @@ public class Render2D(ICrossThreadTickData crossThreadTickData) : NexitiesSystem
         base.InvalidateCaches();
 
         if (!crossThreadTickData.TryGet(AssetTagLib.AterraLib.RenderableData, out RenderableData? renderableDataDto)) return;
+
         renderableDataDto.ClearCache();// necessary to get the correct textures later on
     }
 

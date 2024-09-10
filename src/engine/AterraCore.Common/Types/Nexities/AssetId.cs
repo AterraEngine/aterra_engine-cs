@@ -41,6 +41,7 @@ public readonly struct AssetId :
             (PluginId pluginId, NameSpace assetName) = ParseAssetId(id);
             return (pluginId, assetName, GetAsMemory(pluginId, assetName));
         });
+
         PluginId = pluginId;
         NameSpace = assetName;
         _hashCode = ComputeHashCode();

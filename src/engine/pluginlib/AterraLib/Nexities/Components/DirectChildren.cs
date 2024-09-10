@@ -37,6 +37,7 @@ public class DirectChildren : NexitiesComponent, IDirectChildren {
     public bool TryAddFirst(Ulid id) {
         using (_rwLock.Write()) {
             if (DirectChildIds.Contains(id)) return false;
+
             DirectChildIds.Insert(0, id);
             _count = null;
             return true;
@@ -45,6 +46,7 @@ public class DirectChildren : NexitiesComponent, IDirectChildren {
     public bool TryAdd(Ulid id) {
         using (_rwLock.Write()) {
             if (DirectChildIds.Contains(id)) return false;
+
             DirectChildIds.Add(id);
             _count = null;
             return true;
@@ -54,11 +56,13 @@ public class DirectChildren : NexitiesComponent, IDirectChildren {
     public bool TryInsertBefore(Ulid id, Ulid before) {
         using (_rwLock.Write()) {
             if (DirectChildIds.Contains(id) || !DirectChildIds.Contains(before)) return false;
+
             int indexBefore = DirectChildIds.IndexOf(before);
             DirectChildIds.Insert(
                 indexBefore == 0 ? indexBefore : indexBefore - 1,
                 id
             );
+
             _count = null;
             return true;
         }
@@ -67,6 +71,7 @@ public class DirectChildren : NexitiesComponent, IDirectChildren {
     public bool TryInsertAfter(Ulid id, Ulid after) {
         using (_rwLock.Write()) {
             if (DirectChildIds.Contains(id) || !DirectChildIds.Contains(after)) return false;
+
             int indexAfter = DirectChildIds.IndexOf(after);
 
             DirectChildIds.Insert(

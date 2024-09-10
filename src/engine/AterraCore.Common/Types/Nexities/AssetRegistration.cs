@@ -46,6 +46,7 @@ public record struct AssetRegistration(
             foreach (Type @interface in currentType.GetInterfaces()) {
                 if (!IsExcludedNamespace(@interface) && interfaces.Add(@interface)) typeQueue.Enqueue(@interface);
             }
+
             if (currentType.BaseType != null) typeQueue.Enqueue(currentType.BaseType);
         }
 

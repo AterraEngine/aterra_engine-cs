@@ -78,6 +78,7 @@ public readonly struct SemanticVersion(int major, int minor, int patch, string? 
             int.Parse(match.Groups[3].Value),
             match.Groups[4].Success && match.Groups[4].Value.IsNotNullOrEmpty() ? match.Groups[4].Value : string.Empty
         );
+
         return true;
     }
 
@@ -104,6 +105,7 @@ public readonly struct SemanticVersion(int major, int minor, int patch, string? 
         if (Patch != other.Patch) return Patch.CompareTo(other.Patch);
         if (Addendum.IsNullOrEmpty() && other.Addendum.IsNotNullOrEmpty()) return -1;
         if (Addendum.IsNotNullOrEmpty() && other.Addendum.IsNullOrEmpty()) return 1;
+
         return 0;
     }
     public override int GetHashCode() => (Major, Minor, Patch, Addendum).GetHashCode();

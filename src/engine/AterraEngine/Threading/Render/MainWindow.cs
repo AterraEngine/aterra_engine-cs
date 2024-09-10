@@ -31,6 +31,7 @@ public class MainWindow(IConfigAtlas configAtlas) : IMainWindow {
             configAtlas.EngineConfigXml.Window.Height,
             configAtlas.EngineConfigXml.Window.Name
         );
+
         Raylib.SetWindowMonitor(configAtlas.EngineConfigXml.Window.MonitorId);
 
     }

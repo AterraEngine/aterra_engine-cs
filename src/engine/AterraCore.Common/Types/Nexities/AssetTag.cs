@@ -38,6 +38,7 @@ public readonly struct AssetTag : IEqualityOperators<AssetTag, AssetTag, bool>, 
             (PluginId pluginId, NameSpace assetName) = ParseAssetTag(id);
             return (pluginId, assetName, GetAsMemory(pluginId, assetName));
         });
+
         PluginId = pluginId;
         NameSpace = assetName;
         _hashCode = ComputeHashCode();

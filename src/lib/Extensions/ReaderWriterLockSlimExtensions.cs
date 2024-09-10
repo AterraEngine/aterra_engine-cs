@@ -29,6 +29,7 @@ public static class ReaderWriterLockSlimExtensions {
         if (rwLock.TryEnterReadLock(millisecondsTimeout)) {
             return new ReadReleaser(rwLock);
         }
+
         onTimeout?.Invoke();// Handle timeout scenario
         return null;
     }
@@ -37,6 +38,7 @@ public static class ReaderWriterLockSlimExtensions {
         if (rwLock.TryEnterWriteLock(millisecondsTimeout)) {
             return new WriteReleaser(rwLock);
         }
+
         onTimeout?.Invoke();// Handle timeout scenario
         return null;
     }
@@ -45,6 +47,7 @@ public static class ReaderWriterLockSlimExtensions {
         if (rwLock.TryEnterUpgradeableReadLock(millisecondsTimeout)) {
             return new UpgradableReadReleaser(rwLock);
         }
+
         onTimeout?.Invoke();// Handle timeout scenario
         return null;
     }

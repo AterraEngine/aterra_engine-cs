@@ -49,6 +49,7 @@ public class LevelSwitch(IAterraCoreWorld world, IAssetAtlas assetAtlas, ILogger
 
                     newLevelId = Levels[currentLevelPos - 1];
                     if (newLevelId == level.RawLevelData.AssetId) return;
+
                     world.TryChangeActiveLevel(newLevelId);
                     break;
                 case KeyboardKey.KpAdd:
@@ -57,6 +58,7 @@ public class LevelSwitch(IAterraCoreWorld world, IAssetAtlas assetAtlas, ILogger
 
                     newLevelId = Levels[currentLevelPos + 1];
                     if (newLevelId == level.RawLevelData.AssetId) return;
+
                     world.TryChangeActiveLevel(newLevelId);
                     break;
             }

@@ -104,6 +104,7 @@ public class LogicThreadProcessor(
         while (_endOfTickActions.TryPop(out Action? action)) {
             action();
         }
+
         _endOfTickActions.Clear();
 
         crossThreadTickData.ClearOnLogicTick();// Clear for the end of the tick

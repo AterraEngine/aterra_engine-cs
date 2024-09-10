@@ -30,11 +30,13 @@ public class RandomImpulse : NexitiesSystemWithFilter<IHasImpulse2D> {
                 X = entity.Impulse2D.TranslationOffset.X + (2 * _random.NextSingle() - 1),
                 Y = entity.Impulse2D.TranslationOffset.Y + (2 * _random.NextSingle() - 1)
             };
+
             float scale = _random.NextSingle();
             entity.Impulse2D.ScaleOffset = entity.Impulse2D.ScaleOffset with {
                 X = 1 + 0.01f * MathF.Sign(2 * scale - 1),
                 Y = 1 + 0.01f * MathF.Sign(2 * scale - 1)
             };
+
             entity.Impulse2D.RotationOffset += 2 * _random.NextSingle() - 1;
         }
     }

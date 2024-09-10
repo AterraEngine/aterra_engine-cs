@@ -89,6 +89,7 @@ public class RenderThreadProcessor(
             foreach (INexitiesSystem system in renderSystems) {
                 system.Tick(activeLevel);
             }
+
             Raylib.EndMode2D();
         }
 
@@ -118,6 +119,7 @@ public class RenderThreadProcessor(
             if (textureRecord.UnRegister) PushUnRegisterTexture(textureRecord);
             else PushRegisterTexture(textureRecord);
         }
+
         if (crossThreadQueue.EntireQueueIsEmpty) return;
 
         while (crossThreadQueue.TryDequeue(QueueKey.LogicToRender, out Action? action)) _endOfFrameActions.Push(action);
@@ -149,6 +151,7 @@ public class RenderThreadProcessor(
     // -----------------------------------------------------------------------------------------------------------------
     private void OnEventManagerOnEventClearSystemCaches() {
         if (world.ActiveLevel is not { RenderSystems: var renderSystems }) return;
+
         foreach (INexitiesSystem system in renderSystems) {
             system.InvalidateCaches();
         }
@@ -156,6 +159,7 @@ public class RenderThreadProcessor(
 
     private void OnEventManagerOnEventWindowResized() {
         if (world.ActiveLevel is not { Camera2DEntity: {} camera2DEntity }) return;
+
         camera2DEntity.Camera = camera2DEntity.Camera with {
             Offset = new Vector2(Raylib.GetScreenWidth() / 2f, Raylib.GetScreenHeight() / 2f)
         };

@@ -31,6 +31,7 @@ public class DataCollector : IDataCollector {
         _fpsHistory.Add(fps);
 
         if (_fpsAverageWatch.ElapsedMilliseconds < 1000) return;
+
         FpsAverage = _fpsHistory.Average();
         FpsAverageString = $"{FpsAverage:N2}";
 
@@ -45,6 +46,7 @@ public class DataCollector : IDataCollector {
         _tpsHistory.Add(tps);
 
         if (_tpsAverageWatch.ElapsedMilliseconds < 1000) return;
+
         TpsAverage = _tpsHistory.Average();
         TpsAverageString = $"{TpsAverage:N2}";
 

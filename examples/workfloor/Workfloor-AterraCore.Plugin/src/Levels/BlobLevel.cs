@@ -62,6 +62,7 @@ public class BlobLevel(
             Parallel.For((long)-a, a, body: j => {
                 string entityId = j % 2 == 0 ? WorkfloorIdLib.Entities.ActorDuckyHype : WorkfloorIdLib.Entities.ActorDuckyPlatinum;
                 if (!instanceAtlas.TryCreate(entityId, out IActor2D? newDucky)) throw new ApplicationException("Entity could not be created");
+
                 newDucky.Transform2D.Translation = new Vector2(0, 0);
                 newDucky.Transform2D.Scale = Vector2.One;
                 if (!ChildrenIDs.TryAdd(newDucky.InstanceId)) throw new ApplicationException("Entity could not be added");
@@ -69,12 +70,14 @@ public class BlobLevel(
         });
 
         if (!instanceAtlas.TryCreate(StringAssetIdLib.AterraLib.Entities.Camera2D, out ICamera2D? camera2D)) throw new ApplicationException("Entity could not be created");
+
         camera2D.RaylibCamera2D.Camera = camera2D.RaylibCamera2D.Camera with {
             Target = new Vector2(0, 0),
             Offset = new Vector2(Raylib.GetScreenWidth() / 2f, Raylib.GetScreenHeight() / 2f),
             Rotation = 0,
             Zoom = 10
         };
+
         ChildrenIDs.TryAddFirst(camera2D.InstanceId);
     }
 

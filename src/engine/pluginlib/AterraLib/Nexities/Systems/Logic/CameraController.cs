@@ -6,7 +6,6 @@ using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading.CrossThread;
 using AterraLib.Contracts;
 using Microsoft.Extensions.DependencyInjection;
-using Serilog;
 
 namespace AterraLib.Nexities.Systems.Logic;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -15,7 +14,7 @@ namespace AterraLib.Nexities.Systems.Logic;
 [System(StringAssetIdLib.AterraLib.SystemsLogic.CameraController, CoreTags.LogicThread)]
 [Injectable<CameraController>(ServiceLifetime.Singleton)]
 [UsedImplicitly]
-public class CameraController(ICrossThreadTickData crossThreadTickData, ILogger logger) : NexitiesSystem<ICamera2D> {
+public class CameraController(ICrossThreadTickData crossThreadTickData) : NexitiesSystem<ICamera2D> {
     public override void Tick(ActiveLevel level) {
         if (!crossThreadTickData.TryGet(AssetTagLib.AterraLib.PlayerInputTickData, out ITickDataInput? playerInputTickData)) return;
 
@@ -54,20 +53,18 @@ public class CameraController(ICrossThreadTickData crossThreadTickData, ILogger 
                     break;
             }
         }
-        //
-        // logger.Debug("Translation offset: {0} {1}", translationX, translationY);
-        // logger.Debug("Rotation offset: {0}", rotationOffset);
-        // logger.Debug("Scale X: {0}", scaleX);
-        //
+
         foreach (ICamera2D entity in GetEntities(level)) {
             entity.Impulse2D.TranslationOffset = entity.Impulse2D.TranslationOffset with {
                 X = entity.Impulse2D.TranslationOffset.X + translationX,
                 Y = entity.Impulse2D.TranslationOffset.Y + translationY
             };
+
             entity.Impulse2D.ScaleOffset = entity.Impulse2D.ScaleOffset with {
                 X = entity.Impulse2D.ScaleOffset.X * scaleX,
                 Y = entity.Impulse2D.ScaleOffset.Y * scaleX
             };
+
             entity.Impulse2D.RotationOffset += rotationOffset;
         }
     }

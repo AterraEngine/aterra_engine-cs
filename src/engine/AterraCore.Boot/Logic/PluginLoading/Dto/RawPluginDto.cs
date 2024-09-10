@@ -11,8 +11,8 @@ namespace AterraCore.Boot.Logic.PluginLoading.Dto;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class RawPluginBootDto(string filepath) : IRawPluginBootDto {
-    public string FilePath { get; } = filepath;
     private string? _checksum;
+    public string FilePath { get; } = filepath;
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods

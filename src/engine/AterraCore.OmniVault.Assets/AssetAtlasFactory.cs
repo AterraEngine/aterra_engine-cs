@@ -61,8 +61,10 @@ public class AssetAtlasFactory(IPluginAtlas pluginAtlas) : IAssetAtlasFactory {
                     "Asset with ID: {AssetId} already exists with type {ExistingAssetType}. Cannot assign a new asset with the same ID.",
                     registration.AssetId, _assetsById[registration.AssetId].Type.FullName
                 );
+
                 return;
             }
+
             // Assign overloads
             foreach (AssetId overridableAssetId in registration.OverridableAssetIds) {
                 if (_assetsById.TryAdd(overridableAssetId, registration)) continue;
@@ -86,6 +88,7 @@ public class AssetAtlasFactory(IPluginAtlas pluginAtlas) : IAssetAtlasFactory {
                     "Asset with ID: {AssetId} Cannot assign a new asset because it's {Type} is already assigned to another asset.",
                     registration.AssetId, registration.Type.FullName
                 );
+
                 return;
             }
 
@@ -98,6 +101,7 @@ public class AssetAtlasFactory(IPluginAtlas pluginAtlas) : IAssetAtlasFactory {
 
                 if (!_assetsById.TryGetValue(oldAssetId, out AssetRegistration oldRegistration)) continue;
                 if (pluginAtlas.IsLoadedAfter(oldRegistration.AssetId.PluginId, registration.AssetId.PluginId)) continue;
+
                 _assetsByType.TryUpdate(interfaceType, registration.AssetId, oldAssetId);
             }
         });
@@ -109,6 +113,7 @@ public class AssetAtlasFactory(IPluginAtlas pluginAtlas) : IAssetAtlasFactory {
                 if (!registration.CoreTags.HasFlag(tag)) continue;
                 if (_coreTaggedAssets.TryAdd(tag, [registration.AssetId])) continue;
                 if (!_coreTaggedAssets.TryGetValue(tag, out ConcurrentBag<AssetId>? assets)) continue;
+
                 assets.Add(registration.AssetId);
             }
         });
@@ -118,6 +123,7 @@ public class AssetAtlasFactory(IPluginAtlas pluginAtlas) : IAssetAtlasFactory {
             foreach (string stringTag in registration.StringTags) {
                 if (_stringTaggedAssets.TryAdd(stringTag, [registration.AssetId])) continue;
                 if (!_stringTaggedAssets.TryGetValue(stringTag, out ConcurrentBag<AssetId>? assets)) continue;
+
                 assets.Add(registration.AssetId);
             }
         });

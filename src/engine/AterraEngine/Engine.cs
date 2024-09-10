@@ -34,6 +34,7 @@ public class Engine(
         if (!configAtlas.GameConfigs.TryGetConfig(out IAterraLibGameConfig? aterraLibConfig)) {
             throw new ApplicationException("Config was not setup correctly");
         }
+
         Logger.Information("{@c}", aterraLibConfig);
 
 
@@ -45,6 +46,7 @@ public class Engine(
         if (!renderTask.Result) throw new ApplicationException("Failed to start RenderThread ");
 
         if (!world.TryChangeActiveLevel(StringAssetIdLib.AterraLib.Entities.EmptyLevel)) throw new ApplicationException("Failed to change active level");
+
         await Task.Delay(1_000);
         if (!world.TryChangeActiveLevel("Workfloor:Levels/Main")) throw new ApplicationException("Failed to change active level to");
 

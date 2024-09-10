@@ -36,8 +36,9 @@ public readonly struct EntityNodeTree(IEntityNode root, IEntityTreePools poolPro
         while (stack.TryPop(out IEntityNode? currentNode)) {
             yield return currentNode.Value;
 
-            for (int i = currentNode.Children.Count - 1; i >= 0; i--)
+            for (int i = currentNode.Children.Count - 1; i >= 0; i--) {
                 stack.Push(currentNode.Children[i]);
+            }
         }
 
     }
@@ -84,8 +85,9 @@ public readonly struct EntityNodeTree(IEntityNode root, IEntityTreePools poolPro
             (IEntityNode? parent, IEntityNode child) = t;
             yield return (parent?.Value, child.Value);
 
-            for (int i = child.Children.Count - 1; i >= 0; i--)
+            for (int i = child.Children.Count - 1; i >= 0; i--) {
                 stack.Push((child, child.Children[i]));
+            }
         }
     }
     #endregion
@@ -140,8 +142,9 @@ public readonly struct EntityNodeTree(IEntityNode root, IEntityTreePools poolPro
         while (stack.TryPop(out IEntityNode? currentNode)) {
             yield return currentNode;
 
-            for (int i = currentNode.Children.Count - 1; i >= 0; i--)
+            for (int i = currentNode.Children.Count - 1; i >= 0; i--) {
                 stack.Push(currentNode.Children[i]);
+            }
         }
     }
     #endregion

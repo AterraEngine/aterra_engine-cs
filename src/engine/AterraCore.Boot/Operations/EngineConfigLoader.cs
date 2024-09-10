@@ -45,6 +45,7 @@ public class EngineConfigLoader : IBootOperation {
         if (!configXmlParser.TryDeserializeFromFile(filepath, out EngineConfigXml? configDto)) {
             throw Logger.ThrowError<ApplicationException>("Failed to load Engine Config");
         }
+
         components.EngineConfigXml = configDto;
 
     }

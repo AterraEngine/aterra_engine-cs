@@ -113,6 +113,7 @@ public class AterraCoreWorld(
         Parallel.ForEach(oldTextureAssetIds.Except(newTextureAssetIds), body: id => {
             crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar(id, true));
         });
+
         Parallel.ForEach(newTextureAssetIds.Except(oldTextureAssetIds), body: id => {
             crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar(id, false));
         });

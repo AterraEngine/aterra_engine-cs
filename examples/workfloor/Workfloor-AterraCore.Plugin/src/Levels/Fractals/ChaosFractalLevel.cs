@@ -44,8 +44,10 @@ public class ChaosFractalLevel(
             (Vector2 p1, Vector2 p2, Vector2 p3, uint depth) = tuple;
             if (depth == 0) {
                 if (!instanceAtlas.TryCreate(WorkfloorIdLib.Entities.PropDuckyPlatinum, out IHasTransform2D? newDucky)) throw new ApplicationException("Entity could not be created");
+
                 newDucky.Transform2D.Translation = (p1 + p2 + p3) / 3;
                 if (!ChildrenIDs.TryAdd(newDucky.InstanceId)) throw new ApplicationException("Entity could not be added");
+
                 continue;
             }
 
@@ -59,12 +61,14 @@ public class ChaosFractalLevel(
         }
 
         if (!instanceAtlas.TryCreate(StringAssetIdLib.AterraLib.Entities.Camera2D, out ICamera2D? camera2D)) throw new ApplicationException("Entity could not be created");
+
         camera2D.RaylibCamera2D.Camera = camera2D.RaylibCamera2D.Camera with {
             Target = new Vector2(0, 0),
             Offset = new Vector2(Raylib.GetScreenWidth() / 2f, Raylib.GetScreenHeight() / 2f),
             Rotation = 0,
             Zoom = 10
         };
+
         ChildrenIDs.TryAddFirst(camera2D.InstanceId);
     }
 

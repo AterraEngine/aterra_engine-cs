@@ -44,9 +44,12 @@ public class AssetInstanceFactory(ILogger logger, IPluginAtlas pluginAtlas) : IA
             if (!_constructorCache.TryGetValue(registration.Type, out TConstructor? constructorDelegate)) return false;
             if (!_actionsMap.TryGetValue(registration.AssetId, out TActionsArray? parameterActions)) return false;
 
-            for (int i = 0; i < parameterActions.Length; i++) parameters[i] = parameterActions[i]();
+            for (int i = 0; i < parameterActions.Length; i++) {
+                parameters[i] = parameterActions[i]();
+            }
 
             if (constructorDelegate(parameters) is not T castedInstance) return false;
+
             assetInstance = castedInstance;
             assetInstance.AssetId = registration.AssetId;
             assetInstance.InstanceId = predefinedUlid;

@@ -78,6 +78,7 @@ public class PluginAtlas(IServiceProvider provider) : IPluginAtlas {
         if (_pluginZipArchive.TryGetValue(filePath, out zipArchive)) return true;
 
         if (!File.Exists(filePath)) return false;
+
         zipArchive = ZipFile.OpenRead(filePath);
         _pluginZipArchive = _pluginZipArchive.Add(filePath, zipArchive);
 

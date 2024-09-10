@@ -30,9 +30,10 @@ public class ConcurrentSortedDictionary<TKey, TValue> where TKey : notnull {
             ArrayPool<TValue>.Shared.Return(_preAllocatedCacheArrayValues, true);
             _preAllocatedCacheArrayValues = ArrayPool<TValue>.Shared.Rent(_sortedKeys.Count);
 
-            for (int i = 0; i < _sortedKeys.Count; i++)
+            for (int i = 0; i < _sortedKeys.Count; i++) {
                 if (_dictionary.TryGetValue(_sortedKeys[i], out TValue? value))
                     _preAllocatedCacheArrayValues[i] = value;
+            }
 
             _hasChanged = false;
             return _preAllocatedCacheArrayValues;
@@ -41,12 +42,14 @@ public class ConcurrentSortedDictionary<TKey, TValue> where TKey : notnull {
 
     public bool TryAdd(TKey key, TValue value) {
         if (!_dictionary.TryAdd(key, value)) return false;
+
         UpdateKeys(set => set.Add(key));
         return true;
     }
 
     public bool TryRemove(TKey key) {
         if (!_dictionary.TryRemove(key, out _)) return false;
+
         UpdateKeys(set => set.Remove(key));
         return true;
     }

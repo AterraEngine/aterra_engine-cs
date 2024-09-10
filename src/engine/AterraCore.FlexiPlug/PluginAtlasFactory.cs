@@ -36,6 +36,7 @@ public class PluginAtlasFactory(IServiceProvider provider, IBootComponents bootC
                     ? config
                     : new PluginConfigXml()
             });
+
             pluginIds.Add(dto.PluginNameSpaceId);
         }
 

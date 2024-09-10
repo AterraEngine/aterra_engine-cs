@@ -54,6 +54,7 @@ public class Render2DPrepForProps(IAssetInstanceAtlas instanceAtlas, ICrossThrea
                 child.Sprite2D.UvSelection.Position,
                 child.Sprite2D.UvSelection.Size * size
             );
+
             renderableDataDto.AddToRenderCache(
                 zIndex,
                 texture2D,

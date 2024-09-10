@@ -73,6 +73,7 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetIn
         instance = default;
         if (!_assetInstances.TryGetValue(instanceId, out IAssetInstance? assetInstance)
             || assetInstance is not T convertedInstance) return false;
+
         instance = convertedInstance;
         return true;
     }
@@ -122,22 +123,26 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetIn
 
     public T GetOrCreate<T>(AssetId assetId, Ulid? ulid = null) where T : class, IAssetInstance {
         if (!TryGetOrCreate(assetId, out T? instance, ulid)) throw new ArgumentException($"Asset Id {ulid} not found");
+
         return instance;
     }
 
     public IEnumerable<T> OfType<T>() where T : class, IAssetInstance {
         HashSet<Ulid> alreadyYielded = ulidPools.UlidHashSetPool.Get();
         if (!_assetsByTypes.TryGetValue(typeof(T), out Lazy<ConcurrentDictionary<Ulid, byte>>? assetIds)) yield break;
+
         foreach (Ulid assetId in assetIds.Value.Keys) {
             if (TryGet(assetId, out T? instance) && alreadyYielded.Add(instance.InstanceId)) {
                 yield return instance;
             }
         }
+
         ulidPools.UlidHashSetPool.Return(alreadyYielded);
     }
     public IEnumerable<T> OfTag<T>(CoreTags tags) where T : class, IAssetInstance {
         HashSet<Ulid> alreadyYielded = ulidPools.UlidHashSetPool.Get();
         if (!_assetsByTypes.TryGetValue(typeof(T), out Lazy<ConcurrentDictionary<Ulid, byte>>? instanceIds)) yield break;
+
         foreach (Ulid id in instanceIds.Value.Keys) {
             if (_assetInstances.TryGetValue(id, out IAssetInstance? instance)
                 && instance is T convertedInstance
@@ -147,6 +152,7 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetIn
                 yield return convertedInstance;
             }
         }
+
         ulidPools.UlidHashSetPool.Return(alreadyYielded);
 
     }
@@ -155,13 +161,16 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetIn
             logger.Debug("No type found");
             yield break;
         }
+
         if (!_assetsByTypes.TryGetValue(type, out Lazy<ConcurrentDictionary<Ulid, byte>>? assetIds)) {
             logger.Debug("No Previously created found");
             yield break;
         }
+
         foreach (Ulid instanceId in assetIds.Value.Keys) {
             logger.Debug(" {u}", instanceId);
             if (!TryGet(instanceId, out T? instance)) continue;
+
             logger.Debug("Found the instance");
             yield return instance;
         }

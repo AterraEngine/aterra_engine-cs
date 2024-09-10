@@ -69,6 +69,7 @@ public static class EngineServices {
             IEnumerable<Type> paramTypes = constructor.GetParameters().Select(p => p.ParameterType);
             foreach (Type paramType in paramTypes) {
                 if (ServiceProvider.GetService(paramType) is not null) continue;
+
                 throw Logger.ThrowFatal(e, "Service type of {paramType} could not be found while resolving {TypeOfT}", paramType.FullName, type.FullName);
             }
 

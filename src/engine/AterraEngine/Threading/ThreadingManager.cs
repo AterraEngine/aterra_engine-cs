@@ -42,6 +42,7 @@ public class ThreadingManager(ILogger logger) : IThreadingManager {
                     Name = "ThreadLogic"
                 }
             );
+
             LogicThreadData.Thread.Start();
 
             return true;
@@ -69,6 +70,7 @@ public class ThreadingManager(ILogger logger) : IThreadingManager {
                     Name = "ThreadRender"
                 }
             );
+
             RenderThreadData.Thread.Start();
 
             return true;

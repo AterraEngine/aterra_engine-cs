@@ -37,10 +37,12 @@ public class EntityTreeFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreePoo
             (IEntityNode parentNode, Ulid ulid) = node;
 
             if (!instanceAtlas.TryGet(ulid, out IAssetInstance? childInstance)) continue;// the asset wasn't managed by AterraEngine
+
             var currentNode = new EntityNode(childInstance);
             parentNode.Children.Add(currentNode);
 
             if (childInstance is not IHasDirectChildren hasDirectChildren) continue;
+
             foreach (Ulid grandChildId in hasDirectChildren.ChildrenIDs.Children) {
                 stack.Push((currentNode, grandChildId));
             }

@@ -36,6 +36,7 @@ public abstract class NexitiesEntity(params INexitiesComponent[] components) : A
     public bool TryAddComponent(INexitiesComponent component) {
         if (!_componentsById.TryAdd(component.AssetId, component) ||
             !_componentsByType.TryAdd(component.GetType(), component.AssetId)) return false;
+
         ClearCaches();
         return true;
     }
@@ -62,6 +63,7 @@ public abstract class NexitiesEntity(params INexitiesComponent[] components) : A
         foreach (INexitiesComponent component in components) {
             dict[component.AssetId] = component;
         }
+
         return dict;
     }
     private static ConcurrentDictionary<Type, AssetId> CreateComponentsByType(INexitiesComponent[] components) {
@@ -69,6 +71,7 @@ public abstract class NexitiesEntity(params INexitiesComponent[] components) : A
         foreach (INexitiesComponent component in components) {
             dict[component.GetType()] = component.AssetId;
         }
+
         return dict;
     }
     private static ConcurrentDictionary<Ulid, AssetId> CreateComponentsByInstanceId(INexitiesComponent[] components) {
@@ -76,6 +79,7 @@ public abstract class NexitiesEntity(params INexitiesComponent[] components) : A
         foreach (INexitiesComponent component in components) {
             dict[component.InstanceId] = component.AssetId;
         }
+
         return dict;
     }
 
@@ -96,12 +100,14 @@ public abstract class NexitiesEntity(params INexitiesComponent[] components) : A
     public T GetComponent<T>(AssetId assetId) where T : INexitiesComponent {
         if (_componentsById.TryGetValue(assetId, out INexitiesComponent? component)
             && component is T typedComponent) return typedComponent;
+
         throw new ArgumentException($"Component with assetId {assetId} not found or is of incorrect type");
     }
 
     public T GetComponent<T>() where T : INexitiesComponent {
         Type type = typeof(T);
         if (_componentsByType.TryGetValue(type, out AssetId assetId)) return GetComponent<T>(assetId);
+
         throw new ArgumentException($"Component with type {type} not found");
     }
 
@@ -112,6 +118,7 @@ public abstract class NexitiesEntity(params INexitiesComponent[] components) : A
             component = typedComponent;
             return true;
         }
+
         component = default;
         return false;
     }
@@ -121,6 +128,7 @@ public abstract class NexitiesEntity(params INexitiesComponent[] components) : A
             component = typedComponent;
             return true;
         }
+
         component = default;
         return false;
     }

@@ -37,6 +37,7 @@ public class DragonDucksLevel(
         var entityPool = new ConcurrentStack<IProp2D>();
         Parallel.For(0, 100_000, body: _ => {
             if (!instanceAtlas.TryCreate(WorkfloorIdLib.Entities.PropDuckyPlatinum, out IProp2D? newDucky)) return;
+
             entityPool.Push(newDucky);
         });
 
@@ -48,8 +49,10 @@ public class DragonDucksLevel(
 
             if (depth == 0) {
                 if (!entityPool.TryPop(out IProp2D? entity) || !instanceAtlas.TryCreate(WorkfloorIdLib.Entities.PropDuckyPlatinum, out entity)) continue;
+
                 entity.Transform2D.Translation = (start + end) / 2;
                 if (!ChildrenIDs.TryAdd(entity.InstanceId)) throw new ApplicationException("Entity could not be added");
+
                 continue;
             }
 
@@ -62,12 +65,14 @@ public class DragonDucksLevel(
         }
 
         if (!instanceAtlas.TryCreate(StringAssetIdLib.AterraLib.Entities.Camera2D, out ICamera2D? camera2D)) throw new ApplicationException("Entity could not be created");
+
         camera2D.RaylibCamera2D.Camera = camera2D.RaylibCamera2D.Camera with {
             Target = new Vector2(0, 0),
             Offset = new Vector2(Raylib.GetScreenWidth() / 2f, Raylib.GetScreenHeight() / 2f),
             Rotation = 0,
             Zoom = 10
         };
+
         ChildrenIDs.TryAddFirst(camera2D.InstanceId);
     }
 

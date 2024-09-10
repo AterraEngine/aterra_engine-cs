@@ -23,6 +23,7 @@ public class CrossThreadTickData : ICrossThreadTickData {
     public bool TryRegister<T>(AssetTag key, T tickDataHolder) where T : class, ITickDataHolder {
         if (_tickDataHolders.TryAdd(key, tickDataHolder)) return true;
         if (!_tickDataHolders.TryGetValue(key, out ITickDataHolder? value)) return false;
+
         var oldObject = value as T;
         return oldObject is not null && oldObject.IsEmpty;
     }
@@ -30,6 +31,7 @@ public class CrossThreadTickData : ICrossThreadTickData {
     public bool TryGet<T>(AssetTag key, [NotNullWhen(true)] out T? tickDataHolder) where T : class, ITickDataHolder {
         tickDataHolder = default;
         if (!_tickDataHolders.TryGetValue(key, out ITickDataHolder? value)) return false;
+
         tickDataHolder = value as T;
         return tickDataHolder != null;
     }
