@@ -45,23 +45,38 @@ public class ConcurrentSortedDictionary<TKey, TValue> where TKey : notnull {
         _hasChanged = true;
     }
     
-    private TValue[] _preAllocatedCacheArray = ArrayPool<TValue>.Shared.Rent(0);
+    private TValue[] _preAllocatedCacheArrayValues = ArrayPool<TValue>.Shared.Rent(0);
     public TValue[] Values {
         get {
-            if (!_hasChanged) return _preAllocatedCacheArray;
+            if (!_hasChanged) return _preAllocatedCacheArrayValues;
             
-            ArrayPool<TValue>.Shared.Return(_preAllocatedCacheArray, clearArray: true);
-            _preAllocatedCacheArray = ArrayPool<TValue>.Shared.Rent(_sortedKeys.Count);
+            ArrayPool<TValue>.Shared.Return(_preAllocatedCacheArrayValues, clearArray: true);
+            _preAllocatedCacheArrayValues = ArrayPool<TValue>.Shared.Rent(_sortedKeys.Count);
             
-            for (int i = 0; i < _sortedKeys.Count; i++) {
-                TKey key = _sortedKeys[i];
-                if (_dictionary.TryGetValue(key, out TValue? value)) {
-                    _preAllocatedCacheArray[i] = value;
-                }
-            }
+            for (int i = 0; i < _sortedKeys.Count; i++)
+                if (_dictionary.TryGetValue(_sortedKeys[i], out TValue? value)) 
+                    _preAllocatedCacheArrayValues[i] = value;
             
             _hasChanged = false;
-            return _preAllocatedCacheArray;
+            return _preAllocatedCacheArrayValues;
         }
     }
+    
+    // private TKey[] _preAllocatedCacheArrayKeys = ArrayPool<TKey>.Shared.Rent(0);
+    // public TKey[] Keys {
+    //     get {
+    //         if (!_hasChanged) return _preAllocatedCacheArrayKeys;
+    //         
+    //         ArrayPool<TKey>.Shared.Return(_preAllocatedCacheArrayKeys, clearArray: true);
+    //         _preAllocatedCacheArrayKeys = ArrayPool<TKey>.Shared.Rent(_sortedKeys.Count);
+    //         
+    //         for (int i = 0; i < _sortedKeys.Count; i++) {
+    //             TKey key = _sortedKeys[i];
+    //             _preAllocatedCacheArrayKeys[i] = key;
+    //         }
+    //         
+    //         _hasChanged = false;
+    //         return _preAllocatedCacheArrayKeys;
+    //     }
+    // }
 }

@@ -9,14 +9,21 @@ namespace AterraLib.Nexities.Systems.CrossThreadDataHolders;
 // ---------------------------------------------------------------------------------------------------------------------
 // Support Code
 // ---------------------------------------------------------------------------------------------------------------------
-using RenderCacheTuple = (Texture2D texture, Rectangle source, Rectangle dest, Vector2 origin, float rotation, Color tint);
+public readonly struct RenderCacheDto {
+    public Texture2D Texture {get; init;}
+    public Rectangle Source {get; init;}
+    public Rectangle Dest {get; init;}
+    public Vector2 Origin {get; init;}
+    public float Rotation {get; init;}
+    public Color Tint {get; init;}
+}
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class RenderableData : ITickDataHolder {
     public ConcurrentDictionary<AssetId, (Vector2 Size, Texture2D texture2D)> TextureCache { get; } = new();
-    private readonly ConcurrentSortedDictionary<int, RenderCacheTuple> _renderCache = new();
+    private readonly ConcurrentSortedDictionary<int, RenderCacheDto> _renderCache = new();
 
     public bool PropsProcessed { get; set; }
 
@@ -25,8 +32,17 @@ public class RenderableData : ITickDataHolder {
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     // Method to add render cache items ensuring order
-    public void AddToRenderCache(int key, RenderCacheTuple value) => _renderCache[key] = value;
-    public RenderCacheTuple[] GetOrderedRenderCache() => _renderCache.Values;
+    public void AddToRenderCache(int key, Texture2D texture, Rectangle source, Rectangle dest, Vector2 origin, float rotation, Color tint) {
+        _renderCache[key] = new RenderCacheDto {
+            Texture = texture,
+            Source = source,
+            Dest = dest,
+            Origin = origin,
+            Rotation = rotation,
+            Tint = tint,
+        };
+    }
+    public RenderCacheDto[] GetOrderedRenderCache() => _renderCache.Values;
 
     public void ClearCache() {
         TextureCache.Clear();

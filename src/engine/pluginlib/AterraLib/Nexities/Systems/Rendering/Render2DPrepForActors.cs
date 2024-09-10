@@ -52,14 +52,15 @@ public class Render2DPrepForActors(IAssetInstanceAtlas instanceAtlas, ICrossThre
                 child.Sprite2D.UvSelection.Position,
                 child.Sprite2D.UvSelection.Size * size
             );
-            renderableDataDto.AddToRenderCache(zIndex, (
+            renderableDataDto.AddToRenderCache(
+                zIndex,
                 texture2D, 
                 sourceRect,
                 destRect,
                 combinedRotationOrigin,
                 combinedRotation,
                 child.Sprite2D.Shade
-            ));
+            );
         }
     }
 }
