@@ -16,7 +16,7 @@ public class UlidPools : IUlidPools {
     private const int InitialCapacity = 24;
     private readonly DefaultObjectPoolProvider _objectPoolProvider = new();
 
-    #region XmlNodeQueuePool
+    #region UlidHashSetPool
     private ObjectPool<HashSet<Ulid>>? _ulidHashSetPool;
     public ObjectPool<HashSet<Ulid>> UlidHashSetPool =>
         _ulidHashSetPool ??= _objectPoolProvider.Create(new UlidHashSetPoolPolicy(InitialCapacity));

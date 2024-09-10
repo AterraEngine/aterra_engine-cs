@@ -13,6 +13,7 @@ using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.OmniVault.World.EntityTree;
 using JetBrains.Annotations;
 using System.Collections.Frozen;
+using System.Collections.Immutable;
 
 namespace AterraCore.OmniVault.World;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -33,11 +34,13 @@ public class ActiveLevelFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreeFa
         if (entityTreeFlat.FirstOrDefault(asset => asset is ICamera2D) is ICamera2D possibleCamera)
             instanceAtlas.TryGet(possibleCamera.RaylibCamera2D.InstanceId, out camera2D);
 
+        INexitiesSystem[] renderSystems = GetNexitiesSystems(level2D.NexitiesSystemIds.RenderSystemIds);
         return new ActiveLevel {
             RawLevelData = level2D,
-            Logic = GetNexitiesSystems(level2D.NexitiesSystemIds.LogicSystemIds),
-            Render = GetNexitiesSystems(level2D.NexitiesSystemIds.RenderSystemIds),
-            Ui = GetNexitiesSystems(level2D.NexitiesSystemIds.UiSystemIds),
+            LogicSystems = [..GetNexitiesSystems(level2D.NexitiesSystemIds.LogicSystemIds)],
+            RenderSystems = [..renderSystems],
+            RenderSystemsReversed = [..renderSystems.Reverse()],
+            UiSystems = [..GetNexitiesSystems(level2D.NexitiesSystemIds.UiSystemIds)],
             ActiveEntityTree = entityTree,
             Camera2DEntity = camera2D,
             TextureAssetIds = entityTreeFlat

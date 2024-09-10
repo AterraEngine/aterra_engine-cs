@@ -36,16 +36,8 @@ public class RenderableData : ITickDataHolder {
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     // Method to add render cache items ensuring order
-    public void AddToRenderCache(int key, Texture2D texture, Rectangle source, Rectangle dest, Vector2 origin, float rotation, Color tint) {
-        _renderCache[key] = new RenderCacheDto {
-            Texture = texture,
-            Source = source,
-            Dest = dest,
-            Origin = origin,
-            Rotation = rotation,
-            Tint = tint
-        };
-    }
+    public void AddToRenderCache(int key, RenderCacheDto dto) => _renderCache[key] = dto;
+    
     public RenderCacheDto[] GetOrderedRenderCache() => _renderCache.Values;
 
     public void ClearCache() {

@@ -16,4 +16,13 @@ public enum CoreTags : ulong {
     Texture = 1 << 6,
     Singleton = 1 << 7,
     Level = 1 << 8
+        
+}
+
+
+public static class CoreTagsExtensions {
+    private static string[]? _strings;
+    public static string[] AllCoreTags() => _strings ??= Enum.GetNames(typeof(CoreTags));
+    private static CoreTags[]? _values;
+    public static CoreTags[] AllCoreTagValues() => _values ??= Enum.GetValues<CoreTags>();
 }

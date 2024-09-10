@@ -19,20 +19,21 @@ public class RaylibKeyHandler(ICrossThreadTickData crossThreadTickData) : Nexiti
     public override void Tick(ActiveLevel level) {
         if (!crossThreadTickData.TryGetOrRegister(AssetTagLib.AterraLib.PlayerInputTickData, out TickDataInput? playerInputTickData)) return;
 
-        foreach (KeyboardKey key in KeyboardKeys) {
+        for (int i = KeyboardKeys.Length - 1; i >= 0; i--) {
+            KeyboardKey key = KeyboardKeys[i];
             if (Raylib.IsKeyPressed(key)) playerInputTickData.KeyboardKeyPressed.Push(key);
             if (Raylib.IsKeyPressedRepeat(key)) playerInputTickData.KeyboardKeyPressedRepeated.Push(key);
             if (Raylib.IsKeyReleased(key)) playerInputTickData.KeyboardKeyReleased.Push(key);
             if (Raylib.IsKeyDown(key)) playerInputTickData.KeyboardKeyDown.Push(key);
+            
         }
 
-        playerInputTickData.MouseButtonDown.PushRange(
-            MouseButtons.Where(button => Raylib.IsMouseButtonDown(button)).ToArray()
-        );
+        for (int i = MouseButtons.Length - 1; i >= 0; i--) {
+            MouseButton button = MouseButtons[i];
+            if (Raylib.IsMouseButtonDown(button)) playerInputTickData.MouseButtonDown.Push(button);
+        }
 
         Vector2 mouseWheelMovement = Raylib.GetMouseWheelMoveV();
         playerInputTickData.MouseWheelMovement.Push(mouseWheelMovement);
-        // if (mouseWheelMovement.X != 0f && mouseWheelMovement.Y != 0f)
-        //     playerInputTickData.MouseWheelMovement.Push(mouseWheelMovement);
     }
 }

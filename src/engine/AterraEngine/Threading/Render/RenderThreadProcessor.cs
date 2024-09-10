@@ -45,8 +45,7 @@ public class RenderThreadProcessor(
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    private bool WhileCondition => !Raylib.WindowShouldClose()
-        || CancellationToken.IsCancellationRequested;
+    private bool WhileCondition => !CancellationToken.IsCancellationRequested || !Raylib.WindowShouldClose();
     public CancellationToken CancellationToken { get; set; }
     public void Run() {
         RegisterEvents();
@@ -54,6 +53,7 @@ public class RenderThreadProcessor(
 
         // Window is actually running now
         while (WhileCondition) {
+            if (Raylib.IsWindowResized()) eventManager.InvokeWindowResized();
             logicEventManager.InvokeUpdateFps(Raylib.GetFPS());
             Update();
             HandleQueue();
@@ -73,11 +73,11 @@ public class RenderThreadProcessor(
         eventManager.EventClearSystemCaches += (_, _) => _endOfFrameActions.Push(OnEventManagerOnEventClearSystemCaches);
         eventManager.EventWindowResized += (_, _) => _endOfFrameActions.Push(OnEventManagerOnEventWindowResized);
     }
-
+    
     private void Update() {
         if (world.ActiveLevel is not {
                 Camera2DEntity: var camera2DEntity,
-                RenderSystems: var renderSystems
+                RenderSystemsReversed: var renderSystemsReversed
                 // UiSystems: var uiSystems
             } activeLevel) return;
 
@@ -86,17 +86,16 @@ public class RenderThreadProcessor(
 
         if (camera2DEntity is { Camera: var camera2D }) {
             Raylib.BeginMode2D(camera2D);
-            foreach (INexitiesSystem system in renderSystems) {
-                system.Tick(activeLevel);
-            }
+
+            int count = renderSystemsReversed.Length;
+            for (int i = count - 1; i >= 0; i--) 
+                renderSystemsReversed[i].Tick(activeLevel);
 
             Raylib.EndMode2D();
         }
 
         DrawUi(activeLevel);
         Raylib.EndDrawing();
-
-        if (Raylib.IsWindowResized()) eventManager.InvokeWindowResized();
     }
 
     private void DrawUi(ActiveLevel level) {
@@ -122,8 +121,10 @@ public class RenderThreadProcessor(
 
         if (crossThreadQueue.EntireQueueIsEmpty) return;
 
-        while (crossThreadQueue.TryDequeue(QueueKey.LogicToRender, out Action? action)) _endOfFrameActions.Push(action);
-        while (crossThreadQueue.TryDequeue(QueueKey.MainToRender, out Action? action)) _endOfFrameActions.Push(action);
+        while (crossThreadQueue.TryDequeue(QueueKey.LogicToRender, out Action? action))
+            _endOfFrameActions.Push(action);
+        while (crossThreadQueue.TryDequeue(QueueKey.MainToRender, out Action? action))
+            _endOfFrameActions.Push(action);
     }
 
     private void PushRegisterTexture(TextureRegistrar textureRecord) {
@@ -150,10 +151,11 @@ public class RenderThreadProcessor(
     // Events
     // -----------------------------------------------------------------------------------------------------------------
     private void OnEventManagerOnEventClearSystemCaches() {
-        if (world.ActiveLevel is not { RenderSystems: var renderSystems }) return;
+        if (world.ActiveLevel is not { RenderSystemsReversed: var renderSystemsReversed }) return;
 
-        foreach (INexitiesSystem system in renderSystems) {
-            system.InvalidateCaches();
+        int count = renderSystemsReversed.Length;
+        for (int i = count - 1; i >= 0; i--) {
+            renderSystemsReversed[i].InvalidateCaches();
         }
     }
 

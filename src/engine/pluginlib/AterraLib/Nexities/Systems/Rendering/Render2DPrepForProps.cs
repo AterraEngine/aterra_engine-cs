@@ -43,26 +43,23 @@ public class Render2DPrepForProps(IAssetInstanceAtlas instanceAtlas, ICrossThrea
 
             ITransform2D parentTransform = parent?.Transform2D ?? EmptyTransform2D;
             ITransform2D childTransform = child.Transform2D;
-            Vector2 combinedTranslation = childTransform.Translation + parentTransform.Translation;
-            var combinedScale = new Vector2(childTransform.Scale.X * parentTransform.Scale.X, childTransform.Scale.Y * parentTransform.Scale.Y);
-            float combinedRotation = childTransform.Rotation + parentTransform.Rotation;
-            Vector2 combinedRotationOrigin = childTransform.RotationOrigin + parentTransform.RotationOrigin;
-
-            var destRect = new Rectangle(combinedTranslation, combinedScale.X, combinedScale.Y);
-
-            Rectangle sourceRect = child.Sprite2D.UvAndSourceCalculated ??= new Rectangle(
-                child.Sprite2D.UvSelection.Position,
-                child.Sprite2D.UvSelection.Size * size
-            );
 
             renderableDataDto.AddToRenderCache(
                 zIndex,
-                texture2D,
-                sourceRect,
-                destRect,
-                combinedRotationOrigin,
-                combinedRotation,
-                child.Sprite2D.Shade
+                new RenderCacheDto {
+                    Texture = texture2D,
+                    Source = child.Sprite2D.UvAndSourceCalculated ??= new Rectangle(
+                        child.Sprite2D.UvSelection.Position,
+                        child.Sprite2D.UvSelection.Size * size
+                    ),
+                    Dest = new Rectangle(
+                        childTransform.Translation + parentTransform.Translation,
+                        childTransform.Scale.X * parentTransform.Scale.X,
+                        childTransform.Scale.Y * parentTransform.Scale.Y),
+                    Origin = childTransform.RotationOrigin + parentTransform.RotationOrigin,
+                    Rotation = childTransform.Rotation + parentTransform.Rotation,
+                    Tint = child.Sprite2D.Shade
+                }
             );
         }
 

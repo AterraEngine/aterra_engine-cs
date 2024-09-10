@@ -4,8 +4,12 @@
 using AterraCore.Common.Data;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.OmniVault.Assets;
+using AterraCore.Contracts.PoolCorps;
+using AterraCore.DI;
 using JetBrains.Annotations;
+using System.Collections.Concurrent;
 using System.Collections.Frozen;
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 
 namespace AterraCore.OmniVault.Assets;
@@ -21,14 +25,31 @@ public class AssetAtlas : IAssetAtlas {
 
     public int TotalCount => AssetsById.Count;
 
+    private readonly IAssetIdPools _assetIdPools = EngineServices.GetService<IAssetIdPools>();
+    private readonly ConcurrentDictionary<CoreTags, FrozenSet<AssetId>> _combinedTaggedAssets = new();
+    
     // ------------------------------------------------------------------------------------------------------------- ----
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public IEnumerable<AssetId> GetAllAssetsOfCoreTag(CoreTags coreTag) =>
-        Enum.GetValues<CoreTags>()
-            .Where(tag => coreTag.HasFlag(tag))
-            .SelectMany(tag => CoreTaggedAssets[tag])
-            .ToArray();
+    public IEnumerable<AssetId> GetAllAssetsOfCoreTag(CoreTags coreTag) {
+        if (_combinedTaggedAssets.TryGetValue(coreTag, out FrozenSet<AssetId>? cached)) return cached;
+        
+        HashSet<AssetId> hashset = _assetIdPools.AssetIdHashSetPool.Get(); // Returned on cache clear
+        CoreTags[] allTags = CoreTagsExtensions.AllCoreTagValues();
+        for (int i = allTags.Length - 1; i >= 0; i--) {
+            CoreTags tag = allTags[i];
+            if (!coreTag.HasFlag(tag)) continue;
+            
+            ImmutableArray<AssetId> assets = CoreTaggedAssets[tag].Items;
+            for (int j = assets.Length - 1; j >= 0; j--) {
+                hashset.Add(assets[j]);
+            }
+        }
+        
+        FrozenSet<AssetId> frozenSet = hashset.ToFrozenSet();
+        _combinedTaggedAssets.TryAdd(coreTag, frozenSet);
+        return frozenSet;
+    }
 
     public IEnumerable<AssetId> GetAllAssetsOfStringTag(string stringTag) =>
         StringTaggedAssets.TryGetValue(stringTag, out FrozenSet<AssetId>? bag) ? bag : [];
