@@ -7,8 +7,12 @@ namespace AterraCore.Common.Attributes;
 // ---------------------------------------------------------------------------------------------------------------------
 [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = true)]
 [UsedImplicitly]
-public class ResolveAsSpecificAttribute(string? ulid = null) : Attribute {
-    public Ulid Ulid { get; } = ulid is not null
-        ? Ulid.Parse(ulid, CultureInfo.InvariantCulture)
-        : Ulid.NewUlid();// Yes this intended behaviour.
+public class ResolveAsSpecificAttribute(Ulid ulid) : Attribute {
+    public Ulid Ulid { get; } = ulid;
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Constructors
+    // -----------------------------------------------------------------------------------------------------------------
+    public ResolveAsSpecificAttribute(string ulid) : this(Ulid.Parse(ulid, CultureInfo.InvariantCulture)) {}
+    public ResolveAsSpecificAttribute() : this(Ulid.NewUlid()) {}
 }

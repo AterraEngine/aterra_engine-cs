@@ -33,7 +33,7 @@ public class TransFormAterraEngineLogo : Transform2D {
 [Entity<ActorAterraEngineLogo>("AterraLib:Actor/AterraEngineLogo", CoreTags.Singleton)]
 [UsedImplicitly]
 public class ActorAterraEngineLogo(
-    TransFormAterraEngineLogo transform2D,
+    [ResolveAsSpecific("01J7EEMGC6ZVS6ZW908A5ZTS6Y")] TransFormAterraEngineLogo transform2D,
     [ResolveAsSpecific("01J601YA03GS19CR8AHC9NCG55")] SpriteAterraEngineLogo sprite2D,
     IDirectChildren childEntities,
     IImpulse2D impulse2D
