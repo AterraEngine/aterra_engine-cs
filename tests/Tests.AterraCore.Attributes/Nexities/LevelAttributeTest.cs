@@ -11,16 +11,6 @@ namespace Tests.AterraCore.Attributes.Nexities;
 // ---------------------------------------------------------------------------------------------------------------------
 [TestSubject(typeof(LevelAttribute))]
 public class LevelAttributeTest {
-    // Test types and interfaces
-    [Level("test:asset", CoreTags.Level, ServiceLifetime.Scoped, typeof(ISampleInterface))]
-    private class ClassWithLevelAttribute : ISampleInterface;
-
-    [Level<ISampleInterface>("test:generic/asset", CoreTags.Singleton, ServiceLifetime.Singleton)]
-    private class ClassWithGenericLevelAttribute : ISampleInterface;
-
-    private interface ISampleInterface;
-
-    private interface IAnotherInterface;
 
     [Fact]
     public void LevelAttribute_ShouldInitializeCorrectly() {
@@ -89,4 +79,15 @@ public class LevelAttributeTest {
         Assert.Equal(ServiceLifetime.Singleton, attribute.Lifetime);
         Assert.Equal([typeof(ISampleInterface)], attribute.InterfaceTypes);
     }
+
+    // Test types and interfaces
+    [Level("test:asset", CoreTags.Level, ServiceLifetime.Scoped, typeof(ISampleInterface))]
+    private class ClassWithLevelAttribute : ISampleInterface;
+
+    [Level<ISampleInterface>("test:generic/asset", CoreTags.Singleton)]
+    private class ClassWithGenericLevelAttribute : ISampleInterface;
+
+    private interface ISampleInterface;
+
+    private interface IAnotherInterface;
 }

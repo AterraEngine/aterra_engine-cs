@@ -11,16 +11,6 @@ namespace Tests.AterraCore.Attributes.Nexities;
 // ---------------------------------------------------------------------------------------------------------------------
 [TestSubject(typeof(AssetAttribute))]
 public class AssetAttributeTest {
-    // Test types and interfaces
-    [Asset("test:asset", CoreTags.Asset, ServiceLifetime.Scoped, typeof(ISampleInterface))]
-    private class ClassWithAssetAttribute : ISampleInterface;
-
-    [Asset<ISampleInterface>("test:generic/asset", CoreTags.Singleton, ServiceLifetime.Singleton)]
-    private class ClassWithGenericAssetAttribute : ISampleInterface;
-
-    private interface ISampleInterface;
-
-    private interface IAnotherInterface;
 
     [Fact]
     public void AssetAttribute_ShouldInitializeCorrectly() {
@@ -89,4 +79,15 @@ public class AssetAttributeTest {
         Assert.Equal(ServiceLifetime.Singleton, attribute.Lifetime);
         Assert.Equal([typeof(ISampleInterface)], attribute.InterfaceTypes);
     }
+
+    // Test types and interfaces
+    [Asset("test:asset", CoreTags.Asset, ServiceLifetime.Scoped, typeof(ISampleInterface))]
+    private class ClassWithAssetAttribute : ISampleInterface;
+
+    [Asset<ISampleInterface>("test:generic/asset", CoreTags.Singleton, ServiceLifetime.Singleton)]
+    private class ClassWithGenericAssetAttribute : ISampleInterface;
+
+    private interface ISampleInterface;
+
+    private interface IAnotherInterface;
 }

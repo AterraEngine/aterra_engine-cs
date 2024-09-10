@@ -14,8 +14,8 @@ namespace AterraCore.Nexities.Systems;
 [UsedImplicitly]
 public abstract class NexitiesSystem<TEntity> : AssetInstance, INexitiesSystem
     where TEntity : IAssetInstance {
-    protected bool BufferPopulated;
     protected readonly List<TEntity> EntitiesBuffer = [];
+    protected bool BufferPopulated;
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods

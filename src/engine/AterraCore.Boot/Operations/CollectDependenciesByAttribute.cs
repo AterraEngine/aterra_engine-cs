@@ -1,7 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Attributes;
+using AterraCore.Common.Attributes;
 using AterraCore.ConfigMancer;
 using AterraCore.Contracts.Boot.Operations;
 using AterraCore.FlexiPlug;

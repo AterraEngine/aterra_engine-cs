@@ -18,6 +18,37 @@ namespace AterraCore.Nexities.Entities;
 [DebuggerDisplay("ComponentsById: {_componentsById}")]
 [DebuggerDisplay("ComponentsByType: {_componentsByType}")]
 public abstract class NexitiesEntity(params INexitiesComponent[] components) : AssetInstance, INexitiesEntity, IDisposable {
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Cleanup
+    // -----------------------------------------------------------------------------------------------------------------
+    #region Dispose
+    public void Dispose() {
+        // Return the dictionaries to the pool
+        Pools.ComponentsByIdPool.Return(_componentsById);
+        Pools.ComponentsByTypePool.Return(_componentsByType);
+        Pools.ComponentsByInstanceIdPool.Return(_componentsByInstanceId);
+
+        GC.SuppressFinalize(this);
+    }
+    #endregion
+    #region Try Add
+    public bool TryAddComponent(INexitiesComponent component) {
+        if (!_componentsById.TryAdd(component.AssetId, component) ||
+            !_componentsByType.TryAdd(component.GetType(), component.AssetId)) return false;
+        ClearCaches();
+        return true;
+    }
+    #endregion
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Abstract Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    protected virtual void ClearCaches() {
+        _components = null;
+        _componentIds = null;
+        _componentUlids = null;
+    }
     #region Pooled Dictionaries
     private static INexitiesEntityPools? _pools;
     private static INexitiesEntityPools Pools => _pools ??= EngineServices.GetService<INexitiesEntityPools>();
@@ -59,15 +90,6 @@ public abstract class NexitiesEntity(params INexitiesComponent[] components) : A
     #endregion
 
     // -----------------------------------------------------------------------------------------------------------------
-    // Abstract Methods
-    // -----------------------------------------------------------------------------------------------------------------
-    protected virtual void ClearCaches() {
-        _components = null;
-        _componentIds = null;
-        _componentUlids = null;
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
     // Component manipulation Methods
     // -----------------------------------------------------------------------------------------------------------------
     #region Get & TryGet Components
@@ -106,14 +128,6 @@ public abstract class NexitiesEntity(params INexitiesComponent[] components) : A
     public bool TryGetComponent(AssetId assetId, [NotNullWhen(true)] out INexitiesComponent? component) =>
         _componentsById.TryGetValue(assetId, out component);
     #endregion
-    #region Try Add
-    public bool TryAddComponent(INexitiesComponent component) {
-        if (!_componentsById.TryAdd(component.AssetId, component) ||
-            !_componentsByType.TryAdd(component.GetType(), component.AssetId)) return false;
-        ClearCaches();
-        return true;
-    }
-    #endregion
     #region Try Overwrite
     public bool TryOverwriteComponent(INexitiesComponent component) => TryOverwriteComponent(component, out _);
     public bool TryOverwriteComponent(INexitiesComponent component, [NotNullWhen(true)] out INexitiesComponent? oldComponent) {
@@ -125,20 +139,6 @@ public abstract class NexitiesEntity(params INexitiesComponent[] components) : A
 
         ClearCaches();
         return true;
-    }
-    #endregion
-
-    // -----------------------------------------------------------------------------------------------------------------
-    // Cleanup
-    // -----------------------------------------------------------------------------------------------------------------
-    #region Dispose
-    public void Dispose() {
-        // Return the dictionaries to the pool
-        Pools.ComponentsByIdPool.Return(_componentsById);
-        Pools.ComponentsByTypePool.Return(_componentsByType);
-        Pools.ComponentsByInstanceIdPool.Return(_componentsByInstanceId);
-
-        GC.SuppressFinalize(this);
     }
     #endregion
 }

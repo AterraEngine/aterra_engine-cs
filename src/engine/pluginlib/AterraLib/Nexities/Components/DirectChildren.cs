@@ -1,18 +1,19 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.Attributes;
 using Extensions;
 
 namespace AterraLib.Nexities.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Component<IDirectChildren>(AssetIdStringLib.AterraLib.Components.DirectChildren)]
+[Component<IDirectChildren>(StringAssetIdLib.AterraLib.Components.DirectChildren)]
 [UsedImplicitly]
 public class DirectChildren : NexitiesComponent, IDirectChildren {
-    protected virtual List<Ulid> DirectChildIds { get; } = new(12);
     private readonly ReaderWriterLockSlim _rwLock = new();
     private int? _count;
+    protected virtual List<Ulid> DirectChildIds { get; } = new(12);
 
     public int Count {
         get {

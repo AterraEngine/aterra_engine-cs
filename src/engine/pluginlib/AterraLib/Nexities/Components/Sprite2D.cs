@@ -1,16 +1,18 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.Attributes;
+
 namespace AterraLib.Nexities.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Component<ISprite2D>(AssetIdStringLib.AterraLib.Components.Sprite2D)]
+[Component<ISprite2D>(StringAssetIdLib.AterraLib.Components.Sprite2D)]
 [UsedImplicitly]
 public class Sprite2D : NexitiesComponent, ISprite2D {
-    public virtual AssetId TextureAssetId { get; set; } = new();
 
     private Rectangle _uvSelection = new(0, 0, 1, 1);
+    public virtual AssetId TextureAssetId { get; set; } = new();
 
     public virtual Rectangle UvSelection {
         get => _uvSelection;

@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.Attributes;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading.CrossThread;
 using AterraLib.Contracts;
@@ -10,7 +11,7 @@ namespace AterraLib.Nexities.Systems.Logic;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[System(AssetIdStringLib.AterraLib.SystemsLogic.PlayerController, CoreTags.LogicThread)]
+[System(StringAssetIdLib.AterraLib.SystemsLogic.PlayerController, CoreTags.LogicThread)]
 [Injectable<PlayerController>(ServiceLifetime.Singleton)]
 [UsedImplicitly]
 public class PlayerController(ICrossThreadTickData crossThreadTickData) : NexitiesSystem<IPlayer2D> {

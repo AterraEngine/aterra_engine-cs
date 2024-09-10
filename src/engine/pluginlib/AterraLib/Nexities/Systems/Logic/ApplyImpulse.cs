@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.Attributes;
 using AterraCore.Contracts.OmniVault.World;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -8,7 +9,7 @@ namespace AterraLib.Nexities.Systems.Logic;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[System(AssetIdStringLib.AterraLib.SystemsLogic.ApplyImpulse, CoreTags.LogicThread)]
+[System(StringAssetIdLib.AterraLib.SystemsLogic.ApplyImpulse, CoreTags.LogicThread)]
 [Injectable<ApplyImpulse>(ServiceLifetime.Singleton)]
 [UsedImplicitly]
 public class ApplyImpulse : NexitiesSystemUnCachedWithFilter<IActor2D> {

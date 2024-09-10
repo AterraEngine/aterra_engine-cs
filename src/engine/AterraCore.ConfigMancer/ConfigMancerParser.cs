@@ -1,7 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Attributes;
+using AterraCore.Common.Attributes;
 using AterraCore.Common.ConfigFiles;
 using AterraCore.Common.Data;
 using AterraCore.Contracts.ConfigMancer;
@@ -31,20 +31,6 @@ public class ConfigMancerParser(IPluginAtlas pluginAtlas, ILogger logger, IXmlPo
 
     private XmlParser<GameConfigXml>? _gameConfigParser;
     private XmlParser<GameConfigXml> GameConfigParser => _gameConfigParser ??= new XmlParser<GameConfigXml>(logger, XmlNameSpaces.ConfigGame, Paths.Xsd.XsdGameConfigDto);
-
-    // -----------------------------------------------------------------------------------------------------------------
-    // Methods
-    // -----------------------------------------------------------------------------------------------------------------
-    private static string XmlRootElementName(Type type) =>
-        type.GetCustomAttributes<XmlRootAttribute>().FirstOrDefault()?.ElementName
-        ?? char.ToLowerInvariant(type.Name[0]) + type.Name[1..];
-
-    private static bool TryDeserializeWithAttributes(Type type, XmlNode node, [NotNullWhen(true)] out IConfigMancerElement? deserialized) {
-        var serializer = new XmlSerializer(type, new XmlRootAttribute(node.LocalName) { Namespace = node.NamespaceURI });
-        using var reader = new StringReader(node.OuterXml);
-        deserialized = serializer.Deserialize(reader) as IConfigMancerElement;// If extracted, make a try catch, or a better TryDeserialize...
-        return deserialized != null;
-    }
 
     public bool TryParseGameConfig(string filePath, out FrozenParsedConfigs parsedConfigs) {
         parsedConfigs = default;
@@ -82,5 +68,19 @@ public class ConfigMancerParser(IPluginAtlas pluginAtlas, ILogger logger, IXmlPo
         finally {
             xmlPools.XmlNodeQueuePool.Return(queue);
         }
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    private static string XmlRootElementName(Type type) =>
+        type.GetCustomAttributes<XmlRootAttribute>().FirstOrDefault()?.ElementName
+        ?? char.ToLowerInvariant(type.Name[0]) + type.Name[1..];
+
+    private static bool TryDeserializeWithAttributes(Type type, XmlNode node, [NotNullWhen(true)] out IConfigMancerElement? deserialized) {
+        var serializer = new XmlSerializer(type, new XmlRootAttribute(node.LocalName) { Namespace = node.NamespaceURI });
+        using var reader = new StringReader(node.OuterXml);
+        deserialized = serializer.Deserialize(reader) as IConfigMancerElement;// If extracted, make a try catch, or a better TryDeserialize...
+        return deserialized != null;
     }
 }

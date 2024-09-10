@@ -1,7 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Attributes;
+using AterraCore.Common.Attributes;
 using AterraCore.Common.ConfigFiles;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Boot;
@@ -49,5 +49,4 @@ public class PluginAtlasFactory(IServiceProvider provider, IBootComponents bootC
 
         return pluginAtlas;
     }
-
 }

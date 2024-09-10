@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.Types.Threading;
 using AterraCore.Contracts.Threading.CrossThread.Dto;
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;

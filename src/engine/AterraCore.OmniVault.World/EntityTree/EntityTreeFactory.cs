@@ -1,7 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Attributes;
+using AterraCore.Common.Attributes;
 using AterraCore.Common.Types;
 using AterraCore.Contracts.Nexities.Entities.QuickHands;
 using AterraCore.Contracts.OmniVault.Assets;
@@ -19,7 +19,7 @@ public class EntityTreeFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreePoo
     public IEntityNodeTree CreateEmpty() => new EntityNodeTree(new EntityNode(), entityTreePools);
 
     /// <summary>
-    /// Populates the nodes in the entity node tree starting from the given root instance ID.
+    ///     Populates the nodes in the entity node tree starting from the given root instance ID.
     /// </summary>
     /// <param name="rootInstanceId">The ULID of the root instance.</param>
     /// <returns>The root entity node of the populated tree.</returns>
@@ -29,7 +29,7 @@ public class EntityTreeFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreePoo
         var rootNode = new EntityNode(instance);
         if (instance is not IHasDirectChildren) return rootNode;
 
-        using var stackPool = new PooledResource<Stack<(IEntityNode ParentNode, Ulid InstanceId)>>(entityTreePools.FactoryStack);
+        using var stackPool = new DisposablePooledResource<Stack<(IEntityNode ParentNode, Ulid InstanceId)>>(entityTreePools.FactoryStack);
         Stack<(IEntityNode ParentNode, Ulid InstanceId)> stack = stackPool.Item;
 
         stack.Push((rootNode, rootInstanceId));

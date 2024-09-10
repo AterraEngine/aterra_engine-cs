@@ -19,21 +19,6 @@ public abstract class NexitiesSystemWithParents<TParent, TChild> : AssetInstance
     protected bool BufferPopulated;
     protected (TParent? Parent, TChild Child, int zIndex)[] EntitiesBuffer = [];
 
-    #region Reusable Pool
-    private readonly DefaultObjectPoolProvider _objectPoolProvider = new();
-    private ObjectPool<List<(TParent? Parent, TChild Child, int zIndex)>>? _parentChildPool;
-    protected ObjectPool<List<(TParent? Parent, TChild Child, int zIndex)>> ParentChildPool =>
-        _parentChildPool ??= _objectPoolProvider.Create(new ComponentsByIdPoolPolicy(1024 * 64));
-
-    private class ComponentsByIdPoolPolicy(int capacity) : PooledObjectPolicy<List<(TParent? Parent, TChild Child, int zIndex)>> {
-        public override List<(TParent? Parent, TChild Child, int zIndex)> Create() => new(capacity);
-        public override bool Return(List<(TParent? Parent, TChild Child, int zIndex)> obj) {
-            obj.Clear();
-            return true;
-        }
-    }
-    #endregion
-
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -63,4 +48,19 @@ public abstract class NexitiesSystemWithParents<TParent, TChild> : AssetInstance
         ParentChildPool.Return(list);
         return EntitiesBuffer;
     }
+
+    #region Reusable Pool
+    private readonly DefaultObjectPoolProvider _objectPoolProvider = new();
+    private ObjectPool<List<(TParent? Parent, TChild Child, int zIndex)>>? _parentChildPool;
+    protected ObjectPool<List<(TParent? Parent, TChild Child, int zIndex)>> ParentChildPool =>
+        _parentChildPool ??= _objectPoolProvider.Create(new ComponentsByIdPoolPolicy(1024 * 64));
+
+    private class ComponentsByIdPoolPolicy(int capacity) : PooledObjectPolicy<List<(TParent? Parent, TChild Child, int zIndex)>> {
+        public override List<(TParent? Parent, TChild Child, int zIndex)> Create() => new(capacity);
+        public override bool Return(List<(TParent? Parent, TChild Child, int zIndex)> obj) {
+            obj.Clear();
+            return true;
+        }
+    }
+    #endregion
 }

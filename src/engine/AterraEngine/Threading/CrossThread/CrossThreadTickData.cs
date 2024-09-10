@@ -1,7 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Attributes;
+using AterraCore.Common.Attributes;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Threading.CrossThread;
 using JetBrains.Annotations;
@@ -43,7 +43,7 @@ public class CrossThreadTickData : ICrossThreadTickData {
         tickDataHolder = null;
         return false;
     }
-    
+
     public void ClearOnLogicTick() {
         foreach (ITickDataHolder holder in _tickDataHolders.Values) {
             holder.ClearOnLogicTick();

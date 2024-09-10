@@ -1,7 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Attributes;
+using AterraCore.Common.Attributes;
 using AterraCore.Contracts.Threading;
 using AterraCore.Contracts.Threading.Logic;
 using AterraCore.Contracts.Threading.Rendering;
@@ -16,12 +16,12 @@ namespace AterraEngine.Threading;
 [UsedImplicitly]
 [Singleton<IThreadingManager>]
 public class ThreadingManager(ILogger logger) : IThreadingManager {
+
+    private readonly List<CancellationToken> _cancellationTokens = [];
     private ILogger Logger { get; } = logger.ForContext<ThreadingManager>();
 
     private IThreadData? LogicThreadData { get; set; }
     private IThreadData? RenderThreadData { get; set; }
-
-    private readonly List<CancellationToken> _cancellationTokens = [];
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods

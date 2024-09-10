@@ -11,16 +11,6 @@ namespace Tests.AterraCore.Attributes.Nexities;
 // ---------------------------------------------------------------------------------------------------------------------
 [TestSubject(typeof(TextureAttribute))]
 public class TextureAttributeTest {
-    // Test types and interfaces
-    [Texture("test:asset", CoreTags.Texture, ServiceLifetime.Scoped, typeof(ISampleInterface))]
-    private class ClassWithTextureAttribute : ISampleInterface;
-
-    [Texture<ISampleInterface>("test:generic/asset", CoreTags.Singleton, ServiceLifetime.Singleton)]
-    private class ClassWithGenericTextureAttribute : ISampleInterface;
-
-    private interface ISampleInterface;
-
-    private interface IAnotherInterface;
 
     [Fact]
     public void TextureAttribute_ShouldInitializeCorrectly() {
@@ -89,4 +79,15 @@ public class TextureAttributeTest {
         Assert.Equal(ServiceLifetime.Singleton, attribute.Lifetime);
         Assert.Equal([typeof(ISampleInterface)], attribute.InterfaceTypes);
     }
+
+    // Test types and interfaces
+    [Texture("test:asset", CoreTags.Texture, ServiceLifetime.Scoped, typeof(ISampleInterface))]
+    private class ClassWithTextureAttribute : ISampleInterface;
+
+    [Texture<ISampleInterface>("test:generic/asset", CoreTags.Singleton)]
+    private class ClassWithGenericTextureAttribute : ISampleInterface;
+
+    private interface ISampleInterface;
+
+    private interface IAnotherInterface;
 }

@@ -20,57 +20,14 @@ namespace AterraCore.FlexiPlug;
 public class PluginAtlas(IServiceProvider provider) : IPluginAtlas {
     private readonly ILogger _logger = provider.GetRequiredService<ILogger>().ForContext<PluginAtlas>();
 
+    private ImmutableDictionary<string, ZipArchive> _pluginZipArchive = ImmutableDictionary<string, ZipArchive>.Empty;
+
+    private int? _totalAssetCountCache;
+
     public IReadOnlyCollection<IPluginRecord> Plugins { get; init; } = [];
     public FrozenSet<PluginId> PluginIds { get; init; } = new HashSet<PluginId>().ToFrozenSet();
     public ImmutableArray<PluginId> PluginIdsByOrder { get; init; } = [];
-
-    private int? _totalAssetCountCache;
     public int TotalAssetCount => _totalAssetCountCache ??= Plugins.SelectMany(p => p.AssetTypes).Count();
-
-    private ImmutableDictionary<string, ZipArchive> _pluginZipArchive = ImmutableDictionary<string, ZipArchive>.Empty;
-
-    // -----------------------------------------------------------------------------------------------------------------
-    // Methods
-    // -----------------------------------------------------------------------------------------------------------------
-    #region Get Registrations
-    public IEnumerable<AssetRegistration> GetAssetRegistrations(PluginId? pluginNameSpace = null, CoreTags? filter = null) {
-        // Given this is only done once (during project startup), caching this seems a bit unnecessary.
-        return Plugins
-            // Filter down to only the plugin we need
-            .ConditionalWhere(pluginNameSpace != null, predicate: p => p.PluginId == (PluginId)pluginNameSpace!)
-            .SelectMany(p => p.AssetTypes
-                // Filter down to which Asset Tag we want
-                .ConditionalWhere(filter != null, predicate: record => record.AssetAttribute.CoreTags.HasFlag(filter!))
-                .Select(record => new AssetRegistration(
-                    record.AssetAttribute.AssetId,
-                    record.Type
-                ) {
-                    InterfaceTypes = record.AssetAttribute.InterfaceTypes,
-                    CoreTags = record.AssetAttribute.CoreTags,
-                    StringTags = record.AssetTagAttributes.SelectMany(attribute => attribute.Tags),
-                    OverridableAssetIds = record.OverwritesAssetIdAttributes.Select(attribute => attribute.AssetId)
-                })
-            );
-    }
-
-    public IEnumerable<AssetRegistration> GetEntityRegistrations(PluginId? pluginNameSpace = null) =>
-        GetAssetRegistrations(pluginNameSpace, CoreTags.Entity);
-
-    public IEnumerable<AssetRegistration> GetComponentRegistrations(PluginId? pluginNameSpace = null) =>
-        GetAssetRegistrations(pluginNameSpace, CoreTags.Component);
-    #endregion
-
-    private bool TryGetOrCreateZipArchive(string filePath, [NotNullWhen(true)] out ZipArchive? zipArchive) {
-        zipArchive = default;
-        // ReSharper disable once SuggestVarOrType_SimpleTypes
-        if (_pluginZipArchive.TryGetValue(filePath, out zipArchive)) return true;
-
-        if (!File.Exists(filePath)) return false;
-        zipArchive = ZipFile.OpenRead(filePath);
-        _pluginZipArchive = _pluginZipArchive.Add(filePath, zipArchive);
-
-        return true;
-    }
 
     public bool TryGetFileRawFromPluginZip(
         PluginId pluginId, string internalFilePath,
@@ -114,4 +71,47 @@ public class PluginAtlas(IServiceProvider provider) : IPluginAtlas {
         int r = PluginIdsByOrder.IndexOf(right);
         return l != -1 && r != -1 && l > r;
     }
+
+    private bool TryGetOrCreateZipArchive(string filePath, [NotNullWhen(true)] out ZipArchive? zipArchive) {
+        zipArchive = default;
+        // ReSharper disable once SuggestVarOrType_SimpleTypes
+        if (_pluginZipArchive.TryGetValue(filePath, out zipArchive)) return true;
+
+        if (!File.Exists(filePath)) return false;
+        zipArchive = ZipFile.OpenRead(filePath);
+        _pluginZipArchive = _pluginZipArchive.Add(filePath, zipArchive);
+
+        return true;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    #region Get Registrations
+    public IEnumerable<AssetRegistration> GetAssetRegistrations(PluginId? pluginNameSpace = null, CoreTags? filter = null) {
+        // Given this is only done once (during project startup), caching this seems a bit unnecessary.
+        return Plugins
+            // Filter down to only the plugin we need
+            .ConditionalWhere(pluginNameSpace != null, predicate: p => p.PluginId == (PluginId)pluginNameSpace!)
+            .SelectMany(p => p.AssetTypes
+                // Filter down to which Asset Tag we want
+                .ConditionalWhere(filter != null, predicate: record => record.AssetAttribute.CoreTags.HasFlag(filter!))
+                .Select(record => new AssetRegistration(
+                    record.AssetAttribute.AssetId,
+                    record.Type
+                ) {
+                    InterfaceTypes = record.AssetAttribute.InterfaceTypes,
+                    CoreTags = record.AssetAttribute.CoreTags,
+                    StringTags = record.AssetTagAttributes.SelectMany(attribute => attribute.Tags),
+                    OverridableAssetIds = record.OverwritesAssetIdAttributes.Select(attribute => attribute.AssetId)
+                })
+            );
+    }
+
+    public IEnumerable<AssetRegistration> GetEntityRegistrations(PluginId? pluginNameSpace = null) =>
+        GetAssetRegistrations(pluginNameSpace, CoreTags.Entity);
+
+    public IEnumerable<AssetRegistration> GetComponentRegistrations(PluginId? pluginNameSpace = null) =>
+        GetAssetRegistrations(pluginNameSpace, CoreTags.Component);
+    #endregion
 }

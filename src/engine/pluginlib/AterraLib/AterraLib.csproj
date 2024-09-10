@@ -21,7 +21,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\..\lib\Extensions\Extensions.csproj"/>
-        <ProjectReference Include="..\..\AterraCore.Attributes\AterraCore.Attributes.csproj"/>
         <ProjectReference Include="..\..\AterraCore.Contracts\AterraCore.Contracts.csproj"/>
         <ProjectReference Include="..\..\AterraCore.Nexities\AterraCore.Nexities.csproj"/>
         <ProjectReference Include="..\..\AterraCore.OmniVault.Textures\AterraCore.OmniVault.Textures.csproj"/>

@@ -1,7 +1,8 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Attributes;
+using AterraCore.Common.Attributes;
+using AterraCore.Common.Types.Threading;
 using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.DataCollector;
@@ -36,17 +37,17 @@ public class RenderThreadProcessor(
     IAssetInstanceAtlas instanceAtlas,
     ICrossThreadTickData crossThreadTickData
 ) : IRenderThreadProcessor {
+    private readonly Stack<Action> _endOfFrameActions = [];
     private ILogger Logger { get; } = logger.ForContext<RenderThreadProcessor>();
-    public CancellationToken CancellationToken { get; set; }
 
     private static Color ClearColor { get; } = new(0, 0, 0, 0);
-    private readonly Stack<Action> _endOfFrameActions = [];
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     private bool WhileCondition => !Raylib.WindowShouldClose()
         || CancellationToken.IsCancellationRequested;
+    public CancellationToken CancellationToken { get; set; }
     public void Run() {
         RegisterEvents();
         mainWindow.Init();
@@ -59,13 +60,18 @@ public class RenderThreadProcessor(
 
             while (_endOfFrameActions.TryPop(out Action? action))
                 action();
-            
+
             crossThreadTickData.ClearOnRenderFrame();
         }
 
         Logger.Information("Render Thread Closing");
         Raylib.CloseWindow();
         threadingManager.CancelThreads();
+    }
+
+    public void RegisterEvents() {
+        eventManager.EventClearSystemCaches += (_, _) => _endOfFrameActions.Push(OnEventManagerOnEventClearSystemCaches);
+        eventManager.EventWindowResized += (_, _) => _endOfFrameActions.Push(OnEventManagerOnEventWindowResized);
     }
 
     private void Update() {
@@ -105,11 +111,6 @@ public class RenderThreadProcessor(
         Raylib.DrawText($"entGlb : {instanceAtlas.TotalCount}", 0, 350, 32, Color.LightGray);
         Raylib.DrawText($" Asset : {level.RawLevelData.AssetId}", 0, 400, 12, Color.LightGray);
         Raylib.DrawText($"  Inst : {level.RawLevelData.InstanceId}", 0, 425, 12, Color.LightGray);
-    }
-
-    public void RegisterEvents() {
-        eventManager.EventClearSystemCaches += (_, _) => _endOfFrameActions.Push(OnEventManagerOnEventClearSystemCaches);
-        eventManager.EventWindowResized += (_, _) => _endOfFrameActions.Push(OnEventManagerOnEventWindowResized);
     }
 
     private void HandleQueue() {

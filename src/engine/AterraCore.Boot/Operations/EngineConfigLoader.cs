@@ -15,7 +15,6 @@ namespace AterraCore.Boot.Operations;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class EngineConfigLoader : IBootOperation {
-    private ILogger Logger { get; } = StartupLogger.CreateLogger(false).ForBootOperationContext<EngineConfigLoader>();
     private readonly string? _configFilePath;
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -25,6 +24,7 @@ public class EngineConfigLoader : IBootOperation {
     [UsedImplicitly] public EngineConfigLoader(string? configFilePath = null) {
         _configFilePath = configFilePath;
     }
+    private ILogger Logger { get; } = StartupLogger.CreateLogger(false).ForBootOperationContext<EngineConfigLoader>();
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods

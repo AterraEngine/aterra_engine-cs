@@ -16,6 +16,17 @@ public class TickDataInput : ITickDataInput {
     public ConcurrentStack<MouseButton> MouseButtonDown { get; } = [];
     public ConcurrentStack<Vector2> MouseWheelMovement { get; } = [];
 
+    public void ClearOnLevelChange() => ClearCaches();
+    public void ClearOnLogicTick() => ClearCaches();
+    public void ClearOnRenderFrame() {}
+
+    public bool IsEmpty => KeyboardKeyPressed.IsEmpty
+        && KeyboardKeyPressedRepeated.IsEmpty
+        && KeyboardKeyReleased.IsEmpty
+        && KeyboardKeyDown.IsEmpty
+        && MouseButtonDown.IsEmpty
+        && MouseWheelMovement.IsEmpty;
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -27,15 +38,4 @@ public class TickDataInput : ITickDataInput {
         MouseButtonDown.Clear();
         MouseWheelMovement.Clear();
     }
-
-    public void ClearOnLevelChange() => ClearCaches();
-    public void ClearOnLogicTick() => ClearCaches();
-    public void ClearOnRenderFrame() {}
-
-    public bool IsEmpty => KeyboardKeyPressed.IsEmpty
-        && KeyboardKeyPressedRepeated.IsEmpty
-        && KeyboardKeyReleased.IsEmpty
-        && KeyboardKeyDown.IsEmpty
-        && MouseButtonDown.IsEmpty
-        && MouseWheelMovement.IsEmpty;
 }

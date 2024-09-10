@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.Attributes;
 using AterraLib.Nexities.Components;
 
 namespace AterraLib.Nexities.Entities;
@@ -20,7 +21,7 @@ public class EmptyLevelSystemIds : SystemIds {
     protected override AssetId[] RenderSystems { get; set; } = [
         AssetIdLib.AterraLib.SystemsRendering.Render2DPrepForProps,
         AssetIdLib.AterraLib.SystemsRendering.Render2DPrepForActors,
-        AssetIdLib.AterraLib.SystemsRendering.Render2D,
+        AssetIdLib.AterraLib.SystemsRendering.Render2D
     ];
 
     protected override AssetId[] UiSystems { get; set; } = [
@@ -30,8 +31,8 @@ public class EmptyLevelSystemIds : SystemIds {
 [Component<DirectChildrenEmptyLevel>("AterraLib:Components/DirectChildrenEmptyLevel")]
 [UsedImplicitly]
 public class DirectChildrenEmptyLevel(
-    [InjectAs("01J601ZRSVSA5MMEWMA7B2MV9X")] ActorAterraEngineLogo actorAterraEngineLogo,
-    [InjectAs("01J6024ZFKAT3WQ1R4FKRBZ8SJ")] ICamera2D camera2D
+    [ResolveAsSpecific("01J601ZRSVSA5MMEWMA7B2MV9X")] ActorAterraEngineLogo actorAterraEngineLogo,
+    [ResolveAsSpecific("01J6024ZFKAT3WQ1R4FKRBZ8SJ")] ICamera2D camera2D
 ) : DirectChildren {
     protected override List<Ulid> DirectChildIds { get; } = [
         actorAterraEngineLogo.InstanceId,
@@ -39,22 +40,22 @@ public class DirectChildrenEmptyLevel(
     ];
 }
 
-[Entity<INexitiesLevel>(AssetIdStringLib.AterraLib.Entities.EmptyLevel, CoreTags.Level)]
+[Entity<INexitiesLevel>(StringAssetIdLib.AterraLib.Entities.EmptyLevel, CoreTags.Level)]
 [UsedImplicitly]
 public class EmptyLevel(
-    [InjectAs("01J601YXRRSCWGQQY63E9AFD0Q")] DirectChildrenEmptyLevel children,
-    [InjectAs("01J6022W9XGTXC4J1B55SQSGT5")] EmptyLevelSystemIds systemIds
+    [ResolveAsSpecific("01J601YXRRSCWGQQY63E9AFD0Q")] DirectChildrenEmptyLevel children,
+    [ResolveAsSpecific("01J6022W9XGTXC4J1B55SQSGT5")] EmptyLevelSystemIds systemIds
 ) : NexitiesEntity(children, systemIds), INexitiesLevel {
     private IDirectChildren? _children = children;
-    public IDirectChildren ChildrenIDs => _children ??= GetComponent<IDirectChildren>();
 
     private ISystemIds? _systemIds = systemIds;
+    public IDirectChildren ChildrenIDs => _children ??= GetComponent<IDirectChildren>();
     public ISystemIds NexitiesSystemIds => _systemIds ??= GetComponent<ISystemIds>();
+    public void OnLevelFirstCreation() {}
 
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     protected override void ClearCaches() {}
-    public void OnLevelFirstCreation() {}
 }

@@ -1,7 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Attributes;
+using AterraCore.Common.Attributes;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.OmniVault.Assets;
@@ -29,9 +29,62 @@ using TConstructor=Func<object[], object>;
 [UsedImplicitly]
 [Singleton<IAssetInstanceFactory>]
 public class AssetInstanceFactory(ILogger logger, IPluginAtlas pluginAtlas) : IAssetInstanceFactory {
+    private static readonly ArrayPool<object> ParameterPool = ArrayPool<object>.Shared;
     private readonly FrozenDictionary<AssetId, TActionsArray> _actionsMap = AssembleParameterActions(pluginAtlas);
     private readonly FrozenDictionary<Type, TConstructor> _constructorCache = AssembleConstructorDelegates(pluginAtlas);
-    private static readonly ArrayPool<object> ParameterPool = ArrayPool<object>.Shared;
+
+    // -----------------------------------------------------------------------------------------------------------------
+    //  Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    public bool TryCreate<T>(AssetRegistration registration, Ulid predefinedUlid, [NotNullWhen(true)] out T? assetInstance) where T : class, IAssetInstance {
+        assetInstance = null;
+        object[] parameters = ParameterPool.Rent(registration.ConstructorParamLength);
+
+        try {
+            if (!_constructorCache.TryGetValue(registration.Type, out TConstructor? constructorDelegate)) return false;
+            if (!_actionsMap.TryGetValue(registration.AssetId, out TActionsArray? parameterActions)) return false;
+
+            for (int i = 0; i < parameterActions.Length; i++) parameters[i] = parameterActions[i]();
+
+            if (constructorDelegate(parameters) is not T castedInstance) return false;
+            assetInstance = castedInstance;
+            assetInstance.AssetId = registration.AssetId;
+            assetInstance.InstanceId = predefinedUlid;
+
+            return true;
+        }
+        catch (Exception e) when (e is MethodAccessException or ArgumentException or TargetInvocationException or TargetParameterCountException or NotSupportedException or SecurityException) {
+            logger.Error(e, $"Caught {e.GetType().Name}");
+            return false;
+        }
+        finally {
+            ParameterPool.Return(parameters, true);
+        }
+    }
+
+    public T Create<T>(AssetRegistration registration, Ulid predefinedUlid) where T : class, IAssetInstance {
+        TConstructor constructorDelegate = _constructorCache[registration.Type];
+
+        object[] parameters = _actionsMap[registration.AssetId]
+            .Select(action => action())
+            .ToArray();
+
+        var assetInstance = (T)constructorDelegate(parameters);
+
+        assetInstance.AssetId = registration.AssetId;
+        assetInstance.InstanceId = predefinedUlid;
+
+        return assetInstance;
+    }
+
+    #region Not a Nexities Asset
+    private static object CreateUnknown(ParameterInfo parameter) {
+        Type paramType = parameter.ParameterType;
+        return paramType.IsInterface && EngineServices.TryGetService(paramType, out object? output)
+            ? output
+            : EngineServices.CreateWithServices<object>(paramType);
+    }
+    #endregion
 
     // -----------------------------------------------------------------------------------------------------------------
     // Constructor Methods
@@ -82,20 +135,11 @@ public class AssetInstanceFactory(ILogger logger, IPluginAtlas pluginAtlas) : IA
         return constructorCache.ToFrozenDictionary();
     }
     #endregion
-
-    #region Not a Nexities Asset
-    private static object CreateUnknown(ParameterInfo parameter) {
-        Type paramType = parameter.ParameterType;
-        return paramType.IsInterface && EngineServices.TryGetService(paramType, out object? output)
-            ? output
-            : EngineServices.CreateWithServices<object>(paramType);
-    }
-    #endregion
     #region Basic Nexities Asset
     private static bool IsBasicNexitiesAsset(ParameterInfo parameter) {
         Type paramType = parameter.ParameterType;
         return typeof(IAssetInstance).IsAssignableFrom(paramType)
-            && !parameter.GetCustomAttributes<InjectAsAttribute>().Any()
+            && !parameter.GetCustomAttributes<ResolveAsSpecificAttribute>().Any()
             ;
     }
     private static object CreateBasicNexitiesAsset(ParameterInfo parameter) {
@@ -108,59 +152,15 @@ public class AssetInstanceFactory(ILogger logger, IPluginAtlas pluginAtlas) : IA
     private static bool IsInjectedInstanceNexitiesAsset(ParameterInfo parameter) {
         Type paramType = parameter.ParameterType;
         return typeof(IAssetInstance).IsAssignableFrom(paramType)
-            && parameter.GetCustomAttributes<InjectAsAttribute>().Any()
+            && parameter.GetCustomAttributes<ResolveAsSpecificAttribute>().Any()
             ;
     }
     private static object CreateInjectedInstanceNexitiesAsset(ParameterInfo parameter) {
         IAssetInstanceAtlas instanceAtlas = EngineServices.GetAssetInstanceAtlas();
-        var injectAsValue = parameter.GetCustomAttribute<InjectAsAttribute>()!;
+        var injectAsValue = parameter.GetCustomAttribute<ResolveAsSpecificAttribute>()!;
         Type paramType = parameter.ParameterType;
 
         return instanceAtlas.GetOrCreate<IAssetInstance>(paramType, injectAsValue.Ulid);
     }
     #endregion
-
-    // -----------------------------------------------------------------------------------------------------------------
-    //  Methods
-    // -----------------------------------------------------------------------------------------------------------------
-    public bool TryCreate<T>(AssetRegistration registration, Ulid predefinedUlid, [NotNullWhen(true)] out T? assetInstance) where T : class, IAssetInstance {
-        assetInstance = null;
-        object[] parameters = ParameterPool.Rent(registration.ConstructorParamLength);
-
-        try {
-            if (!_constructorCache.TryGetValue(registration.Type, out TConstructor? constructorDelegate)) return false;
-            if (!_actionsMap.TryGetValue(registration.AssetId, out TActionsArray? parameterActions)) return false;
-
-            for (int i = 0; i < parameterActions.Length; i++) parameters[i] = parameterActions[i]();
-
-            if (constructorDelegate(parameters) is not T castedInstance) return false;
-            assetInstance = castedInstance;
-            assetInstance.AssetId = registration.AssetId;
-            assetInstance.InstanceId = predefinedUlid;
-
-            return true;
-        }
-        catch (Exception e) when (e is MethodAccessException or ArgumentException or TargetInvocationException or TargetParameterCountException or NotSupportedException or SecurityException) {
-            logger.Error(e, $"Caught {e.GetType().Name}");
-            return false;
-        }
-        finally {
-            ParameterPool.Return(parameters, true);
-        }
-    }
-
-    public T Create<T>(AssetRegistration registration, Ulid predefinedUlid) where T : class, IAssetInstance {
-        TConstructor constructorDelegate = _constructorCache[registration.Type];
-
-        object[] parameters = _actionsMap[registration.AssetId]
-            .Select(action => action())
-            .ToArray();
-
-        var assetInstance = (T)constructorDelegate(parameters);
-
-        assetInstance.AssetId = registration.AssetId;
-        assetInstance.InstanceId = predefinedUlid;
-
-        return assetInstance;
-    }
 }

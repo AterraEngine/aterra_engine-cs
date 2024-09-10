@@ -1,9 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Data;
 using System.Collections.Concurrent;
-using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -16,9 +14,8 @@ namespace AterraCore.Common.Types.Nexities;
 [StructLayout(LayoutKind.Sequential)]
 public readonly struct AssetId :
     IEqualityOperators<AssetId, AssetId, bool>,
-    IEquatable<AssetId>, 
-    IEqualityOperators<AssetId, PluginId, bool>
-{
+    IEquatable<AssetId>,
+    IEqualityOperators<AssetId, PluginId, bool> {
     public readonly PluginId PluginId;
     public readonly NameSpace NameSpace;
     private readonly int _hashCode;

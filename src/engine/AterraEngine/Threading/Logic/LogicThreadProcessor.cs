@@ -1,12 +1,12 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Attributes;
+using AterraCore.Common.Attributes;
+using AterraCore.Common.Types.Threading;
 using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading;
 using AterraCore.Contracts.Threading.CrossThread;
-using AterraCore.Contracts.Threading.CrossThread.Dto;
 using AterraCore.Contracts.Threading.Logic;
 using JetBrains.Annotations;
 using Serilog;
@@ -26,19 +26,34 @@ public class LogicThreadProcessor(
     IThreadingManager threadingManager,
     ICrossThreadTickData crossThreadTickData
 ) : ILogicThreadProcessor {
-    private ILogger Logger { get; } = logger.ForContext<LogicThreadProcessor>();
-    public CancellationToken CancellationToken { get; set; }
 
     private const int TargetTicksPerSecond = 20;// TPS
     private const double MillisecondsPerTick = 1000.0 / TargetTicksPerSecond;
-
-    private bool IsRunning { get; set; } = true;
 
     private readonly Stack<Action> _endOfTickActions = [];
 
     private readonly Stopwatch _tickStopwatch = Stopwatch.StartNew();
     private readonly Stopwatch _tpsStopwatch = Stopwatch.StartNew();
     private int _ticks;
+    private ILogger Logger { get; } = logger.ForContext<LogicThreadProcessor>();
+
+    private bool IsRunning { get; set; } = true;
+    public CancellationToken CancellationToken { get; set; }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Event Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    public void RegisterEvents() {
+        eventManager.EventChangeActiveLevel += (_, args) => _endOfTickActions.Push(() => world.TryChangeActiveLevel(args.NewLevelId));
+
+        eventManager.EventTps += (_, d) => Logger.Debug("TPS: {0}", d);
+        // eventManager.EventActualTps += (_, _) => Logger.Debug("Assets: {0}", EngineServices.GetService<IAssetInstanceAtlas>().TotalCount);
+    }
+
+    private void HandleQueue() {
+        while (crossThreadQueue.TryDequeue(QueueKey.MainToLogic, out Action? action)) action.Invoke();
+        while (crossThreadQueue.TryDequeue(QueueKey.RenderToLogic, out Action? action)) action.Invoke();
+    }
 
     // -----------------------------------------------------------------------------------------------------------------
     // Run Method
@@ -111,19 +126,4 @@ public class LogicThreadProcessor(
         _tpsStopwatch.Restart();
     }
     #endregion
-
-    // -----------------------------------------------------------------------------------------------------------------
-    // Event Methods
-    // -----------------------------------------------------------------------------------------------------------------
-    public void RegisterEvents() {
-        eventManager.EventChangeActiveLevel += (_, args) => _endOfTickActions.Push(() => world.TryChangeActiveLevel(args.NewLevelId));
-
-        eventManager.EventTps += (_, d) => Logger.Debug("TPS: {0}", d);
-        // eventManager.EventActualTps += (_, _) => Logger.Debug("Assets: {0}", EngineServices.GetService<IAssetInstanceAtlas>().TotalCount);
-    }
-
-    private void HandleQueue() {
-        while (crossThreadQueue.TryDequeue(QueueKey.MainToLogic, out Action? action)) action.Invoke();
-        while (crossThreadQueue.TryDequeue(QueueKey.RenderToLogic, out Action? action)) action.Invoke();
-    }
 }

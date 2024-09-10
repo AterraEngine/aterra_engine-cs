@@ -9,13 +9,6 @@ namespace Tests.AterraCore.Attributes;
 // ---------------------------------------------------------------------------------------------------------------------
 [TestSubject(typeof(OverridesAssetIdAttribute))]
 public class OverridesAssetIdAttributeTests {
-    // Sample classes for testing
-    [OverridesAssetId("test:overridden-asset-id")]
-    private class ClassWithOverridesAssetId;
-
-    [OverridesAssetId("test:first-override-asset-id")]
-    [OverridesAssetId("test:second-override-asset-id")]
-    private class ClassWithMultipleOverridesAssetId;
 
     [Fact]
     public void OverridesAssetIdAttribute_ShouldInitializeCorrectly() {
@@ -45,4 +38,12 @@ public class OverridesAssetIdAttributeTests {
         Assert.Equal(new AssetId("test:first-override-asset-id"), attributes[0].AssetId);
         Assert.Equal(new AssetId("test:second-override-asset-id"), attributes[1].AssetId);
     }
+
+    // Sample classes for testing
+    [OverridesAssetId("test:overridden-asset-id")]
+    private class ClassWithOverridesAssetId;
+
+    [OverridesAssetId("test:first-override-asset-id")]
+    [OverridesAssetId("test:second-override-asset-id")]
+    private class ClassWithMultipleOverridesAssetId;
 }

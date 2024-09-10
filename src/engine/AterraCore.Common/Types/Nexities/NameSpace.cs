@@ -1,9 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Data;
 using System.Collections.Concurrent;
-using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -17,8 +15,7 @@ namespace AterraCore.Common.Types.Nexities;
 public readonly struct NameSpace :
     IEqualityOperators<NameSpace, NameSpace, bool>,
     IEqualityOperators<NameSpace, string, bool>,
-    IEquatable<NameSpace> 
-{
+    IEquatable<NameSpace> {
     public IReadOnlyList<string> Values { get; }
     private readonly int _hashCode;
     private readonly ReadOnlyMemory<char> _valueMemory;

@@ -1,23 +1,25 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.Attributes;
+
 namespace AterraLib.Nexities.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Component<ISystemIds>(AssetIdStringLib.AterraLib.Components.SystemIds)]
+[Component<ISystemIds>(StringAssetIdLib.AterraLib.Components.SystemIds)]
 [UsedImplicitly]
 public class SystemIds : NexitiesComponent, ISystemIds {
-    protected virtual AssetId[] LogicSystems { get; set; } = [];
     private IReadOnlyCollection<AssetId>? _logicSystemIdsCache;
-    public IReadOnlyCollection<AssetId> LogicSystemIds => _logicSystemIdsCache ?? LogicSystems.AsReadOnly();
+    private IReadOnlyCollection<AssetId>? _renderSystemIdsCache;
+    private IReadOnlyCollection<AssetId>? _uiSystemIdsCache;
+    protected virtual AssetId[] LogicSystems { get; set; } = [];
 
     protected virtual AssetId[] RenderSystems { get; set; } = [];
-    private IReadOnlyCollection<AssetId>? _renderSystemIdsCache;
-    public IReadOnlyCollection<AssetId> RenderSystemIds => _renderSystemIdsCache ?? RenderSystems.AsReadOnly();
 
     protected virtual AssetId[] UiSystems { get; set; } = [];
-    private IReadOnlyCollection<AssetId>? _uiSystemIdsCache;
+    public IReadOnlyCollection<AssetId> LogicSystemIds => _logicSystemIdsCache ?? LogicSystems.AsReadOnly();
+    public IReadOnlyCollection<AssetId> RenderSystemIds => _renderSystemIdsCache ?? RenderSystems.AsReadOnly();
     public IReadOnlyCollection<AssetId> UiSystemIds => _uiSystemIdsCache ?? UiSystems.AsReadOnly();
 
     // -----------------------------------------------------------------------------------------------------------------

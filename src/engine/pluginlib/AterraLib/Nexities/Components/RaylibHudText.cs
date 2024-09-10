@@ -1,11 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.Attributes;
+
 namespace AterraLib.Nexities.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Component<IRaylibHudText>(AssetIdStringLib.AterraLib.Components.RaylibHudText)]
+[Component<IRaylibHudText>(StringAssetIdLib.AterraLib.Components.RaylibHudText)]
 [UsedImplicitly]
 public class RaylibHudText : NexitiesComponent, IHudComponent, IRaylibHudText {
     public HudType Type => HudType.Text;

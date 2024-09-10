@@ -3,7 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedMember.Global
-using AterraCore.Attributes;
+using AterraCore.Common.Attributes;
 using AterraCore.Nexities.Entities;
 
 namespace AterraEngine.Analyzer.Sample;

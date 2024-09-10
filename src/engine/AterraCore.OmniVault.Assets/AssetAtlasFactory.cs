@@ -1,7 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Attributes;
+using AterraCore.Common.Attributes;
 using AterraCore.Common.Data;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.FlexiPlug;
@@ -20,12 +20,12 @@ namespace AterraCore.OmniVault.Assets;
 // ---------------------------------------------------------------------------------------------------------------------
 [Singleton<IAssetAtlasFactory>]
 [UsedImplicitly]
-public class AssetAtlasFactory(IServiceProvider provider, IPluginAtlas pluginAtlas) : IAssetAtlasFactory {
-    private readonly ILogger _logger = EngineServices.GetLogger();
+public class AssetAtlasFactory(IPluginAtlas pluginAtlas) : IAssetAtlasFactory {
 
     private readonly ConcurrentDictionary<AssetId, AssetRegistration> _assetsById = new();
     private readonly ConcurrentDictionary<Type, AssetId> _assetsByType = new();
     private readonly ConcurrentDictionary<CoreTags, ConcurrentBag<AssetId>> _coreTaggedAssets = new ConcurrentDictionary<CoreTags, ConcurrentBag<AssetId>>().PopulateWithEmpties<ConcurrentDictionary<CoreTags, ConcurrentBag<AssetId>>, CoreTags, ConcurrentBag<AssetId>>();
+    private readonly ILogger _logger = EngineServices.GetLogger();
     private readonly ConcurrentDictionary<string, ConcurrentBag<AssetId>> _stringTaggedAssets = new();
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -37,7 +37,7 @@ public class AssetAtlasFactory(IServiceProvider provider, IPluginAtlas pluginAtl
         AssembleCoreTaggedAssets();
         AssembleStringTaggedAssets();
 
-        return new AssetAtlas(provider) {
+        return new AssetAtlas {
             AssetsById = _assetsById.ToFrozenDictionary(),
             AssetsByType = _assetsByType.ToFrozenDictionary(),
             CoreTaggedAssets = _coreTaggedAssets.ToFrozenDictionary(
@@ -122,5 +122,4 @@ public class AssetAtlasFactory(IServiceProvider provider, IPluginAtlas pluginAtl
             }
         });
     }
-
 }

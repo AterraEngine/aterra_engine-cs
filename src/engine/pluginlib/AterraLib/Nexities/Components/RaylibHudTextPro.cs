@@ -1,11 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.Attributes;
+
 namespace AterraLib.Nexities.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Component<IRaylibHudTextPro>(AssetIdStringLib.AterraLib.Components.RaylibHudTextPro)]
+[Component<IRaylibHudTextPro>(StringAssetIdLib.AterraLib.Components.RaylibHudTextPro)]
 [UsedImplicitly]
 public class RaylibHudTextPro : NexitiesComponent, IRaylibHudTextPro {
     public Font Font { get; set; }

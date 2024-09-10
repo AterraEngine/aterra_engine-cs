@@ -9,7 +9,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\src\engine\AterraCore.Attributes\AterraCore.Attributes.csproj"/>
         <ProjectReference Include="..\..\..\src\engine\AterraCore.Common\AterraCore.Common.csproj"/>
         <ProjectReference Include="..\..\..\src\engine\AterraCore.Contracts\AterraCore.Contracts.csproj"/>
         <ProjectReference Include="..\..\..\src\engine\AterraCore.OmniVault.Assets\AterraCore.OmniVault.Assets.csproj"/>
@@ -33,11 +32,15 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ResFiles Include=".\Resources\*.*"/>
+        <ResFiles Include=".\content\*.*"/>
         <Content Include="@(ResFiles)">
-            <Link>Resources\%(Filename)%(Extension)</Link>
+            <Link>content\%(Filename)%(Extension)</Link>
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="src\" />
     </ItemGroup>
 
 
@@ -68,7 +71,7 @@
         <!-- Resources -->
         <ItemGroup>
             <!-- Add more a when needed -->
-            <ResourceFiles Include="$(OutDir)\Resources\*.*"/>
+            <ResourceFiles Include="$(OutDir)\content\*.*"/>
             <!--  -->
         </ItemGroup>
         <Copy SourceFiles="@(ResourceFiles)" DestinationFiles="@(ResourceFiles->'$(OutDir)\temp\resources\%(Filename)%(Extension)')"/>

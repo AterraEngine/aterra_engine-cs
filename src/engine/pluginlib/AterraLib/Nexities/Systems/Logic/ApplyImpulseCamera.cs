@@ -1,13 +1,14 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.Attributes;
 using AterraCore.Contracts.OmniVault.World;
 
 namespace AterraLib.Nexities.Systems.Logic;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[System(AssetIdStringLib.AterraLib.SystemsLogic.ApplyImpulseCamera, CoreTags.LogicThread)]
+[System(StringAssetIdLib.AterraLib.SystemsLogic.ApplyImpulseCamera, CoreTags.LogicThread)]
 [UsedImplicitly]
 public class ApplyImpulseCamera : NexitiesSystem<ICamera2D> {
     public override void Tick(ActiveLevel level) {

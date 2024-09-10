@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.Attributes;
 using AterraCore.OmniVault.Textures;
 using AterraLib.Nexities.Components;
 
@@ -33,7 +34,7 @@ public class TransFormAterraEngineLogo : Transform2D {
 [UsedImplicitly]
 public class ActorAterraEngineLogo(
     TransFormAterraEngineLogo transform2D,
-    [InjectAs("01J601YA03GS19CR8AHC9NCG55")] SpriteAterraEngineLogo sprite2D,
+    [ResolveAsSpecific("01J601YA03GS19CR8AHC9NCG55")] SpriteAterraEngineLogo sprite2D,
     IDirectChildren childEntities,
     IImpulse2D impulse2D
 ) : Actor2D(transform2D, sprite2D, childEntities, impulse2D);

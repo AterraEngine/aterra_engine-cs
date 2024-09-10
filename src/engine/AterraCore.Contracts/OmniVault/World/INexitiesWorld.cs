@@ -11,7 +11,7 @@ namespace AterraCore.Contracts.OmniVault.World;
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IAterraCoreWorld {
     /// <summary>
-    /// Represents the current active level.
+    ///     Represents the current active level.
     /// </summary>
     ActiveLevel? ActiveLevel { get; }
 

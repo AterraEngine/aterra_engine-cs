@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.Attributes;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading.CrossThread;
 using AterraLib.Contracts;
@@ -11,7 +12,7 @@ namespace AterraLib.Nexities.Systems.Logic;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[System(AssetIdStringLib.AterraLib.SystemsLogic.CameraController, CoreTags.LogicThread)]
+[System(StringAssetIdLib.AterraLib.SystemsLogic.CameraController, CoreTags.LogicThread)]
 [Injectable<CameraController>(ServiceLifetime.Singleton)]
 [UsedImplicitly]
 public class CameraController(ICrossThreadTickData crossThreadTickData, ILogger logger) : NexitiesSystem<ICamera2D> {

@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.Attributes;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading.CrossThread;
 using AterraLib.Nexities.Systems.CrossThreadDataHolders;
@@ -9,7 +10,7 @@ namespace AterraLib.Nexities.Systems.Rendering;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[System(AssetIdStringLib.AterraLib.SystemsRendering.RaylibKeyHandler, CoreTags.RenderThread)]
+[System(StringAssetIdLib.AterraLib.SystemsRendering.RaylibKeyHandler, CoreTags.RenderThread)]
 [UsedImplicitly]
 public class RaylibKeyHandler(ICrossThreadTickData crossThreadTickData) : NexitiesSystem {
     private static readonly KeyboardKey[] KeyboardKeys = Enum.GetValues<KeyboardKey>();

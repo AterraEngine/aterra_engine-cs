@@ -1,7 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Attributes;
+using AterraCore.Common.Attributes;
 using AterraCore.Common.ConfigFiles;
 using AterraCore.Common.Data;
 using AterraCore.Common.Types.Nexities;
@@ -21,13 +21,13 @@ public class ConfigAtlas(
     EngineConfigXml engineConfigXml,
     IPluginAtlas pluginAtlas
 ) : IConfigAtlas {
+
+    private IParsedConfigs? _gameConfigs;
     public EngineConfigXml EngineConfigXml { get; } = engineConfigXml;
     public FrozenDictionary<PluginId, PluginConfigXml> PluginConfigXmls { get; } = pluginAtlas.Plugins.ToFrozenDictionary(
         keySelector: plugin => plugin.PluginId,
         elementSelector: plugin => plugin.PluginConfigXml
     );
-
-    private IParsedConfigs? _gameConfigs;
     public IParsedConfigs GameConfigs {
         get {
             if (_gameConfigs is not null) return _gameConfigs ?? FrozenParsedConfigs.Empty;
@@ -68,5 +68,4 @@ public class ConfigAtlas(
         return configs;
     }
     #endregion
-
 }

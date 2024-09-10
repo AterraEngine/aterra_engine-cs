@@ -9,13 +9,13 @@ namespace AterraCore.Loggers;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 /// <summary>
-/// A "special" logger to be used before the service collection is built.
-/// Don't use this after the startup procedure has ended.
+///     A "special" logger to be used before the service collection is built.
+///     Don't use this after the startup procedure has ended.
 /// </summary>
 public static class StartupLogger {
     /// <summary>
-    /// A "special" logger to be used before the service collection is built.
-    /// Don't use this after the startup procedure has ended.
+    ///     A "special" logger to be used before the service collection is built.
+    ///     Don't use this after the startup procedure has ended.
     /// </summary>
     private static ILogger? LoggerCache { get; set; }
 
@@ -24,10 +24,10 @@ public static class StartupLogger {
     // -----------------------------------------------------------------------------------------------------------------
 
     /// <summary>
-    /// Creates a <see cref="LoggerConfiguration"/> for the startup logger.
+    ///     Creates a <see cref="LoggerConfiguration" /> for the startup logger.
     /// </summary>
     /// <param name="asyncConsole">A boolean value indicating whether to use asynchronous console sink.</param>
-    /// <returns>A <see cref="LoggerConfiguration"/> object.</returns>
+    /// <returns>A <see cref="LoggerConfiguration" /> object.</returns>
     private static LoggerConfiguration CreateConfiguration(bool asyncConsole) =>
         new LoggerConfiguration()
             .MinimumLevel.Verbose()
@@ -36,7 +36,7 @@ public static class StartupLogger {
             .SetConsole(asyncConsole, LoggerConfigurationExtensions.OutputTemplateStartup);
 
     /// <summary>
-    /// Creates a logger instance with the specified configuration.
+    ///     Creates a logger instance with the specified configuration.
     /// </summary>
     /// <param name="asyncConsole">Indicates whether the console sink should be asynchronous.</param>
     /// <returns>A logger instance.</returns>

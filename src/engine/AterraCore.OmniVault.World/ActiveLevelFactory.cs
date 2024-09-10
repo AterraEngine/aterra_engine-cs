@@ -1,7 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Attributes;
+using AterraCore.Common.Attributes;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Components;
 using AterraCore.Contracts.Nexities.Entities;
@@ -50,7 +50,7 @@ public class ActiveLevelFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreeFa
     }
 
     /// <summary>
-    /// Creates an instance of the ActiveLevel class from a given INexitiesLevel.
+    ///     Creates an instance of the ActiveLevel class from a given INexitiesLevel.
     /// </summary>
     /// <param name="systemIds">The INexitiesLevel instance to create the ActiveLevel from.</param>
     /// <returns>An instance of the ActiveLevel with the specified properties populated.</returns>

@@ -9,18 +9,6 @@ namespace Tests.AterraCore.Common.Data;
 // ---------------------------------------------------------------------------------------------------------------------
 [TestSubject(typeof(AssetRegistration))]
 public class AssetRegistrationTest {
-    // Sample types for testing
-    private class SampleAsset : ISampleInterface;
-
-    private class SecondSampleAsset : ISampleInterface;
-
-    private class SingletonAsset : ISampleInterface;
-
-    private class DerivedAsset : SampleAsset, IDerivedInterface;
-
-    private interface ISampleInterface;
-
-    private interface IDerivedInterface : ISampleInterface;
 
     [Fact]
     public void Constructor_ShouldInitializePropertiesCorrectly() {
@@ -174,4 +162,17 @@ public class AssetRegistrationTest {
 
         Assert.Equal(idNew, registration.AssetId);
     }
+
+    // Sample types for testing
+    private class SampleAsset : ISampleInterface;
+
+    private class SecondSampleAsset : ISampleInterface;
+
+    private class SingletonAsset : ISampleInterface;
+
+    private class DerivedAsset : SampleAsset, IDerivedInterface;
+
+    private interface ISampleInterface;
+
+    private interface IDerivedInterface : ISampleInterface;
 }

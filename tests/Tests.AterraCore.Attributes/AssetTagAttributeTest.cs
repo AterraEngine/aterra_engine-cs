@@ -7,14 +7,6 @@ namespace Tests.AterraCore.Attributes;
 // ---------------------------------------------------------------------------------------------------------------------
 [TestSubject(typeof(AssetTagAttribute))]
 public class AssetTagAttributeTests {
-    // Sample classes with AssetTagAttribute for testing
-    [AssetTag("Feature", "Beta")]
-    private class ClassWithAssetTag;
-
-    [AssetTag("Feature")]
-    [AssetTag("Beta", "Production")]
-    [AssetTag("Critical", "NeedsReview")]
-    private class ClassWithMultipleAssetTags;
 
     [Fact]
     public void AssetTagAttribute_ShouldInitializeWithTags() {
@@ -54,4 +46,13 @@ public class AssetTagAttributeTests {
 
         Assert.Equal(expectedTags, allTags);
     }
+
+    // Sample classes with AssetTagAttribute for testing
+    [AssetTag("Feature", "Beta")]
+    private class ClassWithAssetTag;
+
+    [AssetTag("Feature")]
+    [AssetTag("Beta", "Production")]
+    [AssetTag("Critical", "NeedsReview")]
+    private class ClassWithMultipleAssetTags;
 }
