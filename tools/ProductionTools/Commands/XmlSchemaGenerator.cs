@@ -2,10 +2,11 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.ConfigFiles;
-using System.Diagnostics.CodeAnalysis;
-using JetBrains.Annotations;
-using Xml;
 using AterraCore.Common.Data;
+using AterraLib;
+using JetBrains.Annotations;
+using System.Diagnostics.CodeAnalysis;
+using Xml;
 
 namespace ProductionTools.Commands;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -29,12 +30,15 @@ public record XsdGeneratorRecord(
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class XmlSchemaGenerator(ILogger logger) : ICommandAtlas {
-    private readonly XsdGenerator _xsdGenerator = new(logger);
 
     private readonly Dictionary<string, XsdGeneratorRecord> _dictionary = new() {
         { "engine-config", new XsdGeneratorRecord(XmlNameSpaces.ConfigEngine, typeof(EngineConfigXml)) },
-        { "plugin-config", new XsdGeneratorRecord(XmlNameSpaces.ConfigPlugin, typeof(PluginConfigXml)) }
+        { "plugin-config", new XsdGeneratorRecord(XmlNameSpaces.ConfigPlugin, typeof(PluginConfigXml)) },
+        { "game-config", new XsdGeneratorRecord(XmlNameSpaces.ConfigGame, typeof(GameConfigXml)) },
+        { "game-config-aterralib", new XsdGeneratorRecord(XmlNameSpaces.ConfigGameAterraLib, typeof(AterraLibGameConfig)) }
     };
+
+    private readonly XsdGenerator _xsdGenerator = new(logger);
 
     // -----------------------------------------------------------------------------------------------------------------
     // Commands

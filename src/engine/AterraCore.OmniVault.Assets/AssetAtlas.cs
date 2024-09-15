@@ -1,14 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Attributes;
 using AterraCore.Common.Data;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.OmniVault.Assets;
-using CodeOfChaos.Extensions;
+using AterraCore.Contracts.PoolCorps;
+using AterraCore.DI;
 using JetBrains.Annotations;
-using Serilog;
 using System.Collections.Concurrent;
+using System.Collections.Frozen;
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 
 namespace AterraCore.OmniVault.Assets;
@@ -16,119 +17,66 @@ namespace AterraCore.OmniVault.Assets;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
-[Injectable<IAssetAtlas>]
-public class AssetAtlas(ILogger logger) : IAssetAtlas {
-    private ILogger Logger { get; } = logger.ForContext<AssetAtlas>();
+public class AssetAtlas : IAssetAtlas {
+    public FrozenDictionary<AssetId, AssetRegistration> AssetsById { get; internal init; } = null!;
+    public FrozenDictionary<Type, AssetId> AssetsByType { get; internal init; } = null!;
+    public FrozenDictionary<CoreTags, FrozenSet<AssetId>> CoreTaggedAssets { get; internal init; } = null!;
+    public FrozenDictionary<string, FrozenSet<AssetId>> StringTaggedAssets { get; internal init; } = null!;
 
-    private readonly ConcurrentDictionary<AssetId, AssetRegistration> _assetsById = new();
-    private readonly ConcurrentDictionary<Type, AssetId> _assetsByType = new();
+    public int TotalCount => AssetsById.Count;
 
-    private readonly ConcurrentDictionary<CoreTags, ConcurrentBag<AssetId>> _coreTaggedAssets = new ConcurrentDictionary<CoreTags, ConcurrentBag<AssetId>>().PopulateWithEmpties();
-    private readonly ConcurrentDictionary<string, ConcurrentBag<AssetId>> _stringTaggedAssets = new();
-
-    public int TotalCount => _assetsById.Count;
+    private readonly IAssetIdPools _assetIdPools = EngineServices.GetService<IAssetIdPools>();
+    private readonly ConcurrentDictionary<CoreTags, FrozenSet<AssetId>> _combinedTaggedAssets = new();
+    
     // ------------------------------------------------------------------------------------------------------------- ----
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public bool TryAssignAsset(AssetRegistration registration, [NotNullWhen(true)] out AssetId? assetId) {
-        assetId = null;
-
-        // Assigns the asset to the dict
-        if (!_assetsById.TryAdd(registration.AssetId, registration)) {
-            Logger.Warning(
-                "Asset with ID: {AssetId} already exists with type {ExistingAssetType}. Cannot assign a new asset with the same ID.",
-                registration.AssetId, _assetsById[registration.AssetId].Type.FullName
-            );
-            return false;
-        }
-
-        if (!_assetsByType.TryAdd(registration.Type, registration.AssetId)) {
-            // The reason for this, is the class type is hard linked to an AssetId
-            Logger.Warning(
-                "Asset with ID: {AssetId} Cannot assign a new asset because it's {Type} is already assigned to another asset.",
-                registration.AssetId, registration.Type.FullName
-            );
-            return false;
-        }
-
-        foreach (Type interfaceType in registration.InterfaceTypes) {
-            // The reason for this, is the class type is softly linked to an AssetId, and can be overwritten
-            _assetsByType.AddOrUpdate(interfaceType, registration.AssetId);
-            Logger.Information("Asset {AssetId} linked to the interface of {Type}", registration.AssetId, interfaceType.FullName);
-        }
-
-        // After Everything is said and done with the assigning, start assigning the Core tags and string tags
-        foreach (CoreTags tag in Enum.GetValuesAsUnderlyingType<CoreTags>()) {
-            if (!registration.CoreTags.HasFlag(tag)) continue;
-            _coreTaggedAssets.TryAddToBagOrCreateBag(tag, registration.AssetId);
-        }
-
-        foreach (string stringTag in registration.StringTags) {
-            if (!_stringTaggedAssets.TryAddToBagOrCreateBag(stringTag, registration.AssetId)) {
-                Logger.Warning("String Tag of {tag} could not be assigned to {assetId}", stringTag, registration.AssetId);
+    public IEnumerable<AssetId> GetAllAssetsOfCoreTag(CoreTags coreTag) {
+        if (_combinedTaggedAssets.TryGetValue(coreTag, out FrozenSet<AssetId>? cached)) return cached;
+        
+        HashSet<AssetId> hashset = _assetIdPools.AssetIdHashSetPool.Get(); // Returned on cache clear
+        CoreTags[] allTags = CoreTagsExtensions.AllCoreTagValues();
+        for (int i = allTags.Length - 1; i >= 0; i--) {
+            CoreTags tag = allTags[i];
+            if (!coreTag.HasFlag(tag)) continue;
+            
+            ImmutableArray<AssetId> assets = CoreTaggedAssets[tag].Items;
+            for (int j = assets.Length - 1; j >= 0; j--) {
+                hashset.Add(assets[j]);
             }
         }
-
-        // Assign overloads
-        foreach (AssetId overridableAssetId in registration.OverridableAssetIds) {
-            if (!_assetsById.TryGetValue(overridableAssetId, out AssetRegistration comparisonValue)) continue;
-            if (!_assetsById.TryUpdate(overridableAssetId, registration, comparisonValue)) continue;
-
-            logger.Information(
-                "Assigned asset {AssetId} to overwrite {overridableAssetId}",
-                registration.AssetId,
-                overridableAssetId
-            );
-        }
-
-        Logger.Information(
-            "Assigned asset {AssetId} of Type {AssetTypeName}",
-            registration.AssetId, registration.Type.FullName
-        );
-
-        assetId = registration.AssetId;
-        return true;
+        
+        FrozenSet<AssetId> frozenSet = hashset.ToFrozenSet();
+        _combinedTaggedAssets.TryAdd(coreTag, frozenSet);
+        return frozenSet;
     }
 
-    public IEnumerable<AssetId> GetAllAssetsOfCoreTag(CoreTags coreTag) =>
-        Enum.GetValues<CoreTags>()
-            .Where(tag => coreTag.HasFlag(tag))
-            .SelectMany(tag => _coreTaggedAssets[tag])
-            .ToArray();
-
     public IEnumerable<AssetId> GetAllAssetsOfStringTag(string stringTag) =>
-        _stringTaggedAssets.TryGetValue(stringTag, out ConcurrentBag<AssetId>? bag) ? bag : [];
+        StringTaggedAssets.TryGetValue(stringTag, out FrozenSet<AssetId>? bag) ? bag : [];
 
-    public IEnumerable<AssetId> GetAllAssetsOfPlugin(string pluginId) => _assetsById
+    public IEnumerable<AssetId> GetAllAssetsOfPlugin(string pluginId) => AssetsById
         .Where(pair => pair.Key.PluginId == pluginId)
         .Select(pair => pair.Key);
 
-    public Type GetAssetType(AssetId assetId) => _assetsById[assetId].Type;
+    public Type GetAssetType(AssetId assetId) => AssetsById[assetId].Type;
 
-    public bool TryGetRegistration(AssetId assetId, out AssetRegistration registration) => _assetsById.TryGetValue(assetId, out registration);
+    public bool TryGetRegistration(AssetId assetId, out AssetRegistration registration) => AssetsById.TryGetValue(assetId, out registration);
 
     public bool TryGetAssetType(AssetId assetId, [NotNullWhen(true)] out Type? type) {
         type = default;
-        if (!_assetsById.TryGetValue(assetId, out AssetRegistration registration)) {
-            return false;
-        }
+        if (!AssetsById.TryGetValue(assetId, out AssetRegistration registration)) return false;
 
         type = registration.Type;
         return true;
     }
     public bool TryGetInterfaceTypes(AssetId assetId, out IEnumerable<Type> type) {
         type = [];
-        if (!_assetsById.TryGetValue(assetId, out AssetRegistration registration)) {
-            return false;
-        }
+        if (!AssetsById.TryGetValue(assetId, out AssetRegistration registration)) return false;
 
         type = registration.InterfaceTypes;
         return true;
     }
-    public bool TryUpdateRegistration(ref AssetRegistration registration) =>
-        _assetsById.TryGetValue(registration.AssetId, out AssetRegistration oldRegistration)
-        && _assetsById.TryUpdate(registration.AssetId, registration, oldRegistration);
 
     public bool TryGetAssetId<T>(out AssetId assetId) => TryGetAssetId(typeof(T), out assetId);
-    public bool TryGetAssetId(Type type, out AssetId assetId) => _assetsByType.TryGetValue(type, out assetId);
+    public bool TryGetAssetId(Type type, out AssetId assetId) => AssetsByType.TryGetValue(type, out assetId);
 }

@@ -9,26 +9,21 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\src\lib\AterraLib\AterraLib.csproj"/>
-        <ProjectReference Include="..\Workfloor-AterraCore\Workfloor-AterraCore.csproj"/>
+        <ProjectReference Include="..\..\..\src\engine\AterraCore.Common\AterraCore.Common.csproj"/>
+        <ProjectReference Include="..\..\..\src\engine\AterraCore.Contracts\AterraCore.Contracts.csproj"/>
+        <ProjectReference Include="..\..\..\src\engine\AterraCore.OmniVault.Assets\AterraCore.OmniVault.Assets.csproj"/>
+        <ProjectReference Include="..\..\..\src\engine\AterraCore.OmniVault.Textures\AterraCore.OmniVault.Textures.csproj"/>
+        <ProjectReference Include="..\..\..\src\engine\pluginlib\AterraLib\AterraLib.csproj"/>
         <ProjectReference Include="..\..\..\tools\Analyzers\AterraEngine.Analyzers\AterraEngine.Analyzers.csproj">
             <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
             <OutputItemType>Analyzer</OutputItemType>
         </ProjectReference>
     </ItemGroup>
 
-
     <ItemGroup>
-        <ProjectReference Include="..\..\..\src\engine\AterraCore.Contracts\AterraCore.Contracts.csproj"/>
-        <ProjectReference Include="..\..\..\src\engine\AterraCore.FlexiPlug\AterraCore.FlexiPlug.csproj"/>
-        <ProjectReference Include="..\..\..\src\engine\AterraCore.Nexities\AterraCore.Nexities.csproj"/>
-        <ProjectReference Include="..\..\..\src\engine\AterraEngine\AterraEngine.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="CodeOfChaos.Extensions" Version="0.6.0"/>
+        <PackageReference Include="CodeOfChaos.Extensions" Version="0.7.0"/>
         <PackageReference Include="CodeOfChaos.Extensions.DependencyInjection" Version="0.1.1"/>
-        <PackageReference Include="CodeOfChaos.Extensions.Serilog" Version="0.3.0"/>
+        <PackageReference Include="CodeOfChaos.Extensions.Serilog" Version="0.4.0"/>
         <PackageReference Include="JetBrains.Annotations" Version="2024.2.0"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1"/>
@@ -37,17 +32,17 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Content Include="..\..\..\src\xsd\*.xsd">
-            <Link>xsd\%(Filename)%(Extension)</Link>
-        </Content>
-        <Content Remove="..\..\..\src\xsd\**"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <Content Include="Data\*.xml">
+        <ResFiles Include=".\content\*.*"/>
+        <Content Include="@(ResFiles)">
+            <Link>content\%(Filename)%(Extension)</Link>
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
+
+    <ItemGroup>
+        <Folder Include="src\"/>
+    </ItemGroup>
+
 
     <Target Name="PackingToZip" AfterTargets="Build">
         <!-- Delete the existing zip file if it exists -->
@@ -56,8 +51,8 @@
 
         <!-- Create directories needed -->
         <MakeDir Directories="$(OutDir)\temp"/>
+        <MakeDir Directories="$(OutDir)\temp\resources"/>
         <MakeDir Directories="$(OutDir)\temp\bin"/>
-        <MakeDir Directories="$(OutDir)\temp\res"/>
         <MakeDir Directories="$(OutDir)\package"/>
 
         <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
@@ -73,11 +68,13 @@
         </ItemGroup>
         <Copy SourceFiles="@(DllFiles)" DestinationFiles="@(DllFiles->'$(OutDir)\temp\bin\%(Filename)%(Extension)')"/>
 
-        <!-- Assets - xml markup files of instances of assets -->
-        <!--        <ItemGroup>-->
-        <!--             <AssetFiles Include="$(OutDir)Data\actor.xml"/>-->
-        <!--        </ItemGroup>-->
-        <!--        <Copy SourceFiles="@(AssetFiles)" DestinationFiles="@(AssetFiles->'$(OutDir)\temp\assets\%(Filename)%(Extension)')"/>-->
+        <!-- Resources -->
+        <ItemGroup>
+            <!-- Add more a when needed -->
+            <ResourceFiles Include="$(OutDir)\content\*.*"/>
+            <!--  -->
+        </ItemGroup>
+        <Copy SourceFiles="@(ResourceFiles)" DestinationFiles="@(ResourceFiles->'$(OutDir)\temp\resources\%(Filename)%(Extension)')"/>
 
         <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 

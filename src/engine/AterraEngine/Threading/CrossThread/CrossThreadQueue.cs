@@ -1,8 +1,10 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Threading.CTQ;
-using AterraCore.Contracts.Threading.CTQ.Dto;
+using AterraCore.Common.Attributes;
+using AterraCore.Common.Types.Threading;
+using AterraCore.Contracts.Threading.CrossThread;
+using AterraCore.Contracts.Threading.CrossThread.Dto;
 using JetBrains.Annotations;
 using Serilog;
 using System.Collections.Concurrent;
@@ -13,12 +15,14 @@ namespace AterraEngine.Threading.CrossThread;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
+[Singleton<ICrossThreadQueue>]
 public class CrossThreadQueue(ILogger logger) : ICrossThreadQueue {
     private ILogger Logger { get; } = logger.ForContext<CrossThreadQueue>();
 
+    private ConcurrentDictionary<QueueKey, ConcurrentQueue<Action>> GeneralActionQueue { get; } = new();
+
     public ConcurrentQueue<TextureRegistrar> TextureRegistrarQueue { get; } = new();
 
-    private ConcurrentDictionary<QueueKey, ConcurrentQueue<Action>> GeneralActionQueue { get; } = new();
     public bool EntireQueueIsEmpty => GeneralActionQueue.IsEmpty;
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -27,7 +31,7 @@ public class CrossThreadQueue(ILogger logger) : ICrossThreadQueue {
     public bool TryDequeue(QueueKey key, [NotNullWhen(true)] out Action? action) {
         action = default;
         return GeneralActionQueue.TryGetValue(key, out ConcurrentQueue<Action>? queue)
-               && queue.TryDequeue(out action);
+            && queue.TryDequeue(out action);
     }
 
     public bool TryEnqueue(QueueKey key, Action action) {

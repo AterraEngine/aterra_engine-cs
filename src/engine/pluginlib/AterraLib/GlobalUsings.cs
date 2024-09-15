@@ -1,0 +1,11 @@
+﻿global using AterraCore.Common.Data;
+global using AterraCore.Common.Types.Nexities;
+global using AterraCore.Contracts.Nexities.Components;
+global using AterraCore.Contracts.Nexities.Entities;
+global using AterraCore.Contracts.Nexities.Levels;
+global using AterraCore.Nexities.Components;
+global using AterraCore.Nexities.Entities;
+global using AterraCore.Nexities.Systems;
+global using JetBrains.Annotations;
+global using Raylib_cs;
+global using System.Numerics;

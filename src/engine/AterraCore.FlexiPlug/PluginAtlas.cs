@@ -3,12 +3,12 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Data;
 using AterraCore.Common.Types.Nexities;
-using AterraCore.Contracts.Boot.Logic.PluginLoading.Dto;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.FlexiPlug.Plugin;
 using CodeOfChaos.Extensions;
-using JetBrains.Annotations;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using System.Collections.Frozen;
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.IO.Compression;
@@ -17,35 +17,77 @@ namespace AterraCore.FlexiPlug;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[UsedImplicitly]
-public class PluginAtlas(ILogger logger) : IPluginAtlas {
-    private ILogger Logger => logger.ForContext<PluginAtlas>();
-
-    private int? _totalAssetCountCache;
-    private LinkedList<IPluginRecord> Plugins { get; } = [];
-
-    private readonly HashSet<PluginId> _pluginIds = [];
-    public IReadOnlySet<PluginId> PluginIds => _pluginIds;
+public class PluginAtlas(IServiceProvider provider) : IPluginAtlas {
+    private readonly ILogger _logger = provider.GetRequiredService<ILogger>().ForContext<PluginAtlas>();
 
     private ImmutableDictionary<string, ZipArchive> _pluginZipArchive = ImmutableDictionary<string, ZipArchive>.Empty;
 
+    private int? _totalAssetCountCache;
+
+    public IReadOnlyCollection<IPluginRecord> Plugins { get; init; } = [];
+    public FrozenSet<PluginId> PluginIds { get; init; } = new HashSet<PluginId>().ToFrozenSet();
+    public ImmutableArray<PluginId> PluginIdsByOrder { get; init; } = [];
     public int TotalAssetCount => _totalAssetCountCache ??= Plugins.SelectMany(p => p.AssetTypes).Count();
+
+    public bool TryGetFileRawFromPluginZip(
+        PluginId pluginId, string internalFilePath,
+        [NotNullWhen(true)] out byte[]? bytes
+    ) {
+        bytes = default;
+
+        IPluginRecord? pluginRecord = Plugins.FirstOrDefault(p => p.PluginId == pluginId);
+        if (pluginRecord is not { PluginBootDto.FilePath: var filePath } || !filePath.IsNotNullOrEmpty()) {
+            _logger.Debug("plugin record did not exist {r}", pluginRecord);
+            return false;
+        }
+
+        if (!TryGetOrCreateZipArchive(filePath, out ZipArchive? zipArchive)) {
+            _logger.Debug("zip archive did not exist {r}", filePath);
+            return false;
+        }
+
+        ZipArchiveEntry? fileEntry = zipArchive.GetEntry(internalFilePath);
+        if (fileEntry is null) {
+            _logger.Debug("Could not attain file Entry {r}", internalFilePath);
+            return false;
+        }
+
+        using var memoryStream = new MemoryStream();
+        using Stream stream = fileEntry.Open();
+        stream.CopyTo(memoryStream);
+        bytes = memoryStream.ToArray();
+
+        return true;
+    }
+
+    public bool IsLoadedBefore(PluginId left, PluginId right) {
+        int l = PluginIdsByOrder.IndexOf(left);
+        int r = PluginIdsByOrder.IndexOf(right);
+        return l != -1 && r != -1 && l < r;
+    }
+
+    public bool IsLoadedAfter(PluginId left, PluginId right) {
+        int l = PluginIdsByOrder.IndexOf(left);
+        int r = PluginIdsByOrder.IndexOf(right);
+        return l != -1 && r != -1 && l > r;
+    }
+
+    private bool TryGetOrCreateZipArchive(string filePath, [NotNullWhen(true)] out ZipArchive? zipArchive) {
+        zipArchive = default;
+        // ReSharper disable once SuggestVarOrType_SimpleTypes
+        if (_pluginZipArchive.TryGetValue(filePath, out zipArchive)) return true;
+
+        if (!File.Exists(filePath)) return false;
+
+        zipArchive = ZipFile.OpenRead(filePath);
+        _pluginZipArchive = _pluginZipArchive.Add(filePath, zipArchive);
+
+        return true;
+    }
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void ImportLoadedPluginDtos(Span<IPluginBootDto> plugins) {
-        foreach (IPluginBootDto plugin in plugins) {
-            Plugins.AddLast(new PluginRecord {
-                PluginId = plugin.PluginNameSpaceId,
-                Types = plugin.Types,
-                PluginBootDto = plugin
-            });
-            _pluginIds.Add(plugin.PluginNameSpaceId);
-        }
-    }
-    public void InvalidateAllCaches() => Plugins.IterateOver(plugin => plugin.InvalidateCaches());
-
     #region Get Registrations
     public IEnumerable<AssetRegistration> GetAssetRegistrations(PluginId? pluginNameSpace = null, CoreTags? filter = null) {
         // Given this is only done once (during project startup), caching this seems a bit unnecessary.
@@ -73,44 +115,4 @@ public class PluginAtlas(ILogger logger) : IPluginAtlas {
     public IEnumerable<AssetRegistration> GetComponentRegistrations(PluginId? pluginNameSpace = null) =>
         GetAssetRegistrations(pluginNameSpace, CoreTags.Component);
     #endregion
-
-    private bool TryGetOrCreateZipArchive(string filePath, [NotNullWhen(true)] out ZipArchive? zipArchive) {
-        zipArchive = default;
-        // ReSharper disable once SuggestVarOrType_SimpleTypes
-        if (_pluginZipArchive.TryGetValue(filePath, out zipArchive)) return false;
-        if (!File.Exists(filePath)) return false;
-
-        zipArchive = ZipFile.OpenRead(filePath);
-        _pluginZipArchive = _pluginZipArchive.Add(filePath, zipArchive);
-        return true;
-    }
-
-    public bool TryGetFileRawFromPluginZip(
-        PluginId pluginId, string internalFilePath,
-        [NotNullWhen(true)] out byte[]? bytes
-    ) {
-        bytes = default;
-
-        IPluginRecord? pluginRecord = Plugins.FirstOrDefault(p => p.PluginId == pluginId);
-        if (pluginRecord is not { PluginBootDto.FilePath: var filePath } || !filePath.IsNotNullOrEmpty()) {
-            logger.Debug("plugin record did not exist {r}", pluginRecord);
-            return false;
-        }
-        if (!TryGetOrCreateZipArchive(filePath, out ZipArchive? zipArchive)) {
-            logger.Debug("zip archive did not exist {r}", pluginRecord);
-            return false;
-        }
-        ZipArchiveEntry? fileEntry = zipArchive.GetEntry(internalFilePath);
-        if (fileEntry is null) {
-            logger.Debug("Could not attain filEntry {r}", pluginRecord);
-            return false;
-        }
-
-        using var memoryStream = new MemoryStream();
-        using Stream stream = fileEntry.Open();
-        stream.CopyTo(memoryStream);
-        bytes = memoryStream.ToArray();
-
-        return true;
-    }
 }

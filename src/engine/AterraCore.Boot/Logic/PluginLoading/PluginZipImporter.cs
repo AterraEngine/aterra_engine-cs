@@ -15,10 +15,10 @@ namespace AterraCore.Boot.Logic.PluginLoading;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class PluginZipImporter(string zipPath, ILogger logger) : IPluginZipImporter<PluginConfigXml>, IDisposable {
-    private ILogger Logger { get; } = logger.ForContext<PluginZipImporter>();
 
     private readonly ZipArchive _archive = ZipFile.OpenRead(zipPath);
     private readonly XmlParser<PluginConfigXml> _pluginConfigParser = new(logger, XmlNameSpaces.ConfigPlugin, Paths.Xsd.XsdPluginConfigDto);
+    private ILogger Logger { get; } = logger.ForContext<PluginZipImporter>();
 
     // -----------------------------------------------------------------------------------------------------------------
     // Disposable
@@ -71,14 +71,14 @@ public class PluginZipImporter(string zipPath, ILogger logger) : IPluginZipImpor
     }
 
     public List<string> GetFileNamesInZip() {
-        // TODO cleanup
         var fileNames = new List<string>();
         try {
             fileNames.AddRange(_archive.Entries.Select(entry => entry.FullName));
         }
         catch (Exception e) {
-            Logger.Warning("Failed to retrieve file names from {zipPath}, {e}", zipPath, e);
+            Logger.Warning(e, "Failed to retrieve file names from {zipPath}", zipPath);
         }
+
         return fileNames;
     }
 

@@ -6,53 +6,49 @@ namespace AterraCore.Common.Data;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public static class AssetIdLib {
-    public static class AterraCore {
-        private const string ThisSection = nameof(AterraCore);
+    public static class AterraLib {
+        public static readonly AssetId ConfigMancer = StringAssetIdLib.AterraLib.ConfigMancer;
 
         #region Components
         public static class Components {
-            private const string ThisClass = nameof(Components);
-
-            public const string DirectChildren = $"{ThisSection}:{ThisClass}/{nameof(DirectChildren)}";
-            public const string RaylibCamera2D = $"{ThisSection}:{ThisClass}/{nameof(RaylibCamera2D)}";
-            public const string Impulse2D = $"{ThisSection}:{ThisClass}/{nameof(Impulse2D)}";
-            public const string RaylibHudText = $"{ThisSection}:{ThisClass}/{nameof(RaylibHudText)}";
-            public const string RaylibHudTextPro = $"{ThisSection}:{ThisClass}/{nameof(RaylibHudTextPro)}";
-            public const string Sprite2D = $"{ThisSection}:{ThisClass}/{nameof(Sprite2D)}";
-            public const string SystemIds = $"{ThisSection}:{ThisClass}/{nameof(SystemIds)}";
-            public const string Transform2D = $"{ThisSection}:{ThisClass}/{nameof(Transform2D)}";
+            public static readonly AssetId DirectChildren = StringAssetIdLib.AterraLib.Components.DirectChildren;
+            public static readonly AssetId RaylibCamera2D = StringAssetIdLib.AterraLib.Components.RaylibCamera2D;
+            public static readonly AssetId Impulse2D = StringAssetIdLib.AterraLib.Components.Impulse2D;
+            public static readonly AssetId RaylibHudText = StringAssetIdLib.AterraLib.Components.RaylibHudText;
+            public static readonly AssetId RaylibHudTextPro = StringAssetIdLib.AterraLib.Components.RaylibHudTextPro;
+            public static readonly AssetId Sprite2D = StringAssetIdLib.AterraLib.Components.Sprite2D;
+            public static readonly AssetId SystemIds = StringAssetIdLib.AterraLib.Components.SystemIds;
+            public static readonly AssetId Transform2D = StringAssetIdLib.AterraLib.Components.Transform2D;
         }
         #endregion
         #region Entities
         public static class Entities {
-            private const string ThisClass = nameof(Entities);
-
-            public const string Actor2D = $"{ThisSection}:{ThisClass}/{nameof(Actor2D)}";
-            public const string Camera2D = $"{ThisSection}:{ThisClass}/{nameof(Camera2D)}";
-            public const string EmptyEntity = $"{ThisSection}:{ThisClass}/{nameof(EmptyEntity)}";
-            public const string EmptySprite = $"{ThisSection}:{ThisClass}/{nameof(EmptySprite)}";
-            public const string EmptyLevel = $"{ThisSection}:{ThisClass}/{nameof(EmptyLevel)}";
-            public const string Hud = $"{ThisSection}:{ThisClass}/{nameof(Hud)}";
-            public const string Player2D = $"{ThisSection}:{ThisClass}/{nameof(Player2D)}";
-            public const string LevelRoot = $"{ThisSection}:{ThisClass}/{nameof(LevelRoot)}";
+            public static readonly AssetId Actor2D = StringAssetIdLib.AterraLib.Entities.Actor2D;
+            public static readonly AssetId Camera2D = StringAssetIdLib.AterraLib.Entities.Camera2D;
+            public static readonly AssetId EmptyEntity = StringAssetIdLib.AterraLib.Entities.EmptyEntity;
+            public static readonly AssetId EmptySprite = StringAssetIdLib.AterraLib.Entities.EmptySprite;
+            public static readonly AssetId EmptyLevel = StringAssetIdLib.AterraLib.Entities.EmptyLevel;
+            public static readonly AssetId Hud = StringAssetIdLib.AterraLib.Entities.Hud;
+            public static readonly AssetId Player2D = StringAssetIdLib.AterraLib.Entities.Player2D;
+            public static readonly AssetId LevelRoot = StringAssetIdLib.AterraLib.Entities.LevelRoot;
+            public static readonly AssetId Prop2D = StringAssetIdLib.AterraLib.Entities.Prop2D;
         }
         #endregion
         #region Systems - Logic
         public static class SystemsLogic {
-            private const string ThisClass = nameof(SystemsLogic);
-
-            public const string ApplyImpulse = $"{ThisSection}:{ThisClass}/{nameof(ApplyImpulse)}";
-            public const string ApplyImpulseCamera = $"{ThisSection}:{ThisClass}/{nameof(ApplyImpulseCamera)}";
-            public const string PlayerController = $"{ThisSection}:{ThisClass}/{nameof(PlayerController)}";
-            public const string CameraController = $"{ThisSection}:{ThisClass}/{nameof(CameraController)}";
+            public static readonly AssetId ApplyImpulse = StringAssetIdLib.AterraLib.SystemsLogic.ApplyImpulse;
+            public static readonly AssetId ApplyImpulseCamera = StringAssetIdLib.AterraLib.SystemsLogic.ApplyImpulseCamera;
+            public static readonly AssetId PlayerController = StringAssetIdLib.AterraLib.SystemsLogic.PlayerController;
+            public static readonly AssetId CameraController = StringAssetIdLib.AterraLib.SystemsLogic.CameraController;
         }
         #endregion
         #region Systems - Rendering
         public static class SystemsRendering {
-            private const string ThisClass = nameof(SystemsRendering);
-
-            public const string Render2D = $"{ThisSection}:{ThisClass}/{nameof(Render2D)}";
-            public const string RenderHud = $"{ThisSection}:{ThisClass}/{nameof(RenderHud)}";
+            public static readonly AssetId Render2D = StringAssetIdLib.AterraLib.SystemsRendering.Render2D;
+            public static readonly AssetId Render2DPrepForProps = StringAssetIdLib.AterraLib.SystemsRendering.Render2DPrepForProps;
+            public static readonly AssetId Render2DPrepForActors = StringAssetIdLib.AterraLib.SystemsRendering.Render2DPrepForActors;
+            public static readonly AssetId RenderHud = StringAssetIdLib.AterraLib.SystemsRendering.RenderHud;
+            public static readonly AssetId RaylibKeyHandler = StringAssetIdLib.AterraLib.SystemsRendering.RaylibKeyHandler;
         }
         #endregion
     }

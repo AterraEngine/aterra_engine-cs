@@ -8,7 +8,6 @@ using AterraCore.Loggers;
 using CodeOfChaos.Extensions;
 using CodeOfChaos.Extensions.Serilog;
 using JetBrains.Annotations;
-using System.Configuration;
 using Xml;
 
 namespace AterraCore.Boot.Operations;
@@ -16,7 +15,6 @@ namespace AterraCore.Boot.Operations;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class EngineConfigLoader : IBootOperation {
-    private ILogger Logger { get; } = StartupLogger.CreateLogger(false).ForBootOperationContext<EngineConfigLoader>();
     private readonly string? _configFilePath;
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -26,6 +24,8 @@ public class EngineConfigLoader : IBootOperation {
     [UsedImplicitly] public EngineConfigLoader(string? configFilePath = null) {
         _configFilePath = configFilePath;
     }
+    private ILogger Logger { get; } = StartupLogger.CreateLogger(false).ForBootOperationContext<EngineConfigLoader>();
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -43,9 +43,9 @@ public class EngineConfigLoader : IBootOperation {
             : _configFilePath!;
 
         if (!configXmlParser.TryDeserializeFromFile(filepath, out EngineConfigXml? configDto)) {
-            Logger.ThrowError<ConfigurationException>("Failed to load Engine Config");
-            return;
+            throw Logger.ThrowError<ApplicationException>("Failed to load Engine Config");
         }
+
         components.EngineConfigXml = configDto;
 
     }

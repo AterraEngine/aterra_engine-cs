@@ -12,11 +12,11 @@ namespace AterraCore.Loggers;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 /// <summary>
-/// Extensions for configuring the Serilog LoggerConfiguration.
+///     Extensions for configuring the Serilog LoggerConfiguration.
 /// </summary>
 public static class LoggerConfigurationExtensions {
     /// <summary>
-    /// The output template used for formatting log messages.
+    ///     The output template used for formatting log messages.
     /// </summary>
     public const string OutputTemplateEngine = "[ {SourceContext,24} : {Timestamp:HH:mm:ss.fff} : {Level:u3}] | {Message:lj} {NewLine}{Exception}";
 
@@ -24,7 +24,7 @@ public static class LoggerConfigurationExtensions {
 
     #region Theme
     /// <summary>
-    /// Represents the theme configuration for the Serilog logger console sink.
+    ///     Represents the theme configuration for the Serilog logger console sink.
     /// </summary>
     private static readonly AnsiConsoleTheme Theme = new(
         new Dictionary<ConsoleThemeStyle, string> {
@@ -53,7 +53,7 @@ public static class LoggerConfigurationExtensions {
     // Extensions
     // -----------------------------------------------------------------------------------------------------------------
     /// <summary>
-    /// Adds default enrichments to the LoggerConfiguration.
+    ///     Adds default enrichments to the LoggerConfiguration.
     /// </summary>
     /// <param name="lc">The LoggerConfiguration object.</param>
     /// <param name="stage">The stage of the application.</param>
@@ -69,7 +69,7 @@ public static class LoggerConfigurationExtensions {
             .Enrich.With(new TruncateSourceContextEnricher(17));
 
     /// <summary>
-    /// Adds an async file sink to the logger configuration for writing logs asynchronously.
+    ///     Adds an async file sink to the logger configuration for writing logs asynchronously.
     /// </summary>
     /// <param name="lc">The logger configuration.</param>
     /// <param name="filePath">The path to the log file.</param>
@@ -86,11 +86,11 @@ public static class LoggerConfigurationExtensions {
     }
 
     /// <summary>
-    /// Writes log events to the console sink with default configuration.
+    ///     Writes log events to the console sink with default configuration.
     /// </summary>
-    /// <param name="lc">The <see cref="LoggerConfiguration"/> object.</param>
+    /// <param name="lc">The <see cref="LoggerConfiguration" /> object.</param>
     /// <param name="outputTemplate">Serilog console template</param>
-    /// <returns>The updated <see cref="LoggerConfiguration"/> object.</returns>
+    /// <returns>The updated <see cref="LoggerConfiguration" /> object.</returns>
     public static LoggerConfiguration DefaultSinkConsole(this LoggerConfiguration lc, string? outputTemplate = null) =>
         lc.WriteTo.Console(
             theme: Theme,
@@ -98,8 +98,8 @@ public static class LoggerConfigurationExtensions {
         );
 
     /// <summary>
-    /// Configures Serilog logger to write log events to the console synchronously or asynchronously.
-    /// Using the async sink avoids any performance issues during gameplay.
+    ///     Configures Serilog logger to write log events to the console synchronously or asynchronously.
+    ///     Using the async sink avoids any performance issues during gameplay.
     /// </summary>
     /// <param name="lc">The LoggerConfiguration object.</param>
     /// <param name="outputTemplate">Serilog console template</param>
@@ -115,11 +115,11 @@ public static class LoggerConfigurationExtensions {
     }
 
     /// <summary>
-    /// Sets up the console sink for Serilog logging.
+    ///     Sets up the console sink for Serilog logging.
     /// </summary>
-    /// <param name="lc">The <see cref="LoggerConfiguration"/> instance.</param>
+    /// <param name="lc">The <see cref="LoggerConfiguration" /> instance.</param>
     /// <param name="outputTemplate">Serilog console template</param>
-    /// <returns>The <see cref="LoggerConfiguration"/> instance with console sink configured.</returns>
+    /// <returns>The <see cref="LoggerConfiguration" /> instance with console sink configured.</returns>
     public static LoggerConfiguration SinkConsole(this LoggerConfiguration lc, string? outputTemplate = null) =>
         lc
             // Using Async Sink to write logs asynchronously 
@@ -130,7 +130,7 @@ public static class LoggerConfigurationExtensions {
             );
 
     /// <summary>
-    /// Sets the console sink for the logger configuration.
+    ///     Sets the console sink for the logger configuration.
     /// </summary>
     /// <param name="lc">The logger configuration.</param>
     /// <param name="allowAsync">A boolean flag indicating whether to use asynchronous console sink or not.</param>

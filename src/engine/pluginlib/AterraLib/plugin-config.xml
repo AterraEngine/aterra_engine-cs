@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pluginConfig xmlns="urn:aterra-engine:plugin-config">
+    <nameSpace>AterraLib</nameSpace>
+    <nameReadable>AterraLib</nameReadable>
+    <author>Andreas Sas</author>
+    <pluginVersion>0.0.0</pluginVersion>
+    <expectedGameVersion>0.0.0</expectedGameVersion>
+    <bins>
+        <bin file="AterraLib.dll"/>
+        <bin file="AterraLib.Contracts.dll"/>
+    </bins>
+</pluginConfig>

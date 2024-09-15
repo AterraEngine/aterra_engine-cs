@@ -23,7 +23,7 @@ public class RegexLibTest {
 
     [Theory]
     [InlineData("123:456")]
-    [InlineData("abc:def/ghi.jkl")]
+    [InlineData("abc:def/ghi_jkl")]
     [InlineData("abc-123:def-456")]
     public void TestAssetId(string input) {
         Assert.Matches(RegexLib.AssetId, input);
@@ -32,6 +32,7 @@ public class RegexLibTest {
     [Theory]
     [InlineData("abc:def-")]
     [InlineData(":def")]
+    [InlineData("abc:def/ghi.jkl")]
     public void TestAssetIdFail(string input) {
         Assert.DoesNotMatch(RegexLib.AssetId, input);
     }
@@ -39,15 +40,35 @@ public class RegexLibTest {
     [Theory]
     [InlineData("asset-123")]
     [InlineData("asset_123")]
-    public void TestAssetNamePartial(string input) {
-        Assert.Matches(RegexLib.AssetPartial, input);
+    public void TestPluginId(string input) {
+        Assert.Matches(RegexLib.PluginId, input);
     }
 
     [Theory]
     [InlineData("asset-123-")]
     [InlineData("-asset123")]
     [InlineData("asset_123-")]
-    public void TestAssetNamePartialFail(string input) {
-        Assert.DoesNotMatch(RegexLib.AssetPartial, input);
+    public void TestPluginIdFail(string input) {
+        Assert.DoesNotMatch(RegexLib.PluginId, input);
+    }
+
+    [Theory]
+    [InlineData("asset-123")]
+    [InlineData("asset_123/test")]
+    public void TestNamespaces(string input) {
+        Assert.Matches(RegexLib.Namespaces, input);
+    }
+
+    [Theory]
+    [InlineData("asset-123-")]
+    [InlineData("-asset123")]
+    [InlineData("asset_123/test-")]
+    [InlineData("asset_123/test_")]
+    [InlineData("asset_123/test/-")]
+    [InlineData("asset_123/test/_")]
+    [InlineData("asset_123/test/")]
+    [InlineData("asset_123/")]
+    public void TestNamespacesFail(string input) {
+        Assert.DoesNotMatch(RegexLib.Namespaces, input);
     }
 }

@@ -7,16 +7,8 @@ namespace Tests.AterraCore.Common.Types;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[TestSubject(typeof(PooledResource<>))]
+[TestSubject(typeof(DisposablePooledResource<>))]
 public class PooledResourceTest {
-    private class MockPooledObject;
-
-    private class SimpleObjectPool<T> : ObjectPool<T> where T : class, new() {
-        public override T Get() => new();
-        public override void Return(T obj) {
-            /* No-op for simplicity */
-        }
-    }
 
     [Fact]
     public void PooledResource_Should_Return_Object_To_Pool_On_Dispose() {
@@ -25,7 +17,7 @@ public class PooledResourceTest {
 
         // Act
         MockPooledObject item;
-        using (var pooledResource = new PooledResource<MockPooledObject>(pool)) {
+        using (var pooledResource = new DisposablePooledResource<MockPooledObject>(pool)) {
             item = pooledResource.Item;
         }
 
@@ -35,5 +27,14 @@ public class PooledResourceTest {
         // checking the item is not null ensures that it was created properly.
         // More complex logic would be needed to test return behavior.
         Assert.IsType<MockPooledObject>(item);
+    }
+
+    private class MockPooledObject;
+
+    private class SimpleObjectPool<T> : ObjectPool<T> where T : class, new() {
+        public override T Get() => new();
+        public override void Return(T obj) {
+            /* No-op for simplicity */
+        }
     }
 }

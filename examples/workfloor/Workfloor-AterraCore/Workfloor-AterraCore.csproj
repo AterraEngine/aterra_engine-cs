@@ -12,8 +12,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\..\src\engine\AterraEngine\AterraEngine.csproj"/>
         <ProjectReference Include="..\..\..\src\engine\AterraCore.Boot\AterraCore.Boot.csproj"/>
-        <ProjectReference Include="..\..\..\src\lib\AterraLib\AterraLib.csproj"/>
+        <ProjectReference Include="..\..\..\src\engine\pluginlib\AterraLib\AterraLib.csproj"/>
         <ProjectReference Include="..\..\..\tools\Analyzers\AterraEngine.Analyzers\AterraEngine.Analyzers.csproj">
             <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
             <OutputItemType>Analyzer</OutputItemType>
@@ -21,9 +22,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="CodeOfChaos.Extensions" Version="0.6.0"/>
+        <PackageReference Include="CodeOfChaos.Extensions" Version="0.7.0"/>
         <PackageReference Include="CodeOfChaos.Extensions.DependencyInjection" Version="0.1.1"/>
-        <PackageReference Include="CodeOfChaos.Extensions.Serilog" Version="0.3.0"/>
+        <PackageReference Include="CodeOfChaos.Extensions.Serilog" Version="0.4.0"/>
         <PackageReference Include="JetBrains.Annotations" Version="2024.2.0"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1"/>
@@ -32,19 +33,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\src\engine\AterraEngine\AterraEngine.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
         <Content Include="..\..\..\src\xsd\*.xsd">
             <Link>xsd\%(Filename)%(Extension)</Link>
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-    </ItemGroup>
-
-    <ItemGroup>
-        <Content Include="Assets\*.png">
-            <Link>assets\%(Filename)%(Extension)</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
@@ -57,8 +47,8 @@
         <!-- Define list of plugin files -->
         <ItemGroup>
             <PluginFiles Include="..\..\..\examples\workfloor\Workfloor-AterraCore.Plugin\bin\$(Configuration)\net8.0\win-x64\package\Workfloor-AterraCore.Plugin.zip"/>
-            <PluginFiles Include="..\..\..\src\lib\AterraLib\bin\$(Configuration)\net8.0\package\AterraLib.zip"/>
-            <PluginFiles Include="..\..\..\src\lib\AterraLibOverwrite\bin\$(Configuration)\net8.0\package\AterraLibOverwrite.zip"/>
+            <PluginFiles Include="..\..\..\src\engine\pluginlib\AterraLib\bin\$(Configuration)\net8.0\package\AterraLib.zip"/>
+            <PluginFiles Include="..\..\..\src\engine\pluginlib\AterraLibOverwrite\bin\$(Configuration)\net8.0\package\AterraLibOverwrite.zip"/>
         </ItemGroup>
 
         <!-- Copy plugins to output directory -->
@@ -67,6 +57,7 @@
         <!-- Define list of special config files -->
         <ItemGroup>
             <ConfigFiles Include="engine-config.xml"/>
+            <ConfigFiles Include="game-config.xml"/>
         </ItemGroup>
 
         <!-- Copy config files to output directory -->

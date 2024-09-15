@@ -9,7 +9,7 @@ namespace AterraCore.Loggers;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 /// <summary>
-/// Contains extension methods for the <see cref="ILogger"/> interface.
+///     Contains extension methods for the <see cref="ILogger" /> interface.
 /// </summary>
 public static class SectionExtensions {
     public static ILogger ForContext<T>(this ILogger logger) => logger.ForContext(Constants.SourceContextPropertyName, typeof(T).Namespace);

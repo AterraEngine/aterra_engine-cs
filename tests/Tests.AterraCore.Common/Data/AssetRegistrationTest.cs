@@ -9,26 +9,14 @@ namespace Tests.AterraCore.Common.Data;
 // ---------------------------------------------------------------------------------------------------------------------
 [TestSubject(typeof(AssetRegistration))]
 public class AssetRegistrationTest {
-    // Sample types for testing
-    private class SampleAsset : ISampleInterface;
-
-    private class SecondSampleAsset : ISampleInterface;
-
-    private class SingletonAsset : ISampleInterface;
-
-    private class DerivedAsset : SampleAsset, IDerivedInterface;
-
-    private interface ISampleInterface;
-
-    private interface IDerivedInterface : ISampleInterface;
 
     [Fact]
     public void Constructor_ShouldInitializePropertiesCorrectly() {
-        var assetId = new AssetId("test:sample.asset");
+        var assetId = new AssetId("test:sample_asset");
         Type type = typeof(SampleAsset);
         const CoreTags coreTags = CoreTags.Singleton;
         string[] stringTags = ["Tag1", "Tag2"];
-        AssetId[] overridableAssetIds = [new AssetId("test:base.asset")];
+        AssetId[] overridableAssetIds = [new("test:base_asset")];
 
         var registration = new AssetRegistration(
             assetId,
@@ -51,7 +39,7 @@ public class AssetRegistrationTest {
         Type type = typeof(SampleAsset);
 
         var registration = new AssetRegistration(
-            new AssetId("test:sample.asset"),
+            new AssetId("test:sample_asset"),
             type
         );
 
@@ -64,7 +52,7 @@ public class AssetRegistrationTest {
         Type type = typeof(SampleAsset);
 
         var registration = new AssetRegistration(
-            new AssetId("test:sample.asset"),
+            new AssetId("test:sample_asset"),
             type
         ) {
             InterfaceTypes = [typeof(ISampleInterface), typeof(IDerivedInterface)]
@@ -80,14 +68,14 @@ public class AssetRegistrationTest {
         Type type = typeof(SingletonAsset);
 
         var registrationWithSingleton = new AssetRegistration(
-            new AssetId("test:singleton.asset"),
+            new AssetId("test:singleton_asset"),
             type
         ) {
             CoreTags = CoreTags.Singleton
         };
 
         var registrationWithoutSingleton = new AssetRegistration(
-            new AssetId("test:non-singleton.asset"),
+            new AssetId("test:non-singleton_asset"),
             type
         ) {
             CoreTags = 0
@@ -103,7 +91,7 @@ public class AssetRegistrationTest {
         Type type = typeof(DerivedAsset);
 
         var registration = new AssetRegistration(
-            new AssetId("test:derived.asset"),
+            new AssetId("test:derived_asset"),
             type
         );
 
@@ -114,7 +102,7 @@ public class AssetRegistrationTest {
     [Fact]
     public void InterfaceTypes_ShouldInitializeToEmpty() {
         var registration = new AssetRegistration(
-            new AssetId("test:sample.asset"),
+            new AssetId("test:sample_asset"),
             typeof(SampleAsset)
         );
 
@@ -123,7 +111,7 @@ public class AssetRegistrationTest {
 
     [Fact]
     public void AssetId_Property_ShouldReturnCorrectValue() {
-        var assetId = new AssetId("test:sample.asset");
+        var assetId = new AssetId("test:sample_asset");
 
         var registration = new AssetRegistration(
             assetId,
@@ -138,7 +126,7 @@ public class AssetRegistrationTest {
         Type type = typeof(SampleAsset);
 
         var registration = new AssetRegistration(
-            new AssetId("test:sample.asset"),
+            new AssetId("test:sample_asset"),
             type
         );
 
@@ -151,7 +139,7 @@ public class AssetRegistrationTest {
         Type typeNew = typeof(SecondSampleAsset);
 
         var registration = new AssetRegistration(
-            new AssetId("test:sample.asset"),
+            new AssetId("test:sample_asset"),
             type
         );
 
@@ -162,16 +150,29 @@ public class AssetRegistrationTest {
 
     [Fact]
     public void AssetId_Property_Set() {
-        var idNew = new AssetId("test:sample.asset.new");
+        var idNew = new AssetId("test:sample_asset_new");
         Type type = typeof(SampleAsset);
 
         var registration = new AssetRegistration(
-            new AssetId("test:sample.asset"),
+            new AssetId("test:sample_asset"),
             type
-        );
-
-        registration.AssetId = idNew;
+        ) {
+            AssetId = idNew
+        };
 
         Assert.Equal(idNew, registration.AssetId);
     }
+
+    // Sample types for testing
+    private class SampleAsset : ISampleInterface;
+
+    private class SecondSampleAsset : ISampleInterface;
+
+    private class SingletonAsset : ISampleInterface;
+
+    private class DerivedAsset : SampleAsset, IDerivedInterface;
+
+    private interface ISampleInterface;
+
+    private interface IDerivedInterface : ISampleInterface;
 }

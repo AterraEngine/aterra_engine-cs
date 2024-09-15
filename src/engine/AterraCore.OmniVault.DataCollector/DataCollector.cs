@@ -9,6 +9,8 @@ namespace AterraCore.OmniVault.DataCollector;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class DataCollector : IDataCollector {
+
+    private const int MaxHistorySize = 60 * 1000;
     public int Fps { get; internal set; }
     public int FpsMin { get; internal set; }
     public int FpsMax { get; internal set; }
@@ -22,8 +24,6 @@ public class DataCollector : IDataCollector {
     public string TpsAverageString { get; private set; } = string.Empty;
 
     public double DeltaTps { get; internal set; }
-
-    private const int MaxHistorySize = 60 * 1000;
     #region FpsAverageWatch
     private readonly HashSet<int> _fpsHistory = new(MaxHistorySize);
     private readonly Stopwatch _fpsAverageWatch = Stopwatch.StartNew();
@@ -31,6 +31,7 @@ public class DataCollector : IDataCollector {
         _fpsHistory.Add(fps);
 
         if (_fpsAverageWatch.ElapsedMilliseconds < 1000) return;
+
         FpsAverage = _fpsHistory.Average();
         FpsAverageString = $"{FpsAverage:N2}";
 
@@ -45,6 +46,7 @@ public class DataCollector : IDataCollector {
         _tpsHistory.Add(tps);
 
         if (_tpsAverageWatch.ElapsedMilliseconds < 1000) return;
+
         TpsAverage = _tpsHistory.Average();
         TpsAverageString = $"{TpsAverage:N2}";
 

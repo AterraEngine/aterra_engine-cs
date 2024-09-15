@@ -13,16 +13,25 @@ namespace AterraCore.Nexities.Systems;
 public abstract class NexitiesSystemWithParentsReversed<TParent, TChild> : NexitiesSystemWithParents<TParent, TChild>
     where TParent : class, IAssetInstance
     where TChild : class, IAssetInstance {
-    protected override (TParent? Parent, TChild Child)[] GetEntities(ActiveLevel level) {
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    protected override (TParent? Parent, TChild Child, int zIndex)[] GetEntities(ActiveLevel level) {
         if (BufferPopulated) return EntitiesBuffer;
 
-        var list = new List<(TParent? Parent, TChild Child)>();
-        foreach ((IAssetInstance? Parent, IAssetInstance Child) instance in level.ActiveEntityTree.GetAsFlatReverseWithParent()) {
-            if (instance.Child is TChild child)
-                list.Add((instance.Parent as TParent, child));
+        List<(TParent? Parent, TChild Child, int zIndex)> list = ParentChildPool.Get();
+        int zIndex = 0;
+        foreach ((IAssetInstance? parent, IAssetInstance childInstance) in level.ActiveEntityTree.GetAsFlatReverseWithParent()) {
+            int i = zIndex++;
+            if (childInstance is TChild child) list.Add((parent as TParent, child, i));
         }
 
         BufferPopulated = true;
-        return EntitiesBuffer = list.ToArray();
+        list.TrimExcess();
+        EntitiesBuffer = list.ToArray();
+
+        ParentChildPool.Return(list);
+        return EntitiesBuffer;
     }
 }

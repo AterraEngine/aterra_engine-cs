@@ -29,11 +29,13 @@ public class PluginLoaderZipImporter : IBootOperation {
                     Logger.Warning("Plugin config is invalid");
                     return;
                 }
+
                 if (!plugin.TrySetPluginConfig(pluginConfig)) {
                     plugin.SetInvalid();
                     Logger.Warning("Plugin config could not be applied to the plugin");
                     return;
                 }
+
                 Logger.Debug("Loaded ConfigXml for {plugin}", pluginConfig.NameSpace);
             },
             #endregion
@@ -54,12 +56,14 @@ public class PluginLoaderZipImporter : IBootOperation {
                     )
                     .Select(filePath => {
                         if (zipImporter.TryGetDllAssembly(filePath, out Assembly? assembly)) return assembly;
+
                         plugin.SetInvalid();
                         Logger.Warning("Failed to load assembly {file}", filePath);
                         return assembly;
                     })
                     .Where(assembly => assembly != null)
                     .Select(assembly => assembly!);
+
 
                 plugin.UpdateAssemblies(assemblies);
             }

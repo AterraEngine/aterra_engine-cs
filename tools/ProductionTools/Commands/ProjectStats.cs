@@ -1,7 +1,6 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using CodeOfChaos.Extensions.Serilog;
 using JetBrains.Annotations;
 using ProductionTools.Repo;
 using System.Collections.Concurrent;

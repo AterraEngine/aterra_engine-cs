@@ -16,21 +16,23 @@ namespace AterraCore.DI;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 /// <summary>
-/// Provides various engine-related services such as dependency injection, logging, and asset management.
+///     Provides various engine-related services such as dependency injection, logging, and asset management.
 /// </summary>
 public static class EngineServices {
-    /// <summary>
-    /// Provides access to various services in the AterraCore Engine.
-    /// </summary>
-    private static ServiceProvider ServiceProvider { get; set; } = null!;
+    private static IServiceCollection? _serviceCollection;
 
     /// <summary>
-    /// Represents the logger used in the EngineServices class.
+    ///     Represents the logger used in the EngineServices class.
     /// </summary>
     private static ILogger? _logger;
 
     /// <summary>
-    /// Provides logging functionality for the application.
+    ///     Provides access to various services in the AterraCore Engine.
+    /// </summary>
+    private static ServiceProvider ServiceProvider { get; set; } = null!;
+
+    /// <summary>
+    ///     Provides logging functionality for the application.
     /// </summary>
     private static ILogger Logger => _logger ??= GetLogger().ForContext(Constants.SourceContextPropertyName, typeof(EngineServices));
 
@@ -38,15 +40,16 @@ public static class EngineServices {
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     /// <summary>
-    /// Builds the service provider using the provided service collection.
+    ///     Builds the service provider using the provided service collection.
     /// </summary>
     /// <param name="serviceCollection">The service collection.</param>
     public static void BuildServiceProvider(IServiceCollection serviceCollection) {
         ServiceProvider = serviceCollection.BuildServiceProvider();
+        _serviceCollection = serviceCollection;
     }
 
     /// <summary>
-    /// Retrieves an instance of the specified service type.
+    ///     Retrieves an instance of the specified service type.
     /// </summary>
     /// <typeparam name="T">The type of the service to retrieve.</typeparam>
     /// <returns>An instance of the specified service type.</returns>
@@ -56,8 +59,20 @@ public static class EngineServices {
             return ServiceProvider.GetRequiredService<T>();
         }
         catch (InvalidOperationException e) {
-            string? typeName = typeof(T).FullName;// Get type name
-            Logger.ThrowFatal(e, "Service type of {TypeOfT} could not be found.", typeName);
+            Type type = typeof(T);
+
+            ServiceDescriptor? serviceDescriptor = _serviceCollection?.FirstOrDefault(descriptor => descriptor.ServiceType == type);
+            if (serviceDescriptor?.ImplementationType?.GetConstructors().FirstOrDefault() is not {} constructor) {
+                throw Logger.ThrowFatal(e, "Service type of {TypeOfT} could not be found.", type.FullName);
+            }
+
+            IEnumerable<Type> paramTypes = constructor.GetParameters().Select(p => p.ParameterType);
+            foreach (Type paramType in paramTypes) {
+                if (ServiceProvider.GetService(paramType) is not null) continue;
+
+                throw Logger.ThrowFatal(e, "Service type of {paramType} could not be found while resolving {TypeOfT}", paramType.FullName, type.FullName);
+            }
+
             throw;
         }
     }
@@ -69,18 +84,19 @@ public static class EngineServices {
     }
 
     /// <summary>
-    /// Creates an instance of the specified type with the required services.
+    ///     Creates an instance of the specified type with the required services.
     /// </summary>
     /// <typeparam name="T">The type of the instance to create.</typeparam>
     /// <returns>
-    /// An instance of the specified type.
+    ///     An instance of the specified type.
     /// </returns>
     /// <remarks>
-    /// This method uses the <see cref="IServiceProvider"/> to resolve dependencies and create the instance of the specified type.
+    ///     This method uses the <see cref="IServiceProvider" /> to resolve dependencies and create the instance of the
+    ///     specified type.
     /// </remarks>
     public static T CreateWithServices<T>() => CreateWithServices<T>(typeof(T));
     /// <summary>
-    /// Creates an instance of type T with the registered services.
+    ///     Creates an instance of type T with the registered services.
     /// </summary>
     /// <typeparam name="T">The type of the object to be created.</typeparam>
     /// <param name="objectType">The type of the object to be created.</param>
@@ -91,32 +107,32 @@ public static class EngineServices {
     // Default Systems Quick access
     // -----------------------------------------------------------------------------------------------------------------
     /// <summary>
-    /// Retrieves the logger instance for the EngineServices context.
+    ///     Retrieves the logger instance for the EngineServices context.
     /// </summary>
     /// <returns>The logger instance.</returns>
     public static ILogger GetLogger() => GetService<ILogger>();
     /// <summary>
-    /// Retrieves an instance of the <see cref="IEngine"/> interface.
+    ///     Retrieves an instance of the <see cref="IEngine" /> interface.
     /// </summary>
-    /// <returns>An instance of the <see cref="IEngine"/> interface.</returns>
+    /// <returns>An instance of the <see cref="IEngine" /> interface.</returns>
     public static IEngine GetEngine() => GetService<IEngine>();
     /// <summary>
-    /// Retrieves the instance of the plugin atlas service.
+    ///     Retrieves the instance of the plugin atlas service.
     /// </summary>
     /// <returns>The instance of the plugin atlas service.</returns>
     public static IPluginAtlas GetPluginAtlas() => GetService<IPluginAtlas>();
     /// <summary>
-    /// Retrieves an instance of the asset atlas.
+    ///     Retrieves an instance of the asset atlas.
     /// </summary>
     /// <returns>An instance of the asset atlas.</returns>
     public static IAssetAtlas GetAssetAtlas() => GetService<IAssetAtlas>();
     /// <summary>
-    /// Retrieves the instance atlas for asset instances.
+    ///     Retrieves the instance atlas for asset instances.
     /// </summary>
     /// <returns>The asset instance atlas.</returns>
     public static IAssetInstanceAtlas GetAssetInstanceAtlas() => GetService<IAssetInstanceAtlas>();
     /// <summary>
-    /// Retrieves the factory for instances of assets.
+    ///     Retrieves the factory for instances of assets.
     /// </summary>
     /// <returns>The Asset Instance Factory.</returns>
     public static IAssetInstanceFactory GetAssetInstanceFactory() => GetService<IAssetInstanceFactory>();

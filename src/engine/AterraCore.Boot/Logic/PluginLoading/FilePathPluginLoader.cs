@@ -17,7 +17,6 @@ using PluginAction=Action<IFilePathPluginLoader, IRawPluginBootDto, IPluginBootD
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class FilePathPluginLoader(ILogger logger) : IFilePathPluginLoader {
-    private ILogger Logger { get; } = logger.ForContext<FilePathPluginLoader>();
     public LinkedList<(IRawPluginBootDto rawPluginBootDto, IPluginBootDto pluginBootDto)> Plugins { get; } = [];
     public HashSet<string> Checksums { get; } = [];
 

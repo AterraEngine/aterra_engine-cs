@@ -10,11 +10,11 @@ namespace AterraCore.OmniVault.World.EntityTree;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 /// <summary>
-/// The `EntityNodeTree` struct represents a hierarchical tree structure of entity nodes in an entity system.
+///     The `EntityNodeTree` struct represents a hierarchical tree structure of entity nodes in an entity system.
 /// </summary>
 public readonly struct EntityNodeTree(IEntityNode root, IEntityTreePools poolProvider) : IEntityNodeTree {
     /// <summary>
-    /// Represents a tree structure of entity nodes with a root node.
+    ///     Represents a tree structure of entity nodes with a root node.
     /// </summary>
     private IEntityNode Root { get; } = root;
 
@@ -23,11 +23,11 @@ public readonly struct EntityNodeTree(IEntityNode root, IEntityTreePools poolPro
     // -----------------------------------------------------------------------------------------------------------------
     #region Flat | root -> child -> n-grandchildren
     /// <summary>
-    /// Retrieves all assets in the entity tree as a flattened collection.
+    ///     Retrieves all assets in the entity tree as a flattened collection.
     /// </summary>
     /// <returns>A collection of asset instances in the entity tree.</returns>
     public IEnumerable<IAssetInstance> GetAsFlat() {
-        using var stackPool = new PooledResource<Stack<IEntityNode>>(poolProvider.StackPool);
+        using var stackPool = new DisposablePooledResource<Stack<IEntityNode>>(poolProvider.StackPool);
 
         Stack<IEntityNode> stack = stackPool.Item;
 
@@ -36,20 +36,21 @@ public readonly struct EntityNodeTree(IEntityNode root, IEntityTreePools poolPro
         while (stack.TryPop(out IEntityNode? currentNode)) {
             yield return currentNode.Value;
 
-            for (int i = currentNode.Children.Count - 1; i >= 0; i--)
+            for (int i = currentNode.Children.Count - 1; i >= 0; i--) {
                 stack.Push(currentNode.Children[i]);
+            }
         }
 
     }
     #endregion
     #region FlatReverse | deepest n-grandchild -> child -> root
     /// <summary>
-    /// Retrieves all assets in the entity tree in reverse order as a flattened collection.
+    ///     Retrieves all assets in the entity tree in reverse order as a flattened collection.
     /// </summary>
     /// <returns>A collection of asset instances in the entity tree in reverse order.</returns>
     public IEnumerable<IAssetInstance> GetAsFlatReverse() {
-        using var queuePool = new PooledResource<Queue<IEntityNode>>(poolProvider.QueuePool);
-        using var assetsPool = new PooledResource<Queue<IAssetInstance>>(poolProvider.QueueAssetInstancePool);
+        using var queuePool = new DisposablePooledResource<Queue<IEntityNode>>(poolProvider.QueuePool);
+        using var assetsPool = new DisposablePooledResource<Queue<IAssetInstance>>(poolProvider.QueueAssetInstancePool);
 
         Queue<IEntityNode> queue = queuePool.Item;
         Queue<IAssetInstance> assets = assetsPool.Item;
@@ -70,11 +71,11 @@ public readonly struct EntityNodeTree(IEntityNode root, IEntityTreePools poolPro
     #endregion
     #region FlatWithParent | root -> child -> n-grandchildren
     /// <summary>
-    /// Retrieves all assets in the entity tree as a flattened collection along with their parent assets.
+    ///     Retrieves all assets in the entity tree as a flattened collection along with their parent assets.
     /// </summary>
     /// <returns>A collection of tuples, each containing a parent asset instance and its child asset instance.</returns>
     public IEnumerable<(IAssetInstance? Parent, IAssetInstance Child)> GetAsFlatWithParent() {
-        using var stackPool = new PooledResource<Stack<(IEntityNode? Parent, IEntityNode Child)>>(poolProvider.ParentedStackPool);
+        using var stackPool = new DisposablePooledResource<Stack<(IEntityNode? Parent, IEntityNode Child)>>(poolProvider.ParentedStackPool);
 
         Stack<(IEntityNode? Parent, IEntityNode Child)> stack = stackPool.Item;
 
@@ -84,22 +85,24 @@ public readonly struct EntityNodeTree(IEntityNode root, IEntityTreePools poolPro
             (IEntityNode? parent, IEntityNode child) = t;
             yield return (parent?.Value, child.Value);
 
-            for (int i = child.Children.Count - 1; i >= 0; i--)
+            for (int i = child.Children.Count - 1; i >= 0; i--) {
                 stack.Push((child, child.Children[i]));
+            }
         }
     }
     #endregion
     #region FlatReverseWithParent | deepest n-grandchild -> child -> root
     /// <summary>
-    /// Retrieves all assets in the entity tree as a flattened reverse representation with their parent-child relationship.
+    ///     Retrieves all assets in the entity tree as a flattened reverse representation with their parent-child relationship.
     /// </summary>
     /// <returns>
-    /// An <see cref="IEnumerable{T}"/> of tuples representing the parent-child relationship in reverse order.
-    /// Each tuple contains an <see cref="IAssetInstance"/> representing the possible existing parent node and an <see cref="IAssetInstance"/> representing the child node.
+    ///     An <see cref="IEnumerable{T}" /> of tuples representing the parent-child relationship in reverse order.
+    ///     Each tuple contains an <see cref="IAssetInstance" /> representing the possible existing parent node and an
+    ///     <see cref="IAssetInstance" /> representing the child node.
     /// </returns>
     public IEnumerable<(IAssetInstance? Parent, IAssetInstance Child)> GetAsFlatReverseWithParent() {
-        using var stackPool = new PooledResource<Stack<(IEntityNode? Parent, IEntityNode Node)>>(poolProvider.ParentedStackPool);
-        using var assetsPool = new PooledResource<Stack<(IAssetInstance? Parent, IAssetInstance Child)>>(poolProvider.ParentedStackAssetInstancePool);
+        using var stackPool = new DisposablePooledResource<Stack<(IEntityNode? Parent, IEntityNode Node)>>(poolProvider.ParentedStackPool);
+        using var assetsPool = new DisposablePooledResource<Stack<(IAssetInstance? Parent, IAssetInstance Child)>>(poolProvider.ParentedStackAssetInstancePool);
 
         // I'm using the usefulness of stacks, LIFO to just get all of them after the fact
         Stack<(IEntityNode? Parent, IEntityNode Node)> stack = stackPool.Item;
@@ -123,11 +126,15 @@ public readonly struct EntityNodeTree(IEntityNode root, IEntityTreePools poolPro
 
     #region TraverseDepthFirst
     /// <summary>
-    /// Traverses the entity node tree in a depth-first manner and returns an enumerable collection of the visited entity nodes.
+    ///     Traverses the entity node tree in a depth-first manner and returns an enumerable collection of the visited entity
+    ///     nodes.
     /// </summary>
-    /// <returns>An enumerable collection of <see cref="IEntityNode"/> representing the visited entity nodes in a depth-first traversal.</returns>
+    /// <returns>
+    ///     An enumerable collection of <see cref="IEntityNode" /> representing the visited entity nodes in a depth-first
+    ///     traversal.
+    /// </returns>
     public IEnumerable<IEntityNode> TraverseDepthFirst() {
-        using var stackPool = new PooledResource<Stack<IEntityNode>>(poolProvider.StackPool);
+        using var stackPool = new DisposablePooledResource<Stack<IEntityNode>>(poolProvider.StackPool);
 
         Stack<IEntityNode> stack = stackPool.Item;
 
@@ -135,18 +142,19 @@ public readonly struct EntityNodeTree(IEntityNode root, IEntityTreePools poolPro
         while (stack.TryPop(out IEntityNode? currentNode)) {
             yield return currentNode;
 
-            for (int i = currentNode.Children.Count - 1; i >= 0; i--)
+            for (int i = currentNode.Children.Count - 1; i >= 0; i--) {
                 stack.Push(currentNode.Children[i]);
+            }
         }
     }
     #endregion
     #region TraverseBreadthFirst
     /// <summary>
-    /// Traverses the entity node tree in a breadth-first manner, yielding each entity node.
+    ///     Traverses the entity node tree in a breadth-first manner, yielding each entity node.
     /// </summary>
     /// <returns>An IEnumerable of IEntityNode representing the entity nodes in the tree, traversed in a breadth-first manner.</returns>
     public IEnumerable<IEntityNode> TraverseBreadthFirst() {
-        using var queuePool = new PooledResource<Queue<IEntityNode>>(poolProvider.QueuePool);
+        using var queuePool = new DisposablePooledResource<Queue<IEntityNode>>(poolProvider.QueuePool);
 
         Queue<IEntityNode> queue = queuePool.Item;
 

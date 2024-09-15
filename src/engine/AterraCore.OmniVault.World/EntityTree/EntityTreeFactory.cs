@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.Attributes;
 using AterraCore.Common.Types;
 using AterraCore.Contracts.Nexities.Entities.QuickHands;
 using AterraCore.Contracts.OmniVault.Assets;
@@ -12,12 +13,13 @@ namespace AterraCore.OmniVault.World.EntityTree;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
+[Singleton<IEntityTreeFactory>]
 public class EntityTreeFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreePools entityTreePools) : IEntityTreeFactory {
     public IEntityNodeTree CreateFromRootId(Ulid rootInstanceId) => new EntityNodeTree(PopulateNodes(rootInstanceId), entityTreePools);
     public IEntityNodeTree CreateEmpty() => new EntityNodeTree(new EntityNode(), entityTreePools);
 
     /// <summary>
-    /// Populates the nodes in the entity node tree starting from the given root instance ID.
+    ///     Populates the nodes in the entity node tree starting from the given root instance ID.
     /// </summary>
     /// <param name="rootInstanceId">The ULID of the root instance.</param>
     /// <returns>The root entity node of the populated tree.</returns>
@@ -27,7 +29,7 @@ public class EntityTreeFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreePoo
         var rootNode = new EntityNode(instance);
         if (instance is not IHasDirectChildren) return rootNode;
 
-        using var stackPool = new PooledResource<Stack<(IEntityNode ParentNode, Ulid InstanceId)>>(entityTreePools.FactoryStack);
+        using var stackPool = new DisposablePooledResource<Stack<(IEntityNode ParentNode, Ulid InstanceId)>>(entityTreePools.FactoryStack);
         Stack<(IEntityNode ParentNode, Ulid InstanceId)> stack = stackPool.Item;
 
         stack.Push((rootNode, rootInstanceId));
@@ -35,10 +37,12 @@ public class EntityTreeFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreePoo
             (IEntityNode parentNode, Ulid ulid) = node;
 
             if (!instanceAtlas.TryGet(ulid, out IAssetInstance? childInstance)) continue;// the asset wasn't managed by AterraEngine
+
             var currentNode = new EntityNode(childInstance);
             parentNode.Children.Add(currentNode);
 
             if (childInstance is not IHasDirectChildren hasDirectChildren) continue;
+
             foreach (Ulid grandChildId in hasDirectChildren.ChildrenIDs.Children) {
                 stack.Push((currentNode, grandChildId));
             }

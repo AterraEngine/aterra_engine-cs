@@ -20,7 +20,6 @@ public class XsdGenerator(ILogger logger) {
         var importer = new XmlReflectionImporter(null, nameSpace);
         var schemas = new XmlSchemas();
         var exporter = new XmlSchemaExporter(schemas);
-        XmlSchema validSchema = schemas[0];
 
         try {
             logger.Debug("Importing type mapping...");
@@ -38,6 +37,7 @@ public class XsdGenerator(ILogger logger) {
                 }
             );
 
+            XmlSchema validSchema = schemas[0];
             validSchema.Write(writer);
             logger.Information("XML Schema (XSD) generated successfully at {Path}.", outputPath);
         }

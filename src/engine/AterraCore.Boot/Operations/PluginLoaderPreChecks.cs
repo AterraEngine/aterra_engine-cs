@@ -22,6 +22,7 @@ public class PluginLoaderPreChecks : IBootOperation {
             .IterateOverValid(
                 (_, rawData, plugin) => {
                     if (File.Exists(rawData.FilePath)) return;
+
                     plugin.SetInvalid();
                     Logger.Error($"Plugin file \"{rawData.FilePath}\" does not exist");
                 }
@@ -35,6 +36,7 @@ public class PluginLoaderPreChecks : IBootOperation {
                         Logger.Warning($"Plugin file \"{rawData.FilePath}\" checksum could not be computed");
                         return;
                     }
+
                     if (loader.Checksums.Add(checksum)) return;
 
                     plugin.SetInvalid();

@@ -1,10 +1,10 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Attributes;
+using AterraCore.Common.Attributes;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Components;
-using AterraCore.Contracts.Nexities.Entities.Pools;
+using AterraCore.Contracts.PoolCorps;
 using JetBrains.Annotations;
 using Microsoft.Extensions.ObjectPool;
 using System.Collections.Concurrent;
@@ -14,7 +14,7 @@ namespace AterraCore.PoolCorps;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
-[Injectable<NexitiesEntityPools, INexitiesEntityPools>]
+[Singleton<NexitiesEntityPools, INexitiesEntityPools>]
 public class NexitiesEntityPools : INexitiesEntityPools {
     // Small initial capacity as entities usually don't hold many components.
     private const int InitialCapacity = 12;

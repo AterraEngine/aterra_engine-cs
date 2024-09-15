@@ -12,12 +12,12 @@ namespace AterraCore.Boot.Logic.PluginLoading.Dto;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class PluginBootDto : IPluginBootDto {
-    private PluginConfigXml? _configXml;
 
     private readonly List<Assembly> _assemblies = [];
-    public IReadOnlyCollection<Assembly> Assemblies => _assemblies.AsReadOnly();
 
     private readonly List<Type> _types = [];
+    private PluginConfigXml? _configXml;
+    public IReadOnlyCollection<Assembly> Assemblies => _assemblies.AsReadOnly();
     public IReadOnlyCollection<Type> Types => _types.AsReadOnly();
 
     public PluginId PluginNameSpaceId { get; internal set; }
@@ -40,6 +40,7 @@ public class PluginBootDto : IPluginBootDto {
 
     public bool TrySetPluginConfig(PluginConfigXml pluginConfigXml) {
         if (_configXml is not null) return false;
+
         _configXml = pluginConfigXml;
         PluginNameSpaceId = pluginConfigXml.NameSpace;
         return true;

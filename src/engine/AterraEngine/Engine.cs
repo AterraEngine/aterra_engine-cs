@@ -1,13 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.Attributes;
 using AterraCore.Common.Data;
-using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts;
-using AterraCore.Contracts.FlexiPlug;
-using AterraCore.Contracts.OmniVault.Assets;
+using AterraCore.Contracts.ConfigMancer;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading;
+using AterraLib.Contracts;
 using JetBrains.Annotations;
 using Serilog;
 
@@ -16,11 +16,11 @@ namespace AterraEngine;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
+[Singleton<IEngine, Engine>]
 public class Engine(
     ILogger logger,
-    IAssetAtlas assetAtlas,
-    IPluginAtlas pluginAtlas,
     IAterraCoreWorld world,
+    IConfigAtlas configAtlas,
     IThreadingManager threadingManager
 ) : IEngine {
     private ILogger Logger { get; } = logger.ForContext<Engine>();
@@ -31,6 +31,13 @@ public class Engine(
     public async Task Run() {
         Logger.Information("Entered AterraEngine");
 
+        if (!configAtlas.GameConfigs.TryGetConfig(out IAterraLibGameConfig? aterraLibConfig)) {
+            throw new ApplicationException("Config was not setup correctly");
+        }
+
+        Logger.Information("{@c}", aterraLibConfig);
+
+
         Task<bool> logicTask = threadingManager.TrySpawnLogicThreadAsync();
         Task<bool> renderTask = threadingManager.TrySpawnRenderThreadAsync();
 
@@ -38,15 +45,11 @@ public class Engine(
         if (!logicTask.Result) throw new ApplicationException("Failed to start LogicThread ");
         if (!renderTask.Result) throw new ApplicationException("Failed to start RenderThread ");
 
-        foreach (AssetRegistration assetRegistration in pluginAtlas.GetAssetRegistrations()) {
-            if (!assetAtlas.TryAssignAsset(assetRegistration, out AssetId? _)) {
-                Logger.Warning("Type {Type} could not be assigned as an asset", assetRegistration.Type);
-            }
-        }
-        if (!world.TryChangeActiveLevel(AssetIdLib.AterraCore.Entities.EmptyLevel)) throw new ApplicationException("Failed to change active level");
+        if (!world.TryChangeActiveLevel(StringAssetIdLib.AterraLib.Entities.EmptyLevel)) throw new ApplicationException("Failed to change active level");
+
         await Task.Delay(1_000);
-        if (!world.TryChangeActiveLevel("Workfloor:Levels/DragonDucksLevel")) throw new ApplicationException("Failed to change active level to");
-     
+        if (!world.TryChangeActiveLevel("Workfloor:Levels/Main")) throw new ApplicationException("Failed to change active level to");
+
         // -------------------------------------------------------------------------------------------------------------
 
         // Block main thread until all sub threads have been cancelled

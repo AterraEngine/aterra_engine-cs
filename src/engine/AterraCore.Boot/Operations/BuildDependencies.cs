@@ -20,9 +20,7 @@ public class BuildDependencies : IBootOperation {
 
         var builder = new EngineServiceBuilder(Logger, components.Services);
 
-        builder.AssignFromServiceDescriptors(components.DefaultServices);
-        builder.AssignFromServiceDescriptors(components.DynamicServices);
-        builder.AssignFromServiceDescriptors(components.StaticServices);
+        builder.AssignFromServiceDescriptors(components.ServiceDescriptors);
 
         builder.FinishBuilding();
     }

@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.Attributes;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Threading.Logic;
 using AterraCore.Contracts.Threading.Logic.EventDelegates;
@@ -12,6 +13,7 @@ namespace AterraEngine.Threading.Logic;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
+[Singleton<ILogicEventManager>]
 public class LogicEventManager : ILogicEventManager {
     public event EventHandler<IChangeActiveLevelEventArgs>? EventChangeActiveLevel;
     public event EventHandler<int>? EventTps;

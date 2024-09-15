@@ -1,7 +1,6 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Data;
 using CodeOfChaos.Extensions;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
@@ -15,10 +14,12 @@ namespace AterraCore.Common.Types;
 ///     Represents a semantic version number.
 /// </summary>
 /// <remarks>
-///     A semantic version number consists of three components: Major, Minor, and Patch.
+///     A semantic version number consists of three mayor components: Major, Minor, and Patch; and one optional string
+///     addendum
 ///     The Major version number is incremented when incompatible changes are made.
 ///     The Minor version number is incremented when new, backwards-compatible features are added.
 ///     The Patch version number is incremented when backwards-compatible fixes are made.
+///     The Addendum is allowed to contain any information.
 /// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public readonly struct SemanticVersion(int major, int minor, int patch, string? addendum = null) : IComparable<SemanticVersion>, IEquatable<SemanticVersion> {
@@ -57,10 +58,14 @@ public readonly struct SemanticVersion(int major, int minor, int patch, string? 
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     /// <summary>
-    /// Tries to parse a string representation of a semantic version and returns a value indicating whether the parsing was successful.
+    ///     Tries to parse a string representation of a semantic version and returns a value indicating whether the parsing was
+    ///     successful.
     /// </summary>
     /// <param name="input">The string representation of the semantic version.</param>
-    /// <param name="version">When this method returns, contains the parsed SemanticVersion if parsing was successful, or SemanticVersion.Zero if parsing failed.</param>
+    /// <param name="version">
+    ///     When this method returns, contains the parsed SemanticVersion if parsing was successful, or
+    ///     SemanticVersion.Zero if parsing failed.
+    /// </param>
     /// <returns><c>true</c> if parsing was successful; otherwise, <c>false</c>.</returns>
     public static bool TryParse(string input, out SemanticVersion version) {
         version = Zero;
@@ -73,6 +78,7 @@ public readonly struct SemanticVersion(int major, int minor, int patch, string? 
             int.Parse(match.Groups[3].Value),
             match.Groups[4].Success && match.Groups[4].Value.IsNotNullOrEmpty() ? match.Groups[4].Value : string.Empty
         );
+
         return true;
     }
 
@@ -99,6 +105,7 @@ public readonly struct SemanticVersion(int major, int minor, int patch, string? 
         if (Patch != other.Patch) return Patch.CompareTo(other.Patch);
         if (Addendum.IsNullOrEmpty() && other.Addendum.IsNotNullOrEmpty()) return -1;
         if (Addendum.IsNotNullOrEmpty() && other.Addendum.IsNullOrEmpty()) return 1;
+
         return 0;
     }
     public override int GetHashCode() => (Major, Minor, Patch, Addendum).GetHashCode();

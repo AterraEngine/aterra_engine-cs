@@ -1,12 +1,12 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts;
 using AterraCore.Boot;
 using AterraCore.Boot.Operations;
+using AterraCore.Contracts;
 using AterraCore.Contracts.Boot;
-using CliArgsParser;
 using AterraCore.DI;
+using CliArgsParser;
 using CodeOfChaos.Extensions;
 
 namespace Workfloor_AterraCore;
@@ -17,7 +17,8 @@ public static class Program {
     public async static Task Main(string[] args) {
         IEngineConfiguration config = new EngineConfiguration()
                 .RegisterBootOperation<EngineConfigLoader>()
-                .RegisterBootOperation<CollectDefaultDependencies>()
+                .RegisterBootOperation<CollectDependenciesByAttribute>()// Do these first, because the manual ones might overwrite
+                .RegisterBootOperation<CollectDependenciesManually>()
                 .RegisterBootOperation<PluginLoaderDefine>()
                 .RegisterBootOperation<PluginLoaderPreChecks>()
                 .RegisterBootOperation<PluginLoaderZipImporter>()

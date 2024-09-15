@@ -11,10 +11,10 @@ namespace AterraCore.Contracts.OmniVault.World;
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IAterraCoreWorld {
     /// <summary>
-    /// Represents the current active level.
+    ///     Represents the current active level.
     /// </summary>
     ActiveLevel? ActiveLevel { get; }
-    
+
     bool TryChangeActiveLevel(INexitiesLevel levelInstance);
     bool TryChangeActiveLevel(AssetId levelId, Ulid? levelInstanceId = null);
 

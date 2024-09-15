@@ -13,15 +13,13 @@ namespace AterraCore.Boot;
 public record BootComponents(
     IFilePathPluginLoader PluginLoader
 ) : IBootComponents {
-    public IServiceCollection Services { get; } = new ServiceCollection();
-
-    public LinkedList<ServiceDescriptor> DefaultServices { get; } = [];
-    public LinkedList<ServiceDescriptor> StaticServices { get; } = [];
-    public LinkedList<ServiceDescriptor> DynamicServices { get; } = [];
-
-    public LinkedList<IPluginBootDto> AssemblyLoadedPlugins { get; } = [];
 
     private EngineConfigXml? _engineConfigXml;
+    public IServiceCollection Services { get; } = new ServiceCollection();
+
+    public LinkedList<ServiceDescriptor> ServiceDescriptors { get; } = [];
+
+    public LinkedList<IPluginBootDto> AssemblyLoadedPlugins { get; } = [];
 
     public EngineConfigXml EngineConfigXml {
         get => _engineConfigXml!;

@@ -6,21 +6,6 @@ namespace Extensions;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public static class ReaderWriterLockSlimExtensions {
-    // -----------------------------------------------------------------------------------------------------------------
-    // Helper Class
-    // -----------------------------------------------------------------------------------------------------------------
-    private readonly struct ReadReleaser(ReaderWriterLockSlim rwLock) : IDisposable {
-        public void Dispose() => rwLock.ExitReadLock();
-    }
-
-    private readonly struct WriteReleaser(ReaderWriterLockSlim rwLock) : IDisposable {
-        public void Dispose() => rwLock.ExitWriteLock();
-    }
-
-    public readonly struct UpgradableReadReleaser(ReaderWriterLockSlim rwLock) : IDisposable {
-        public ReaderWriterLockSlim Lock { get; } = rwLock;
-        public void Dispose() => Lock.ExitUpgradeableReadLock();
-    }
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
@@ -44,6 +29,7 @@ public static class ReaderWriterLockSlimExtensions {
         if (rwLock.TryEnterReadLock(millisecondsTimeout)) {
             return new ReadReleaser(rwLock);
         }
+
         onTimeout?.Invoke();// Handle timeout scenario
         return null;
     }
@@ -52,6 +38,7 @@ public static class ReaderWriterLockSlimExtensions {
         if (rwLock.TryEnterWriteLock(millisecondsTimeout)) {
             return new WriteReleaser(rwLock);
         }
+
         onTimeout?.Invoke();// Handle timeout scenario
         return null;
     }
@@ -60,7 +47,24 @@ public static class ReaderWriterLockSlimExtensions {
         if (rwLock.TryEnterUpgradeableReadLock(millisecondsTimeout)) {
             return new UpgradableReadReleaser(rwLock);
         }
+
         onTimeout?.Invoke();// Handle timeout scenario
         return null;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Helper Class
+    // -----------------------------------------------------------------------------------------------------------------
+    private readonly struct ReadReleaser(ReaderWriterLockSlim rwLock) : IDisposable {
+        public void Dispose() => rwLock.ExitReadLock();
+    }
+
+    private readonly struct WriteReleaser(ReaderWriterLockSlim rwLock) : IDisposable {
+        public void Dispose() => rwLock.ExitWriteLock();
+    }
+
+    public readonly struct UpgradableReadReleaser(ReaderWriterLockSlim rwLock) : IDisposable {
+        public ReaderWriterLockSlim Lock { get; } = rwLock;
+        public void Dispose() => Lock.ExitUpgradeableReadLock();
     }
 }

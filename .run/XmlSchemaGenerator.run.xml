@@ -1,7 +1,7 @@
 ﻿<component name="ProjectRunConfigurationManager">
   <configuration default="false" name="XmlSchemaGenerator" type="DotNetProject" factoryName=".NET Project">
     <option name="EXE_PATH" value="$PROJECT_DIR$/tools/ProductionTools/bin/Debug/net8.0/win-x64/ProductionTools.exe" />
-    <option name="PROGRAM_PARAMETERS" value="generate-xmlschema -c=&quot;engine-config&quot; -f=&quot;E:\Portfolio\internal\005-aterra_engine\0001-cs-aterra_engine\src\xsd&quot; &amp;&amp; generate-xmlschema -c=&quot;plugin-config&quot; -f=&quot;E:\Portfolio\internal\005-aterra_engine\0001-cs-aterra_engine\src\xsd&quot;" />
+    <option name="PROGRAM_PARAMETERS" value="generate-xmlschema -c=&quot;engine-config&quot; -f=&quot;E:\Portfolio\internal\005-aterra_engine\0001-cs-aterra_engine\src\xsd&quot; &amp;&amp; generate-xmlschema -c=&quot;plugin-config&quot; -f=&quot;E:\Portfolio\internal\005-aterra_engine\0001-cs-aterra_engine\src\xsd&quot; &amp;&amp; generate-xmlschema -c=&quot;game-config&quot; -f=&quot;E:\Portfolio\internal\005-aterra_engine\0001-cs-aterra_engine\src\xsd&quot; &amp;&amp; generate-xmlschema -c=&quot;game-config-aterralib&quot; -f=&quot;E:\Portfolio\internal\005-aterra_engine\0001-cs-aterra_engine\src\xsd&quot;" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tools/ProductionTools/bin/Debug/net8.0/win-x64" />
     <option name="PASS_PARENT_ENVS" value="1" />
     <option name="USE_EXTERNAL_CONSOLE" value="0" />

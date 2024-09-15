@@ -1,12 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.Attributes;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Levels;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World;
-using AterraCore.Contracts.Threading.CTQ;
-using AterraCore.Contracts.Threading.CTQ.Dto;
+using AterraCore.Contracts.Threading.CrossThread;
+using AterraCore.Contracts.Threading.CrossThread.Dto;
 using Extensions;
 using JetBrains.Annotations;
 using Serilog;
@@ -17,51 +18,33 @@ namespace AterraCore.OmniVault.World;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 /// <summary>
-/// Represents the core world of the Aterra system.
-/// This class is responsible for managing the active level and changing levels in the game.
+///     Represents the core world of the Aterra system.
+///     This class is responsible for managing the active level and changing levels in the game.
 /// </summary>
 [UsedImplicitly]
+[Singleton<IAterraCoreWorld>]
 public class AterraCoreWorld(
     IAssetInstanceAtlas instanceAtlas,
     ILogger logger,
     IActiveLevelFactory levelFactory,
-    ICrossThreadQueue crossThreadQueue
+    ICrossThreadQueue crossThreadQueue,
+    ICrossThreadTickData crossThreadTickData
 ) : IAterraCoreWorld {
-    /// <summary>
-    /// Represents a Logger used for logging information and messages.
-    /// </summary>
-    private ILogger Logger { get; } = logger.ForContext<AterraCoreWorld>();
 
     /// <summary>
-    /// Represents the lock object used to synchronize access to the active level in the AterraCoreWorld class.
+    ///     Represents the lock object used to synchronize access to the active level in the AterraCoreWorld class.
     /// </summary>
     private readonly ReaderWriterLockSlim _activeLevelLock = new();
 
     /// <summary>
-    /// Represents the current active level.
+    ///     Represents a Logger used for logging information and messages.
+    /// </summary>
+    private ILogger Logger { get; } = logger.ForContext<AterraCoreWorld>();
+
+    /// <summary>
+    ///     Represents the current active level.
     /// </summary>
     public ActiveLevel? ActiveLevel { get; private set; }
-
-    // -----------------------------------------------------------------------------------------------------------------
-    // Methods
-    // -----------------------------------------------------------------------------------------------------------------
-    /// <summary>
-    /// Emits the active level in the AterraCoreWorld.
-    /// This method is called when the active level is changed and is responsible for handling the texture asset changes.
-    /// </summary>
-    /// <param name="activeLevel">The new active level.</param>
-    /// <param name="oldLevel">The previous active level.</param>
-    private void EmitActiveLevel(ActiveLevel? activeLevel, ActiveLevel? oldLevel) {
-        IEnumerable<AssetId> oldTextureAssetIds = oldLevel?.TextureAssetIds.ToArray() ?? [];
-        IEnumerable<AssetId> newTextureAssetIds = activeLevel?.TextureAssetIds.ToArray() ?? [];
-
-        Parallel.ForEach(oldTextureAssetIds.Except(newTextureAssetIds), body: id => {
-            crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar(id, true));
-        });
-        Parallel.ForEach(newTextureAssetIds.Except(oldTextureAssetIds), body: id => {
-            crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar(id, false));
-        });
-    }
 
     /// <summary>  Tries to change the active level in the AterraCoreWorld. </summary>
     /// <param name="levelInstance">The instance of a level to set the active level to.</param>
@@ -81,19 +64,22 @@ public class AterraCoreWorld(
                 Logger.Warning("Can't change to the same level instance: {LevelId}", levelInstanceId);
                 return false;
             }
-            
-            if (!instanceAtlas.TryGetOrCreateSingleton(
-                levelId, 
-                out INexitiesLevel? level,
-                nexitiesLevel => nexitiesLevel.OnLevelFirstCreation(), 
-                levelInstanceId
-            )) {
+
+            INexitiesLevel? level = instanceAtlas.OfAssetId<INexitiesLevel>(levelId).FirstOrDefault();
+
+            if (level == null && !instanceAtlas.TryGetOrCreateSingleton(
+                    levelId,
+                    out level,
+                    afterCreation: nexitiesLevel => nexitiesLevel.OnLevelFirstCreation(),
+                    levelInstanceId
+                )) {
                 Logger.Warning("Failed to get level by instance ULID: {LevelId}", levelInstanceId);
                 return false;
             }
 
             Logger.Information("Successfully fetched or created level. Creating ActiveLevel instance now.");
             ActiveLevel = levelFactory.CreateLevel2D(level);
+            crossThreadTickData.ClearOnLevelChange();
         }
 
         EmitActiveLevel(ActiveLevel, oldLevel);
@@ -109,5 +95,27 @@ public class AterraCoreWorld(
             level = ActiveLevel;
             return level != null;
         }
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    /// <summary>
+    ///     Emits the active level in the AterraCoreWorld.
+    ///     This method is called when the active level is changed and is responsible for handling the texture asset changes.
+    /// </summary>
+    /// <param name="activeLevel">The new active level.</param>
+    /// <param name="oldLevel">The previous active level.</param>
+    private void EmitActiveLevel(ActiveLevel? activeLevel, ActiveLevel? oldLevel) {
+        IEnumerable<AssetId> oldTextureAssetIds = oldLevel?.TextureAssetIds.ToArray() ?? [];
+        IEnumerable<AssetId> newTextureAssetIds = activeLevel?.TextureAssetIds.ToArray() ?? [];
+
+        Parallel.ForEach(oldTextureAssetIds.Except(newTextureAssetIds), body: id => {
+            crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar(id, true));
+        });
+
+        Parallel.ForEach(newTextureAssetIds.Except(oldTextureAssetIds), body: id => {
+            crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar(id, false));
+        });
     }
 }

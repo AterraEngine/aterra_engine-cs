@@ -2,9 +2,15 @@
 <engineConfig xmlns="urn:aterra-engine:engine-config">
     <logging asyncConsole="true" outputFile=""/>
 
-    <loadOrder relativeRootPath="plugins">
+    <!--    <paths>-->
+    <!--        <gameConfig>game-config.xml</gameConfig>-->
+    <!--    </paths>-->
+    <window monitorId="1" height="1000" width="1000" name="AterraEngine - Workfloor"/>
+
+    <loadOrder relativeRootPath="plugins" enforcePluginIdUniqueness="true">
         <plugin file="AterraLib.zip"/>
         <plugin file="AterraLibOverwrite.zip"/>
         <plugin file="Workfloor-AterraCore.Plugin.zip"/>
     </loadOrder>
+
 </engineConfig>

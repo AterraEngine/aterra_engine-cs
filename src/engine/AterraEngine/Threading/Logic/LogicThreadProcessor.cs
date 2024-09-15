@@ -1,11 +1,12 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.Attributes;
+using AterraCore.Common.Types.Threading;
 using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading;
-using AterraCore.Contracts.Threading.CTQ;
-using AterraCore.Contracts.Threading.CTQ.Dto;
+using AterraCore.Contracts.Threading.CrossThread;
 using AterraCore.Contracts.Threading.Logic;
 using JetBrains.Annotations;
 using Serilog;
@@ -16,27 +17,43 @@ namespace AterraEngine.Threading.Logic;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
+[Singleton<ILogicThreadProcessor>]
 public class LogicThreadProcessor(
     ILogger logger,
     IAterraCoreWorld world,
     ILogicEventManager eventManager,
     ICrossThreadQueue crossThreadQueue,
-    IThreadingManager threadingManager
+    IThreadingManager threadingManager,
+    ICrossThreadTickData crossThreadTickData
 ) : ILogicThreadProcessor {
-    private ILogger Logger { get; } = logger.ForContext<LogicThreadProcessor>();
-    public CancellationToken CancellationToken { get; set; }
 
-    private int TargetTicksPerSecond { get; set; } = 20;// TPS
-    private double MillisecondsPerTick => 1000.0 / TargetTicksPerSecond;
-
-    private bool IsRunning { get; set; } = true;
-    public bool IsFinished { get; private set; }
+    private const int TargetTicksPerSecond = 20;// TPS
+    private const double MillisecondsPerTick = 1000.0 / TargetTicksPerSecond;
 
     private readonly Stack<Action> _endOfTickActions = [];
 
     private readonly Stopwatch _tickStopwatch = Stopwatch.StartNew();
     private readonly Stopwatch _tpsStopwatch = Stopwatch.StartNew();
     private int _ticks;
+    private ILogger Logger { get; } = logger.ForContext<LogicThreadProcessor>();
+
+    private bool IsRunning { get; set; } = true;
+    public CancellationToken CancellationToken { get; set; }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Event Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    public void RegisterEvents() {
+        eventManager.EventChangeActiveLevel += (_, args) => _endOfTickActions.Push(() => world.TryChangeActiveLevel(args.NewLevelId));
+
+        eventManager.EventTps += (_, d) => Logger.Debug("TPS: {0}", d);
+        // eventManager.EventActualTps += (_, _) => Logger.Debug("Assets: {0}", EngineServices.GetService<IAssetInstanceAtlas>().TotalCount);
+    }
+
+    private void HandleQueue() {
+        while (crossThreadQueue.TryDequeue(QueueKey.MainToLogic, out Action? action)) action.Invoke();
+        while (crossThreadQueue.TryDequeue(QueueKey.RenderToLogic, out Action? action)) action.Invoke();
+    }
 
     // -----------------------------------------------------------------------------------------------------------------
     // Run Method
@@ -55,13 +72,12 @@ public class LogicThreadProcessor(
                 // Call UPDATE LOOP
                 Update();
                 HandleQueue();
+                RunEndOfTick();
 
                 // Wait until the end of the Tick cycle
                 SleepUntilEndOfTick();
                 CalculateActualTps();
 
-                // End of Tick
-                RunEndOfTick();
                 _ticks++;
                 if (!CancellationToken.IsCancellationRequested) continue;
 
@@ -70,7 +86,6 @@ public class LogicThreadProcessor(
             }
         }
         finally {
-            IsFinished = true;
             IsRunning = false;
             threadingManager.CancelThreads();
             Logger.Information("Logic Thread Closing");
@@ -89,7 +104,10 @@ public class LogicThreadProcessor(
         while (_endOfTickActions.TryPop(out Action? action)) {
             action();
         }
+
         _endOfTickActions.Clear();
+
+        crossThreadTickData.ClearOnLogicTick();// Clear for the end of the tick
     }
 
     private void SleepUntilEndOfTick() {
@@ -109,23 +127,4 @@ public class LogicThreadProcessor(
         _tpsStopwatch.Restart();
     }
     #endregion
-
-    // -----------------------------------------------------------------------------------------------------------------
-    // Event Methods
-    // -----------------------------------------------------------------------------------------------------------------
-    public void RegisterEvents() {
-        eventManager.EventChangeActiveLevel += (_, args) => _endOfTickActions.Push(() => world.TryChangeActiveLevel(args.NewLevelId));
-
-        eventManager.EventTps += (_, d) => Logger.Debug("TPS: {0}", d);
-        // eventManager.EventActualTps += (_, _) => Logger.Debug("Assets: {0}", EngineServices.GetService<IAssetInstanceAtlas>().TotalCount);
-    }
-
-    private void HandleQueue() {
-        while (crossThreadQueue.TryDequeue(QueueKey.MainToLogic, out Action? action)) {
-            action.Invoke();
-        }
-        while (crossThreadQueue.TryDequeue(QueueKey.RenderToLogic, out Action? action)) {
-            action.Invoke();
-        }
-    }
 }

@@ -1,13 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using JetBrains.Annotations;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Diagnostics;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using JetBrains.Annotations;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace AterraEngine.Analyzers;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -55,7 +55,7 @@ public class AssetAttributePartialIdAnalyzers : DiagnosticAnalyzer {
             .OfType<INamedTypeSymbol>()
             .SelectMany(typeSymbol => typeSymbol.GetAttributes())
             .Where(data => data.AttributeClass != null &&
-                           InheritsFrom(data.AttributeClass, "AterraCore.Attributes.AssetAttribute"));
+                InheritsFrom(data.AttributeClass, "AterraCore.Attributes.AssetAttribute"));
 
         foreach (AttributeData attribute in attributes) {
             TypedConstant instanceTypeArg = GetInstanceTypeArg(attribute);
@@ -100,9 +100,11 @@ public class AssetAttributePartialIdAnalyzers : DiagnosticAnalyzer {
     }
 
     private static bool InheritsFrom(ITypeSymbol symbol, string baseTypeFullName) {
-        for (ITypeSymbol? baseType = symbol; baseType != null; baseType = baseType.BaseType)
+        for (ITypeSymbol? baseType = symbol; baseType != null; baseType = baseType.BaseType) {
             if (baseType.ToDisplayString().Equals(baseTypeFullName))
                 return true;
+        }
+
         return false;
     }
 
@@ -113,6 +115,7 @@ public class AssetAttributePartialIdAnalyzers : DiagnosticAnalyzer {
         while (symbolsStack.TryPop(out INamespaceOrTypeSymbol? symbol)) {
             foreach (ISymbol member in symbol.GetMembers()) {
                 yield return member;
+
                 if (member is INamespaceOrTypeSymbol namespaceOrTypeSymbol) {
                     symbolsStack.Push(namespaceOrTypeSymbol);
                 }

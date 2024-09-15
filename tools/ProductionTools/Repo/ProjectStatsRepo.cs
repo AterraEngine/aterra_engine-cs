@@ -32,6 +32,7 @@ public class ProjectStatsRepo(ILogger logger) {
                 lineCounts.Add((await File.ReadAllLinesAsync(filepath, ct)).Length);
             }
         );
+
         logger.Debug($"Found {lineCounts.Count} line entries");
         return lineCounts;
     }
@@ -50,6 +51,7 @@ public class ProjectStatsRepo(ILogger logger) {
                 }
             }
         );
+
         logger.Debug($"Found {charCounts.Count} chars entries");
         return charCounts;
     }

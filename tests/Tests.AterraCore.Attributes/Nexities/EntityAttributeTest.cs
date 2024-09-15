@@ -11,20 +11,10 @@ namespace Tests.AterraCore.Attributes.Nexities;
 // ---------------------------------------------------------------------------------------------------------------------
 [TestSubject(typeof(EntityAttribute))]
 public class EntityAttributeTest {
-    // Test types and interfaces
-    [Entity("test:asset", CoreTags.Entity, ServiceLifetime.Scoped, typeof(ISampleInterface))]
-    private class ClassWithEntityAttribute : ISampleInterface;
-
-    [Entity<ISampleInterface>("test:generic.asset", CoreTags.Singleton, ServiceLifetime.Singleton)]
-    private class ClassWithGenericEntityAttribute : ISampleInterface;
-
-    private interface ISampleInterface;
-
-    private interface IAnotherInterface;
 
     [Fact]
     public void EntityAttribute_ShouldInitializeCorrectly() {
-        const string assetId = "test:sample.asset";
+        const string assetId = "test:sample/asset";
         const CoreTags coreTags = CoreTags.Singleton | CoreTags.Entity;
         const ServiceLifetime lifetime = ServiceLifetime.Singleton;
         Type[] interfaceTypes = [typeof(ISampleInterface)];
@@ -39,7 +29,7 @@ public class EntityAttributeTest {
 
     [Fact]
     public void EntityAttribute_Generic_ShouldInitializeCorrectly() {
-        const string assetId = "test:sample.generic";
+        const string assetId = "test:sample/generic";
         const CoreTags coreTags = CoreTags.Entity;
         const ServiceLifetime lifetime = ServiceLifetime.Scoped;
 
@@ -53,7 +43,7 @@ public class EntityAttributeTest {
 
     [Fact]
     public void EntityAttribute_Generic_MultipleInterfaces_ShouldInitializeCorrectly() {
-        const string assetId = "test:sample.multiple";
+        const string assetId = "test:sample/multiple";
         const CoreTags coreTags = CoreTags.Singleton | CoreTags.Entity;
         const ServiceLifetime lifetime = ServiceLifetime.Transient;
 
@@ -84,9 +74,20 @@ public class EntityAttributeTest {
         var attribute = (EntityAttribute)type.GetCustomAttribute(typeof(EntityAttribute))!;
 
         Assert.NotNull(attribute);
-        Assert.Equal(new AssetId("test:generic.asset"), attribute.AssetId);
+        Assert.Equal(new AssetId("test:generic/asset"), attribute.AssetId);
         Assert.True(attribute.CoreTags.HasFlag(CoreTags.Singleton));
         Assert.Equal(ServiceLifetime.Singleton, attribute.Lifetime);
         Assert.Equal([typeof(ISampleInterface)], attribute.InterfaceTypes);
     }
+
+    // Test types and interfaces
+    [Entity("test:asset", CoreTags.Entity, ServiceLifetime.Scoped, typeof(ISampleInterface))]
+    private class ClassWithEntityAttribute : ISampleInterface;
+
+    [Entity<ISampleInterface>("test:generic/asset", CoreTags.Singleton, ServiceLifetime.Singleton)]
+    private class ClassWithGenericEntityAttribute : ISampleInterface;
+
+    private interface ISampleInterface;
+
+    private interface IAnotherInterface;
 }

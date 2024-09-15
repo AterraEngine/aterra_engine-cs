@@ -1,6 +1,8 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.Attributes;
+using AterraCore.Contracts.ConfigMancer;
 using AterraCore.Contracts.Renderer;
 using JetBrains.Annotations;
 
@@ -9,13 +11,8 @@ namespace AterraEngine.Threading.Render;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
-public class MainWindow : IMainWindow {
-    private static int Width => 1000;
-    private static int Height => 1000;
-    private static string Name => "AterraEngine - Test";
-
-    public bool IsInitialised { get; private set; }
-
+[Singleton<IMainWindow>]
+public class MainWindow(IConfigAtlas configAtlas) : IMainWindow {
     public void Init() {
         // Necessary to write Raylib logs with Serilog
         unsafe { Raylib.SetTraceLogCallback(RaylibLogger.GetPointer()); }
@@ -24,14 +21,18 @@ public class MainWindow : IMainWindow {
             ConfigFlags.ResizableWindow
             | ConfigFlags.Msaa4xHint// Enable Multi Sampling Anti Aliasing 4x (if available)
             // | ConfigFlags.InterlacedHint
-            | ConfigFlags.UndecoratedWindow
+            // | ConfigFlags.UndecoratedWindow
             // | ConfigFlags.MousePassthroughWindow
             // | ConfigFlags.TransparentWindow
         );
 
-        Raylib.InitWindow(Width, Height, Name);
-        Raylib.SetWindowMonitor(1);// WArn dev stuff
+        Raylib.InitWindow(
+            configAtlas.EngineConfigXml.Window.Width,
+            configAtlas.EngineConfigXml.Window.Height,
+            configAtlas.EngineConfigXml.Window.Name
+        );
 
-        IsInitialised = true;
+        Raylib.SetWindowMonitor(configAtlas.EngineConfigXml.Window.MonitorId);
+
     }
 }

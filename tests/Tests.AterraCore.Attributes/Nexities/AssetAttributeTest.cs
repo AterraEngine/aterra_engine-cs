@@ -11,20 +11,10 @@ namespace Tests.AterraCore.Attributes.Nexities;
 // ---------------------------------------------------------------------------------------------------------------------
 [TestSubject(typeof(AssetAttribute))]
 public class AssetAttributeTest {
-    // Test types and interfaces
-    [Asset("test:asset", CoreTags.Asset, ServiceLifetime.Scoped, typeof(ISampleInterface))]
-    private class ClassWithAssetAttribute : ISampleInterface;
-
-    [Asset<ISampleInterface>("test:generic.asset", CoreTags.Singleton, ServiceLifetime.Singleton)]
-    private class ClassWithGenericAssetAttribute : ISampleInterface;
-
-    private interface ISampleInterface;
-
-    private interface IAnotherInterface;
 
     [Fact]
     public void AssetAttribute_ShouldInitializeCorrectly() {
-        const string assetId = "test:sample.asset";
+        const string assetId = "test:sample/asset";
         const CoreTags coreTags = CoreTags.Singleton;
         const ServiceLifetime lifetime = ServiceLifetime.Singleton;
         Type[] interfaceTypes = [typeof(ISampleInterface)];
@@ -39,7 +29,7 @@ public class AssetAttributeTest {
 
     [Fact]
     public void AssetAttribute_Generic_ShouldInitializeCorrectly() {
-        const string assetId = "test:sample.generic";
+        const string assetId = "test:sample/generic";
         const CoreTags coreTags = CoreTags.Asset;
         const ServiceLifetime lifetime = ServiceLifetime.Scoped;
 
@@ -53,7 +43,7 @@ public class AssetAttributeTest {
 
     [Fact]
     public void AssetAttribute_Generic_MultipleInterfaces_ShouldInitializeCorrectly() {
-        const string assetId = "test:sample.multiple";
+        const string assetId = "test:sample/multiple";
         const CoreTags coreTags = CoreTags.Singleton;
         const ServiceLifetime lifetime = ServiceLifetime.Transient;
 
@@ -84,9 +74,20 @@ public class AssetAttributeTest {
         var attribute = (AssetAttribute)type.GetCustomAttribute(typeof(AssetAttribute))!;
 
         Assert.NotNull(attribute);
-        Assert.Equal(new AssetId("test:generic.asset"), attribute.AssetId);
+        Assert.Equal(new AssetId("test:generic/asset"), attribute.AssetId);
         Assert.Equal(CoreTags.Singleton, attribute.CoreTags);
         Assert.Equal(ServiceLifetime.Singleton, attribute.Lifetime);
         Assert.Equal([typeof(ISampleInterface)], attribute.InterfaceTypes);
     }
+
+    // Test types and interfaces
+    [Asset("test:asset", CoreTags.Asset, ServiceLifetime.Scoped, typeof(ISampleInterface))]
+    private class ClassWithAssetAttribute : ISampleInterface;
+
+    [Asset<ISampleInterface>("test:generic/asset", CoreTags.Singleton, ServiceLifetime.Singleton)]
+    private class ClassWithGenericAssetAttribute : ISampleInterface;
+
+    private interface ISampleInterface;
+
+    private interface IAnotherInterface;
 }

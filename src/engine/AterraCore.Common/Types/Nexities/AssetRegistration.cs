@@ -1,7 +1,6 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Data;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -29,6 +28,9 @@ public record struct AssetRegistration(
     private ConstructorInfo? _constructor = null;
     public ConstructorInfo Constructor => _constructor ??= Type.GetConstructors().First();
 
+    public int? _paramLength = null;
+    public int ConstructorParamLength => _paramLength ?? Constructor.GetParameters().Length;
+
     private bool? _isSingleton;
     public bool IsSingleton => _isSingleton ??= CoreTags.HasFlag(CoreTags.Singleton);
 
@@ -44,6 +46,7 @@ public record struct AssetRegistration(
             foreach (Type @interface in currentType.GetInterfaces()) {
                 if (!IsExcludedNamespace(@interface) && interfaces.Add(@interface)) typeQueue.Enqueue(@interface);
             }
+
             if (currentType.BaseType != null) typeQueue.Enqueue(currentType.BaseType);
         }
 

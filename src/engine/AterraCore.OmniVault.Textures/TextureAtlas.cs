@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.Attributes;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.OmniVault.Assets;
@@ -15,6 +16,7 @@ namespace AterraCore.OmniVault.Textures;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
+[Singleton<ITextureAtlas>]
 public class TextureAtlas(ILogger logger, IAssetInstanceAtlas instanceAtlas, IPluginAtlas pluginAtlas) : ITextureAtlas {
     private ILogger Logger { get; } = logger.ForContext<TextureAtlas>();
     public IEnumerable<ITexture2DAsset> TextureAssets => instanceAtlas.OfType<ITexture2DAsset>();
@@ -26,10 +28,12 @@ public class TextureAtlas(ILogger logger, IAssetInstanceAtlas instanceAtlas, IPl
         image = new Image();
         if (!pluginAtlas.PluginIds.Contains(assetId.PluginId)) {
             if (!Path.Exists(filePath)) return false;
+
             // Image is not part of a plugin, and can be loaded directly
             image = Raylib.LoadImage(filePath);
             return true;
         }
+
         if (!pluginAtlas.TryGetFileRawFromPluginZip(assetId.PluginId, filePath, out byte[]? rawImage)) return false;
 
         logger.Debug($"Loading image {assetId} && {filePath}");
@@ -43,10 +47,12 @@ public class TextureAtlas(ILogger logger, IAssetInstanceAtlas instanceAtlas, IPl
 
         try {
             if (!TryGetImage(textureAssetId, textureAsset.ImagePath, out Image image)) return false;
+
             Logger.Debug("Loaded image {path}", textureAsset.ImagePath);
 
             Texture2D texture = Raylib.LoadTextureFromImage(image);
             if (!textureAsset.TrySetTexture(texture)) return false;
+
             textureAsset.Size = new Vector2(image.Width, image.Height);
             Logger.Debug("Assigned image {path} to asset {Ulid}", textureAsset.ImagePath, textureAsset.InstanceId);
 
@@ -66,6 +72,7 @@ public class TextureAtlas(ILogger logger, IAssetInstanceAtlas instanceAtlas, IPl
 
         try {
             if (!textureAsset.TryUnSetTexture(out Texture2D texture)) return false;
+
             Raylib.UnloadTexture(texture);
             Logger.Debug("Unloaded texture {id}", textureAssetId);
             return true;

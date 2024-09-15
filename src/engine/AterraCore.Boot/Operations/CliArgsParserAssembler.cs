@@ -2,9 +2,9 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.Boot.Logic.PluginLoading.Dto;
-using CliArgsParser;
 using AterraCore.Contracts.Boot.Operations;
 using AterraCore.Loggers;
+using CliArgsParser;
 using System.Reflection;
 
 namespace AterraCore.Boot.Operations;
@@ -32,6 +32,5 @@ public class CliArgsParserAssembler : IBootOperation {
                 }
             }
         });
-
     }
 }
