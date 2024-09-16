@@ -2,12 +2,13 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Attributes.DI;
+using AterraCore.Common.Data;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Levels;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading.CrossThread;
-using AterraCore.Contracts.Threading.CrossThread.Dto;
+using AterraEngine.Threading.CrossThread.TickDataHolders;
 using Extensions;
 using JetBrains.Annotations;
 using Serilog;
@@ -27,7 +28,6 @@ public class AterraCoreWorld(
     IAssetInstanceAtlas instanceAtlas,
     ILogger logger,
     IActiveLevelFactory levelFactory,
-    ICrossThreadQueue crossThreadQueue,
     ICrossThreadTickData crossThreadTickData,
     ICrossThreadEventManager crossThreadEventManager
 ) : IAterraCoreWorld {
@@ -80,7 +80,7 @@ public class AterraCoreWorld(
 
             Logger.Information("Successfully fetched or created level. Creating ActiveLevel instance now.");
             ActiveLevel = levelFactory.CreateLevel2D(level);
-            crossThreadTickData.ClearOnLevelChange();
+            crossThreadEventManager.InvokeLevelChangeCleanup();
         }
 
         EmitNewActiveLevel(ActiveLevel, oldLevel);
@@ -113,11 +113,13 @@ public class AterraCoreWorld(
         IEnumerable<AssetId> oldTextureAssetIds = oldLevel?.TextureAssetIds.ToArray() ?? [];
         IEnumerable<AssetId> newTextureAssetIds = activeLevel.TextureAssetIds.ToArray();
 
-        Parallel.ForEach(oldTextureAssetIds.Except(newTextureAssetIds), body: id => 
-            crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar(id, true)));
-
-        Parallel.ForEach(newTextureAssetIds.Except(oldTextureAssetIds), body: id => 
-            crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar(id, false)));
+        if (crossThreadTickData.TryGetOrRegister(AssetTagLib.AterraLib.TextureData, out TextureDataHolder? textureDataHolder) && !textureDataHolder.IsEmpty) {
+            Parallel.ForEach(newTextureAssetIds.Except(oldTextureAssetIds), body: id => 
+                textureDataHolder.TexturesToLoad.Enqueue(id));
+            
+            Parallel.ForEach(oldTextureAssetIds.Except(newTextureAssetIds), body: id => 
+                textureDataHolder.TexturesToUnLoad.Enqueue(id));
+        }
         
         crossThreadEventManager.InvokeLevelChangeCompleted(activeLevel);
     }

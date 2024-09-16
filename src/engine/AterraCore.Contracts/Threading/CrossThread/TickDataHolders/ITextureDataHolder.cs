@@ -2,12 +2,14 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Types.Nexities;
+using System.Collections.Concurrent;
 
-namespace AterraCore.Contracts.Threading.CrossThread.Dto;
+namespace AterraCore.Contracts.Threading.CrossThread.TickDataHolders;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public record TextureRegistrar(
-    AssetId TextureAssetId,
-    bool UnRegister
-);
+public interface ITextureDataHolder : ITickDataHolder {
+    ConcurrentQueue<AssetId> TexturesToLoad { get; }
+    ConcurrentQueue<AssetId> TexturesToUnLoad { get; }
+}

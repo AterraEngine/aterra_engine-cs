@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Contracts.Threading.CrossThread;
 using AterraLib.Contracts;
 using System.Collections.Concurrent;
 
@@ -8,7 +9,7 @@ namespace AterraLib.Nexities.Systems.CrossThreadDataHolders;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class TickDataInput : ITickDataInput {
+public class TickDataInput : ITickDataInput, IHasLevelChangeCleanup, IHasLogicTickCleanup {
     public ConcurrentStack<KeyboardKey> KeyboardKeyPressed { get; } = [];
     public ConcurrentStack<KeyboardKey> KeyboardKeyPressedRepeated { get; } = [];
     public ConcurrentStack<KeyboardKey> KeyboardKeyReleased { get; } = [];
@@ -16,9 +17,8 @@ public class TickDataInput : ITickDataInput {
     public ConcurrentStack<MouseButton> MouseButtonDown { get; } = [];
     public ConcurrentStack<Vector2> MouseWheelMovement { get; } = [];
 
-    public void ClearOnLevelChange() => ClearCaches();
-    public void ClearOnLogicTick() => ClearCaches();
-    public void ClearOnRenderFrame() {}
+    public void OnLevelChangeCleanup() => ClearCaches();
+    public void OnLogicTickCleanup() => ClearCaches();
 
     public bool IsEmpty => KeyboardKeyPressed.IsEmpty
         && KeyboardKeyPressedRepeated.IsEmpty

@@ -5,8 +5,8 @@ namespace AterraCore.Common.Types.Threading;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public enum QueueThreads {
-    Main,
-    Logic,
-    Render
+public enum QueueToThread {
+    ToMain,
+    ToLogic,
+    ToRender
 }

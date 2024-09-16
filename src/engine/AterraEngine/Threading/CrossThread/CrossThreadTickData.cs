@@ -14,18 +14,29 @@ namespace AterraEngine.Threading.CrossThread;
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
 [Singleton<ICrossThreadTickData>]
-public class CrossThreadTickData : ICrossThreadTickData {
+public class CrossThreadTickData(ICrossThreadEventManager crossThreadEventManager) : ICrossThreadTickData {
     private readonly ConcurrentDictionary<AssetTag, ITickDataHolder> _tickDataHolders = new();
-
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public bool TryRegister<T>(AssetTag key, T tickDataHolder) where T : class, ITickDataHolder {
-        if (_tickDataHolders.TryAdd(key, tickDataHolder)) return true;
-        if (!_tickDataHolders.TryGetValue(key, out ITickDataHolder? value)) return false;
+    public bool TryRegister<T>(AssetTag key) where T : class, ITickDataHolder, new() => TryRegister(key, new T());
+    public bool TryRegister<T>(AssetTag key, out T dataHolder) where T : class, ITickDataHolder, new() {
+        dataHolder = new T();
+        return TryRegister(key, dataHolder);
+    }
 
-        var oldObject = value as T;
-        return oldObject is not null && oldObject.IsEmpty;
+    // ReSharper disable once SuspiciousTypeConversion.Global
+    // ReSharper disable once ConvertIfStatementToSwitchStatement
+    public bool TryRegister<T>(AssetTag key, T tickDataHolder) where T : class, ITickDataHolder {
+        if (!_tickDataHolders.TryAdd(key, tickDataHolder)) return false;
+
+        // attack to events
+        if (tickDataHolder is IHasLevelChangeCleanup levelChangeCleanup) crossThreadEventManager.LevelChangeCleanup += levelChangeCleanup.OnLevelChangeCleanup;
+        if (tickDataHolder is IHasLogicTickCleanup logicCleanup) crossThreadEventManager.LogicTickCleanup += logicCleanup.OnLogicTickCleanup;
+        if (tickDataHolder is IHasRenderTickCleanup renderCleanup) crossThreadEventManager.RenderTickCleanup += renderCleanup.OnRenderTickCleanup;
+        
+        return true;
     }
 
     public bool TryGet<T>(AssetTag key, [NotNullWhen(true)] out T? tickDataHolder) where T : class, ITickDataHolder {
@@ -38,28 +49,8 @@ public class CrossThreadTickData : ICrossThreadTickData {
 
     public bool TryGetOrRegister<T>(AssetTag key, [NotNullWhen(true)] out T? tickDataHolder) where T : class, ITickDataHolder, new() {
         if (TryGet(key, out tickDataHolder)) return true;
-
-        tickDataHolder = new T();
-        if (TryRegister(key, tickDataHolder)) return true;
-
+        if (TryRegister<T>(key, out tickDataHolder)) return true;
         tickDataHolder = null;
         return false;
-    }
-
-    public void ClearOnLogicTick() {
-        foreach (ITickDataHolder holder in _tickDataHolders.Values) {
-            holder.ClearOnLogicTick();
-        }
-    }
-
-    public void ClearOnLevelChange() {
-        foreach (ITickDataHolder holder in _tickDataHolders.Values) {
-            holder.ClearOnLevelChange();
-        }
-    }
-    public void ClearOnRenderFrame() {
-        foreach (ITickDataHolder holder in _tickDataHolders.Values) {
-            holder.ClearOnRenderFrame();
-        }
     }
 }

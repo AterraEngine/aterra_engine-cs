@@ -17,11 +17,10 @@ public readonly struct RenderCacheDto {
     public float Rotation { get; init; }
     public Color Tint { get; init; }
 }
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class RenderableData : ITickDataHolder {
+public class RenderableData : ITickDataHolder, IHasLevelChangeCleanup {
     private readonly ConcurrentSortedDictionary<int, RenderCacheDto> _renderCache = new();
     public ConcurrentDictionary<AssetId, (Vector2 Size, Texture2D texture2D)> TextureCache { get; } = new();
 
@@ -29,9 +28,7 @@ public class RenderableData : ITickDataHolder {
 
     public bool IsEmpty => true;
 
-    public void ClearOnLevelChange() => ClearCache();
-    public void ClearOnLogicTick() {}
-    public void ClearOnRenderFrame() {}
+    public void OnLevelChangeCleanup() => ClearCache();
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------

@@ -2,7 +2,6 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Attributes.DI;
-using AterraCore.Common.Types.Threading;
 using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading;
@@ -22,16 +21,13 @@ public class LogicThreadProcessor(
     ILogger logger,
     IAterraCoreWorld world,
     ILogicEventManager eventManager,
-    ICrossThreadQueue crossThreadQueue,
-    IThreadingManager threadingManager,
-    ICrossThreadTickData crossThreadTickData
+    ICrossThreadEventManager crossThreadEventManager,
+    IThreadingManager threadingManager
 ) : AbstractThreadProcessor, ILogicThreadProcessor {
 
     private const int TargetTicksPerSecond = 20;// TPS
     private const double MillisecondsPerTick = 1000.0 / TargetTicksPerSecond;
-
-    private readonly Stack<Action> _endOfTickActions = [];
-
+    
     private readonly Stopwatch _tickStopwatch = Stopwatch.StartNew();
     private readonly Stopwatch _tpsStopwatch = Stopwatch.StartNew();
     private int _ticks;
@@ -47,11 +43,6 @@ public class LogicThreadProcessor(
     // -----------------------------------------------------------------------------------------------------------------
     public override void RegisterEventsStartup() {
         eventManager.EventTps += (_, d) => Logger.Debug("TPS: {0}", d);
-    }
-
-    private void HandleQueue() {
-        while (crossThreadQueue.TryDequeue(QueueKey.MainToLogic, out Action? action)) action.Invoke();
-        while (crossThreadQueue.TryDequeue(QueueKey.RenderToLogic, out Action? action)) action.Invoke();
     }
     
     public override void OnLevelChangeStarted(IActiveLevel oldLevel) {
@@ -80,8 +71,7 @@ public class LogicThreadProcessor(
 
                 // Call UPDATE LOOP
                 if (world.ActiveLevel is {} activeLevel) TickEventLogic?.Invoke(activeLevel);
-                HandleQueue();
-                RunEndOfTick();
+                crossThreadEventManager.InvokeLogicTickCleanup();
 
                 // Wait until the end of the Tick cycle
                 SleepUntilEndOfTick();
@@ -99,16 +89,6 @@ public class LogicThreadProcessor(
             threadingManager.CancelThreads();
             Logger.Information("Logic Thread Closing");
         }
-    }
-    
-    private void RunEndOfTick() {
-        while (_endOfTickActions.TryPop(out Action? action)) {
-            action();
-        }
-
-        _endOfTickActions.Clear();
-        
-        crossThreadTickData.ClearOnLogicTick();// Clear for the end of the tick
     }
 
     private void SleepUntilEndOfTick() {
