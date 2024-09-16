@@ -1,12 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.Nexities.Levels;
+using AterraCore.Contracts.OmniVault.World;
 
-namespace AterraCore.Contracts.OmniVault.World;
+namespace AterraCore.Contracts.Nexities.Systems;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IActiveLevelFactory {
-    IActiveLevel CreateLevel2D(INexitiesLevel level2D);
+public interface IRenderSystem {
+    void RenderTick(IActiveLevel level);
 }

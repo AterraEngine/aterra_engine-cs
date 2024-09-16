@@ -13,10 +13,10 @@ public interface IAterraCoreWorld {
     /// <summary>
     ///     Represents the current active level.
     /// </summary>
-    ActiveLevel? ActiveLevel { get; }
+    IActiveLevel? ActiveLevel { get; }
 
     bool TryChangeActiveLevel(INexitiesLevel levelInstance);
     bool TryChangeActiveLevel(AssetId levelId, Ulid? levelInstanceId = null);
 
-    bool TryGetActiveLevel([NotNullWhen(true)] out ActiveLevel? level);
+    bool TryGetActiveLevel([NotNullWhen(true)] out IActiveLevel? level);
 }

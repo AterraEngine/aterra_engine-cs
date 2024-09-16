@@ -34,7 +34,7 @@ public class Render2DPrepForActors(IAssetInstanceAtlas instanceAtlas, ICrossThre
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public override void Tick(ActiveLevel level) {
+    public override void Tick(IActiveLevel level) {
         if (!crossThreadTickData.TryGetOrRegister(AssetTagLib.AterraLib.RenderableData, out RenderableData? renderableDataDto)) return;
 
         foreach ((IHasTransform2D? parent, IActor2D child, int zIndex) in GetEntities(level).AsSpan()) {

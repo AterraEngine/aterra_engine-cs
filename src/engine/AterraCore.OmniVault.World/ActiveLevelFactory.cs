@@ -13,7 +13,6 @@ using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.OmniVault.World.EntityTree;
 using JetBrains.Annotations;
 using System.Collections.Frozen;
-using System.Collections.Immutable;
 
 namespace AterraCore.OmniVault.World;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -26,7 +25,7 @@ public class ActiveLevelFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreeFa
     /// <summary> Creates an instance of ActiveLevel using the provided INexitiesLevel as input.</summary>
     /// <param name="level2D">The INexitiesLevel object representing the level.</param>
     /// <returns>An instance of ActiveLevel.</returns>
-    public ActiveLevel CreateLevel2D(INexitiesLevel level2D) {
+    public IActiveLevel CreateLevel2D(INexitiesLevel level2D) {
         IEntityNodeTree entityTree = entityTreeFactory.CreateFromRootId(level2D.InstanceId);
         List<IAssetInstance> entityTreeFlat = entityTree.GetAsFlat().ToList();
 

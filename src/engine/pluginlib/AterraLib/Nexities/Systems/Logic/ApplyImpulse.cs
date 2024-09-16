@@ -14,7 +14,7 @@ namespace AterraLib.Nexities.Systems.Logic;
 [UsedImplicitly]
 public class ApplyImpulse : NexitiesSystemUnCachedWithFilter<IActor2D> {
     protected override Predicate<IActor2D> Filter { get; } = entity => !entity.Impulse2D.IsEmpty;
-    public override void Tick(ActiveLevel level) {
+    public override void Tick(IActiveLevel level) {
         foreach (IActor2D entity in GetEntities(level)) {
             entity.Transform2D.Translation += entity.Impulse2D.TranslationOffset;
             entity.Transform2D.Scale *= entity.Impulse2D.ScaleOffset;

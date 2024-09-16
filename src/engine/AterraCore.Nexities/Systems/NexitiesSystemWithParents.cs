@@ -22,7 +22,7 @@ public abstract class NexitiesSystemWithParents<TParent, TChild> : AssetInstance
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public abstract void Tick(ActiveLevel level);
+    public abstract void Tick(IActiveLevel level);
     public virtual void InvalidateCaches() {
         EntitiesBuffer = [];
         BufferPopulated = false;
@@ -31,7 +31,7 @@ public abstract class NexitiesSystemWithParents<TParent, TChild> : AssetInstance
     // -----------------------------------------------------------------------------------------------------------------
     // Helper Methods
     // -----------------------------------------------------------------------------------------------------------------
-    protected virtual (TParent? Parent, TChild Child, int zIndex)[] GetEntities(ActiveLevel level) {
+    protected virtual (TParent? Parent, TChild Child, int zIndex)[] GetEntities(IActiveLevel level) {
         if (BufferPopulated) return EntitiesBuffer;
 
         List<(TParent? Parent, TChild Child, int zIndex)> list = ParentChildPool.Get();

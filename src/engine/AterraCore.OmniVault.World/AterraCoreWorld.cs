@@ -44,7 +44,7 @@ public class AterraCoreWorld(
     /// <summary>
     ///     Represents the current active level.
     /// </summary>
-    public ActiveLevel? ActiveLevel { get; private set; }
+    public IActiveLevel? ActiveLevel { get; private set; }
 
     /// <summary>  Tries to change the active level in the AterraCoreWorld. </summary>
     /// <param name="levelInstance">The instance of a level to set the active level to.</param>
@@ -58,7 +58,7 @@ public class AterraCoreWorld(
     public bool TryChangeActiveLevel(AssetId levelId, Ulid? levelInstanceId = null) {
         // Retrieve the old level, to make comparison with, in case of loading new assets
         Logger.Information("Attempting to change level to {LevelId}, Instance {InstanceId}", levelId, levelInstanceId);
-        TryGetActiveLevel(out ActiveLevel? oldLevel);
+        TryGetActiveLevel(out IActiveLevel? oldLevel);
         using (_activeLevelLock.Write()) {
             if (ActiveLevel is { RawLevelData.InstanceId : var knownInstanceId } && knownInstanceId == levelInstanceId) {
                 Logger.Warning("Can't change to the same level instance: {LevelId}", levelInstanceId);
@@ -90,7 +90,7 @@ public class AterraCoreWorld(
     /// <summary> Attempts to retrieve the current active level </summary>
     /// <param name="level">An out parameter to store the active level, if successful.</param>
     /// <returns>True if the active level is successfully retrieved; otherwise, false.</returns>
-    public bool TryGetActiveLevel([NotNullWhen(true)] out ActiveLevel? level) {
+    public bool TryGetActiveLevel([NotNullWhen(true)] out IActiveLevel? level) {
         using (_activeLevelLock.Read()) {
             level = ActiveLevel;
             return level != null;
@@ -106,7 +106,7 @@ public class AterraCoreWorld(
     /// </summary>
     /// <param name="activeLevel">The new active level.</param>
     /// <param name="oldLevel">The previous active level.</param>
-    private void EmitActiveLevel(ActiveLevel? activeLevel, ActiveLevel? oldLevel) {
+    private void EmitActiveLevel(IActiveLevel? activeLevel, IActiveLevel? oldLevel) {
         IEnumerable<AssetId> oldTextureAssetIds = oldLevel?.TextureAssetIds.ToArray() ?? [];
         IEnumerable<AssetId> newTextureAssetIds = activeLevel?.TextureAssetIds.ToArray() ?? [];
 

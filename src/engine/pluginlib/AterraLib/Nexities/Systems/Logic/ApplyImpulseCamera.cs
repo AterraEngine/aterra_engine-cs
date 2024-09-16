@@ -11,7 +11,7 @@ namespace AterraLib.Nexities.Systems.Logic;
 [System(StringAssetIdLib.AterraLib.SystemsLogic.ApplyImpulseCamera, CoreTags.LogicThread)]
 [UsedImplicitly]
 public class ApplyImpulseCamera : NexitiesSystem<ICamera2D> {
-    public override void Tick(ActiveLevel level) {
+    public override void Tick(IActiveLevel level) {
         foreach (ICamera2D entity in GetEntities(level)) {
             Vector2 scaledTranslationOffset = entity.RaylibCamera2D.Camera.Zoom != 0
                     ? entity.Impulse2D.TranslationOffset / entity.RaylibCamera2D.Camera.Zoom * 10f

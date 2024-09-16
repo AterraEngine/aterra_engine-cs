@@ -15,7 +15,7 @@ namespace AterraLib.Nexities.Systems.Logic;
 [Injectable<PlayerController>(ServiceLifetime.Singleton)]
 [UsedImplicitly]
 public class PlayerController(ICrossThreadTickData crossThreadTickData) : NexitiesSystem<IPlayer2D> {
-    public override void Tick(ActiveLevel level) {
+    public override void Tick(IActiveLevel level) {
         if (!crossThreadTickData.TryGet(AssetTagLib.AterraLib.PlayerInputTickData, out ITickDataInput? playerInputTickData)) return;
 
         float x = 0f;

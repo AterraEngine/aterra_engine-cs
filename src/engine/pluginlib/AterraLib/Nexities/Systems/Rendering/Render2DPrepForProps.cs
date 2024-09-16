@@ -34,7 +34,7 @@ public class Render2DPrepForProps(IAssetInstanceAtlas instanceAtlas, ICrossThrea
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public override void Tick(ActiveLevel level) {
+    public override void Tick(IActiveLevel level) {
         if (!crossThreadTickData.TryGetOrRegister(AssetTagLib.AterraLib.RenderableData, out RenderableData? renderableDataDto)) return;
         if (renderableDataDto.PropsProcessed) return;
 

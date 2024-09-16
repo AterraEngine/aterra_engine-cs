@@ -18,7 +18,7 @@ namespace Workfloor_AterraCore.Plugin.Systems.Logic;
 [UsedImplicitly]
 public class RandomImpulseCamera : NexitiesSystem<ICamera2D> {
     // -----------------------------------------------------------------------------------------------------------------
-    public override void Tick(ActiveLevel level) {
+    public override void Tick(IActiveLevel level) {
         foreach (ICamera2D entity in GetEntities(level)) {
             entity.Impulse2D.RotationOffset += -1f;
         }

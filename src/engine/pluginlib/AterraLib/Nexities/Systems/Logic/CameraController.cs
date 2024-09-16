@@ -15,7 +15,7 @@ namespace AterraLib.Nexities.Systems.Logic;
 [Injectable<CameraController>(ServiceLifetime.Singleton)]
 [UsedImplicitly]
 public class CameraController(ICrossThreadTickData crossThreadTickData) : NexitiesSystem<ICamera2D> {
-    public override void Tick(ActiveLevel level) {
+    public override void Tick(IActiveLevel level) {
         if (!crossThreadTickData.TryGet(AssetTagLib.AterraLib.PlayerInputTickData, out ITickDataInput? playerInputTickData)) return;
 
         float translationX = 0.0f;

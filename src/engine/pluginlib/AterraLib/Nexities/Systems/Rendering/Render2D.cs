@@ -24,7 +24,7 @@ public class Render2D(ICrossThreadTickData crossThreadTickData) : NexitiesSystem
         renderableDataDto.ClearCache();// necessary to get the correct textures later on
     }
 
-    public override void Tick(ActiveLevel level) {
+    public override void Tick(IActiveLevel level) {
         if (!crossThreadTickData.TryGet(AssetTagLib.AterraLib.RenderableData, out RenderableData? renderableDataDto)) return;
 
         foreach (RenderCacheDto dto in renderableDataDto.GetOrderedRenderCache().AsSpan()) {

@@ -17,13 +17,13 @@ public abstract class NexitiesSystemUnCached<TEntity> : AssetInstance, INexities
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public abstract void Tick(ActiveLevel level);
+    public abstract void Tick(IActiveLevel level);
     public virtual void InvalidateCaches() {}
 
     // -----------------------------------------------------------------------------------------------------------------
     // Helper Methods
     // -----------------------------------------------------------------------------------------------------------------
-    protected IEnumerable<TEntity> GetEntities(ActiveLevel level) {
+    protected IEnumerable<TEntity> GetEntities(IActiveLevel level) {
         foreach (IAssetInstance instance in level.ActiveEntityTree.GetAsFlat()) {
             if (instance is TEntity assetInstance)
                 yield return assetInstance;

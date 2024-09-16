@@ -13,7 +13,7 @@ namespace AterraCore.Nexities.Systems;
 public abstract class NexitiesSystemWithFilter<TEntity> : NexitiesSystem<TEntity>
     where TEntity : IAssetInstance {
     protected abstract Predicate<TEntity> Filter { get; }
-    protected override IEnumerable<TEntity> GetEntities(ActiveLevel level) {
+    protected override IEnumerable<TEntity> GetEntities(IActiveLevel level) {
         if (BufferPopulated) return EntitiesBuffer;
 
         foreach (IAssetInstance instance in level.ActiveEntityTree.GetAsFlat()) {

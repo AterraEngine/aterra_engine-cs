@@ -24,7 +24,7 @@ public class RandomImpulse : NexitiesSystemWithFilter<IHasImpulse2D> {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public override void Tick(ActiveLevel level) {
+    public override void Tick(IActiveLevel level) {
         foreach (IHasImpulse2D entity in GetEntities(level)) {
             entity.Impulse2D.TranslationOffset = entity.Impulse2D.TranslationOffset with {
                 X = entity.Impulse2D.TranslationOffset.X + (2 * _random.NextSingle() - 1),

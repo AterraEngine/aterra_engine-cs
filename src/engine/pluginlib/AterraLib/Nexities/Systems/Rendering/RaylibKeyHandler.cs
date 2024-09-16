@@ -16,7 +16,7 @@ public class RaylibKeyHandler(ICrossThreadTickData crossThreadTickData) : Nexiti
     private static readonly KeyboardKey[] KeyboardKeys = Enum.GetValues<KeyboardKey>();
     private static readonly MouseButton[] MouseButtons = Enum.GetValues<MouseButton>();
 
-    public override void Tick(ActiveLevel level) {
+    public override void Tick(IActiveLevel level) {
         if (!crossThreadTickData.TryGetOrRegister(AssetTagLib.AterraLib.PlayerInputTickData, out TickDataInput? playerInputTickData)) return;
 
         for (int i = KeyboardKeys.Length - 1; i >= 0; i--) {

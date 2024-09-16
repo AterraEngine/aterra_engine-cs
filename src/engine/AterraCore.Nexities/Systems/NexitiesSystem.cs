@@ -20,7 +20,7 @@ public abstract class NexitiesSystem<TEntity> : AssetInstance, INexitiesSystem
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public abstract void Tick(ActiveLevel level);
+    public abstract void Tick(IActiveLevel level);
     public virtual void InvalidateCaches() {
         EntitiesBuffer.Clear();
         BufferPopulated = false;
@@ -29,7 +29,7 @@ public abstract class NexitiesSystem<TEntity> : AssetInstance, INexitiesSystem
     // -----------------------------------------------------------------------------------------------------------------
     // Helper Methods
     // -----------------------------------------------------------------------------------------------------------------
-    protected virtual IEnumerable<TEntity> GetEntities(ActiveLevel level) {
+    protected virtual IEnumerable<TEntity> GetEntities(IActiveLevel level) {
         if (BufferPopulated) return EntitiesBuffer;
 
         foreach (IAssetInstance instance in level.ActiveEntityTree.GetAsFlat()) {

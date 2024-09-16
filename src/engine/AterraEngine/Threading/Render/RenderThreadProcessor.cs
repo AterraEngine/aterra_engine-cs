@@ -3,7 +3,6 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Attributes;
 using AterraCore.Common.Types.Threading;
-using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.DataCollector;
 using AterraCore.Contracts.OmniVault.Textures;
@@ -41,6 +40,8 @@ public class RenderThreadProcessor(
     private ILogger Logger { get; } = logger.ForContext<RenderThreadProcessor>();
 
     private static Color ClearColor { get; } = new(0, 0, 0, 0);
+    
+    public event EventHandler<IActiveLevel> TickEvent; 
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
@@ -98,7 +99,7 @@ public class RenderThreadProcessor(
         Raylib.EndDrawing();
     }
 
-    private void DrawUi(ActiveLevel level) {
+    private void DrawUi(IActiveLevel level) {
         Raylib.DrawRectangle(0, 0, 250, 50 * 9, new Color(0, 0, 0, 127));
 
         Raylib.DrawText($"   FPS : {dataCollector.Fps}", 0, 0, 32, Color.LightGray);
