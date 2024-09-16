@@ -15,9 +15,9 @@ namespace AterraLib.Nexities.Systems.Rendering;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[System(StringAssetIdLib.AterraLib.SystemsRendering.Render2DPrepForActors, CoreTags.RenderThread)]
 [UsedImplicitly]
-public class Render2DPrepForActors(IAssetInstanceAtlas instanceAtlas, ICrossThreadTickData crossThreadTickData) : NexitiesSystemWithParentsReversed<IHasTransform2D, IActor2D>, IRender2DSystem {
+[System(StringAssetIdLib.AterraLib.SystemsRendering.Render2DPrepForActors, CoreTags.LogicThread)]
+public class Render2DPrepForActors(IAssetInstanceAtlas instanceAtlas, ICrossThreadTickData crossThreadTickData) : NexitiesSystemWithParentsReversed<IHasTransform2D, IActor2D>, ILogicSystem {
 
     private static readonly Transform2D EmptyTransform2D = new();
     // -----------------------------------------------------------------------------------------------------------------
@@ -35,7 +35,7 @@ public class Render2DPrepForActors(IAssetInstanceAtlas instanceAtlas, ICrossThre
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void Render2DTick(IActiveLevel level) {
+    public void LogicTick(IActiveLevel level) {
         if (!crossThreadTickData.TryGetOrRegister(AssetIdLib.AterraLib.TickDataHolders.RenderableData, out RenderableData? renderableDataDto)) return;
 
         foreach ((IHasTransform2D? parent, IActor2D child, int zIndex) in GetEntities(level).AsSpan()) {

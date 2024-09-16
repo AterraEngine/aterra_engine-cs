@@ -113,13 +113,17 @@ public class AterraCoreWorld(
         IEnumerable<AssetId> oldTextureAssetIds = oldLevel?.TextureAssetIds.ToArray() ?? [];
         IEnumerable<AssetId> newTextureAssetIds = activeLevel.TextureAssetIds.ToArray();
 
-        if (crossThreadTickData.TryGetOrRegister(AssetIdLib.AterraLib.TickDataHolders.TextureData, out ITextureDataHolder? textureDataHolder)
-            && !textureDataHolder.IsEmpty) {
-            Parallel.ForEach(newTextureAssetIds.Except(oldTextureAssetIds), body: id =>
-                textureDataHolder.TexturesToLoad.Enqueue(id));
+        if (crossThreadTickData.TryGetOrRegisterNonEmpty(AssetIdLib.AterraLib.TickDataHolders.TextureData, out ITextureDataHolder? textureDataHolder)) {
+            
+            (bool, AssetId id)[] texturesToHandle = newTextureAssetIds.Except(oldTextureAssetIds)
+                .Select(id => (true, id))
+                .Concat(oldTextureAssetIds.Except(newTextureAssetIds).Select(id => (false, id)))
+                .ToArray();
 
-            Parallel.ForEach(oldTextureAssetIds.Except(newTextureAssetIds), body: id =>
-                textureDataHolder.TexturesToUnLoad.Enqueue(id));
+            Parallel.ForEach(texturesToHandle, ((bool ToLoad, AssetId Id) tuple) => {
+                if (tuple.ToLoad) textureDataHolder.TexturesToLoad.Enqueue(tuple.Id);
+                else textureDataHolder.TexturesToUnLoad.Enqueue(tuple.Id);
+            });
         }
 
         crossThreadEventManager.InvokeLevelChangeCompleted(activeLevel);
