@@ -1,7 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Attributes;
+using AterraCore.Common.Attributes.DI;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Components;
 using AterraCore.Contracts.Nexities.Entities;
@@ -11,6 +11,8 @@ using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.OmniVault.World.EntityTree;
+using AterraCore.Contracts.PoolCorps;
+using AterraCore.DI;
 using JetBrains.Annotations;
 using System.Collections.Frozen;
 
@@ -33,20 +35,17 @@ public class ActiveLevelFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreeFa
         if (entityTreeFlat.FirstOrDefault(asset => asset is ICamera2D) is ICamera2D possibleCamera)
             instanceAtlas.TryGet(possibleCamera.RaylibCamera2D.InstanceId, out camera2D);
 
-        INexitiesSystem[] renderSystems = GetNexitiesSystems(level2D.NexitiesSystemIds.RenderSystemIds);
-        return new ActiveLevel {
+        return new ActiveLevel(
+            EngineServices.GetService<INexitiesSystemPools>()
+        ) {
             RawLevelData = level2D,
-            LogicSystems = [..GetNexitiesSystems(level2D.NexitiesSystemIds.LogicSystemIds)],
-            RenderSystems = [..renderSystems],
-            RenderSystemsReversed = [..renderSystems.Reverse()],
-            UiSystems = [..GetNexitiesSystems(level2D.NexitiesSystemIds.UiSystemIds)],
+            RawSystemData = GetNexitiesSystems(level2D.NexitiesSystemIds.AllSystems),
             ActiveEntityTree = entityTree,
             Camera2DEntity = camera2D,
             TextureAssetIds = entityTreeFlat
                 .Where(asset => asset is IIsRenderable2D)
                 .Select(asset => ((IIsRenderable2D)asset).Sprite2D.TextureAssetId)
                 .Select(id => assetAtlas.TryGetRegistration(id, out AssetRegistration assetInstance) ? assetInstance.AssetId : id)
-                .Distinct()
                 .ToFrozenSet()
         };
     }
@@ -56,14 +55,12 @@ public class ActiveLevelFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreeFa
     /// </summary>
     /// <param name="systemIds">The INexitiesLevel instance to create the ActiveLevel from.</param>
     /// <returns>An instance of the ActiveLevel with the specified properties populated.</returns>
-    private INexitiesSystem[] GetNexitiesSystems(IReadOnlyCollection<AssetId> systemIds) {
-        var systems = new List<INexitiesSystem>(systemIds.Count);
+    private LinkedList<INexitiesSystem> GetNexitiesSystems(IReadOnlyCollection<AssetId> systemIds) {
+        var systems = new LinkedList<INexitiesSystem>();
         foreach (AssetId assetId in systemIds) {
             if (instanceAtlas.TryGetOrCreate(assetId, out INexitiesSystem? instance))
-                systems.Add(instance);
+                systems.AddLast(instance);
         }
-
-        systems.TrimExcess();
-        return systems.ToArray();
+        return systems;
     }
 }

@@ -1,7 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Attributes;
+using AterraCore.Common.Attributes.DI;
 using AterraCore.Common.Types.Threading;
 using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.World;
@@ -25,7 +25,7 @@ public class LogicThreadProcessor(
     ICrossThreadQueue crossThreadQueue,
     IThreadingManager threadingManager,
     ICrossThreadTickData crossThreadTickData
-) : ILogicThreadProcessor {
+) : AbstractThreadProcessor, ILogicThreadProcessor {
 
     private const int TargetTicksPerSecond = 20;// TPS
     private const double MillisecondsPerTick = 1000.0 / TargetTicksPerSecond;
@@ -38,29 +38,38 @@ public class LogicThreadProcessor(
     private ILogger Logger { get; } = logger.ForContext<LogicThreadProcessor>();
 
     private bool IsRunning { get; set; } = true;
-    public CancellationToken CancellationToken { get; set; }
+    
+    public event TickEventHandler? TickEventLogic;  
+    public event EmptyEventHandler? TickEventClearCaches;  
 
     // -----------------------------------------------------------------------------------------------------------------
     // Event Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void RegisterEvents() {
-        eventManager.EventChangeActiveLevel += (_, args) => _endOfTickActions.Push(() => world.TryChangeActiveLevel(args.NewLevelId));
-
+    public override void RegisterEventsStartup() {
         eventManager.EventTps += (_, d) => Logger.Debug("TPS: {0}", d);
-        // eventManager.EventActualTps += (_, _) => Logger.Debug("Assets: {0}", EngineServices.GetService<IAssetInstanceAtlas>().TotalCount);
     }
 
     private void HandleQueue() {
         while (crossThreadQueue.TryDequeue(QueueKey.MainToLogic, out Action? action)) action.Invoke();
         while (crossThreadQueue.TryDequeue(QueueKey.RenderToLogic, out Action? action)) action.Invoke();
     }
+    
+    public override void OnLevelChangeStarted(IActiveLevel oldLevel) {
+        TickEventLogic = null;
+        TickEventClearCaches = null;
+    }
+    
+    public override void OnLevelChangeCompleted(IActiveLevel newLevel) {
+        RegisterTickEvents<ILogicSystem>(ref TickEventLogic, newLevel.TryGetLogicSystems, system => system.LogicTick);
+        RegisterClearCacheEvents<ILogicClearableCacheSystem>(ref TickEventClearCaches, newLevel.TryGetLogicClearableCacheSystems, system => system.LogicThreadClearCaches);
+    }
 
     // -----------------------------------------------------------------------------------------------------------------
     // Run Method
     // -----------------------------------------------------------------------------------------------------------------
     #region Run & Update
-    public void Run() {
-        RegisterEvents();
+    public override void Run() {
+        RegisterEventsStartup();
 
         try {
             _tpsStopwatch.Start();
@@ -70,7 +79,7 @@ public class LogicThreadProcessor(
                 _tickStopwatch.Restart();
 
                 // Call UPDATE LOOP
-                Update();
+                if (world.ActiveLevel is {} activeLevel) TickEventLogic?.Invoke(activeLevel);
                 HandleQueue();
                 RunEndOfTick();
 
@@ -91,22 +100,14 @@ public class LogicThreadProcessor(
             Logger.Information("Logic Thread Closing");
         }
     }
-
-    private void Update() {
-        if (world.ActiveLevel is not { LogicSystems: var logicSystems } activeLevel) return;
-
-        foreach (INexitiesSystem logicSystem in logicSystems) {
-            logicSystem.Tick(activeLevel);
-        }
-    }
-
+    
     private void RunEndOfTick() {
         while (_endOfTickActions.TryPop(out Action? action)) {
             action();
         }
 
         _endOfTickActions.Clear();
-
+        
         crossThreadTickData.ClearOnLogicTick();// Clear for the end of the tick
     }
 

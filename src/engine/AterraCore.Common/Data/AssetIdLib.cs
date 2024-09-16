@@ -47,7 +47,7 @@ public static class AssetIdLib {
             public static readonly AssetId Render2D = StringAssetIdLib.AterraLib.SystemsRendering.Render2D;
             public static readonly AssetId Render2DPrepForProps = StringAssetIdLib.AterraLib.SystemsRendering.Render2DPrepForProps;
             public static readonly AssetId Render2DPrepForActors = StringAssetIdLib.AterraLib.SystemsRendering.Render2DPrepForActors;
-            public static readonly AssetId RenderHud = StringAssetIdLib.AterraLib.SystemsRendering.RenderHud;
+            public static readonly AssetId RenderUi = StringAssetIdLib.AterraLib.SystemsRendering.RenderUi;
             public static readonly AssetId RaylibKeyHandler = StringAssetIdLib.AterraLib.SystemsRendering.RaylibKeyHandler;
         }
         #endregion

@@ -1,7 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Attributes;
+using AterraCore.Common.Attributes.DI;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Levels;
 using AterraCore.Contracts.OmniVault.Assets;
@@ -28,7 +28,8 @@ public class AterraCoreWorld(
     ILogger logger,
     IActiveLevelFactory levelFactory,
     ICrossThreadQueue crossThreadQueue,
-    ICrossThreadTickData crossThreadTickData
+    ICrossThreadTickData crossThreadTickData,
+    ICrossThreadEventManager crossThreadEventManager
 ) : IAterraCoreWorld {
 
     /// <summary>
@@ -82,7 +83,7 @@ public class AterraCoreWorld(
             crossThreadTickData.ClearOnLevelChange();
         }
 
-        EmitActiveLevel(ActiveLevel, oldLevel);
+        EmitNewActiveLevel(ActiveLevel, oldLevel);
         Logger.Information("Active Level successfully created.");
         return true;
     }
@@ -106,16 +107,18 @@ public class AterraCoreWorld(
     /// </summary>
     /// <param name="activeLevel">The new active level.</param>
     /// <param name="oldLevel">The previous active level.</param>
-    private void EmitActiveLevel(IActiveLevel? activeLevel, IActiveLevel? oldLevel) {
+    private void EmitNewActiveLevel(IActiveLevel activeLevel, IActiveLevel? oldLevel) {
+        if (oldLevel is not null) crossThreadEventManager.InvokeLevelChangeStarted(oldLevel);
+        
         IEnumerable<AssetId> oldTextureAssetIds = oldLevel?.TextureAssetIds.ToArray() ?? [];
-        IEnumerable<AssetId> newTextureAssetIds = activeLevel?.TextureAssetIds.ToArray() ?? [];
+        IEnumerable<AssetId> newTextureAssetIds = activeLevel.TextureAssetIds.ToArray();
 
-        Parallel.ForEach(oldTextureAssetIds.Except(newTextureAssetIds), body: id => {
-            crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar(id, true));
-        });
+        Parallel.ForEach(oldTextureAssetIds.Except(newTextureAssetIds), body: id => 
+            crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar(id, true)));
 
-        Parallel.ForEach(newTextureAssetIds.Except(oldTextureAssetIds), body: id => {
-            crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar(id, false));
-        });
+        Parallel.ForEach(newTextureAssetIds.Except(oldTextureAssetIds), body: id => 
+            crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar(id, false)));
+        
+        crossThreadEventManager.InvokeLevelChangeCompleted(activeLevel);
     }
 }

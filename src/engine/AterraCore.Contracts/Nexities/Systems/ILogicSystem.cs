@@ -8,6 +8,6 @@ namespace AterraCore.Contracts.Nexities.Systems;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ILogicSystem { 
+public interface ILogicSystem : INexitiesSystem { 
     void LogicTick(IActiveLevel level);
 }

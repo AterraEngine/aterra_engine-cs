@@ -1,7 +1,8 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Attributes;
+using AterraCore.Common.Attributes.Nexities;
+using System.Collections.Concurrent;
 
 namespace AterraLib.Nexities.Components;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -10,33 +11,29 @@ namespace AterraLib.Nexities.Components;
 [Component<ISystemIds>(StringAssetIdLib.AterraLib.Components.SystemIds)]
 [UsedImplicitly]
 public class SystemIds : NexitiesComponent, ISystemIds {
-    private IReadOnlyCollection<AssetId>? _logicSystemIdsCache;
-    private IReadOnlyCollection<AssetId>? _renderSystemIdsCache;
-    private IReadOnlyCollection<AssetId>? _uiSystemIdsCache;
-    protected virtual AssetId[] LogicSystems { get; set; } = [];
-
-    protected virtual AssetId[] RenderSystems { get; set; } = [];
-
-    protected virtual AssetId[] UiSystems { get; set; } = [];
-    public IReadOnlyCollection<AssetId> LogicSystemIds => _logicSystemIdsCache ?? LogicSystems.AsReadOnly();
-    public IReadOnlyCollection<AssetId> RenderSystemIds => _renderSystemIdsCache ?? RenderSystems.AsReadOnly();
-    public IReadOnlyCollection<AssetId> UiSystemIds => _uiSystemIdsCache ?? UiSystems.AsReadOnly();
+    protected virtual List<AssetId> Systems { get; } = [];
+    public IReadOnlyList<AssetId> AllSystems => Systems;
+    
+    private ConcurrentBag<AssetId>? _includedSystems;
+    private ConcurrentBag<AssetId> IncludedSystems => _includedSystems ??= new ConcurrentBag<AssetId>(Systems);
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void AppendLogicSystem(AssetId logicSystem) {
-        LogicSystems = LogicSystems.Append(logicSystem).ToArray();
-        _logicSystemIdsCache = null;
+    private void ClearCache() {
+        _includedSystems = null;
     }
-
-    public void AppendRenderSystem(AssetId renderSystem) {
-        RenderSystems = RenderSystems.Append(renderSystem).ToArray();
-        _renderSystemIdsCache = null;
+    
+    public override bool Cleanup() {
+        Systems.Clear();
+        ClearCache();
+        return true;
     }
-
-    public void AppendUiSystem(AssetId uiSystem) {
-        UiSystems = UiSystems.Append(uiSystem).ToArray();
-        _uiSystemIdsCache = null;
+    
+    public bool TryAppendSystem(AssetId systemId) {
+        if (Systems.Contains(systemId)) return false;
+        Systems.Add(systemId);
+        ClearCache();
+        return true;
     }
 }

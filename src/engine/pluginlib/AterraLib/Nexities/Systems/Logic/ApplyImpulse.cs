@@ -1,7 +1,8 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Attributes;
+using AterraCore.Common.Attributes.DI;
+using AterraCore.Common.Attributes.Nexities;
 using AterraCore.Contracts.OmniVault.World;
 using Microsoft.Extensions.DependencyInjection;
 

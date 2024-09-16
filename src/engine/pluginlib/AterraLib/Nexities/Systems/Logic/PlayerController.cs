@@ -1,7 +1,9 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Attributes;
+using AterraCore.Common.Attributes.DI;
+using AterraCore.Common.Attributes.Nexities;
+using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading.CrossThread;
 using AterraLib.Contracts;
@@ -14,8 +16,8 @@ namespace AterraLib.Nexities.Systems.Logic;
 [System(StringAssetIdLib.AterraLib.SystemsLogic.PlayerController, CoreTags.LogicThread)]
 [Injectable<PlayerController>(ServiceLifetime.Singleton)]
 [UsedImplicitly]
-public class PlayerController(ICrossThreadTickData crossThreadTickData) : NexitiesSystem<IPlayer2D> {
-    public override void Tick(IActiveLevel level) {
+public class PlayerController(ICrossThreadTickData crossThreadTickData) : NexitiesSystem<IPlayer2D>, ILogicSystem {
+    public void LogicTick(IActiveLevel level) {
         if (!crossThreadTickData.TryGet(AssetTagLib.AterraLib.PlayerInputTickData, out ITickDataInput? playerInputTickData)) return;
 
         float x = 0f;

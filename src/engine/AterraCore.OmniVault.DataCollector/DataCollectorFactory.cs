@@ -1,7 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Attributes;
+using AterraCore.Common.Attributes.DI;
 using AterraCore.Contracts.OmniVault.DataCollector;
 using AterraCore.Contracts.Threading.Logic;
 using JetBrains.Annotations;

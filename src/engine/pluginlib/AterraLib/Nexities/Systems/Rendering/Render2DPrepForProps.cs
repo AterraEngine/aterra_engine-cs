@@ -1,8 +1,9 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Attributes;
+using AterraCore.Common.Attributes.Nexities;
 using AterraCore.Contracts.Nexities.Entities.QuickHands;
+using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.Textures;
 using AterraCore.Contracts.OmniVault.World;
@@ -16,7 +17,7 @@ namespace AterraLib.Nexities.Systems.Rendering;
 // ---------------------------------------------------------------------------------------------------------------------
 [System(StringAssetIdLib.AterraLib.SystemsRendering.Render2DPrepForProps, CoreTags.RenderThread)]
 [UsedImplicitly]
-public class Render2DPrepForProps(IAssetInstanceAtlas instanceAtlas, ICrossThreadTickData crossThreadTickData) : NexitiesSystemWithParentsReversed<IHasTransform2D, IProp2D> {
+public class Render2DPrepForProps(IAssetInstanceAtlas instanceAtlas, ICrossThreadTickData crossThreadTickData) : NexitiesSystemWithParentsReversed<IHasTransform2D, IProp2D>, IRender2DSystem {
 
     private static readonly Transform2D EmptyTransform2D = new();
     // -----------------------------------------------------------------------------------------------------------------
@@ -34,7 +35,7 @@ public class Render2DPrepForProps(IAssetInstanceAtlas instanceAtlas, ICrossThrea
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public override void Tick(IActiveLevel level) {
+    public void Render2DTick(IActiveLevel level) {
         if (!crossThreadTickData.TryGetOrRegister(AssetTagLib.AterraLib.RenderableData, out RenderableData? renderableDataDto)) return;
         if (renderableDataDto.PropsProcessed) return;
 

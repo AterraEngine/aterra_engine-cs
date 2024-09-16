@@ -56,8 +56,8 @@ public static class StringAssetIdLib {
             public const string Render2D = $"{ThisSection}:{ThisClass}/{nameof(Render2D)}";
             public const string Render2DPrepForProps = $"{ThisSection}:{ThisClass}/{nameof(Render2DPrepForProps)}";
             public const string Render2DPrepForActors = $"{ThisSection}:{ThisClass}/{nameof(Render2DPrepForActors)}";
-            public const string RenderHud = $"{ThisSection}:{ThisClass}/{nameof(RenderHud)}";
             public const string RaylibKeyHandler = $"{ThisSection}:{ThisClass}/{nameof(RaylibKeyHandler)}";
+            public const string RenderUi = $"{ThisSection}:{ThisClass}/{nameof(RenderUi)}";
         }
         #endregion
     }

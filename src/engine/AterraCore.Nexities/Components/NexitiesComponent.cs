@@ -8,4 +8,6 @@ namespace AterraCore.Nexities.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class NexitiesComponent : AssetInstance, INexitiesComponent;
+public abstract class NexitiesComponent : AssetInstance, INexitiesComponent {
+    public virtual bool Cleanup() => false;
+}

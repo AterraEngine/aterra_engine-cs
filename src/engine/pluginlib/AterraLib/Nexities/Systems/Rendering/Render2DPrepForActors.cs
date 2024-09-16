@@ -1,8 +1,9 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Attributes;
+using AterraCore.Common.Attributes.Nexities;
 using AterraCore.Contracts.Nexities.Entities.QuickHands;
+using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.Textures;
 using AterraCore.Contracts.OmniVault.World;
@@ -16,7 +17,7 @@ namespace AterraLib.Nexities.Systems.Rendering;
 // ---------------------------------------------------------------------------------------------------------------------
 [System(StringAssetIdLib.AterraLib.SystemsRendering.Render2DPrepForActors, CoreTags.RenderThread)]
 [UsedImplicitly]
-public class Render2DPrepForActors(IAssetInstanceAtlas instanceAtlas, ICrossThreadTickData crossThreadTickData) : NexitiesSystemWithParentsReversed<IHasTransform2D, IActor2D> {
+public class Render2DPrepForActors(IAssetInstanceAtlas instanceAtlas, ICrossThreadTickData crossThreadTickData) : NexitiesSystemWithParentsReversed<IHasTransform2D, IActor2D>, IRender2DSystem {
 
     private static readonly Transform2D EmptyTransform2D = new();
     // -----------------------------------------------------------------------------------------------------------------
@@ -34,7 +35,7 @@ public class Render2DPrepForActors(IAssetInstanceAtlas instanceAtlas, ICrossThre
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public override void Tick(IActiveLevel level) {
+    public void Render2DTick(IActiveLevel level) {
         if (!crossThreadTickData.TryGetOrRegister(AssetTagLib.AterraLib.RenderableData, out RenderableData? renderableDataDto)) return;
 
         foreach ((IHasTransform2D? parent, IActor2D child, int zIndex) in GetEntities(level).AsSpan()) {

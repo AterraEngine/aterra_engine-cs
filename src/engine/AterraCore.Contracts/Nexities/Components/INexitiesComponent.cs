@@ -7,4 +7,6 @@ namespace AterraCore.Contracts.Nexities.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface INexitiesComponent : IAssetInstance;
+public interface INexitiesComponent : IAssetInstance {
+    public bool Cleanup();
+}

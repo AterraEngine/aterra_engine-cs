@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Attributes;
+using AterraCore.Common.Attributes.DI;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.OmniVault.Assets;

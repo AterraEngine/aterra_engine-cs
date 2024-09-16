@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Attributes;
+using AterraCore.Common.Attributes.Nexities;
 using AterraCore.Common.Data;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Components;
@@ -21,25 +22,26 @@ namespace Workfloor_AterraCore.Plugin.Levels;
 [Component("Workfloor:BlobLevelSystemIds")]
 [UsedImplicitly]
 public class BlobLevelSystemIds : SystemIds {
-    protected override AssetId[] LogicSystems { get; set; } = [
+    protected override List<AssetId> Systems { get; } = [
+        // Logic section
         AssetIdLib.AterraLib.SystemsLogic.PlayerController,
         AssetIdLib.AterraLib.SystemsLogic.CameraController,
         WorkfloorIdLib.SystemsLogic.LevelSwitch,
         WorkfloorIdLib.SystemsLogic.RandomImpulse,
+        
         // "Workfloor:ApplyRandomImpulseCamera",
         AssetIdLib.AterraLib.SystemsLogic.ApplyImpulse,
-        AssetIdLib.AterraLib.SystemsLogic.ApplyImpulseCamera
-    ];
-
-    protected override AssetId[] RenderSystems { get; set; } = [
+        AssetIdLib.AterraLib.SystemsLogic.ApplyImpulseCamera, 
+        
+        // Render 2D
         AssetIdLib.AterraLib.SystemsRendering.Render2DPrepForProps,
         AssetIdLib.AterraLib.SystemsRendering.Render2DPrepForActors,
         AssetIdLib.AterraLib.SystemsRendering.Render2D,
-        AssetIdLib.AterraLib.SystemsRendering.RaylibKeyHandler
-    ];
-
-    protected override AssetId[] UiSystems { get; set; } = [
-    ];
+        AssetIdLib.AterraLib.SystemsRendering.RaylibKeyHandler,
+        
+        // Render UI
+        AssetIdLib.AterraLib.SystemsRendering.RenderUi
+    ]; 
 }
 
 [UsedImplicitly]

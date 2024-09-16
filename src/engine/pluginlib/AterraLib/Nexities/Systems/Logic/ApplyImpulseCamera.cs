@@ -1,7 +1,8 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Attributes;
+using AterraCore.Common.Attributes.Nexities;
+using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.World;
 
 namespace AterraLib.Nexities.Systems.Logic;
@@ -10,8 +11,8 @@ namespace AterraLib.Nexities.Systems.Logic;
 // ---------------------------------------------------------------------------------------------------------------------
 [System(StringAssetIdLib.AterraLib.SystemsLogic.ApplyImpulseCamera, CoreTags.LogicThread)]
 [UsedImplicitly]
-public class ApplyImpulseCamera : NexitiesSystem<ICamera2D> {
-    public override void Tick(IActiveLevel level) {
+public class ApplyImpulseCamera : NexitiesSystem<ICamera2D>, ILogicSystem {
+    public void LogicTick(IActiveLevel level) {
         foreach (ICamera2D entity in GetEntities(level)) {
             Vector2 scaledTranslationOffset = entity.RaylibCamera2D.Camera.Zoom != 0
                     ? entity.Impulse2D.TranslationOffset / entity.RaylibCamera2D.Camera.Zoom * 10f

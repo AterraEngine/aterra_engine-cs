@@ -1,10 +1,9 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Attributes;
+using AterraCore.Common.Attributes.DI;
 using AterraCore.Common.Types.Threading;
-using AterraCore.Contracts.OmniVault.Assets;
-using AterraCore.Contracts.OmniVault.DataCollector;
+using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.Textures;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Renderer;
@@ -30,26 +29,26 @@ public class RenderThreadProcessor(
     ITextureAtlas textureAtlas,
     ICrossThreadQueue crossThreadQueue,
     IThreadingManager threadingManager,
-    IDataCollector dataCollector,
     IRenderEventManager eventManager,
     ILogicEventManager logicEventManager,
-    IAssetInstanceAtlas instanceAtlas,
     ICrossThreadTickData crossThreadTickData
-) : IRenderThreadProcessor {
+) : AbstractThreadProcessor, IRenderThreadProcessor {
     private readonly Stack<Action> _endOfFrameActions = [];
     private ILogger Logger { get; } = logger.ForContext<RenderThreadProcessor>();
 
     private static Color ClearColor { get; } = new(0, 0, 0, 0);
-    
-    public event EventHandler<IActiveLevel> TickEvent; 
+    //
+    public event TickEventHandler? TickEvent2DMode;  
+    public event TickEventHandler? TickEvent3DMode;  
+    public event TickEventHandler? TickEventUiMode;  
+    public event EmptyEventHandler? TickEventClearCaches;  
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     private bool WhileCondition => !CancellationToken.IsCancellationRequested || !Raylib.WindowShouldClose();
-    public CancellationToken CancellationToken { get; set; }
-    public void Run() {
-        RegisterEvents();
+    public override void Run() {
+        RegisterEventsStartup();
         mainWindow.Init();
 
         // Window is actually running now
@@ -69,51 +68,42 @@ public class RenderThreadProcessor(
         Raylib.CloseWindow();
         threadingManager.CancelThreads();
     }
+    public override void OnLevelChangeStarted(IActiveLevel oldLevel) {
+        TickEvent2DMode = null;
+        TickEvent3DMode = null;
+        TickEventUiMode = null;
+        TickEventClearCaches = null;
+    }
+    
+    public override void OnLevelChangeCompleted(IActiveLevel newLevel) {
+        RegisterTickEvents<IRender2DSystem>(ref TickEvent2DMode, newLevel.TryGetRender2DSystems, system => system.Render2DTick);
+        RegisterTickEvents<IRender3DSystem>(ref TickEvent3DMode, newLevel.TryGetRender3DSystems, system => system.Render3DTick);
+        RegisterTickEvents<IRenderUiSystem>(ref TickEventUiMode, newLevel.TryGetRenderUiSystems, system => system.RenderUITick);
+        RegisterClearCacheEvents<IRenderClearableCacheSystem>(ref TickEventClearCaches, newLevel.TryGetRenderClearableCacheSystems, system => system.RenderThreadClearCaches);
+    }
 
-    public void RegisterEvents() {
-        eventManager.EventClearSystemCaches += (_, _) => _endOfFrameActions.Push(OnEventManagerOnEventClearSystemCaches);
+
+    public override void RegisterEventsStartup() {
+        eventManager.EventClearSystemCaches += (_, _) => _endOfFrameActions.Push(() => TickEventClearCaches?.Invoke());
         eventManager.EventWindowResized += (_, _) => _endOfFrameActions.Push(OnEventManagerOnEventWindowResized);
     }
     
     private void Update() {
-        if (world.ActiveLevel is not {
-                Camera2DEntity: var camera2DEntity,
-                RenderSystemsReversed: var renderSystemsReversed
-                // UiSystems: var uiSystems
-            } activeLevel) return;
+        if (world.ActiveLevel is not { Camera2DEntity: var camera2DEntity } activeLevel) return;
 
         Raylib.BeginDrawing();
         Raylib.ClearBackground(ClearColor);
 
-        if (camera2DEntity is { Camera: var camera2D }) {
+        if (camera2DEntity is { Camera: var camera2D } ) {
             Raylib.BeginMode2D(camera2D);
-
-            int count = renderSystemsReversed.Length;
-            for (int i = count - 1; i >= 0; i--) 
-                renderSystemsReversed[i].Tick(activeLevel);
-
+            TickEvent2DMode?.Invoke(activeLevel);
             Raylib.EndMode2D();
         }
 
-        DrawUi(activeLevel);
+        TickEventUiMode?.Invoke(activeLevel);
         Raylib.EndDrawing();
     }
-
-    private void DrawUi(IActiveLevel level) {
-        Raylib.DrawRectangle(0, 0, 250, 50 * 9, new Color(0, 0, 0, 127));
-
-        Raylib.DrawText($"   FPS : {dataCollector.Fps}", 0, 0, 32, Color.LightGray);
-        Raylib.DrawText($"minFPS : {dataCollector.FpsMin}", 0, 50, 32, Color.LightGray);
-        Raylib.DrawText($"maxFPS : {dataCollector.FpsMax}", 0, 100, 32, Color.LightGray);
-        Raylib.DrawText($"avgFPS : {dataCollector.FpsAverageString}", 0, 150, 32, Color.LightGray);
-        Raylib.DrawText($"   TPS : {dataCollector.Tps}", 0, 200, 32, Color.LightGray);
-        Raylib.DrawText($"avgTPS : {dataCollector.TpsAverageString}", 0, 250, 32, Color.LightGray);
-        Raylib.DrawText($" DUCKS : {level.RawLevelData.ChildrenIDs.Count}", 0, 300, 32, Color.LightGray);
-        Raylib.DrawText($"entGlb : {instanceAtlas.TotalCount}", 0, 350, 32, Color.LightGray);
-        Raylib.DrawText($" Asset : {level.RawLevelData.AssetId}", 0, 400, 12, Color.LightGray);
-        Raylib.DrawText($"  Inst : {level.RawLevelData.InstanceId}", 0, 425, 12, Color.LightGray);
-    }
-
+    
     private void HandleQueue() {
         while (crossThreadQueue.TextureRegistrarQueue.TryDequeue(out TextureRegistrar? textureRecord)) {
             if (textureRecord.UnRegister) PushUnRegisterTexture(textureRecord);
@@ -151,15 +141,6 @@ public class RenderThreadProcessor(
     // -----------------------------------------------------------------------------------------------------------------
     // Events
     // -----------------------------------------------------------------------------------------------------------------
-    private void OnEventManagerOnEventClearSystemCaches() {
-        if (world.ActiveLevel is not { RenderSystemsReversed: var renderSystemsReversed }) return;
-
-        int count = renderSystemsReversed.Length;
-        for (int i = count - 1; i >= 0; i--) {
-            renderSystemsReversed[i].InvalidateCaches();
-        }
-    }
-
     private void OnEventManagerOnEventWindowResized() {
         if (world.ActiveLevel is not { Camera2DEntity: {} camera2DEntity }) return;
 

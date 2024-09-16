@@ -1,13 +1,11 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Contracts.OmniVault.World;
-
 namespace AterraCore.Contracts.Nexities.Systems;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IRenderSystem {
-    void RenderTick(IActiveLevel level);
+public interface ILogicClearableCacheSystem : INexitiesSystem {
+    void LogicThreadClearCaches();
 }
