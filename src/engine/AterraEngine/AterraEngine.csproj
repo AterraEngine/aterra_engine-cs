@@ -23,6 +23,7 @@
         <ProjectReference Include="..\AterraCore.Contracts\AterraCore.Contracts.csproj"/>
         <ProjectReference Include="..\AterraCore.DI\AterraCore.DI.csproj"/>
         <ProjectReference Include="..\AterraCore.Common\AterraCore.Common.csproj"/>
+        <ProjectReference Include="..\AterraCore.OmniVault.Assets\AterraCore.OmniVault.Assets.csproj" />
         <ProjectReference Include="..\pluginlib\AterraLib.Contracts\AterraLib.Contracts.csproj"/>
     </ItemGroup>
 
@@ -35,6 +36,10 @@
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1"/>
         <PackageReference Include="Microsoft.Extensions.ObjectPool.DependencyInjection" Version="8.8.0"/>
         <PackageReference Include="Ulid" Version="1.3.4"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Threading\CrossThread\TickDataHolders\" />
     </ItemGroup>
 
 </Project>

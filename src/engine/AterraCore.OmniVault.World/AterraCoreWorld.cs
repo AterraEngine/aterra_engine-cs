@@ -8,7 +8,7 @@ using AterraCore.Contracts.Nexities.Levels;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading.CrossThread;
-using AterraEngine.Threading.CrossThread.TickDataHolders;
+using AterraCore.Contracts.Threading.CrossThread.TickDataHolders;
 using Extensions;
 using JetBrains.Annotations;
 using Serilog;
@@ -113,7 +113,9 @@ public class AterraCoreWorld(
         IEnumerable<AssetId> oldTextureAssetIds = oldLevel?.TextureAssetIds.ToArray() ?? [];
         IEnumerable<AssetId> newTextureAssetIds = activeLevel.TextureAssetIds.ToArray();
 
-        if (crossThreadTickData.TryGetOrRegister(AssetTagLib.AterraLib.TextureData, out TextureDataHolder? textureDataHolder) && !textureDataHolder.IsEmpty) {
+        if (crossThreadTickData.TryGetOrRegister(AssetIdLib.AterraLib.TickDataHolders.TextureData, out ITextureDataHolder? textureDataHolder)
+            && !textureDataHolder.IsEmpty) 
+        {
             Parallel.ForEach(newTextureAssetIds.Except(oldTextureAssetIds), body: id => 
                 textureDataHolder.TexturesToLoad.Enqueue(id));
             

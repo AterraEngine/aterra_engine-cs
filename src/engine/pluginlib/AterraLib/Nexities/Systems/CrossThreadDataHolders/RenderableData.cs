@@ -1,7 +1,9 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.Attributes.Nexities;
 using AterraCore.Contracts.Threading.CrossThread;
+using AterraCore.OmniVault.Assets;
 using Extensions;
 using System.Collections.Concurrent;
 
@@ -20,7 +22,9 @@ public readonly struct RenderCacheDto {
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class RenderableData : ITickDataHolder, IHasLevelChangeCleanup {
+[UsedImplicitly]
+[DataHolder(StringAssetIdLib.AterraLib.TickDataHolders.RenderableData)]
+public class RenderableData : AssetInstance, ITickDataHolder, IHasLevelChangeCleanup {
     private readonly ConcurrentSortedDictionary<int, RenderCacheDto> _renderCache = new();
     public ConcurrentDictionary<AssetId, (Vector2 Size, Texture2D texture2D)> TextureCache { get; } = new();
 

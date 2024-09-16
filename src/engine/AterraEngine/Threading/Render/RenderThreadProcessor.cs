@@ -10,9 +10,9 @@ using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Renderer;
 using AterraCore.Contracts.Threading;
 using AterraCore.Contracts.Threading.CrossThread;
+using AterraCore.Contracts.Threading.CrossThread.TickDataHolders;
 using AterraCore.Contracts.Threading.Logic;
 using AterraCore.Contracts.Threading.Rendering;
-using AterraEngine.Threading.CrossThread.TickDataHolders;
 using JetBrains.Annotations;
 using Serilog;
 using System.Numerics;
@@ -122,7 +122,7 @@ public class RenderThreadProcessor(
     }
     
     private void HandleQueue() {
-        if (!crossThreadTickData.TryGetOrRegister(AssetTagLib.AterraLib.TextureData, out TextureDataHolder? textureDataHolder) || textureDataHolder.IsEmpty) return;
+        if (!crossThreadTickData.TryGetOrRegister(AssetIdLib.AterraLib.TickDataHolders.TextureData, out ITextureDataHolder? textureDataHolder) || textureDataHolder.IsEmpty) return;
 
         while (textureDataHolder.TexturesToLoad.TryDequeue(out AssetId textureToLoad)) PushRegisterTexture(textureToLoad);
         while (textureDataHolder.TexturesToUnLoad.TryDequeue(out AssetId textureToUnLoad)) PushUnRegisterTexture(textureToUnLoad);

@@ -32,7 +32,7 @@ public class LevelSwitch(IAterraCoreWorld world, IAssetAtlas assetAtlas, ILogger
         _levelsCache = null;
     }
     public void Tick(IActiveLevel level) {
-        if (!crossThreadTickData.TryGet(AssetTagLib.AterraLib.PlayerInputTickData, out ITickDataInput? playerInputTickData)) return;
+        if (!crossThreadTickData.TryGet(AssetIdLib.AterraLib.TickDataHolders.PlayerInputTickData, out IPlayerInputTickData? playerInputTickData)) return;
 
         AssetId currentLevelId = level.RawLevelData.AssetId;
         int currentLevelPos = Levels.IndexOf(currentLevelId);

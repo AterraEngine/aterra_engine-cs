@@ -20,13 +20,13 @@ public class Render2D(ICrossThreadTickData crossThreadTickData) : NexitiesSystem
     public override void InvalidateCaches() {
         base.InvalidateCaches();
 
-        if (!crossThreadTickData.TryGet(AssetTagLib.AterraLib.RenderableData, out RenderableData? renderableDataDto)) return;
+        if (!crossThreadTickData.TryGet(AssetIdLib.AterraLib.TickDataHolders.RenderableData, out RenderableData? renderableDataDto)) return;
 
         renderableDataDto.ClearCache();// necessary to get the correct textures later on
     }
 
     public void Render2DTick(IActiveLevel level) {
-        if (!crossThreadTickData.TryGet(AssetTagLib.AterraLib.RenderableData, out RenderableData? renderableDataDto)) return;
+        if (!crossThreadTickData.TryGet(AssetIdLib.AterraLib.TickDataHolders.RenderableData, out RenderableData? renderableDataDto)) return;
 
         foreach (RenderCacheDto dto in renderableDataDto.GetOrderedRenderCache().AsSpan()) {
             Raylib.DrawTexturePro(dto.Texture, dto.Source, dto.Dest, dto.Origin, dto.Rotation, dto.Tint);

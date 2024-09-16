@@ -9,7 +9,7 @@ namespace AterraCore.Contracts.Threading.CrossThread;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface ICrossThreadTickData {
-    bool TryRegister<T>(AssetTag key, T tickDataHolder) where T : class, ITickDataHolder;
-    bool TryGet<T>(AssetTag key, [NotNullWhen(true)] out T? tickDataHolder) where T : class, ITickDataHolder;
-    bool TryGetOrRegister<T>(AssetTag key, [NotNullWhen(true)] out T? tickDataHolder) where T : class, ITickDataHolder, new();
+    bool TryRegister<T>(AssetId assetId) where T : class, ITickDataHolder;
+    bool TryGet<T>(AssetId assetId, [NotNullWhen(true)] out T? tickDataHolder) where T : class, ITickDataHolder;
+    bool TryGetOrRegister<T>(AssetId assetId, [NotNullWhen(true)] out T? tickDataHolder) where T : class, ITickDataHolder;
 }

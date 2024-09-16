@@ -1,7 +1,9 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.Attributes.Nexities;
 using AterraCore.Contracts.Threading.CrossThread;
+using AterraCore.OmniVault.Assets;
 using AterraLib.Contracts;
 using System.Collections.Concurrent;
 
@@ -9,7 +11,9 @@ namespace AterraLib.Nexities.Systems.CrossThreadDataHolders;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class TickDataInput : ITickDataInput, IHasLevelChangeCleanup, IHasLogicTickCleanup {
+[UsedImplicitly]
+[DataHolder(StringAssetIdLib.AterraLib.TickDataHolders.PlayerInputTickData)]
+public class PlayerInputTickData : AssetInstance, IPlayerInputTickData, IHasLevelChangeCleanup, IHasLogicTickCleanup {
     public ConcurrentStack<KeyboardKey> KeyboardKeyPressed { get; } = [];
     public ConcurrentStack<KeyboardKey> KeyboardKeyPressedRepeated { get; } = [];
     public ConcurrentStack<KeyboardKey> KeyboardKeyReleased { get; } = [];

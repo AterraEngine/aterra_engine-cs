@@ -36,7 +36,7 @@ public class Render2DPrepForProps(IAssetInstanceAtlas instanceAtlas, ICrossThrea
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public void Render2DTick(IActiveLevel level) {
-        if (!crossThreadTickData.TryGetOrRegister(AssetTagLib.AterraLib.RenderableData, out RenderableData? renderableDataDto)) return;
+        if (!crossThreadTickData.TryGetOrRegister(AssetIdLib.AterraLib.TickDataHolders.RenderableData, out RenderableData? renderableDataDto)) return;
         if (renderableDataDto.PropsProcessed) return;
 
         foreach ((IHasTransform2D? parent, IProp2D child, int zIndex) in GetEntities(level).AsSpan()) {

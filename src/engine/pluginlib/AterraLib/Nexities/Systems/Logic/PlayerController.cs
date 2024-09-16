@@ -18,7 +18,7 @@ namespace AterraLib.Nexities.Systems.Logic;
 [UsedImplicitly]
 public class PlayerController(ICrossThreadTickData crossThreadTickData) : NexitiesSystem<IPlayer2D>, ILogicSystem {
     public void LogicTick(IActiveLevel level) {
-        if (!crossThreadTickData.TryGet(AssetTagLib.AterraLib.PlayerInputTickData, out ITickDataInput? playerInputTickData)) return;
+        if (!crossThreadTickData.TryGet(AssetIdLib.AterraLib.TickDataHolders.PlayerInputTickData, out IPlayerInputTickData? playerInputTickData)) return;
 
         float x = 0f;
         float y = 0f;

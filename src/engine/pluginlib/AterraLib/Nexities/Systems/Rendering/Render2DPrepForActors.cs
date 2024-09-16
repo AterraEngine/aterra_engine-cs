@@ -36,7 +36,7 @@ public class Render2DPrepForActors(IAssetInstanceAtlas instanceAtlas, ICrossThre
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public void Render2DTick(IActiveLevel level) {
-        if (!crossThreadTickData.TryGetOrRegister(AssetTagLib.AterraLib.RenderableData, out RenderableData? renderableDataDto)) return;
+        if (!crossThreadTickData.TryGetOrRegister(AssetIdLib.AterraLib.TickDataHolders.RenderableData, out RenderableData? renderableDataDto)) return;
 
         foreach ((IHasTransform2D? parent, IActor2D child, int zIndex) in GetEntities(level).AsSpan()) {
             (Vector2 size, Texture2D texture2D) = GetTextureAsset(child.Sprite2D.TextureAssetId, renderableDataDto);

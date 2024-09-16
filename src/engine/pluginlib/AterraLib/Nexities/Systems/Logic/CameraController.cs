@@ -18,7 +18,7 @@ namespace AterraLib.Nexities.Systems.Logic;
 [UsedImplicitly]
 public class CameraController(ICrossThreadTickData crossThreadTickData) : NexitiesSystem<ICamera2D>, ILogicSystem {
     public void LogicTick(IActiveLevel level) {
-        if (!crossThreadTickData.TryGet(AssetTagLib.AterraLib.PlayerInputTickData, out ITickDataInput? playerInputTickData)) return;
+        if (!crossThreadTickData.TryGet(AssetIdLib.AterraLib.TickDataHolders.PlayerInputTickData, out IPlayerInputTickData? playerInputTickData)) return;
 
         float translationX = 0.0f;
         float translationY = 0.0f;

@@ -10,7 +10,7 @@ namespace AterraLib.Contracts;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ITickDataInput : ITickDataHolder {
+public interface IPlayerInputTickData : ITickDataHolder {
     ConcurrentStack<KeyboardKey> KeyboardKeyPressed { get; }
     ConcurrentStack<KeyboardKey> KeyboardKeyPressedRepeated { get; }
     ConcurrentStack<KeyboardKey> KeyboardKeyReleased { get; }

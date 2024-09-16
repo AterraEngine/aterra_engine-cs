@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Attributes.DI;
 using AterraCore.Common.Types.Nexities;
+using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.Threading.CrossThread;
 using JetBrains.Annotations;
 using System.Collections.Concurrent;
@@ -14,22 +15,17 @@ namespace AterraEngine.Threading.CrossThread;
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
 [Singleton<ICrossThreadTickData>]
-public class CrossThreadTickData(ICrossThreadEventManager crossThreadEventManager) : ICrossThreadTickData {
-    private readonly ConcurrentDictionary<AssetTag, ITickDataHolder> _tickDataHolders = new();
+public class CrossThreadTickData(ICrossThreadEventManager crossThreadEventManager, IAssetInstanceAtlas instanceAtlas) : ICrossThreadTickData {
+    private readonly ConcurrentDictionary<AssetId, ITickDataHolder> _tickDataHolders = new();
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public bool TryRegister<T>(AssetTag key) where T : class, ITickDataHolder, new() => TryRegister(key, new T());
-    public bool TryRegister<T>(AssetTag key, out T dataHolder) where T : class, ITickDataHolder, new() {
-        dataHolder = new T();
-        return TryRegister(key, dataHolder);
-    }
-
     // ReSharper disable once SuspiciousTypeConversion.Global
     // ReSharper disable once ConvertIfStatementToSwitchStatement
-    public bool TryRegister<T>(AssetTag key, T tickDataHolder) where T : class, ITickDataHolder {
-        if (!_tickDataHolders.TryAdd(key, tickDataHolder)) return false;
+    public bool TryRegister<T>(AssetId assetId) where T : class, ITickDataHolder {
+        if (!instanceAtlas.TryGetOrCreate(assetId, out T? tickDataHolder)) return false;
+        if (!_tickDataHolders.TryAdd(assetId, tickDataHolder)) return false;
 
         // attack to events
         if (tickDataHolder is IHasLevelChangeCleanup levelChangeCleanup) crossThreadEventManager.LevelChangeCleanup += levelChangeCleanup.OnLevelChangeCleanup;
@@ -39,17 +35,18 @@ public class CrossThreadTickData(ICrossThreadEventManager crossThreadEventManage
         return true;
     }
 
-    public bool TryGet<T>(AssetTag key, [NotNullWhen(true)] out T? tickDataHolder) where T : class, ITickDataHolder {
+    public bool TryGet<T>(AssetId assetId, [NotNullWhen(true)] out T? tickDataHolder) where T : class, ITickDataHolder {
         tickDataHolder = default;
-        if (!_tickDataHolders.TryGetValue(key, out ITickDataHolder? value)) return false;
+        if (!_tickDataHolders.TryGetValue(assetId, out ITickDataHolder? value)) return false;
 
         tickDataHolder = value as T;
         return tickDataHolder != null;
     }
 
-    public bool TryGetOrRegister<T>(AssetTag key, [NotNullWhen(true)] out T? tickDataHolder) where T : class, ITickDataHolder, new() {
-        if (TryGet(key, out tickDataHolder)) return true;
-        if (TryRegister<T>(key, out tickDataHolder)) return true;
+    public bool TryGetOrRegister<T>(AssetId assetId, [NotNullWhen(true)] out T? tickDataHolder) where T : class, ITickDataHolder {
+        if (TryGet(assetId, out tickDataHolder)) return true;
+        if (!TryRegister<T>(assetId)) return false;
+        if (TryGet(assetId, out tickDataHolder)) return true;
         tickDataHolder = null;
         return false;
     }

@@ -51,5 +51,12 @@ public static class AssetIdLib {
             public static readonly AssetId RaylibKeyHandler = StringAssetIdLib.AterraLib.SystemsRendering.RaylibKeyHandler;
         }
         #endregion
+        #region TickDataHolders
+        public static class TickDataHolders {
+            public static readonly AssetId PlayerInputTickData = StringAssetIdLib.AterraLib.TickDataHolders.PlayerInputTickData;
+            public static readonly AssetId RenderableData = StringAssetIdLib.AterraLib.TickDataHolders.RenderableData;
+            public static readonly AssetId TextureData = StringAssetIdLib.AterraLib.TickDataHolders.TextureData;
+        }
+        #endregion
     }
 }
