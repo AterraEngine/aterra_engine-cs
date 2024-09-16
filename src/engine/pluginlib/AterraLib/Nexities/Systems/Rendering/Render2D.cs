@@ -5,7 +5,7 @@ using AterraCore.Common.Attributes.Nexities;
 using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading.CrossThread;
-using AterraLib.Nexities.Systems.CrossThreadDataHolders;
+using AterraLib.Nexities.DataHolders;
 
 namespace AterraLib.Nexities.Systems.Rendering;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -17,14 +17,6 @@ public class Render2D(ICrossThreadTickData crossThreadTickData) : NexitiesSystem
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public override void InvalidateCaches() {
-        base.InvalidateCaches();
-
-        if (!crossThreadTickData.TryGet(AssetIdLib.AterraLib.TickDataHolders.RenderableData, out RenderableData? renderableDataDto)) return;
-
-        renderableDataDto.ClearCache();// necessary to get the correct textures later on
-    }
-
     public void Render2DTick(IActiveLevel level) {
         if (!crossThreadTickData.TryGet(AssetIdLib.AterraLib.TickDataHolders.RenderableData, out RenderableData? renderableDataDto)) return;
 

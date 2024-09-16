@@ -9,7 +9,7 @@ using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading.CrossThread;
-using AterraCore.OmniVault.Assets;
+using AterraCore.Nexities.Systems;
 using AterraLib.Contracts;
 using CodeOfChaos.Extensions;
 using JetBrains.Annotations;
@@ -24,14 +24,14 @@ namespace Workfloor_AterraCore.Plugin.Systems.Logic;
 [System(WorkfloorIdLib.SystemsLogic.LevelSwitch, CoreTags.LogicThread)]
 [Injectable<LevelSwitch>(ServiceLifetime.Singleton)]
 [UsedImplicitly]
-public class LevelSwitch(IAterraCoreWorld world, IAssetAtlas assetAtlas, ILogger logger, ICrossThreadTickData crossThreadTickData) : AssetInstance, INexitiesSystem {
+public class LevelSwitch(IAterraCoreWorld world, IAssetAtlas assetAtlas, ILogger logger, ICrossThreadTickData crossThreadTickData) : NexitiesSystem, ILogicSystem {
     private List<AssetId>? _levelsCache;
     private List<AssetId> Levels => _levelsCache ??= assetAtlas.GetAllAssetsOfCoreTag(CoreTags.Level).WhereNot(id => id == AssetIdLib.AterraLib.Entities.EmptyLevel).ToList();
 
-    public void InvalidateCaches() {
-        _levelsCache = null;
-    }
-    public void Tick(IActiveLevel level) {
+    // -----------------------------------------------------------------------------------------------------------------
+    // Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    public void LogicTick(IActiveLevel level) {
         if (!crossThreadTickData.TryGet(AssetIdLib.AterraLib.TickDataHolders.PlayerInputTickData, out IPlayerInputTickData? playerInputTickData)) return;
 
         AssetId currentLevelId = level.RawLevelData.AssetId;

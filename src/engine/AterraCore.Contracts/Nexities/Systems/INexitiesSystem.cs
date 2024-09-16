@@ -7,6 +7,4 @@ namespace AterraCore.Contracts.Nexities.Systems;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface INexitiesSystem : IAssetInstance {
-    void InvalidateCaches();
-}
+public interface INexitiesSystem : IAssetInstance;

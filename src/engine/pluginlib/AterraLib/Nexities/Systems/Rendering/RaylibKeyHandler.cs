@@ -5,7 +5,7 @@ using AterraCore.Common.Attributes.Nexities;
 using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading.CrossThread;
-using AterraLib.Nexities.Systems.CrossThreadDataHolders;
+using AterraLib.Nexities.DataHolders;
 
 namespace AterraLib.Nexities.Systems.Rendering;
 // ---------------------------------------------------------------------------------------------------------------------

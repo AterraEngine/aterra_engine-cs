@@ -122,7 +122,7 @@ public class RenderThreadProcessor(
     }
     
     private void HandleQueue() {
-        if (!crossThreadTickData.TryGetOrRegister(AssetIdLib.AterraLib.TickDataHolders.TextureData, out ITextureDataHolder? textureDataHolder) || textureDataHolder.IsEmpty) return;
+        if (!crossThreadTickData.TryGetOrRegisterNonEmpty(AssetIdLib.AterraLib.TickDataHolders.TextureData, out ITextureDataHolder? textureDataHolder)) return;
 
         while (textureDataHolder.TexturesToLoad.TryDequeue(out AssetId textureToLoad)) PushRegisterTexture(textureToLoad);
         while (textureDataHolder.TexturesToUnLoad.TryDequeue(out AssetId textureToUnLoad)) PushUnRegisterTexture(textureToUnLoad);

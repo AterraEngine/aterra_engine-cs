@@ -18,14 +18,6 @@ public abstract class NexitiesSystem<TEntity> : AssetInstance, INexitiesSystem
     protected bool BufferPopulated;
 
     // -----------------------------------------------------------------------------------------------------------------
-    // Methods
-    // -----------------------------------------------------------------------------------------------------------------
-    public virtual void InvalidateCaches() {
-        EntitiesBuffer.Clear();
-        BufferPopulated = false;
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
     // Helper Methods
     // -----------------------------------------------------------------------------------------------------------------
     protected virtual IEnumerable<TEntity> GetEntities(IActiveLevel level) {

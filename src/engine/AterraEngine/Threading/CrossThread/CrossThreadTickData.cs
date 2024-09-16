@@ -50,4 +50,7 @@ public class CrossThreadTickData(ICrossThreadEventManager crossThreadEventManage
         tickDataHolder = null;
         return false;
     }
+    
+    public bool TryGetNonEmpty<T>(AssetId assetId, [NotNullWhen(true)] out T? tickDataHolder) where T : class, ITickDataHolder => TryGet(assetId, out tickDataHolder) && !tickDataHolder.IsEmpty;
+    public bool TryGetOrRegisterNonEmpty<T>(AssetId assetId, [NotNullWhen(true)] out T? tickDataHolder) where T : class, ITickDataHolder => TryGetOrRegister(assetId, out tickDataHolder) && !tickDataHolder.IsEmpty;
 }

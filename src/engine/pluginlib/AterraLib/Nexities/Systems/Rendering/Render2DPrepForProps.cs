@@ -9,7 +9,7 @@ using AterraCore.Contracts.OmniVault.Textures;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading.CrossThread;
 using AterraLib.Nexities.Components;
-using AterraLib.Nexities.Systems.CrossThreadDataHolders;
+using AterraLib.Nexities.DataHolders;
 
 namespace AterraLib.Nexities.Systems.Rendering;
 // ---------------------------------------------------------------------------------------------------------------------

@@ -7,7 +7,7 @@ using AterraCore.OmniVault.Assets;
 using Extensions;
 using System.Collections.Concurrent;
 
-namespace AterraLib.Nexities.Systems.CrossThreadDataHolders;
+namespace AterraLib.Nexities.DataHolders;
 // ---------------------------------------------------------------------------------------------------------------------
 // Support Code
 // ---------------------------------------------------------------------------------------------------------------------

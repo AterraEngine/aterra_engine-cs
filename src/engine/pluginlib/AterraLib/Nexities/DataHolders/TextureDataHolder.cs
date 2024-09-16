@@ -6,8 +6,7 @@ using AterraCore.Contracts.Threading.CrossThread.TickDataHolders;
 using AterraCore.OmniVault.Assets;
 using System.Collections.Concurrent;
 
-namespace AterraLib.Nexities.Systems.CrossThreadDataHolders;
-
+namespace AterraLib.Nexities.DataHolders;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
