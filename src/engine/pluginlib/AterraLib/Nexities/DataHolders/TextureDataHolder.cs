@@ -15,6 +15,6 @@ namespace AterraLib.Nexities.DataHolders;
 public class TextureDataHolder : AssetInstance, ITextureDataHolder {
     public ConcurrentQueue<AssetId> TexturesToLoad { get; } = new();
     public ConcurrentQueue<AssetId> TexturesToUnLoad { get; } = new();
-    
+
     public bool IsEmpty => TexturesToLoad.IsEmpty && TexturesToUnLoad.IsEmpty;
 }

@@ -11,7 +11,7 @@ public interface ICrossThreadEventManager {
     #region LevelChange
     public event LevelChangeStarted? EventLevelChangeStarted;
     public event LevelChangeCompleted? EventLevelChangeCompleted;
-    
+
     public void InvokeLevelChangeStarted(IActiveLevel oldLevel);
     public void InvokeLevelChangeCompleted(IActiveLevel newLevel);
     #endregion
@@ -19,10 +19,9 @@ public interface ICrossThreadEventManager {
     public event Action? LogicTickCleanup;
     public event Action? RenderTickCleanup;
     public event Action? LevelChangeCleanup;
-    
+
     public void InvokeLogicTickCleanup();
     public void InvokeRenderTickCleanup();
     public void InvokeLevelChangeCleanup();
     #endregion
 }
-

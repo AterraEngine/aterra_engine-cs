@@ -42,9 +42,8 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetIn
         if (!factory.TryCreate(registration, predefinedUlid ?? Ulid.NewUlid(), out instance)) return false;
 
         // Add or update directly
-        T assetInstance = instance;
-        if (!_assetInstances.TryAdd(assetInstance.InstanceId, assetInstance)) {
-            if (!_assetInstances.TryUpdate(assetInstance.InstanceId, assetInstance, assetInstance)) {
+        if (!_assetInstances.TryAdd(instance.InstanceId, instance)) {
+            if (!_assetInstances.TryUpdate(instance.InstanceId, instance, instance)) {
                 return false;
             }
         }

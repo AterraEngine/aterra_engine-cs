@@ -12,8 +12,8 @@ public interface ICrossThreadTickData {
     bool TryRegister<T>(AssetId assetId) where T : class, ITickDataHolder;
     bool TryGet<T>(AssetId assetId, [NotNullWhen(true)] out T? tickDataHolder) where T : class, ITickDataHolder;
     bool TryGetOrRegister<T>(AssetId assetId, [NotNullWhen(true)] out T? tickDataHolder) where T : class, ITickDataHolder;
-    
+
     bool TryGetNonEmpty<T>(AssetId assetId, [NotNullWhen(true)] out T? tickDataHolder) where T : class, ITickDataHolder;
     bool TryGetOrRegisterNonEmpty<T>(AssetId assetId, [NotNullWhen(true)] out T? tickDataHolder) where T : class, ITickDataHolder;
-    
+
 }

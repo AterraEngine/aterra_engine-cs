@@ -64,12 +64,12 @@ public static class StringAssetIdLib {
         #region TickDataHolders
         public static class TickDataHolders {
             private const string ThisClass = nameof(TickDataHolders);
-            
+
             public const string PlayerInputTickData = $"#{ThisSection}:{ThisClass}/{nameof(PlayerInputTickData)}";
             public const string RenderableData = $"#{ThisSection}:{ThisClass}/{nameof(RenderableData)}";
             public const string TextureData = $"#{ThisSection}:{ThisClass}/{nameof(TextureData)}";
         }
         #endregion
-        
+
     }
 }

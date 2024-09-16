@@ -5,7 +5,6 @@ using AterraCore.Common.Types.Nexities;
 using System.Collections.Concurrent;
 
 namespace AterraCore.Contracts.Threading.CrossThread.TickDataHolders;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------

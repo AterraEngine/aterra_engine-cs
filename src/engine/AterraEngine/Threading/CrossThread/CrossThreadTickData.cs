@@ -17,7 +17,7 @@ namespace AterraEngine.Threading.CrossThread;
 [Singleton<ICrossThreadTickData>]
 public class CrossThreadTickData(ICrossThreadEventManager crossThreadEventManager, IAssetInstanceAtlas instanceAtlas) : ICrossThreadTickData {
     private readonly ConcurrentDictionary<AssetId, ITickDataHolder> _tickDataHolders = new();
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -31,7 +31,7 @@ public class CrossThreadTickData(ICrossThreadEventManager crossThreadEventManage
         if (tickDataHolder is IHasLevelChangeCleanup levelChangeCleanup) crossThreadEventManager.LevelChangeCleanup += levelChangeCleanup.OnLevelChangeCleanup;
         if (tickDataHolder is IHasLogicTickCleanup logicCleanup) crossThreadEventManager.LogicTickCleanup += logicCleanup.OnLogicTickCleanup;
         if (tickDataHolder is IHasRenderTickCleanup renderCleanup) crossThreadEventManager.RenderTickCleanup += renderCleanup.OnRenderTickCleanup;
-        
+
         return true;
     }
 
@@ -47,10 +47,11 @@ public class CrossThreadTickData(ICrossThreadEventManager crossThreadEventManage
         if (TryGet(assetId, out tickDataHolder)) return true;
         if (!TryRegister<T>(assetId)) return false;
         if (TryGet(assetId, out tickDataHolder)) return true;
+
         tickDataHolder = null;
         return false;
     }
-    
+
     public bool TryGetNonEmpty<T>(AssetId assetId, [NotNullWhen(true)] out T? tickDataHolder) where T : class, ITickDataHolder => TryGet(assetId, out tickDataHolder) && !tickDataHolder.IsEmpty;
     public bool TryGetOrRegisterNonEmpty<T>(AssetId assetId, [NotNullWhen(true)] out T? tickDataHolder) where T : class, ITickDataHolder => TryGetOrRegister(assetId, out tickDataHolder) && !tickDataHolder.IsEmpty;
 }

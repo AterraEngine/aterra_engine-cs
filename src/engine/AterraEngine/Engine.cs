@@ -55,24 +55,24 @@ public class Engine(
 
         using var cts = new CancellationTokenSource();
         // Task dequeueTask = PeriodicDequeue(cts.Token);
-        
+
         // Block main thread until all sub threads have been cancelled
         WaitHandle[] waitHandles = threadingManager.GetWaitHandles();
         WaitHandle.WaitAll(waitHandles);
         Logger.Information("Child Threads have been cancelled");
-        
-        
+
+
         await cts.CancelAsync();
         // await dequeueTask; // Ensure the dequeue task has completed
 
         threadingManager.JoinThreads();// wait until all threads are done
         Logger.Information("Exiting AterraEngine");
     }
-    
+
     private readonly Stopwatch _tickStopwatch = Stopwatch.StartNew();
     private async Task PeriodicDequeue(CancellationToken ct) {
         while (!ct.IsCancellationRequested) {
-            
+
             _tickStopwatch.Stop();
             double sleepTime = 1000 - _tickStopwatch.Elapsed.TotalMilliseconds;
             if (sleepTime > 0) await Task.Delay((int)sleepTime, ct);

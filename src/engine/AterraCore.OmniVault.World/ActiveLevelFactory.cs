@@ -61,6 +61,7 @@ public class ActiveLevelFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreeFa
             if (instanceAtlas.TryGetOrCreate(assetId, out INexitiesSystem? instance))
                 systems.AddLast(instance);
         }
+
         return systems;
     }
 }

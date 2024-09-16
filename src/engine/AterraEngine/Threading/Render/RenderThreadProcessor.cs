@@ -38,13 +38,13 @@ public class RenderThreadProcessor(
     private ILogger Logger { get; } = logger.ForContext<RenderThreadProcessor>();
 
     private static Color ClearColor { get; } = new(0, 0, 0, 0);
-    
+
     private bool WhileCondition => !CancellationToken.IsCancellationRequested || !Raylib.WindowShouldClose();
-    
-    public event TickEventHandler? TickEvent2DMode;  
-    public event TickEventHandler? TickEvent3DMode;  
-    public event TickEventHandler? TickEventUiMode;  
-    public event EmptyEventHandler? TickEventClearCaches;  
+
+    public event TickEventHandler? TickEvent2DMode;
+    public event TickEventHandler? TickEvent3DMode;
+    public event TickEventHandler? TickEventUiMode;
+    public event EmptyEventHandler? TickEventClearCaches;
 
     // -----------------------------------------------------------------------------------------------------------------
     // Event Methods
@@ -56,7 +56,7 @@ public class RenderThreadProcessor(
             Offset = new Vector2(Raylib.GetScreenWidth() / 2f, Raylib.GetScreenHeight() / 2f)
         };
     }
-    
+
     public override void OnLevelChangeStarted(IActiveLevel oldLevel) {
         _endOfFrameActions.Push(() => {
             TickEvent2DMode = null;
@@ -65,21 +65,21 @@ public class RenderThreadProcessor(
             TickEventClearCaches = null;
         });
     }
-    
+
     public override void OnLevelChangeCompleted(IActiveLevel newLevel) {
         _endOfFrameActions.Push(() => {
-            RegisterTickEvents<IRender2DSystem>(ref TickEvent2DMode, newLevel.TryGetRender2DSystems, system => system.Render2DTick);
-            RegisterTickEvents<IRender3DSystem>(ref TickEvent3DMode, newLevel.TryGetRender3DSystems, system => system.Render3DTick);
-            RegisterTickEvents<IRenderUiSystem>(ref TickEventUiMode, newLevel.TryGetRenderUiSystems, system => system.RenderUITick);
-            RegisterClearCacheEvents<IRenderClearableCacheSystem>(ref TickEventClearCaches, newLevel.TryGetRenderClearableCacheSystems, system => system.RenderThreadClearCaches);
+            RegisterTickEvents<IRender2DSystem>(ref TickEvent2DMode, newLevel.TryGetRender2DSystems, callback: system => system.Render2DTick);
+            RegisterTickEvents<IRender3DSystem>(ref TickEvent3DMode, newLevel.TryGetRender3DSystems, callback: system => system.Render3DTick);
+            RegisterTickEvents<IRenderUiSystem>(ref TickEventUiMode, newLevel.TryGetRenderUiSystems, callback: system => system.RenderUITick);
+            RegisterClearCacheEvents<IRenderClearableCacheSystem>(ref TickEventClearCaches, newLevel.TryGetRenderClearableCacheSystems, callback: system => system.RenderThreadClearCaches);
         });
     }
-    
+
     public override void RegisterEventsStartup() {
         eventManager.EventClearSystemCaches += (_, _) => _endOfFrameActions.Push(() => TickEventClearCaches?.Invoke());
         eventManager.EventWindowResized += (_, _) => _endOfFrameActions.Push(OnEventWindowResized);
     }
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Run Method
     // -----------------------------------------------------------------------------------------------------------------
@@ -96,6 +96,7 @@ public class RenderThreadProcessor(
 
             while (_endOfFrameActions.TryPop(out Action? action))
                 action();
+
             crossThreadEventManager.InvokeRenderTickCleanup();
         }
 
@@ -103,15 +104,15 @@ public class RenderThreadProcessor(
         Raylib.CloseWindow();
         threadingManager.CancelThreads();
     }
-    
-    
+
+
     private void Update() {
         if (world.ActiveLevel is not { Camera2DEntity: var camera2DEntity } activeLevel) return;
 
         Raylib.BeginDrawing();
         Raylib.ClearBackground(ClearColor);
 
-        if (camera2DEntity is { Camera: var camera2D } ) {
+        if (camera2DEntity is { Camera: var camera2D }) {
             Raylib.BeginMode2D(camera2D);
             TickEvent2DMode?.Invoke(activeLevel);
             Raylib.EndMode2D();
@@ -120,7 +121,7 @@ public class RenderThreadProcessor(
         TickEventUiMode?.Invoke(activeLevel);
         Raylib.EndDrawing();
     }
-    
+
     private void HandleQueue() {
         if (!crossThreadTickData.TryGetOrRegisterNonEmpty(AssetIdLib.AterraLib.TickDataHolders.TextureData, out ITextureDataHolder? textureDataHolder)) return;
 

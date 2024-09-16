@@ -19,7 +19,6 @@ public enum CoreTags : ulong {
     DataHolder = 1 << 9
 }
 
-
 public static class CoreTagsExtensions {
     private static string[]? _strings;
     public static string[] AllCoreTags() => _strings ??= Enum.GetNames(typeof(CoreTags));

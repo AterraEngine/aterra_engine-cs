@@ -27,16 +27,16 @@ public class LogicThreadProcessor(
 
     private const int TargetTicksPerSecond = 20;// TPS
     private const double MillisecondsPerTick = 1000.0 / TargetTicksPerSecond;
-    
+
     private readonly Stopwatch _tickStopwatch = Stopwatch.StartNew();
     private readonly Stopwatch _tpsStopwatch = Stopwatch.StartNew();
     private int _ticks;
     private ILogger Logger { get; } = logger.ForContext<LogicThreadProcessor>();
 
     private bool IsRunning { get; set; } = true;
-    
-    public event TickEventHandler? TickEventLogic;  
-    public event EmptyEventHandler? TickEventClearCaches;  
+
+    public event TickEventHandler? TickEventLogic;
+    public event EmptyEventHandler? TickEventClearCaches;
 
     // -----------------------------------------------------------------------------------------------------------------
     // Event Methods
@@ -44,15 +44,15 @@ public class LogicThreadProcessor(
     public override void RegisterEventsStartup() {
         eventManager.EventTps += (_, d) => Logger.Debug("TPS: {0}", d);
     }
-    
+
     public override void OnLevelChangeStarted(IActiveLevel oldLevel) {
         TickEventLogic = null;
         TickEventClearCaches = null;
     }
-    
+
     public override void OnLevelChangeCompleted(IActiveLevel newLevel) {
-        RegisterTickEvents<ILogicSystem>(ref TickEventLogic, newLevel.TryGetLogicSystems, system => system.LogicTick);
-        RegisterClearCacheEvents<ILogicClearableCacheSystem>(ref TickEventClearCaches, newLevel.TryGetLogicClearableCacheSystems, system => system.LogicThreadClearCaches);
+        RegisterTickEvents<ILogicSystem>(ref TickEventLogic, newLevel.TryGetLogicSystems, callback: system => system.LogicTick);
+        RegisterClearCacheEvents<ILogicClearableCacheSystem>(ref TickEventClearCaches, newLevel.TryGetLogicClearableCacheSystems, callback: system => system.LogicThreadClearCaches);
     }
 
     // -----------------------------------------------------------------------------------------------------------------

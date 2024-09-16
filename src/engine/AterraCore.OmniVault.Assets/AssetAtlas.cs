@@ -27,25 +27,25 @@ public class AssetAtlas : IAssetAtlas {
 
     private readonly IAssetIdPools _assetIdPools = EngineServices.GetService<IAssetIdPools>();
     private readonly ConcurrentDictionary<CoreTags, FrozenSet<AssetId>> _combinedTaggedAssets = new();
-    
+
     // ------------------------------------------------------------------------------------------------------------- ----
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public IEnumerable<AssetId> GetAllAssetsOfCoreTag(CoreTags coreTag) {
         if (_combinedTaggedAssets.TryGetValue(coreTag, out FrozenSet<AssetId>? cached)) return cached;
-        
-        HashSet<AssetId> hashset = _assetIdPools.AssetIdHashSetPool.Get(); // Returned on cache clear
+
+        HashSet<AssetId> hashset = _assetIdPools.AssetIdHashSetPool.Get();// Returned on cache clear
         CoreTags[] allTags = CoreTagsExtensions.AllCoreTagValues();
         for (int i = allTags.Length - 1; i >= 0; i--) {
             CoreTags tag = allTags[i];
             if (!coreTag.HasFlag(tag)) continue;
-            
+
             ImmutableArray<AssetId> assets = CoreTaggedAssets[tag].Items;
             for (int j = assets.Length - 1; j >= 0; j--) {
                 hashset.Add(assets[j]);
             }
         }
-        
+
         FrozenSet<AssetId> frozenSet = hashset.ToFrozenSet();
         _combinedTaggedAssets.TryAdd(coreTag, frozenSet);
         return frozenSet;

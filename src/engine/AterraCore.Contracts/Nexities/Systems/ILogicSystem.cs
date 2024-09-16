@@ -4,10 +4,9 @@
 using AterraCore.Contracts.OmniVault.World;
 
 namespace AterraCore.Contracts.Nexities.Systems;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ILogicSystem : INexitiesSystem { 
+public interface ILogicSystem : INexitiesSystem {
     void LogicTick(IActiveLevel level);
 }

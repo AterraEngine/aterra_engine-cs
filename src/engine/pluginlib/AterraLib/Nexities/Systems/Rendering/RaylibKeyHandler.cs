@@ -26,7 +26,7 @@ public class RaylibKeyHandler(ICrossThreadTickData crossThreadTickData) : Nexiti
             if (Raylib.IsKeyPressedRepeat(key)) playerInputTickData.KeyboardKeyPressedRepeated.Push(key);
             if (Raylib.IsKeyReleased(key)) playerInputTickData.KeyboardKeyReleased.Push(key);
             if (Raylib.IsKeyDown(key)) playerInputTickData.KeyboardKeyDown.Push(key);
-            
+
         }
 
         for (int i = MouseButtons.Length - 1; i >= 0; i--) {

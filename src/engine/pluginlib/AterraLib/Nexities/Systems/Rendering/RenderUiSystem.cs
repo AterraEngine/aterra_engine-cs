@@ -8,7 +8,6 @@ using AterraCore.Contracts.OmniVault.DataCollector;
 using AterraCore.Contracts.OmniVault.World;
 
 namespace AterraLib.Nexities.Systems.Rendering;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------

@@ -109,20 +109,19 @@ public class AterraCoreWorld(
     /// <param name="oldLevel">The previous active level.</param>
     private void EmitNewActiveLevel(IActiveLevel activeLevel, IActiveLevel? oldLevel) {
         if (oldLevel is not null) crossThreadEventManager.InvokeLevelChangeStarted(oldLevel);
-        
+
         IEnumerable<AssetId> oldTextureAssetIds = oldLevel?.TextureAssetIds.ToArray() ?? [];
         IEnumerable<AssetId> newTextureAssetIds = activeLevel.TextureAssetIds.ToArray();
 
         if (crossThreadTickData.TryGetOrRegister(AssetIdLib.AterraLib.TickDataHolders.TextureData, out ITextureDataHolder? textureDataHolder)
-            && !textureDataHolder.IsEmpty) 
-        {
-            Parallel.ForEach(newTextureAssetIds.Except(oldTextureAssetIds), body: id => 
+            && !textureDataHolder.IsEmpty) {
+            Parallel.ForEach(newTextureAssetIds.Except(oldTextureAssetIds), body: id =>
                 textureDataHolder.TexturesToLoad.Enqueue(id));
-            
-            Parallel.ForEach(oldTextureAssetIds.Except(newTextureAssetIds), body: id => 
+
+            Parallel.ForEach(oldTextureAssetIds.Except(newTextureAssetIds), body: id =>
                 textureDataHolder.TexturesToUnLoad.Enqueue(id));
         }
-        
+
         crossThreadEventManager.InvokeLevelChangeCompleted(activeLevel);
     }
 }

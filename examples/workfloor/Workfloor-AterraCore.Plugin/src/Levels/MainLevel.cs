@@ -28,20 +28,20 @@ public class MainLevelSystemIds : SystemIds {
         AssetIdLib.AterraLib.SystemsLogic.PlayerController,
         AssetIdLib.AterraLib.SystemsLogic.CameraController,
         WorkfloorIdLib.SystemsLogic.LevelSwitch,
-        
+
         // "Workfloor:ApplyRandomImpulseCamera",
         AssetIdLib.AterraLib.SystemsLogic.ApplyImpulse,
         AssetIdLib.AterraLib.SystemsLogic.ApplyImpulseCamera,
-        
+
         // Render 2D
         AssetIdLib.AterraLib.SystemsRendering.Render2DPrepForProps,
         AssetIdLib.AterraLib.SystemsRendering.Render2DPrepForActors,
         AssetIdLib.AterraLib.SystemsRendering.Render2D,
         AssetIdLib.AterraLib.SystemsRendering.RaylibKeyHandler,
-        
+
         // Render UI
         AssetIdLib.AterraLib.SystemsRendering.RenderUi
-    ]; 
+    ];
 }
 
 [UsedImplicitly]

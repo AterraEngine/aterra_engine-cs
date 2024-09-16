@@ -17,7 +17,7 @@ public class EmptyLevelSystemIds : SystemIds {
         AssetIdLib.AterraLib.SystemsRendering.Render2DPrepForProps,
         AssetIdLib.AterraLib.SystemsRendering.Render2DPrepForActors,
         AssetIdLib.AterraLib.SystemsRendering.Render2D,
-        
+
         // Render UI
         AssetIdLib.AterraLib.SystemsRendering.RenderUi
     ];

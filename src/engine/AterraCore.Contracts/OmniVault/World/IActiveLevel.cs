@@ -26,7 +26,7 @@ public interface IActiveLevel {
     bool TryGetRender3DSystems([NotNullWhen(true)] out IRender3DSystem[]? systems);
     bool TryGetRenderUiSystems([NotNullWhen(true)] out IRenderUiSystem[]? systems);
     bool TryGetLogicSystems([NotNullWhen(true)] out ILogicSystem[]? systems);
-    
+
     bool TryGetRenderClearableCacheSystems([NotNullWhen(true)] out IRenderClearableCacheSystem[]? systems);
     bool TryGetLogicClearableCacheSystems([NotNullWhen(true)] out ILogicClearableCacheSystem[]? systems);
 }

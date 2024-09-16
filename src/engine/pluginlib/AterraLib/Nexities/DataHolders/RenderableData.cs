@@ -19,6 +19,7 @@ public readonly struct RenderCacheDto {
     public float Rotation { get; init; }
     public Color Tint { get; init; }
 }
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -38,7 +39,7 @@ public class RenderableData : AssetInstance, ITickDataHolder, IHasLevelChangeCle
     // -----------------------------------------------------------------------------------------------------------------
     // Method to add render cache items ensuring order
     public void AddToRenderCache(int key, RenderCacheDto dto) => _renderCache[key] = dto;
-    
+
     public RenderCacheDto[] GetOrderedRenderCache() => _renderCache.Values;
 
     public void ClearCache() {
