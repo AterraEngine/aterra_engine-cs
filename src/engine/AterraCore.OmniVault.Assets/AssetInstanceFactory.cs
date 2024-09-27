@@ -3,7 +3,6 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Attributes;
 using AterraCore.Common.Types.Nexities;
-using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.DI;
 using JetBrains.Annotations;
@@ -16,7 +15,6 @@ using System.Reflection;
 using System.Security;
 
 namespace AterraCore.OmniVault.Assets;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Support Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -28,10 +26,11 @@ using TConstructor=Func<object[], object>;
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
 [Singleton<IAssetInstanceFactory>]
-public class AssetInstanceFactory(ILogger logger, IPluginAtlas pluginAtlas) : IAssetInstanceFactory {
+public class AssetInstanceFactory(ILogger logger, IAssetAtlas assetAtlas) : IAssetInstanceFactory {
     private static readonly ArrayPool<object> ParameterPool = ArrayPool<object>.Shared;
-    private readonly FrozenDictionary<AssetId, TActionsArray> _actionsMap = AssembleParameterActions(pluginAtlas);
-    private readonly FrozenDictionary<Type, TConstructor> _constructorCache = AssembleConstructorDelegates(pluginAtlas);
+    
+    private readonly FrozenDictionary<AssetId, TActionsArray> _actionsMap = AssembleParameterActions(assetAtlas);
+    private readonly FrozenDictionary<Type, TConstructor> _constructorCache = AssembleConstructorDelegates(assetAtlas);
 
     // -----------------------------------------------------------------------------------------------------------------
     //  Methods
@@ -93,10 +92,10 @@ public class AssetInstanceFactory(ILogger logger, IPluginAtlas pluginAtlas) : IA
     // Constructor Methods
     // -----------------------------------------------------------------------------------------------------------------
     #region Special constructor methods
-    private static FrozenDictionary<AssetId, TActionsArray> AssembleParameterActions(IPluginAtlas pluginAtlas) {
+    private static FrozenDictionary<AssetId, TActionsArray> AssembleParameterActions(IAssetAtlas assetAtlas) {
         Dictionary<AssetId, TActionsArray> actionMap = new();
 
-        foreach (AssetRegistration registration in pluginAtlas.GetAssetRegistrations()) {
+        foreach ((AssetId assetId, AssetRegistration registration) in assetAtlas.AssetsById) {
             ParameterInfo[] parameters = registration.Constructor.GetParameters();
 
             var actions = new Func<object>[parameters.Length];
@@ -104,22 +103,28 @@ public class AssetInstanceFactory(ILogger logger, IPluginAtlas pluginAtlas) : IA
             // Parse the parameter-info's and apply correct behaviour
             for (int index = 0; index < parameters.Length; index++) {
                 ParameterInfo parameter = parameters[index];
-                actions[index] = parameter switch {
-                    _ when IsBasicNexitiesAsset(parameter) => () => CreateBasicNexitiesAsset(parameter),
-                    _ when IsInjectedInstanceNexitiesAsset(parameter) => () => CreateInjectedInstanceNexitiesAsset(parameter),
-                    _ => () => CreateUnknown(parameter)
-                };
+                if (IsBasicNexitiesAsset(parameter)) {
+                    actions[index] = () => CreateBasicNexitiesAsset(parameter);
+                }
+                else if (IsInjectedInstanceNexitiesAsset(parameter)) {
+                    actions[index] = () => CreateInjectedInstanceNexitiesAsset(parameter);
+                }
+                else {
+                    actions[index] = () => CreateUnknown(parameter);
+                }
             }
 
-            actionMap.Add(registration.AssetId, actions);
+            actionMap.Add(assetId, actions);
         }
 
         return actionMap.ToFrozenDictionary();
     }
-    private static FrozenDictionary<Type, TConstructor> AssembleConstructorDelegates(IPluginAtlas pluginAtlas) {
+    private static FrozenDictionary<Type, TConstructor> AssembleConstructorDelegates(IAssetAtlas assetAtlas) {
         Dictionary<Type, TConstructor> constructorCache = new();
 
-        foreach (AssetRegistration registration in pluginAtlas.GetAssetRegistrations()) {
+        foreach ((Type type, AssetId assetId) in assetAtlas.AssetsByType) {
+            if (!assetAtlas.TryGetRegistration(assetId, out AssetRegistration registration)) continue;
+
             ConstructorInfo constructorInfo = registration.Constructor;
             ParameterExpression parametersArray = Expression.Parameter(typeof(object[]), "args");
 
@@ -132,7 +137,8 @@ public class AssetInstanceFactory(ILogger logger, IPluginAtlas pluginAtlas) : IA
             NewExpression newExpression = Expression.New(constructorInfo, parameterExpressions);
             Expression<TConstructor> lambda = Expression.Lambda<TConstructor>(Expression.Convert(newExpression, typeof(object)), parametersArray);
 
-            constructorCache.Add(registration.Type, lambda.Compile());
+            constructorCache.TryAdd(type, lambda.Compile());
+            constructorCache.TryAdd(registration.Type, lambda.Compile());
         }
 
         return constructorCache.ToFrozenDictionary();

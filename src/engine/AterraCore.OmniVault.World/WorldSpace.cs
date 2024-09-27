@@ -22,14 +22,14 @@ namespace AterraCore.OmniVault.World;
 ///     This class is responsible for managing the active level and changing levels in the game.
 /// </summary>
 [UsedImplicitly]
-[Singleton<IAterraCoreWorld>]
-public class AterraCoreWorld(
+[Singleton<IWorldSpace>]
+public class WorldSpace(
     IAssetInstanceAtlas instanceAtlas,
     ILogger logger,
     IActiveLevelFactory levelFactory,
     ICrossThreadQueue crossThreadQueue,
     ICrossThreadTickData crossThreadTickData
-) : IAterraCoreWorld {
+) : IWorldSpace {
 
     /// <summary>
     ///     Represents the lock object used to synchronize access to the active level in the AterraCoreWorld class.
@@ -39,7 +39,7 @@ public class AterraCoreWorld(
     /// <summary>
     ///     Represents a Logger used for logging information and messages.
     /// </summary>
-    private ILogger Logger { get; } = logger.ForContext<AterraCoreWorld>();
+    private ILogger Logger { get; } = logger.ForContext<WorldSpace>();
 
     /// <summary>
     ///     Represents the current active level.
@@ -64,7 +64,7 @@ public class AterraCoreWorld(
                 Logger.Warning("Can't change to the same level instance: {LevelId}", levelInstanceId);
                 return false;
             }
-
+            
             INexitiesLevel? level = instanceAtlas.OfAssetId<INexitiesLevel>(levelId).FirstOrDefault();
 
             if (level == null && !instanceAtlas.TryGetOrCreateSingleton(

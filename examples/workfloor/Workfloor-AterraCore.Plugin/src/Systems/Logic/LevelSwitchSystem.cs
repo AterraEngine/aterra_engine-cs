@@ -23,13 +23,14 @@ namespace Workfloor_AterraCore.Plugin.Systems.Logic;
 [System(WorkfloorIdLib.SystemsLogic.LevelSwitch, CoreTags.LogicThread)]
 [Injectable<LevelSwitch>(ServiceLifetime.Singleton)]
 [UsedImplicitly]
-public class LevelSwitch(IAterraCoreWorld world, IAssetAtlas assetAtlas, ILogger logger, ICrossThreadTickData crossThreadTickData) : AssetInstance, INexitiesSystem {
+public class LevelSwitch(IWorldSpace world, IAssetAtlas assetAtlas, ILogger logger, ICrossThreadTickData crossThreadTickData) : AssetInstance, INexitiesSystem {
     private List<AssetId>? _levelsCache;
     private List<AssetId> Levels => _levelsCache ??= assetAtlas.GetAllAssetsOfCoreTag(CoreTags.Level).WhereNot(id => id == AssetIdLib.AterraLib.Entities.EmptyLevel).ToList();
 
     public void InvalidateCaches() {
         _levelsCache = null;
     }
+    
     public void Tick(ActiveLevel level) {
         if (!crossThreadTickData.TryGet(AssetTagLib.AterraLib.PlayerInputTickData, out ITickDataInput? playerInputTickData)) return;
 

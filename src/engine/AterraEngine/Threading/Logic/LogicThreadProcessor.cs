@@ -20,7 +20,7 @@ namespace AterraEngine.Threading.Logic;
 [Singleton<ILogicThreadProcessor>]
 public class LogicThreadProcessor(
     ILogger logger,
-    IAterraCoreWorld world,
+    IWorldSpace world,
     ILogicEventManager eventManager,
     ICrossThreadQueue crossThreadQueue,
     IThreadingManager threadingManager,

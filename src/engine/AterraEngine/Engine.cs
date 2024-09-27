@@ -4,10 +4,8 @@
 using AterraCore.Common.Attributes;
 using AterraCore.Common.Data;
 using AterraCore.Contracts;
-using AterraCore.Contracts.ConfigMancer;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading;
-using AterraLib.Contracts;
 using JetBrains.Annotations;
 using Serilog;
 
@@ -19,8 +17,7 @@ namespace AterraEngine;
 [Singleton<IEngine, Engine>]
 public class Engine(
     ILogger logger,
-    IAterraCoreWorld world,
-    IConfigAtlas configAtlas,
+    IWorldSpace world,
     IThreadingManager threadingManager
 ) : IEngine {
     private ILogger Logger { get; } = logger.ForContext<Engine>();
@@ -31,12 +28,7 @@ public class Engine(
     public async Task Run() {
         Logger.Information("Entered AterraEngine");
 
-        if (!configAtlas.GameConfigs.TryGetConfig(out IAterraLibGameConfig? aterraLibConfig)) {
-            throw new ApplicationException("Config was not setup correctly");
-        }
-
-        Logger.Information("{@c}", aterraLibConfig);
-
+        // if (!configAtlas.GameConfigs.TryGetConfig(out IAterraLibGameConfig? aterraLibConfig)) throw new ApplicationException("Config was not setup correctly");
 
         Task<bool> logicTask = threadingManager.TrySpawnLogicThreadAsync();
         Task<bool> renderTask = threadingManager.TrySpawnRenderThreadAsync();

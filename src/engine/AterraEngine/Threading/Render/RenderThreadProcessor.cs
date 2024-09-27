@@ -26,7 +26,7 @@ namespace AterraEngine.Threading.Render;
 public class RenderThreadProcessor(
     ILogger logger,
     IMainWindow mainWindow,
-    IAterraCoreWorld world,
+    IWorldSpace world,
     ITextureAtlas textureAtlas,
     ICrossThreadQueue crossThreadQueue,
     IThreadingManager threadingManager,

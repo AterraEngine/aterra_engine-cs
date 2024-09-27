@@ -31,7 +31,7 @@ public class CollectDependenciesByAttribute : IBootOperation {
 
         List<Assembly> assemblies = [
             typeof(AssetAtlas).Assembly,
-            typeof(AterraCoreWorld).Assembly,
+            typeof(WorldSpace).Assembly,
             typeof(ConfigAtlas).Assembly,
             typeof(DataCollector).Assembly,
             typeof(Engine).Assembly,
