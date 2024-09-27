@@ -26,6 +26,7 @@
         <ProjectReference Include="..\AterraCore.AssetVault\AterraCore.AssetVault.csproj" />
         <ProjectReference Include="..\AterraCore.PoolCorps\AterraCore.PoolCorps.csproj"/>
         <ProjectReference Include="..\AterraCore.ConfigMancer\AterraCore.ConfigMancer.csproj"/>
+        <ProjectReference Include="..\AterraCore.Threading\AterraCore.Threading.csproj" />
         <ProjectReference Include="..\AterraEngine\AterraEngine.csproj"/>
     </ItemGroup>
 
