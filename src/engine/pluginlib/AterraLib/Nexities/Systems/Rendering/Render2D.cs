@@ -1,7 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Attributes;
+using AterraCore.Common.Attributes.Nexities;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading.CrossThread;
 using AterraLib.Nexities.Systems.CrossThreadDataHolders;

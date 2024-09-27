@@ -4,13 +4,13 @@
 using AterraCore.Contracts.OmniVault.World.EntityTree;
 using Microsoft.Extensions.ObjectPool;
 
-namespace AterraCore.OmniVault.World.EntityTree.Pools;
+namespace AterraEngine.EntityTree.Pools;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class QueuePooledObjectPolicy(int initialCapacity) : PooledObjectPolicy<Queue<IEntityNode>> {
-    public override Queue<IEntityNode> Create() => new(initialCapacity);
-    public override bool Return(Queue<IEntityNode> obj) {
+public class FactoryStackPooledObjectPolicy(int initialCapacity) : PooledObjectPolicy<Stack<(IEntityNode ParentNode, Ulid InstanceId)>> {
+    public override Stack<(IEntityNode ParentNode, Ulid InstanceId)> Create() => new(initialCapacity);
+    public override bool Return(Stack<(IEntityNode ParentNode, Ulid InstanceId)> obj) {
         obj.Clear();
         return true;
     }

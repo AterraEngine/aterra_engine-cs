@@ -12,7 +12,7 @@ using System.Collections.Frozen;
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 
-namespace AterraCore.OmniVault.Assets;
+namespace AterraCore.AssetVault;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------

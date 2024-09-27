@@ -1,7 +1,8 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Attributes;
+using AterraCore.Common.Attributes.DI;
+using AterraCore.Common.Attributes.Nexities;
 using AterraCore.Common.Data;
 using AterraCore.Contracts.Nexities.Entities;
 using AterraCore.Contracts.Nexities.Entities.QuickHands;

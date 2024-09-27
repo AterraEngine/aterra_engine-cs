@@ -5,7 +5,7 @@ using AterraCore.Common.Types;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World.EntityTree;
 
-namespace AterraCore.OmniVault.World.EntityTree;
+namespace AterraEngine.EntityTree;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------

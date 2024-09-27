@@ -1,7 +1,7 @@
 ﻿// -----------------------------------------------------------------------------------------------------------------
 // Methods
 // -----------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Attributes;
+using AterraCore.Common.Attributes.Nexities;
 using AterraCore.Common.Types.Nexities;
 using AterraLib.Nexities.Components;
 using JetBrains.Annotations;

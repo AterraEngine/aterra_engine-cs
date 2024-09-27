@@ -21,6 +21,7 @@
 
 
     <ItemGroup>
+        <ProjectReference Include="..\..\AterraCore.AssetVault\AterraCore.AssetVault.csproj" />
         <ProjectReference Include="..\..\AterraCore.OmniVault.Textures\AterraCore.OmniVault.Textures.csproj"/>
     </ItemGroup>
 

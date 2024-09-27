@@ -2,11 +2,10 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.OmniVault.Textures;
-using AterraCore.OmniVault.Assets;
 using Raylib_cs;
 using System.Numerics;
 
-namespace AterraCore.OmniVault.Textures;
+namespace AterraCore.AssetVault.Textures;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------

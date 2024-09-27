@@ -1,8 +1,9 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.AssetVault.Textures;
 using AterraCore.Common.Attributes;
-using AterraCore.OmniVault.Textures;
+using AterraCore.Common.Attributes.Nexities;
 using JetBrains.Annotations;
 using System.Numerics;
 

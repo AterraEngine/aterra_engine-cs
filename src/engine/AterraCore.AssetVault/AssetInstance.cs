@@ -4,7 +4,7 @@
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.OmniVault.Assets;
 
-namespace AterraCore.OmniVault.Assets;
+namespace AterraCore.AssetVault;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------

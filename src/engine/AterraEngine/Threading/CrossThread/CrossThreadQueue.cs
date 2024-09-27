@@ -1,7 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Attributes;
+using AterraCore.Common.Attributes.DI;
 using AterraCore.Common.Types.Threading;
 using AterraCore.Contracts.Threading.CrossThread;
 using AterraCore.Contracts.Threading.CrossThread.Dto;

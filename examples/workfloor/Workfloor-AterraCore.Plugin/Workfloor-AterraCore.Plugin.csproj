@@ -11,8 +11,7 @@
     <ItemGroup>
         <ProjectReference Include="..\..\..\src\engine\AterraCore.Common\AterraCore.Common.csproj"/>
         <ProjectReference Include="..\..\..\src\engine\AterraCore.Contracts\AterraCore.Contracts.csproj"/>
-        <ProjectReference Include="..\..\..\src\engine\AterraCore.OmniVault.Assets\AterraCore.OmniVault.Assets.csproj"/>
-        <ProjectReference Include="..\..\..\src\engine\AterraCore.OmniVault.Textures\AterraCore.OmniVault.Textures.csproj"/>
+        <ProjectReference Include="..\..\..\src\engine\AterraCore.AssetVault\AterraCore.AssetVault.csproj" />
         <ProjectReference Include="..\..\..\src\engine\pluginlib\AterraLib\AterraLib.csproj"/>
         <ProjectReference Include="..\..\..\tools\Analyzers\AterraEngine.Analyzers\AterraEngine.Analyzers.csproj">
             <ReferenceOutputAssembly>false</ReferenceOutputAssembly>

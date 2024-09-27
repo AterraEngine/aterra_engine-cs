@@ -1,7 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Attributes;
+using AterraCore.Common.Attributes.DI;
 using AterraCore.Common.Data;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.FlexiPlug;
@@ -14,7 +14,7 @@ using Serilog;
 using System.Collections.Concurrent;
 using System.Collections.Frozen;
 
-namespace AterraCore.OmniVault.Assets;
+namespace AterraCore.AssetVault;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------

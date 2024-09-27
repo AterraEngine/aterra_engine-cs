@@ -17,9 +17,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\lib\Extensions\Extensions.csproj" />
         <ProjectReference Include="..\AterraCore.Contracts\AterraCore.Contracts.csproj"/>
+        <ProjectReference Include="..\AterraCore.DI\AterraCore.DI.csproj" />
         <ProjectReference Include="..\AterraCore.Loggers\AterraCore.Loggers.csproj"/>
-        <ProjectReference Include="..\AterraCore.OmniVault.Assets\AterraCore.OmniVault.Assets.csproj"/>
     </ItemGroup>
 
     <ItemGroup>

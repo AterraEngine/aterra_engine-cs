@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.Attributes.DI;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Tests.AterraCore.Attributes;

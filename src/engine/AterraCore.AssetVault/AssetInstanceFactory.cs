@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Attributes;
+using AterraCore.Common.Attributes.DI;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.DI;
@@ -14,7 +15,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Security;
 
-namespace AterraCore.OmniVault.Assets;
+namespace AterraCore.AssetVault;
 // ---------------------------------------------------------------------------------------------------------------------
 // Support Code
 // ---------------------------------------------------------------------------------------------------------------------

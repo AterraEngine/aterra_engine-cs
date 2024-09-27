@@ -1,13 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Attributes;
+using AterraCore.Common.Attributes.DI;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World.EntityTree;
 using JetBrains.Annotations;
 using Microsoft.Extensions.ObjectPool;
 
-namespace AterraCore.OmniVault.World.EntityTree.Pools;
+namespace AterraEngine.EntityTree.Pools;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------

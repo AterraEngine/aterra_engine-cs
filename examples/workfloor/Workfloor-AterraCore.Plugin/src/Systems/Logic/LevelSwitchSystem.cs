@@ -1,14 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Attributes;
+using AterraCore.AssetVault;
+using AterraCore.Common.Attributes.DI;
+using AterraCore.Common.Attributes.Nexities;
 using AterraCore.Common.Data;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading.CrossThread;
-using AterraCore.OmniVault.Assets;
 using AterraLib.Contracts;
 using CodeOfChaos.Extensions;
 using JetBrains.Annotations;

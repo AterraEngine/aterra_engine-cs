@@ -1,7 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Attributes;
+using AterraCore.Common.Attributes.DI;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Components;
 using AterraCore.Contracts.Nexities.Entities;
@@ -13,9 +13,8 @@ using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.OmniVault.World.EntityTree;
 using JetBrains.Annotations;
 using System.Collections.Frozen;
-using System.Collections.Immutable;
 
-namespace AterraCore.OmniVault.World;
+namespace AterraEngine;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------

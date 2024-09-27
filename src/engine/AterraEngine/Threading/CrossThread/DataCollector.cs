@@ -4,7 +4,7 @@
 using AterraCore.Contracts.OmniVault.DataCollector;
 using System.Diagnostics;
 
-namespace AterraCore.OmniVault.DataCollector;
+namespace AterraEngine.Threading.CrossThread;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------

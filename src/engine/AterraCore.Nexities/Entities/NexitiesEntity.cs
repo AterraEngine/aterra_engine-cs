@@ -1,12 +1,12 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.AssetVault;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Components;
 using AterraCore.Contracts.Nexities.Entities;
 using AterraCore.Contracts.PoolCorps;
 using AterraCore.DI;
-using AterraCore.OmniVault.Assets;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;

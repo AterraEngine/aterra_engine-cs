@@ -1,7 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Attributes;
+using AterraCore.Common.Attributes.DI;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.OmniVault.Assets;
@@ -11,7 +11,7 @@ using Raylib_cs;
 using Serilog;
 using System.Numerics;
 
-namespace AterraCore.OmniVault.Textures;
+namespace AterraCore.AssetVault.Textures;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------

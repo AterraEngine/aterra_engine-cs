@@ -23,7 +23,7 @@
         <ProjectReference Include="..\..\..\lib\Extensions\Extensions.csproj"/>
         <ProjectReference Include="..\..\AterraCore.Contracts\AterraCore.Contracts.csproj"/>
         <ProjectReference Include="..\..\AterraCore.Nexities\AterraCore.Nexities.csproj"/>
-        <ProjectReference Include="..\..\AterraCore.OmniVault.Textures\AterraCore.OmniVault.Textures.csproj"/>
+        <ProjectReference Include="..\..\AterraCore.AssetVault\AterraCore.AssetVault.csproj" />
         <ProjectReference Include="..\AterraLib.Contracts\AterraLib.Contracts.csproj"/>
     </ItemGroup>
 
