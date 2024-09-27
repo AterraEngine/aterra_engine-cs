@@ -3,7 +3,6 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Attributes;
 using AterraCore.Common.Types.Threading;
-using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.DataCollector;
 using AterraCore.Contracts.OmniVault.Textures;
@@ -36,23 +35,23 @@ public class RenderThreadProcessor(
     ILogicEventManager logicEventManager,
     IAssetInstanceAtlas instanceAtlas,
     ICrossThreadTickData crossThreadTickData
+    
 ) : IRenderThreadProcessor {
     private readonly Stack<Action> _endOfFrameActions = [];
     private ILogger Logger { get; } = logger.ForContext<RenderThreadProcessor>();
 
     private static Color ClearColor { get; } = new(0, 0, 0, 0);
-
+    public CancellationToken CancellationToken { get; set; }
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    private bool WhileCondition => !CancellationToken.IsCancellationRequested || !Raylib.WindowShouldClose();
-    public CancellationToken CancellationToken { get; set; }
     public void Run() {
         RegisterEvents();
         mainWindow.Init();
 
         // Window is actually running now
-        while (WhileCondition) {
+        while (!Raylib.WindowShouldClose()) {
             if (Raylib.IsWindowResized()) eventManager.InvokeWindowResized();
             logicEventManager.InvokeUpdateFps(Raylib.GetFPS());
             Update();
