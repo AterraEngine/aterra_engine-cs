@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.Common.Attributes.AssetVault;
 using AterraCore.Common.Types.Nexities;
 
 namespace Tests.AterraCore.Attributes;

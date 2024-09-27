@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Attributes;
+using AterraCore.Common.Attributes.AssetVault;
 using AterraCore.Common.Attributes.Nexities;
 using AterraCore.Common.ConfigFiles;
 using AterraCore.Common.Types.Nexities;
