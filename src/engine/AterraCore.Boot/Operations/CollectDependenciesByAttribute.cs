@@ -24,11 +24,12 @@ public class CollectDependenciesByAttribute : IBootOperation {
     public void Run(IBootComponents components) {
         Logger.Debug("Entered Collection of Dependencies");
 
+        AssignFromType<AssetVault.IAssemblyEntry>();
         AssignFromType<ConfigMancer.IAssemblyEntry>();
         AssignFromType<FlexiPlug.IAssemblyEntry>();
-        AssignFromType<AssetVault.IAssemblyEntry>();
         AssignFromType<PoolCorps.IAssemblyEntry>();
         AssignFromType<Threading.IAssemblyEntry>();
+        
         AssignFromType<AterraEngine.IAssemblyEntry>();
 
         IEnumerable<ServiceDescriptor> dependencies = _assemblies
