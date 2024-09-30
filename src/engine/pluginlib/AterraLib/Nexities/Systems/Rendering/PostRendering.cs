@@ -3,36 +3,20 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Attributes.Nexities;
 using AterraCore.Contracts.OmniVault.World;
-using AterraCore.Contracts.Threading.CrossThread;
 using AterraCore.Contracts.Threading2.CrossData;
 using AterraCore.Contracts.Threading2.CrossData.Holders;
-using AterraLib.Nexities.Systems.CrossThreadDataHolders;
 
 namespace AterraLib.Nexities.Systems.Rendering;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[System(StringAssetIdLib.AterraLib.SystemsRendering.Render2D, CoreTags.RenderThread)]
+[System(StringAssetIdLib.AterraLib.SystemsRendering.PostRendering, CoreTags.RenderThread)]
 [UsedImplicitly]
-public class Render2D(ICrossThreadTickData crossThreadTickData, ICrossThreadDataAtlas crossThreadDataAtlas) : NexitiesSystem {
+public class PostRendering(ICrossThreadDataAtlas crossThreadDataAtlas) : NexitiesSystem {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public override void InvalidateCaches() {
-        base.InvalidateCaches();
-
-        if (!crossThreadTickData.TryGet(AssetTagLib.AterraLib.RenderableData, out RenderableData? renderableDataDto)) return;
-
-        renderableDataDto.ClearCache();// necessary to get the correct textures later on
-    }
-
     public override void Tick(ActiveLevel level) {
-        if (!crossThreadTickData.TryGet(AssetTagLib.AterraLib.RenderableData, out RenderableData? renderableDataDto)) return;
-
-        foreach (RenderCacheDto dto in renderableDataDto.GetOrderedRenderCache().AsSpan()) {
-            Raylib.DrawTexturePro(dto.Texture, dto.Source, dto.Dest, dto.Origin, dto.Rotation, dto.Tint);
-        }
-        
         if (!crossThreadDataAtlas.TryGetOrCreateDataCollector(out IDataCollector? dataCollector)) return;
         dataCollector.Fps = Raylib.GetFPS();
     }

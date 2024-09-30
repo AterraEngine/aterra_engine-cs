@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.AssetVault;
 using AterraCore.Contracts.Threading.CrossThread;
 using Extensions;
 using System.Collections.Concurrent;
@@ -21,7 +22,7 @@ public readonly struct RenderCacheDto {
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class RenderableData : ITickDataHolder {
+public class RenderableData : AssetInstance, ITickDataHolder {
     private readonly ConcurrentSortedDictionary<int, RenderCacheDto> _renderCache = new();
     public ConcurrentDictionary<AssetId, (Vector2 Size, Texture2D texture2D)> TextureCache { get; } = new();
 

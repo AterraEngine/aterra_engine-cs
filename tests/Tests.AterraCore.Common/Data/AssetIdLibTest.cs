@@ -42,6 +42,6 @@ public class AssetIdLibTest {
     [Fact]
     public void TestSystemsRenderingConstants() {
         Assert.Equal("AterraLib:SystemsRendering/Render2D", StringAssetIdLib.AterraLib.SystemsRendering.Render2D);
-        Assert.Equal("AterraLib:SystemsRendering/RenderHud", StringAssetIdLib.AterraLib.SystemsRendering.RenderHud);
+        Assert.Equal("AterraLib:SystemsRendering/RenderHud", StringAssetIdLib.AterraLib.SystemsRendering.RenderUi);
     }
 }

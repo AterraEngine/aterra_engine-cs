@@ -1,22 +1,22 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Types.Nexities;
-using AterraCore.Contracts.Threading2.Cross.Queue;
+using AterraCore.Contracts.Threading;
+using Serilog;
 
-namespace AterraCore.Threading.Cross.Queue;
+namespace AterraCore.Threading.Threads;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class CrossThreadQueueHolder : ICrossThreadQueueHolder {
-    public AssetTag AssetTag { get; set; }
-    public IQueueHolder? QueueHolder { get; set; }
+public abstract class AbstractThreadProcessor : IThreadProcessor {
+    protected Stack<Action> EndOfTickActions { get; } = [];
+    protected abstract ILogger Logger { get; }
+    
+    public CancellationToken CancellationToken { get; set; }
 
     // -----------------------------------------------------------------------------------------------------------------
-    // Methods
+    // Methods 
     // -----------------------------------------------------------------------------------------------------------------
-    public void Clear() {
-        AssetTag = default;
-        QueueHolder = null;
-    }
+    public abstract void Run();
 }

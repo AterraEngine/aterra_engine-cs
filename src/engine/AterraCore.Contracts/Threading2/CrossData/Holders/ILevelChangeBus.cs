@@ -1,11 +1,18 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraCore.Contracts.OmniVault.DataCollector;
+namespace AterraCore.Contracts.Threading2.CrossData.Holders;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
+public interface ILevelChangeBus : ICrossThreadData {
+    public LevelChangeState LevelChangeState { get; set; }
+}
 
-public interface IDataCollectorFactory {
-    IDataCollector Create();
+public enum LevelChangeState {
+    Normal = 0,
+    OldLevelUnloaded = 1,
+    NewLevelLoaded = 2,
+    Finished = 3,
 }

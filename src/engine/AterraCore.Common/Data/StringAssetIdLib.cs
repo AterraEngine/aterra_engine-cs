@@ -6,6 +6,20 @@ namespace AterraCore.Common.Data;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public static class StringAssetIdLib {
+    public static class AterraCore {
+        private const string ThisSection = nameof(AterraCore);
+        
+        #region CrossThreadDataHolders
+        public static class CrossThreadDataHolders {
+            private const string ThisClass = nameof(CrossThreadDataHolders);
+            
+            public const string DataCollector = $"{ThisSection}:{ThisClass}/{nameof(DataCollector)}";
+            public const string TextureBus = $"{ThisSection}:{ThisClass}/{nameof(TextureBus)}";
+            public const string LevelChangeBus = $"{ThisSection}:{ThisClass}/{nameof(LevelChangeBus)}";
+        }
+        #endregion
+    }
+    
     public static class AterraLib {
         private const string ThisSection = nameof(AterraLib);
         public const string ConfigMancer = $"{ThisSection}:{nameof(ConfigMancer)}";
@@ -47,6 +61,7 @@ public static class StringAssetIdLib {
             public const string ApplyImpulseCamera = $"{ThisSection}:{ThisClass}/{nameof(ApplyImpulseCamera)}";
             public const string PlayerController = $"{ThisSection}:{ThisClass}/{nameof(PlayerController)}";
             public const string CameraController = $"{ThisSection}:{ThisClass}/{nameof(CameraController)}";
+            public const string PostLogicProcessing = $"{ThisSection}:{ThisClass}/{nameof(PostLogicProcessing)}";
         }
         #endregion
         #region Systems - Rendering
@@ -54,10 +69,16 @@ public static class StringAssetIdLib {
             private const string ThisClass = nameof(SystemsRendering);
 
             public const string Render2D = $"{ThisSection}:{ThisClass}/{nameof(Render2D)}";
+            public const string PostRendering = $"{ThisSection}:{ThisClass}/{nameof(PostRendering)}";
             public const string Render2DPrepForProps = $"{ThisSection}:{ThisClass}/{nameof(Render2DPrepForProps)}";
             public const string Render2DPrepForActors = $"{ThisSection}:{ThisClass}/{nameof(Render2DPrepForActors)}";
-            public const string RenderHud = $"{ThisSection}:{ThisClass}/{nameof(RenderHud)}";
+            public const string RenderUi = $"{ThisSection}:{ThisClass}/{nameof(RenderUi)}";
             public const string RaylibKeyHandler = $"{ThisSection}:{ThisClass}/{nameof(RaylibKeyHandler)}";
+        }
+        #endregion
+        #region CrossThreadDataHolders
+        public static class CrossThreadDataHolders {
+            private const string ThisClass = nameof(CrossThreadDataHolders);
         }
         #endregion
     }

@@ -15,7 +15,8 @@ public enum CoreTags : ulong {
     LogicThread = 1 << 5,
     Texture = 1 << 6,
     Singleton = 1 << 7,
-    Level = 1 << 8
+    Level = 1 << 8,
+    CrossThreadDataHolder = 1 << 9
         
 }
 

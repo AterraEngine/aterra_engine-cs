@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.AssetVault;
 using AterraLib.Contracts;
 using System.Collections.Concurrent;
 
@@ -8,7 +9,7 @@ namespace AterraLib.Nexities.Systems.CrossThreadDataHolders;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class TickDataInput : ITickDataInput {
+public class TickDataInput : AssetInstance, ITickDataInput {
     public ConcurrentStack<KeyboardKey> KeyboardKeyPressed { get; } = [];
     public ConcurrentStack<KeyboardKey> KeyboardKeyPressedRepeated { get; } = [];
     public ConcurrentStack<KeyboardKey> KeyboardKeyReleased { get; } = [];

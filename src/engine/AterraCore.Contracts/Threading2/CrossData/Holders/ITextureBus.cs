@@ -2,17 +2,16 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Types.Nexities;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Concurrent;
 
-namespace AterraCore.Contracts.Threading2.Cross.Queue;
+namespace AterraCore.Contracts.Threading2.CrossData.Holders;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ICrossThreadQueue {
-    void EnqueueToRenderThread(AssetTag assetTag, IQueueHolder? queueHolder = null) ;
-    bool TryDequeueFromRenderThread(out AssetTag assetTag, [NotNullWhen(true)] out IQueueHolder? queueHolder) ;
+public interface ITextureBus : ICrossThreadData {
+    ConcurrentQueue<AssetId> TexturesToLoad { get; }
+    ConcurrentQueue<AssetId> TexturesToUnLoad { get; }
     
-    void EnqueueToLogicThread(AssetTag assetTag, IQueueHolder? queueHolder = null) ;
-    bool TryDequeueFromLogicThread(out AssetTag assetTag, [NotNullWhen(true)] out IQueueHolder? queueHolder) ;
+    bool IsEmpty { get; }
 }

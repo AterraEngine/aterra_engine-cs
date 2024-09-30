@@ -7,6 +7,5 @@ namespace AterraCore.Contracts.Threading;
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IThreadProcessor {
     CancellationToken CancellationToken { get; set; }
-    void RegisterEvents();
     void Run();
 }

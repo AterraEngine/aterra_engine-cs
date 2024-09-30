@@ -2,17 +2,18 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Attributes.DI;
+using AterraCore.Common.Types.Nexities;
 using AterraCore.Common.Types.Threading;
-using AterraCore.Contracts.OmniVault.Assets;
-using AterraCore.Contracts.OmniVault.DataCollector;
+using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.Textures;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Renderer;
 using AterraCore.Contracts.Threading;
 using AterraCore.Contracts.Threading.CrossThread;
-using AterraCore.Contracts.Threading.CrossThread.Dto;
 using AterraCore.Contracts.Threading.Logic;
 using AterraCore.Contracts.Threading.Rendering;
+using AterraCore.Contracts.Threading2.CrossData;
+using AterraCore.Contracts.Threading2.CrossData.Holders;
 using JetBrains.Annotations;
 using Serilog;
 using System.Numerics;
@@ -28,16 +29,15 @@ public class RenderThreadProcessor(
     IMainWindow mainWindow,
     IWorldSpace world,
     ITextureAtlas textureAtlas,
-    ICrossThreadQueue crossThreadQueue,
     IThreadingManager threadingManager,
-    IDataCollector dataCollector,
     IRenderEventManager eventManager,
     ILogicEventManager logicEventManager,
-    IAssetInstanceAtlas instanceAtlas,
-    ICrossThreadTickData crossThreadTickData
-    
+    ICrossThreadTickData crossThreadTickData,
+    ICrossThreadDataAtlas crossThreadDataAtlas
 ) : IRenderThreadProcessor {
     private readonly Stack<Action> _endOfFrameActions = [];
+    private bool _invokeCacheClear;
+    
     private ILogger Logger { get; } = logger.ForContext<RenderThreadProcessor>();
 
     private static Color ClearColor { get; } = new(0, 0, 0, 0);
@@ -55,11 +55,16 @@ public class RenderThreadProcessor(
             if (Raylib.IsWindowResized()) eventManager.InvokeWindowResized();
             logicEventManager.InvokeUpdateFps(Raylib.GetFPS());
             Update();
-            HandleQueue();
+            HandleCrossThreadData();
 
             while (_endOfFrameActions.TryPop(out Action? action))
                 action();
-
+            
+            if (_invokeCacheClear) {
+                _invokeCacheClear = false;
+                eventManager.InvokeClearSystemCaches();
+            }
+            
             crossThreadTickData.ClearOnRenderFrame();
         }
 
@@ -76,8 +81,8 @@ public class RenderThreadProcessor(
     private void Update() {
         if (world.ActiveLevel is not {
                 Camera2DEntity: var camera2DEntity,
-                RenderSystemsReversed: var renderSystemsReversed
-                // UiSystems: var uiSystems
+                RenderSystemsReversed: var renderSystemsReversed,
+                UiSystems: var uiSystems
             } activeLevel) return;
 
         Raylib.BeginDrawing();
@@ -93,56 +98,39 @@ public class RenderThreadProcessor(
             Raylib.EndMode2D();
         }
 
-        DrawUi(activeLevel);
+        foreach (INexitiesSystem uiSystem in uiSystems) {
+            uiSystem.Tick(activeLevel);
+        }
+        
         Raylib.EndDrawing();
     }
 
-    private void DrawUi(ActiveLevel level) {
-        Raylib.DrawRectangle(0, 0, 250, 50 * 9, new Color(0, 0, 0, 127));
-
-        Raylib.DrawText($"   FPS : {dataCollector.Fps}", 0, 0, 32, Color.LightGray);
-        Raylib.DrawText($"minFPS : {dataCollector.FpsMin}", 0, 50, 32, Color.LightGray);
-        Raylib.DrawText($"maxFPS : {dataCollector.FpsMax}", 0, 100, 32, Color.LightGray);
-        Raylib.DrawText($"avgFPS : {dataCollector.FpsAverageString}", 0, 150, 32, Color.LightGray);
-        Raylib.DrawText($"   TPS : {dataCollector.Tps}", 0, 200, 32, Color.LightGray);
-        Raylib.DrawText($"avgTPS : {dataCollector.TpsAverageString}", 0, 250, 32, Color.LightGray);
-        Raylib.DrawText($" DUCKS : {level.RawLevelData.ChildrenIDs.Count}", 0, 300, 32, Color.LightGray);
-        Raylib.DrawText($"entGlb : {instanceAtlas.TotalCount}", 0, 350, 32, Color.LightGray);
-        Raylib.DrawText($" Asset : {level.RawLevelData.AssetId}", 0, 400, 12, Color.LightGray);
-        Raylib.DrawText($"  Inst : {level.RawLevelData.InstanceId}", 0, 425, 12, Color.LightGray);
-    }
-
-    private void HandleQueue() {
-        while (crossThreadQueue.TextureRegistrarQueue.TryDequeue(out TextureRegistrar? textureRecord)) {
-            if (textureRecord.UnRegister) PushUnRegisterTexture(textureRecord);
-            else PushRegisterTexture(textureRecord);
+    private void HandleCrossThreadData() {
+        if (crossThreadDataAtlas.TryGetOrCreateTextureBus(out ITextureBus? textureBus) && !textureBus.IsEmpty) {
+            while (textureBus.TexturesToLoad.TryDequeue(out AssetId id)) PushRegisterTexture(id);
+            while (textureBus.TexturesToUnLoad.TryDequeue(out AssetId id)) PushUnRegisterTexture(id);
         }
-
-        if (crossThreadQueue.EntireQueueIsEmpty) return;
-
-        while (crossThreadQueue.TryDequeue(QueueKey.LogicToRender, out Action? action))
-            _endOfFrameActions.Push(action);
-        while (crossThreadQueue.TryDequeue(QueueKey.MainToRender, out Action? action))
-            _endOfFrameActions.Push(action);
+        
+        crossThreadDataAtlas.Try
     }
 
-    private void PushRegisterTexture(TextureRegistrar textureRecord) {
+    private void PushRegisterTexture(AssetId id) {
         _endOfFrameActions.Push(RegisterTexture);
         return;
 
         void RegisterTexture() {
-            textureAtlas.TryRegisterTexture(textureRecord.TextureAssetId);
-            eventManager.InvokeClearSystemCaches();
+            textureAtlas.TryRegisterTexture(id);
+            _invokeCacheClear = true;
         }
     }
 
-    private void PushUnRegisterTexture(TextureRegistrar textureRecord) {
+    private void PushUnRegisterTexture(AssetId id) {
         _endOfFrameActions.Push(UnregisterTexture);
         return;
 
         void UnregisterTexture() {
-            textureAtlas.TryUnRegisterTexture(textureRecord.TextureAssetId);
-            eventManager.InvokeClearSystemCaches();
+            textureAtlas.TryUnRegisterTexture(id);
+            _invokeCacheClear = true;
         }
     }
 

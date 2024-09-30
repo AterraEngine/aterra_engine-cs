@@ -7,7 +7,8 @@ using AterraCore.Contracts.Nexities.Levels;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading.CrossThread;
-using AterraCore.Contracts.Threading.CrossThread.Dto;
+using AterraCore.Contracts.Threading2.CrossData;
+using AterraCore.Contracts.Threading2.CrossData.Holders;
 using Extensions;
 using JetBrains.Annotations;
 using Serilog;
@@ -27,8 +28,8 @@ public class WorldSpace(
     IAssetInstanceAtlas instanceAtlas,
     ILogger logger,
     IActiveLevelFactory levelFactory,
-    ICrossThreadQueue crossThreadQueue,
-    ICrossThreadTickData crossThreadTickData
+    ICrossThreadTickData crossThreadTickData,
+    ICrossThreadDataAtlas crossThreadDataAtlas
 ) : IWorldSpace {
 
     /// <summary>
@@ -107,15 +108,12 @@ public class WorldSpace(
     /// <param name="activeLevel">The new active level.</param>
     /// <param name="oldLevel">The previous active level.</param>
     private void EmitActiveLevel(ActiveLevel? activeLevel, ActiveLevel? oldLevel) {
+        if (!crossThreadDataAtlas.TryGetOrCreateTextureBus(out ITextureBus? textureBus)) return;
+        
         IEnumerable<AssetId> oldTextureAssetIds = oldLevel?.TextureAssetIds.ToArray() ?? [];
         IEnumerable<AssetId> newTextureAssetIds = activeLevel?.TextureAssetIds.ToArray() ?? [];
-
-        Parallel.ForEach(oldTextureAssetIds.Except(newTextureAssetIds), body: id => {
-            crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar(id, true));
-        });
-
-        Parallel.ForEach(newTextureAssetIds.Except(oldTextureAssetIds), body: id => {
-            crossThreadQueue.TextureRegistrarQueue.Enqueue(new TextureRegistrar(id, false));
-        });
+        
+        Parallel.ForEach(oldTextureAssetIds.Except(newTextureAssetIds), body: id => textureBus.TexturesToUnLoad.Enqueue(id));
+        Parallel.ForEach(newTextureAssetIds.Except(oldTextureAssetIds), body: id => textureBus.TexturesToLoad.Enqueue(id));
     }
 }

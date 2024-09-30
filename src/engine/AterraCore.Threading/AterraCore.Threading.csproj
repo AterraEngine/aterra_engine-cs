@@ -7,12 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Cross\Data\Holders\" />
       <Folder Include="Threads\Logic\" />
       <Folder Include="Threads\Render\" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\AterraCore.AssetVault\AterraCore.AssetVault.csproj" />
       <ProjectReference Include="..\AterraCore.Contracts\AterraCore.Contracts.csproj" />
       <ProjectReference Include="..\AterraCore.DI\AterraCore.DI.csproj" />
     </ItemGroup>

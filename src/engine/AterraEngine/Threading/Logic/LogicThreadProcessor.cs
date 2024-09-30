@@ -2,7 +2,6 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Attributes.DI;
-using AterraCore.Common.Types.Threading;
 using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading;
@@ -22,7 +21,6 @@ public class LogicThreadProcessor(
     ILogger logger,
     IWorldSpace world,
     ILogicEventManager eventManager,
-    ICrossThreadQueue crossThreadQueue,
     IThreadingManager threadingManager,
     ICrossThreadTickData crossThreadTickData
 ) : ILogicThreadProcessor {
@@ -34,27 +32,21 @@ public class LogicThreadProcessor(
 
     private readonly Stopwatch _tickStopwatch = Stopwatch.StartNew();
     private readonly Stopwatch _tpsStopwatch = Stopwatch.StartNew();
-    private int _ticks;
     private ILogger Logger { get; } = logger.ForContext<LogicThreadProcessor>();
 
     private bool IsRunning { get; set; } = true;
     public CancellationToken CancellationToken { get; set; }
+    
+    public int TPS { get; private set; }
+    private int _ticks;
 
     // -----------------------------------------------------------------------------------------------------------------
     // Event Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void RegisterEvents() {
+    private void RegisterEvents() {
         eventManager.EventChangeActiveLevel += (_, args) => _endOfTickActions.Push(() => world.TryChangeActiveLevel(args.NewLevelId));
-
         eventManager.EventTps += (_, d) => Logger.Debug("TPS: {0}", d);
-        // eventManager.EventActualTps += (_, _) => Logger.Debug("Assets: {0}", EngineServices.GetService<IAssetInstanceAtlas>().TotalCount);
     }
-
-    private void HandleQueue() {
-        while (crossThreadQueue.TryDequeue(QueueKey.MainToLogic, out Action? action)) action.Invoke();
-        while (crossThreadQueue.TryDequeue(QueueKey.RenderToLogic, out Action? action)) action.Invoke();
-    }
-
     // -----------------------------------------------------------------------------------------------------------------
     // Run Method
     // -----------------------------------------------------------------------------------------------------------------
@@ -71,7 +63,6 @@ public class LogicThreadProcessor(
 
                 // Call UPDATE LOOP
                 Update();
-                HandleQueue();
                 RunEndOfTick();
 
                 // Wait until the end of the Tick cycle
@@ -123,6 +114,7 @@ public class LogicThreadProcessor(
         if (_tpsStopwatch.ElapsedMilliseconds < 1000) return;
 
         eventManager.InvokeUpdateTps(_ticks);
+        TPS = _ticks;
         _ticks = 0;
         _tpsStopwatch.Restart();
     }
