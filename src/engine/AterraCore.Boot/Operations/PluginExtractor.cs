@@ -3,7 +3,6 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Attributes.AssetVault;
 using AterraCore.Common.Attributes.DI;
-using AterraCore.Common.Attributes.Nexities;
 using AterraCore.Contracts.Boot.Logic.PluginLoading.Dto;
 using AterraCore.Contracts.Boot.Operations;
 using AterraCore.Contracts.OmniVault.Assets;

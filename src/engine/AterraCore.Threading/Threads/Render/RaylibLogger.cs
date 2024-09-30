@@ -8,7 +8,7 @@ using Serilog.Core;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-namespace AterraEngine.Threading.Render;
+namespace AterraCore.Threading.Threads.Render;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------

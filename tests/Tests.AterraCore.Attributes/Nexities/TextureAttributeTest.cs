@@ -2,7 +2,6 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Attributes.AssetVault;
-using AterraCore.Common.Attributes.Nexities;
 using AterraCore.Common.Data;
 using AterraCore.Common.Types.Nexities;
 using Microsoft.Extensions.DependencyInjection;

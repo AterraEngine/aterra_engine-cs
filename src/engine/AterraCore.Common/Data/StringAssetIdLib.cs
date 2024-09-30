@@ -23,6 +23,15 @@ public static class StringAssetIdLib {
     public static class AterraLib {
         private const string ThisSection = nameof(AterraLib);
         public const string ConfigMancer = $"{ThisSection}:{nameof(ConfigMancer)}";
+        
+        #region CrossThreadDataHolders
+        public static class CrossThreadDataHolders {
+            private const string ThisClass = nameof(CrossThreadDataHolders);
+            
+            public const string TickDataInput = $"{ThisSection}:{ThisClass}/{nameof(TickDataInput)}";
+            public const string RenderableData = $"{ThisSection}:{ThisClass}/{nameof(RenderableData)}";
+        }
+        #endregion
 
         #region Components
         public static class Components {
@@ -74,11 +83,6 @@ public static class StringAssetIdLib {
             public const string Render2DPrepForActors = $"{ThisSection}:{ThisClass}/{nameof(Render2DPrepForActors)}";
             public const string RenderUi = $"{ThisSection}:{ThisClass}/{nameof(RenderUi)}";
             public const string RaylibKeyHandler = $"{ThisSection}:{ThisClass}/{nameof(RaylibKeyHandler)}";
-        }
-        #endregion
-        #region CrossThreadDataHolders
-        public static class CrossThreadDataHolders {
-            private const string ThisClass = nameof(CrossThreadDataHolders);
         }
         #endregion
     }

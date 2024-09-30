@@ -8,4 +8,5 @@ namespace AterraCore.Contracts.Threading;
 public interface IThreadProcessor {
     CancellationToken CancellationToken { get; set; }
     void Run();
+    void AddToEndOfTick(Action action);
 }

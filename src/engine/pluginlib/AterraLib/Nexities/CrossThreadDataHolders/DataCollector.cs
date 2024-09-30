@@ -3,7 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.AssetVault;
 using AterraCore.Common.Attributes.AssetVault;
-using AterraCore.Contracts.Threading2.CrossData.Holders;
+using AterraCore.Contracts.Threading.CrossData.Holders;
 using System.Diagnostics;
 
 namespace AterraLib.Nexities.CrossThreadDataHolders;
@@ -35,7 +35,7 @@ public class DataCollector : AssetInstance, IDataCollector {
     #region FpsAverageWatch
     private readonly HashSet<int> _fpsHistory = new(MaxHistorySize);
     private readonly Stopwatch _fpsAverageWatch = Stopwatch.StartNew();
-    internal void UpdateFpsAverage(int fps) {
+    private void UpdateFpsAverage(int fps) {
         _fpsHistory.Add(fps);
 
         if (_fpsAverageWatch.ElapsedMilliseconds < AverageLengthMs) return;

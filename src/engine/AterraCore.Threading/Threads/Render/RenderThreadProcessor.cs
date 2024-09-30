@@ -3,79 +3,61 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Attributes.DI;
 using AterraCore.Common.Types.Nexities;
-using AterraCore.Common.Types.Threading;
 using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.Textures;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Renderer;
 using AterraCore.Contracts.Threading;
-using AterraCore.Contracts.Threading.CrossThread;
-using AterraCore.Contracts.Threading.Logic;
+using AterraCore.Contracts.Threading.CrossData;
+using AterraCore.Contracts.Threading.CrossData.Holders;
 using AterraCore.Contracts.Threading.Rendering;
-using AterraCore.Contracts.Threading2.CrossData;
-using AterraCore.Contracts.Threading2.CrossData.Holders;
 using JetBrains.Annotations;
-using Serilog;
 using System.Numerics;
 
-namespace AterraEngine.Threading.Render;
+namespace AterraCore.Threading.Threads.Render;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
 [Singleton<IRenderThreadProcessor>]
 public class RenderThreadProcessor(
-    ILogger logger,
     IMainWindow mainWindow,
     IWorldSpace world,
     ITextureAtlas textureAtlas,
     IThreadingManager threadingManager,
-    IRenderEventManager eventManager,
-    ILogicEventManager logicEventManager,
-    ICrossThreadTickData crossThreadTickData,
     ICrossThreadDataAtlas crossThreadDataAtlas
-) : IRenderThreadProcessor {
-    private readonly Stack<Action> _endOfFrameActions = [];
+) : AbstractThreadProcessor<RenderThreadProcessor>, IRenderThreadProcessor {
     private bool _invokeCacheClear;
-    
-    private ILogger Logger { get; } = logger.ForContext<RenderThreadProcessor>();
 
     private static Color ClearColor { get; } = new(0, 0, 0, 0);
-    public CancellationToken CancellationToken { get; set; }
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void Run() {
-        RegisterEvents();
+    public override void Run() {
         mainWindow.Init();
 
         // Window is actually running now
         while (!Raylib.WindowShouldClose()) {
-            if (Raylib.IsWindowResized()) eventManager.InvokeWindowResized();
-            logicEventManager.InvokeUpdateFps(Raylib.GetFPS());
+            if (Raylib.IsWindowResized()) AddToEndOfTick(OnEventManagerOnEventWindowResized);
+            crossThreadDataAtlas.DataCollector.Fps = Raylib.GetFPS();
+            
             Update();
             HandleCrossThreadData();
 
-            while (_endOfFrameActions.TryPop(out Action? action))
+            while (EndOfTickActions.TryPop(out Action? action))
                 action();
             
             if (_invokeCacheClear) {
                 _invokeCacheClear = false;
-                eventManager.InvokeClearSystemCaches();
+                OnEventManagerOnEventClearSystemCaches();
             }
-            
-            crossThreadTickData.ClearOnRenderFrame();
+            crossThreadDataAtlas.CleanupRenderTick(); // Clear for the end of the tick
         }
 
         Logger.Information("Render Thread Closing");
         Raylib.CloseWindow();
         threadingManager.CancelThreads();
-    }
-
-    public void RegisterEvents() {
-        eventManager.EventClearSystemCaches += (_, _) => _endOfFrameActions.Push(OnEventManagerOnEventClearSystemCaches);
-        eventManager.EventWindowResized += (_, _) => _endOfFrameActions.Push(OnEventManagerOnEventWindowResized);
     }
     
     private void Update() {
@@ -106,16 +88,20 @@ public class RenderThreadProcessor(
     }
 
     private void HandleCrossThreadData() {
-        if (crossThreadDataAtlas.TryGetOrCreateTextureBus(out ITextureBus? textureBus) && !textureBus.IsEmpty) {
+        ITextureBus textureBus = crossThreadDataAtlas.TextureBus;
+        if (!textureBus.IsEmpty) {
             while (textureBus.TexturesToLoad.TryDequeue(out AssetId id)) PushRegisterTexture(id);
             while (textureBus.TexturesToUnLoad.TryDequeue(out AssetId id)) PushUnRegisterTexture(id);
         }
         
-        crossThreadDataAtlas.Try
+        if (crossThreadDataAtlas.LevelChangeBus.IsLevelChangePending) {
+            AddToEndOfTick(() => crossThreadDataAtlas.LevelChangeBus.IsLevelChangePending = false);
+            _invokeCacheClear = true;
+        }
     }
 
     private void PushRegisterTexture(AssetId id) {
-        _endOfFrameActions.Push(RegisterTexture);
+        AddToEndOfTick(RegisterTexture);
         return;
 
         void RegisterTexture() {
@@ -125,7 +111,7 @@ public class RenderThreadProcessor(
     }
 
     private void PushUnRegisterTexture(AssetId id) {
-        _endOfFrameActions.Push(UnregisterTexture);
+        AddToEndOfTick(UnregisterTexture);
         return;
 
         void UnregisterTexture() {

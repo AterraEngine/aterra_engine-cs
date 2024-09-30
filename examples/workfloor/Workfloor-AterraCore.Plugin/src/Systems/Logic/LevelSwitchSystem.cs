@@ -9,7 +9,8 @@ using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World;
-using AterraCore.Contracts.Threading.CrossThread;
+using AterraCore.Contracts.Threading.CrossData;
+using AterraCore.Contracts.Threading.Logic;
 using AterraLib.Contracts;
 using CodeOfChaos.Extensions;
 using JetBrains.Annotations;
@@ -24,7 +25,7 @@ namespace Workfloor_AterraCore.Plugin.Systems.Logic;
 [System(WorkfloorIdLib.SystemsLogic.LevelSwitch, CoreTags.LogicThread)]
 [Injectable<LevelSwitch>(ServiceLifetime.Singleton)]
 [UsedImplicitly]
-public class LevelSwitch(IWorldSpace world, IAssetAtlas assetAtlas, ILogger logger, ICrossThreadTickData crossThreadTickData) : AssetInstance, INexitiesSystem {
+public class LevelSwitch(ILogicThreadProcessor logicThreadProcessor, IWorldSpace world, IAssetAtlas assetAtlas, ILogger logger, ICrossThreadDataAtlas crossThreadDataAtlas) : AssetInstance, INexitiesSystem {
     private List<AssetId>? _levelsCache;
     private List<AssetId> Levels => _levelsCache ??= assetAtlas.GetAllAssetsOfCoreTag(CoreTags.Level).WhereNot(id => id == AssetIdLib.AterraLib.Entities.EmptyLevel).ToList();
 
@@ -33,7 +34,7 @@ public class LevelSwitch(IWorldSpace world, IAssetAtlas assetAtlas, ILogger logg
     }
     
     public void Tick(ActiveLevel level) {
-        if (!crossThreadTickData.TryGet(AssetTagLib.AterraLib.PlayerInputTickData, out ITickDataInput? playerInputTickData)) return;
+        if (!crossThreadDataAtlas.TryGetOrCreate(AssetIdLib.AterraLib.CrossThreadDataHolders.TickDataInput, out ITickDataInput? playerInputTickData)) return;
 
         AssetId currentLevelId = level.RawLevelData.AssetId;
         int currentLevelPos = Levels.IndexOf(currentLevelId);
@@ -51,8 +52,9 @@ public class LevelSwitch(IWorldSpace world, IAssetAtlas assetAtlas, ILogger logg
 
                     newLevelId = Levels[currentLevelPos - 1];
                     if (newLevelId == level.RawLevelData.AssetId) return;
+                    
+                    logicThreadProcessor.AddToEndOfTick(() => world.TryChangeActiveLevel(newLevelId));
 
-                    world.TryChangeActiveLevel(newLevelId);
                     break;
                 case KeyboardKey.KpAdd:
                     logger.Warning("PRESSED PLUS");
@@ -61,7 +63,7 @@ public class LevelSwitch(IWorldSpace world, IAssetAtlas assetAtlas, ILogger logg
                     newLevelId = Levels[currentLevelPos + 1];
                     if (newLevelId == level.RawLevelData.AssetId) return;
 
-                    world.TryChangeActiveLevel(newLevelId);
+                    logicThreadProcessor.AddToEndOfTick(() => world.TryChangeActiveLevel(newLevelId));
                     break;
             }
         }

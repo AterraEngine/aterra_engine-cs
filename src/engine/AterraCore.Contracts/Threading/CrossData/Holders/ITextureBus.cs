@@ -2,17 +2,16 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Types.Nexities;
-using AterraCore.Contracts.Threading2.CrossData.Holders;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Concurrent;
 
-namespace AterraCore.Contracts.Threading2.CrossData;
+namespace AterraCore.Contracts.Threading.CrossData.Holders;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ICrossThreadDataAtlas {
-    bool TryGetOrCreate<T>(AssetId assetId, [NotNullWhen(true)] out T? dataHolder) where T : class, ICrossThreadData;
+public interface ITextureBus : ICrossThreadData {
+    ConcurrentQueue<AssetId> TexturesToLoad { get; }
+    ConcurrentQueue<AssetId> TexturesToUnLoad { get; }
     
-    bool TryGetOrCreateDataCollector([NotNullWhen(true)] out IDataCollector? dataHolder);
-    bool TryGetOrCreateTextureBus([NotNullWhen(true)] out ITextureBus? dataHolder);
+    bool IsEmpty { get; }
 }

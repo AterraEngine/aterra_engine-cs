@@ -1,18 +1,21 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraCore.Contracts.Threading2.CrossData.Holders;
-
+namespace AterraCore.Contracts.Threading.CrossData.Holders;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ILevelChangeBus : ICrossThreadData {
-    public LevelChangeState LevelChangeState { get; set; }
-}
+public interface IDataCollector : ICrossThreadData {
+    int Fps { get; set; }
+    int FpsMin { get; }
+    int FpsMax { get; }
+    double FpsAverage { get; set; }
+    string FpsAverageString { get; set; }
 
-public enum LevelChangeState {
-    Normal = 0,
-    OldLevelUnloaded = 1,
-    NewLevelLoaded = 2,
-    Finished = 3,
+    int Tps { get; set; }
+    int TpsMin { get; }
+    int TpsMax { get; }
+    double TpsAverage { get; set; }
+    string TpsAverageString { get; set; }
+    double DeltaTps { get; set; }
 }

@@ -16,6 +16,13 @@ public static class AssetIdLib {
     
     public static class AterraLib {
         public static readonly AssetId ConfigMancer = StringAssetIdLib.AterraLib.ConfigMancer;
+        
+        #region CrossThreadDataHolders
+        public static class CrossThreadDataHolders {
+            public const string TickDataInput = StringAssetIdLib.AterraLib.CrossThreadDataHolders.TickDataInput;
+            public const string RenderableData = StringAssetIdLib.AterraLib.CrossThreadDataHolders.RenderableData;
+        }
+        #endregion
 
         #region Components
         public static class Components {

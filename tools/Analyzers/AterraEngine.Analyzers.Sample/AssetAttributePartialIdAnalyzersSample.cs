@@ -4,7 +4,6 @@
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedMember.Global
 using AterraCore.Common.Attributes.AssetVault;
-using AterraCore.Common.Attributes.Nexities;
 using AterraCore.Nexities.Entities;
 
 namespace AterraEngine.Analyzer.Sample;

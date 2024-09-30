@@ -6,7 +6,7 @@ using AterraCore.Contracts.ConfigMancer;
 using AterraCore.Contracts.Renderer;
 using JetBrains.Annotations;
 
-namespace AterraEngine.Threading.Render;
+namespace AterraCore.Threading.Threads.Render;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------

@@ -5,55 +5,39 @@ using AterraCore.Common.Attributes.DI;
 using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading;
-using AterraCore.Contracts.Threading.CrossThread;
+using AterraCore.Contracts.Threading.CrossData;
 using AterraCore.Contracts.Threading.Logic;
 using JetBrains.Annotations;
-using Serilog;
 using System.Diagnostics;
 
-namespace AterraEngine.Threading.Logic;
+namespace AterraCore.Threading.Threads.Logic;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [UsedImplicitly]
 [Singleton<ILogicThreadProcessor>]
 public class LogicThreadProcessor(
-    ILogger logger,
     IWorldSpace world,
-    ILogicEventManager eventManager,
     IThreadingManager threadingManager,
-    ICrossThreadTickData crossThreadTickData
-) : ILogicThreadProcessor {
+    ICrossThreadDataAtlas crossThreadDataAtlas
+) : AbstractThreadProcessor<LogicThreadProcessor>, ILogicThreadProcessor {
 
     private const int TargetTicksPerSecond = 20;// TPS
     private const double MillisecondsPerTick = 1000.0 / TargetTicksPerSecond;
 
-    private readonly Stack<Action> _endOfTickActions = [];
-
     private readonly Stopwatch _tickStopwatch = Stopwatch.StartNew();
     private readonly Stopwatch _tpsStopwatch = Stopwatch.StartNew();
-    private ILogger Logger { get; } = logger.ForContext<LogicThreadProcessor>();
 
     private bool IsRunning { get; set; } = true;
-    public CancellationToken CancellationToken { get; set; }
     
     public int TPS { get; private set; }
     private int _ticks;
-
-    // -----------------------------------------------------------------------------------------------------------------
-    // Event Methods
-    // -----------------------------------------------------------------------------------------------------------------
-    private void RegisterEvents() {
-        eventManager.EventChangeActiveLevel += (_, args) => _endOfTickActions.Push(() => world.TryChangeActiveLevel(args.NewLevelId));
-        eventManager.EventTps += (_, d) => Logger.Debug("TPS: {0}", d);
-    }
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Run Method
     // -----------------------------------------------------------------------------------------------------------------
     #region Run & Update
-    public void Run() {
-        RegisterEvents();
-
+    public override void Run() {
         try {
             _tpsStopwatch.Start();
 
@@ -92,19 +76,16 @@ public class LogicThreadProcessor(
     }
 
     private void RunEndOfTick() {
-        while (_endOfTickActions.TryPop(out Action? action)) {
+        while (EndOfTickActions.TryPop(out Action? action)) {
             action();
         }
 
-        _endOfTickActions.Clear();
-
-        crossThreadTickData.ClearOnLogicTick();// Clear for the end of the tick
+        crossThreadDataAtlas.CleanupLogicTick(); // Clear for the end of the tick
     }
 
     private void SleepUntilEndOfTick() {
         _tickStopwatch.Stop();
         double deltaTps = _tickStopwatch.Elapsed.TotalMilliseconds;
-        eventManager.InvokeUpdateDeltaTps(deltaTps);
 
         double sleepTime = MillisecondsPerTick - deltaTps;
         if (sleepTime > 0) Thread.Sleep((int)sleepTime);
@@ -113,7 +94,6 @@ public class LogicThreadProcessor(
     private void CalculateActualTps() {
         if (_tpsStopwatch.ElapsedMilliseconds < 1000) return;
 
-        eventManager.InvokeUpdateTps(_ticks);
         TPS = _ticks;
         _ticks = 0;
         _tpsStopwatch.Restart();

@@ -1,11 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Types.Nexities;
-using AterraCore.Contracts.Threading.Logic.EventDelegates;
+namespace AterraCore.Contracts.Threading.CrossData.Holders;
 
-namespace AterraEngine.Threading.Logic.EventDelegates;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public record ChangeActiveLevelEventArgs(AssetId NewLevelId) : IChangeActiveLevelEventArgs;
+public interface ILevelChangeBus : ICrossThreadData {
+    public bool IsLevelChangePending { get; set; }
+    
+    public void NotifyLevelChange();
+}

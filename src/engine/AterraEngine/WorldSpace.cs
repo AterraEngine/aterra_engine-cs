@@ -6,9 +6,7 @@ using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Levels;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World;
-using AterraCore.Contracts.Threading.CrossThread;
-using AterraCore.Contracts.Threading2.CrossData;
-using AterraCore.Contracts.Threading2.CrossData.Holders;
+using AterraCore.Contracts.Threading.CrossData;
 using Extensions;
 using JetBrains.Annotations;
 using Serilog;
@@ -28,7 +26,6 @@ public class WorldSpace(
     IAssetInstanceAtlas instanceAtlas,
     ILogger logger,
     IActiveLevelFactory levelFactory,
-    ICrossThreadTickData crossThreadTickData,
     ICrossThreadDataAtlas crossThreadDataAtlas
 ) : IWorldSpace {
 
@@ -80,7 +77,7 @@ public class WorldSpace(
 
             Logger.Information("Successfully fetched or created level. Creating ActiveLevel instance now.");
             ActiveLevel = levelFactory.CreateLevel2D(level);
-            crossThreadTickData.ClearOnLevelChange();
+            crossThreadDataAtlas.LevelChangeBus.NotifyLevelChange();
         }
 
         EmitActiveLevel(ActiveLevel, oldLevel);
@@ -108,12 +105,10 @@ public class WorldSpace(
     /// <param name="activeLevel">The new active level.</param>
     /// <param name="oldLevel">The previous active level.</param>
     private void EmitActiveLevel(ActiveLevel? activeLevel, ActiveLevel? oldLevel) {
-        if (!crossThreadDataAtlas.TryGetOrCreateTextureBus(out ITextureBus? textureBus)) return;
-        
         IEnumerable<AssetId> oldTextureAssetIds = oldLevel?.TextureAssetIds.ToArray() ?? [];
         IEnumerable<AssetId> newTextureAssetIds = activeLevel?.TextureAssetIds.ToArray() ?? [];
         
-        Parallel.ForEach(oldTextureAssetIds.Except(newTextureAssetIds), body: id => textureBus.TexturesToUnLoad.Enqueue(id));
-        Parallel.ForEach(newTextureAssetIds.Except(oldTextureAssetIds), body: id => textureBus.TexturesToLoad.Enqueue(id));
+        Parallel.ForEach(oldTextureAssetIds.Except(newTextureAssetIds), body: id => crossThreadDataAtlas.TextureBus.TexturesToUnLoad.Enqueue(id));
+        Parallel.ForEach(newTextureAssetIds.Except(oldTextureAssetIds), body: id => crossThreadDataAtlas.TextureBus.TexturesToLoad.Enqueue(id));
     }
 }

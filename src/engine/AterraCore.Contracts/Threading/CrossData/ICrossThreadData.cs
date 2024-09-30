@@ -3,7 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.OmniVault.Assets;
 
-namespace AterraCore.Contracts.Threading2.CrossData;
+namespace AterraCore.Contracts.Threading.CrossData;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

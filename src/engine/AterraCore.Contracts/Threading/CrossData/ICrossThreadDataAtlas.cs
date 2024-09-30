@@ -1,23 +1,26 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Attributes.DI;
-using AterraCore.Contracts.Threading.Rendering;
-using JetBrains.Annotations;
+using AterraCore.Common.Types.Nexities;
+using AterraCore.Contracts.Threading.CrossData.Holders;
+using System.Diagnostics.CodeAnalysis;
 
-namespace AterraEngine.Threading.Render;
+namespace AterraCore.Contracts.Threading.CrossData;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[UsedImplicitly]
-[Singleton<IRenderEventManager>]
-public class RenderEventManager : IRenderEventManager {
-    public event EventHandler? EventWindowResized;
-    public event EventHandler? EventClearSystemCaches;
+public interface ICrossThreadDataAtlas {
+    ITextureBus TextureBus { get; }
+    IDataCollector DataCollector { get; }
+    ILevelChangeBus LevelChangeBus { get; }
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void InvokeWindowResized() => EventWindowResized?.Invoke(this, EventArgs.Empty);
-    public void InvokeClearSystemCaches() => EventClearSystemCaches?.Invoke(this, EventArgs.Empty);
+    bool TryGet<T>(AssetId assetId, [NotNullWhen(true)] out T? dataHolder) where T : class, ICrossThreadData;
+    bool TryGetOrCreate<T>(AssetId assetId, [NotNullWhen(true)] out T? dataHolder) where T : class, ICrossThreadData;
+
+    void CleanupRenderTick();
+    void CleanupLogicTick();
 }

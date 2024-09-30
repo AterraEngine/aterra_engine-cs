@@ -6,9 +6,9 @@ using AterraCore.Contracts.Nexities.Entities.QuickHands;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.Textures;
 using AterraCore.Contracts.OmniVault.World;
-using AterraCore.Contracts.Threading.CrossThread;
+using AterraCore.Contracts.Threading.CrossData;
 using AterraLib.Nexities.Components;
-using AterraLib.Nexities.Systems.CrossThreadDataHolders;
+using AterraLib.Nexities.CrossThreadDataHolders;
 
 namespace AterraLib.Nexities.Systems.Rendering;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -16,7 +16,7 @@ namespace AterraLib.Nexities.Systems.Rendering;
 // ---------------------------------------------------------------------------------------------------------------------
 [System(StringAssetIdLib.AterraLib.SystemsRendering.Render2DPrepForProps, CoreTags.RenderThread)]
 [UsedImplicitly]
-public class Render2DPrepForProps(IAssetInstanceAtlas instanceAtlas, ICrossThreadTickData crossThreadTickData) : NexitiesSystemWithParentsReversed<IHasTransform2D, IProp2D> {
+public class Render2DPrepForProps(IAssetInstanceAtlas instanceAtlas, ICrossThreadDataAtlas crossThreadDataAtlas) : NexitiesSystemWithParentsReversed<IHasTransform2D, IProp2D> {
 
     private static readonly Transform2D EmptyTransform2D = new();
     // -----------------------------------------------------------------------------------------------------------------
@@ -35,7 +35,7 @@ public class Render2DPrepForProps(IAssetInstanceAtlas instanceAtlas, ICrossThrea
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public override void Tick(ActiveLevel level) {
-        if (!crossThreadTickData.TryGetOrRegister(AssetTagLib.AterraLib.RenderableData, out RenderableData? renderableDataDto)) return;
+        if (!crossThreadDataAtlas.TryGetOrCreate(AssetIdLib.AterraLib.CrossThreadDataHolders.RenderableData, out RenderableData? renderableDataDto)) return;
         if (renderableDataDto.PropsProcessed) return;
 
         foreach ((IHasTransform2D? parent, IProp2D child, int zIndex) in GetEntities(level).AsSpan()) {

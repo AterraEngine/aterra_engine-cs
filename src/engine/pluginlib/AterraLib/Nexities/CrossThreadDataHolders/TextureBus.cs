@@ -3,7 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.AssetVault;
 using AterraCore.Common.Attributes.AssetVault;
-using AterraCore.Contracts.Threading2.CrossData.Holders;
+using AterraCore.Contracts.Threading.CrossData.Holders;
 using System.Collections.Concurrent;
 
 namespace AterraLib.Nexities.CrossThreadDataHolders;

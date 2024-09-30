@@ -3,8 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Attributes.Nexities;
 using AterraCore.Contracts.OmniVault.World;
-using AterraCore.Contracts.Threading2.CrossData;
-using AterraCore.Contracts.Threading2.CrossData.Holders;
+using AterraCore.Contracts.Threading.CrossData;
 
 namespace AterraLib.Nexities.Systems.Rendering;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -17,7 +16,6 @@ public class PostRendering(ICrossThreadDataAtlas crossThreadDataAtlas) : Nexitie
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public override void Tick(ActiveLevel level) {
-        if (!crossThreadDataAtlas.TryGetOrCreateDataCollector(out IDataCollector? dataCollector)) return;
-        dataCollector.Fps = Raylib.GetFPS();
+        crossThreadDataAtlas.DataCollector.Fps = Raylib.GetFPS();
     }
 }

@@ -3,7 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.AssetVault;
 using AterraCore.Common.Attributes.AssetVault;
-using AterraCore.Contracts.Threading2.CrossData.Holders;
+using AterraCore.Contracts.Threading.CrossData.Holders;
 
 namespace AterraLib.Nexities.CrossThreadDataHolders;
 
@@ -14,8 +14,8 @@ namespace AterraLib.Nexities.CrossThreadDataHolders;
 [CrossThreadDataHolder<ILevelChangeBus>(StringAssetIdLib.AterraCore.CrossThreadDataHolders.LevelChangeBus)]
 public class LevelChangeBus : AssetInstance, ILevelChangeBus {
     private readonly object _lock = new();
-    private LevelChangeState _levelChangeState = LevelChangeState.Normal;
-    public LevelChangeState LevelChangeState {
+    private bool _levelChangeState;
+    public bool IsLevelChangePending {
         get {
             lock (_lock) return _levelChangeState;
         }
@@ -23,4 +23,9 @@ public class LevelChangeBus : AssetInstance, ILevelChangeBus {
             lock (_lock) _levelChangeState = value;
         }
     }
+    
+    // -----------------------------------------------------------------------------------------------------------------
+    // Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    public void NotifyLevelChange() => IsLevelChangePending = true;
 }

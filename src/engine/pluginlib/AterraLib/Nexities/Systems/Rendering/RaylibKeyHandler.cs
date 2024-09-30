@@ -3,8 +3,8 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Attributes.Nexities;
 using AterraCore.Contracts.OmniVault.World;
-using AterraCore.Contracts.Threading.CrossThread;
-using AterraLib.Nexities.Systems.CrossThreadDataHolders;
+using AterraCore.Contracts.Threading.CrossData;
+using AterraLib.Contracts;
 
 namespace AterraLib.Nexities.Systems.Rendering;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -12,13 +12,13 @@ namespace AterraLib.Nexities.Systems.Rendering;
 // ---------------------------------------------------------------------------------------------------------------------
 [System(StringAssetIdLib.AterraLib.SystemsRendering.RaylibKeyHandler, CoreTags.RenderThread)]
 [UsedImplicitly]
-public class RaylibKeyHandler(ICrossThreadTickData crossThreadTickData) : NexitiesSystem {
+public class RaylibKeyHandler(ICrossThreadDataAtlas crossThreadDataAtlas) : NexitiesSystem {
     private static readonly KeyboardKey[] KeyboardKeys = Enum.GetValues<KeyboardKey>();
     private static readonly MouseButton[] MouseButtons = Enum.GetValues<MouseButton>();
 
     public override void Tick(ActiveLevel level) {
-        if (!crossThreadTickData.TryGetOrRegister(AssetTagLib.AterraLib.PlayerInputTickData, out TickDataInput? playerInputTickData)) return;
-
+        if (!crossThreadDataAtlas.TryGetOrCreate(AssetIdLib.AterraLib.CrossThreadDataHolders.TickDataInput, out ITickDataInput? playerInputTickData)) return;
+        
         for (int i = KeyboardKeys.Length - 1; i >= 0; i--) {
             KeyboardKey key = KeyboardKeys[i];
             if (Raylib.IsKeyPressed(key)) playerInputTickData.KeyboardKeyPressed.Push(key);

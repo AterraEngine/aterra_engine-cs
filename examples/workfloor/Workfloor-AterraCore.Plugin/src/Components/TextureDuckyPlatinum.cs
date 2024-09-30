@@ -3,7 +3,6 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.AssetVault.Textures;
 using AterraCore.Common.Attributes.AssetVault;
-using AterraCore.Common.Attributes.Nexities;
 using JetBrains.Annotations;
 using System.Numerics;
 using Workfloor_AterraCore.Plugin.Contracts;

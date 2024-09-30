@@ -1,17 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Types.Nexities;
-using System.Collections.Concurrent;
-
-namespace AterraCore.Contracts.Threading2.CrossData.Holders;
+namespace AterraCore.Contracts.Threading.CrossData;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ITextureBus : ICrossThreadData {
-    ConcurrentQueue<AssetId> TexturesToLoad { get; }
-    ConcurrentQueue<AssetId> TexturesToUnLoad { get; }
-    
-    bool IsEmpty { get; }
+public interface IHasRenderTickCleanup : ICrossThreadData {
+    void OnRenderTickCleanup();
 }
+
+public delegate void RenderTickCleanupDelegate();

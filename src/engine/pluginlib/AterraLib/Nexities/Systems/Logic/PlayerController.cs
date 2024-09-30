@@ -4,7 +4,7 @@
 using AterraCore.Common.Attributes.DI;
 using AterraCore.Common.Attributes.Nexities;
 using AterraCore.Contracts.OmniVault.World;
-using AterraCore.Contracts.Threading.CrossThread;
+using AterraCore.Contracts.Threading.CrossData;
 using AterraLib.Contracts;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,9 +15,9 @@ namespace AterraLib.Nexities.Systems.Logic;
 [System(StringAssetIdLib.AterraLib.SystemsLogic.PlayerController, CoreTags.LogicThread)]
 [Injectable<PlayerController>(ServiceLifetime.Singleton)]
 [UsedImplicitly]
-public class PlayerController(ICrossThreadTickData crossThreadTickData) : NexitiesSystem<IPlayer2D> {
+public class PlayerController(ICrossThreadDataAtlas crossThreadDataAtlas) : NexitiesSystem<IPlayer2D> {
     public override void Tick(ActiveLevel level) {
-        if (!crossThreadTickData.TryGet(AssetTagLib.AterraLib.PlayerInputTickData, out ITickDataInput? playerInputTickData)) return;
+        if (!crossThreadDataAtlas.TryGetOrCreate(AssetIdLib.AterraLib.CrossThreadDataHolders.TickDataInput, out ITickDataInput? playerInputTickData)) return;
 
         float x = 0f;
         float y = 0f;

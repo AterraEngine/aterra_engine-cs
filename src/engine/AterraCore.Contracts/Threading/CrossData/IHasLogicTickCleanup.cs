@@ -1,12 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Types.Nexities;
+namespace AterraCore.Contracts.Threading.CrossData;
 
-namespace AterraCore.Contracts.Threading.Logic.EventDelegates;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IChangeActiveLevelEventArgs {
-    public AssetId NewLevelId { get; }
+public interface IHasLogicTickCleanup : ICrossThreadData {
+    void OnLogicTickCleanup();
 }
+
+public delegate void LogicTickCleanupDelegate();

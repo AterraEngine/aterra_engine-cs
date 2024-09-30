@@ -2,11 +2,12 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.AssetVault;
-using AterraCore.Contracts.Threading.CrossThread;
+using AterraCore.Common.Attributes.AssetVault;
+using AterraCore.Contracts.Threading.CrossData;
 using Extensions;
 using System.Collections.Concurrent;
 
-namespace AterraLib.Nexities.Systems.CrossThreadDataHolders;
+namespace AterraLib.Nexities.CrossThreadDataHolders;
 // ---------------------------------------------------------------------------------------------------------------------
 // Support Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -22,24 +23,21 @@ public readonly struct RenderCacheDto {
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class RenderableData : AssetInstance, ITickDataHolder {
+[UsedImplicitly]
+[CrossThreadDataHolder(StringAssetIdLib.AterraLib.CrossThreadDataHolders.RenderableData)]
+public class RenderableData : AssetInstance, ICrossThreadData {
     private readonly ConcurrentSortedDictionary<int, RenderCacheDto> _renderCache = new();
     public ConcurrentDictionary<AssetId, (Vector2 Size, Texture2D texture2D)> TextureCache { get; } = new();
 
     public bool PropsProcessed { get; set; }
-
-    public bool IsEmpty => true;
-
-    public void ClearOnLevelChange() => ClearCache();
-    public void ClearOnLogicTick() {}
-    public void ClearOnRenderFrame() {}
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     // Method to add render cache items ensuring order
     public void AddToRenderCache(int key, RenderCacheDto dto) => _renderCache[key] = dto;
     
-    public RenderCacheDto[] GetOrderedRenderCache() => _renderCache.Values;
+    public ReadOnlySpan<RenderCacheDto> GetOrderedRenderCache() => _renderCache.Values;
 
     public void ClearCache() {
         TextureCache.Clear();
