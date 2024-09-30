@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Attributes.Nexities;
+using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading.CrossData;
 using AterraLib.Nexities.CrossThreadDataHolders;
@@ -10,9 +11,9 @@ namespace AterraLib.Nexities.Systems.Rendering;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[System(StringAssetIdLib.AterraLib.SystemsRendering.Render2D, CoreTags.RenderThread)]
+[System(StringAssetIdLib.AterraLib.SystemsRendering.Render2D)]
 [UsedImplicitly]
-public class Render2D(ICrossThreadDataAtlas crossThreadDataAtlas) : NexitiesSystem {
+public class Render2D(ICrossThreadDataAtlas crossThreadDataAtlas) : NexitiesSystem, IRenderSystem {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -30,7 +31,7 @@ public class Render2D(ICrossThreadDataAtlas crossThreadDataAtlas) : NexitiesSyst
         foreach (RenderCacheDto dto in renderableDataDto.GetOrderedRenderCache()) {
             Raylib.DrawTexturePro(dto.Texture, dto.Source, dto.Dest, dto.Origin, dto.Rotation, dto.Tint);
         }
-        
+
         crossThreadDataAtlas.DataCollector.Fps = Raylib.GetFPS();
     }
 }

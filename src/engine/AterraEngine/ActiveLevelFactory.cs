@@ -33,13 +33,13 @@ public class ActiveLevelFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreeFa
         if (entityTreeFlat.FirstOrDefault(asset => asset is ICamera2D) is ICamera2D possibleCamera)
             instanceAtlas.TryGet(possibleCamera.RaylibCamera2D.InstanceId, out camera2D);
 
-        INexitiesSystem[] renderSystems = GetNexitiesSystems(level2D.NexitiesSystemIds.RenderSystemIds);
+        IRenderSystem[] renderSystems = GetNexitiesSystems<IRenderSystem>(level2D.NexitiesSystemIds.AssetIds);
         return new ActiveLevel {
             RawLevelData = level2D,
-            LogicSystems = [..GetNexitiesSystems(level2D.NexitiesSystemIds.LogicSystemIds)],
+            LogicSystems = [..GetNexitiesSystems<ILogicSytem>(level2D.NexitiesSystemIds.AssetIds)],
             RenderSystems = [..renderSystems],
             RenderSystemsReversed = [..renderSystems.Reverse()],
-            UiSystems = [..GetNexitiesSystems(level2D.NexitiesSystemIds.UiSystemIds)],
+            UiSystems = [..GetNexitiesSystems<IUiSystem>(level2D.NexitiesSystemIds.AssetIds)],
             ActiveEntityTree = entityTree,
             Camera2DEntity = camera2D,
             TextureAssetIds = entityTreeFlat
@@ -56,10 +56,10 @@ public class ActiveLevelFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreeFa
     /// </summary>
     /// <param name="systemIds">The INexitiesLevel instance to create the ActiveLevel from.</param>
     /// <returns>An instance of the ActiveLevel with the specified properties populated.</returns>
-    private INexitiesSystem[] GetNexitiesSystems(IReadOnlyCollection<AssetId> systemIds) {
-        var systems = new List<INexitiesSystem>(systemIds.Count);
+    private T[] GetNexitiesSystems<T>(IReadOnlyCollection<AssetId> systemIds) where T : class, INexitiesSystem {
+        var systems = new List<T>(systemIds.Count);
         foreach (AssetId assetId in systemIds) {
-            if (instanceAtlas.TryGetOrCreate(assetId, out INexitiesSystem? instance))
+            if (instanceAtlas.TryGetOrCreate(assetId, out T? instance))
                 systems.Add(instance);
         }
 

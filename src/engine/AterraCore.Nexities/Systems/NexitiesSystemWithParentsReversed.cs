@@ -17,7 +17,7 @@ public abstract class NexitiesSystemWithParentsReversed<TParent, TChild> : Nexit
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    protected override (TParent? Parent, TChild Child, int zIndex)[] GetEntities(ActiveLevel level) {
+    protected override ReadOnlySpan<(TParent? Parent, TChild Child, int zIndex)> GetEntities(ActiveLevel level) {
         if (BufferPopulated) return EntitiesBuffer;
 
         List<(TParent? Parent, TChild Child, int zIndex)> list = ParentChildPool.Get();

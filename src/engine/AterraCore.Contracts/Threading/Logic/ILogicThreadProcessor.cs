@@ -5,6 +5,4 @@ namespace AterraCore.Contracts.Threading.Logic;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ILogicThreadProcessor : IThreadProcessor {
-    public int TPS { get; }
-}
+public interface ILogicThreadProcessor : IThreadProcessor;

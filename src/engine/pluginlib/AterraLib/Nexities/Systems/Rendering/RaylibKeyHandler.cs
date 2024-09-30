@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Attributes.Nexities;
+using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading.CrossData;
 using AterraLib.Contracts;
@@ -10,22 +11,21 @@ namespace AterraLib.Nexities.Systems.Rendering;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[System(StringAssetIdLib.AterraLib.SystemsRendering.RaylibKeyHandler, CoreTags.RenderThread)]
+[System(StringAssetIdLib.AterraLib.SystemsRendering.RaylibKeyHandler)]
 [UsedImplicitly]
-public class RaylibKeyHandler(ICrossThreadDataAtlas crossThreadDataAtlas) : NexitiesSystem {
+public class RaylibKeyHandler(ICrossThreadDataAtlas crossThreadDataAtlas) : NexitiesSystem, IRenderSystem {
     private static readonly KeyboardKey[] KeyboardKeys = Enum.GetValues<KeyboardKey>();
     private static readonly MouseButton[] MouseButtons = Enum.GetValues<MouseButton>();
 
     public override void Tick(ActiveLevel level) {
         if (!crossThreadDataAtlas.TryGetOrCreate(AssetIdLib.AterraLib.CrossThreadDataHolders.TickDataInput, out ITickDataInput? playerInputTickData)) return;
-        
+
         for (int i = KeyboardKeys.Length - 1; i >= 0; i--) {
             KeyboardKey key = KeyboardKeys[i];
             if (Raylib.IsKeyPressed(key)) playerInputTickData.KeyboardKeyPressed.Push(key);
             if (Raylib.IsKeyPressedRepeat(key)) playerInputTickData.KeyboardKeyPressedRepeated.Push(key);
             if (Raylib.IsKeyReleased(key)) playerInputTickData.KeyboardKeyReleased.Push(key);
             if (Raylib.IsKeyDown(key)) playerInputTickData.KeyboardKeyDown.Push(key);
-            
         }
 
         for (int i = MouseButtons.Length - 1; i >= 0; i--) {

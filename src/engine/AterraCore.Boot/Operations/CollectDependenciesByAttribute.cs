@@ -15,12 +15,12 @@ namespace AterraCore.Boot.Operations;
 public class CollectDependenciesByAttribute : IBootOperation {
     private ILogger Logger { get; } = StartupLogger.CreateLogger(false).ForBootOperationContext(nameof(CollectDependenciesByAttribute));
     private readonly List<Assembly> _assemblies = [];
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     private void AssignFromType<T>() => _assemblies.Add(typeof(T).Assembly);
-    
+
     public void Run(IBootComponents components) {
         Logger.Debug("Entered Collection of Dependencies");
 
@@ -29,7 +29,7 @@ public class CollectDependenciesByAttribute : IBootOperation {
         AssignFromType<FlexiPlug.IAssemblyEntry>();
         AssignFromType<PoolCorps.IAssemblyEntry>();
         AssignFromType<Threading.IAssemblyEntry>();
-        
+
         AssignFromType<AterraEngine.IAssemblyEntry>();
 
         IEnumerable<ServiceDescriptor> dependencies = _assemblies

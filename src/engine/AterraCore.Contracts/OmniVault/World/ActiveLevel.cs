@@ -17,12 +17,12 @@ namespace AterraCore.Contracts.OmniVault.World;
 [StructLayout(LayoutKind.Sequential)]
 public readonly struct ActiveLevel {
     public INexitiesLevel RawLevelData { get; init; }
-    
-    public ImmutableArray<INexitiesSystem> LogicSystems { get; init; }
-    public ImmutableArray<INexitiesSystem> RenderSystems { get; init; }
-    public ImmutableArray<INexitiesSystem> UiSystems { get; init; }
-    
-    public ImmutableArray<INexitiesSystem> RenderSystemsReversed { get; init; }
+
+    public ImmutableArray<ILogicSytem> LogicSystems { get; init; }
+    public ImmutableArray<IRenderSystem> RenderSystems { get; init; }
+    public ImmutableArray<IUiSystem> UiSystems { get; init; }
+
+    public ImmutableArray<IRenderSystem> RenderSystemsReversed { get; init; }
 
     public IEntityNodeTree ActiveEntityTree { get; init; }
     public IRaylibCamera2D? Camera2DEntity { get; init; }

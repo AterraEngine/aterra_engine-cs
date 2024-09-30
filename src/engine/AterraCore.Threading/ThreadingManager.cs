@@ -88,7 +88,7 @@ public class ThreadingManager(ILogger logger) : IThreadingManager {
         LogicThreadData?.CancellationTokenSource.Cancel();
         RenderThreadData?.CancellationTokenSource.Cancel();
     }
-    
+
     public WaitHandle[] GetWaitHandles() {
         return _cancellationTokens
             .Select(cancellationToken => cancellationToken.WaitHandle)

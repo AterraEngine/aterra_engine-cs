@@ -22,26 +22,20 @@ namespace Workfloor_AterraCore.Plugin.Levels;
 [Component("Workfloor:BlobLevelSystemIds")]
 [UsedImplicitly]
 public class BlobLevelSystemIds : SystemIds {
-    protected override AssetId[] LogicSystems { get; set; } = [
+    protected override List<AssetId> RawAssetIds { get; } = [
         AssetIdLib.AterraLib.SystemsLogic.PlayerController,
         AssetIdLib.AterraLib.SystemsLogic.CameraController,
         WorkfloorIdLib.SystemsLogic.LevelSwitch,
         WorkfloorIdLib.SystemsLogic.RandomImpulse,
         AssetIdLib.AterraLib.SystemsLogic.ApplyImpulse,
         AssetIdLib.AterraLib.SystemsLogic.ApplyImpulseCamera,
-        AssetIdLib.AterraLib.SystemsLogic.PostLogicProcessing,
-    ];
 
-    protected override AssetId[] RenderSystems { get; set; } = [
         AssetIdLib.AterraLib.SystemsRendering.Render2DPrepForProps,
         AssetIdLib.AterraLib.SystemsRendering.Render2DPrepForActors,
         AssetIdLib.AterraLib.SystemsRendering.Render2D,
         AssetIdLib.AterraLib.SystemsRendering.RaylibKeyHandler,
-        AssetIdLib.AterraLib.SystemsRendering.PostRendering,
-    ];
 
-    protected override AssetId[] UiSystems { get; set; } = [
-        AssetIdLib.AterraLib.SystemsRendering.RenderUi,
+        AssetIdLib.AterraLib.SystemsRendering.RenderUi
     ];
 }
 

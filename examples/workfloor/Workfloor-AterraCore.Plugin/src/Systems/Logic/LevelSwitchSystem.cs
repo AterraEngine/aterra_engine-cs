@@ -22,17 +22,17 @@ namespace Workfloor_AterraCore.Plugin.Systems.Logic;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[System(WorkfloorIdLib.SystemsLogic.LevelSwitch, CoreTags.LogicThread)]
+[System(WorkfloorIdLib.SystemsLogic.LevelSwitch)]
 [Injectable<LevelSwitch>(ServiceLifetime.Singleton)]
 [UsedImplicitly]
-public class LevelSwitch(ILogicThreadProcessor logicThreadProcessor, IWorldSpace world, IAssetAtlas assetAtlas, ILogger logger, ICrossThreadDataAtlas crossThreadDataAtlas) : AssetInstance, INexitiesSystem {
+public class LevelSwitch(ILogicThreadProcessor logicThreadProcessor, IWorldSpace world, IAssetAtlas assetAtlas, ILogger logger, ICrossThreadDataAtlas crossThreadDataAtlas) : AssetInstance, ILogicSytem {
     private List<AssetId>? _levelsCache;
     private List<AssetId> Levels => _levelsCache ??= assetAtlas.GetAllAssetsOfCoreTag(CoreTags.Level).WhereNot(id => id == AssetIdLib.AterraLib.Entities.EmptyLevel).ToList();
 
     public void InvalidateCaches() {
         _levelsCache = null;
     }
-    
+
     public void Tick(ActiveLevel level) {
         if (!crossThreadDataAtlas.TryGetOrCreate(AssetIdLib.AterraLib.CrossThreadDataHolders.TickDataInput, out ITickDataInput? playerInputTickData)) return;
 
@@ -52,7 +52,7 @@ public class LevelSwitch(ILogicThreadProcessor logicThreadProcessor, IWorldSpace
 
                     newLevelId = Levels[currentLevelPos - 1];
                     if (newLevelId == level.RawLevelData.AssetId) return;
-                    
+
                     logicThreadProcessor.AddToEndOfTick(() => world.TryChangeActiveLevel(newLevelId));
 
                     break;

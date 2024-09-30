@@ -62,7 +62,7 @@ public class WorldSpace(
                 Logger.Warning("Can't change to the same level instance: {LevelId}", levelInstanceId);
                 return false;
             }
-            
+
             INexitiesLevel? level = instanceAtlas.OfAssetId<INexitiesLevel>(levelId).FirstOrDefault();
 
             if (level == null && !instanceAtlas.TryGetOrCreateSingleton(
@@ -107,7 +107,7 @@ public class WorldSpace(
     private void EmitActiveLevel(ActiveLevel? activeLevel, ActiveLevel? oldLevel) {
         IEnumerable<AssetId> oldTextureAssetIds = oldLevel?.TextureAssetIds.ToArray() ?? [];
         IEnumerable<AssetId> newTextureAssetIds = activeLevel?.TextureAssetIds.ToArray() ?? [];
-        
+
         Parallel.ForEach(oldTextureAssetIds.Except(newTextureAssetIds), body: id => crossThreadDataAtlas.TextureBus.TexturesToUnLoad.Enqueue(id));
         Parallel.ForEach(newTextureAssetIds.Except(oldTextureAssetIds), body: id => crossThreadDataAtlas.TextureBus.TexturesToLoad.Enqueue(id));
     }

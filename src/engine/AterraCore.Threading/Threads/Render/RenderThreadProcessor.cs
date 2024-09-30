@@ -30,7 +30,7 @@ public class RenderThreadProcessor(
     private bool _invokeCacheClear;
 
     private static Color ClearColor { get; } = new(0, 0, 0, 0);
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -41,29 +41,30 @@ public class RenderThreadProcessor(
         while (!Raylib.WindowShouldClose()) {
             if (Raylib.IsWindowResized()) AddToEndOfTick(OnEventManagerOnEventWindowResized);
             crossThreadDataAtlas.DataCollector.Fps = Raylib.GetFPS();
-            
+
             Update();
             HandleCrossThreadData();
 
             while (EndOfTickActions.TryPop(out Action? action))
                 action();
-            
+
             if (_invokeCacheClear) {
                 _invokeCacheClear = false;
                 OnEventManagerOnEventClearSystemCaches();
             }
-            crossThreadDataAtlas.CleanupRenderTick(); // Clear for the end of the tick
+
+            crossThreadDataAtlas.CleanupRenderTick();// Clear for the end of the tick
         }
 
         Logger.Information("Render Thread Closing");
         Raylib.CloseWindow();
         threadingManager.CancelThreads();
     }
-    
+
     private void Update() {
         if (world.ActiveLevel is not {
                 Camera2DEntity: var camera2DEntity,
-                RenderSystemsReversed: var renderSystemsReversed,
+                RenderSystems: var renderSystems,
                 UiSystems: var uiSystems
             } activeLevel) return;
 
@@ -73,17 +74,17 @@ public class RenderThreadProcessor(
         if (camera2DEntity is { Camera: var camera2D }) {
             Raylib.BeginMode2D(camera2D);
 
-            int count = renderSystemsReversed.Length;
-            for (int i = count - 1; i >= 0; i--) 
-                renderSystemsReversed[i].Tick(activeLevel);
+            foreach (IRenderSystem renderSystem in renderSystems) {
+                renderSystem.Tick(activeLevel);
+            }
 
             Raylib.EndMode2D();
         }
 
-        foreach (INexitiesSystem uiSystem in uiSystems) {
+        foreach (IUiSystem uiSystem in uiSystems) {
             uiSystem.Tick(activeLevel);
         }
-        
+
         Raylib.EndDrawing();
     }
 
@@ -93,7 +94,7 @@ public class RenderThreadProcessor(
             while (textureBus.TexturesToLoad.TryDequeue(out AssetId id)) PushRegisterTexture(id);
             while (textureBus.TexturesToUnLoad.TryDequeue(out AssetId id)) PushUnRegisterTexture(id);
         }
-        
+
         if (crossThreadDataAtlas.LevelChangeBus.IsLevelChangePending) {
             AddToEndOfTick(() => crossThreadDataAtlas.LevelChangeBus.IsLevelChangePending = false);
             _invokeCacheClear = true;

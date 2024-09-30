@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Attributes.DI;
 using AterraCore.Common.Attributes.Nexities;
+using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading.CrossData;
 using AterraLib.Contracts;
@@ -12,10 +13,10 @@ namespace AterraLib.Nexities.Systems.Logic;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[System(StringAssetIdLib.AterraLib.SystemsLogic.PlayerController, CoreTags.LogicThread)]
+[System(StringAssetIdLib.AterraLib.SystemsLogic.PlayerController)]
 [Injectable<PlayerController>(ServiceLifetime.Singleton)]
 [UsedImplicitly]
-public class PlayerController(ICrossThreadDataAtlas crossThreadDataAtlas) : NexitiesSystem<IPlayer2D> {
+public class PlayerController(ICrossThreadDataAtlas crossThreadDataAtlas) : NexitiesSystem<IPlayer2D>, ILogicSytem {
     public override void Tick(ActiveLevel level) {
         if (!crossThreadDataAtlas.TryGetOrCreate(AssetIdLib.AterraLib.CrossThreadDataHolders.TickDataInput, out ITickDataInput? playerInputTickData)) return;
 

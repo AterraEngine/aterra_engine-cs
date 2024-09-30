@@ -37,7 +37,7 @@
 
     <ItemGroup>
         <Folder Include="Boot\Logic\"/>
-        <Folder Include="OmniVault\DataCollector\" />
+        <Folder Include="OmniVault\DataCollector\"/>
     </ItemGroup>
 
 </Project>

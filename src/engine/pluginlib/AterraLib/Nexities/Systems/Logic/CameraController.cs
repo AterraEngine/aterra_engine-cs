@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Attributes.DI;
 using AterraCore.Common.Attributes.Nexities;
+using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading.CrossData;
 using AterraLib.Contracts;
@@ -12,10 +13,10 @@ namespace AterraLib.Nexities.Systems.Logic;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[System(StringAssetIdLib.AterraLib.SystemsLogic.CameraController, CoreTags.LogicThread)]
+[System(StringAssetIdLib.AterraLib.SystemsLogic.CameraController)]
 [Injectable<CameraController>(ServiceLifetime.Singleton)]
 [UsedImplicitly]
-public class CameraController(ICrossThreadDataAtlas crossThreadDataAtlas) : NexitiesSystem<ICamera2D> {
+public class CameraController(ICrossThreadDataAtlas crossThreadDataAtlas) : NexitiesSystem<ICamera2D>, ILogicSytem {
     public override void Tick(ActiveLevel level) {
         if (!crossThreadDataAtlas.TryGetOrCreate(AssetIdLib.AterraLib.CrossThreadDataHolders.TickDataInput, out ITickDataInput? playerInputTickData)) return;
 

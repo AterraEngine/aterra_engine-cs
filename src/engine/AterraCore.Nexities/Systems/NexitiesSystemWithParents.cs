@@ -5,7 +5,6 @@ using AterraCore.AssetVault;
 using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World;
-
 using JetBrains.Annotations;
 using Microsoft.Extensions.ObjectPool;
 
@@ -32,7 +31,7 @@ public abstract class NexitiesSystemWithParents<TParent, TChild> : AssetInstance
     // -----------------------------------------------------------------------------------------------------------------
     // Helper Methods
     // -----------------------------------------------------------------------------------------------------------------
-    protected virtual (TParent? Parent, TChild Child, int zIndex)[] GetEntities(ActiveLevel level) {
+    protected virtual ReadOnlySpan<(TParent? Parent, TChild Child, int zIndex)> GetEntities(ActiveLevel level) {
         if (BufferPopulated) return EntitiesBuffer;
 
         List<(TParent? Parent, TChild Child, int zIndex)> list = ParentChildPool.Get();

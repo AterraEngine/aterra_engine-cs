@@ -6,7 +6,6 @@ using AterraCore.Contracts.Threading.CrossData.Holders;
 using System.Diagnostics.CodeAnalysis;
 
 namespace AterraCore.Contracts.Threading.CrossData;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------

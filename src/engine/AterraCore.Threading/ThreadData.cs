@@ -6,6 +6,6 @@ namespace AterraCore.Threading;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public readonly record struct ThreadData(
-    CancellationTokenSource CancellationTokenSource, 
+    CancellationTokenSource CancellationTokenSource,
     Thread Thread
 );

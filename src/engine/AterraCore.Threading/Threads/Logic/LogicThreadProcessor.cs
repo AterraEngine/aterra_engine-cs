@@ -29,10 +29,9 @@ public class LogicThreadProcessor(
     private readonly Stopwatch _tpsStopwatch = Stopwatch.StartNew();
 
     private bool IsRunning { get; set; } = true;
-    
-    public int TPS { get; private set; }
+
     private int _ticks;
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Run Method
     // -----------------------------------------------------------------------------------------------------------------
@@ -80,7 +79,7 @@ public class LogicThreadProcessor(
             action();
         }
 
-        crossThreadDataAtlas.CleanupLogicTick(); // Clear for the end of the tick
+        crossThreadDataAtlas.CleanupLogicTick();// Clear for the end of the tick
     }
 
     private void SleepUntilEndOfTick() {
@@ -94,7 +93,7 @@ public class LogicThreadProcessor(
     private void CalculateActualTps() {
         if (_tpsStopwatch.ElapsedMilliseconds < 1000) return;
 
-        TPS = _ticks;
+        crossThreadDataAtlas.DataCollector.Tps = _ticks;
         _ticks = 0;
         _tpsStopwatch.Restart();
     }

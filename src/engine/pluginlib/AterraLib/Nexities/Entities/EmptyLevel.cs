@@ -12,19 +12,12 @@ namespace AterraLib.Nexities.Entities;
 [Component<EmptyLevelSystemIds>("AterraLib:Components/EmptyLevelSystemIds")]
 [UsedImplicitly]
 public class EmptyLevelSystemIds : SystemIds {
-    protected override AssetId[] LogicSystems { get; set; } = [
-        AssetIdLib.AterraLib.SystemsLogic.PostLogicProcessing,
-    ];
-
-    protected override AssetId[] RenderSystems { get; set; } = [
+    protected override List<AssetId> RawAssetIds { get; } = [
         AssetIdLib.AterraLib.SystemsRendering.Render2DPrepForProps,
         AssetIdLib.AterraLib.SystemsRendering.Render2DPrepForActors,
         AssetIdLib.AterraLib.SystemsRendering.Render2D,
-        AssetIdLib.AterraLib.SystemsRendering.PostRendering,
-    ];
 
-    protected override AssetId[] UiSystems { get; set; } = [
-        AssetIdLib.AterraLib.SystemsRendering.RenderUi,
+        AssetIdLib.AterraLib.SystemsRendering.RenderUi
     ];
 }
 

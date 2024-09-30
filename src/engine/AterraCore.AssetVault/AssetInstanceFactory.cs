@@ -29,7 +29,7 @@ using TConstructor=Func<object[], object>;
 [Singleton<IAssetInstanceFactory>]
 public class AssetInstanceFactory(ILogger logger, IAssetAtlas assetAtlas) : IAssetInstanceFactory {
     private static readonly ArrayPool<object> ParameterPool = ArrayPool<object>.Shared;
-    
+
     private readonly FrozenDictionary<AssetId, TActionsArray> _actionsMap = AssembleParameterActions(assetAtlas);
     private readonly FrozenDictionary<Type, TConstructor> _constructorCache = AssembleConstructorDelegates(assetAtlas);
 

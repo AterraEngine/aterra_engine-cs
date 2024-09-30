@@ -23,25 +23,19 @@ namespace Workfloor_AterraCore.Plugin.Levels;
 [Component("Workfloor:MainLevelSystemIds")]
 [UsedImplicitly]
 public class MainLevelSystemIds : SystemIds {
-    protected override AssetId[] LogicSystems { get; set; } = [
+    protected override List<AssetId> RawAssetIds { get; } = [
         AssetIdLib.AterraLib.SystemsLogic.PlayerController,
         AssetIdLib.AterraLib.SystemsLogic.CameraController,
         WorkfloorIdLib.SystemsLogic.LevelSwitch,
         AssetIdLib.AterraLib.SystemsLogic.ApplyImpulse,
         AssetIdLib.AterraLib.SystemsLogic.ApplyImpulseCamera,
-        AssetIdLib.AterraLib.SystemsLogic.PostLogicProcessing,
-    ];
 
-    protected override AssetId[] RenderSystems { get; set; } = [
         AssetIdLib.AterraLib.SystemsRendering.Render2DPrepForProps,
         AssetIdLib.AterraLib.SystemsRendering.Render2DPrepForActors,
         AssetIdLib.AterraLib.SystemsRendering.Render2D,
         AssetIdLib.AterraLib.SystemsRendering.RaylibKeyHandler,
-        AssetIdLib.AterraLib.SystemsRendering.PostRendering,
-    ];
 
-    protected override AssetId[] UiSystems { get; set; } = [
-        AssetIdLib.AterraLib.SystemsRendering.RenderUi,
+        AssetIdLib.AterraLib.SystemsRendering.RenderUi
     ];
 }
 
@@ -57,6 +51,10 @@ public class MainLevel(
     private ISystemIds? _systemIds = systemIds;
     public IDirectChildren ChildrenIDs => _children ??= GetComponent<IDirectChildren>();
     public ISystemIds NexitiesSystemIds => _systemIds ??= GetComponent<ISystemIds>();
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Methods
+    // -----------------------------------------------------------------------------------------------------------------
     public void OnLevelFirstCreation() {
         const int entitiesPerLevel = 10_000;
 

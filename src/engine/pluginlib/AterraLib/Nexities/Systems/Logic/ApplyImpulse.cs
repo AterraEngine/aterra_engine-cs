@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Attributes.DI;
 using AterraCore.Common.Attributes.Nexities;
+using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.World;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,10 +11,10 @@ namespace AterraLib.Nexities.Systems.Logic;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[System(StringAssetIdLib.AterraLib.SystemsLogic.ApplyImpulse, CoreTags.LogicThread)]
+[System(StringAssetIdLib.AterraLib.SystemsLogic.ApplyImpulse)]
 [Injectable<ApplyImpulse>(ServiceLifetime.Singleton)]
 [UsedImplicitly]
-public class ApplyImpulse : NexitiesSystemUnCachedWithFilter<IActor2D> {
+public class ApplyImpulse : NexitiesSystemUnCachedWithFilter<IActor2D>, ILogicSytem {
     protected override Predicate<IActor2D> Filter { get; } = entity => !entity.Impulse2D.IsEmpty;
     public override void Tick(ActiveLevel level) {
         foreach (IActor2D entity in GetEntities(level)) {

@@ -17,7 +17,9 @@ public class DirectChildren : NexitiesComponent, IDirectChildren {
 
     public int Count {
         get {
-            using (_rwLock.Read()) return _count ??= DirectChildIds.Count;
+            using (_rwLock.Read()) {
+                return _count ??= DirectChildIds.Count;
+            }
         }
     }
 

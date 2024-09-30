@@ -12,7 +12,7 @@ namespace AterraCore.Boot.Operations;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class CollectDependenciesManually : IBootOperation { 
+public class CollectDependenciesManually : IBootOperation {
     private ILogger Logger { get; } = StartupLogger.CreateLogger(false).ForBootOperationContext(nameof(CollectDependenciesManually));
 
     // -----------------------------------------------------------------------------------------------------------------

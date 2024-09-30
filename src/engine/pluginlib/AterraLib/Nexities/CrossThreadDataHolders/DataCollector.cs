@@ -31,7 +31,7 @@ public class DataCollector : AssetInstance, IDataCollector {
     public int FpsMax { get; set; }
     public double FpsAverage { get; set; }
     public string FpsAverageString { get; set; } = string.Empty;
-    
+
     #region FpsAverageWatch
     private readonly HashSet<int> _fpsHistory = new(MaxHistorySize);
     private readonly Stopwatch _fpsAverageWatch = Stopwatch.StartNew();
@@ -59,14 +59,14 @@ public class DataCollector : AssetInstance, IDataCollector {
             UpdateTpsAverage(value);
         }
     }
-    
+
     public int TpsMin { get; private set; }
     public int TpsMax { get; private set; }
-    public double TpsAverage { get;  set; }
+    public double TpsAverage { get; set; }
     public string TpsAverageString { get; set; } = string.Empty;
 
     public double DeltaTps { get; set; }
-    
+
     #region TpsAverageWatch
     private readonly HashSet<int> _tpsHistory = new(MaxHistorySize);
     private readonly Stopwatch _tpsAverageWatch = Stopwatch.StartNew();

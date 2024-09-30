@@ -2,12 +2,11 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 namespace AterraCore.Contracts.Threading.CrossData.Holders;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface ILevelChangeBus : ICrossThreadData {
     public bool IsLevelChangePending { get; set; }
-    
+
     public void NotifyLevelChange();
 }

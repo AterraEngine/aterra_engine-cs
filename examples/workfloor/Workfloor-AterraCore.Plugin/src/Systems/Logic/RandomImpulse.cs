@@ -6,6 +6,7 @@ using AterraCore.Common.Attributes.Nexities;
 using AterraCore.Common.Data;
 using AterraCore.Contracts.Nexities.Entities;
 using AterraCore.Contracts.Nexities.Entities.QuickHands;
+using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Nexities.Systems;
 using JetBrains.Annotations;
@@ -15,10 +16,10 @@ namespace Workfloor_AterraCore.Plugin.Systems.Logic;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[System(WorkfloorIdLib.SystemsLogic.RandomImpulse, CoreTags.LogicThread)]
+[System(WorkfloorIdLib.SystemsLogic.RandomImpulse)]
 [Injectable<RandomImpulse>(ServiceLifetime.Singleton)]
 [UsedImplicitly]
-public class RandomImpulse : NexitiesSystemWithFilter<IHasImpulse2D> {
+public class RandomImpulse : NexitiesSystemWithFilter<IHasImpulse2D>, ILogicSytem {
     private readonly Random _random = new();
     protected override Predicate<IHasImpulse2D> Filter { get; } = entity => entity is not (IPlayer2D or ICamera2D);
 
