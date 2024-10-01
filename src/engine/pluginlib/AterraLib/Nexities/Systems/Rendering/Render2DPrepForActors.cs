@@ -18,8 +18,8 @@ namespace AterraLib.Nexities.Systems.Rendering;
 [System(StringAssetIdLib.AterraLib.SystemsRendering.Render2DPrepForActors)]
 [UsedImplicitly]
 public class Render2DPrepForActors(IAssetInstanceAtlas instanceAtlas, ICrossThreadDataAtlas crossThreadDataAtlas) : NexitiesSystemWithParentsReversed<IHasTransform2D, IActor2D>, IRenderSystem {
-
     private static readonly Transform2D EmptyTransform2D = new();
+
     // -----------------------------------------------------------------------------------------------------------------
     // Helper Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -39,7 +39,6 @@ public class Render2DPrepForActors(IAssetInstanceAtlas instanceAtlas, ICrossThre
         if (!crossThreadDataAtlas.TryGetOrCreate(AssetIdLib.AterraLib.CrossThreadDataHolders.RenderableData, out RenderableData? renderableDataDto)) return;
 
         foreach ((IHasTransform2D? parent, IActor2D child, int zIndex) in GetEntities(level)) {
-
             (Vector2 size, Texture2D texture2D) = GetTextureAsset(child.Sprite2D.TextureAssetId, renderableDataDto);
 
             ITransform2D parentTransform = parent?.Transform2D ?? EmptyTransform2D;

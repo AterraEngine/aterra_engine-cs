@@ -44,11 +44,13 @@ public class EmptyLevel(
     private ISystemIds? _systemIds = systemIds;
     public IDirectChildren ChildrenIDs => _children ??= GetComponent<IDirectChildren>();
     public ISystemIds NexitiesSystemIds => _systemIds ??= GetComponent<ISystemIds>();
-    public void OnLevelFirstCreation() {}
-
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    protected override void ClearCaches() {}
+    protected override void ClearCaches() {
+        base.ClearCaches();
+        _children = null;
+        _systemIds = null;
+    }
 }

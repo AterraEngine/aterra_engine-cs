@@ -51,9 +51,8 @@ public class AssetInstanceFactory(ILogger logger, IAssetAtlas assetAtlas) : IAss
             if (constructorDelegate(parameters) is not T castedInstance) return false;
 
             assetInstance = castedInstance;
-            assetInstance.AssetId = registration.AssetId;
-            assetInstance.InstanceId = predefinedUlid;
-
+            assetInstance.OnCreate(predefinedUlid, registration.AssetId);
+            
             return true;
         }
         catch (Exception e) when (e is MethodAccessException or ArgumentException or TargetInvocationException or TargetParameterCountException or NotSupportedException or SecurityException) {
@@ -73,9 +72,7 @@ public class AssetInstanceFactory(ILogger logger, IAssetAtlas assetAtlas) : IAss
             .ToArray();
 
         var assetInstance = (T)constructorDelegate(parameters);
-
-        assetInstance.AssetId = registration.AssetId;
-        assetInstance.InstanceId = predefinedUlid;
+        assetInstance.OnCreate(predefinedUlid, registration.AssetId);
 
         return assetInstance;
     }

@@ -25,10 +25,8 @@ public interface IAssetInstanceAtlas {
 
     bool TryGetOrCreate<T>(Type type, [NotNullWhen(true)] out T? instance, Ulid? ulid = null) where T : class, IAssetInstance;
     bool TryGetOrCreate<T>(AssetId assetId, [NotNullWhen(true)] out T? instance, Ulid? ulid = null) where T : class, IAssetInstance;
-    bool TryGetOrCreate<T>(AssetId assetId, [NotNullWhen(true)] out T? instance, Action<T> afterCreation, Ulid? ulid = null) where T : class, IAssetInstance;
 
     bool TryGetOrCreateSingleton<T>(AssetId assetId, [NotNullWhen(true)] out T? instance, Ulid? ulid = null) where T : class, IAssetInstance;
-    bool TryGetOrCreateSingleton<T>(AssetId assetId, [NotNullWhen(true)] out T? instance, Action<T> afterCreation, Ulid? ulid = null) where T : class, IAssetInstance;
 
     T GetOrCreate<T>(Type type, Ulid? ulid = null) where T : class, IAssetInstance;
     T GetOrCreate<T>(AssetId assetId, Ulid? ulid = null) where T : class, IAssetInstance;

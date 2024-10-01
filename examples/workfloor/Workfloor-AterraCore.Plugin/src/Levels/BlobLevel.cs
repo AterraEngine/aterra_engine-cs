@@ -51,7 +51,8 @@ public class BlobLevel(
     private ISystemIds? _systemIds = systemIds;
     public IDirectChildren ChildrenIDs => _children ??= GetComponent<IDirectChildren>();
     public ISystemIds NexitiesSystemIds => _systemIds ??= GetComponent<ISystemIds>();
-    public void OnLevelFirstCreation() {
+    public override void OnCreate(Ulid instanceId, AssetId assetId) {
+        base.OnCreate(instanceId, assetId);
         const int entitiesPerLevel = 10_000;
 
         int a = (int)(Math.Sqrt(entitiesPerLevel) / 2f);

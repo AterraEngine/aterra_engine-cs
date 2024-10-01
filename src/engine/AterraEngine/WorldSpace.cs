@@ -65,10 +65,9 @@ public class WorldSpace(
 
             INexitiesLevel? level = instanceAtlas.OfAssetId<INexitiesLevel>(levelId).FirstOrDefault();
 
-            if (level == null && !instanceAtlas.TryGetOrCreateSingleton(
+            if (level == null && !instanceAtlas.TryGetOrCreate(
                     levelId,
                     out level,
-                    afterCreation: nexitiesLevel => nexitiesLevel.OnLevelFirstCreation(),
                     levelInstanceId
                 )) {
                 Logger.Warning("Failed to get level by instance ULID: {LevelId}", levelInstanceId);

@@ -38,24 +38,29 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetIn
             && _singletonAssetInstances.TryGetValue(registration.AssetId, out Ulid existingUlid)) {
             return TryGet(existingUlid, out instance);
         }
-
+        
+        // Check if id is already present
+        if (predefinedUlid is not null && _assetInstances.TryGetValue((Ulid)predefinedUlid, out IAssetInstance? _)) {
+            logger.Warning("Asset Id {id} already exists", assetId);
+            return false;
+        }
+        
+        // Also runs the OnCreate method
         if (!factory.TryCreate(registration, predefinedUlid ?? Ulid.NewUlid(), out instance)) return false;
 
         // Add or update directly
         T assetInstance = instance;
-        if (!_assetInstances.TryAdd(assetInstance.InstanceId, assetInstance)) {
-            if (!_assetInstances.TryUpdate(assetInstance.InstanceId, assetInstance, assetInstance)) {
-                return false;
-            }
-        }
+        _assetInstances.TryAdd(assetInstance.InstanceId, assetInstance); // No need to check here, as TryAdd will return false if the key already exists and we checked for that see above
 
         foreach (Type? implementedType in registration.DerivedInterfaceTypes.Concat([registration.Type])) {
-            Lazy<ConcurrentDictionary<Ulid, byte>> lazyBag = _assetsByTypes.GetOrAdd(implementedType, valueFactory: _ => new Lazy<ConcurrentDictionary<Ulid, byte>>(() => new ConcurrentDictionary<Ulid, byte>()));
+            Lazy<ConcurrentDictionary<Ulid, byte>> lazyBag = _assetsByTypes.GetOrAdd(
+                implementedType, 
+                _ => new Lazy<ConcurrentDictionary<Ulid, byte>>(() => new ConcurrentDictionary<Ulid, byte>())
+            );
             lazyBag.Value.TryAdd(instance.InstanceId, 0);
         }
 
-        if (registration.IsSingleton)
-            _singletonAssetInstances.TryAdd(instance.AssetId, instance.InstanceId);
+        if (registration.IsSingleton) _singletonAssetInstances.TryAdd(instance.AssetId, instance.InstanceId);
 
         return true;
     }
@@ -94,25 +99,9 @@ public class AssetInstanceAtlas(ILogger logger, IAssetAtlas assetAtlas, IAssetIn
         ulid is not null && TryGet((Ulid)ulid, out instance)
         || TryCreate(assetId, out instance, ulid);
 
-    public bool TryGetOrCreate<T>(AssetId assetId, [NotNullWhen(true)] out T? instance, Action<T> afterCreation, Ulid? ulid = null) where T : class, IAssetInstance {
-        if ((ulid is not {} ulidCasted || !TryGet(ulidCasted, out instance))
-            && !TryCreate(assetId, out instance, ulid)) return false;
-
-        afterCreation(instance);
-        return true;
-    }
-
     public bool TryGetOrCreateSingleton<T>(AssetId assetId, [NotNullWhen(true)] out T? instance, Ulid? ulid = null) where T : class, IAssetInstance =>
         TryGetSingleton(assetId, out instance)
         || TryCreate(assetId, out instance, ulid);
-
-    public bool TryGetOrCreateSingleton<T>(AssetId assetId, [NotNullWhen(true)] out T? instance, Action<T> afterCreation, Ulid? ulid = null) where T : class, IAssetInstance {
-        if (TryGetSingleton(assetId, out instance)) return true;
-        if (!TryCreate(assetId, out instance, ulid)) return false;
-
-        afterCreation(instance);
-        return true;
-    }
 
     public T GetOrCreate<T>(Type type, Ulid? ulid = null) where T : class, IAssetInstance {
         if (TryGetOrCreate(type, out T? instance, ulid)) return instance;

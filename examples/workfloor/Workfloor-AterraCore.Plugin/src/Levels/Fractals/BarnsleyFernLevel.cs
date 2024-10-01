@@ -4,6 +4,7 @@
 using AterraCore.Common.Attributes;
 using AterraCore.Common.Attributes.Nexities;
 using AterraCore.Common.Data;
+using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Components;
 using AterraCore.Contracts.Nexities.Entities;
 using AterraCore.Contracts.Nexities.Entities.QuickHands;
@@ -31,7 +32,8 @@ public class BarnsleyFernLevel(
     private ISystemIds? _systemIds = systemIds;
     public IDirectChildren ChildrenIDs => _children ??= GetComponent<IDirectChildren>();
     public ISystemIds NexitiesSystemIds => _systemIds ??= GetComponent<ISystemIds>();
-    public void OnLevelFirstCreation() {
+    public override void OnCreate(Ulid instanceId, AssetId assetId) {
+        base.OnCreate(instanceId, assetId);
         const int iterations = 1_000_000;
         var point = new Vector2(0, 0);
 
