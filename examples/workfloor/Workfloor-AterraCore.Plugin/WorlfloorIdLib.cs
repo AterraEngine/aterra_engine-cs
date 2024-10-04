@@ -22,6 +22,7 @@ public static class WorkfloorIdLib {
         public const string TextureDuckyPlatinum = $"{ThisSection}:{ThisClass}/{nameof(TextureDuckyPlatinum)}";
         public const string SpriteDuckyPlatinum = $"{ThisSection}:{ThisClass}/{nameof(SpriteDuckyPlatinum)}";
         public const string TagComponent = $"{ThisSection}:{ThisClass}/{nameof(TagComponent)}";
+        public const string BoundingCircle = $"{ThisSection}:{ThisClass}/{nameof(BoundingCircle)}";
     }
     #endregion
     #region Entities
@@ -56,6 +57,7 @@ public static class WorkfloorIdLib {
         public const string RandomImpulse = $"{ThisSection}:{ThisClass}/{nameof(RandomImpulse)}";
         public const string LevelSwitch = $"{ThisSection}:{ThisClass}/{nameof(LevelSwitch)}";
         public const string SpawnEnemy = $"{ThisSection}:{ThisClass}/{nameof(SpawnEnemy)}";
+        public const string Collision = $"{ThisSection}:{ThisClass}/{nameof(Collision)}";
     }
     #endregion
     #region Systems - Rendering

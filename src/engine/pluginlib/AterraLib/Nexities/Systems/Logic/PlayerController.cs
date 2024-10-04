@@ -25,7 +25,7 @@ public class PlayerController(ICrossThreadDataAtlas crossThreadDataAtlas) : Nexi
         float rotation = 0f;
         Vector2 scale = Vector2.One;
 
-        KeyboardKey[] keyMovements = playerInputTickData.KeyboardKeyDown.ToArray();
+        KeyboardKey[] keyMovements = playerInputTickData.KeyboardKeyDown.Distinct().ToArray();
         for (int i = keyMovements.Length - 1; i >= 0; i--) {
             // ReSharper disable once SwitchStatementMissingSomeEnumCasesNoDefault
             switch (keyMovements[i]) {
@@ -50,7 +50,7 @@ public class PlayerController(ICrossThreadDataAtlas crossThreadDataAtlas) : Nexi
             }
         }
 
-        Vector2[] mouseWheelMovements = playerInputTickData.MouseWheelMovement.ToArray();
+        Vector2[] mouseWheelMovements = playerInputTickData.MouseWheelMovement.Distinct().ToArray();
         for (int i = mouseWheelMovements.Length - 1; i >= 0; i--) {
             switch (mouseWheelMovements[i]) {
                 case { X: 0f, Y: 0f }: break;

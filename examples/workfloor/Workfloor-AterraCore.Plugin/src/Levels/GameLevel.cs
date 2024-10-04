@@ -42,6 +42,7 @@ public class GameLevel(
             AssetIdLib.AterraLib.SystemsLogic.PlayerController,
             AssetIdLib.AterraLib.SystemsLogic.CameraController,
             WorkfloorIdLib.SystemsLogic.SpawnEnemy,
+            WorkfloorIdLib.SystemsLogic.Collision,
             // WorkfloorIdLib.SystemsLogic.LevelSwitch,
             
             AssetIdLib.AterraLib.SystemsLogic.ApplyImpulse,
@@ -56,6 +57,10 @@ public class GameLevel(
         
         if (!instanceAtlas.TryCreate(WorkfloorIdLib.Entities.DuckyPlayer, out IPlayer2D? player2D)) throw new ApplicationException("Entity could not be created");
         ChildrenIDs.TryAdd(player2D);
+        
+        if (!instanceAtlas.TryCreate(WorkfloorIdLib.Entities.PropDuckyHype, out IProp2D? prop2D)) throw new ApplicationException("Entity could not be created");
+        prop2D.Transform2D.Scale = new Vector2(0,0);
+        ChildrenIDs.TryAdd(prop2D);
         
         if (!instanceAtlas.TryCreate(StringAssetIdLib.AterraLib.Entities.Camera2D, out ICamera2D? camera2D)) throw new ApplicationException("Entity could not be created");
 

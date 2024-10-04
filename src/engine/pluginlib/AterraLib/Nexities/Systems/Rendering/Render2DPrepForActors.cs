@@ -10,6 +10,7 @@ using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading.CrossData;
 using AterraLib.Nexities.Components;
 using AterraLib.Nexities.CrossThreadDataHolders;
+using Serilog;
 
 namespace AterraLib.Nexities.Systems.Rendering;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -17,7 +18,7 @@ namespace AterraLib.Nexities.Systems.Rendering;
 // ---------------------------------------------------------------------------------------------------------------------
 [System(StringAssetIdLib.AterraLib.SystemsRendering.Render2DPrepForActors)]
 [UsedImplicitly]
-public class Render2DPrepForActors(IAssetInstanceAtlas instanceAtlas, ICrossThreadDataAtlas crossThreadDataAtlas) : NexitiesSystemWithParentsReversed<IHasTransform2D, IActor2D>, IRenderSystem {
+public class Render2DPrepForActors(IAssetInstanceAtlas instanceAtlas, ICrossThreadDataAtlas crossThreadDataAtlas, ILogger logger) : NexitiesSystemWithParentsReversed<IHasTransform2D, IActor2D>, IRenderSystem {
     private static readonly Transform2D EmptyTransform2D = new();
 
     // -----------------------------------------------------------------------------------------------------------------

@@ -24,7 +24,7 @@ public abstract class NexitiesSystemWithParents<TParent, TChild> : AssetInstance
     // -----------------------------------------------------------------------------------------------------------------
     public abstract void Tick(ActiveLevel level);
     public virtual void InvalidateCaches() {
-        EntitiesBuffer = [];
+        Array.Clear(EntitiesBuffer);
         BufferPopulated = false;
     }
 

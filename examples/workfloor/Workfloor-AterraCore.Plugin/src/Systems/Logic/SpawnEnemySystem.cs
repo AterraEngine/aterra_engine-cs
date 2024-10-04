@@ -7,6 +7,7 @@ using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading.CrossData;
+using AterraCore.DI;
 using AterraCore.Nexities.Systems;
 using JetBrains.Annotations;
 using System.Diagnostics;
@@ -41,11 +42,13 @@ public class SpawnEnemySystem(IAssetInstanceAtlas instanceAtlas, ICrossThreadDat
             throw new ApplicationException("Entity could not be created");
 
         enemyDucky.Transform2D.Translation = new Vector2(Random.Shared.Next(-10, 10), Random.Shared.Next(-10, 10));
+        enemyDucky.Transform2D.Scale = Vector2.One;
         _enemyCollection.ChildrenIDs.TryAdd(enemyDucky);
 
-        _stopWatch.Restart();
-
+        level.ResetActiveEntityTree();
         crossThreadDataAtlas.LevelChangeBus.NotifyLevelChange();
+        
+        _stopWatch.Restart();
     }
 
 }

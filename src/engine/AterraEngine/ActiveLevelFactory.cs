@@ -12,7 +12,7 @@ using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.OmniVault.World.EntityTree;
 using JetBrains.Annotations;
-using System.Collections.Frozen;
+using System.Collections.Concurrent;
 
 namespace AterraEngine;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -36,7 +36,7 @@ public class ActiveLevelFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreeFa
             instanceAtlas.TryGet(possibleCamera.RaylibCamera2D.InstanceId, out camera2D);
 
         IRenderSystem[] renderSystems = GetNexitiesSystems<IRenderSystem>(level2D.NexitiesSystemIds.AssetIds);
-        return new ActiveLevel(entityTreeFactory) {
+        return new ActiveLevel(entityTreeFactory, assetAtlas) {
             RawLevelData = level2D,
             LogicSystems = [..GetNexitiesSystems<ILogicSytem>(level2D.NexitiesSystemIds.AssetIds)],
             RenderSystems = [..renderSystems],
@@ -44,12 +44,10 @@ public class ActiveLevelFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreeFa
             UiSystems = [..GetNexitiesSystems<IUiSystem>(level2D.NexitiesSystemIds.AssetIds)],
             ActiveEntityTree = entityTree,
             Camera2DEntity = camera2D,
-            TextureAssetIds = entityTreeFlat
+            TextureAssetIds = new ConcurrentBag<AssetId>(entityTreeFlat
                 .Where(asset => asset is IIsRenderable2D)
                 .Select(asset => ((IIsRenderable2D)asset).Sprite2D.TextureAssetId)
-                .Select(id => assetAtlas.TryGetRegistration(id, out AssetRegistration assetInstance) ? assetInstance.AssetId : id)
-                .Distinct()
-                .ToFrozenSet()
+                .Select(id => assetAtlas.TryGetRegistration(id, out AssetRegistration assetInstance) ? assetInstance.AssetId : id))
         };
     }
 

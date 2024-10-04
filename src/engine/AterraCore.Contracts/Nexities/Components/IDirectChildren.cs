@@ -9,6 +9,7 @@ namespace AterraCore.Contracts.Nexities.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IDirectChildren : INexitiesComponent {
     int Count { get; }
+    int CountNested { get; }
     IReadOnlyCollection<Ulid> Children { get; }
 
     // -----------------------------------------------------------------------------------------------------------------

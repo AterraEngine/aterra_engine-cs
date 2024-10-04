@@ -13,7 +13,7 @@ namespace AterraLib.Nexities.Systems.Rendering;
 // ---------------------------------------------------------------------------------------------------------------------
 [System(StringAssetIdLib.AterraLib.SystemsRendering.Render2D)]
 [UsedImplicitly]
-public class Render2D(ICrossThreadDataAtlas crossThreadDataAtlas) : NexitiesSystem, IRenderSystem {
+public class Render2D(ICrossThreadDataAtlas crossThreadDataAtlas, IWorldSpace world) : NexitiesSystem, IRenderSystem {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -23,6 +23,7 @@ public class Render2D(ICrossThreadDataAtlas crossThreadDataAtlas) : NexitiesSyst
         if (!crossThreadDataAtlas.TryGetOrCreate(AssetIdLib.AterraLib.CrossThreadDataHolders.RenderableData, out RenderableData? renderableDataDto)) return;
 
         renderableDataDto.ClearCache();// necessary to get the correct textures later on
+        world.ActiveLevel?.ResetActiveEntityTree();
     }
 
     public override void Tick(ActiveLevel level) {

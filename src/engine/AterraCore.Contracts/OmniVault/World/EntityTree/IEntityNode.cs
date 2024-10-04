@@ -14,5 +14,6 @@ public interface IEntityNode {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void AddChild(IAssetInstance child);
+    public void AddChild<T>(T child) where T : IAssetInstance;
+    public void UpdateAndCascade();
 }

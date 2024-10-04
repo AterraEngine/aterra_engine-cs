@@ -125,11 +125,9 @@ public class RenderThreadProcessor(
     // Events
     // -----------------------------------------------------------------------------------------------------------------
     private void OnEventManagerOnEventClearSystemCaches() {
-        if (world.ActiveLevel is not { RenderSystemsReversed: var renderSystemsReversed }) return;
-
-        int count = renderSystemsReversed.Length;
-        for (int i = count - 1; i >= 0; i--) {
-            renderSystemsReversed[i].InvalidateCaches();
+        if (world.ActiveLevel is not { RenderSystems: var renderSystems }) return;
+        foreach (IRenderSystem renderSystem in renderSystems) {
+            renderSystem.InvalidateCaches();
         }
     }
 
