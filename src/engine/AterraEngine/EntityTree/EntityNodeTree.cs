@@ -4,6 +4,7 @@
 using AterraCore.Common.Types;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World.EntityTree;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AterraEngine.EntityTree;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -12,7 +13,7 @@ namespace AterraEngine.EntityTree;
 /// <summary>
 ///     The `EntityNodeTree` struct represents a hierarchical tree structure of entity nodes in an entity system.
 /// </summary>
-public readonly struct EntityNodeTree(IEntityNode root, IEntityTreePools poolProvider) : IEntityNodeTree {
+public class EntityNodeTree(IEntityNode root, IEntityTreePools poolProvider) : IEntityNodeTree {
     /// <summary>
     ///     Represents a tree structure of entity nodes with a root node.
     /// </summary>
@@ -168,4 +169,24 @@ public readonly struct EntityNodeTree(IEntityNode root, IEntityTreePools poolPro
         }
     }
     #endregion
+
+    public bool TryGetFirst<T>(Func<IEntityNode, bool> predicate, [NotNullWhen(true)] out T? node) where T : IAssetInstance {
+        node = default;
+
+        foreach (IEntityNode n in TraverseDepthFirst()) {
+            if (!predicate(n) || n.Value is not T t) continue;
+
+            node = t;
+            return true;
+        }
+        
+        return false;
+    }
+
+    public void FindAndUpdateNodes<T>(Func<IEntityNode, bool> predicate, Action<IEntityNode> action) {
+        foreach (IEntityNode n in TraverseDepthFirst()) {
+            if (!predicate(n)) continue;
+            action(n);
+        }
+    }
 }

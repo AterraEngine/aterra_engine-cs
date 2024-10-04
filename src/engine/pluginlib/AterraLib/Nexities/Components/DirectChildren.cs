@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Attributes.Nexities;
+using AterraCore.Contracts.OmniVault.Assets;
 using Extensions;
 
 namespace AterraLib.Nexities.Components;
@@ -52,6 +53,7 @@ public class DirectChildren : NexitiesComponent, IDirectChildren {
             return true;
         }
     }
+    public bool TryAdd<T>(T asset) where T : IAssetInstance => TryAdd(asset.InstanceId);
 
     public bool TryInsertBefore(Ulid id, Ulid before) {
         using (_rwLock.Write()) {

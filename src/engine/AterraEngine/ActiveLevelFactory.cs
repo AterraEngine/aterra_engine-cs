@@ -18,10 +18,12 @@ namespace AterraEngine;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-/// <summary> The ActiveLevelFactory class is responsible for creating active levels based on the provided level data. </summary>
+/// <summary>
+/// The ActiveLevelFactory class is responsible for creating active levels based on the provided level data.
+/// </summary>
 [UsedImplicitly]
 [Singleton<IActiveLevelFactory>]
-public class ActiveLevelFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreeFactory entityTreeFactory, IAssetAtlas assetAtlas) : IActiveLevelFactory {
+public class ActiveLevelFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreeFactory entityTreeFactory , IAssetAtlas assetAtlas) : IActiveLevelFactory {
     /// <summary> Creates an instance of ActiveLevel using the provided INexitiesLevel as input.</summary>
     /// <param name="level2D">The INexitiesLevel object representing the level.</param>
     /// <returns>An instance of ActiveLevel.</returns>
@@ -34,7 +36,7 @@ public class ActiveLevelFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreeFa
             instanceAtlas.TryGet(possibleCamera.RaylibCamera2D.InstanceId, out camera2D);
 
         IRenderSystem[] renderSystems = GetNexitiesSystems<IRenderSystem>(level2D.NexitiesSystemIds.AssetIds);
-        return new ActiveLevel {
+        return new ActiveLevel(entityTreeFactory) {
             RawLevelData = level2D,
             LogicSystems = [..GetNexitiesSystems<ILogicSytem>(level2D.NexitiesSystemIds.AssetIds)],
             RenderSystems = [..renderSystems],

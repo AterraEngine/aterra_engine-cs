@@ -9,4 +9,11 @@ namespace AterraCore.Contracts.Nexities.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 public interface ISystemIds : INexitiesComponent {
     public IReadOnlyCollection<AssetId> AssetIds { get; }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    public void Add(AssetId assetId);
+    public bool TryAdd(AssetId assetId);
+    public void AddRange(IEnumerable<AssetId> assetIds);
 }

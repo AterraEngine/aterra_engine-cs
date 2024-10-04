@@ -69,7 +69,7 @@ public class LogicThreadProcessor(
     private void Update() {
         if (world.ActiveLevel is not { LogicSystems: var logicSystems } activeLevel) return;
 
-        foreach (INexitiesSystem logicSystem in logicSystems) {
+        foreach (ILogicSytem logicSystem in logicSystems) {
             logicSystem.Tick(activeLevel);
         }
     }
@@ -79,6 +79,11 @@ public class LogicThreadProcessor(
             action();
         }
 
+        if (crossThreadDataAtlas.ResetActiveLevel) {
+            world.ActiveLevel?.ResetActiveEntityTree();
+            crossThreadDataAtlas.ResetActiveLevel = false;
+        }
+        
         crossThreadDataAtlas.CleanupLogicTick();// Clear for the end of the tick
     }
 

@@ -40,7 +40,7 @@ public class Engine(
         if (!world.TryChangeActiveLevel(StringAssetIdLib.AterraLib.Entities.EmptyLevel)) throw new ApplicationException("Failed to change active level");
 
         await Task.Delay(1_000);
-        if (!world.TryChangeActiveLevel("Workfloor:Levels/Main")) throw new ApplicationException("Failed to change active level to");
+        if (!world.TryChangeActiveLevel("Workfloor:Levels/Game")) throw new ApplicationException("Failed to change active level to");
 
         // -------------------------------------------------------------------------------------------------------------
 

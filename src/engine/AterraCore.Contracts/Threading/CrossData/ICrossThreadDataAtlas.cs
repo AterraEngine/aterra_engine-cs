@@ -14,6 +14,8 @@ public interface ICrossThreadDataAtlas {
     IDataCollector DataCollector { get; }
     ILevelChangeBus LevelChangeBus { get; }
 
+    bool ResetActiveLevel { get; set; }
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
