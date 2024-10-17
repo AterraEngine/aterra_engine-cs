@@ -179,13 +179,14 @@ public class EntityNodeTree(IEntityNode root, IEntityTreePools poolProvider) : I
             node = t;
             return true;
         }
-        
+
         return false;
     }
 
     public void FindAndUpdateNodes<T>(Func<IEntityNode, bool> predicate, Action<IEntityNode> action) {
         foreach (IEntityNode n in TraverseDepthFirst()) {
             if (!predicate(n)) continue;
+
             action(n);
         }
     }

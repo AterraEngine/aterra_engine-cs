@@ -13,7 +13,7 @@ public static partial class RegexLib {
     public static readonly Regex AssetTag = RegexAssetTag();
     public static readonly Regex PluginId = RegexPluginId();
     public static readonly Regex Namespaces = RegexNamespaces();
-    
+
     [GeneratedRegex(@"^(\d+)\.(\d+)\.(\d+)(?:\-(\w*))?$", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase)]
     private static partial Regex RegexSemanticVersion();
 

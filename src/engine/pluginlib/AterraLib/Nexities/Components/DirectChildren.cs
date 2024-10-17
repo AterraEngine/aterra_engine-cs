@@ -26,15 +26,15 @@ public class DirectChildren : NexitiesComponent, IDirectChildren {
             }
         }
     }
-    
+
     private int? _countNested;
     public int CountNested {
         get {
             using (_rwLock.Read()) {
                 // if (_countNested is not null) return _countNested.Value;
-                
+
                 IAssetInstanceAtlas instanceAtlas = EngineServices.GetAssetInstanceAtlas();
-                
+
                 Stack<Ulid> stack = new(DirectChildIds);
                 int count = 0;
                 while (stack.TryPop(out Ulid id)) {
@@ -45,7 +45,7 @@ public class DirectChildren : NexitiesComponent, IDirectChildren {
                         stack.Push(nestedChildId);
                     }
                 }
-                
+
                 // _countNested = count;
                 return count;
             }
@@ -70,13 +70,14 @@ public class DirectChildren : NexitiesComponent, IDirectChildren {
         }
 
     }
-    
+
     public bool TryAddFirst(Ulid id) {
         using (_rwLock.Write()) {
             if (DirectChildIds.Contains(id)) return false;
 
             DirectChildIds.Insert(0, id);
         }
+
         ClearCaches();
         return true;
     }
@@ -86,6 +87,7 @@ public class DirectChildren : NexitiesComponent, IDirectChildren {
 
             DirectChildIds.Add(id);
         }
+
         ClearCaches();
         return true;
     }

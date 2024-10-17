@@ -22,14 +22,14 @@ public class ActiveLevel(IEntityTreeFactory entityTreeFactory, IAssetAtlas asset
     public required ImmutableArray<IRenderSystem> RenderSystems { get; init; }
     public required ImmutableArray<IUiSystem> UiSystems { get; init; }
     public required ImmutableArray<IRenderSystem> RenderSystemsReversed { get; init; }
-    
+
     private IEntityNodeTree? _activeEntityTree;
     public required IEntityNodeTree ActiveEntityTree {
         get => _activeEntityTree ??= entityTreeFactory.CreateFromRootId(RawLevelData.InstanceId);
         set => _activeEntityTree = value;
     }
     public required IRaylibCamera2D? Camera2DEntity { get; init; }
-    
+
     private ConcurrentBag<AssetId>? _textureAssetIds;
     public required ConcurrentBag<AssetId> TextureAssetIds {
         get => _textureAssetIds ??= new ConcurrentBag<AssetId>(ActiveEntityTree.GetAsFlat()
@@ -38,7 +38,7 @@ public class ActiveLevel(IEntityTreeFactory entityTreeFactory, IAssetAtlas asset
             .Select(id => assetAtlas.TryGetRegistration(id, out AssetRegistration assetInstance) ? assetInstance.AssetId : id));
         init => _textureAssetIds = value;
     }
-    
+
     public void ResetActiveEntityTree() {
         _activeEntityTree = null;
         _textureAssetIds = null;

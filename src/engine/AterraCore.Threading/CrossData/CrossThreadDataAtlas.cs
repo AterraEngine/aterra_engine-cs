@@ -28,7 +28,7 @@ public class CrossThreadDataAtlas(IAssetInstanceAtlas instanceAtlas) : ICrossThr
 
     private ILevelChangeBus? _levelChangeBus;
     public ILevelChangeBus LevelChangeBus => _levelChangeBus ??= TryGetOrCreate(AssetIdLib.AterraCore.CrossThreadDataHolders.LevelChangeBus, out ILevelChangeBus? dataHolder) ? dataHolder : throw new Exception();
-    
+
     public bool ResetActiveLevel { get; set; } = false;
 
     private event RenderTickCleanupDelegate? RenderTickCleanups;

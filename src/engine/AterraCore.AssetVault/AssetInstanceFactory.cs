@@ -52,7 +52,7 @@ public class AssetInstanceFactory(ILogger logger, IAssetAtlas assetAtlas) : IAss
 
             assetInstance = castedInstance;
             assetInstance.OnCreate(predefinedUlid, registration.AssetId);
-            
+
             return true;
         }
         catch (Exception e) when (e is MethodAccessException or ArgumentException or TargetInvocationException or TargetParameterCountException or NotSupportedException or SecurityException) {

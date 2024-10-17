@@ -126,6 +126,7 @@ public class RenderThreadProcessor(
     // -----------------------------------------------------------------------------------------------------------------
     private void OnEventManagerOnEventClearSystemCaches() {
         if (world.ActiveLevel is not { RenderSystems: var renderSystems }) return;
+
         foreach (IRenderSystem renderSystem in renderSystems) {
             renderSystem.InvalidateCaches();
         }

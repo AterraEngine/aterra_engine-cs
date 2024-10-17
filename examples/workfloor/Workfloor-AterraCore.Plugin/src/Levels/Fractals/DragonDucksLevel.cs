@@ -33,7 +33,7 @@ public class DragonDucksLevel(
     public ISystemIds NexitiesSystemIds => _systemIds ??= GetComponent<ISystemIds>();
     public override void OnCreate(Ulid instanceId, AssetId assetId) {
         base.OnCreate(instanceId, assetId);
-        
+
         const int iterations = 16;
         var startVector = new Vector2(-100, 0);
         var endVector = new Vector2(100, 0);

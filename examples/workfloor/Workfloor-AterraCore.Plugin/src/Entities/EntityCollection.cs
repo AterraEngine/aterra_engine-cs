@@ -9,7 +9,6 @@ using JetBrains.Annotations;
 using Workfloor_AterraCore.Plugin.Components;
 
 namespace Workfloor_AterraCore.Plugin.Entities;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -18,9 +17,9 @@ namespace Workfloor_AterraCore.Plugin.Entities;
 public class EntityCollection(IDirectChildren children, TagComponent tags) : NexitiesEntity(children, tags), IHasDirectChildren {
     private IDirectChildren? _children = children;
     public IDirectChildren ChildrenIDs => _children ??= GetComponent<IDirectChildren>();
-    
+
     private TagComponent? _tags = tags;
     public TagComponent TagComponent => _tags ??= GetComponent<TagComponent>();
-    
+
     public int Count => ChildrenIDs.Count;
 }

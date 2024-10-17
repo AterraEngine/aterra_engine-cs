@@ -21,8 +21,9 @@ public class DuckyPlayerActor(
     IDirectChildren childEntities,
     IImpulse2D impulse2D,
     BoundingCircle boundingCircle
-) : NexitiesEntity(transform2D, sprite2D, childEntities, impulse2D, boundingCircle), 
-    IDuckyPlayerActor, IHasBoundingCircle {
+) : NexitiesEntity(transform2D, sprite2D, childEntities, impulse2D, boundingCircle),
+    IDuckyPlayerActor,
+    IHasBoundingCircle {
 
     private BoundingCircle? _boundingCircle = boundingCircle;
     public BoundingCircle BoundingCircle => _boundingCircle ??= GetComponent<BoundingCircle>();
@@ -37,5 +38,5 @@ public class DuckyPlayerActor(
     public IDirectChildren ChildrenIDs => _childrenIDs ??= GetComponent<IDirectChildren>();
 
     private IImpulse2D? _impulse2D = impulse2D;
-    public IImpulse2D Impulse2D => _impulse2D ??= GetComponent<IImpulse2D>(); 
+    public IImpulse2D Impulse2D => _impulse2D ??= GetComponent<IImpulse2D>();
 }

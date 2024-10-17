@@ -23,7 +23,7 @@ namespace AterraEngine;
 /// </summary>
 [UsedImplicitly]
 [Singleton<IActiveLevelFactory>]
-public class ActiveLevelFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreeFactory entityTreeFactory , IAssetAtlas assetAtlas) : IActiveLevelFactory {
+public class ActiveLevelFactory(IAssetInstanceAtlas instanceAtlas, IEntityTreeFactory entityTreeFactory, IAssetAtlas assetAtlas) : IActiveLevelFactory {
     /// <summary> Creates an instance of ActiveLevel using the provided INexitiesLevel as input.</summary>
     /// <param name="level2D">The INexitiesLevel object representing the level.</param>
     /// <returns>An instance of ActiveLevel.</returns>

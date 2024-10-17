@@ -36,8 +36,8 @@ public class Engine(
         Task<bool> renderTask = threadingManager.TrySpawnRenderThreadAsync();
 
         await Task.WhenAll(logicTask, renderTask);
-        if (!logicTask.Result) throw new ApplicationException("Failed to start LogicThread ");
-        if (!renderTask.Result) throw new ApplicationException("Failed to start RenderThread ");
+        if (!logicTask.Result) throw new ApplicationException("Failed to start LogicThread");
+        if (!renderTask.Result) throw new ApplicationException("Failed to start RenderThread");
 
         if (!world.TryChangeActiveLevel(StringAssetIdLib.AterraLib.Entities.EmptyLevel)) throw new ApplicationException("Failed to change active level");
 

@@ -83,7 +83,7 @@ public class LogicThreadProcessor(
             world.ActiveLevel?.ResetActiveEntityTree();
             crossThreadDataAtlas.ResetActiveLevel = false;
         }
-        
+
         crossThreadDataAtlas.CleanupLogicTick();// Clear for the end of the tick
     }
 

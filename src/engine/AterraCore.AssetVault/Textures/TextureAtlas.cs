@@ -61,7 +61,7 @@ public class TextureAtlas(ILogger logger, IAssetInstanceAtlas instanceAtlas, IPl
 
             Raylib.GenTextureMipmaps(ref texture);
             Raylib.SetTextureFilter(texture, TextureFilter.Anisotropic4X);
-            
+
             return true;
         }
         catch (Exception ex) {

@@ -14,15 +14,14 @@ namespace AterraCore.Common.Types.Nexities;
 public readonly struct AssetId :
     IEqualityOperators<AssetId, AssetId, bool>,
     IEquatable<AssetId>,
-    IEqualityOperators<AssetId, PluginId, bool> 
-{
+    IEqualityOperators<AssetId, PluginId, bool> {
     private const int MaxLength = 255;
     public readonly PluginId PluginId;
     public readonly NameSpace NameSpace;
     private readonly int _hashCode;
     private readonly ReadOnlyMemory<char> _assetIdCache;
     private static readonly ConcurrentDictionary<string, (PluginId pluginId, NameSpace assetName, ReadOnlyMemory<char> cache)> GlobalCache = new();
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Constructors
     // -----------------------------------------------------------------------------------------------------------------
@@ -37,12 +36,14 @@ public readonly struct AssetId :
         _assetIdCache = GetOrAddCache(pluginId, assetName).cache;
 
         if (_assetIdCache.Length <= MaxLength) return;
+
         GlobalCache.TryRemove(_assetIdCache.ToString(), out _);
         throw new ArgumentException("AssetId length cannot exceed 256 characters");
     }
 
     public AssetId(string assetId) {
         if (assetId.Length > MaxLength) throw new ArgumentException("AssetId length cannot exceed 256 characters");
+
         (PluginId pluginId, NameSpace assetName, ReadOnlyMemory<char> cache) = GlobalCache.GetOrAdd(assetId, valueFactory: id => {
             (PluginId pluginId, NameSpace assetName) = ParseAssetId(id);
             return (pluginId, assetName, GetAsMemory(pluginId, assetName));
@@ -83,7 +84,7 @@ public readonly struct AssetId :
         string key = pluginId.Value + ':' + string.Join('/', assetName);
         return GlobalCache.GetOrAdd(
             key,
-            _ => (pluginId, assetName, GetAsMemory(pluginId, assetName))
+            valueFactory: _ => (pluginId, assetName, GetAsMemory(pluginId, assetName))
         );
     }
 
@@ -93,24 +94,24 @@ public readonly struct AssetId :
     }
 
     public override string ToString() => _assetIdCache.ToString();
-    
+
     public override int GetHashCode() => _hashCode;
-    
+
     private int ComputeHashCode() => HashCode.Combine(PluginId, NameSpace);
 
     // -----------------------------------------------------------------------------------------------------------------
     // Comparison Methods
     // -----------------------------------------------------------------------------------------------------------------
     public static bool operator ==(AssetId left, AssetId right) => left.Equals(right);
-    
+
     public static bool operator !=(AssetId left, AssetId right) => !left.Equals(right);
-    
+
     public static bool operator ==(AssetId left, PluginId right) => left.PluginId == right;
-    
+
     public static bool operator !=(AssetId left, PluginId right) => left.PluginId != right;
-    
+
     public override bool Equals(object? obj) => obj is AssetId other && Equals(other);
-    
+
     public bool Equals(AssetId other) =>
         PluginId.Equals(other.PluginId)
         && NameSpace.Equals(other.NameSpace);

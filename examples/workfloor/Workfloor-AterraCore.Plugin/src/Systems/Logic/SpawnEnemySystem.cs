@@ -15,7 +15,6 @@ using System.Numerics;
 using Workfloor_AterraCore.Plugin.Entities;
 
 namespace Workfloor_AterraCore.Plugin.Systems.Logic;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -25,16 +24,17 @@ public class SpawnEnemySystem(IAssetInstanceAtlas instanceAtlas, ICrossThreadDat
 
     private EntityCollection? _enemyCollection;
     private readonly Stopwatch _stopWatch = Stopwatch.StartNew();
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public override void Tick(ActiveLevel level) {
         if (_enemyCollection is null) {
-            if (!level.ActiveEntityTree.TryGetFirst(node => node.Value is EntityCollection {TagComponent.Tags: {} tags } && tags.Contains(WorkfloorIdLib.Tags.EnemyCollection), out EntityCollection? enemyCollection)) throw new Exception("apjzepokazek");
+            if (!level.ActiveEntityTree.TryGetFirst(predicate: node => node.Value is EntityCollection { TagComponent.Tags: {} tags } && tags.Contains(WorkfloorIdLib.Tags.EnemyCollection), out EntityCollection? enemyCollection)) throw new Exception("apjzepokazek");
+
             _enemyCollection = enemyCollection;
         }
-        
+
         if (_stopWatch.ElapsedMilliseconds < 1000) return;
         if (_enemyCollection.Count >= 100) return;
 
@@ -47,7 +47,7 @@ public class SpawnEnemySystem(IAssetInstanceAtlas instanceAtlas, ICrossThreadDat
 
         level.ResetActiveEntityTree();
         crossThreadDataAtlas.LevelChangeBus.NotifyLevelChange();
-        
+
         _stopWatch.Restart();
     }
 

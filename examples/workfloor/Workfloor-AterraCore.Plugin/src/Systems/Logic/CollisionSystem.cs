@@ -15,7 +15,6 @@ using Workfloor_AterraCore.Plugin.Components;
 using Workfloor_AterraCore.Plugin.Entities;
 
 namespace Workfloor_AterraCore.Plugin.Systems.Logic;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -25,8 +24,8 @@ public class CollisionSystem(ICrossThreadDataAtlas crossThreadDataAtlas, ILogger
 
     public override void Tick(ActiveLevel level) {
         IEnumerable<IHasBoundingCircle> entities = GetEntities(level).ToArray();
-        if (!level.ActiveEntityTree.TryGetFirst(node => node.Value is DuckyPlayerActor, out DuckyPlayerActor? player)) return;
-        
+        if (!level.ActiveEntityTree.TryGetFirst(predicate: node => node.Value is DuckyPlayerActor, out DuckyPlayerActor? player)) return;
+
         // Check for collisions with other entities
         foreach (IHasBoundingCircle other in entities) {
             if (player == other) continue;
@@ -38,11 +37,11 @@ public class CollisionSystem(ICrossThreadDataAtlas crossThreadDataAtlas, ILogger
             if (distance <= player.BoundingCircle.Radius + other.BoundingCircle.Radius) {
                 // Collision detected, update the sprite color and log the collision
                 other.Sprite2D.Shade = Color.Red;
-                logger.Information("Collision detected between {Player} and {Other}", player.InstanceId, other.InstanceId);   
+                logger.Information("Collision detected between {Player} and {Other}", player.InstanceId, other.InstanceId);
             }
         }
 
-        
+
         level.ResetActiveEntityTree();
         crossThreadDataAtlas.LevelChangeBus.NotifyLevelChange();
     }

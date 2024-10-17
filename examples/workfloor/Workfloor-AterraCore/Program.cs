@@ -13,21 +13,21 @@ namespace Workfloor_AterraCore;
 public static class Program {
     public async static Task Main(string[] args) {
         var builder = new EngineBuilder();
-        
+
         builder.RegisterBootOperations(config => {
             config.AddOperation<EngineConfigLoader>();
-            config.AddOperation<CollectDependenciesByAttribute>(); // Do these first, because the manual ones might overwrite
+            config.AddOperation<CollectDependenciesByAttribute>();// Do these first, because the manual ones might overwrite
             config.AddOperation<CollectDependenciesManually>();
             config.AddOperation<PluginLoaderDefine>();
             config.AddOperation<PluginLoaderPreChecks>();
             config.AddOperation<PluginLoaderZipImporter>();
             config.AddOperation<PluginExtractor>();
-            config.AddOperation<CliArgsParserAssembler > ();
+            config.AddOperation<CliArgsParserAssembler>();
             config.AddOperation<BuildDependencies>();
         });
-        
+
         IEngine engine = builder.BuildEngine();
-        
+
         // --- Engine is running ---
         // Actually startup the engine
         if (!args.IsEmpty())

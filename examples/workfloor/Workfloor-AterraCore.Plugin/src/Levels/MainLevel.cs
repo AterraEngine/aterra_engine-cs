@@ -48,7 +48,7 @@ public class MainLevel(
 ) : NexitiesEntity(children, systemIds), INexitiesLevel {
     private IDirectChildren? _children = children;
     public IDirectChildren ChildrenIDs => _children ??= GetComponent<IDirectChildren>();
-    
+
     private ISystemIds? _systemIds = systemIds;
     public ISystemIds NexitiesSystemIds => _systemIds ??= GetComponent<ISystemIds>();
 

@@ -10,7 +10,7 @@ namespace AterraCore.AssetVault;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public abstract class AssetInstance : IAssetInstance {
-    public Ulid InstanceId  { get; set; }
+    public Ulid InstanceId { get; set; }
     public AssetId AssetId { get; set; }
 
     // -----------------------------------------------------------------------------------------------------------------
