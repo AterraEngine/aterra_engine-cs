@@ -6,6 +6,8 @@ using AterraCore.Common.Data;
 using AterraCore.Contracts;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading;
+using AterraCore.DI;
+using CliArgsParser;
 using JetBrains.Annotations;
 using Serilog;
 
@@ -52,4 +54,5 @@ public class Engine(
         threadingManager.JoinThreads();// wait until all threads are done
         Logger.Information("Exiting AterraEngine");
     }
+    public IArgsParser GetArgsParser() => EngineServices.GetService<IArgsParser>();
 }

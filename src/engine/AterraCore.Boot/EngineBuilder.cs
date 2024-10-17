@@ -9,19 +9,40 @@ using AterraCore.Loggers;
 using CodeOfChaos.Extensions.Serilog;
 
 namespace AterraCore.Boot;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class EngineConfiguration(ILogger? logger = null) : IEngineConfiguration {
-
-    private BootComponents? _components;
-    private ILogger Logger { get; } = GetStartupLogger(logger);
-
+public class EngineBuilder {
     private LinkedList<IBootOperation> OrderOfBootOperations { get; } = [];
+    private ILogger Logger { get; } = GetStartupLogger();
+    
+    private BootComponents? _components;
     private BootComponents Components => _components ??= new BootComponents(
         PluginLoader: new FilePathPluginLoader(Logger)
     );
 
+    // -----------------------------------------------------------------------------------------------------------------
+    // Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    
+    #region StartupLogger Helper
+    private static ILogger? _startupLogger;
+    private static ILogger GetStartupLogger() => _startupLogger ??= StartupLogger.CreateLogger(false).ForContext<EngineBuilder>();
+    #endregion
+    
+    #region RegisterBootOperations
+    public void RegisterBootOperations(Action<BootOperationConfiguration> action) {
+        var config = new BootOperationConfiguration(OrderOfBootOperations);
+        action(config);
+    }
+    
+    public class BootOperationConfiguration(LinkedList<IBootOperation> operations) {
+        public void AddOperation<T>() where T : IBootOperation => AddOperation(Activator.CreateInstance<T>());
+        public void AddOperation<T>(T operation ) where T : IBootOperation => operations.AddLast(operation);
+    }
+    #endregion
+    
     #region BuildEngine
     public IEngine BuildEngine() {
         // Log operation order
@@ -50,26 +71,6 @@ public class EngineConfiguration(ILogger? logger = null) : IEngineConfiguration 
         }
 
         Logger.Information(builder);
-    }
-    #endregion
-
-    // -----------------------------------------------------------------------------------------------------------------
-    // Helper Methods
-    // -----------------------------------------------------------------------------------------------------------------
-    #region StartupLogger Helper
-    private static ILogger? _startupLogger;
-    private static ILogger GetStartupLogger(ILogger? logger) =>
-        logger ?? (_startupLogger ??= StartupLogger.CreateLogger(false).ForContext<EngineConfiguration>());
-    #endregion
-
-    // -----------------------------------------------------------------------------------------------------------------
-    // Methods
-    // -----------------------------------------------------------------------------------------------------------------
-    #region RegisterBootOperations
-    public IEngineConfiguration RegisterBootOperation<T>() where T : IBootOperation, new() => RegisterBootOperation(new T());
-    public IEngineConfiguration RegisterBootOperation(IBootOperation newOperation) {
-        OrderOfBootOperations.AddLast(newOperation);
-        return this;
     }
     #endregion
 }

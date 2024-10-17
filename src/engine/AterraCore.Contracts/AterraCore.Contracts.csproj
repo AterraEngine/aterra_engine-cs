@@ -23,6 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="CliArgsParser" Version="2.1.2" />
         <PackageReference Include="CodeOfChaos.Extensions" Version="0.7.0"/>
         <PackageReference Include="CodeOfChaos.Extensions.DependencyInjection" Version="0.1.1"/>
         <PackageReference Include="CodeOfChaos.Extensions.Serilog" Version="0.4.0"/>
