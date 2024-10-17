@@ -4,7 +4,6 @@
 using AterraCore.Contracts.Boot.Operations;
 using AterraCore.Contracts.FlexiPlug;
 using AterraCore.Contracts.OmniVault.Assets;
-using AterraCore.Contracts.OmniVault.DataCollector;
 using AterraCore.Loggers;
 using CodeOfChaos.Extensions;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,7 +25,6 @@ public class CollectDependenciesManually : IBootOperation {
             ServiceDescriptor.Singleton(EngineLogger.CreateLogger(components.EngineConfigXml.LoggingConfig.UseAsyncConsole)),
             ServiceDescriptor.Singleton<IPluginAtlas>(provider => provider.GetRequiredService<IPluginAtlasFactory>().GetAtlas()),
             ServiceDescriptor.Singleton<IAssetAtlas>(provider => provider.GetRequiredService<IAssetAtlasFactory>().GetAtlas()),
-            ServiceDescriptor.Singleton<IDataCollector>(provider => provider.GetRequiredService<IDataCollectorFactory>().Create()),
             ServiceDescriptor.Singleton(components.EngineConfigXml),
             ServiceDescriptor.Singleton(components)
         ]);

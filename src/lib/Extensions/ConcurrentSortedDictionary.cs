@@ -64,22 +64,4 @@ public class ConcurrentSortedDictionary<TKey, TValue> where TKey : notnull {
         ImmutableInterlocked.Update(ref _sortedKeys, updateFunc);
         _hasChanged = true;
     }
-
-    // private TKey[] _preAllocatedCacheArrayKeys = ArrayPool<TKey>.Shared.Rent(0);
-    // public TKey[] Keys {
-    //     get {
-    //         if (!_hasChanged) return _preAllocatedCacheArrayKeys;
-    //         
-    //         ArrayPool<TKey>.Shared.Return(_preAllocatedCacheArrayKeys, clearArray: true);
-    //         _preAllocatedCacheArrayKeys = ArrayPool<TKey>.Shared.Rent(_sortedKeys.Count);
-    //         
-    //         for (int i = 0; i < _sortedKeys.Count; i++) {
-    //             TKey key = _sortedKeys[i];
-    //             _preAllocatedCacheArrayKeys[i] = key;
-    //         }
-    //         
-    //         _hasChanged = false;
-    //         return _preAllocatedCacheArrayKeys;
-    //     }
-    // }
 }

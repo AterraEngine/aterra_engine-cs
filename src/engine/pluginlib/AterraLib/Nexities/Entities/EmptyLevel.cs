@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Attributes;
+using AterraCore.Common.Attributes.Nexities;
 using AterraLib.Nexities.Components;
 
 namespace AterraLib.Nexities.Entities;
@@ -11,20 +12,12 @@ namespace AterraLib.Nexities.Entities;
 [Component<EmptyLevelSystemIds>("AterraLib:Components/EmptyLevelSystemIds")]
 [UsedImplicitly]
 public class EmptyLevelSystemIds : SystemIds {
-    protected override AssetId[] LogicSystems { get; set; } = [
-        // AssetIdStringLib.AterraLib.SystemsLogic.CameraController,
-        // "Workfloor:ApplyRandomImpulse",
-        // "Workfloor:ApplyRandomImpulseCamera",
-        // AssetIdStringLib.AterraLib.SystemsLogic.ApplyImpulseCamera
-    ];
-
-    protected override AssetId[] RenderSystems { get; set; } = [
+    protected override List<AssetId> RawAssetIds { get; } = [
         AssetIdLib.AterraLib.SystemsRendering.Render2DPrepForProps,
         AssetIdLib.AterraLib.SystemsRendering.Render2DPrepForActors,
-        AssetIdLib.AterraLib.SystemsRendering.Render2D
-    ];
+        AssetIdLib.AterraLib.SystemsRendering.Render2D,
 
-    protected override AssetId[] UiSystems { get; set; } = [
+        AssetIdLib.AterraLib.SystemsRendering.RenderUi
     ];
 }
 
@@ -51,11 +44,13 @@ public class EmptyLevel(
     private ISystemIds? _systemIds = systemIds;
     public IDirectChildren ChildrenIDs => _children ??= GetComponent<IDirectChildren>();
     public ISystemIds NexitiesSystemIds => _systemIds ??= GetComponent<ISystemIds>();
-    public void OnLevelFirstCreation() {}
-
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    protected override void ClearCaches() {}
+    protected override void ClearCaches() {
+        base.ClearCaches();
+        _children = null;
+        _systemIds = null;
+    }
 }

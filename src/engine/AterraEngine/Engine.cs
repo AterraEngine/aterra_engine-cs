@@ -1,13 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Attributes;
+using AterraCore.Common.Attributes.DI;
 using AterraCore.Common.Data;
 using AterraCore.Contracts;
-using AterraCore.Contracts.ConfigMancer;
 using AterraCore.Contracts.OmniVault.World;
 using AterraCore.Contracts.Threading;
-using AterraLib.Contracts;
+using AterraCore.DI;
+using CliArgsParser;
 using JetBrains.Annotations;
 using Serilog;
 
@@ -19,8 +19,7 @@ namespace AterraEngine;
 [Singleton<IEngine, Engine>]
 public class Engine(
     ILogger logger,
-    IAterraCoreWorld world,
-    IConfigAtlas configAtlas,
+    IWorldSpace world,
     IThreadingManager threadingManager
 ) : IEngine {
     private ILogger Logger { get; } = logger.ForContext<Engine>();
@@ -28,22 +27,17 @@ public class Engine(
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public async Task Run() {
+    public async Task RunAsync() {
         Logger.Information("Entered AterraEngine");
 
-        if (!configAtlas.GameConfigs.TryGetConfig(out IAterraLibGameConfig? aterraLibConfig)) {
-            throw new ApplicationException("Config was not setup correctly");
-        }
-
-        Logger.Information("{@c}", aterraLibConfig);
-
+        // if (!configAtlas.GameConfigs.TryGetConfig(out IAterraLibGameConfig? aterraLibConfig)) throw new ApplicationException("Config was not setup correctly");
 
         Task<bool> logicTask = threadingManager.TrySpawnLogicThreadAsync();
         Task<bool> renderTask = threadingManager.TrySpawnRenderThreadAsync();
 
         await Task.WhenAll(logicTask, renderTask);
-        if (!logicTask.Result) throw new ApplicationException("Failed to start LogicThread ");
-        if (!renderTask.Result) throw new ApplicationException("Failed to start RenderThread ");
+        if (!logicTask.Result) throw new ApplicationException("Failed to start LogicThread");
+        if (!renderTask.Result) throw new ApplicationException("Failed to start RenderThread");
 
         if (!world.TryChangeActiveLevel(StringAssetIdLib.AterraLib.Entities.EmptyLevel)) throw new ApplicationException("Failed to change active level");
 
@@ -60,4 +54,5 @@ public class Engine(
         threadingManager.JoinThreads();// wait until all threads are done
         Logger.Information("Exiting AterraEngine");
     }
+    public IArgsParser GetArgsParser() => EngineServices.GetService<IArgsParser>();
 }

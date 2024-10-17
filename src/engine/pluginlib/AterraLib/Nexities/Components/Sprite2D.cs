@@ -1,7 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Attributes;
+using AterraCore.Common.Attributes.Nexities;
 
 namespace AterraLib.Nexities.Components;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -23,6 +23,5 @@ public class Sprite2D : NexitiesComponent, ISprite2D {
     }
 
     public Color Shade { get; set; } = Color.White;
-
     public Rectangle? UvAndSourceCalculated { get; set; }
 }

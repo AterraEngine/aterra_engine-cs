@@ -2,7 +2,9 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Attributes;
+using AterraCore.Common.Attributes.Nexities;
 using AterraCore.Common.Data;
+using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.Nexities.Components;
 using AterraCore.Contracts.Nexities.Entities;
 using AterraCore.Contracts.Nexities.Levels;
@@ -28,7 +30,8 @@ public class SierpinskiLevel(
     private ISystemIds? _systemIds = systemIds;
     public IDirectChildren ChildrenIDs => _children ??= GetComponent<IDirectChildren>();
     public ISystemIds NexitiesSystemIds => _systemIds ??= GetComponent<ISystemIds>();
-    public void OnLevelFirstCreation() {
+    public override void OnCreate(Ulid instanceId, AssetId assetId) {
+        base.OnCreate(instanceId, assetId);
         const uint sierpinskiDepth = 11;
         const float sierpinskiSize = 2500f;
 

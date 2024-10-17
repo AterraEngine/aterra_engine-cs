@@ -8,6 +8,8 @@ namespace AterraCore.Contracts.OmniVault.Assets;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IAssetInstance {
-    public Ulid InstanceId { get; set; }
-    public AssetId AssetId { get; set; }
+    public Ulid InstanceId { get; }
+    public AssetId AssetId { get; }
+
+    public void OnCreate(Ulid instanceId, AssetId assetId);
 }

@@ -9,7 +9,7 @@ namespace AterraCore.Contracts.OmniVault.World;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IAterraCoreWorld {
+public interface IWorldSpace {
     /// <summary>
     ///     Represents the current active level.
     /// </summary>

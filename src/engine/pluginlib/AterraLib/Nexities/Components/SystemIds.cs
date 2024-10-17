@@ -1,42 +1,38 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Attributes;
+using AterraCore.Common.Attributes.Nexities;
+using AterraCore.DI;
+using Serilog;
+using System.Net.Http.Headers;
 
 namespace AterraLib.Nexities.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Component<ISystemIds>(StringAssetIdLib.AterraLib.Components.SystemIds)]
 [UsedImplicitly]
+[Component<ISystemIds>(StringAssetIdLib.AterraLib.Components.SystemIds)]
 public class SystemIds : NexitiesComponent, ISystemIds {
-    private IReadOnlyCollection<AssetId>? _logicSystemIdsCache;
-    private IReadOnlyCollection<AssetId>? _renderSystemIdsCache;
-    private IReadOnlyCollection<AssetId>? _uiSystemIdsCache;
-    protected virtual AssetId[] LogicSystems { get; set; } = [];
+    protected virtual List<AssetId> RawAssetIds { get; } = [];
+    public IReadOnlyCollection<AssetId> AssetIds => RawAssetIds.AsReadOnly();
 
-    protected virtual AssetId[] RenderSystems { get; set; } = [];
-
-    protected virtual AssetId[] UiSystems { get; set; } = [];
-    public IReadOnlyCollection<AssetId> LogicSystemIds => _logicSystemIdsCache ?? LogicSystems.AsReadOnly();
-    public IReadOnlyCollection<AssetId> RenderSystemIds => _renderSystemIdsCache ?? RenderSystems.AsReadOnly();
-    public IReadOnlyCollection<AssetId> UiSystemIds => _uiSystemIdsCache ?? UiSystems.AsReadOnly();
+    private static ILogger Logger => EngineServices.GetLogger().ForContext<SystemIds>();
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void AppendLogicSystem(AssetId logicSystem) {
-        LogicSystems = LogicSystems.Append(logicSystem).ToArray();
-        _logicSystemIdsCache = null;
+    public bool TryAdd(AssetId assetId) {
+        if (RawAssetIds.Contains(assetId)) return false;
+
+        RawAssetIds.Add(assetId);
+        return true;
     }
 
-    public void AppendRenderSystem(AssetId renderSystem) {
-        RenderSystems = RenderSystems.Append(renderSystem).ToArray();
-        _renderSystemIdsCache = null;
+    public void Add(AssetId assetId) {
+        if (!TryAdd(assetId)) Logger.Warning("Failed to add asset id {AssetId} to system ids", assetId);
     }
 
-    public void AppendUiSystem(AssetId uiSystem) {
-        UiSystems = UiSystems.Append(uiSystem).ToArray();
-        _uiSystemIdsCache = null;
+    public void AddRange(IEnumerable<AssetId> assetIds) {
+        foreach (AssetId assetId in assetIds) Add(assetId);
     }
 }

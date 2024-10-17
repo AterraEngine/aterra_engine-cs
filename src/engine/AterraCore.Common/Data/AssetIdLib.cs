@@ -6,8 +6,23 @@ namespace AterraCore.Common.Data;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public static class AssetIdLib {
+    public static class AterraCore {
+        public static class CrossThreadDataHolders {
+            public static readonly AssetId DataCollector = StringAssetIdLib.AterraCore.CrossThreadDataHolders.DataCollector;
+            public static readonly AssetId TextureBus = StringAssetIdLib.AterraCore.CrossThreadDataHolders.TextureBus;
+            public static readonly AssetId LevelChangeBus = StringAssetIdLib.AterraCore.CrossThreadDataHolders.LevelChangeBus;
+        }
+    }
+
     public static class AterraLib {
         public static readonly AssetId ConfigMancer = StringAssetIdLib.AterraLib.ConfigMancer;
+
+        #region CrossThreadDataHolders
+        public static class CrossThreadDataHolders {
+            public const string TickDataInput = StringAssetIdLib.AterraLib.CrossThreadDataHolders.TickDataInput;
+            public const string RenderableData = StringAssetIdLib.AterraLib.CrossThreadDataHolders.RenderableData;
+        }
+        #endregion
 
         #region Components
         public static class Components {
@@ -47,7 +62,7 @@ public static class AssetIdLib {
             public static readonly AssetId Render2D = StringAssetIdLib.AterraLib.SystemsRendering.Render2D;
             public static readonly AssetId Render2DPrepForProps = StringAssetIdLib.AterraLib.SystemsRendering.Render2DPrepForProps;
             public static readonly AssetId Render2DPrepForActors = StringAssetIdLib.AterraLib.SystemsRendering.Render2DPrepForActors;
-            public static readonly AssetId RenderHud = StringAssetIdLib.AterraLib.SystemsRendering.RenderHud;
+            public static readonly AssetId RenderUi = StringAssetIdLib.AterraLib.SystemsRendering.RenderUi;
             public static readonly AssetId RaylibKeyHandler = StringAssetIdLib.AterraLib.SystemsRendering.RaylibKeyHandler;
         }
         #endregion

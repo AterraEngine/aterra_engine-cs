@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Contracts.OmniVault.Assets;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AterraCore.Contracts.OmniVault.World.EntityTree;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -16,4 +17,7 @@ public interface IEntityNodeTree {
 
     IEnumerable<IEntityNode> TraverseDepthFirst();
     IEnumerable<IEntityNode> TraverseBreadthFirst();
+
+    bool TryGetFirst<T>(Func<IEntityNode, bool> predicate, [NotNullWhen(true)] out T? value) where T : IAssetInstance;
+    void FindAndUpdateNodes<T>(Func<IEntityNode, bool> predicate, Action<IEntityNode> action);
 }

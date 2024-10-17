@@ -2,7 +2,9 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraCore.Common.Attributes;
-using AterraCore.OmniVault.Textures;
+using AterraCore.AssetVault.Textures;
+using AterraCore.Common.Attributes.AssetVault;
+using AterraCore.Common.Attributes.Nexities;
 using AterraLib.Nexities.Components;
 
 namespace AterraLib.Nexities.Entities;

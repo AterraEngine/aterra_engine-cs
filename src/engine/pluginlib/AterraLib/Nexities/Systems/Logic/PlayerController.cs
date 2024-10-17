@@ -1,9 +1,11 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Attributes;
+using AterraCore.Common.Attributes.DI;
+using AterraCore.Common.Attributes.Nexities;
+using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.World;
-using AterraCore.Contracts.Threading.CrossThread;
+using AterraCore.Contracts.Threading.CrossData;
 using AterraLib.Contracts;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,19 +13,19 @@ namespace AterraLib.Nexities.Systems.Logic;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[System(StringAssetIdLib.AterraLib.SystemsLogic.PlayerController, CoreTags.LogicThread)]
+[System(StringAssetIdLib.AterraLib.SystemsLogic.PlayerController)]
 [Injectable<PlayerController>(ServiceLifetime.Singleton)]
 [UsedImplicitly]
-public class PlayerController(ICrossThreadTickData crossThreadTickData) : NexitiesSystem<IPlayer2D> {
+public class PlayerController(ICrossThreadDataAtlas crossThreadDataAtlas) : NexitiesSystem<IPlayer2D>, ILogicSytem {
     public override void Tick(ActiveLevel level) {
-        if (!crossThreadTickData.TryGet(AssetTagLib.AterraLib.PlayerInputTickData, out ITickDataInput? playerInputTickData)) return;
+        if (!crossThreadDataAtlas.TryGetOrCreate(AssetIdLib.AterraLib.CrossThreadDataHolders.TickDataInput, out ITickDataInput? playerInputTickData)) return;
 
         float x = 0f;
         float y = 0f;
         float rotation = 0f;
         Vector2 scale = Vector2.One;
 
-        KeyboardKey[] keyMovements = playerInputTickData.KeyboardKeyDown.ToArray();
+        KeyboardKey[] keyMovements = playerInputTickData.KeyboardKeyDown.Distinct().ToArray();
         for (int i = keyMovements.Length - 1; i >= 0; i--) {
             // ReSharper disable once SwitchStatementMissingSomeEnumCasesNoDefault
             switch (keyMovements[i]) {
@@ -48,7 +50,7 @@ public class PlayerController(ICrossThreadTickData crossThreadTickData) : Nexiti
             }
         }
 
-        Vector2[] mouseWheelMovements = playerInputTickData.MouseWheelMovement.ToArray();
+        Vector2[] mouseWheelMovements = playerInputTickData.MouseWheelMovement.Distinct().ToArray();
         for (int i = mouseWheelMovements.Length - 1; i >= 0; i--) {
             switch (mouseWheelMovements[i]) {
                 case { X: 0f, Y: 0f }: break;

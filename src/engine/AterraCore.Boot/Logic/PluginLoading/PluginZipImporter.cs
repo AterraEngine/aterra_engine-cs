@@ -39,7 +39,7 @@ public class PluginZipImporter(string zipPath, ILogger logger) : IPluginZipImpor
             return false;
         }
 
-        if (!_pluginConfigParser.TrySerializeFromBytes(bytes, out pluginConfig)) {
+        if (!_pluginConfigParser.TryDeserializeFromBytes(bytes, out pluginConfig)) {
             Logger.Warning("Failed to deserialize plugin config from {path} in {zip}", Paths.Plugins.PluginConfig, zipPath);
             return false;
         }

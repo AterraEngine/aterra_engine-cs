@@ -71,30 +71,21 @@ public readonly struct PluginId :
     // -----------------------------------------------------------------------------------------------------------------
     // Comparison Methods
     // -----------------------------------------------------------------------------------------------------------------
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator ==(PluginId left, PluginId right) => left.Equals(right);
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator !=(PluginId left, PluginId right) => !left.Equals(right);
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator ==(PluginId left, string? right) =>
         !string.IsNullOrEmpty(right) && TryCreateNew(right, out PluginId? output) && left.Equals(output);
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator !=(PluginId left, string? right) =>
         string.IsNullOrEmpty(right) || !TryCreateNew(right, out PluginId? output) || !left.Equals(output);
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static AssetId operator +(PluginId left, NameSpace right) => new(left, right);
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override bool Equals(object? obj) => obj is PluginId other && Equals(other);
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool Equals(PluginId other) => Value.Equals(other.Value, StringComparison.InvariantCultureIgnoreCase);
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override int GetHashCode() => _hashCode;
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private int ComputeHashCode() => StringComparer.OrdinalIgnoreCase.GetHashCode(Value);
 }

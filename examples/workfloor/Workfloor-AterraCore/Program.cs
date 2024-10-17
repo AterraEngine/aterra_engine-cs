@@ -4,9 +4,6 @@
 using AterraCore.Boot;
 using AterraCore.Boot.Operations;
 using AterraCore.Contracts;
-using AterraCore.Contracts.Boot;
-using AterraCore.DI;
-using CliArgsParser;
 using CodeOfChaos.Extensions;
 
 namespace Workfloor_AterraCore;
@@ -15,24 +12,27 @@ namespace Workfloor_AterraCore;
 // ---------------------------------------------------------------------------------------------------------------------
 public static class Program {
     public async static Task Main(string[] args) {
-        IEngineConfiguration config = new EngineConfiguration()
-                .RegisterBootOperation<EngineConfigLoader>()
-                .RegisterBootOperation<CollectDependenciesByAttribute>()// Do these first, because the manual ones might overwrite
-                .RegisterBootOperation<CollectDependenciesManually>()
-                .RegisterBootOperation<PluginLoaderDefine>()
-                .RegisterBootOperation<PluginLoaderPreChecks>()
-                .RegisterBootOperation<PluginLoaderZipImporter>()
-                .RegisterBootOperation<PluginExtractor>()
-                .RegisterBootOperation<CliArgsParserAssembler>()
-                .RegisterBootOperation<BuildDependencies>()
-            ;
+        var builder = new EngineBuilder();
 
-        IEngine engine = config.BuildEngine();
-        var argsParser = EngineServices.GetService<IArgsParser>();
+        builder.RegisterBootOperations(config => {
+            config.AddOperation<EngineConfigLoader>();
+            config.AddOperation<CollectDependenciesByAttribute>();// Do these first, because the manual ones might overwrite
+            config.AddOperation<CollectDependenciesManually>();
+            config.AddOperation<PluginLoaderDefine>();
+            config.AddOperation<PluginLoaderPreChecks>();
+            config.AddOperation<PluginLoaderZipImporter>();
+            config.AddOperation<PluginExtractor>();
+            config.AddOperation<CliArgsParserAssembler>();
+            config.AddOperation<BuildDependencies>();
+        });
+
+        IEngine engine = builder.BuildEngine();
 
         // --- Engine is running ---
         // Actually startup the engine
-        if (!args.IsEmpty()) await argsParser.ParseAsyncLinear(args);
-        else await engine.Run();
+        if (!args.IsEmpty())
+            await engine.GetArgsParser().ParseAsyncLinear(args);
+        else
+            await engine.RunAsync();
     }
 }

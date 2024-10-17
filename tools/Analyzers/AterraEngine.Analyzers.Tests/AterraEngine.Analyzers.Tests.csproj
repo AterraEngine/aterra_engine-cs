@@ -35,7 +35,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\src\engine\AterraCore.OmniVault.World\AterraCore.OmniVault.World.csproj"/>
         <ProjectReference Include="..\AterraEngine.Analyzers\AterraEngine.Analyzers.csproj"/>
     </ItemGroup>
 

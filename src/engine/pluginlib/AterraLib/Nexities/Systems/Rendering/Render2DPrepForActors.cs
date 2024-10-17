@@ -1,24 +1,26 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Attributes;
+using AterraCore.Common.Attributes.Nexities;
 using AterraCore.Contracts.Nexities.Entities.QuickHands;
+using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.Textures;
 using AterraCore.Contracts.OmniVault.World;
-using AterraCore.Contracts.Threading.CrossThread;
+using AterraCore.Contracts.Threading.CrossData;
 using AterraLib.Nexities.Components;
-using AterraLib.Nexities.Systems.CrossThreadDataHolders;
+using AterraLib.Nexities.CrossThreadDataHolders;
+using Serilog;
 
 namespace AterraLib.Nexities.Systems.Rendering;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[System(StringAssetIdLib.AterraLib.SystemsRendering.Render2DPrepForActors, CoreTags.RenderThread)]
+[System(StringAssetIdLib.AterraLib.SystemsRendering.Render2DPrepForActors)]
 [UsedImplicitly]
-public class Render2DPrepForActors(IAssetInstanceAtlas instanceAtlas, ICrossThreadTickData crossThreadTickData) : NexitiesSystemWithParentsReversed<IHasTransform2D, IActor2D> {
-
+public class Render2DPrepForActors(IAssetInstanceAtlas instanceAtlas, ICrossThreadDataAtlas crossThreadDataAtlas, ILogger logger) : NexitiesSystemWithParentsReversed<IHasTransform2D, IActor2D>, IRenderSystem {
     private static readonly Transform2D EmptyTransform2D = new();
+
     // -----------------------------------------------------------------------------------------------------------------
     // Helper Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -35,17 +37,17 @@ public class Render2DPrepForActors(IAssetInstanceAtlas instanceAtlas, ICrossThre
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public override void Tick(ActiveLevel level) {
-        if (!crossThreadTickData.TryGetOrRegister(AssetTagLib.AterraLib.RenderableData, out RenderableData? renderableDataDto)) return;
+        if (!crossThreadDataAtlas.TryGetOrCreate(AssetIdLib.AterraLib.CrossThreadDataHolders.RenderableData, out RenderableData? renderableDataDto)) return;
 
-        foreach ((IHasTransform2D? parent, IActor2D child, int zIndex) in GetEntities(level).AsSpan()) {
+        foreach ((IHasTransform2D? parent, IActor2D child, int zIndex) in GetEntities(level)) {
             (Vector2 size, Texture2D texture2D) = GetTextureAsset(child.Sprite2D.TextureAssetId, renderableDataDto);
 
             ITransform2D parentTransform = parent?.Transform2D ?? EmptyTransform2D;
             ITransform2D childTransform = child.Transform2D;
 
             renderableDataDto.AddToRenderCache(
-                zIndex,
                 new RenderCacheDto {
+                    ZIndex = zIndex,
                     Texture = texture2D,
                     Source = child.Sprite2D.UvAndSourceCalculated ??= new Rectangle(
                         child.Sprite2D.UvSelection.Position,

@@ -21,7 +21,7 @@
 
 
     <ItemGroup>
-        <ProjectReference Include="..\..\AterraCore.OmniVault.Textures\AterraCore.OmniVault.Textures.csproj"/>
+        <ProjectReference Include="..\..\AterraCore.AssetVault\AterraCore.AssetVault.csproj"/>
     </ItemGroup>
 
     <Target Name="PackingToZip" AfterTargets="Build">

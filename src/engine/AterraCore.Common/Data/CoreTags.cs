@@ -11,14 +11,15 @@ public enum CoreTags : ulong {
     Component = 1 << 1,
     Entity = 1 << 2,
     System = 1 << 3,
-    RenderThread = 1 << 4,
-    LogicThread = 1 << 5,
+
+    // _ = 1 << 4,
+    // _ = 1 << 5,
     Texture = 1 << 6,
     Singleton = 1 << 7,
-    Level = 1 << 8
-        
-}
+    Level = 1 << 8,
+    CrossThreadDataHolder = 1 << 9
 
+}
 
 public static class CoreTagsExtensions {
     private static string[]? _strings;

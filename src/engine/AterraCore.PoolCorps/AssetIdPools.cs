@@ -1,7 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Attributes;
+using AterraCore.Common.Attributes.DI;
 using AterraCore.Common.Types.Nexities;
 using AterraCore.Contracts.PoolCorps;
 using JetBrains.Annotations;
@@ -9,7 +9,6 @@ using Microsoft.Extensions.ObjectPool;
 using System.Collections.Concurrent;
 
 namespace AterraCore.PoolCorps;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------

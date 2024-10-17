@@ -1,9 +1,11 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraCore.Common.Attributes;
+using AterraCore.Common.Attributes.DI;
+using AterraCore.Common.Attributes.Nexities;
+using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.World;
-using AterraCore.Contracts.Threading.CrossThread;
+using AterraCore.Contracts.Threading.CrossData;
 using AterraLib.Contracts;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,12 +13,12 @@ namespace AterraLib.Nexities.Systems.Logic;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[System(StringAssetIdLib.AterraLib.SystemsLogic.CameraController, CoreTags.LogicThread)]
+[System(StringAssetIdLib.AterraLib.SystemsLogic.CameraController)]
 [Injectable<CameraController>(ServiceLifetime.Singleton)]
 [UsedImplicitly]
-public class CameraController(ICrossThreadTickData crossThreadTickData) : NexitiesSystem<ICamera2D> {
+public class CameraController(ICrossThreadDataAtlas crossThreadDataAtlas) : NexitiesSystem<ICamera2D>, ILogicSytem {
     public override void Tick(ActiveLevel level) {
-        if (!crossThreadTickData.TryGet(AssetTagLib.AterraLib.PlayerInputTickData, out ITickDataInput? playerInputTickData)) return;
+        if (!crossThreadDataAtlas.TryGetOrCreate(AssetIdLib.AterraLib.CrossThreadDataHolders.TickDataInput, out ITickDataInput? playerInputTickData)) return;
 
         float translationX = 0.0f;
         float translationY = 0.0f;

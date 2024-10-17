@@ -1,10 +1,10 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraCore.AssetVault;
 using AterraCore.Contracts.Nexities.Systems;
 using AterraCore.Contracts.OmniVault.Assets;
 using AterraCore.Contracts.OmniVault.World;
-using AterraCore.OmniVault.Assets;
 using JetBrains.Annotations;
 using Microsoft.Extensions.ObjectPool;
 
@@ -24,14 +24,14 @@ public abstract class NexitiesSystemWithParents<TParent, TChild> : AssetInstance
     // -----------------------------------------------------------------------------------------------------------------
     public abstract void Tick(ActiveLevel level);
     public virtual void InvalidateCaches() {
-        EntitiesBuffer = [];
+        Array.Clear(EntitiesBuffer);
         BufferPopulated = false;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     // Helper Methods
     // -----------------------------------------------------------------------------------------------------------------
-    protected virtual (TParent? Parent, TChild Child, int zIndex)[] GetEntities(ActiveLevel level) {
+    protected virtual ReadOnlySpan<(TParent? Parent, TChild Child, int zIndex)> GetEntities(ActiveLevel level) {
         if (BufferPopulated) return EntitiesBuffer;
 
         List<(TParent? Parent, TChild Child, int zIndex)> list = ParentChildPool.Get();
