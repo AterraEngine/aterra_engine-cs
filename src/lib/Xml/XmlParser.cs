@@ -23,9 +23,8 @@ public class XmlParser<T>(ILogger logger, string nameSpace, string xsdPath) wher
     // -----------------------------------------------------------------------------------------------------------------
     // Serialize / Deserialize Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public bool TryDeserializeFromFile(string filePath, [NotNullWhen(true)] out T? config) {
-        // Default to null
-        config = default;
+    public bool TryDeserializeFromFile(string filePath, [NotNullWhen(true)] out T? output) {
+        output = default;
         try {
             if (!File.Exists(filePath)) {
                 logger.Warning("No file found at {FilePath}", filePath);
@@ -34,7 +33,7 @@ public class XmlParser<T>(ILogger logger, string nameSpace, string xsdPath) wher
 
             using var reader = new StreamReader(filePath);
             using var xmlReader = XmlReader.Create(reader, _readerSettings);
-            config = (T)_serializer.Deserialize(xmlReader)!;
+            output = (T)_serializer.Deserialize(xmlReader)!;
 
             return true;
         }
@@ -46,7 +45,6 @@ public class XmlParser<T>(ILogger logger, string nameSpace, string xsdPath) wher
     }
 
     public bool TrySerializeToFile(T config, string filePath) {
-        // Default to null
         try {
             using var writer = new StreamWriter(filePath);
             using var xmlWriter = XmlWriter.Create(writer, _writerSettings);
@@ -60,12 +58,12 @@ public class XmlParser<T>(ILogger logger, string nameSpace, string xsdPath) wher
 
     }
 
-    public bool TrySerializeFromBytes(byte[] bytes, [NotNullWhen(true)] out T? config) {
-        config = default;
+    public bool TryDeserializeFromBytes(byte[] bytes, [NotNullWhen(true)] out T? output) {
+        output = default;
         try {
             using var memoryStream = new MemoryStream(bytes);
             using var xmlReader = XmlReader.Create(memoryStream, _readerSettings);
-            config = (T)_serializer.Deserialize(xmlReader)!;
+            output = (T)_serializer.Deserialize(xmlReader)!;
             return true;
         }
 

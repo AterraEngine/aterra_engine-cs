@@ -14,6 +14,7 @@ namespace AterraLib.Nexities.CrossThreadDataHolders;
 [UsedImplicitly]
 [CrossThreadDataHolder<ITickDataInput>(StringAssetIdLib.AterraLib.CrossThreadDataHolders.TickDataInput)]
 public class TickDataInput : AssetInstance, IHasLogicTickCleanup, ITickDataInput {
+    // TODO check if these needs to be stacks or could become ConcurrentBags
     public ConcurrentStack<KeyboardKey> KeyboardKeyPressed { get; } = [];
     public ConcurrentStack<KeyboardKey> KeyboardKeyPressedRepeated { get; } = [];
     public ConcurrentStack<KeyboardKey> KeyboardKeyReleased { get; } = [];
