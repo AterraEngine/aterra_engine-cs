@@ -33,6 +33,6 @@ public static class Program {
         if (!args.IsEmpty())
             await engine.GetArgsParser().ParseAsyncLinear(args);
         else
-            await engine.Run();
+            await engine.RunAsync();
     }
 }

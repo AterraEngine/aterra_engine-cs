@@ -27,7 +27,7 @@ public class Engine(
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public async Task Run() {
+    public async Task RunAsync() {
         Logger.Information("Entered AterraEngine");
 
         // if (!configAtlas.GameConfigs.TryGetConfig(out IAterraLibGameConfig? aterraLibConfig)) throw new ApplicationException("Config was not setup correctly");
