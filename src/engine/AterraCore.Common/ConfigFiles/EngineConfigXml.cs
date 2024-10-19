@@ -44,6 +44,6 @@ public class EngineConfigXml {
         [XmlAttribute("monitorId")] public int MonitorId { get; set; }
         [XmlAttribute("width")] public int Width { get; set; } = 1000;
         [XmlAttribute("height")] public int Height { get; set; } = 1000;
-        [XmlAttribute("name")] public string Name { get; set; } = "AterraEngine";
+        [XmlAttribute("name")] public string Name { get; set; } = "AterraEngineOLD";
     }
 }

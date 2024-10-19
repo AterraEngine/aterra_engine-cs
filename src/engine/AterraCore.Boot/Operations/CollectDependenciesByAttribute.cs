@@ -30,7 +30,7 @@ public class CollectDependenciesByAttribute : IBootOperation {
         AssignFromType<PoolCorps.IAssemblyEntry>();
         AssignFromType<Threading.IAssemblyEntry>();
 
-        AssignFromType<AterraEngine.IAssemblyEntry>();
+        AssignFromType<AterraEngineOLD.IAssemblyEntry>();
 
         IEnumerable<ServiceDescriptor> dependencies = _assemblies
             .SelectMany(assembly => assembly

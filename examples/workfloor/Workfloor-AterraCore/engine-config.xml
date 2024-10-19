@@ -5,7 +5,7 @@
     <!--    <paths>-->
     <!--        <gameConfig>game-config.xml</gameConfig>-->
     <!--    </paths>-->
-    <window monitorId="1" height="1000" width="1000" name="AterraEngine - Workfloor"/>
+    <window monitorId="1" height="1000" width="1000" name="AterraEngineOLD - Workfloor"/>
 
     <loadOrder relativeRootPath="plugins" enforcePluginIdUniqueness="true">
         <plugin file="AterraLib.zip"/>

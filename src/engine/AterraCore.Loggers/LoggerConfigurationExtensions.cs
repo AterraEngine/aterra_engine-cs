@@ -61,7 +61,7 @@ public static class LoggerConfigurationExtensions {
     public static LoggerConfiguration DefaultEnrich(this LoggerConfiguration lc, string stage) =>
         lc
             .Enrich.FromLogContext()
-            .Enrich.WithProperty("Application", "AterraEngine")
+            .Enrich.WithProperty("Application", "AterraEngineOLD")
             .Enrich.WithProperty("Stage", stage)
             .Enrich.WithProperty("MachineName", Environment.MachineName)
             .Enrich.WithThreadId()

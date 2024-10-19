@@ -25,7 +25,7 @@ public static class Program {
             config.AddOperation<CliArgsParserAssembler>();
             config.AddOperation<BuildDependencies>();
         });
-
+        
         IEngine engine = builder.BuildEngine();
 
         // --- Engine is running ---

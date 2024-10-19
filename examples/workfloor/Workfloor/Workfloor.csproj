@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\src\engine\AterraEngine.Common\AterraEngine.Common.csproj" />
+      <ProjectReference Include="..\..\..\src\engine\AterraEngine.Contracts\AterraEngine.Contracts.csproj" />
+      <ProjectReference Include="..\..\..\src\engine\AterraEngine\AterraEngine.csproj" />
+    </ItemGroup>
+
+</Project>
