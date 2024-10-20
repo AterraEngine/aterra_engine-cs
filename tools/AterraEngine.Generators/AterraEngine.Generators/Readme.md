@@ -1,29 +1,16 @@
-# Roslyn Source Generators Sample
+# AterraEngine.Generators
 
-A set of three projects that illustrates Roslyn source generators. Enjoy this template to learn from and modify source generators for your own needs.
+This project contains Source Code Generators for the AterraEngine and its various sub-projects.
 
 ## Content
-### AterraEngine.Generators
-A .NET Standard project with implementations of sample source generators.
-**You must build this project to see the result (generated code) in the IDE.**
 
-- [SampleSourceGenerator.cs](SampleSourceGenerator.cs): A source generator that creates C# classes based on a text file (in this case, Domain Driven Design ubiquitous language registry).
-- [SampleIncrementalSourceGenerator.cs](SampleIncrementalSourceGenerator.cs): A source generator that creates a custom report based on class properties. The target class should be annotated with the `Generators.ReportAttribute` attribute.
-
-### AterraEngine.Generators.Sample
-A project that references source generators. Note the parameters of `ProjectReference` in [AterraEngine.Generators.Sample.csproj](../AterraEngine.Generators.Sample/AterraEngine.Generators.Sample.csproj), they make sure that the project is referenced as a set of source generators. 
-
-### AterraEngine.Generators.Tests
-Unit tests for source generators. The easiest way to develop language-related features is to start with unit tests.
-
-## How To?
-### How to debug?
-- Use the [launchSettings.json](Properties/launchSettings.json) profile.
-- Debug tests.
-
-### How can I determine which syntax nodes I should expect?
-Consider installing the Roslyn syntax tree viewer plugin [Rossynt](https://plugins.jetbrains.com/plugin/16902-rossynt/).
-
-### How to learn more about wiring source generators?
-Watch the walkthrough video: [Let’s Build an Incremental Source Generator With Roslyn, by Stefan Pölz](https://youtu.be/azJm_Y2nbAI)
-The complete set of information is available in [Source Generators Cookbook](https://github.com/dotnet/roslyn/blob/main/docs/features/source-generators.cookbook.md).
+- **[InjectableServicesGenerator.cs](InjectableServicesGenerator.cs)**:
+    - **Purpose**: This source generator automatically generates extension methods for registering services into the dependency injection container.
+    - **How it works**:
+        - **Attribute-Matched Classes**: It scans for classes annotated with a custom attribute `InjectableServiceAttribute<TService>`.
+        - **Service Registration**: For each annotated class, it creates a registration method (e.g., `services.AddSingleton<,>`).
+        - **Generated Output**: The generated file `InjectableServicesExtensions.g.cs` contains an extension method `RegisterServicesFrom<YourAssemblyName>` which registers all the discovered services when invoked.
+    - **Testing**:
+        - Verification of the presence of the `InjectableServiceAttribute`.
+        - Correct parsing of the generic type and lifetime parameters.
+        - Generation of the expected service registration code.
