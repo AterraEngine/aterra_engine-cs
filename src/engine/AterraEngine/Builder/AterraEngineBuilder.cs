@@ -1,8 +1,10 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraEngine.Builder.BootOperations;
 using AterraEngine.Common.Attributes;
 using AterraEngine.Contracts.Builder;
+using AterraEngine.Contracts.Builder.BootOperations;
 using AterraEngine.Contracts.Engine;
 using AterraEngine.Core.DependencyInjection;
 using AterraEngine.Loggers;
@@ -19,8 +21,9 @@ namespace AterraEngine.Builder;
 [InjectableService<IAterraEngineBuilder>(ServiceLifetime.Singleton)]
 public class AterraEngineBuilder : IAterraEngineBuilder {
     public IServiceCollection Services { get; } = CreateDefaultServices();
-    public ILogger BuilderLogger { get; private set; } = LoggerConfigurations.CreateBuilderLogger(LogEventLevel.Verbose);
-    public IBootOperationBuilder BootOperations { get; } = new BootOperationBuilder();
+    public ILogger Logger { get; private set; } = LoggerConfigurations.CreateBuilderLogger(LogEventLevel.Verbose);
+    
+    private IBootOperationBuilder _bootOperations = new BootOperationBuilder(new BootOperationConfig());
 
     // -----------------------------------------------------------------------------------------------------------------
     // Constructor Helpers
@@ -42,17 +45,24 @@ public class AterraEngineBuilder : IAterraEngineBuilder {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
+    public IAterraEngineBuilder WithBootOperations(Action<BootOperationConfig> configure) {
+        var config = new BootOperationConfig();
+        configure(config);
+        _bootOperations = new BootOperationBuilder(config);
+        return this;
+    }
+    
     #region Logging
     /// <inheritdoc />
     public IAterraEngineBuilder WithSerilog(ILogger logger) {
-        BuilderLogger = logger;
+        Logger = logger;
         return this;
     }
     /// <inheritdoc />
     public IAterraEngineBuilder WithSerilog(Action<LoggerConfiguration> configure) {
         var configuration = new LoggerConfiguration();
         configure(configuration);
-        BuilderLogger = configuration.CreateLogger();
+        Logger = configuration.CreateLogger();
         return this;
     }
 
@@ -75,9 +85,12 @@ public class AterraEngineBuilder : IAterraEngineBuilder {
     
     #region Build
     /// <inheritdoc />
-    public IAterraEngine Build() => Build<IAterraEngine>();
+    public Task<IAterraEngine> BuildAsync() => BuildAsync<IAterraEngine>();
     /// <inheritdoc />
-    public T Build<T>() where T : IAterraEngine {
+    public async Task<T> BuildAsync<T>() where T : IAterraEngine {
+        
+        await _bootOperations.BuildAsync(Services);
+        
         // Todo Collect from source
         EngineServices.ConfigureServices(Services, []);
         

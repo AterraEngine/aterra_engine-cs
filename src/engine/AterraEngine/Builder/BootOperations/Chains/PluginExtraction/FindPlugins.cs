@@ -1,19 +1,19 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Collections;
+using AterraEngine.Contracts.Builder.BootOperations;
 
-namespace AterraEngine.Contracts.Builder;
+namespace AterraEngine.Builder.BootOperations.Chains.PluginExtraction;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IBootOperationChain : IEnumerable {
-    LinkedList<Type> BootOperations { get; } 
-    HashSet<Type> BootOperationTypes { get; }
+public class FindPlugins : IChainOperation<PluginExtractionVariables> {
+    public async Task<PluginExtractionVariables> ExecuteAsync(PluginExtractionVariables chainVariables, CancellationToken cancellationToken) {
+        // do something
+        
+        Console.WriteLine("Find plugins");
 
-    bool TryAddLast(Type type);
-    bool TryAddFirst(Type type);
-    bool TryAddLastRange<T>(T types) where T : IEnumerable<Type>;
-    bool TryAddFirstRange<T>(T types) where T : IEnumerable<Type>;
+        return chainVariables;
+    }
 }

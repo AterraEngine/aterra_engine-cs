@@ -2,8 +2,11 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.Builder;
-using AterraEngine.Contracts.Builder;
+using AterraEngine.Builder.BootOperations;
+using AterraEngine.Builder.BootOperations.Chains.PluginExtraction;
+using AterraEngine.Contracts.Builder.BootOperations;
 using AterraEngine.Contracts.Engine;
+using System.Diagnostics;
 
 namespace Workfloor;
 
@@ -16,13 +19,16 @@ public static class Program {
         // Builder
         // -------------------------------------------------------------------------------------------------------------
         var builder = new AterraEngineBuilder();
-
-        builder.BootOperations.Register<IBootOperation, IBootOperation>("pluginExtraction");
+        
+        builder.WithPlugins(config => {
+            config.PluginPath = "plugins/";
+            config.IsPresent("AterraEngine.Core");
+        });
         
         // -------------------------------------------------------------------------------------------------------------
         // Engine
         // -------------------------------------------------------------------------------------------------------------
-        IAterraEngine engine = builder.Build();
+        IAterraEngine engine = await builder.BuildAsync();
         
         await engine.RunAsync();
     }

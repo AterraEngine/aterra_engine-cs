@@ -1,20 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Common.Attributes;
-using AterraEngine.Contracts.Engine;
+using AterraEngine.Contracts.Builder.BootOperations;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AterraEngine.Engine;
+namespace AterraEngine.Builder.BootOperations;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[InjectableService<IAterraEngine>(ServiceLifetime.Singleton)]
-public class AterraEngine : IAterraEngine {
-
-    public async Task RunAsync() {
-        
-        // GatherDataFromGamePlugins();
-    }
+public readonly struct ChainVariables(string chainName) : IChainVariables {
+    public string ChainName { get; } = chainName;
+    public IServiceCollection Services { get; } = new ServiceCollection();
 }

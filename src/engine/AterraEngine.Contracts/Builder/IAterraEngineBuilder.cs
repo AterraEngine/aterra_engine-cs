@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraEngine.Contracts.Builder.BootOperations;
 using AterraEngine.Contracts.Engine;
 using Serilog;
 
@@ -13,8 +14,6 @@ namespace AterraEngine.Contracts.Builder;
 /// Interface for building an AterraEngine with configurable logging options.
 /// </summary>
 public interface IAterraEngineBuilder {
-    IBootOperationBuilder BootOperations { get; }
-    
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -54,11 +53,12 @@ public interface IAterraEngineBuilder {
     /// Builds the IAterraEngine instance.
     /// </summary>
     /// <returns>An instance of IAterraEngine constructed based on the configured settings.</returns>
-    IAterraEngine Build();
+    Task<IAterraEngine> BuildAsync();
+    
     /// <summary>
     /// Builds the engine with the current configuration.
     /// </summary>
     /// <returns>An instance of <see cref="IAterraEngine"/>.</returns>
-    T Build<T>() where T : IAterraEngine;
+    Task<T> BuildAsync<T>() where T : IAterraEngine;
     #endregion
 }

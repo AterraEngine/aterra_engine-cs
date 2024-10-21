@@ -1,20 +1,18 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Common.Attributes;
-using AterraEngine.Contracts.Engine;
-using Microsoft.Extensions.DependencyInjection;
-
-namespace AterraEngine.Engine;
+namespace AterraEngine.Contracts.Builder.BootOperations;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[InjectableService<IAterraEngine>(ServiceLifetime.Singleton)]
-public class AterraEngine : IAterraEngine {
+public interface IBootOperationChain : IEnumerable<Type> {
+    LinkedList<Type> BootOperations { get; } 
+    HashSet<Type> BootOperationTypes { get; }
+    Type ChainVariableType { get; }
 
-    public async Task RunAsync() {
-        
-        // GatherDataFromGamePlugins();
-    }
+    bool TryAddLast(Type type);
+    bool TryAddFirst(Type type);
+    bool TryAddLastRange<T>(T types) where T : IEnumerable<Type>;
+    bool TryAddFirstRange<T>(T types) where T : IEnumerable<Type>;
 }

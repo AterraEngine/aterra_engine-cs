@@ -1,11 +1,11 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Contracts.Builder;
+using AterraEngine.Contracts.Builder.BootOperations;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 
-namespace AterraEngine.Builder;
+namespace AterraEngine.Builder.BootOperations;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
@@ -13,17 +13,19 @@ namespace AterraEngine.Builder;
 public class BootOperationChain : IBootOperationChain {
     public LinkedList<Type> BootOperations { get; } 
     public HashSet<Type> BootOperationTypes { get; }
+    public Type ChainVariableType { get; }
 
     // -----------------------------------------------------------------------------------------------------------------
     // Constructors
     // -----------------------------------------------------------------------------------------------------------------
-    private BootOperationChain(Type[] types) {
+    private BootOperationChain(Type[] types, Type chainVariableType) {
         BootOperations = new LinkedList<Type>(types);
         BootOperationTypes = [..types];
+        ChainVariableType = chainVariableType ;
     }
 
-    public static bool TryCreate(Type[] types, [NotNullWhen(true)] out IBootOperationChain? chain) {
-        chain = new BootOperationChain(types);
+    public static bool TryCreate<T>(Type[] types, [NotNullWhen(true)] out IBootOperationChain? chain) where T : IChainVariables {
+        chain = new BootOperationChain(types, typeof(T));
         if (chain.BootOperationTypes.Count == types.Length) return true;
         
         chain = null;
@@ -31,6 +33,7 @@ public class BootOperationChain : IBootOperationChain {
     }
 
     public IEnumerator GetEnumerator() => BootOperations.GetEnumerator();
+    IEnumerator<Type> IEnumerable<Type>.GetEnumerator() => BootOperations.GetEnumerator();
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods

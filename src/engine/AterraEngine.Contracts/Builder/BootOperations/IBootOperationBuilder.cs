@@ -1,19 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Diagnostics.CodeAnalysis;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace AterraEngine.Contracts.Builder;
+namespace AterraEngine.Contracts.Builder.BootOperations;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IBootOperationBuilder {
-    bool TryRegister(string chainName, params Type[] types);
-    bool TryGetChain(string chainName, [NotNullWhen(true)] out IBootOperationChain? chain);
-    bool TryAddToChain(string chainName, params Type[] types);
-    
-    IBootOperationBuilder Register(string chainName, params Type[] types);
-    IBootOperationBuilder AddToChain(string chainName, params Type[] types);
-    IBootOperationChain GetChain(string chainName);
+    Task BuildAsync(IServiceCollection serviceCollection, CancellationToken cancellationToken = default);
 }
