@@ -2,17 +2,15 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.Common.Attributes;
-using AterraEngine.Contracts.Engine;
+using AterraEngine.Contracts.Core.Omnia.Registrations;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AterraEngine.Engine;
+namespace AterraEngine.Core.Omnia.Registrations;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[InjectableService<IAterraEngine>(ServiceLifetime.Singleton)]
-public class AterraEngine : IAterraEngine {
-
-    public async Task RunAsync() {
-    }
+[InjectableService<IAssetRegistrationAtlas>(ServiceLifetime.Singleton)]
+public class AssetRegistrationAtlas : IAssetRegistrationAtlas  {
+    
 }

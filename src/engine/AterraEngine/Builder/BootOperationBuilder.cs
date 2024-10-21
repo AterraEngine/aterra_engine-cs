@@ -2,61 +2,56 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.Contracts.Builder;
+using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AterraEngine.Builder;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-/// <summary>
-/// The BootOperationBuilder class is responsible for managing a sequence of boot operations.
-/// </summary>
-/// <remarks>
-/// This class provides methods to register boot operations and organize their order of execution
-/// by specifying whether an operation should be placed before or after another operation,
-/// based on a provided predicate.
-/// </remarks>
 public class BootOperationBuilder : IBootOperationBuilder {
-    /// <summary>
-    /// Gets the linked list of boot operation types.
-    /// </summary>
-    private LinkedList<Type> BootOperations { get; } = [];
+    private ConcurrentDictionary<string,IBootOperationChain> BootOperationsChains { get; } = [];
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    /// <inheritdoc/>
-    public IBootOperationBuilder Register<T>() where T : IBootOperation {
-        BootOperations.AddLast(typeof(T));
-        return this;
-    }
+    public bool TryRegister(string chainName, params Type[] types) {
+        if (string.IsNullOrEmpty(chainName)) return false;
 
-    /// <inheritdoc/>
-    public IBootOperationBuilder RegisterAfter<T>(Func<Type, bool> predicate) where T : IBootOperation {
-    LinkedListNode<Type>? current = BootOperations.First;
-        while (current != null) {
-            if (predicate(current.Value)) {
-                BootOperations.AddAfter(current, typeof(T));
-                return this;
-            }
-            current = current.Next;
+        if (!BootOperationsChains.TryGetValue(chainName, out IBootOperationChain? chain)) {
+            return BootOperationChain.TryCreate(types, out chain) 
+                && BootOperationsChains.TryAdd(chainName, chain);
         }
 
-        BootOperations.AddLast(typeof(T));
+        foreach (Type type in types) {
+            chain.BootOperations.AddLast(type);
+        }
+        return true;
+    }
+    
+    public bool TryGetChain(string chainName, [NotNullWhen(true)] out IBootOperationChain? chain) => BootOperationsChains.TryGetValue(chainName, out chain);
+
+    public bool TryAddToChain(string chainName, params Type[] types) {
+        return !string.IsNullOrEmpty(chainName) 
+            && BootOperationsChains.TryGetValue(chainName, out IBootOperationChain? chain)
+            && chain.TryAddLastRange(types);
+    }
+    
+    public IBootOperationBuilder Register(string chainName, params Type[] types) {
+        if (!TryRegister(chainName, types)) throw new InvalidOperationException($"Failed to register boot operations for chain '{chainName}'.");
+        return this;
+    }
+    
+    public IBootOperationChain GetChain(string chainName) {
+        if (!TryGetChain(chainName, out IBootOperationChain? chain)) throw new InvalidOperationException($"Failed to get boot operations for chain '{chainName}'.");
+        return chain;
+    }
+    
+    public IBootOperationBuilder AddToChain(string chainName, params Type[] types) {
+        if (!TryAddToChain(chainName, types)) throw new InvalidOperationException($"Failed to add boot operations to chain '{chainName}'.");
         return this;
     }
 
-    /// <inheritdoc/>
-    public IBootOperationBuilder RegisterBefore<T>(Func<Type, bool> predicate) where T : IBootOperation {
-        LinkedListNode<Type>? current = BootOperations.First;
-        while (current != null) {
-            if (predicate(current.Value)) {
-                BootOperations.AddBefore(current, typeof(T));
-                return this;
-            }
-            current = current.Next;
-        }
-        BootOperations.AddLast(typeof(T));
-        return this;
-    }
+
 }

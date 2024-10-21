@@ -34,7 +34,7 @@ public class AterraEngineBuilder : IAterraEngineBuilder {
             .AddSingleton<ILogger>(logger)
         ;
         
-        // services.RegisterServicesFromAterraEngine();
+        services.RegisterServicesFromAterraEngine();
         
         return services;
     } 

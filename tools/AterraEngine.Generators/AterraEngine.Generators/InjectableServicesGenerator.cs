@@ -7,6 +7,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -14,7 +15,9 @@ namespace AterraEngine.Generators;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Generator]
+#pragma warning disable RS1038
+[Generator(LanguageNames.CSharp)]
+#pragma warning restore RS1038
 public class InjectableServicesGenerator : IIncrementalGenerator {
     public const string GeneratedFileName = "InjectableServicesExtensions.g.cs";
     public const string AttributeMetadataName = "AterraEngine.Common.Attributes.InjectableServiceAttribute`1";
@@ -23,21 +26,17 @@ public class InjectableServicesGenerator : IIncrementalGenerator {
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public void Initialize(IncrementalGeneratorInitializationContext context) {
+        Debugger.Break();
         // Combine syntax collection and semantic processing in a pipeline
         IncrementalValuesProvider<ClassDeclarationSyntax> classDeclarations =
             context.SyntaxProvider.CreateSyntaxProvider(
                 predicate: static (node, _) => node is ClassDeclarationSyntax { AttributeLists.Count: > 0 },
                 transform: static (ctx, _) => (ClassDeclarationSyntax)ctx.Node
             );
-
-        IncrementalValueProvider<Compilation> compilationProvider = context.CompilationProvider;
-
-        IncrementalValueProvider<(Compilation compilation, ImmutableArray<ClassDeclarationSyntax> classDeclarations)> compilationAndClasses =
-            compilationProvider.Combine(classDeclarations.Collect());
-
-        context.RegisterSourceOutput(compilationAndClasses, action: (sourceContext, source) => {
-            Generate(source.compilation, source.classDeclarations, sourceContext);
-        });
+        
+        context.RegisterSourceOutput(
+            context.CompilationProvider.Combine(classDeclarations.Collect()), 
+            action: (sourceContext, source) => Generate(source.Item1, source.Item2, sourceContext));
     }
 
     private static void Generate(Compilation compilation, ImmutableArray<ClassDeclarationSyntax> classDeclarations, SourceProductionContext context) {
@@ -50,7 +49,6 @@ public class InjectableServicesGenerator : IIncrementalGenerator {
                     DiagnosticSeverity.Warning,
                     true),
                 Location.None));
-
             return;
         }
 
@@ -62,7 +60,8 @@ public class InjectableServicesGenerator : IIncrementalGenerator {
 
             foreach (AttributeSyntax attribute in candidate.AttributeLists.SelectMany(attrList => attrList.Attributes)) {
                 TypeInfo attributeTypeInfo = model.GetTypeInfo(attribute);
-                if (!SymbolEqualityComparer.Default.Equals(attributeTypeInfo.Type, attributeSymbol)) continue;
+                if (attributeTypeInfo.Type is not INamedTypeSymbol typeSymbol) continue;
+                if (!SymbolEqualityComparer.Default.Equals(typeSymbol.ConstructedFrom, attributeSymbol)) continue;
 
                 // Extract the type argument (TService)
                 if (attribute is not { Name: GenericNameSyntax genericNameSyntax }) continue;

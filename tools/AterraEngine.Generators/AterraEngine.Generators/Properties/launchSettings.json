@@ -1,7 +1,7 @@
 ﻿{
   "$schema": "https://json.schemastore.org/launchsettings.json",
   "profiles": {
-    "DebugRoslynSourceGenerator": {
+    "Generators": {
       "commandName": "DebugRoslynComponent",
       "targetProject": "../AterraEngine.Generators.Sample/AterraEngine.Generators.Sample.csproj"
     }

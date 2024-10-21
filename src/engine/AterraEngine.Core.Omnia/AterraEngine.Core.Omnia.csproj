@@ -15,8 +15,4 @@
       <ProjectReference Include="..\AterraEngine.Contracts\AterraEngine.Contracts.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Instances\" />
-    </ItemGroup>
-
 </Project>

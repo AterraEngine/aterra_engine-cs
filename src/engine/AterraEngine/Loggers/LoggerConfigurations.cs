@@ -18,7 +18,8 @@ public static class LoggerConfigurations {
     /// </summary>
     /// <param name="logEventLevel">The minimum log event level.</param>
     /// <returns>The logger configuration.</returns>
-    public static LoggerConfiguration CreateEngineConfiguration(LogEventLevel logEventLevel) =>
+    // ReSharper disable once MemberCanBePrivate.Global
+    public static LoggerConfiguration CreateEngineLoggerConfiguration(LogEventLevel logEventLevel) =>
         new LoggerConfiguration()
             .MinimumLevel.Is(logEventLevel)
             .AsyncSinkFile("logs/log_engine-.log")
@@ -34,7 +35,7 @@ public static class LoggerConfigurations {
     /// <param name="logEventLevel">The minimum log event level.</param>
     /// <returns>The configured logger.</returns>
     public static Logger CreateEngineLogger(LogEventLevel logEventLevel) => 
-        CreateEngineConfiguration(logEventLevel)
+        CreateEngineLoggerConfiguration(logEventLevel)
             .CreateLogger();
 
     /// <summary>
@@ -42,7 +43,8 @@ public static class LoggerConfigurations {
     /// </summary>
     /// <param name="logEventLevel">The minimum event level to capture.</param>
     /// <returns>A <see cref="LoggerConfiguration" /> object.</returns>
-    public static LoggerConfiguration CreateBuilderConfiguration(LogEventLevel logEventLevel) =>
+    // ReSharper disable once MemberCanBePrivate.Global
+    public static LoggerConfiguration CreateBuilderLoggerConfiguration(LogEventLevel logEventLevel) =>
         new LoggerConfiguration()
             .MinimumLevel.Is(logEventLevel)
             .DefaultEnrich("Startup")
@@ -59,7 +61,7 @@ public static class LoggerConfigurations {
     /// <param name="logEventLevel">The logging event level.</param>
     /// <returns>A Logger object configured for the builder.</returns>
     public static Logger CreateBuilderLogger(LogEventLevel logEventLevel) => 
-        CreateBuilderConfiguration(logEventLevel)
+        CreateBuilderLoggerConfiguration(logEventLevel)
             .CreateLogger();
 }
 
