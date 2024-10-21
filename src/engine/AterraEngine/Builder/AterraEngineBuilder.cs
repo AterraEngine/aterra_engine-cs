@@ -20,7 +20,6 @@ namespace AterraEngine.Builder;
 public class AterraEngineBuilder : IAterraEngineBuilder {
     public IServiceCollection Services { get; } = CreateDefaultServices();
     public ILogger BuilderLogger { get; private set; } = LoggerConfigurations.CreateBuilderLogger(LogEventLevel.Verbose);
-    
     public IBootOperationBuilder BootOperations { get; } = new BootOperationBuilder();
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -34,6 +33,7 @@ public class AterraEngineBuilder : IAterraEngineBuilder {
             .AddSingleton<ILogger>(logger)
         ;
         
+        // Add auto generated services from various subprojects.
         services.RegisterServicesFromAterraEngine();
         
         return services;

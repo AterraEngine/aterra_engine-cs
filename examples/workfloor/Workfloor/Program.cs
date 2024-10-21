@@ -16,6 +16,8 @@ public static class Program {
         // Builder
         // -------------------------------------------------------------------------------------------------------------
         var builder = new AterraEngineBuilder();
+
+        builder.BootOperations.Register<IBootOperation, IBootOperation>("pluginExtraction");
         
         // -------------------------------------------------------------------------------------------------------------
         // Engine
