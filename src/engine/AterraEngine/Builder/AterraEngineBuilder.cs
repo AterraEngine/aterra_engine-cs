@@ -1,10 +1,8 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Builder.BootOperations;
 using AterraEngine.Common.Attributes;
 using AterraEngine.Contracts.Builder;
-using AterraEngine.Contracts.Builder.BootOperations;
 using AterraEngine.Contracts.Engine;
 using AterraEngine.Core.DependencyInjection;
 using AterraEngine.Loggers;
@@ -23,8 +21,6 @@ public class AterraEngineBuilder : IAterraEngineBuilder {
     public IServiceCollection Services { get; } = CreateDefaultServices();
     public ILogger Logger { get; private set; } = LoggerConfigurations.CreateBuilderLogger(LogEventLevel.Verbose);
     
-    private IBootOperationBuilder _bootOperations = new BootOperationBuilder(new BootOperationConfig());
-
     // -----------------------------------------------------------------------------------------------------------------
     // Constructor Helpers
     // -----------------------------------------------------------------------------------------------------------------
@@ -45,12 +41,6 @@ public class AterraEngineBuilder : IAterraEngineBuilder {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public IAterraEngineBuilder WithBootOperations(Action<BootOperationConfig> configure) {
-        var config = new BootOperationConfig();
-        configure(config);
-        _bootOperations = new BootOperationBuilder(config);
-        return this;
-    }
     
     #region Logging
     /// <inheritdoc />
@@ -88,12 +78,12 @@ public class AterraEngineBuilder : IAterraEngineBuilder {
     public Task<IAterraEngine> BuildAsync() => BuildAsync<IAterraEngine>();
     /// <inheritdoc />
     public async Task<T> BuildAsync<T>() where T : IAterraEngine {
-        
-        await _bootOperations.BuildAsync(Services);
+        Logger.Information("Building engine...");
         
         // Todo Collect from source
         EngineServices.ConfigureServices(Services, []);
         
+        Logger.Information("Finished building engine");
         return EngineServices.Provider.GetRequiredService<T>();
     }
     #endregion

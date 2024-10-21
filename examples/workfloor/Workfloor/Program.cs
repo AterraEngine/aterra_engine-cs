@@ -2,11 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.Builder;
-using AterraEngine.Builder.BootOperations;
-using AterraEngine.Builder.BootOperations.Chains.PluginExtraction;
-using AterraEngine.Contracts.Builder.BootOperations;
 using AterraEngine.Contracts.Engine;
-using System.Diagnostics;
 
 namespace Workfloor;
 
@@ -19,11 +15,6 @@ public static class Program {
         // Builder
         // -------------------------------------------------------------------------------------------------------------
         var builder = new AterraEngineBuilder();
-        
-        builder.WithPlugins(config => {
-            config.PluginPath = "plugins/";
-            config.IsPresent("AterraEngine.Core");
-        });
         
         // -------------------------------------------------------------------------------------------------------------
         // Engine
