@@ -26,7 +26,9 @@ public class InjectableServicesGenerator : IIncrementalGenerator {
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public void Initialize(IncrementalGeneratorInitializationContext context) {
-        Debugger.Break();
+        // Uncomment to debug
+        // Debugger.Break();
+        
         // Combine syntax collection and semantic processing in a pipeline
         IncrementalValuesProvider<ClassDeclarationSyntax> classDeclarations =
             context.SyntaxProvider.CreateSyntaxProvider(
