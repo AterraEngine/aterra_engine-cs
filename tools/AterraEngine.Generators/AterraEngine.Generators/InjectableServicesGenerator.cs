@@ -7,7 +7,6 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -15,13 +14,11 @@ namespace AterraEngine.Generators;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-#pragma warning disable RS1038
 [Generator(LanguageNames.CSharp)]
-#pragma warning restore RS1038
 public class InjectableServicesGenerator : IIncrementalGenerator {
     public const string GeneratedFileName = "InjectableServicesExtensions.g.cs";
     public const string AttributeMetadataName = "AterraEngine.Common.Attributes.InjectableServiceAttribute`1";
-
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -43,14 +40,10 @@ public class InjectableServicesGenerator : IIncrementalGenerator {
 
     private static void Generate(Compilation compilation, ImmutableArray<ClassDeclarationSyntax> classDeclarations, SourceProductionContext context) {
         if (compilation.GetTypeByMetadataName(AttributeMetadataName) is not {} attributeSymbol) {
-            context.ReportDiagnostic(Diagnostic.Create(new DiagnosticDescriptor(
-                    "SRVGEN001",
-                    "Service Generator Error",
-                    "InjectableServiceAttribute not found",
-                    "SourceGenerator",
-                    DiagnosticSeverity.Warning,
-                    true),
-                Location.None));
+            context.ReportDiagnostic(Diagnostic.Create(
+                Rules.NoAttributesFound, 
+                Location.None
+            ));
             return;
         }
 
@@ -92,13 +85,10 @@ public class InjectableServicesGenerator : IIncrementalGenerator {
         }
 
         if (registrations.Count <= 0) {
-            context.ReportDiagnostic(Diagnostic.Create(new DiagnosticDescriptor(
-                "SRVGEN002",
-                "Service Generator Info",
-                "No registrations were generated",
-                "SourceGenerator",
-                DiagnosticSeverity.Info,
-                true), Location.None));
+            context.ReportDiagnostic(Diagnostic.Create(
+                Rules.NoRegistrationsGenerated,
+                Location.None
+            ));
             return;
         }
 
