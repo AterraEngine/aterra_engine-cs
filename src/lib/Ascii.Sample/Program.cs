@@ -1,8 +1,47 @@
-﻿using Ascii;
+﻿using Ascii.BorderLibrary;
+using Ascii.Library;
+using CodeOfChaos.Ansi;
 
-Console.WriteLine(new AnsiShadow().Convert("Aterra Engine", "red", "black"));
+var ansiShadow = new AnsiShadow();
+// Console.WriteLine(ansiShadow.ConvertToAsciiString("Aterra Engine"));
+//
+// Console.ReadKey();
+//
+// ansiShadow = new AnsiShadow(config => {
+//     config.RegisterAnsiMarkup(AnsiColor.AsFore("hotpink"), '█','▄' );
+//     config.RegisterAnsiMarkup(AnsiColor.AsFore("aqua"), '╔','═', '╗', '║', '╚', '╝' );
+// });
+// Console.WriteLine(ansiShadow.ConvertToAsciiString("Aterra Engine"));
+//
+// Console.ReadKey();
+//
+// ansiShadow = new AnsiShadow(config => {
+//     config.RegisterAnsiMarkup(AnsiColor.AsFore("darkslategray"), '█','▄' );
+//     config.RegisterAnsiMarkup(AnsiColor.AsFore("lightslategray"), '╔','═', '╗', '║', '╚', '╝' );
+//     
+//     config.RegisterBorder<ThinBorder>();
+// });
+// Console.WriteLine(ansiShadow.ConvertToAsciiString("Aterra Engine"));
+//
+// Console.ReadKey();
+//
+// ansiShadow = new AnsiShadow(config => {
+//     config.RegisterAnsiMarkup(AnsiColor.AsFore("darkslategray"), '█','▄' );
+//     config.RegisterAnsiMarkup(AnsiColor.AsFore("lightslategray"), '╔','═', '╗', '║', '╚', '╝' );
+//     
+//     config.RegisterBorder<ThinPadding1Border>();
+// });
+// Console.WriteLine(ansiShadow.ConvertToAsciiString(" Aterra Engine "));
+// Console.WriteLine(ansiShadow.ConvertToAsciiString(" A "));
+//
+// Console.ReadKey();
 
-Console.ReadKey();
-
-
-Console.WriteLine(new AnsiShadow().Convert("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "aqua", "pink"));
+ansiShadow = new AnsiShadow(config => {
+    config.RegisterAnsiMarkup(AnsiColor.AsFore("darkslategray"), '█','▄' );
+    config.RegisterAnsiMarkup(AnsiColor.AsFore("lightslategray"), '╔','═', '╗', '║', '╚', '╝' );
+    
+    config.RegisterBorder(ThinBorder.GeneratePaddingBorder(1));
+    // config.RegisterBorder<ThinBorder>();
+});
+Console.WriteLine(ansiShadow.ConvertToAsciiString(" Aterra Engine "));
+Console.WriteLine(ansiShadow.ConvertToAsciiString(" A "));
