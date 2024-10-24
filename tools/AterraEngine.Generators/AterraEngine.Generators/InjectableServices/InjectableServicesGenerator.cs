@@ -62,13 +62,13 @@ public class InjectableServicesGenerator : IIncrementalGenerator {
     private static IEnumerable<InjectableServiceRegistration> GetRegistrations(Compilation compilation, ImmutableArray<ClassDeclarationSyntax> classDeclarations, INamedTypeSymbol attributeType) {
         foreach (ClassDeclarationSyntax candidate in classDeclarations) {
             SemanticModel model = compilation.GetSemanticModel(candidate.SyntaxTree);
-            if (model.GetDeclaredSymbol(candidate) is not {} classSymbol) continue;
+            if (model.GetDeclaredSymbol(candidate) is not {} implementationTypeSymbol) continue;
 
             foreach (AttributeSyntax attribute in candidate.AttributeLists.SelectMany(attrList => attrList.Attributes)) {
                 if (model.GetTypeInfo(attribute).Type is not INamedTypeSymbol attributeTypeInfo) continue;
                 if (!SymbolEqualityComparer.Default.Equals(attributeTypeInfo.ConstructedFrom, attributeType)) continue;
                 if (attribute is not { Name: GenericNameSyntax genericNameSyntax }) continue;
-                if ( genericNameSyntax.TypeArgumentList.Arguments.FirstOrDefault() is not { } typeArgumentSyntax) continue;
+                if (genericNameSyntax.TypeArgumentList.Arguments.FirstOrDefault() is not { } typeArgumentSyntax) continue;
                 if (model.GetSymbolInfo(typeArgumentSyntax).Symbol is not INamedTypeSymbol serviceTypeSymbol) continue;
                 if (attribute.ArgumentList?.Arguments.FirstOrDefault()?.Expression is not MemberAccessExpressionSyntax lifetimeExpr) continue;
 
@@ -77,7 +77,7 @@ public class InjectableServicesGenerator : IIncrementalGenerator {
 
                 yield return new InjectableServiceRegistration(
                     serviceTypeSymbol.ToDisplayString(),
-                    classSymbol.ToDisplayString(),
+                    implementationTypeSymbol.ToDisplayString(),
                     lifetimeName
                 );
             }
