@@ -26,7 +26,6 @@ public class InjectableServicesGenerator : IIncrementalGenerator {
     public void Initialize(IncrementalGeneratorInitializationContext context) {
         IncrementalValueProvider<ImmutableArray<ClassDeclarationSyntax>> syntaxProvider = context.SyntaxProvider
             .CreateSyntaxProvider(ProviderPredicate, ProviderTransform)
-            .Where(syntax => syntax is not null)
             .Collect();
 
         context.RegisterSourceOutput(context.CompilationProvider.Combine(syntaxProvider), GenerateSources);
@@ -37,6 +36,7 @@ public class InjectableServicesGenerator : IIncrementalGenerator {
     private static ClassDeclarationSyntax ProviderTransform(GeneratorSyntaxContext ctx, CancellationToken _) => (ClassDeclarationSyntax)ctx.Node;
     #endregion
 
+    #region SourceGenerator
     private static void GenerateSources(SourceProductionContext context, (Compilation, ImmutableArray<ClassDeclarationSyntax>) source) {
         (Compilation? compilation, ImmutableArray<ClassDeclarationSyntax> classDeclarations) = source;
 
@@ -101,12 +101,10 @@ public class InjectableServicesGenerator : IIncrementalGenerator {
             .AppendLine("}")
             .ToString();
     }
+    #endregion
 
     #region Helper Methods
-    private static void ReportDiagnostic(SourceProductionContext context, DiagnosticDescriptor rule) {
-        context.ReportDiagnostic(Diagnostic.Create(rule, Location.None));
-    }
-
+    private static void ReportDiagnostic(SourceProductionContext context, DiagnosticDescriptor rule) => context.ReportDiagnostic(Diagnostic.Create(rule, Location.None));
     private static string Sanitize(string input) => new(input.Where(char.IsLetterOrDigit).ToArray());
     #endregion
 }

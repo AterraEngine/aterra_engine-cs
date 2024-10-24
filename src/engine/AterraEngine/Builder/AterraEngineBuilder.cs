@@ -76,14 +76,14 @@ public class AterraEngineBuilder : IAterraEngineBuilder {
     /// <inheritdoc />
     public Task<IAterraEngine> BuildAsync() => BuildAsync<IAterraEngine>();
     /// <inheritdoc />
-    public async Task<T> BuildAsync<T>() where T : IAterraEngine {
+    public Task<T> BuildAsync<T>() where T : IAterraEngine {
         Logger.Information("Building engine...");
 
         // Todo Collect from source
         EngineServices.ConfigureServices(Services, []);
 
         Logger.Information("Finished building engine");
-        return EngineServices.Provider.GetRequiredService<T>();
+        return Task.FromResult(EngineServices.Provider.GetRequiredService<T>());
     }
     #endregion
 }
