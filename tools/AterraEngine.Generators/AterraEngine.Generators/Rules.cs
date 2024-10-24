@@ -25,4 +25,13 @@ public static class Rules {
         DiagnosticSeverity.Warning,
         true
     );
+
+    public static readonly DiagnosticDescriptor NoAssemblyNameFound = new(
+        "ATRGEN003",
+        "No assembly name was found",
+        "No assembly name was found",
+        "SourceGenerator",
+        DiagnosticSeverity.Error,
+        true
+    );
 }
