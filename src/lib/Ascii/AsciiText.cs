@@ -8,19 +8,21 @@ namespace Ascii;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class AsciiText<TConfig>(Action<TConfig>? config) where TConfig : AsciiTextConfig, new() {
-    private readonly StringBuilder _sb = new();
+public class AsciiText<TConfig>(Action<TConfig>? configure, int stringBuilderCapacity = 1000) 
+    where TConfig : AsciiTextConfig, new()
+{
+    private readonly StringBuilder _sb = new(stringBuilderCapacity);
     private string _lastConvertedWord = string.Empty;
-    private bool _lastConvertedWithBorder;
-    private TConfig _config = RegisterConfig(config);
+    private TConfig _config = RegisterConfig(configure);
     private readonly Dictionary<char, string[]> _charactersWithGraphics = new();
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
+
     private void Clear() {
-        _lastConvertedWord = string.Empty;
         _sb.Clear();
+        _lastConvertedWord = string.Empty;
         _charactersWithGraphics.Clear();
     }
 
@@ -33,11 +35,12 @@ public class AsciiText<TConfig>(Action<TConfig>? config) where TConfig : AsciiTe
         int lineCount = configInstance.AlphabetDictionary.Max(x => x.Value.Max(line => line.Length));
         string[] space = new string[lineCount];
         string spaceChars = new(' ', configInstance.SpaceCharWidth);
-        for (int i = lineCount - 1; i >= 0; i--) {
+
+        for (int i = 0; i < lineCount; i++) {
             space[i] = spaceChars;
         }
 
-        configInstance.AlphabetDictionary.Add(' ', [..space]);
+        configInstance.AlphabetDictionary[' '] = space.ToImmutableArray();
 
         return configInstance;
     }
@@ -53,132 +56,114 @@ public class AsciiText<TConfig>(Action<TConfig>? config) where TConfig : AsciiTe
         if (_charactersWithGraphics.TryGetValue(c, out string[]? letterArray)) return letterArray;
         if (!_config.AlphabetDictionary.TryGetValue(c, out ImmutableArray<string> stringArray)) return _config.AlphabetDictionary[' '].ToArray();
 
-        StringBuilder localBuilder = new();
         string[] localArray = new string[stringArray.Length];
         for (int i = 0; i < stringArray.Length; i++) {
-            char[] charArray = stringArray[i].ToCharArray();
-
-            foreach (char c1 in charArray) {
-                if (!_config.GraphicsDictionary.TryGetValue(c1, out string? graphics)) {
-                    localBuilder.Append(c1);
-                    continue;
-                }
-
-                localBuilder.Append(graphics);
+            var localBuilder = new StringBuilder(stringArray[i].Length);
+            foreach (char c1 in stringArray[i]) {
+                localBuilder.Append(_config.GraphicsDictionary.TryGetValue(c1, out string? graphics) ? graphics : c1);
             }
 
             localArray[i] = localBuilder.ToString();
-            localBuilder.Clear();
         }
 
-        _charactersWithGraphics.Add(c, localArray);
+        _charactersWithGraphics[c] = localArray;
         return localArray;
     }
-    
+
     private ImmutableArray<string> GetWithoutGraphics(char c) {
         if (!_config.CapitalizationSensitive) c = char.ToLowerInvariant(c);
-
-        return _config.AlphabetDictionary.TryGetValue(c, out ImmutableArray<string> letterArray)
-            ? letterArray
-            : _config.AlphabetDictionary[' '];
+        return _config.AlphabetDictionary.TryGetValue(c, out ImmutableArray<string> letterArray) ? letterArray : _config.AlphabetDictionary[' '];
     }
-    
 
     public string ConvertToAsciiString(string text) {
-        if (_config.Border is not null) return ConvertToAsciiStringWithBorder(text);
-        if (text == _lastConvertedWord && !_lastConvertedWithBorder) return _sb.ToString();
+        if (_config.Border != null) return WithBorder(text);
 
+        return text == _lastConvertedWord ? _sb.ToString() : NormalOutput(text);
+    }
+
+    private string NormalOutput(string text) {
         _sb.Clear();
-        string[][] textStrings = text.Select(GetWithGraphics).ToArray();
-        int lines = textStrings.Max(t => t.Length);
+
+        string[][] textArray = text.Select(GetWithGraphics).ToArray();
+        int lines = textArray.Max(t => t.Length);
 
         for (int i = 0; i < lines; i++) {
-            foreach (string[] textString in textStrings) {
-                _sb.Append(i < textString.Length
-                        ? textString[i]
-                        : new string(' ', textString[0].Length)// Handle missing lines for alignment
-                );
-            }
+
+            ExtractAsciiText(textArray, i);
 
             _sb.AppendLine();
         }
 
         _lastConvertedWord = text;
-        _lastConvertedWithBorder = false;
         return _sb.ToString();
     }
 
-    public string ConvertToAsciiStringWithBorder(string text) {
-        if (_config.Border is null) return ConvertToAsciiString(text);
-        if (text == _lastConvertedWord && _lastConvertedWithBorder) return _sb.ToString();
-        
-        ImmutableArray<string> cornerTopLeft = _config.Border.BorderGraphics[BorderAssignment.CornerTopLeft];
-        ImmutableArray<string> cornerTopRight = _config.Border.BorderGraphics[BorderAssignment.CornerTopRight];
-        ImmutableArray<string> cornerBottomLeft = _config.Border.BorderGraphics[BorderAssignment.CornerBottomLeft];
-        ImmutableArray<string> cornerBottomRight = _config.Border.BorderGraphics[BorderAssignment.CornerBottomRight];
-        ImmutableArray<string> straightTop = _config.Border.BorderGraphics[BorderAssignment.StraightTop];
-        ImmutableArray<string> straightBottom = _config.Border.BorderGraphics[BorderAssignment.StraightBottom];
-        ImmutableArray<string> straightLeft = _config.Border.BorderGraphics[BorderAssignment.StraightLeft];
-        ImmutableArray<string> straightRight = _config.Border.BorderGraphics[BorderAssignment.StraightRight];
-        
-        int chunkSize = cornerTopLeft[0].Length; // In AsciiBorder we make sure everything is the same length
+    private string WithBorder(string text) {
+        IReadOnlyDictionary<BorderAssignment, ImmutableArray<string>> borderGraphics = _config.Border!.BorderGraphics;
+        int chunkSize = borderGraphics[BorderAssignment.CornerTopLeft][0].Length;// Assuming chunk sizes are consistent
 
         ImmutableArray<string>[] colorLessTextArray = text.Select(GetWithoutGraphics).ToArray();
+        string[][] textArray = text.Select(GetWithGraphics).ToArray();
 
-        // Calculate the necessary width of the text content
         int totalLineLength = colorLessTextArray.Sum(lines => lines[0].Length);
-
-        // Adjust total line length to be a multiple of chunkSize
         int remainderWidth = totalLineLength % chunkSize;
         if (remainderWidth != 0) totalLineLength += chunkSize - remainderWidth;
         int straightSteps = totalLineLength / chunkSize;
 
-        // Calculate text height
-        string[][] textArray = text.Select(GetWithGraphics).ToArray();
-        int textHeight = textArray[0].Length;
-    
-        // Adjust text height to be a multiple of chunkSize
+        int textHeight = textArray.Max(arr => arr.Length);
         int remainderHeight = textHeight % chunkSize;
         if (remainderHeight != 0) textHeight += chunkSize - remainderHeight;
 
         _sb.Clear();
-        
-        // Construct the top border
-        for (int i = 0; i < chunkSize; i++) {
-            _sb.Append(cornerTopLeft[i]);
-            for (int j = 0; j < straightSteps; j++) {
-                _sb.Append(straightTop[i]);
-            }
-            _sb.AppendLine(cornerTopRight[i]);
-        }
-        
-        
-        // Construct the text with side borders
-        for (int i = 0; i < textHeight; i++) {
-            _sb.Append(straightLeft[i % chunkSize]);
-            
-            foreach (string[] textString in textArray) {
-                _sb.Append(i < textString.Length
-                        ? textString[i]
-                        : new string(' ', textString[0].Length)// Handle missing lines for alignment
-                );
-            }
 
-            _sb.AppendLine(straightRight[i % chunkSize]);
+        // Top border
+        GenerateAsciiBorder(
+            chunkSize,
+            borderGraphics[BorderAssignment.CornerTopLeft],
+            straightSteps,
+            borderGraphics[BorderAssignment.StraightTop],
+            borderGraphics[BorderAssignment.CornerTopRight]
+        );
+
+        // Text with side borders
+        for (int i = 0; i < textHeight; i++) {
+            _sb.Append(borderGraphics[BorderAssignment.StraightLeft][i % chunkSize]);
+
+            ExtractAsciiText(textArray, i);
+
+            _sb.AppendLine(borderGraphics[BorderAssignment.StraightRight][i % chunkSize]);
         }
-        
-        // Construct the bottom border
-        for (int i = 0; i < chunkSize; i++) {
-            _sb.Append(cornerBottomLeft[i]);
-            for (int j = 0; j < straightSteps; j++) {
-                _sb.Append(straightBottom[i]);
-            }
-            _sb.AppendLine(cornerBottomRight[i]);
-        }
-        
+
+        // Bottom border
+        GenerateAsciiBorder(
+            chunkSize,
+            borderGraphics[BorderAssignment.CornerBottomLeft],
+            straightSteps,
+            borderGraphics[BorderAssignment.StraightBottom],
+            borderGraphics[BorderAssignment.CornerBottomRight]
+        );
+
         _lastConvertedWord = text;
-        _lastConvertedWithBorder = true;
         return _sb.ToString();
     }
 
+    private void ExtractAsciiText(string[][] textArray, int i) {
+        foreach (string[] textString in textArray) {
+            _sb.Append(i < textString.Length
+                ? textString[i]
+                : new string(' ', textString[0].Length));
+        }
+    }
+
+    private void GenerateAsciiBorder(int chunkSize, ImmutableArray<string> cornerLeft, int straightSteps, ImmutableArray<string> straight, ImmutableArray<string> cornerRight) {
+        for (int i = 0; i < chunkSize; i++) {
+            _sb.Append(cornerLeft[i]);
+
+            for (int j = 0; j < straightSteps; j++) {
+                _sb.Append(straight[i % chunkSize]);
+            }
+
+            _sb.AppendLine(cornerRight[i]);
+        }
+    }
 }

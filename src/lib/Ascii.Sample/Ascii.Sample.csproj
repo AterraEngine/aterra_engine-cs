@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Ascii\Ascii.csproj" />
+        <ProjectReference Include="..\Ascii\Ascii.csproj"/>
     </ItemGroup>
 
 </Project>

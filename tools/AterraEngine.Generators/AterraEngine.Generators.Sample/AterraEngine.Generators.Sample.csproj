@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\src\engine\AterraEngine.Common\AterraEngine.Common.csproj" />
+        <ProjectReference Include="..\..\..\src\engine\AterraEngine.Common\AterraEngine.Common.csproj"/>
     </ItemGroup>
 
     <ItemGroup>

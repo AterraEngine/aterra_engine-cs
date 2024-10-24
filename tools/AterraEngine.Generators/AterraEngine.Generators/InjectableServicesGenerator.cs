@@ -18,32 +18,33 @@ namespace AterraEngine.Generators;
 public class InjectableServicesGenerator : IIncrementalGenerator {
     public const string GeneratedFileName = "InjectableServicesExtensions.g.cs";
     public const string AttributeMetadataName = "AterraEngine.Common.Attributes.InjectableServiceAttribute`1";
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public void Initialize(IncrementalGeneratorInitializationContext context) {
         // Uncomment to debug
         // Debugger.Break();
-        
+
         // Combine syntax collection and semantic processing in a pipeline
         IncrementalValuesProvider<ClassDeclarationSyntax> classDeclarations =
             context.SyntaxProvider.CreateSyntaxProvider(
                 predicate: static (node, _) => node is ClassDeclarationSyntax { AttributeLists.Count: > 0 },
                 transform: static (ctx, _) => (ClassDeclarationSyntax)ctx.Node
             );
-        
+
         context.RegisterSourceOutput(
-            context.CompilationProvider.Combine(classDeclarations.Collect()), 
+            context.CompilationProvider.Combine(classDeclarations.Collect()),
             action: (sourceContext, source) => Generate(source.Item1, source.Item2, sourceContext));
     }
 
     private static void Generate(Compilation compilation, ImmutableArray<ClassDeclarationSyntax> classDeclarations, SourceProductionContext context) {
         if (compilation.GetTypeByMetadataName(AttributeMetadataName) is not {} attributeSymbol) {
             context.ReportDiagnostic(Diagnostic.Create(
-                Rules.NoAttributesFound, 
+                Rules.NoAttributesFound,
                 Location.None
             ));
+
             return;
         }
 
@@ -89,6 +90,7 @@ public class InjectableServicesGenerator : IIncrementalGenerator {
                 Rules.NoRegistrationsGenerated,
                 Location.None
             ));
+
             return;
         }
 

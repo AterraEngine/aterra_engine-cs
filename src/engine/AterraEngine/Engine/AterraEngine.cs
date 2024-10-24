@@ -6,7 +6,6 @@ using AterraEngine.Contracts.Engine;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AterraEngine.Engine;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -14,7 +13,7 @@ namespace AterraEngine.Engine;
 public class AterraEngine : IAterraEngine {
 
     public async Task RunAsync() {
-        
+
         // GatherDataFromGamePlugins();
     }
 }

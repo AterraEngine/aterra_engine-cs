@@ -15,11 +15,10 @@ namespace System;
 // ---------------------------------------------------------------------------------------------------------------------
 [StructLayout(LayoutKind.Sequential)]
 public readonly struct AssetNameSpace :
-    IEquatable<AssetNameSpace> ,
+    IEquatable<AssetNameSpace>,
     IEqualityOperators<AssetNameSpace, AssetNameSpace, bool>,
     IEqualityOperators<AssetNameSpace, string, bool>,
-    IAdditionOperators<AssetNameSpace, AssetPath, AssetId>
-{
+    IAdditionOperators<AssetNameSpace, AssetPath, AssetId> {
     public string Value { get; }
     private readonly int _hashCode;
 

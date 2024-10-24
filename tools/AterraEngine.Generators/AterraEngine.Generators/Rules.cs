@@ -4,7 +4,6 @@
 using Microsoft.CodeAnalysis;
 
 namespace AterraEngine.Generators;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -17,7 +16,7 @@ public static class Rules {
         DiagnosticSeverity.Info,
         true
     );
-    
+
     public static readonly DiagnosticDescriptor NoRegistrationsGenerated = new(
         "ATRGEN002",
         "No registrations were generated",

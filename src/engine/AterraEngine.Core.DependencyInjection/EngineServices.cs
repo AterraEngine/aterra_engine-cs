@@ -4,7 +4,6 @@
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AterraEngine.Core.DependencyInjection;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -18,7 +17,7 @@ public static class EngineServices {
         foreach (ServiceDescriptor descriptor in serviceDescriptors) {
             collection.Add(descriptor);
         }
-        
+
         Provider = collection.BuildServiceProvider();
     }
 }

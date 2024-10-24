@@ -19,6 +19,7 @@ public static class LoggerConfigurationExtensions {
     ///     The output template used for formatting log messages.
     /// </summary>
     public const string OutputTemplateEngine = "[ {SourceContext,24} : {Timestamp:HH:mm:ss.fff} : {Level:u3}] | {Message:lj} {NewLine}{Exception}";
+
     public const string OutputTemplateStartup = "[ {IsBootOperation,-4}{SourceContext,20} : {Timestamp:HH:mm:ss.fff} : {Level:u3}] | {Message:lj} {NewLine}{Exception}";
 
     #region Theme
@@ -80,7 +81,7 @@ public static class LoggerConfigurationExtensions {
                 rollingInterval: RollingInterval.Day
             ));
     }
-    
+
     /// <summary>
     ///     Configures Serilog logger to write log events to the console synchronously or asynchronously.
     ///     Using the async sink avoids any performance issues during gameplay.

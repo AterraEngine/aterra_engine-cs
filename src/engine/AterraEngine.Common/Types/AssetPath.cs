@@ -17,8 +17,7 @@ namespace System;
 public readonly struct AssetPath :
     IEquatable<AssetPath>,
     IEqualityOperators<AssetPath, AssetPath, bool>,
-    IEqualityOperators<AssetPath, string, bool>
-{
+    IEqualityOperators<AssetPath, string, bool> {
     public IReadOnlyList<string> Values { get; }
     private readonly int _hashCode;
     private readonly ReadOnlyMemory<char> _valueMemory;

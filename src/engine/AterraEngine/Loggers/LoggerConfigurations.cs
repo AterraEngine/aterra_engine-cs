@@ -6,7 +6,6 @@ using Serilog.Core;
 using Serilog.Events;
 
 namespace AterraEngine.Loggers;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -24,17 +23,16 @@ public static class LoggerConfigurations {
             .MinimumLevel.Is(logEventLevel)
             .AsyncSinkFile("logs/log_engine-.log")
             .SetConsole(
-                allowAsync: true,
+                true,
                 LoggerConfigurationExtensions.OutputTemplateStartup
-            )
-    ;
+            );
 
     /// <summary>
     /// Creates a logger for the engine.
     /// </summary>
     /// <param name="logEventLevel">The minimum log event level.</param>
     /// <returns>The configured logger.</returns>
-    public static Logger CreateEngineLogger(LogEventLevel logEventLevel) => 
+    public static Logger CreateEngineLogger(LogEventLevel logEventLevel) =>
         CreateEngineLoggerConfiguration(logEventLevel)
             .CreateLogger();
 
@@ -50,18 +48,16 @@ public static class LoggerConfigurations {
             .DefaultEnrich("Startup")
             .AsyncSinkFile("logs/log_builder-.log")
             .SetConsole(
-                allowAsync: false,
+                false,
                 LoggerConfigurationExtensions.OutputTemplateStartup
-            )
-        ;
+            );
 
     /// <summary>
     /// Creates a logger for the builder.
     /// </summary>
     /// <param name="logEventLevel">The logging event level.</param>
     /// <returns>A Logger object configured for the builder.</returns>
-    public static Logger CreateBuilderLogger(LogEventLevel logEventLevel) => 
+    public static Logger CreateBuilderLogger(LogEventLevel logEventLevel) =>
         CreateBuilderLoggerConfiguration(logEventLevel)
             .CreateLogger();
 }
-

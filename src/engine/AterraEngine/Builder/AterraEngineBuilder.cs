@@ -12,7 +12,6 @@ using Serilog.Core;
 using Serilog.Events;
 
 namespace AterraEngine.Builder;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -20,7 +19,7 @@ namespace AterraEngine.Builder;
 public class AterraEngineBuilder : IAterraEngineBuilder {
     public IServiceCollection Services { get; } = CreateDefaultServices();
     public ILogger Logger { get; private set; } = LoggerConfigurations.CreateBuilderLogger(LogEventLevel.Verbose);
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Constructor Helpers
     // -----------------------------------------------------------------------------------------------------------------
@@ -30,18 +29,18 @@ public class AterraEngineBuilder : IAterraEngineBuilder {
         services
             .AddSingleton(logger)
             .AddSingleton<ILogger>(logger)
-        ;
-        
+            ;
+
         // Add auto generated services from various subprojects.
         services.RegisterServicesFromAterraEngine();
-        
+
         return services;
-    } 
-    
+    }
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    
+
     #region Logging
     /// <inheritdoc />
     public IAterraEngineBuilder WithSerilog(ILogger logger) {
@@ -72,17 +71,17 @@ public class AterraEngineBuilder : IAterraEngineBuilder {
         return this;
     }
     #endregion
-    
+
     #region Build
     /// <inheritdoc />
     public Task<IAterraEngine> BuildAsync() => BuildAsync<IAterraEngine>();
     /// <inheritdoc />
     public async Task<T> BuildAsync<T>() where T : IAterraEngine {
         Logger.Information("Building engine...");
-        
+
         // Todo Collect from source
         EngineServices.ConfigureServices(Services, []);
-        
+
         Logger.Information("Finished building engine");
         return EngineServices.Provider.GetRequiredService<T>();
     }

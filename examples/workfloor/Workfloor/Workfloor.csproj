@@ -8,9 +8,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\src\engine\AterraEngine.Common\AterraEngine.Common.csproj" />
-      <ProjectReference Include="..\..\..\src\engine\AterraEngine.Contracts\AterraEngine.Contracts.csproj" />
-      <ProjectReference Include="..\..\..\src\engine\AterraEngine\AterraEngine.csproj" />
+        <ProjectReference Include="..\..\..\src\engine\AterraEngine.Common\AterraEngine.Common.csproj"/>
+        <ProjectReference Include="..\..\..\src\engine\AterraEngine.Contracts\AterraEngine.Contracts.csproj"/>
+        <ProjectReference Include="..\..\..\src\engine\AterraEngine\AterraEngine.csproj"/>
     </ItemGroup>
 
 </Project>

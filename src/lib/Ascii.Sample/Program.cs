@@ -37,11 +37,13 @@ var ansiShadow = new AnsiShadow();
 // Console.ReadKey();
 
 ansiShadow = new AnsiShadow(config => {
-    config.RegisterAnsiMarkup(AnsiColor.AsFore("darkslategray"), '█','▄' );
-    config.RegisterAnsiMarkup(AnsiColor.AsFore("lightslategray"), '╔','═', '╗', '║', '╚', '╝' );
-    
-    config.RegisterBorder(ThinBorder.GeneratePaddingBorder(1));
+    config.RegisterAnsiMarkup(AnsiColor.AsFore("darkslategray"), '█', '▄');
+    config.RegisterAnsiMarkup(AnsiColor.AsFore("lightslategray"), '╔', '═', '╗', '║', '╚', '╝');
+
+    // config.RegisterBorder(ThinBorder.GeneratePaddingBorder(1));
     // config.RegisterBorder<ThinBorder>();
+    config.RegisterBorder<ThickBorder>();
 });
-Console.WriteLine(ansiShadow.ConvertToAsciiString(" Aterra Engine "));
+
+Console.WriteLine(ansiShadow.ConvertToAsciiString(" Aterra  Engine "));
 Console.WriteLine(ansiShadow.ConvertToAsciiString(" A "));

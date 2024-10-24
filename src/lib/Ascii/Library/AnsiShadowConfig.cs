@@ -219,15 +219,7 @@ public class AnsiShadowConfig : AsciiTextConfig {
             "╚══════╝"
         ],
         #endregion
-        [' '] = [
-            "     ",
-            "     ",
-            "     ",
-            "     ",
-            "     ",
-            "     "
-        ],
-        // Numbers
+        #region Numbers
         ['0'] = [
             " ██████╗ ",
             "██╔═████╗",
@@ -308,8 +300,16 @@ public class AnsiShadowConfig : AsciiTextConfig {
             " █████╔╝",
             " ╚════╝ "
         ],
-
-        // Punctuation and symbols
+        #endregion
+        #region Punctuation and symbols
+        [' '] = [
+            "     ",
+            "     ",
+            "     ",
+            "     ",
+            "     ",
+            "     "
+        ],
         ['!'] = [
             "██╗",
             "██║",
@@ -422,5 +422,6 @@ public class AnsiShadowConfig : AsciiTextConfig {
             " █╔╝",
             " ╚╝ "
         ]
+        #endregion
     };
 }

@@ -6,7 +6,6 @@ using AterraEngine.Contracts.Engine;
 using Serilog;
 
 namespace AterraEngine.Contracts.Builder;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -17,7 +16,7 @@ public interface IAterraEngineBuilder {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    
+
     #region Serilogger
     /// <summary>
     /// Configures the builder to use the specified Serilog logger.
@@ -25,14 +24,14 @@ public interface IAterraEngineBuilder {
     /// <param name="logger">An instance of the ILogger to be used by the builder.</param>
     /// <returns>A reference to the IAterraEngineBuilder instance for method chaining.</returns>
     IAterraEngineBuilder WithSerilog(ILogger logger);
-    
+
     /// <summary>
     /// Configures the builder to use the specified Serilog logger.
     /// </summary>
     /// <param name="configure">An action to configure the LoggerConfiguration for Serilog.</param>
     /// <returns>A reference to the IAterraEngineBuilder instance for method chaining.</returns>
     IAterraEngineBuilder WithSerilog(Action<LoggerConfiguration> configure);
-    
+
     /// <summary>
     /// Adds Serilog Services as the Engine Logging provider
     /// </summary>
@@ -54,7 +53,7 @@ public interface IAterraEngineBuilder {
     /// </summary>
     /// <returns>An instance of IAterraEngine constructed based on the configured settings.</returns>
     Task<IAterraEngine> BuildAsync();
-    
+
     /// <summary>
     /// Builds the engine with the current configuration.
     /// </summary>

@@ -4,11 +4,10 @@
 using System.Collections.Immutable;
 
 namespace Ascii.BorderLibrary;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class ThinPadding1Border :AsciiBorder {
+public class ThinPadding1Border : AsciiBorder {
     protected override Dictionary<BorderAssignment, ImmutableArray<string>> _borderGraphics { get; init; } = new() {
         [BorderAssignment.CornerTopLeft] = [
             "╔═",
@@ -25,7 +24,7 @@ public class ThinPadding1Border :AsciiBorder {
         [BorderAssignment.CornerBottomLeft] = [
             "║ ",
             "╚═"
-            
+
         ],
         [BorderAssignment.StraightLeft] = [
             "║ ",
@@ -42,6 +41,6 @@ public class ThinPadding1Border :AsciiBorder {
         [BorderAssignment.StraightBottom] = [
             "  ",
             "══"
-        ],
+        ]
     };
 }

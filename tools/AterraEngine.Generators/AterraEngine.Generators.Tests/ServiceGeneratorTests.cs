@@ -13,7 +13,6 @@ using System.Diagnostics;
 using System.Linq;
 
 namespace AterraEngine.Generators.Tests;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -52,7 +51,7 @@ public class ServiceGeneratorTests {
                 return services;
             }
         }
-        
+
         """;
 
     [Fact]
@@ -61,7 +60,7 @@ public class ServiceGeneratorTests {
         var generator = new InjectableServicesGenerator();
 
         // Source generators should be tested using 'GeneratorDriver'.
-        var driver = CSharpGeneratorDriver.Create(generator.AsSourceGenerator()); // This converts the IIncrementalGenerator to ISourceGenerator
+        var driver = CSharpGeneratorDriver.Create(generator.AsSourceGenerator());// This converts the IIncrementalGenerator to ISourceGenerator
 
         // We need to create a compilation with the required source code.
         var compilation = CSharpCompilation.Create(nameof(ServiceGeneratorTests),

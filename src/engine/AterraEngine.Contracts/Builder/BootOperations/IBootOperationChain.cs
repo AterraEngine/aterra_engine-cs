@@ -2,12 +2,11 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 namespace AterraEngine.Contracts.Builder.BootOperations;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IBootOperationChain : IEnumerable<Type> {
-    LinkedList<Type> BootOperations { get; } 
+    LinkedList<Type> BootOperations { get; }
     HashSet<Type> BootOperationTypes { get; }
     Type ChainVariableType { get; }
 

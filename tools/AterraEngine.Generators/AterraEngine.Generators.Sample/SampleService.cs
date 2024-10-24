@@ -5,7 +5,6 @@ using AterraEngine.Common.Attributes;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AterraEngine.Generators.Sample;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------

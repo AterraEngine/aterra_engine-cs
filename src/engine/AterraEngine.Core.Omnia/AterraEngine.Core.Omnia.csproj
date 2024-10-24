@@ -7,12 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Ulid" Version="1.3.4" />
+        <PackageReference Include="Ulid" Version="1.3.4"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\AterraEngine.Common\AterraEngine.Common.csproj" />
-      <ProjectReference Include="..\AterraEngine.Contracts\AterraEngine.Contracts.csproj" />
+        <ProjectReference Include="..\AterraEngine.Common\AterraEngine.Common.csproj"/>
+        <ProjectReference Include="..\AterraEngine.Contracts\AterraEngine.Contracts.csproj"/>
     </ItemGroup>
 
 </Project>
