@@ -19,24 +19,17 @@ namespace AterraEngine.Generators.InjectableServices;
 [Generator(LanguageNames.CSharp)]
 public class InjectableServicesGenerator : IIncrementalGenerator {
     public const string GeneratedFileName = "InjectableServicesExtensions.g.cs";
-    public const string AttributeMetadataName = "AterraEngine.Common.Attributes.InjectableServiceAttribute`1";
+    private const string AttributeMetadataName = "AterraEngine.Common.Attributes.InjectableServiceAttribute`1";
 
-    private static readonly ImmutableHashSet<string> ValidLifeTimes = ["Singleton", "Scoped", "Transient"];
+    private static readonly ImmutableHashSet<string> ValidLifeTimes = ImmutableHashSet.Create("Singleton", "Scoped", "Transient");
 
-    // -----------------------------------------------------------------------------------------------------------------
-    // Methods
-    // -----------------------------------------------------------------------------------------------------------------
     public void Initialize(IncrementalGeneratorInitializationContext context) {
-        context.RegisterSourceOutput(
-            context.CompilationProvider.Combine(
-                context.SyntaxProvider.CreateSyntaxProvider(
-                        ProviderPredicate,
-                        ProviderTransform
-                    )
-                    .Where(syntax => syntax is not null)
-                    .Collect()
-            ),
-            action: (sourceContext, source) => GenerateSources(source.Item1, source.Item2, sourceContext));
+        IncrementalValueProvider<ImmutableArray<ClassDeclarationSyntax>> syntaxProvider = context.SyntaxProvider
+            .CreateSyntaxProvider(ProviderPredicate, ProviderTransform)
+            .Where(syntax => syntax is not null)
+            .Collect();
+
+        context.RegisterSourceOutput(context.CompilationProvider.Combine(syntaxProvider), GenerateSources);
     }
 
     #region ClassDeclarationsProvider
@@ -44,21 +37,21 @@ public class InjectableServicesGenerator : IIncrementalGenerator {
     private static ClassDeclarationSyntax ProviderTransform(GeneratorSyntaxContext ctx, CancellationToken _) => (ClassDeclarationSyntax)ctx.Node;
     #endregion
 
-    private static void GenerateSources(Compilation compilation, ImmutableArray<ClassDeclarationSyntax> classDeclarations, SourceProductionContext context) {
-        if (compilation.AssemblyName is not {} assemblyName) {
+    private static void GenerateSources(SourceProductionContext context, (Compilation, ImmutableArray<ClassDeclarationSyntax>) source) {
+        (Compilation? compilation, ImmutableArray<ClassDeclarationSyntax> classDeclarations) = source;
+
+        if (compilation.AssemblyName is not { } assemblyName) {
             ReportDiagnostic(context, Rules.NoAssemblyNameFound);
             return;
         }
 
-        if (compilation.GetTypeByMetadataName(AttributeMetadataName) is not {} attributeType) {
+        if (compilation.GetTypeByMetadataName(AttributeMetadataName) is not { } attributeType) {
             ReportDiagnostic(context, Rules.NoAttributesFound);
             return;
         }
 
-        List<InjectableServiceRegistration> registrations = GetRegistrations(compilation, classDeclarations, attributeType).ToList();
-        registrations.Sort((registration1, registration2) =>
-            StringComparer.InvariantCultureIgnoreCase.Compare(registration1.LifeTime, registration2.LifeTime)
-        );
+        IEnumerable<InjectableServiceRegistration> registrations = GetRegistrations(compilation, classDeclarations, attributeType)
+            .OrderBy(r => r.LifeTime, StringComparer.InvariantCultureIgnoreCase);
 
         context.AddSource(
             GeneratedFileName,
@@ -74,16 +67,12 @@ public class InjectableServicesGenerator : IIncrementalGenerator {
             foreach (AttributeSyntax attribute in candidate.AttributeLists.SelectMany(attrList => attrList.Attributes)) {
                 if (model.GetTypeInfo(attribute).Type is not INamedTypeSymbol attributeTypeInfo) continue;
                 if (!SymbolEqualityComparer.Default.Equals(attributeTypeInfo.ConstructedFrom, attributeType)) continue;
-
                 if (attribute is not { Name: GenericNameSyntax genericNameSyntax }) continue;
-                if (genericNameSyntax.TypeArgumentList.Arguments.FirstOrDefault() is not {} typeArgumentSyntax) continue;
+                if ( genericNameSyntax.TypeArgumentList.Arguments.FirstOrDefault() is not { } typeArgumentSyntax) continue;
                 if (model.GetSymbolInfo(typeArgumentSyntax).Symbol is not INamedTypeSymbol serviceTypeSymbol) continue;
-                if (attribute.ArgumentList is not { Arguments.Count: > 0 } attributeArguments) continue;
+                if (attribute.ArgumentList?.Arguments.FirstOrDefault()?.Expression is not MemberAccessExpressionSyntax lifetimeExpr) continue;
 
-                ExpressionSyntax? lifetimeArgument = attributeArguments.Arguments.FirstOrDefault()?.Expression;
-                if (lifetimeArgument is not MemberAccessExpressionSyntax memberAccessExpression) continue;
-
-                string lifetimeName = memberAccessExpression.ToString().Split('.').Last();
+                string lifetimeName = lifetimeExpr.Name.Identifier.Text;
                 if (!ValidLifeTimes.Contains(lifetimeName)) continue;
 
                 yield return new InjectableServiceRegistration(
@@ -102,17 +91,15 @@ public class InjectableServicesGenerator : IIncrementalGenerator {
             .AppendLine()
             .AppendLine("public static class InjectableServicesExtensions {")
             .AppendLine($"    public static IServiceCollection RegisterServicesFrom{assemblyName}(this IServiceCollection services) {{");
-
-
+        
         foreach (InjectableServiceRegistration registration in registrations) {
             sourceBuilder.AppendLine($"        services.Add{registration.LifeTime}<{registration.ServiceTypeName}, {registration.ImplementationTypeName}>();");
         }
 
-        sourceBuilder.AppendLine("        return services;")
+        return sourceBuilder.AppendLine("        return services;")
             .AppendLine("    }")
-            .AppendLine("}");
-
-        return sourceBuilder.ToString();
+            .AppendLine("}")
+            .ToString();
     }
 
     #region Helper Methods
@@ -120,6 +107,6 @@ public class InjectableServicesGenerator : IIncrementalGenerator {
         context.ReportDiagnostic(Diagnostic.Create(rule, Location.None));
     }
 
-    private static string Sanitize(string input) => string.Join("", input.Where(char.IsLetterOrDigit));
+    private static string Sanitize(string input) => new(input.Where(char.IsLetterOrDigit).ToArray());
     #endregion
 }
