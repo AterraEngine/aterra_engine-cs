@@ -14,6 +14,6 @@ public class ListPooledObjectPolicy<T> : PooledObjectPolicy<List<T>> {
         obj.Clear();
         return true;
     }
-    
+
     public static DefaultObjectPool<List<T>> CreatePool() => new(new ListPooledObjectPolicy<T>());
 }

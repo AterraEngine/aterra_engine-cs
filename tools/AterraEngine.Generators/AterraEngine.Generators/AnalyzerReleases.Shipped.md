@@ -6,4 +6,4 @@
 -----------|--------------------|----------|--------------------------------------
  ATRGEN001 | InjectableServices | Info     | InjectableServiceAttribute not found 
  ATRGEN002 | InjectableServices | Warning  | No registrations were generated      
- ATRGEN003 | SourceGenerator    | Error    | No assembly name was found      
+ ATRGEN003 | SourceGenerator    | Error    | No assembly name was found           

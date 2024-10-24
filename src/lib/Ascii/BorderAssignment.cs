@@ -10,12 +10,12 @@ public enum BorderAssignment {
     CornerTopRight,
     CornerBottomLeft,
     CornerBottomRight,
-    
+
     StraightTop,
     StraightBottom,
     StraightLeft,
     StraightRight,
-    
-    StraightHorizontal, // helper -> StraightLeft, StraightRight
-    StraightVertical, // helper -> StraightTop, StraightBottom
+
+    StraightHorizontal,// helper -> StraightLeft, StraightRight
+    StraightVertical// helper -> StraightTop, StraightBottom
 }

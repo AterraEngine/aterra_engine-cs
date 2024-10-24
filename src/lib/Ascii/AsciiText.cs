@@ -8,9 +8,8 @@ namespace Ascii;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class AsciiText<TConfig>(Action<TConfig>? configure, int stringBuilderCapacity = 1000) 
-    where TConfig : AsciiTextConfig, new()
-{
+public class AsciiText<TConfig>(Action<TConfig>? configure, int stringBuilderCapacity = 1000)
+    where TConfig : AsciiTextConfig, new() {
     private readonly StringBuilder _sb = new(stringBuilderCapacity);
     private string _lastConvertedWord = string.Empty;
     private TConfig _config = RegisterConfig(configure);

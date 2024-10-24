@@ -22,16 +22,16 @@
         <None Include="$(OutputPath)\$(AssemblyName).dll"
               Pack="true"
               PackagePath="analyzers/dotnet/cs"
-              Visible="false" />
-        
+              Visible="false"/>
+
         <!-- Pack added dependencies-->
         <None Include="$(PkgMicrosoft_Extensions_ObjectPool)\lib\netstandard2.0\*.dll"
               Pack="true"
               PackagePath="analyzers/dotnet/cs"
-              Visible="false" />
-        
+              Visible="false"/>
+
         <!-- Include the README file in the root of the NuGet package -->
-        <None Include="README.md" Pack="true" PackagePath="" />
+        <None Include="README.md" Pack="true" PackagePath=""/>
     </ItemGroup>
 
     <!-- Ensure the GetDependencyTargetPaths target runs during the GetTargetPath target -->
@@ -46,7 +46,7 @@
             <!-- Add packaged dependencies here so they are referenced correctly -->
             <TargetPathWithTargetPlatformMoniker
                     Include="$(PkgMicrosoft_Extensions_ObjectPool)\lib\netstandard2.0\*.dll"
-                    IncludeRuntimeDependency="false" />
+                    IncludeRuntimeDependency="false"/>
         </ItemGroup>
     </Target>
 
