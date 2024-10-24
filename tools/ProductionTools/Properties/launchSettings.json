@@ -1,0 +1,20 @@
+﻿{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "ConsoleThemeTest": {
+      "commandName": "Project",
+      "commandLineArgs": "console-theme-test"
+    },
+    "Xml Schema Generator": {
+      "commandName": "Project",
+      "commandLineArgs": "generate-xmlschema -c=\"engine-config\" -f=\"..\\..\\..\\..\\..\\..\\src\\xsd\" && generate-xmlschema -c=\"plugin-config\" -f=\"..\\..\\..\\..\\..\\..\\src\\xsd\" && generate-xmlschema -c=\"game-config\" -f=\"..\\..\\..\\..\\..\\..\\src\\xsd\" && generate-xmlschema -c=\"game-config-aterralib\" -f=\"..\\..\\..\\..\\..\\..\\src\\xsd\""
+    },
+    "Stat Counter": {
+      "commandName": "Project",
+      "commandLineArgs": "stats-count"
+    },
+    "Open Cli Tools" : {
+      "commandName": "Project"
+    }
+  }
+}

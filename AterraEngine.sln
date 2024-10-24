@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{EB56FFEB-7FE6-44BB-B268-654433136B0F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests-old", "tests-old", "{EB56FFEB-7FE6-44BB-B268-654433136B0F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workfloor", "Workfloor", "{BA09286A-862B-4331-98ED-AD330808EDF8}"
 EndProject
@@ -113,6 +113,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ascii", "src\lib\Ascii\Ascii.csproj", "{9A9BCF4E-54ED-4323-A85D-6ABB70AECB5E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ascii.Sample", "src\lib\Ascii.Sample\Ascii.Sample.csproj", "{F17CFD92-1E4E-4626-9143-7847A420A89C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{4D900137-2DCF-4346-AAE2-997D99840ADD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

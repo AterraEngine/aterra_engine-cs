@@ -15,7 +15,7 @@ public static class Program {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    private async static Task MainAsync(string[] args) {
+    private async static Task Main(string[] args) {
         await using Logger logger = new LoggerConfiguration()
             .MinimumLevel.Verbose()
             .DefaultSinkConsole()// Using the normal version of the Sink Console, else the empty lines get processed earlier.
@@ -35,12 +35,11 @@ public static class Program {
         );
 
         ServiceProvider provider = serviceCollection.BuildServiceProvider();
-        var parser = provider.GetRequiredService<IArgsParser>();
 
-        await parser.ParseAsyncLinear(args);
-    }
-
-    public static void Main(string[] args) {
-        MainAsync(args).GetAwaiter().GetResult();
+        if (args.Length > 0) {
+            await provider.GetRequiredService<IArgsParser>().ParseAsyncLinear(args);
+        } else {
+            await provider.GetRequiredService<ICliParser>().StartParsingAsync();
+        }
     }
 }

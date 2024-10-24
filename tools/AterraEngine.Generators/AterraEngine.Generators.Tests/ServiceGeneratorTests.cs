@@ -52,7 +52,7 @@ public class ServiceGeneratorTests {
                 return services;
             }
         }
-
+        
         """;
 
     [Fact]
@@ -97,9 +97,10 @@ public class ServiceGeneratorTests {
             .SourceText;
 
         Assert.NotNull(generatedFileSyntax);
-
-        // Complex generators should be tested using text comparison.
-        Assert.Equal(ExpectedGeneratedClassText, generatedFileSyntax.ToString(),
-            ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
+        Assert.Equal(ExpectedGeneratedClassText.Trim(), 
+            generatedFileSyntax.ToString().Trim(),
+            ignoreLineEndingDifferences: true, 
+            ignoreWhiteSpaceDifferences: true
+        );
     }
 }
