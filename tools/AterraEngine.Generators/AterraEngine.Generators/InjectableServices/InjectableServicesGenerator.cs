@@ -55,7 +55,7 @@ public class InjectableServicesGenerator : IIncrementalGenerator {
 
         context.AddSource(
             GeneratedFileName,
-            SourceText.From(GenerateSourceText(Sanitize(assemblyName), registrations), Encoding.UTF8)
+            SourceText.From(GenerateSourceText(context, Sanitize(assemblyName), registrations), Encoding.UTF8)
         );
     }
 
@@ -84,7 +84,7 @@ public class InjectableServicesGenerator : IIncrementalGenerator {
         }
     }
 
-    private static string GenerateSourceText(string assemblyName, IEnumerable<InjectableServiceRegistration> registrations) {
+    private static string GenerateSourceText(SourceProductionContext context, string assemblyName, IEnumerable<InjectableServiceRegistration> registrations) {
         StringBuilder sourceBuilder = new StringBuilder()
             .AppendLine("using Microsoft.Extensions.DependencyInjection;")
             .AppendLine($"namespace {assemblyName};")
@@ -92,9 +92,12 @@ public class InjectableServicesGenerator : IIncrementalGenerator {
             .AppendLine("public static class InjectableServicesExtensions {")
             .AppendLine($"    public static IServiceCollection RegisterServicesFrom{assemblyName}(this IServiceCollection services) {{");
         
+        int i = 0; // Dumb solution, but it works
         foreach (InjectableServiceRegistration registration in registrations) {
             sourceBuilder.AppendLine($"        services.Add{registration.LifeTime}<{registration.ServiceTypeName}, {registration.ImplementationTypeName}>();");
+            i++;
         }
+        if (i == 0) ReportDiagnostic(context,Rules.NoServicesRegistered);
 
         return sourceBuilder.AppendLine("        return services;")
             .AppendLine("    }")

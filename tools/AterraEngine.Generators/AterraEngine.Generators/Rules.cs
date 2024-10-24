@@ -12,16 +12,16 @@ public static class Rules {
         "ATRGEN001",
         "InjectableServiceAttribute not found",
         "InjectableServiceAttribute not found",
-        "SourceGenerator",
+        "InjectableServices",
         DiagnosticSeverity.Info,
         true
     );
 
-    public static readonly DiagnosticDescriptor NoRegistrationsGenerated = new(
+    public static readonly DiagnosticDescriptor NoServicesRegistered = new(
         "ATRGEN002",
-        "No registrations were generated",
-        "No registrations were generated",
-        "SourceGenerator",
+        "No Service registrations were generated",
+        "No Service registrations were generated",
+        "InjectableServices",
         DiagnosticSeverity.Warning,
         true
     );
