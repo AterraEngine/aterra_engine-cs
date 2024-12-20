@@ -28,6 +28,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{1B50191E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Workfloor.AterraEngine.Frameworks.Nexities.Generators", "examples\Workfloor.AterraEngine.Frameworks.Nexities.Generators\Workfloor.AterraEngine.Frameworks.Nexities.Generators.csproj", "{AC6A188D-48EB-4826-AE03-8FCAE4864738}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Frameworks.Omnia", "src\AterraEngine.Frameworks.Omnia\AterraEngine.Frameworks.Omnia.csproj", "{86363B1C-1B8F-4D31-8ACD-CAA74A4D37A1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Omnia", "Omnia", "{CA5385AC-AD2D-48A5-9D18-8E99049BEC50}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "frameworks", "frameworks", "{BA5D90C4-D49B-434D-9A1F-E1A3DE058A33}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.AterraEngine.Common", "tests\Tests.AterraEngine.Common\Tests.AterraEngine.Common.csproj", "{2CC72E9D-8675-405A-B0D9-C4FD845AF875}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +53,10 @@ Global
 		{2841E28F-8EF1-4A70-883D-604280CAC265} = {D5464FB9-C907-4F70-8D1A-7DA467E16925}
 		{15ADC8F0-F52A-4507-8229-72A6BFB4A0A7} = {A5A7C72C-9D49-4DEE-866D-D45A8C981A80}
 		{AC6A188D-48EB-4826-AE03-8FCAE4864738} = {E4DFBCC3-6E11-439F-964F-67F359ADBF5B}
+		{CA5385AC-AD2D-48A5-9D18-8E99049BEC50} = {A5A7C72C-9D49-4DEE-866D-D45A8C981A80}
+		{86363B1C-1B8F-4D31-8ACD-CAA74A4D37A1} = {CA5385AC-AD2D-48A5-9D18-8E99049BEC50}
+		{BA5D90C4-D49B-434D-9A1F-E1A3DE058A33} = {1B50191E-73D0-4519-94C0-776FE219827E}
+		{2CC72E9D-8675-405A-B0D9-C4FD845AF875} = {1B50191E-73D0-4519-94C0-776FE219827E}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{71B371EA-3406-497A-A4B2-C20617113C0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -75,5 +87,13 @@ Global
 		{AC6A188D-48EB-4826-AE03-8FCAE4864738}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC6A188D-48EB-4826-AE03-8FCAE4864738}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC6A188D-48EB-4826-AE03-8FCAE4864738}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86363B1C-1B8F-4D31-8ACD-CAA74A4D37A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86363B1C-1B8F-4D31-8ACD-CAA74A4D37A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86363B1C-1B8F-4D31-8ACD-CAA74A4D37A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86363B1C-1B8F-4D31-8ACD-CAA74A4D37A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CC72E9D-8675-405A-B0D9-C4FD845AF875}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CC72E9D-8675-405A-B0D9-C4FD845AF875}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CC72E9D-8675-405A-B0D9-C4FD845AF875}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CC72E9D-8675-405A-B0D9-C4FD845AF875}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -2,15 +2,20 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.Frameworks.Nexities;
+using AterraEngine.Frameworks.Omnia;
 
 namespace Workfloor.AterraEngine.Frameworks.Nexities.Generators;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[NexitiesTag("some_value")]
+[OmniaId("some_value")]
 public class Entity : NexitiesEntity {
-    public override void Initialize() {
-        throw new NotImplementedException();
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    public override void Initialize(OmniaId assetId) {
+        base.Initialize(assetId);
     }
 }

@@ -64,7 +64,7 @@ public class NexitiesEntityDtoFactory(CachedSymbolConvertor symbolConvertor) {
         //      is because we don't want to iterate of the array multiple times.
         //      We want to do this once, and then use the result.
         foreach (AttributeData attribute in attributes) {
-            if (symbolConvertor.EqualsNexitiesTag(attribute.AttributeClass)) {
+            if (symbolConvertor.EqualsOmniaId(attribute.AttributeClass)) {
                 tagAttribute = attribute;
                 continue;
             }

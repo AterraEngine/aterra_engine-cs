@@ -49,7 +49,7 @@ public class NexitiesEntityGenerator : IIncrementalGenerator {
         CachedSymbolConvertor symbolConvertor = [
             NexitiesEntity_DisplayString,
             INexitiesEntity_DisplayString,
-            NexitiesTag_DisplayString,
+            OmniaIdAttribute_DisplayString,
         ];
         symbolConvertor.ConvertAll(syntaxContext.SemanticModel.Compilation);
         NexitiesEntityDtoFactory factory = new(symbolConvertor);

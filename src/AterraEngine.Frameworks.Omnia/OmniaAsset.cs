@@ -1,22 +1,25 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraEngine.Frameworks.Nexities;
+namespace AterraEngine.Frameworks.Omnia;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class NexitiesAsset : INexitiesAsset {
-    public Guid Id { get; protected set; }
-
+public class OmniaAsset : IOmniaAsset {
+    public Guid InstanceId { get; private set; }
+    public OmniaId AssetId { get; private set; }
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public virtual void Initialize() {
-        Id = Guid.CreateVersion7();
+    public virtual void Initialize(OmniaId assetId) {
+        InstanceId = Guid.CreateVersion7();
+        AssetId = assetId;
     }
     
     public virtual void Cleanup() {
-        Id = Guid.Empty;
+        InstanceId = Guid.Empty;
+        AssetId = OmniaId.Empty;
     }
 }

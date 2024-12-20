@@ -1,14 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraEngine.Frameworks.Nexities;
+namespace AterraEngine.Frameworks.Omnia;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface INexitiesAsset {
-    Guid Id { get; }
+public interface IOmniaAsset {
+    Guid InstanceId { get; }
+    OmniaId AssetId { get; }
     
-    void Initialize();
+    void Initialize(OmniaId assetId);
     void Cleanup();
 }

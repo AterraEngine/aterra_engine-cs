@@ -14,7 +14,8 @@ public static class SymbolNames {
     public const string INexitiesEntity_DisplayString = $"AterraEngine.Frameworks.Nexities.{INexitiesEntity}";
     public const string INexitiesEntity = "INexitiesEntity";
     
-    public const string NexitiesTag_DisplayString = $"AterraEngine.Frameworks.Nexities.{NexitiesTag}";
-    public const string NexitiesTag = "NexitiesTag";
+    public const string OmniaIdAttribute_DisplayString = $"AterraEngine.Frameworks.Omnia.{OmniaIdAttribute}";
+    public const string OmniaIdAttribute = "OmniaIdAttribute";
+    public const string OmniaId = "OmniaId";
     
 }

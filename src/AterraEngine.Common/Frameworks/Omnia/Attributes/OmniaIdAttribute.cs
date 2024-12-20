@@ -1,13 +1,12 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraEngine.Frameworks.Nexities;
+namespace AterraEngine.Frameworks.Omnia;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[AttributeUsage( AttributeTargets.Class )]
-public class NexitiesTagAttribute(string tag) : Attribute {
-    // TODO to actual easy to use NexitiesTag
-    public string Tag { get; } = tag;
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct )]
+public class OmniaIdAttribute(string id) : Attribute {
+    public string Id { get; } = id;
 }
