@@ -9,12 +9,28 @@ namespace Workfloor.Entities;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[EntityFlags(PreStash | ...)]
-[Tag("workfloor_test:entities/box")]
+// [EntityFlags(PreStash | ...)]
+// [Tag("workfloor_test:entities/box")]
 public partial class BoxEntity : NexitiesEntity{
     [AsSpecific("GUID")] public partial ITransformComponent Transform { get; private set; }
     public ITransformComponent Transform2 { get; private set; }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // AUTO GENERATED STUFF
 public partial class BoxEntity {  

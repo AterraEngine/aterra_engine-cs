@@ -1,10 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <OutputType>Exe</OutputType>
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\AterraEngine.Common\AterraEngine.Common.csproj" />
+      <ProjectReference Include="..\..\src\AterraEngine.Frameworks.Nexities.Generators\AterraEngine.Frameworks.Nexities.Generators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+      <ProjectReference Include="..\..\src\AterraEngine.Frameworks.Nexities\AterraEngine.Frameworks.Nexities.csproj" />
+    </ItemGroup>
 
 </Project>

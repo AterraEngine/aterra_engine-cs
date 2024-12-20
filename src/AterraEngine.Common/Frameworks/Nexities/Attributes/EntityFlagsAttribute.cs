@@ -6,14 +6,13 @@ namespace AterraEngine.Frameworks.Nexities;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class NexitiesEntity : INexitiesEntity {
-    public Guid Id { get; private set; } = Guid.CreateVersion7();
+[AttributeUsage(AttributeTargets.Class)]
+public class EntityFlagsAttribute(EntityFlag flags) : Attribute {
+    public EntityFlag Flags { get; } = flags;
+}
 
-    // -----------------------------------------------------------------------------------------------------------------
-    // Methods
-    // -----------------------------------------------------------------------------------------------------------------
-    public abstract void Initialize();
-    public void Cleanup() {
-        Id = Guid.Empty;
-    }
+// TODO move this out of the file
+[Flags]
+public enum EntityFlag : ulong {
+    Undefined = 0,
 }

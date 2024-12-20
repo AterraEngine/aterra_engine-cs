@@ -6,14 +6,8 @@ namespace AterraEngine.Frameworks.Nexities;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class NexitiesEntity : INexitiesEntity {
-    public Guid Id { get; private set; } = Guid.CreateVersion7();
-
-    // -----------------------------------------------------------------------------------------------------------------
-    // Methods
-    // -----------------------------------------------------------------------------------------------------------------
-    public abstract void Initialize();
-    public void Cleanup() {
-        Id = Guid.Empty;
-    }
+[AttributeUsage( AttributeTargets.Class )]
+public class NexitiesTagAttribute(string tag) : Attribute {
+    // TODO to actual easy to use NexitiesTag
+    public string Tag { get; } = tag;
 }
