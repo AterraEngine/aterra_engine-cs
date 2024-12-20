@@ -6,11 +6,4 @@ namespace AterraEngine.Frameworks.Nexities;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class NexitiesComponent : INexitiesComponent {
-    public Guid Id { get; internal set; } = Guid.CreateVersion7();
-
-    // -----------------------------------------------------------------------------------------------------------------
-    // Methods
-    // -----------------------------------------------------------------------------------------------------------------
-    public abstract void Cleanup();
-}
+public abstract class NexitiesComponent : NexitiesAsset, INexitiesComponent;

@@ -6,9 +6,6 @@ namespace AterraEngine.Frameworks.Nexities;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface INexitiesEntity {
-    Guid Id { get; }
+public interface INexitiesEntity : INexitiesAsset {
     
-    void Initialize();
-    void Cleanup();
 }

@@ -47,7 +47,7 @@ public partial class BoxEntity {
     private ITransformComponent GetComponentTransform() {
         // Get from direct or indirect cache
         if (_transform is not null) return _transform;
-        if (_componentStorage.TryGet<ITransformComponent>([NotNullWhen(true)] out ITransformComponent? _cached)) {
+        if (_componentStorage.TryGet<ITransformComponent>([NotNullWhen(true)], out ITransformComponent? _cached)) {
             return _transform = _cached;
         }
 

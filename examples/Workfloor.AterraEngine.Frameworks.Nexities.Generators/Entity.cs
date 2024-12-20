@@ -9,7 +9,7 @@ namespace Workfloor.AterraEngine.Frameworks.Nexities.Generators;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [NexitiesTag("some_value")]
-public class BoxEntity : NexitiesEntity {
+public class Entity : NexitiesEntity {
     public override void Initialize() {
         throw new NotImplementedException();
     }
