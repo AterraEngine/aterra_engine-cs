@@ -22,7 +22,7 @@ public class OmniaIdTest {
     public async Task OmniaIdCreationTest(string fullOmniaId, string @namespace, string[] paths) {
         var assetId = new OmniaId(fullOmniaId);
         await Assert.That(assetId.NameSpace.Value).IsEqualTo(@namespace);
-        await Assert.That(assetId.Path.Values).IsEqualTo(paths);
+        await Assert.That(assetId.Path.Values).IsEquivalentTo(paths);
     }
 
     [Test]

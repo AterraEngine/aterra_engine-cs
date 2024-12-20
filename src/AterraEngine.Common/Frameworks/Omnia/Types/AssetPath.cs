@@ -51,12 +51,11 @@ public readonly struct AssetPath :
         GlobalCache[matchGroup.Value] = this;
     }
     
-    public AssetPath(params string?[] values) {
-        string[] valueArray = values.Where(s => s is not null).ToArray()!;
-        if (!valueArray.All(value => RegexLib.AssetPath.IsMatch(value)))
+    public AssetPath(params string[] values) {
+        if (!values.All(value => RegexLib.AssetPath.IsMatch(value)))
             throw new ArgumentException("Invalid Asset Name format.");
 
-        string joined = string.Join('/', valueArray);
+        string joined = string.Join('/', values);
         if (GlobalCache.TryGetValue(joined, out AssetPath existing)) {
             Values = existing.Values;
             ValueMemory = existing.ValueMemory;
@@ -64,8 +63,8 @@ public readonly struct AssetPath :
             return;
         }
 
-        Values = valueArray;
-        ValueMemory = GetAsMemory(valueArray);
+        Values = values;
+        ValueMemory = GetAsMemory(values);
         HashCode = ComputeHashCode();
         GlobalCache[joined] = this;
     }

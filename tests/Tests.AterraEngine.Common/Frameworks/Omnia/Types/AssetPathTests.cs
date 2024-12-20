@@ -9,6 +9,7 @@ namespace Tests.AterraEngine.Common.Frameworks.Omnia.Types;
 // ---------------------------------------------------------------------------------------------------------------------
 [TestSubject(typeof(AssetPath))]
 public class AssetPathTests {
+    
     [Test]
     [Arguments("ns1")]
     [Arguments("ns1_ns2")]
@@ -57,14 +58,13 @@ public class AssetPathTests {
 
     [Test]
     public async Task Constructor_WithIEnumerable_InitializesCorrectly(
-        [Matrix("a", "b", "c", "d", null)] string? path1,
-        [Matrix("a", "b", "c", null, "d")] string? path2,
-        [Matrix("a", "b", null, "c", "d")] string? path3,
-        [Matrix("a", null, "b", "c", "d")] string? path4,
-        [Matrix("a", "b", "c", "d","e")] string? path5 // else there is an error where all paths are null
+        [Matrix("a", "b", "c", "d" )] string path1,
+        [Matrix("a", "b", "c", "d")] string path2,
+        [Matrix("a", "b", "c", "d")] string path3,
+        [Matrix("a", "b", "c", "d")] string path4
     ) {
         // Arrange
-        var assetName = new AssetPath(path1, path2, path3 , path4, path5);
+        var assetName = new AssetPath(path1, path2, path3 , path4);
     
         // Act
         List<string> valuesList = assetName.Values.ToList();
@@ -75,7 +75,6 @@ public class AssetPathTests {
         await Assert.That(valuesList[1]).IsEqualTo(path2);
         await Assert.That(valuesList[2]).IsEqualTo(path3);
         await Assert.That(valuesList[3]).IsEqualTo(path4);
-        await Assert.That(valuesList[4]).IsEqualTo(path5);
     }
 
     [Test]

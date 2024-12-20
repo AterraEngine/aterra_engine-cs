@@ -44,7 +44,7 @@ public class AssetNameSpaceTest {
 
     [Test]
     public async Task Constructor_WithString_InitializesCorrectly() {
-        string value = "plugin1";
+        const string value = "plugin1";
 
         var pluginId = new AssetNameSpace(value);
 
@@ -53,7 +53,7 @@ public class AssetNameSpaceTest {
 
     [Test]
     public async Task Constructor_ThrowsArgumentException_ForInvalidString() {
-        string value = "plugin1/";
+        const string value = "plugin1/";
 
         await Assert.ThrowsAsync<ArgumentException>(() => Task.FromResult(new AssetNameSpace(value)));
     }

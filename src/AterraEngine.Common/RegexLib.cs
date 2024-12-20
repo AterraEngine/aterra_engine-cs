@@ -21,6 +21,6 @@ public static partial class RegexLib {
     [GeneratedRegex(@"^([a-z0-9](?:[a-z0-9]|(?<![_\-])[_\-](?![_\-]))*[a-z0-9])$", DefaultOptions)]
     public static partial Regex AssetNameSpace { get; }
 
-    [GeneratedRegex(@"^([a-z0-9](?:[a-z0-9]|(?<![\/_\-])[\/_\-](?![\/_\-]))*[a-z0-9])$", DefaultOptions)]
+    [GeneratedRegex(@"^([a-z0-9](?:[a-z0-9]|(?<![\/_\-])[\/_\-](?![\/_\-]))*[a-z0-9]|[a-z0-9])$", DefaultOptions)]
     public static partial Regex AssetPath { get; }
 }
