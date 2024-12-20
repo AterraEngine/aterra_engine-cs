@@ -20,7 +20,10 @@ public class OmniaIdTest {
     [Arguments("PLUGIN_NAME:FOLDER_ANOTHER/ITEM", "PLUGIN_NAME", new[] { "FOLDER_ANOTHER", "ITEM" })]
     [Arguments("PLUGINNAME:FOLDER_ANOTHER/ITEM", "PLUGINNAME", new[] { "FOLDER_ANOTHER", "ITEM" })]
     public async Task OmniaIdCreationTest(string fullOmniaId, string @namespace, string[] paths) {
+        // Arrange & Act
         var assetId = new OmniaId(fullOmniaId);
+
+        // Assert
         await Assert.That(assetId.NameSpace.Value).IsEqualTo(@namespace);
         await Assert.That(assetId.Path.Values).IsEquivalentTo(paths);
     }
@@ -35,12 +38,13 @@ public class OmniaIdTest {
     [Arguments("PLUGIN_NAME", "FOLDER_ANOTHER/ITEM", "PLUGIN_NAME", new[] { "FOLDER_ANOTHER", "ITEM" })]
     [Arguments("PLUGINNAME", "FOLDER_ANOTHER/ITEM", "PLUGINNAME", new[] { "FOLDER_ANOTHER", "ITEM" })]
     public async Task OmniaIdThoughFullStringsCreationTest(string pluginId, string assetName, string @namespace, string[] paths) {
+        // Arrange & Act
         var assetId = new OmniaId(pluginId, assetName);
-        
+
+        // Assert
         await Assert.That(assetId.NameSpace.Value).IsEqualTo(@namespace);
         await Assert.That(assetId.Path.Values).IsEquivalentTo(paths);
     }
-
 
     [Test]
     [Arguments("pluginName", new[] { "folder", "item" }, "pluginName", new[] { "folder", "item" })]
@@ -53,8 +57,10 @@ public class OmniaIdTest {
     [Arguments("PLUGINNAME", new[] { "FOLDER_ANOTHER", "ITEM" }, "PLUGINNAME", new[] { "FOLDER_ANOTHER", "ITEM" })]
     [Arguments("PluginName", new[] { "Folder", "Item" }, "PluginName", new[] { "Folder", "Item" })]
     public async Task OmniaIdThoughStringPartsCreationTest(string pluginId, IEnumerable<string> assetName, string @namespace, string[] paths) {
+        // Arrange & Act
         var assetId = new OmniaId(pluginId, assetName);
         
+        // Assert
         await Assert.That(assetId.NameSpace.Value).IsEqualTo(@namespace);
         await Assert.That(assetId.Path.Values).IsEquivalentTo(paths);
     }
@@ -93,18 +99,22 @@ public class OmniaIdTest {
     [Test]
     [Arguments("pluginName:folder/item", "PLUGINNAME:FOLDER/ITEM")]
     public async Task OmniaIdEqualityTest(string a, string b) {
+        // Arrange & Act
         var assetA = new OmniaId(a);
         var assetB = new OmniaId(b);
 
+        // Assert
         await Assert.That(assetA).IsEqualTo(assetB);
     }
 
     [Test]
     [Arguments("pluginName:folder/item", "PLUGINNAME:FOLDER/other")]
     public async Task OmniaId_EqualityFail_Test(string a, string b) {
+        // Arrange & Act
         var assetA = new OmniaId(a);
         var assetB = new OmniaId(b);
         
+        // Assert
         await Assert.That(assetA).IsNotEqualTo(assetB);
     }
 
@@ -112,24 +122,32 @@ public class OmniaIdTest {
     [Test]
     [Arguments("pluginName:folder/item", "pluginName", "folder/item")]
     public async Task OmniaId_Plus_Test(string expectedResult, string pluginId, string assetName) {
+        // Arrange
         var left = new AssetNameSpace(pluginId);
         var right = new AssetPath(assetName);
-        var newAsset = left + right;
+        
+        // Act
+        OmniaId newAsset = left + right;
 
+        // Assert
         await Assert.That(newAsset.ToString()).IsEqualTo(expectedResult);
     }
 
     [Test]
     public async Task OmniaId_IsEmpty() {
+        // Arrange & Act
         var assetId = OmniaId.Empty;
-        
+
+        // Assert
         await Assert.That(assetId.IsEmpty).IsTrue();
     }
 
     [Test]
     public async Task OmniaId_IsEmpty_Not() {
+        // Arrange & Act
         var assetId = new OmniaId("pluginName:folder/item");
         
+        // Assert
         await Assert.That(assetId.IsEmpty).IsFalse();
     }
 }
