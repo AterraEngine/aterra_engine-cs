@@ -49,5 +49,6 @@ public class OmniaLibrary : IOmniaLibrary {
         if (registration.Instances.TryGetValue(someGuid, out IOmniaAsset? instance)) return (instance as TAsset)!;
         
         // ELSE CREATE IT WITH THE SPECIFIC ID
+        return Result<TAsset>.FromError("Asset not found");
     }
 }
