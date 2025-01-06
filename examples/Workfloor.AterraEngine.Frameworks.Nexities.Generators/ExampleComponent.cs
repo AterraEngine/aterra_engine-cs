@@ -1,11 +1,15 @@
-﻿// ---------------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraEngine.Frameworks.Nexities.Generators.Content.NexitiesTag;
+using AterraEngine.Frameworks.Nexities;
+using AterraEngine.Frameworks.Omnia;
+
+namespace Workfloor.AterraEngine.Frameworks.Nexities.Generators;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class NexitiesTagGenerator {
-    // TODO : Analyzer to verify tag is in correct format
+[OmniaId("example:component")]
+public class ExampleComponent : NexitiesComponent {
+    public int Value { get; set; }
 }

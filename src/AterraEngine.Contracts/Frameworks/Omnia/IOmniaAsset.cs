@@ -8,7 +8,7 @@ namespace AterraEngine.Frameworks.Omnia;
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IOmniaAsset {
     Guid InstanceId { get; }
-    OmniaId AssetId { get; }
+    OmniaId OmniaId { get; }
     
     void Initialize(OmniaId assetId);
     void Cleanup();

@@ -8,18 +8,18 @@ namespace AterraEngine.Frameworks.Omnia;
 // ---------------------------------------------------------------------------------------------------------------------
 public class OmniaAsset : IOmniaAsset {
     public Guid InstanceId { get; private set; }
-    public OmniaId AssetId { get; private set; }
+    public OmniaId OmniaId { get; private set; }
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public virtual void Initialize(OmniaId assetId) {
         InstanceId = Guid.CreateVersion7();
-        AssetId = assetId;
+        OmniaId = assetId;
     }
     
     public virtual void Cleanup() {
         InstanceId = Guid.Empty;
-        AssetId = OmniaId.Empty;
+        OmniaId = OmniaId.Empty;
     }
 }

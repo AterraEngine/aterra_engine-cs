@@ -1,7 +1,6 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Frameworks.Nexities.Generators.Content.NexitiesTag;
 using AterraEngine.Frameworks.Nexities.Generators.Helpers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -22,6 +21,7 @@ public class NexitiesEntityGenerator : IIncrementalGenerator {
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public void Initialize(IncrementalGeneratorInitializationContext context) {
+        // ReSharper disable once SuggestVarOrType_Elsewhere
         var syntaxData = context.SyntaxProvider
             .CreateSyntaxProvider(
                 IsNexitiesEntity,
@@ -58,6 +58,6 @@ public class NexitiesEntityGenerator : IIncrementalGenerator {
     }
     
     private static void Output(SourceProductionContext context, (Compilation compilation, ImmutableArray<NexitiesEntityDto> Data) valueTuple) {
-        
+        // TODO Do something with the output of the generator
     }
 }

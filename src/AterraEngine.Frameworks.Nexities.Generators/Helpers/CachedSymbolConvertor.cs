@@ -12,6 +12,11 @@ namespace AterraEngine.Frameworks.Nexities.Generators.Helpers;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
+/// <summary>
+/// Represents a caching mechanism for converting symbols in a Roslyn compilation context.
+/// This class provides functionality to cache, retrieve, and compare symbols based on their metadata names.
+/// The input is based on their string display-names.
+/// </summary>
 public class CachedSymbolConvertor : ICollection {
     private readonly List<string> _keys = [];
     private Dictionary<string, INamedTypeSymbol?> _cache = null!;

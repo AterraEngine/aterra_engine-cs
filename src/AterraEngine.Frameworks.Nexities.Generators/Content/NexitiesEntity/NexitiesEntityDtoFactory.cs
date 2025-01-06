@@ -25,6 +25,8 @@ public class NexitiesEntityDtoFactory(CachedSymbolConvertor symbolConvertor) {
     // ReSharper disable once InvertIf
     public NexitiesEntityDto CreateNew(ClassDeclarationSyntax classSyntax, ISymbol classSymbol, CancellationToken ct = default) {
         // If anything fails, return an empty NexitiesEntityDto
+        //      Technically this shouldn't happen because we check for these things during gathering of the syntax node
+        //      But better safe than sorry, plus deals with nullability issues
         if (classSymbol is not INamedTypeSymbol namedTypeSymbol) return NexitiesEntityDto.AsEmpty(classSyntax, classSymbol);
         if (classSymbol is not ITypeSymbol typeSymbol) return NexitiesEntityDto.AsEmpty(classSyntax, classSymbol);
         if (!IsNexitiesEntity(typeSymbol)) return NexitiesEntityDto.AsEmpty(classSyntax, classSymbol);
@@ -37,6 +39,8 @@ public class NexitiesEntityDtoFactory(CachedSymbolConvertor symbolConvertor) {
             if (tagAttribute is null) issues |= NexitiesEntityIssues.NoTagAttribute;
             return NexitiesEntityDto.AsEmpty(classSyntax, classSymbol, issues);
         }
+        
+        // TODO check if partial? (probably, I don't know if this is necessary)
         
         return new NexitiesEntityDto {
             ClassDeclarationSyntax = classSyntax,
