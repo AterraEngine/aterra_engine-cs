@@ -63,7 +63,7 @@ public class LevelSwitch(ILogicThreadProcessor logicThreadProcessor, IWorldSpace
                     newLevelId = Levels[currentLevelPos + 1];
                     if (newLevelId == level.RawLevelData.AssetId) return;
 
-                    logicThreadProcessor.AddToEndOfTick(() => world.TryChangeActiveLevel(newLevelId));
+                    logicThreadProcessor.AddToEndOfTick(() => world.TryChangeActiveLevel(WorkfloorIdLib.Levels.Game));
                     break;
             }
         }
