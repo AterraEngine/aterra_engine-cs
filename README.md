@@ -23,4 +23,4 @@ AterraEngine is built around a flexible data-driven design. Key components inclu
 ## 📜 License
 AterraEngine is licensed under the GPL-3.0 license.
 
-> Note: The AterraEngine logo and ducky sprites included in this project are © AndreasSas, and may not be used without explicit permission.
+> Note: The AterraEngine logo and ducky sprites included in this project are © AnnaSas, and may not be used without explicit permission.
