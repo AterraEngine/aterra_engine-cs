@@ -19,8 +19,9 @@ AterraEngine is built around a flexible data-driven design. Key components inclu
 - **Exceptions are reserved for unhandled states** : Prefer returning a result object with errors instead of raising exception. 
     example : Say we are writing a method that reads a json file to create a game entity at runtime. If the json file is not able to be parsed, instead of raising an exception the method should return a result object with an applicable error. The consuming scope which required the execution of the method in question should then either cascade the error upwards, handle the error gracefully and insert a default object, or when this is truly a "bug in the system" raise an exception.  
     Given we are writing a game engine, and eventually games within it, developers should always think "what if ..." for the stuff they write. Better to have an edge case handled and it never happen than a known edge case which could have been resolved to be causing issues.
+- **K&R braces style** : This isn't really a philosophy, but by stating it here it should clear up some common issues "change to ... braces style". The .editorconfig should also deal with this for you automagically.
 
 ## 📜 License
-AterraEngine is licensed under the GPL-3.0 license.
+AterraEngine is licensed under the GPL-3.0 license. See [Licence](LICENSE) for the full licence.
 
 > Note: The AterraEngine logo and ducky sprites included in this project are © AnnaSas, and may not be used without explicit permission.
