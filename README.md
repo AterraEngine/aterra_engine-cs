@@ -15,6 +15,11 @@ AterraEngine is built around a flexible data-driven design. Key components inclu
 - **Dependency Injection**: The entire engine, even the ECS framework, is built around dependency injection, making it easy to extend or override core game behavior through plugins.
 - **Plugins and loadorder**: Allowing players to define their own load order of plugins built by the gamedevs or modders.
 
+## 💭 Design Philosophies
+- **Exceptions are reserved for unhandled states** : Prefer returning a result object with errors instead of raising exception. 
+    example : Say we are writing a method that reads a json file to create a game entity at runtime. If the json file is not able to be parsed, instead of raising an exception the method should return a result object with an applicable error. The consuming scope which required the execution of the method in question should then either cascade the error upwards, handle the error gracefully and insert a default object, or when this is truly a "bug in the system" raise an exception.  
+    Given we are writing a game engine, and eventually games within it, developers should always think "what if ..." for the stuff they write. Better to have an edge case handled and it never happen than a known edge case which could have been resolved to be causing issues.
+
 ## 📜 License
 AterraEngine is licensed under the GPL-3.0 license.
 
