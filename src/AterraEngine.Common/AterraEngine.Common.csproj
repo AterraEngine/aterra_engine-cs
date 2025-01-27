@@ -9,12 +9,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="AterraEngine.Unions" Version="3.2.1" />
-      <PackageReference Include="AterraEngine.Unions.Generators" Version="3.2.1">
+      <PackageReference Include="AterraEngine.Unions" Version="3.6.0" />
+      <PackageReference Include="AterraEngine.Unions.Generators" Version="3.6.0">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
-      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
     </ItemGroup>
 
 </Project>
