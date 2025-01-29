@@ -1,11 +1,23 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Diagnostics;
+using System.Collections.Immutable;
+
 namespace AterraEngine.Frameworks.Nexities.Generators.Content.NexitiesTag;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class NexitiesTagGenerator {
-    // TODO : Analyzer to verify tag is in correct format
-}
+// [DiagnosticAnalyzer(LanguageNames.CSharp)]
+// public class NexitiesTagGenerator : DiagnosticAnalyzer{
+//     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray.Create<DiagnosticDescriptor>([
+//         
+//     ]);
+//     
+//     // TODO : Analyzer to verify tag is in correct format
+//     public override void Initialize(AnalysisContext context) {
+//         throw new System.NotImplementedException();
+//     }
+// }

@@ -4,16 +4,14 @@
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        
-        <RootNamespace>AterraEngine</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\AterraEngine.Common\AterraEngine.Common.csproj" />
+      <ProjectReference Include="..\..\src\AterraEngine.Frameworks.Nexities.Generators\AterraEngine.Frameworks.Nexities.Generators.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="AterraEngine.DependencyInjection.Contracts" Version="2.0.1" />
+      <PackageReference Include="TUnit" Version="0.8.8" />
     </ItemGroup>
 
 </Project>

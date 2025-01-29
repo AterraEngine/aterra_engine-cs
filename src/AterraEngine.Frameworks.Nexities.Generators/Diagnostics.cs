@@ -1,18 +1,20 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.DependencyInjection;
+using Microsoft.CodeAnalysis;
 
-namespace AterraEngine.Frameworks.Omnia;
+namespace AterraEngine.Frameworks.Nexities.Generators;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class OmniaFactory(IScopedProvider provider) : IOmniaFactory {
-    
-    public Result<TAsset> CreateAsset<TAsset>() where TAsset : class, IOmniaAsset {
-        if (provider.GetService<TAsset>() is {} serviceInstance) return serviceInstance;
-        
-        return Result<TAsset>.FromError("Failed to create asset");
-    }
+public static class Diagnostics {
+    public static readonly DiagnosticDescriptor InvalidGuidDescriptor = new(
+        id: "NX0001",
+        title: "Invalid GUID",
+        messageFormat: "'{0}' is not a valid GUID",
+        category: "Syntax",
+        DiagnosticSeverity.Error,
+        isEnabledByDefault: true);
+
 }

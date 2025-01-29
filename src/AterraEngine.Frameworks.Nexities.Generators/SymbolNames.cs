@@ -18,4 +18,8 @@ public static class SymbolNames {
     public const string OmniaIdAttribute = "OmniaIdAttribute";
     public const string OmniaId = "OmniaId";
     
+    public const string KeyedInstanceAttribute_DisplayString = $"AterraEngine.Frameworks.Omnia.{KeyedInstanceAttribute}";
+    public const string KeyedInstanceAttribute = "KeyedInstanceAttribute";
+    public const string KeyedInstance = "OmniaId";
+    
 }

@@ -12,8 +12,7 @@ namespace Workfloor.AterraEngine.Frameworks.Nexities.Generators;
 [OmniaId("example:entity")]
 public partial class Entity : NexitiesEntity {
     public partial ExampleComponent ExampleComponent { get; }
-    
-    [AsSpecifcId("some guid")] public partial ISomeComponent SomeComponent { get; }
+    [KeyedInstance("some guid")] public partial ISomeComponent SomeComponent { get; }
 }
 
 public interface ISomeComponent : INexitiesComponent {}
@@ -22,6 +21,18 @@ public interface ISomeComponent : INexitiesComponent {}
 // We shouldn't touch any of thi, but it should overrideable? Don't know about that yet
 // Technically if I enabled lang=preview I could use the "field" of an auto property, but given it is still in preview.
 public partial class Entity {
+
+    
+    public Entity(IOmniaLibrary omniaLibrary) {
+        // Maybe something along these lines or direct dependency injection?
+        // Or we actually make a specific method that is only toi be used during construction <---
+        if (!TryRegisterComponent<ExampleComponent>(omniaLibrary.GetByType<ExampleComponent>())) 
+            throw new Exception("Could not register ExampleComponent");
+        
+        if (!TryRegisterComponent<ISomeComponent>(omniaLibrary.GetByQuery<ISomeComponent>(InstanceId:"some guid"))) 
+            throw new Exception("Could not register ExampleComponent");
+    }
+    
     private ExampleComponent? _exampleComponent;
     public partial ExampleComponent ExampleComponent {
         get {

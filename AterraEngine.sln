@@ -36,6 +36,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "frameworks", "frameworks", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.AterraEngine.Common", "tests\Tests.AterraEngine.Common\Tests.AterraEngine.Common.csproj", "{2CC72E9D-8675-405A-B0D9-C4FD845AF875}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.AterraEngine.Frameworks.Nexities.Generators", "tests\Tests.AterraEngine.Frameworks.Nexities.Generators\Tests.AterraEngine.Frameworks.Nexities.Generators.csproj", "{8E2F0EE9-6EC6-402D-9E5C-EAC15D99A73C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,7 @@ Global
 		{86363B1C-1B8F-4D31-8ACD-CAA74A4D37A1} = {CA5385AC-AD2D-48A5-9D18-8E99049BEC50}
 		{BA5D90C4-D49B-434D-9A1F-E1A3DE058A33} = {1B50191E-73D0-4519-94C0-776FE219827E}
 		{2CC72E9D-8675-405A-B0D9-C4FD845AF875} = {1B50191E-73D0-4519-94C0-776FE219827E}
+		{8E2F0EE9-6EC6-402D-9E5C-EAC15D99A73C} = {BA5D90C4-D49B-434D-9A1F-E1A3DE058A33}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{71B371EA-3406-497A-A4B2-C20617113C0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -95,5 +98,9 @@ Global
 		{2CC72E9D-8675-405A-B0D9-C4FD845AF875}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CC72E9D-8675-405A-B0D9-C4FD845AF875}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CC72E9D-8675-405A-B0D9-C4FD845AF875}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E2F0EE9-6EC6-402D-9E5C-EAC15D99A73C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E2F0EE9-6EC6-402D-9E5C-EAC15D99A73C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E2F0EE9-6EC6-402D-9E5C-EAC15D99A73C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E2F0EE9-6EC6-402D-9E5C-EAC15D99A73C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

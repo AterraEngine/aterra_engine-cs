@@ -20,7 +20,7 @@ public readonly record struct OmniaTypeRegistration(
         new ConcurrentQueue<IOmniaAsset>()
     );
         
-    public bool TryGetAssetFromPool<TAsset>(OmniaId assetId,[NotNullWhen(true)] out TAsset? instance) where TAsset : IOmniaAsset {
+    public bool TryGetAssetFromPool<TAsset>(OmniaId assetId,[NotNullWhen(true)] out TAsset? instance) where TAsset : class, IOmniaAsset {
         instance = default;
         if (!Pool.TryPeek(out IOmniaAsset? assetInstance) || assetInstance is not {} asset || asset.OmniaId != assetId) return false;
 
@@ -30,7 +30,7 @@ public readonly record struct OmniaTypeRegistration(
         return RegisterInstance(instance);
     }
 
-    public bool TryGetAssetFromFactory<TAsset>([NotNullWhen(true)] out TAsset? instance) where TAsset : IOmniaAsset {
+    public bool TryGetAssetFromFactory<TAsset>([NotNullWhen(true)] out TAsset? instance) where TAsset : class, IOmniaAsset {
         instance = default;
         Result<TAsset> factoryResult = Factory.CreateAsset<TAsset>();
         if (factoryResult.IsError) return false;

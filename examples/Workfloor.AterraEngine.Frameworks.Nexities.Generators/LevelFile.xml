@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="" ?>
+<Level Id="workfloor:level/1">
+    <LevelTreee>
+        <Instance Entity="Guid:123">
+            <Component Type="ITransform">
+                <XYZ>1;2;3</XYZ>
+            </Component>
+        </Instance>        
+    </LevelTreee>
+    
+    <Library>
+        <Entity Type="IEntity" Id="Guid:123">
+            <Component Type="ISomeComponent" Id="Guid:456">
+                ... SOME DATA
+            </Component>
+            <Component Type="ISomeOtherComponent" Id="Guid:789">
+                ... Some Data
+            </Component>
+        </Entity>
+    </Library>
+</Level>

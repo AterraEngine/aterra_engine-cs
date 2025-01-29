@@ -7,5 +7,5 @@ namespace AterraEngine.Frameworks.Omnia;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IOmniaFactory {
-    Result<TAsset> CreateAsset<TAsset>() where TAsset : IOmniaAsset;
+    Result<TAsset> CreateAsset<TAsset>() where TAsset : class, IOmniaAsset;
 }

@@ -1,18 +1,13 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.DependencyInjection;
-
-namespace AterraEngine.Frameworks.Omnia;
+namespace AterraEngine.Frameworks.Nexities;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class OmniaFactory(IScopedProvider provider) : IOmniaFactory {
-    
-    public Result<TAsset> CreateAsset<TAsset>() where TAsset : class, IOmniaAsset {
-        if (provider.GetService<TAsset>() is {} serviceInstance) return serviceInstance;
-        
-        return Result<TAsset>.FromError("Failed to create asset");
-    }
+// TODO create analyzer that checks if this is a valid Guid
+[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false)]
+public class KeyedInstanceAttribute(string guid) : Attribute {
+    public Guid Guid { get; } = guid.ToGuid();
 }
