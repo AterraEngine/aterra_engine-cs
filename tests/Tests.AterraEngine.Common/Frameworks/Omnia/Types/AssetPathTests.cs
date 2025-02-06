@@ -22,7 +22,7 @@ public class AssetPathTests {
         await Assert.That(result).IsTrue().Because($"Expected true for value: {value}, but got false. Regex might be failing to match.");
         await Assert.That(assetName).IsNotNull();
         await Assert.That(assetName!.Value).IsEqualTo(value);
-        await Assert.That(assetName).IsTypeOf<AssetPath>();
+        await Assert.That((object)assetName).IsTypeOf<AssetPath>();
     }
 
     [Test]
@@ -57,6 +57,7 @@ public class AssetPathTests {
     }
 
     [Test]
+    [MatrixDataSource]
     public async Task Constructor_WithIEnumerable_InitializesCorrectly(
         [Matrix("a", "b", "c", "d" )] string path1,
         [Matrix("a", "b", "c", "d")] string path2,

@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.Frameworks.Omnia;
+using CodeOfChaos.Types;
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 
@@ -11,22 +12,18 @@ namespace AterraEngine.Frameworks.Nexities;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public abstract class NexitiesEntity : OmniaAsset, INexitiesEntity {
-    public ConcurrentDictionary<OmniaId, INexitiesComponent> Components { get; } = new();
-
+    public TypedValueStore<Type> Components { get; } = new();
+    
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public bool TryGetComponent<TComponent>(OmniaId omniaId, [NotNullWhen(true)] out TComponent? exampleComponent) where TComponent : INexitiesComponent {
-        exampleComponent = default;
-
-        if (!Components.TryGetValue(omniaId, out INexitiesComponent? component) || component is not TComponent typedComponent) return false;
-
-        exampleComponent = typedComponent;
-        return true;
+    public bool TryGetComponent<TComponent>([NotNullWhen(true)] out TComponent? component) where TComponent : INexitiesComponent {
+        return Components.TryGetValue(typeof(TComponent), out component);
     }
 
     public bool TryRegisterComponent<TComponent>(TComponent component) where TComponent : INexitiesComponent {
-        return Components.TryAdd(component.OmniaId, component);
+        return Components.TryAdd(typeof(TComponent), component);
     }
 
     public override void Cleanup() {
@@ -35,7 +32,7 @@ public abstract class NexitiesEntity : OmniaAsset, INexitiesEntity {
         // TODO inject this or go through "EngineServices"
         var library = new OmniaLibrary();
         
-        foreach (INexitiesComponent component in Components.Values) {
+        foreach (INexitiesComponent component in Components) {
             library.ReturnAsset(component);
         }
         

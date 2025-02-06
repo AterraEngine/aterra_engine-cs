@@ -38,6 +38,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.AterraEngine.Common",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.AterraEngine.Frameworks.Nexities.Generators", "tests\Tests.AterraEngine.Frameworks.Nexities.Generators\Tests.AterraEngine.Frameworks.Nexities.Generators.csproj", "{8E2F0EE9-6EC6-402D-9E5C-EAC15D99A73C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Frameworks.Continuum", "src\AterraEngine.Frameworks.Continuum\AterraEngine.Frameworks.Continuum.csproj", "{B5CC5CA4-6D7F-4C44-95EA-D0FD5FD16694}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Continuum", "Continuum", "{54758794-25D7-4DFF-B1FD-2A20F1753723}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,6 +64,8 @@ Global
 		{BA5D90C4-D49B-434D-9A1F-E1A3DE058A33} = {1B50191E-73D0-4519-94C0-776FE219827E}
 		{2CC72E9D-8675-405A-B0D9-C4FD845AF875} = {1B50191E-73D0-4519-94C0-776FE219827E}
 		{8E2F0EE9-6EC6-402D-9E5C-EAC15D99A73C} = {BA5D90C4-D49B-434D-9A1F-E1A3DE058A33}
+		{54758794-25D7-4DFF-B1FD-2A20F1753723} = {A5A7C72C-9D49-4DEE-866D-D45A8C981A80}
+		{B5CC5CA4-6D7F-4C44-95EA-D0FD5FD16694} = {54758794-25D7-4DFF-B1FD-2A20F1753723}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{71B371EA-3406-497A-A4B2-C20617113C0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -102,5 +108,9 @@ Global
 		{8E2F0EE9-6EC6-402D-9E5C-EAC15D99A73C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8E2F0EE9-6EC6-402D-9E5C-EAC15D99A73C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8E2F0EE9-6EC6-402D-9E5C-EAC15D99A73C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5CC5CA4-6D7F-4C44-95EA-D0FD5FD16694}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5CC5CA4-6D7F-4C44-95EA-D0FD5FD16694}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5CC5CA4-6D7F-4C44-95EA-D0FD5FD16694}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5CC5CA4-6D7F-4C44-95EA-D0FD5FD16694}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -13,12 +13,11 @@ namespace AterraEngine.Frameworks.Nexities.Generators.Content.SyntaxCheckers;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public class ValidKeyedInstanceAnalyzer : DiagnosticAnalyzer{
-    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray.Create<DiagnosticDescriptor>([
+    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = [
         Diagnostics.InvalidGuidDescriptor
-    ]);
+    ];
     
     public override void Initialize(AnalysisContext context) {
         context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);

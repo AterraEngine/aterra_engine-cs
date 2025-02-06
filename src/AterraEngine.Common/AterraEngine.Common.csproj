@@ -9,12 +9,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="AterraEngine.Unions" Version="3.6.0" />
-      <PackageReference Include="AterraEngine.Unions.Generators" Version="3.6.0">
+      <PackageReference Include="AterraEngine.Unions" Version="3.8.0" />
+      <PackageReference Include="AterraEngine.Unions.Generators" Version="3.8.0">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
-      <PackageReference Include="CodeOfChaos.Extensions" Version="0.30.0" />
+      <PackageReference Include="CodeOfChaos.Extensions" Version="0.32.0" />
     </ItemGroup>
 
 </Project>
