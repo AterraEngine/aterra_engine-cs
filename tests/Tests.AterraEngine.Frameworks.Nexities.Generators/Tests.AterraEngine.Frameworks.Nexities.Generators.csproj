@@ -12,7 +12,7 @@
 
     <ItemGroup>
       <PackageReference Include="CodeOfChaos.Testing.TUnit" Version="0.5.0" />
-      <PackageReference Include="TUnit" Version="0.10.19" />
+      <PackageReference Include="TUnit" Version="0.10.28" />
     </ItemGroup>
 
 </Project>

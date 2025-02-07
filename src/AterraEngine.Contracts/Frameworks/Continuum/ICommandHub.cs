@@ -6,6 +6,7 @@ namespace AterraEngine.Frameworks.Continuum;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class IEventHandler {
-    
+public interface ICommandHub {
+    ValueTask<T1> PublishAsync<T0,T1>(T0 commandData) where T0 : ICommand<T1> where T1 : struct;
+    Task StartProcessingAsync();
 }

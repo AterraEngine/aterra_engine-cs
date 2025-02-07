@@ -1,12 +1,12 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraEngine.Frameworks.Continuum;
+using AterraEngine.Frameworks.Continuum;
+
+namespace Workfloor.AterraEngine.Frameworks.Continuum.CommandHandlers;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ICommand<TResponse> : IMessage where TResponse : struct {
-    
+public record struct SimpleCommand(string input) : ICommand<bool> {
 }
-

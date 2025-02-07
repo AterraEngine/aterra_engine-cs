@@ -6,7 +6,6 @@ namespace AterraEngine.Frameworks.Continuum;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ICommand<TResponse> : IMessage where TResponse : struct {
+public interface IMessage {
     
 }
-

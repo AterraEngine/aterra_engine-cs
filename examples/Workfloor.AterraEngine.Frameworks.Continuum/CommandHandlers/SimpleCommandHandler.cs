@@ -1,11 +1,16 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraEngine.Frameworks.Continuum;
+using AterraEngine.Frameworks.Continuum;
+
+namespace Workfloor.AterraEngine.Frameworks.Continuum.CommandHandlers;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IEvent {
-    long Timestamp { get; }
+public class SimpleCommandHandler : CommandHandler<SimpleCommand, bool> {
+    public override ValueTask<bool> HandleAsync(SimpleCommand command) {
+        if (command.input == "true") return new ValueTask<bool>(true);
+        return new ValueTask<bool>(false);
+    }
 }
