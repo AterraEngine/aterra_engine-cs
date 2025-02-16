@@ -10,15 +10,21 @@ namespace AterraEngine.Frameworks.Continuum;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class MessageBusFactory : IMessageBusFactory {
+public class MessageBusFactory(IScopedProvider provider) : IMessageBusFactory {
     public readonly ConcurrentDictionary<Type, ICommandHub> RegisteredCommandHubs = [];
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public IMessageBus Create(IScopedProvider provider) {
+    public IMessageBus Create(IScopedProvider _) {
         return new MessageBus {
-            CommandHubs = RegisteredCommandHubs.ToFrozenDictionary(),
+            CommandHubs = RegisteredCommandHubs.ToFrozenDictionary()
         };
+    }
+
+    public IMessageBusFactory AddCommand<TCommand, TResult>() where TCommand : ICommand<TResult> where TResult : struct {
+        var hub = provider.GetRequiredService<ICommandHub<TCommand, TResult>>();
+        RegisteredCommandHubs.TryAdd(typeof(TCommand),hub);
+        return this;
     }
 }

@@ -9,7 +9,7 @@ namespace AterraEngine.Frameworks.Continuum;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface ICommandHandler<TCommand, TResponse> where TCommand : ICommand<TResponse> where TResponse : struct {
-    Task StartProcessingAsync(Channel<(TCommand Command, Channel<TResponse> ReplyChannel)> channel);
-    
-    ValueTask<TResponse> HandleAsync(TCommand command);
+    Task StartProcessingAsync(Channel<(TCommand Command, Channel<TResponse> ReplyChannel)> channel, CancellationToken ct = default);
+
+    ValueTask<TResponse> HandleAsync(TCommand command, CancellationToken ct = default);
 }

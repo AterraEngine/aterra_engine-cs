@@ -16,7 +16,7 @@ public class MessageBus : IMessageBus {
     // -----------------------------------------------------------------------------------------------------------------
     public ValueTask<TOutput> ExecuteAsync<TCommand, TOutput>(TCommand command, CancellationToken ct = default) where TCommand : ICommand<TOutput> where TOutput : struct {
         if (!CommandHubs.TryGetValue(typeof(TCommand), out ICommandHub? hub)) throw new InvalidOperationException("No command hub found");
-        return hub.PublishAsync<TCommand, TOutput>(command);
+        return hub.PublishAsync<TCommand, TOutput>(command, ct);
     }
 
     public void StartProcessingAsync() {

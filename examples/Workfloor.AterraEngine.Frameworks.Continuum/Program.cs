@@ -14,13 +14,11 @@ public static class Program {
     public static async Task Main() {
         var collection = new ServiceCollection();
         collection.AddTransient<SimpleCommandHandler>();
-        collection.AddTransientFromFactory<IMessageBus, MessageBusFactory>();
-        collection.AddTransientFromFactory<MessageBusFactory>(provider => {
-            var factory = new MessageBusFactory();
-            
-            var simpleCommandHandler = provider.GetRequiredService<SimpleCommandHandler>();
-            CommandHub<SimpleCommand, bool> hub = CommandHub<SimpleCommand, bool>.FromHandler(simpleCommandHandler);
-            factory.RegisteredCommandHubs.TryAdd(typeof(SimpleCommand),hub );
+        collection.AddTransient(typeof(ICommandHub<,>), typeof(CommandHub<,>)); // TODO fix that CommandHub<,> can be registered as a service and not just an interface
+        collection.AddTransientFromFactory<IMessageBus, IMessageBusFactory>();
+        collection.AddSingletonFromFactory<IMessageBusFactory>(static provider => {
+            var factory = new MessageBusFactory(provider);
+            factory.AddCommand<SimpleCommand, bool>();
             return factory;
         });
         
@@ -31,8 +29,10 @@ public static class Program {
         while (true) {
             Console.Write("Enter a string: ");
             if (Console.ReadLine() is not {} input) continue;
-            bool result = await messageBus.ExecuteAsync<SimpleCommand, bool>(new SimpleCommand(input));
-            Console.WriteLine($"You entered: {input} and got : {result}");
+            _ = Task.Run(async () => {
+                bool result = await messageBus.ExecuteAsync<SimpleCommand, bool>(new SimpleCommand(input, DateTime.UtcNow));
+                Console.WriteLine($"You entered: {input} and got : {result}");
+            });
         }
     }
 }

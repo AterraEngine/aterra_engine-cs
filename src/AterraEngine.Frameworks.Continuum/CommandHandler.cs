@@ -8,15 +8,17 @@ namespace AterraEngine.Frameworks.Continuum;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class CommandHandler<TCommand, TOutput>() : ICommandHandler<TCommand, TOutput> where TCommand : ICommand<TOutput> where TOutput : struct {
-    public async Task StartProcessingAsync(Channel<(TCommand Command, Channel<TOutput> ReplyChannel)> channel) {
-        while (await channel.Reader.WaitToReadAsync()) {
+public abstract class CommandHandler<TCommand, TOutput> : ICommandHandler<TCommand, TOutput> where TCommand : ICommand<TOutput> where TOutput : struct {
+    public async Task StartProcessingAsync(Channel<(TCommand Command, Channel<TOutput> ReplyChannel)> channel, CancellationToken ct = default) {
+        while (await channel.Reader.WaitToReadAsync(ct)) {
             while (channel.Reader.TryRead(out (TCommand Command, Channel<TOutput> ReplyChannel) data)) {
-                TOutput result = await HandleAsync(data.Command);
-                await data.ReplyChannel.Writer.WriteAsync(result);
+                // Each handle should be their own CancellationToken.
+                // But there should be a way to define how much this is depending on some sort of config?
+                TOutput result = await HandleAsync(data.Command, new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
+                await data.ReplyChannel.Writer.WriteAsync(result, ct);
             }
         }
     }
     
-    public abstract ValueTask<TOutput> HandleAsync(TCommand command) ;
+    public abstract ValueTask<TOutput> HandleAsync(TCommand command, CancellationToken ct = default);
 }
