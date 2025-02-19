@@ -17,7 +17,7 @@ public class CommandHub<TCommand, TOutput> : ICommandHub<TCommand, TOutput> wher
         SingleWriter = false
     });
     
-    private readonly Channel<TOutput> _replyChannel =Channel.CreateUnbounded<TOutput>(new UnboundedChannelOptions() {
+    private readonly Channel<TOutput> _replyChannel = Channel.CreateUnbounded<TOutput>(new UnboundedChannelOptions() {
         AllowSynchronousContinuations = true,
         SingleReader = true,
         SingleWriter = false
@@ -25,14 +25,14 @@ public class CommandHub<TCommand, TOutput> : ICommandHub<TCommand, TOutput> wher
 
     private ICommandHandler<TCommand, TOutput>? Subscriber { get; set; }
     
-    [MemberNotNullWhen(false, nameof(Subscriber))]
-    public bool IsEmpty => Subscriber is null;
+    [MemberNotNullWhen(true, nameof(Subscriber))]
+    public bool HasSubscriptions => Subscriber is not null;
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public void Subscribe<TCommandHandler>(TCommandHandler handler) where TCommandHandler : ICommandHandler<TCommand, TOutput> {
-        if (!IsEmpty) throw new InvalidOperationException("Cannot subscribe to a command hub that already has a subscriber");
+        if (HasSubscriptions) throw new InvalidOperationException("Cannot subscribe to a command hub that already has a subscriber");
         Subscriber = handler;
     }
     public async Task StartProcessingAsync() {
@@ -48,7 +48,7 @@ public class CommandHub<TCommand, TOutput> : ICommandHub<TCommand, TOutput> wher
     }
 
     public async ValueTask<T1> ExecuteAsync<T0,T1>(T0 commandData, CancellationToken ct = default) where T0 : ICommand<T1> where T1 : struct {
-        if (IsEmpty) throw new InvalidOperationException("Cannot publish to a command hub that has no subscriber");
+        if (!HasSubscriptions) throw new InvalidOperationException("Cannot publish to a command hub that has no subscriber");
         if (commandData is not TCommand typedCommand) throw new ArgumentException("Command data is not of the expected type");
         if (typeof(T1) != typeof(TOutput)) throw new ArgumentException("Command data is not of the expected type");
         

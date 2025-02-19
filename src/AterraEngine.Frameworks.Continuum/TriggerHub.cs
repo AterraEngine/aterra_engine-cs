@@ -17,7 +17,7 @@ public class TriggerHub<TTrigger> : ITriggerHub<TTrigger> where TTrigger : ITrig
 
     private List<ITriggerHandler<TTrigger>> Subscribers { get; set; } = [];
     
-    public bool IsEmpty => Subscribers.Count == 0;
+    public bool HasSubscriptions => Subscribers.Count > 0;
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
@@ -25,9 +25,9 @@ public class TriggerHub<TTrigger> : ITriggerHub<TTrigger> where TTrigger : ITrig
     public void Subscribe<TTriggerHandler>(TTriggerHandler handler) where TTriggerHandler : ITriggerHandler<TTrigger> {
         Subscribers.Add(handler);
     }
-    
+
     public async ValueTask PublishAsync<T>(T eventData, CancellationToken ct = default) where T : ITrigger {
-        if (IsEmpty) throw new InvalidOperationException("Cannot publish to a command hub that has no subscriber");
+        if (!HasSubscriptions) throw new InvalidOperationException("Cannot publish to a command hub that has no subscriber");
         if (eventData is not TTrigger typedTrigger) throw new ArgumentException("Command data is not of the expected type");
         if (typeof(T) != typeof(TTrigger)) throw new ArgumentException("Command data is not of the expected type");
         

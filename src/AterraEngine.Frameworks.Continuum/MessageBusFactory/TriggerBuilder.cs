@@ -1,16 +1,19 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.DependencyInjection.Services;
+using AterraEngine.DependencyInjection;
 
 namespace AterraEngine.Frameworks.Continuum;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IMessageBusFactory : IFactoryService<IMessageBus> {
-    IMessageBusFactory AddCommand<TCommandHandler, TCommand, TResult>()
-        where TCommand : ICommand<TResult>
-        where TResult : struct
-        where TCommandHandler : class, ICommandHandler<TCommand, TResult>;
+public class TriggerBuilder<TTrigger>(ITriggerHub<TTrigger> hub, IScopedProvider provider) : ITriggerBuilder<TTrigger>
+    where TTrigger : ITrigger 
+{
+    public ITriggerBuilder<TTrigger> AddHandler<TTriggerHandler>() where TTriggerHandler : class, ITriggerHandler<TTrigger> {
+        var handler = provider.GetRequiredService<TTriggerHandler>(); 
+        hub.Subscribe(handler);
+        return this;
+    }
 }

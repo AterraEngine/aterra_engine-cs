@@ -6,13 +6,8 @@ namespace AterraEngine.Frameworks.Continuum;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ICommandHub {
-    bool HasSubscriptions { get; }
+public interface ITriggerBuilder<TTrigger>
+    where TTrigger : ITrigger {
     
-    ValueTask<T1> ExecuteAsync<T0,T1>(T0 commandData, CancellationToken ct = default) where T0 : ICommand<T1> where T1 : struct;
-    Task StartProcessingAsync();
-}
-
-public interface ICommandHub<TCommand, TOutput> : ICommandHub where TCommand : ICommand<TOutput> where TOutput : struct {
-    void Subscribe<TCommandHandler>(TCommandHandler handler) where TCommandHandler : ICommandHandler<TCommand, TOutput>;
+    ITriggerBuilder<TTrigger> AddHandler<TTriggerHandler>() where TTriggerHandler : class, ITriggerHandler<TTrigger>;
 }

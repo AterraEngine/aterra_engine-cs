@@ -1,18 +1,18 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraEngine.DependencyInjection.Services;
+
 namespace AterraEngine.Frameworks.Continuum;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ICommandHub {
-    bool HasSubscriptions { get; }
+public interface IMessageBusFactory : IFactoryService<IMessageBus> {
+    ICommandBuilder<TCommand, TResult> AddCommand<TCommand, TResult>()
+        where TCommand : ICommand<TResult>
+        where TResult : struct;
     
-    ValueTask<T1> ExecuteAsync<T0,T1>(T0 commandData, CancellationToken ct = default) where T0 : ICommand<T1> where T1 : struct;
-    Task StartProcessingAsync();
-}
-
-public interface ICommandHub<TCommand, TOutput> : ICommandHub where TCommand : ICommand<TOutput> where TOutput : struct {
-    void Subscribe<TCommandHandler>(TCommandHandler handler) where TCommandHandler : ICommandHandler<TCommand, TOutput>;
+    ITriggerBuilder<TTrigger> AddTrigger<TTrigger>() 
+        where TTrigger : ITrigger;
 }

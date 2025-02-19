@@ -24,21 +24,23 @@ public class MessageBusFactory(IScopedProvider provider) : IMessageBusFactory {
         };
     }
 
-    public IMessageBusFactory AddCommand<TCommandHandler, TCommand, TResult>() 
+    public ICommandBuilder<TCommand, TResult> AddCommand<TCommand, TResult>() 
         where TCommand : ICommand<TResult>
         where TResult : struct 
-        where TCommandHandler : class, ICommandHandler<TCommand, TResult>
     {
-        var hub = provider.GetRequiredService<ICommandHub<TCommand, TResult>>();
-        var handler = provider.GetRequiredService<TCommandHandler>();
+        ICommandHub hub = _registeredCommandHubs.GetOrAdd(
+            typeof(TCommand),
+            static (_, provider) => provider.GetRequiredService<ICommandHub<TCommand, TResult>>(),
+            provider
+        );
         
-        hub.Subscribe(handler);
+        if (hub is not ICommandHub<TCommand, TResult> typedHub) throw new InvalidOperationException("Failed to get command hub");
         
-        _registeredCommandHubs.TryAdd(typeof(TCommand),hub);
-        return this;
+        return new CommandBuilder<TCommand, TResult>(typedHub, provider);
     }
-    
-    public IMessageBusFactory AddTrigger<TTriggerHandler, TTrigger>() where TTrigger : ITrigger where TTriggerHandler : class, ITriggerHandler<TTrigger> {
+
+
+    public ITriggerBuilder<TTrigger> AddTrigger<TTrigger>() where TTrigger : ITrigger {
         // One trigger hub can have multiple subscribers
         ITriggerHub hub = _registeredTriggerHubs.GetOrAdd(
             typeof(TTrigger),
@@ -47,9 +49,6 @@ public class MessageBusFactory(IScopedProvider provider) : IMessageBusFactory {
         );
         if (hub is not ITriggerHub<TTrigger> typedHub) throw new InvalidOperationException("Failed to get trigger hub");
         
-        var handler = provider.GetRequiredService<TTriggerHandler>();
-
-        typedHub.Subscribe(handler);
-        return this;
+        return new TriggerBuilder<TTrigger>(typedHub, provider);
     }
 }

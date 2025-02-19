@@ -14,6 +14,7 @@ namespace Workfloor.AterraEngine.Frameworks.Continuum;
 public static class Program {
     public static async Task Main() {
         var collection = new ServiceCollection();
+        
         // Handlers
         collection.AddTransient<SimpleCommandHandler>();
         collection.AddTransient<SimpleTriggerHandler>();
@@ -26,9 +27,12 @@ public static class Program {
         collection.AddSingletonFromFactory<IMessageBusFactory>(static provider => {
             var factory = new MessageBusFactory(provider);
             
-            factory.AddCommand<SimpleCommandHandler, SimpleCommand, bool>();
-            factory.AddTrigger<SimpleTriggerHandler, SimpleTrigger>();
-            factory.AddTrigger<SimpleTriggerHandler2, SimpleTrigger>();
+            factory.AddCommand<SimpleCommand, bool>()
+                .AddHandler<SimpleCommandHandler>();
+            
+            factory.AddTrigger<SimpleTrigger>()
+                .AddHandler<SimpleTriggerHandler>()
+                .AddHandler<SimpleTriggerHandler2>();
             
             return factory;
         });
