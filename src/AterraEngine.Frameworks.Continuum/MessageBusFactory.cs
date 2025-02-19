@@ -22,8 +22,16 @@ public class MessageBusFactory(IScopedProvider provider) : IMessageBusFactory {
         };
     }
 
-    public IMessageBusFactory AddCommand<TCommand, TResult>() where TCommand : ICommand<TResult> where TResult : struct {
+    public IMessageBusFactory AddCommand<TCommandHandler, TCommand, TResult>() 
+        where TCommand : ICommand<TResult>
+        where TResult : struct 
+        where TCommandHandler : class, ICommandHandler<TCommand, TResult>
+    {
         var hub = provider.GetRequiredService<ICommandHub<TCommand, TResult>>();
+        var handler = provider.GetRequiredService<TCommandHandler>();
+        
+        hub.Subscribe(handler);
+        
         RegisteredCommandHubs.TryAdd(typeof(TCommand),hub);
         return this;
     }

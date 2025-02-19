@@ -6,7 +6,6 @@ using AterraEngine.Frameworks.Nexities;
 using AterraEngine.Frameworks.Omnia;
 
 namespace Workfloor.AterraEngine.Frameworks.Nexities.Generators;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -15,7 +14,7 @@ namespace Workfloor.AterraEngine.Frameworks.Nexities.Generators;
 public partial class Entity : NexitiesEntity, IEntity {
     public partial ExampleComponent ExampleComponent { get; }
     [KeyedInstance("458ebce3-a1b2-4966-8ac2-656c4687881d")] public partial ISomeComponent SomeComponent { get; }
-}
+}q
 
 public interface ISomeComponent : INexitiesComponent {}
 public interface IEntity : INexitiesEntity {}

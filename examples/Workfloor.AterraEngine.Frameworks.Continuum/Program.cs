@@ -14,11 +14,12 @@ public static class Program {
     public static async Task Main() {
         var collection = new ServiceCollection();
         collection.AddTransient<SimpleCommandHandler>();
-        collection.AddTransient(typeof(ICommandHub<,>), typeof(CommandHub<,>)); // TODO fix that CommandHub<,> can be registered as a service and not just an interface
+        collection.AddTransient(typeof(ICommandHub<,>), typeof(CommandHub<,>));
         collection.AddTransientFromFactory<IMessageBus, IMessageBusFactory>();
         collection.AddSingletonFromFactory<IMessageBusFactory>(static provider => {
             var factory = new MessageBusFactory(provider);
-            factory.AddCommand<SimpleCommand, bool>();
+            
+            factory.AddCommand<SimpleCommandHandler, SimpleCommand, bool>();
             return factory;
         });
         

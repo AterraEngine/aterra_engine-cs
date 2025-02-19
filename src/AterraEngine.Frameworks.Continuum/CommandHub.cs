@@ -1,6 +1,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraEngine.DependencyInjection;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Channels;
 
@@ -30,12 +31,12 @@ public class CommandHub<TCommand, TOutput> : ICommandHub<TCommand, TOutput> wher
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    private void Subscribe<TCommandHandler>(TCommandHandler handler) where TCommandHandler : ICommandHandler<TCommand, TOutput> {
+    public void Subscribe<TCommandHandler>(TCommandHandler handler) where TCommandHandler : ICommandHandler<TCommand, TOutput> {
         if (!IsEmpty) throw new InvalidOperationException("Cannot subscribe to a command hub that already has a subscriber");
         Subscriber = handler;
     }
     public async Task StartProcessingAsync() => await Subscriber!.StartProcessingAsync(_channel);
-    
+
     public async ValueTask<T1> PublishAsync<T0,T1>(T0 commandData, CancellationToken ct = default) where T0 : ICommand<T1> where T1 : struct {
         if (IsEmpty) throw new InvalidOperationException("Cannot publish to a command hub that has no subscriber");
         if (commandData is not TCommand typedCommand) throw new ArgumentException("Command data is not of the expected type");

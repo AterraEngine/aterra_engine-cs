@@ -10,7 +10,6 @@ namespace AterraEngine.Frameworks.Continuum;
 // ---------------------------------------------------------------------------------------------------------------------
 public class MessageBus : IMessageBus {
     public FrozenDictionary<Type, ICommandHub> CommandHubs  { private get; init; } = FrozenDictionary<Type, ICommandHub>.Empty;
-    
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
