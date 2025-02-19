@@ -8,6 +8,4 @@ namespace AterraEngine.Frameworks.Continuum;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ITriggerHandler<TTrigger> where TTrigger : ITrigger  {
-    Task HandleAsync(TTrigger @event, CancellationToken ct = default);
-}
+public interface ITriggerHandler<in TTrigger> : IMessageHandler<TTrigger, Task> where TTrigger : ITrigger;

@@ -20,18 +20,20 @@ public class CommandBuilder<TCommand, TResult>(ICommandHub<TCommand, TResult> hu
             
         return this;
     }
-    public ICommandBuilder<TCommand, TResult> WithPipelineStep(Type type) {
-        object requiredService = provider.GetRequiredService(type.MakeGenericType(typeof(TCommand), typeof(TResult)));
-        if (requiredService is not ICommandPipelineStep<TCommand, TResult> pipeline) throw new InvalidOperationException("Failed to get pipeline step");
+    public ICommandBuilder<TCommand, TResult> WithPipelineSteps(params Type[] types) {
+        ICommandPipelineStep<TCommand, TResult>[] pipelines = types
+            .Select(type => provider.GetRequiredService(type.MakeGenericType(typeof(TCommand), typeof(TResult))))
+            .Cast<ICommandPipelineStep<TCommand, TResult>>()
+            .ToArray();
         
-        hub.AddPipelineStep(pipeline);
+        hub.AddPipelines(pipelines);
         return this;
     }
-    
-    public ICommandBuilder<TCommand, TResult> WithPipelineStep<TCommandPipelineStep>() where TCommandPipelineStep : class, ICommandPipelineStep<TCommand, TResult> {
-        var pipeline = provider.GetRequiredService<TCommandPipelineStep>();
-        
-        hub.AddPipelineStep(pipeline);
-        return this;
-    }
+    //
+    // public ICommandBuilder<TCommand, TResult> WithPipelineStep<TCommandPipelineStep>() where TCommandPipelineStep : class, ICommandPipelineStep<TCommand, TResult> {
+    //     var pipeline = provider.GetRequiredService<TCommandPipelineStep>();
+    //     
+    //     hub.AddPipelineStep(pipeline);
+    //     return this;
+    // }
 }

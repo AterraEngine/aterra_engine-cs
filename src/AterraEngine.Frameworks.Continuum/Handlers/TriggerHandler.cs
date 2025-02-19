@@ -1,18 +1,11 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraEngine.Frameworks.Continuum;
+namespace AterraEngine.Frameworks.Continuum.Handlers;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ITriggerHub {
-    ValueTask PublishAsync<T>(T eventData, CancellationToken ct = default) where T : ITrigger;
-    Task StartProcessingAsync();
-}
+public abstract class TriggerHandler<TTrigger> : MessageHandler<TTrigger, Task>, ITriggerHandler<TTrigger>
+    where TTrigger : ITrigger;
 
-public interface ITriggerHub<TTrigger> : ITriggerHub, IMessageHub<TTrigger, Task> 
-    where TTrigger : ITrigger 
-{
-    void Subscribe<TTriggerHandler>(TTriggerHandler handler) where TTriggerHandler : ITriggerHandler<TTrigger>;
-}

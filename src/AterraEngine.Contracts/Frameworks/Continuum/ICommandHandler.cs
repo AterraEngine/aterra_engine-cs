@@ -6,6 +6,6 @@ namespace AterraEngine.Frameworks.Continuum;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ICommandHandler<in TCommand, TResponse> where TCommand : ICommand<TResponse> where TResponse : struct {
-    ValueTask<TResponse> HandleAsync(TCommand command, CancellationToken ct = default);
-}
+public interface ICommandHandler<in TCommand, TResponse> : IMessageHandler<TCommand, ValueTask<TResponse>> 
+    where TCommand : ICommand<TResponse>
+    where TResponse : struct;

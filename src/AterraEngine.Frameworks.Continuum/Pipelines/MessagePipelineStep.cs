@@ -1,18 +1,14 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraEngine.Frameworks.Continuum;
+namespace AterraEngine.Frameworks.Continuum.Pipelines;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ITriggerHub {
-    ValueTask PublishAsync<T>(T eventData, CancellationToken ct = default) where T : ITrigger;
-    Task StartProcessingAsync();
-}
-
-public interface ITriggerHub<TTrigger> : ITriggerHub, IMessageHub<TTrigger, Task> 
-    where TTrigger : ITrigger 
-{
-    void Subscribe<TTriggerHandler>(TTriggerHandler handler) where TTriggerHandler : ITriggerHandler<TTrigger>;
+public abstract class MessagePipelineStep<TInput, TOutput> : IPipelineStep<TInput, TOutput> {
+    public bool IsNextStepPopulated => NextStep != null;
+    public Func<TInput, CancellationToken, TOutput>? NextStep { get; set; }
+    
+    public abstract TOutput HandleStepAsync(TInput input, CancellationToken ct = default);
 }

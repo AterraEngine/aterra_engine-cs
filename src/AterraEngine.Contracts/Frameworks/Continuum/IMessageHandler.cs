@@ -6,13 +6,8 @@ namespace AterraEngine.Frameworks.Continuum;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ITriggerHub {
-    ValueTask PublishAsync<T>(T eventData, CancellationToken ct = default) where T : ITrigger;
-    Task StartProcessingAsync();
-}
-
-public interface ITriggerHub<TTrigger> : ITriggerHub, IMessageHub<TTrigger, Task> 
-    where TTrigger : ITrigger 
-{
-    void Subscribe<TTriggerHandler>(TTriggerHandler handler) where TTriggerHandler : ITriggerHandler<TTrigger>;
+public interface IMessageHandler<in TInput, out TOutput> {
+    Guid Id { get; }
+    
+    TOutput HandleAsync(TInput input, CancellationToken ct = default);
 }

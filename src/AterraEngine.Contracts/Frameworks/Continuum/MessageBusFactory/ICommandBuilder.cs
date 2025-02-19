@@ -1,8 +1,6 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Frameworks.Continuum.Pipelines;
-
 namespace AterraEngine.Frameworks.Continuum;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -14,6 +12,5 @@ public interface ICommandBuilder<TCommand, TResult>
 
 
     ICommandBuilder<TCommand, TResult> WithHandler<TCommandHandler>() where TCommandHandler : class, ICommandHandler<TCommand, TResult>;
-    ICommandBuilder<TCommand, TResult> WithPipelineStep(Type type);
-    ICommandBuilder<TCommand, TResult> WithPipelineStep<TCommandPipelineStep>() where TCommandPipelineStep : class, ICommandPipelineStep<TCommand, TResult> ;
+    ICommandBuilder<TCommand, TResult> WithPipelineSteps(params Type[] types) ;
 }

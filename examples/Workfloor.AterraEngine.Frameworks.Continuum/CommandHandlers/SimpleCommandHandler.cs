@@ -2,14 +2,15 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.Frameworks.Continuum;
+using AterraEngine.Frameworks.Continuum.Handlers;
 
 namespace Workfloor.AterraEngine.Frameworks.Continuum.CommandHandlers;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class SimpleCommandHandler : ICommandHandler<SimpleCommand, bool> {
-    public async ValueTask<bool> HandleAsync(SimpleCommand command, CancellationToken ct = default) {
+public class SimpleCommandHandler : CommandHandler<SimpleCommand, bool> {
+    public async override ValueTask<bool> HandleAsync(SimpleCommand command, CancellationToken ct = default) {
         Console.WriteLine($"Received at : {command.DateTime}");
         
         await Task.Delay(TimeSpan.FromSeconds(1), ct); // Wait 1 second

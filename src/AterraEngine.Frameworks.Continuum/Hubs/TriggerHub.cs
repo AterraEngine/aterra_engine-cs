@@ -3,21 +3,19 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Threading.Channels;
 
-namespace AterraEngine.Frameworks.Continuum;
+namespace AterraEngine.Frameworks.Continuum.Hubs;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class TriggerHub<TTrigger> : ITriggerHub<TTrigger> where TTrigger : ITrigger {
+public class TriggerHub<TTrigger> : MessageHub<ITriggerHandler<TTrigger>, TTrigger, Task>, ITriggerHub<TTrigger>
+    where TTrigger : ITrigger 
+{
     private readonly Channel<TTrigger> _channel = Channel.CreateUnbounded<TTrigger>(new UnboundedChannelOptions() {
         AllowSynchronousContinuations = true,
         SingleReader = false,
         SingleWriter = false
     });
-
-    private List<ITriggerHandler<TTrigger>> Subscribers { get; set; } = [];
-    
-    public bool HasSubscriptions => Subscribers.Count > 0;
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
@@ -40,10 +38,11 @@ public class TriggerHub<TTrigger> : ITriggerHub<TTrigger> where TTrigger : ITrig
                 // Each handle should be their own CancellationToken.
                 // But there should be a way to define how much this is depending on some sort of config?
                 var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
-            
-                // TODO create a pipeline system which can do stuff before or after the actual handler. 
-                    
-                IEnumerable<Task> tasks = Subscribers.Select(subscriber => subscriber.HandleAsync(trigger, cts.Token));
+                
+                IEnumerable<Task> tasks = SubscribersWithPipelines.IsEmpty
+                    ? Subscribers.Select(subscriber => subscriber.HandleAsync(trigger, cts.Token)) 
+                    : SubscribersWithPipelines.Values.Select(sub => sub.HandleStepAsync(trigger, cts.Token));
+                
                 await Task.WhenAll(tasks);
             }
         }

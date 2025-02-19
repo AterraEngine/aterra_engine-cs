@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.DependencyInjection;
 using AterraEngine.Frameworks.Continuum;
+using AterraEngine.Frameworks.Continuum.Hubs;
 using Workfloor.AterraEngine.Frameworks.Continuum.CommandHandlers;
 using Workfloor.AterraEngine.Frameworks.Continuum.PipelineSteps;
 using Workfloor.AterraEngine.Frameworks.Continuum.TriggerHandlers;
@@ -31,8 +32,8 @@ public static class Program {
 
             factory.AddCommand<SimpleCommand, bool>()
                 .WithHandler<SimpleCommandHandler>()
-                .WithPipelineStep(typeof(CommandPipelineStep<,>))
-                .WithPipelineStep<CommandPipelineStep<SimpleCommand, bool>>();
+                .WithPipelineSteps(typeof(CommandPipelineStep<,>));
+                // .WithPipelineStep<CommandPipelineStep<SimpleCommand, bool>>();
             
             factory.AddTrigger<SimpleTrigger>()
                 .WithHandler<SimpleTriggerHandler>()
