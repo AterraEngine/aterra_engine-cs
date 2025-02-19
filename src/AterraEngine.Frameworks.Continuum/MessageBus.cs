@@ -25,11 +25,23 @@ public class MessageBus : IMessageBus {
         await hub.PublishAsync(trigger, ct);
     }
 
-    public void StartProcessing() {
-        IEnumerable<Task> tasks = TriggerHubs.Select(hub => hub.Value.StartProcessingAsync())
-            .Concat(CommandHubs.Select(hub => hub.Value.StartProcessingAsync())); 
+    public void StartProcessing() => _ = StartProcessingAsync().ConfigureAwait(false);
+    
+    private async Task StartProcessingAsync() {
+        
+        var tasks = new Task[TriggerHubs.Count + CommandHubs.Count];
+
+        // This is scuffed, but works, so hey what do we care.
+        int i;
+        for (i = 0; i < TriggerHubs.Count; i++) {
+            tasks[i] = TriggerHubs.Values[i].StartProcessingAsync();
+        }
+
+        for (int j = i; j < CommandHubs.Count + i ; j++) {
+            tasks[j] = CommandHubs.Values[j - i].StartProcessingAsync();
+        }
         
         // Fire and forget the tasks
-        Task.WhenAll(tasks).ConfigureAwait(false);
+        await Task.WhenAll(tasks);
     }
 }
