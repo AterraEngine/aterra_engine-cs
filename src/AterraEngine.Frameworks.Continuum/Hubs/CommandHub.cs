@@ -63,13 +63,4 @@ public class CommandHub<TCommand, TOutput> : MessageHub<IMessageHandler<TCommand
         }
         throw new InvalidOperationException("No reply was received");
     }
-
-    // -----------------------------------------------------------------------------------------------------------------
-    // Constructors
-    // -----------------------------------------------------------------------------------------------------------------
-    public static CommandHub<TCommand, TOutput> FromHandler<TCommandHandler>(TCommandHandler handler) where TCommandHandler : ICommandHandler<TCommand, TOutput> {
-        var hub = new CommandHub<TCommand, TOutput>();
-        hub.Subscribe(handler);
-        return hub;
-    }
 }
