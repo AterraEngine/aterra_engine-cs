@@ -19,6 +19,7 @@ public class MessageBus : IMessageBus {
         if (!CommandHubs.TryGetValue(typeof(TCommand), out ICommandHub? hub)) throw new InvalidOperationException("No command hub found");
         return hub.ExecuteAsync<TCommand, TOutput>(command, ct);
     }
+    
     public async ValueTask PublishAsync<TTrigger>(TTrigger trigger, CancellationToken ct = default) where TTrigger : ITrigger {
         if (!TriggerHubs.TryGetValue(typeof(TTrigger), out ITriggerHub? hub)) throw new InvalidOperationException("No event hub found");
         await hub.PublishAsync(trigger, ct);

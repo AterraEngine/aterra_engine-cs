@@ -35,13 +35,16 @@ public class CommandHub<TCommand, TOutput> : ICommandHub<TCommand, TOutput> wher
         if (HasSubscriptions) throw new InvalidOperationException("Cannot subscribe to a command hub that already has a subscriber");
         Subscriber = handler;
     }
+    
     public async Task StartProcessingAsync() {
+        if (!HasSubscriptions) throw new InvalidOperationException("Cannot start processing a command hub that has no subscriber");
+        
         while (await _channel.Reader.WaitToReadAsync()) {
             while (_channel.Reader.TryRead(out (TCommand Command, Channel<TOutput> ReplyChannel) data)) {
                 // Each handle should be their own CancellationToken.
                 // But there should be a way to define how much this is depending on some sort of config?
                 var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
-                TOutput result = await Subscriber!.HandleAsync(data.Command, cts.Token);
+                TOutput result = await Subscriber.HandleAsync(data.Command, cts.Token);
                 await data.ReplyChannel.Writer.WriteAsync(result, cts.Token);
             }
         }
@@ -54,7 +57,8 @@ public class CommandHub<TCommand, TOutput> : ICommandHub<TCommand, TOutput> wher
         
         await _channel.Writer.WriteAsync((typedCommand, _replyChannel), ct);
         while (await _replyChannel.Reader.WaitToReadAsync(ct)) {
-            if (_replyChannel.Reader.TryRead(out TOutput result) && result is T1 castedResult) return castedResult;
+            if (_replyChannel.Reader.TryRead(out TOutput result) || result is not T1 castedResult) continue;
+            return castedResult;
         }
         throw new InvalidOperationException("No reply was received");
     }

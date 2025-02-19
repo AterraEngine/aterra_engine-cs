@@ -11,5 +11,5 @@ public interface ICommandBuilder<out TCommand, TResult>
     where TResult : struct {
 
 
-    ICommandBuilder<TCommand, TResult> AddHandler<TCommandHandler>() where TCommandHandler : class, ICommandHandler<TCommand, TResult>;
+    ICommandBuilder<TCommand, TResult> WithHandler<TCommandHandler>() where TCommandHandler : class, ICommandHandler<TCommand, TResult>;
 }

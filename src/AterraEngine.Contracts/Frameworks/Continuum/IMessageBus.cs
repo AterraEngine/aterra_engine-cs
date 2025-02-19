@@ -8,7 +8,7 @@ namespace AterraEngine.Frameworks.Continuum;
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IMessageBus {
     ValueTask<TOutput> ExecuteAsync<TCommand, TOutput>(TCommand command, CancellationToken ct = default) where TCommand : ICommand<TOutput> where TOutput : struct;
-    ValueTask PublishAsync<TEvent>(TEvent @event, CancellationToken ct = default) where TEvent : ITrigger;
+    ValueTask PublishAsync<TTrigger>(TTrigger triger, CancellationToken ct = default) where TTrigger : ITrigger;
     
     void StartProcessing();
 }

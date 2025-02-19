@@ -28,11 +28,11 @@ public static class Program {
             var factory = new MessageBusFactory(provider);
             
             factory.AddCommand<SimpleCommand, bool>()
-                .AddHandler<SimpleCommandHandler>();
+                .WithHandler<SimpleCommandHandler>();
             
             factory.AddTrigger<SimpleTrigger>()
-                .AddHandler<SimpleTriggerHandler>()
-                .AddHandler<SimpleTriggerHandler2>();
+                .WithHandler<SimpleTriggerHandler>()
+                .WithHandler<SimpleTriggerHandler2>();
             
             return factory;
         });

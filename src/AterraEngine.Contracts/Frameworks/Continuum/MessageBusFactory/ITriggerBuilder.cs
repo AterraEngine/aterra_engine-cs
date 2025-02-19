@@ -9,5 +9,5 @@ namespace AterraEngine.Frameworks.Continuum;
 public interface ITriggerBuilder<TTrigger>
     where TTrigger : ITrigger {
     
-    ITriggerBuilder<TTrigger> AddHandler<TTriggerHandler>() where TTriggerHandler : class, ITriggerHandler<TTrigger>;
+    ITriggerBuilder<TTrigger> WithHandler<TTriggerHandler>() where TTriggerHandler : class, ITriggerHandler<TTrigger>;
 }
