@@ -3,17 +3,11 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.Frameworks.Continuum;
 
-namespace Workfloor.AterraEngine.Frameworks.Continuum.CommandHandlers;
+namespace Workfloor.AterraEngine.Frameworks.Continuum.TriggerHandlers;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class SimpleCommandHandler : ICommandHandler<SimpleCommand, bool> {
-    public async ValueTask<bool> HandleAsync(SimpleCommand command, CancellationToken ct = default) {
-        Console.WriteLine($"Received at : {command.DateTime}");
-        
-        await Task.Delay(TimeSpan.FromSeconds(1), ct); // Wait 1 second
-        Console.WriteLine($"Processing command: {command.Input}");
-        return command.Input == "true";
-    }
+public record SimpleTrigger(string Input, DateTime DateTime) : ITrigger {
+    
 }

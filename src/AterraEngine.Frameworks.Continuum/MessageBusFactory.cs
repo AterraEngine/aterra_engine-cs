@@ -11,14 +11,16 @@ namespace AterraEngine.Frameworks.Continuum;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class MessageBusFactory(IScopedProvider provider) : IMessageBusFactory {
-    public readonly ConcurrentDictionary<Type, ICommandHub> RegisteredCommandHubs = [];
+    private readonly ConcurrentDictionary<Type, ICommandHub> _registeredCommandHubs = [];
+    private readonly ConcurrentDictionary<Type, ITriggerHub> _registeredTriggerHubs = [];
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public IMessageBus Create(IScopedProvider _) {
         return new MessageBus {
-            CommandHubs = RegisteredCommandHubs.ToFrozenDictionary()
+            CommandHubs = _registeredCommandHubs.ToFrozenDictionary(),
+            TriggerHubs = _registeredTriggerHubs.ToFrozenDictionary()
         };
     }
 
@@ -32,7 +34,22 @@ public class MessageBusFactory(IScopedProvider provider) : IMessageBusFactory {
         
         hub.Subscribe(handler);
         
-        RegisteredCommandHubs.TryAdd(typeof(TCommand),hub);
+        _registeredCommandHubs.TryAdd(typeof(TCommand),hub);
+        return this;
+    }
+    
+    public IMessageBusFactory AddTrigger<TTriggerHandler, TTrigger>() where TTrigger : ITrigger where TTriggerHandler : class, ITriggerHandler<TTrigger> {
+        // One trigger hub can have multiple subscribers
+        ITriggerHub hub = _registeredTriggerHubs.GetOrAdd(
+            typeof(TTrigger),
+            static (_, provider) => provider.GetRequiredService<ITriggerHub<TTrigger>>(),
+            provider
+        );
+        if (hub is not ITriggerHub<TTrigger> typedHub) throw new InvalidOperationException("Failed to get trigger hub");
+        
+        var handler = provider.GetRequiredService<TTriggerHandler>();
+
+        typedHub.Subscribe(handler);
         return this;
     }
 }

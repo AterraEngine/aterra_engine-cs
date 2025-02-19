@@ -35,9 +35,19 @@ public class CommandHub<TCommand, TOutput> : ICommandHub<TCommand, TOutput> wher
         if (!IsEmpty) throw new InvalidOperationException("Cannot subscribe to a command hub that already has a subscriber");
         Subscriber = handler;
     }
-    public async Task StartProcessingAsync() => await Subscriber!.StartProcessingAsync(_channel);
+    public async Task StartProcessingAsync() {
+        while (await _channel.Reader.WaitToReadAsync()) {
+            while (_channel.Reader.TryRead(out (TCommand Command, Channel<TOutput> ReplyChannel) data)) {
+                // Each handle should be their own CancellationToken.
+                // But there should be a way to define how much this is depending on some sort of config?
+                var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+                TOutput result = await Subscriber!.HandleAsync(data.Command, cts.Token);
+                await data.ReplyChannel.Writer.WriteAsync(result, cts.Token);
+            }
+        }
+    }
 
-    public async ValueTask<T1> PublishAsync<T0,T1>(T0 commandData, CancellationToken ct = default) where T0 : ICommand<T1> where T1 : struct {
+    public async ValueTask<T1> ExecuteAsync<T0,T1>(T0 commandData, CancellationToken ct = default) where T0 : ICommand<T1> where T1 : struct {
         if (IsEmpty) throw new InvalidOperationException("Cannot publish to a command hub that has no subscriber");
         if (commandData is not TCommand typedCommand) throw new ArgumentException("Command data is not of the expected type");
         if (typeof(T1) != typeof(TOutput)) throw new ArgumentException("Command data is not of the expected type");
