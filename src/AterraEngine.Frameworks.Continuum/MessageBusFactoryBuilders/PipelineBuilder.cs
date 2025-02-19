@@ -8,12 +8,5 @@ namespace AterraEngine.Frameworks.Continuum;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ICommandBuilder<TCommand, TResult>
-    where TCommand : ICommand<TResult>
-    where TResult : struct {
-
-
-    ICommandBuilder<TCommand, TResult> WithHandler<TCommandHandler>() where TCommandHandler : class, ICommandHandler<TCommand, TResult>;
-    ICommandBuilder<TCommand, TResult> WithPipelineStep(Type type);
-    ICommandBuilder<TCommand, TResult> WithPipelineStep<TCommandPipelineStep>() where TCommandPipelineStep : class, ICommandPipelineStep<TCommand, TResult> ;
+public class PipelineBuilder {
 }

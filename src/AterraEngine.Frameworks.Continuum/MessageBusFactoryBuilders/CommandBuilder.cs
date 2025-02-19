@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.DependencyInjection;
+using AterraEngine.Frameworks.Continuum.Pipelines;
 
 namespace AterraEngine.Frameworks.Continuum;
 
@@ -17,6 +18,20 @@ public class CommandBuilder<TCommand, TResult>(ICommandHub<TCommand, TResult> hu
         var handler = provider.GetRequiredService<TCommandHandler>(); 
         hub.Subscribe(handler);
             
+        return this;
+    }
+    public ICommandBuilder<TCommand, TResult> WithPipelineStep(Type type) {
+        object requiredService = provider.GetRequiredService(type.MakeGenericType(typeof(TCommand), typeof(TResult)));
+        if (requiredService is not ICommandPipelineStep<TCommand, TResult> pipeline) throw new InvalidOperationException("Failed to get pipeline step");
+        
+        hub.AddPipelineStep(pipeline);
+        return this;
+    }
+    
+    public ICommandBuilder<TCommand, TResult> WithPipelineStep<TCommandPipelineStep>() where TCommandPipelineStep : class, ICommandPipelineStep<TCommand, TResult> {
+        var pipeline = provider.GetRequiredService<TCommandPipelineStep>();
+        
+        hub.AddPipelineStep(pipeline);
         return this;
     }
 }

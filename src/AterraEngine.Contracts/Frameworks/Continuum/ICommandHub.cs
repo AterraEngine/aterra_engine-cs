@@ -1,6 +1,8 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraEngine.Frameworks.Continuum.Pipelines;
+
 namespace AterraEngine.Frameworks.Continuum;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -13,6 +15,10 @@ public interface ICommandHub {
     Task StartProcessingAsync();
 }
 
-public interface ICommandHub<TCommand, TOutput> : ICommandHub where TCommand : ICommand<TOutput> where TOutput : struct {
+public interface ICommandHub<TCommand, TOutput> : ICommandHub
+    where TCommand : ICommand<TOutput>
+    where TOutput : struct 
+{
     void Subscribe<TCommandHandler>(TCommandHandler handler) where TCommandHandler : ICommandHandler<TCommand, TOutput>;
+    void AddPipelineStep<TPipelineStep>(TPipelineStep pipeline) where TPipelineStep : ICommandPipelineStep<TCommand, TOutput>;
 }

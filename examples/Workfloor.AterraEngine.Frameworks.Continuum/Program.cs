@@ -4,6 +4,7 @@
 using AterraEngine.DependencyInjection;
 using AterraEngine.Frameworks.Continuum;
 using Workfloor.AterraEngine.Frameworks.Continuum.CommandHandlers;
+using Workfloor.AterraEngine.Frameworks.Continuum.PipelineSteps;
 using Workfloor.AterraEngine.Frameworks.Continuum.TriggerHandlers;
 
 namespace Workfloor.AterraEngine.Frameworks.Continuum;
@@ -23,12 +24,15 @@ public static class Program {
         // Needed for Continuum to work 
         collection.AddTransient(typeof(ICommandHub<,>), typeof(CommandHub<,>));
         collection.AddTransient(typeof(ITriggerHub<>), typeof(TriggerHub<>));
+        collection.AddTransient(typeof(CommandPipelineStep<,>));
         collection.AddTransientFromFactory<IMessageBus, IMessageBusFactory>();
         collection.AddSingletonFromFactory<IMessageBusFactory>(static provider => {
             var factory = new MessageBusFactory(provider);
-            
+
             factory.AddCommand<SimpleCommand, bool>()
-                .WithHandler<SimpleCommandHandler>();
+                .WithHandler<SimpleCommandHandler>()
+                .WithPipelineStep(typeof(CommandPipelineStep<,>))
+                .WithPipelineStep<CommandPipelineStep<SimpleCommand, bool>>();
             
             factory.AddTrigger<SimpleTrigger>()
                 .WithHandler<SimpleTriggerHandler>()

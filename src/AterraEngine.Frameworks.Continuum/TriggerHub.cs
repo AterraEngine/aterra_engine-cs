@@ -40,7 +40,9 @@ public class TriggerHub<TTrigger> : ITriggerHub<TTrigger> where TTrigger : ITrig
                 // Each handle should be their own CancellationToken.
                 // But there should be a way to define how much this is depending on some sort of config?
                 var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
-
+            
+                // TODO create a pipeline system which can do stuff before or after the actual handler. 
+                    
                 IEnumerable<Task> tasks = Subscribers.Select(subscriber => subscriber.HandleAsync(trigger, cts.Token));
                 await Task.WhenAll(tasks);
             }

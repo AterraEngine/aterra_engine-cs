@@ -1,19 +1,16 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Frameworks.Continuum.Pipelines;
-
-namespace AterraEngine.Frameworks.Continuum;
+namespace AterraEngine.Frameworks.Continuum.Pipelines;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ICommandBuilder<TCommand, TResult>
+public abstract class CommandPipeline<TCommand, TResult> : ICommandPipelineStep<TCommand, TResult>
     where TCommand : ICommand<TResult>
     where TResult : struct {
+    
+    public Func<TCommand, CancellationToken, ValueTask<TResult>> NextStep { protected get; set; } = null!;
 
-
-    ICommandBuilder<TCommand, TResult> WithHandler<TCommandHandler>() where TCommandHandler : class, ICommandHandler<TCommand, TResult>;
-    ICommandBuilder<TCommand, TResult> WithPipelineStep(Type type);
-    ICommandBuilder<TCommand, TResult> WithPipelineStep<TCommandPipelineStep>() where TCommandPipelineStep : class, ICommandPipelineStep<TCommand, TResult> ;
+    public abstract ValueTask<TResult> HandleStepAsync(TCommand command, CancellationToken ct = default);
 }
