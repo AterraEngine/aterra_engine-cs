@@ -12,7 +12,7 @@ namespace AterraEngine.Frameworks.Continuum.Hubs;
 public class CommandHub<TCommand, TOutput> : MessageHub<IMessageHandler<TCommand, ValueTask<TOutput>>, TCommand, ValueTask<TOutput>>, ICommandHub<TCommand, TOutput> 
     where TCommand : ICommand<TOutput> where TOutput : struct 
 {
-    private readonly Channel<(TCommand Command, Channel<TOutput> ReplyChannel)> _channel = Channel.CreateUnbounded<(TCommand Command, Channel<TOutput> ReplyChannel)>(new UnboundedChannelOptions() {
+    private readonly Channel<CommandHubChannelDto<TCommand, TOutput>> _channel = Channel.CreateUnbounded<CommandHubChannelDto<TCommand, TOutput>>(new UnboundedChannelOptions() {
         AllowSynchronousContinuations = true,
         SingleReader = false,
         SingleWriter = false
@@ -36,17 +36,11 @@ public class CommandHub<TCommand, TOutput> : MessageHub<IMessageHandler<TCommand
         if (!HasSubscriptions) throw new InvalidOperationException("Cannot start processing a command hub that has no subscriber");
         
         while (await _channel.Reader.WaitToReadAsync()) {
-            // TODO Why is there only one reply channel per hub?
-            while (_channel.Reader.TryRead(out (TCommand Command, Channel<TOutput> ReplyChannel) data)) {
-                // Each handle should be their own CancellationToken.
-                // But there should be a way to define how much this is depending on some sort of config?
-                var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
-
+            while (_channel.Reader.TryRead(out CommandHubChannelDto<TCommand, TOutput>? dto)) {
                 IMessageHandler<TCommand, ValueTask<TOutput>> subscriber = GetSubscribers()[0];
-                
-                TOutput result = await subscriber.HandleAsync(data.Command, cts.Token);
+                TOutput result = await subscriber.HandleAsync(dto.CommandData, dto.CancellationToken);
 
-                await data.ReplyChannel.Writer.WriteAsync(result, cts.Token);
+                await dto.ReplyChannel.Writer.WriteAsync(result, dto.CancellationToken);
             }
         }
     }
@@ -54,7 +48,9 @@ public class CommandHub<TCommand, TOutput> : MessageHub<IMessageHandler<TCommand
     public async override ValueTask<TOutput> ExecuteAsync(TCommand inputData, CancellationToken ct = default) {
         if (!HasSubscriptions) throw new InvalidOperationException("Cannot publish to a command hub that has no subscriber");
         
-        await _channel.Writer.WriteAsync((inputData, _replyChannel), ct);
+        var dto = new CommandHubChannelDto<TCommand, TOutput>(inputData, _replyChannel, ct);
+        await _channel.Writer.WriteAsync(dto, ct);
+        
         while (await _replyChannel.Reader.WaitToReadAsync(ct)) {
             // Can only receive ONE reply per request, so we should do it like this 
             if (!_replyChannel.Reader.TryRead(out TOutput result)) continue;

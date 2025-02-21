@@ -12,7 +12,7 @@ namespace AterraEngine.Frameworks.Continuum.Hubs;
 public class TriggerHub<TTrigger> : MessageHub<ITriggerHandler<TTrigger>, TTrigger, Task>, ITriggerHub<TTrigger>
     where TTrigger : ITrigger 
 {
-    private readonly Channel<TTrigger> _channel = Channel.CreateUnbounded<TTrigger>(new UnboundedChannelOptions() {
+    private readonly Channel<TriggerHubChannelDto<TTrigger>> _channel = Channel.CreateUnbounded<TriggerHubChannelDto<TTrigger>>(new UnboundedChannelOptions() {
         AllowSynchronousContinuations = true,
         SingleReader = false,
         SingleWriter = false
@@ -23,16 +23,14 @@ public class TriggerHub<TTrigger> : MessageHub<ITriggerHandler<TTrigger>, TTrigg
     // -----------------------------------------------------------------------------------------------------------------
     public async Task StartProcessingAsync() {
         while (await _channel.Reader.WaitToReadAsync()) {
-            while (_channel.Reader.TryRead(out TTrigger? trigger)) {
+            while (_channel.Reader.TryRead(out TriggerHubChannelDto<TTrigger>? dto)) {
                 // Each handle should be their own CancellationToken.
                 // But there should be a way to define how much this is depending on some sort of config?
-                var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
-                
                 Span<ITriggerHandler<TTrigger>> subscribers = GetSubscribers();
                 var tasks = new Task[SubscriberCount];
                 
                 for (int i = Subscribers.Count - 1; i >= 0; i--) {
-                    tasks[i] = subscribers[i].HandleAsync(trigger, cts.Token);
+                    tasks[i] = subscribers[i].HandleAsync(dto.Trigger, dto.CancellationToken);
                 }
                 
                 await Task.WhenAll(tasks);
@@ -42,6 +40,8 @@ public class TriggerHub<TTrigger> : MessageHub<ITriggerHandler<TTrigger>, TTrigg
     
     public async override Task ExecuteAsync(TTrigger inputData, CancellationToken ct = default) {
         if (!HasSubscriptions) throw new InvalidOperationException("Cannot publish to a command hub that has no subscriber");
-        await _channel.Writer.WriteAsync(inputData, ct);
+        
+        var dto = new TriggerHubChannelDto<TTrigger>(inputData, ct);
+        await _channel.Writer.WriteAsync(dto, ct);
     }
 }
