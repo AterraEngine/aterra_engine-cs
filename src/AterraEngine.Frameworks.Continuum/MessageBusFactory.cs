@@ -10,6 +10,7 @@ namespace AterraEngine.Frameworks.Continuum;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
+// TODO Fully rework factory pattern to just save all the types, and resolve on Create()
 public class MessageBusFactory(IScopedProvider provider) : IMessageBusFactory {
     private readonly ConcurrentDictionary<Type, ICommandHub> _registeredCommandHubs = [];
     private readonly ConcurrentDictionary<Type, ITriggerHub> _registeredTriggerHubs = [];
