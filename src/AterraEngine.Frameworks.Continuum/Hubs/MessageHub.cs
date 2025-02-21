@@ -1,7 +1,8 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Frameworks.Continuum.Pipelines;
+using AterraEngine.Frameworks.Continuum.Handlers;
+using AterraEngine.Frameworks.Continuum.PipelineSteps;
 using System.Collections.Concurrent;
 
 namespace AterraEngine.Frameworks.Continuum.Hubs;
@@ -9,33 +10,49 @@ namespace AterraEngine.Frameworks.Continuum.Hubs;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class MessageHub<TMessageHandler, TInput, TOutput> : IMessageHub<TInput, TOutput>
-    where TMessageHandler : IMessageHandler<TInput, TOutput>
-{
+public abstract class MessageHub<TMessageHandler, TInput, TOutput> : IMessageHub<TMessageHandler, TInput, TOutput> 
+    where TMessageHandler : class, IMessageHandler<TInput, TOutput> {
     
-    public bool HasSubscriptions => Subscribers.Count > 0;
-    protected List<TMessageHandler> Subscribers { get; } = [];
-    protected ConcurrentDictionary<Guid, IPipelineStep<TInput, TOutput>> SubscribersWithPipelines { get; } = [];
+    public bool HasSubscriptions => !Subscribers.IsEmpty;
+    protected int SubscriberCount => Subscribers.Count;
+
+    private List<Guid> SubscriberOrder { get; } = [];
+    protected ConcurrentDictionary<Guid, IMessageHandler<TInput, TOutput>> Subscribers { get; } = [];
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
+    public virtual void SubscribeHandler(TMessageHandler handler) {
+        SubscriberOrder.Add(handler.Id);
+        Subscribers.TryAdd(handler.Id, handler);
+    }
+    
     public void AddPipelines<TPipeline>(TPipeline[] pipelines) where TPipeline : IPipelineStep<TInput, TOutput> {
-        int subCount = Subscribers.Count;
+        int subCount = SubscriberOrder.Count;
         if (subCount == 0) throw new InvalidOperationException("Cannot add pipeline(s) to a message hub that has no subscriber(s)");
         
         // No Original pipeline defined already
         for (int i = 0; i < subCount; i++) {
             IPipelineStep<TInput, TOutput> currentPipeline = pipelines.First();
             foreach (TPipeline pipelineStep in pipelines.Skip(1)) {
-                currentPipeline.NextStep = pipelineStep.HandleStepAsync;
+                currentPipeline.NextStep = pipelineStep.HandleAsync;
                 currentPipeline = pipelineStep;
             }
 
-            TMessageHandler subscriber = Subscribers[i];
-            currentPipeline.NextStep = subscriber.HandleAsync;
+            Guid id = SubscriberOrder[i];
+            IMessageHandler<TInput, TOutput> originalSubscriber = Subscribers[id];
+            currentPipeline.NextStep = originalSubscriber.HandleAsync;
             
-            SubscribersWithPipelines.TryAdd(subscriber.Id, currentPipeline);
+            Subscribers.AddOrUpdate(id, currentPipeline);
         }
+    }
+    public abstract TOutput ExecuteAsync(TInput inputData, CancellationToken ct = default);
+    
+    protected Span<TMessageHandler> GetSubscribers() {
+        var subscribers = new TMessageHandler[SubscriberCount];
+        for (int i = SubscriberCount - 1; i >= 0; i--) {
+            subscribers[i] = Subscribers[SubscriberOrder[i]] as TMessageHandler ?? throw new InvalidOperationException("Subscriber is not of the expected type");
+        }
+        return subscribers;
     }
 }

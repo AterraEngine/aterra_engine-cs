@@ -1,13 +1,11 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraEngine.Frameworks.Continuum;
+namespace AterraEngine.Frameworks.Continuum.Handlers;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IMessageHandler<in TInput, out TOutput> {
-    Guid Id { get; }
-    
-    TOutput HandleAsync(TInput input, CancellationToken ct = default);
-}
+public interface IQueryHandler<in TQuery, TResponse> : IMessageHandler<TQuery, ValueTask<TResponse>> 
+    where TQuery : IQuery<TResponse>
+    where TResponse : struct;

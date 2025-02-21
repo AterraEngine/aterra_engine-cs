@@ -2,18 +2,18 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.Frameworks.Continuum;
-using AterraEngine.Frameworks.Continuum.Pipelines;
+using AterraEngine.Frameworks.Continuum.PipelineSteps;
 
 namespace Workfloor.AterraEngine.Frameworks.Continuum.PipelineSteps;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class CommandPipelineStep<TCommand, TResult> : CommandPipeline<TCommand, TResult>
+public class SimpleCommandPipelineStep<TCommand, TResult> : CommandPipelineStep<TCommand, TResult>
     where TCommand : ICommand<TResult>
     where TResult : struct
 {
-    public async override ValueTask<TResult> HandleStepAsync(TCommand command, CancellationToken ct = default) {
+    public async override ValueTask<TResult> HandleAsync(TCommand command, CancellationToken ct = default) {
         // Do stuff before next step
         Console.WriteLine("Doing stuff before next step");
         

@@ -2,7 +2,9 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.DependencyInjection;
-using AterraEngine.Frameworks.Continuum.Pipelines;
+using AterraEngine.Frameworks.Continuum.Handlers;
+using AterraEngine.Frameworks.Continuum.Hubs;
+using AterraEngine.Frameworks.Continuum.PipelineSteps;
 
 namespace AterraEngine.Frameworks.Continuum;
 
@@ -16,10 +18,11 @@ public class CommandBuilder<TCommand, TResult>(ICommandHub<TCommand, TResult> hu
     public ICommandBuilder<TCommand, TResult> WithHandler<TCommandHandler>() where TCommandHandler : class, ICommandHandler<TCommand, TResult> {
         if (hub.HasSubscriptions) throw new InvalidOperationException("Cannot add handler after command hub has been populated");
         var handler = provider.GetRequiredService<TCommandHandler>(); 
-        hub.Subscribe(handler);
+        hub.SubscribeHandler(handler);
             
         return this;
     }
+    
     public ICommandBuilder<TCommand, TResult> WithPipelineSteps(params Type[] types) {
         ICommandPipelineStep<TCommand, TResult>[] pipelines = types
             .Select(type => provider.GetRequiredService(type.MakeGenericType(typeof(TCommand), typeof(TResult))))
@@ -29,11 +32,4 @@ public class CommandBuilder<TCommand, TResult>(ICommandHub<TCommand, TResult> hu
         hub.AddPipelines(pipelines);
         return this;
     }
-    //
-    // public ICommandBuilder<TCommand, TResult> WithPipelineStep<TCommandPipelineStep>() where TCommandPipelineStep : class, ICommandPipelineStep<TCommand, TResult> {
-    //     var pipeline = provider.GetRequiredService<TCommandPipelineStep>();
-    //     
-    //     hub.AddPipelineStep(pipeline);
-    //     return this;
-    // }
 }

@@ -1,15 +1,11 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Frameworks.Continuum.Handlers;
-
-namespace AterraEngine.Frameworks.Continuum;
+namespace AterraEngine.Frameworks.Continuum.PipelineSteps;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ITriggerBuilder<TTrigger>
-    where TTrigger : ITrigger {
-    
-    ITriggerBuilder<TTrigger> WithHandler<TTriggerHandler>() where TTriggerHandler : class, ITriggerHandler<TTrigger>;
-}
+public interface ITriggerPipelineStep<TTrigger> : IPipelineStep<TTrigger, Task>
+    where TTrigger : ITrigger
+;

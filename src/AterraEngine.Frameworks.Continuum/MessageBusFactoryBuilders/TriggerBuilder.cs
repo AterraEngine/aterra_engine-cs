@@ -2,6 +2,8 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.DependencyInjection;
+using AterraEngine.Frameworks.Continuum.Handlers;
+using AterraEngine.Frameworks.Continuum.Hubs;
 
 namespace AterraEngine.Frameworks.Continuum;
 
@@ -13,7 +15,7 @@ public class TriggerBuilder<TTrigger>(ITriggerHub<TTrigger> hub, IScopedProvider
 {
     public ITriggerBuilder<TTrigger> WithHandler<TTriggerHandler>() where TTriggerHandler : class, ITriggerHandler<TTrigger> {
         var handler = provider.GetRequiredService<TTriggerHandler>(); 
-        hub.Subscribe(handler);
+        hub.SubscribeHandler(handler);
         return this;
     }
 }

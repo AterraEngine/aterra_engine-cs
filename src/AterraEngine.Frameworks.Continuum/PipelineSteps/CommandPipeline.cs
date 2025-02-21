@@ -1,11 +1,11 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraEngine.Frameworks.Continuum;
+namespace AterraEngine.Frameworks.Continuum.PipelineSteps;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ICommandHandler<in TCommand, TResponse> : IMessageHandler<TCommand, ValueTask<TResponse>> 
-    where TCommand : ICommand<TResponse>
-    where TResponse : struct;
+public abstract class CommandPipelineStep<TCommand, TResult> : MessagePipelineStep<TCommand, ValueTask<TResult>>, ICommandPipelineStep<TCommand, TResult>
+    where TCommand : ICommand<TResult>
+    where TResult : struct;

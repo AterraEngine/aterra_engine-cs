@@ -1,15 +1,13 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Frameworks.Continuum.Handlers;
-
-namespace AterraEngine.Frameworks.Continuum;
+namespace AterraEngine.Frameworks.Continuum.Handlers;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ITriggerBuilder<TTrigger>
-    where TTrigger : ITrigger {
+public interface IMessageHandler<in TInput, out TOutput> {
+    Guid Id { get; }
     
-    ITriggerBuilder<TTrigger> WithHandler<TTriggerHandler>() where TTriggerHandler : class, ITriggerHandler<TTrigger>;
+    TOutput HandleAsync(TInput input, CancellationToken ct = default);
 }

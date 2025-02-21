@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.DependencyInjection;
+using AterraEngine.Frameworks.Continuum.Hubs;
 using System.Collections.Concurrent;
 using System.Collections.Frozen;
 

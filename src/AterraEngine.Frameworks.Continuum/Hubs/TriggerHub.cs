@@ -1,6 +1,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraEngine.Frameworks.Continuum.Handlers;
 using System.Threading.Channels;
 
 namespace AterraEngine.Frameworks.Continuum.Hubs;
@@ -20,18 +21,6 @@ public class TriggerHub<TTrigger> : MessageHub<ITriggerHandler<TTrigger>, TTrigg
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void Subscribe<TTriggerHandler>(TTriggerHandler handler) where TTriggerHandler : ITriggerHandler<TTrigger> {
-        Subscribers.Add(handler);
-    }
-
-    public async ValueTask PublishAsync<T>(T eventData, CancellationToken ct = default) where T : ITrigger {
-        if (!HasSubscriptions) throw new InvalidOperationException("Cannot publish to a command hub that has no subscriber");
-        if (eventData is not TTrigger typedTrigger) throw new ArgumentException("Command data is not of the expected type");
-        if (typeof(T) != typeof(TTrigger)) throw new ArgumentException("Command data is not of the expected type");
-        
-        await _channel.Writer.WriteAsync(typedTrigger, ct);
-    }
-    
     public async Task StartProcessingAsync() {
         while (await _channel.Reader.WaitToReadAsync()) {
             while (_channel.Reader.TryRead(out TTrigger? trigger)) {
@@ -39,12 +28,20 @@ public class TriggerHub<TTrigger> : MessageHub<ITriggerHandler<TTrigger>, TTrigg
                 // But there should be a way to define how much this is depending on some sort of config?
                 var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
                 
-                IEnumerable<Task> tasks = SubscribersWithPipelines.IsEmpty
-                    ? Subscribers.Select(subscriber => subscriber.HandleAsync(trigger, cts.Token)) 
-                    : SubscribersWithPipelines.Values.Select(sub => sub.HandleStepAsync(trigger, cts.Token));
+                Span<ITriggerHandler<TTrigger>> subscribers = GetSubscribers();
+                var tasks = new Task[SubscriberCount];
+                
+                for (int i = Subscribers.Count - 1; i >= 0; i--) {
+                    tasks[i] = subscribers[i].HandleAsync(trigger, cts.Token);
+                }
                 
                 await Task.WhenAll(tasks);
             }
         }
+    }
+    
+    public async override Task ExecuteAsync(TTrigger inputData, CancellationToken ct = default) {
+        if (!HasSubscriptions) throw new InvalidOperationException("Cannot publish to a command hub that has no subscriber");
+        await _channel.Writer.WriteAsync(inputData, ct);
     }
 }

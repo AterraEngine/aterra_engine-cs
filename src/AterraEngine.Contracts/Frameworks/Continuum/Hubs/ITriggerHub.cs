@@ -1,11 +1,16 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraEngine.Frameworks.Continuum.Pipelines;
+using AterraEngine.Frameworks.Continuum.Handlers;
+
+namespace AterraEngine.Frameworks.Continuum.Hubs;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ITriggerPipelineStep<TTrigger> : IPipelineStep<TTrigger, Task>
-    where TTrigger : ITrigger
-;
+public interface ITriggerHub {
+    Task StartProcessingAsync();
+}
+
+public interface ITriggerHub<TTrigger> : ITriggerHub, IMessageHub<ITriggerHandler<TTrigger>, TTrigger, Task> 
+    where TTrigger : ITrigger ;

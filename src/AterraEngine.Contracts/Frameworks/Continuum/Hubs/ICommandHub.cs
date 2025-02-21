@@ -1,10 +1,17 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraEngine.Frameworks.Continuum.Pipelines;
+using AterraEngine.Frameworks.Continuum.Handlers;
+
+namespace AterraEngine.Frameworks.Continuum.Hubs;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class TriggerPipelineStep<TTrigger> : MessagePipelineStep<TTrigger, Task>, ITriggerPipelineStep<TTrigger>
-    where TTrigger : ITrigger;
+public interface ICommandHub {
+    Task StartProcessingAsync();
+}
+
+public interface ICommandHub<TCommand, TOutput> : ICommandHub, IMessageHub<IMessageHandler<TCommand, ValueTask<TOutput>>, TCommand, ValueTask<TOutput>>
+    where TCommand : ICommand<TOutput>
+    where TOutput : struct;

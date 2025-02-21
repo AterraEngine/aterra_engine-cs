@@ -4,6 +4,7 @@
 using AterraEngine.DependencyInjection;
 using AterraEngine.Frameworks.Continuum;
 using AterraEngine.Frameworks.Continuum.Hubs;
+using AterraEngine.Frameworks.Continuum.PipelineSteps;
 using Workfloor.AterraEngine.Frameworks.Continuum.CommandHandlers;
 using Workfloor.AterraEngine.Frameworks.Continuum.PipelineSteps;
 using Workfloor.AterraEngine.Frameworks.Continuum.TriggerHandlers;
@@ -25,14 +26,14 @@ public static class Program {
         // Needed for Continuum to work 
         collection.AddTransient(typeof(ICommandHub<,>), typeof(CommandHub<,>));
         collection.AddTransient(typeof(ITriggerHub<>), typeof(TriggerHub<>));
-        collection.AddTransient(typeof(CommandPipelineStep<,>));
+        collection.AddTransient(typeof(SimpleCommandPipelineStep<,>));
         collection.AddTransientFromFactory<IMessageBus, IMessageBusFactory>();
         collection.AddSingletonFromFactory<IMessageBusFactory>(static provider => {
             var factory = new MessageBusFactory(provider);
 
             factory.AddCommand<SimpleCommand, bool>()
                 .WithHandler<SimpleCommandHandler>()
-                .WithPipelineSteps(typeof(CommandPipelineStep<,>));
+                .WithPipelineSteps(typeof(SimpleCommandPipelineStep<,>));
                 // .WithPipelineStep<CommandPipelineStep<SimpleCommand, bool>>();
             
             factory.AddTrigger<SimpleTrigger>()
@@ -49,9 +50,18 @@ public static class Program {
         while (true) {
             Console.Write("Enter a string: ");
             if (Console.ReadLine() is not {} input) continue;
-            await messageBus.PublishAsync(new SimpleTrigger(input, DateTime.UtcNow));
-            bool result = await messageBus.ExecuteAsync<SimpleCommand, bool>(new SimpleCommand(input, DateTime.UtcNow));
-            Console.WriteLine($"You entered: {input} and got : {result}");
+
+            await Parallel.ForAsync(0, 10, CancellationToken.None, async (i, ct) => {
+                try {
+                    await messageBus.PublishAsync(new SimpleTrigger($"{input};;{i}", DateTime.UtcNow), ct);
+                    bool result = await messageBus.ExecuteAsync<SimpleCommand, bool>(new SimpleCommand($"{input};;{i}", DateTime.UtcNow), ct);
+                    Console.WriteLine($"You entered: {input} and got : {result}");
+                }
+                catch (OperationCanceledException ex) {
+                    Console.WriteLine($"Operation canceled: {ex.Message}");
+                }
+            });
+            
         }
     }
 }

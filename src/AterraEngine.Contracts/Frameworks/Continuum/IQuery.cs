@@ -1,11 +1,11 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraEngine.Frameworks.Continuum.Pipelines;
+namespace AterraEngine.Frameworks.Continuum;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ICommandPipelineStep<TCommand, TResult> : IPipelineStep<TCommand, ValueTask<TResult>>
-    where TCommand : ICommand<TResult>
-    where TResult : struct;
+public interface IQuery<TResponse> : IMessage where TResponse : struct {
+    
+}

@@ -1,12 +1,14 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraEngine.Frameworks.Continuum.Handlers;
+
 namespace AterraEngine.Frameworks.Continuum;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ICommandBuilder<TCommand, TResult>
+public interface ICommandBuilder<out TCommand, TResult>
     where TCommand : ICommand<TResult>
     where TResult : struct {
 

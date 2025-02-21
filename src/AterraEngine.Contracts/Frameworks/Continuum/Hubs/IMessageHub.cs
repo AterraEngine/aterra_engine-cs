@@ -2,14 +2,17 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.Frameworks.Continuum.Handlers;
+using AterraEngine.Frameworks.Continuum.PipelineSteps;
 
-namespace AterraEngine.Frameworks.Continuum;
+namespace AterraEngine.Frameworks.Continuum.Hubs;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ITriggerBuilder<TTrigger>
-    where TTrigger : ITrigger {
+public interface IMessageHub<in TMessageHandler, TInput, TOutput> where TMessageHandler : IMessageHandler<TInput, TOutput> {
+    bool HasSubscriptions { get; }
     
-    ITriggerBuilder<TTrigger> WithHandler<TTriggerHandler>() where TTriggerHandler : class, ITriggerHandler<TTrigger>;
+    void SubscribeHandler(TMessageHandler handler);
+    void AddPipelines<TPipeline>(TPipeline[] pipelines) where TPipeline : IPipelineStep<TInput, TOutput>;
+    TOutput ExecuteAsync(TInput inputData, CancellationToken ct = default);
 }

@@ -1,14 +1,11 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraEngine.Frameworks.Continuum.Pipelines;
+namespace AterraEngine.Frameworks.Continuum.PipelineSteps;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class MessagePipelineStep<TInput, TOutput> : IPipelineStep<TInput, TOutput> {
-    public bool IsNextStepPopulated => NextStep != null;
-    public Func<TInput, CancellationToken, TOutput>? NextStep { get; set; }
-    
-    public abstract TOutput HandleStepAsync(TInput input, CancellationToken ct = default);
-}
+public interface ICommandPipelineStep<TCommand, TResult> : IPipelineStep<TCommand, ValueTask<TResult>>
+    where TCommand : ICommand<TResult>
+    where TResult : struct;
