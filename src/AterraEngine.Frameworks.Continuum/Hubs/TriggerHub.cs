@@ -21,7 +21,7 @@ public class TriggerHub<TTrigger> : MessageHub<ITriggerHandler<TTrigger>, TTrigg
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public async Task StartProcessingAsync() {
+    public async override Task StartProcessingAsync() {
         while (await _channel.Reader.WaitToReadAsync()) {
             while (_channel.Reader.TryRead(out TriggerHubChannelDto<TTrigger>? dto)) {
                 // Each handle should be their own CancellationToken.

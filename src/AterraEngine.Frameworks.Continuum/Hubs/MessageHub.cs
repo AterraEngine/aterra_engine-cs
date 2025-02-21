@@ -22,6 +22,8 @@ public abstract class MessageHub<TMessageHandler, TInput, TOutput> : IMessageHub
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
+    public abstract Task StartProcessingAsync();
+    
     public virtual void SubscribeHandler(TMessageHandler handler) {
         SubscriberOrder.Add(handler.Id);
         Subscribers.TryAdd(handler.Id, handler);

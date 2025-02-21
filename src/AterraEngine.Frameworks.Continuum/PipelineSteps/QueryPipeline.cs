@@ -1,0 +1,11 @@
+// ---------------------------------------------------------------------------------------------------------------------
+// Imports
+// ---------------------------------------------------------------------------------------------------------------------
+namespace AterraEngine.Frameworks.Continuum.PipelineSteps;
+
+// ---------------------------------------------------------------------------------------------------------------------
+// Code
+// ---------------------------------------------------------------------------------------------------------------------
+public abstract class QueryPipelineStep<TQuery, TResult> : MessagePipelineStep<TQuery, ValueTask<TResult>>, IQueryPipelineStep<TQuery, TResult>
+    where TQuery : IQuery<TResult>
+    where TResult : struct;

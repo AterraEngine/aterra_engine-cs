@@ -32,7 +32,7 @@ public class CommandHub<TCommand, TOutput> : MessageHub<IMessageHandler<TCommand
         base.SubscribeHandler(handler);
     }
 
-    public async Task StartProcessingAsync() {
+    public async override Task StartProcessingAsync() {
         if (!HasSubscriptions) throw new InvalidOperationException("Cannot start processing a command hub that has no subscriber");
         
         while (await _channel.Reader.WaitToReadAsync()) {

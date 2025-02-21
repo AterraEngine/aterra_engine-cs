@@ -2,19 +2,17 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.Frameworks.Continuum.Handlers;
-using AterraEngine.Frameworks.Continuum.PipelineSteps;
 
-namespace AterraEngine.Frameworks.Continuum.Hubs;
+namespace AterraEngine.Frameworks.Continuum;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IMessageHub<in TMessageHandler, TInput, TOutput> where TMessageHandler : IMessageHandler<TInput, TOutput> {
-    bool HasSubscriptions { get; }
-    
-    void SubscribeHandler(TMessageHandler handler);
-    void AddPipelines<TPipeline>(TPipeline[] pipelines) where TPipeline : IPipelineStep<TInput, TOutput>;
+public interface IQueryBuilder<out TQuery, TResult>
+    where TQuery : IQuery<TResult>
+    where TResult : struct {
 
-    Task StartProcessingAsync(); 
-    TOutput ExecuteAsync(TInput inputData, CancellationToken ct = default);
+
+    IQueryBuilder<TQuery, TResult> WithHandler<TQueryHandler>() where TQueryHandler : class, IQueryHandler<TQuery, TResult>;
+    IQueryBuilder<TQuery, TResult> WithPipelineSteps(params Type[] types) ;
 }

@@ -14,6 +14,7 @@ namespace AterraEngine.Frameworks.Continuum;
 public class MessageBusFactory(IScopedProvider provider) : IMessageBusFactory {
     private readonly ConcurrentDictionary<Type, ICommandHub> _registeredCommandHubs = [];
     private readonly ConcurrentDictionary<Type, ITriggerHub> _registeredTriggerHubs = [];
+    private readonly ConcurrentDictionary<Type, IQueryHub> _registeredQueryHubs = [];
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
@@ -21,7 +22,8 @@ public class MessageBusFactory(IScopedProvider provider) : IMessageBusFactory {
     public IMessageBus Create(IScopedProvider _) {
         return new MessageBus {
             CommandHubs = _registeredCommandHubs.ToFrozenDictionary(),
-            TriggerHubs = _registeredTriggerHubs.ToFrozenDictionary()
+            TriggerHubs = _registeredTriggerHubs.ToFrozenDictionary(),
+            QueryHubs = _registeredQueryHubs.ToFrozenDictionary()
         };
     }
 
@@ -51,5 +53,16 @@ public class MessageBusFactory(IScopedProvider provider) : IMessageBusFactory {
         if (hub is not ITriggerHub<TTrigger> typedHub) throw new InvalidOperationException("Failed to get trigger hub");
         
         return new TriggerBuilder<TTrigger>(typedHub, provider);
+    }
+
+    public IQueryBuilder<TQuery, TResult> AddQuery<TQuery, TResult>() where TQuery : IQuery<TResult> where TResult : struct {
+        IQueryHub hub = _registeredQueryHubs.GetOrAdd(
+            typeof(TQuery),
+            static (_, provider) => provider.GetRequiredService<IQueryHub<TQuery, TResult>>(),
+            provider
+        );
+        
+        if (hub is not IQueryHub<TQuery, TResult> typedHub) throw  new InvalidOperationException("Failed to get command hub");
+        return new QueryBuilder<TQuery, TResult>(typedHub, provider);
     }
 }
