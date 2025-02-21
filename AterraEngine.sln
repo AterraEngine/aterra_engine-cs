@@ -44,6 +44,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Continuum", "Continuum", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Workfloor.AterraEngine.Frameworks.Continuum", "examples\Workfloor.AterraEngine.Frameworks.Continuum\Workfloor.AterraEngine.Frameworks.Continuum.csproj", "{60217295-FABB-422C-85F6-F74B623B3B57}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Frameworks.Continuum.DependencyInjectionExtensions", "src\AterraEngine.Frameworks.Continuum.DependencyInjectionExtensions\AterraEngine.Frameworks.Continuum.DependencyInjectionExtensions.csproj", "{1248E9EF-3634-48DD-AD31-D1F8EDC5678C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,7 @@ Global
 		{54758794-25D7-4DFF-B1FD-2A20F1753723} = {A5A7C72C-9D49-4DEE-866D-D45A8C981A80}
 		{B5CC5CA4-6D7F-4C44-95EA-D0FD5FD16694} = {54758794-25D7-4DFF-B1FD-2A20F1753723}
 		{60217295-FABB-422C-85F6-F74B623B3B57} = {E4DFBCC3-6E11-439F-964F-67F359ADBF5B}
+		{1248E9EF-3634-48DD-AD31-D1F8EDC5678C} = {54758794-25D7-4DFF-B1FD-2A20F1753723}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{71B371EA-3406-497A-A4B2-C20617113C0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -119,5 +122,9 @@ Global
 		{60217295-FABB-422C-85F6-F74B623B3B57}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60217295-FABB-422C-85F6-F74B623B3B57}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{60217295-FABB-422C-85F6-F74B623B3B57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1248E9EF-3634-48DD-AD31-D1F8EDC5678C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1248E9EF-3634-48DD-AD31-D1F8EDC5678C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1248E9EF-3634-48DD-AD31-D1F8EDC5678C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1248E9EF-3634-48DD-AD31-D1F8EDC5678C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

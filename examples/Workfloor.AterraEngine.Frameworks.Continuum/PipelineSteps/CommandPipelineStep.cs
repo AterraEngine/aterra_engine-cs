@@ -2,7 +2,6 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.Frameworks.Continuum;
-using AterraEngine.Frameworks.Continuum.PipelineSteps;
 
 namespace Workfloor.AterraEngine.Frameworks.Continuum.PipelineSteps;
 
@@ -18,7 +17,7 @@ public class SimpleCommandPipelineStep<TCommand, TResult> : CommandPipelineStep<
         Console.WriteLine("Doing stuff before next step");
         
         // Do next step
-        TResult result = await NextStep(command, ct);
+        TResult result = await NextStep.HandleAsync(command, ct);
 
         // Do stuff after next step
         Console.WriteLine("Doing stuff after next step");

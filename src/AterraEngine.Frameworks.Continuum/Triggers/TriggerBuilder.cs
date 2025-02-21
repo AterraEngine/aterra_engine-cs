@@ -1,19 +1,19 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Frameworks.Continuum;
+using AterraEngine.DependencyInjection;
 
-namespace Workfloor.AterraEngine.Frameworks.Continuum.TriggerHandlers;
+namespace AterraEngine.Frameworks.Continuum;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class SimpleTriggerHandler : TriggerHandler<SimpleTrigger> {
-
-    public override Task HandleAsync(SimpleTrigger trigger, CancellationToken ct = default) {
-        Console.WriteLine($"T1 Received at : {trigger.DateTime}");
-        Console.WriteLine($"T1 Processing event: {trigger.Input}");
-        
-        return Task.CompletedTask;
+public class TriggerBuilder<TTrigger>(ITriggerHub<TTrigger> hub, IScopedProvider provider) : ITriggerBuilder<TTrigger>
+    where TTrigger : ITrigger 
+{
+    public ITriggerBuilder<TTrigger> WithHandler<TTriggerHandler>() where TTriggerHandler : class, ITriggerHandler<TTrigger> {
+        var handler = provider.GetRequiredService<TTriggerHandler>(); 
+        hub.SubscribeHandler(handler);
+        return this;
     }
 }

@@ -6,10 +6,14 @@ namespace AterraEngine.Frameworks.Continuum;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IMessageBus {
-    ValueTask<TResponse> QueryAsync<TQuery, TResponse>(TQuery query, CancellationToken ct = default) where TQuery : IQuery<TResponse> where TResponse : struct;
-    ValueTask<TOutput> ExecuteAsync<TCommand, TOutput>(TCommand command, CancellationToken ct = default) where TCommand : ICommand<TOutput> where TOutput : struct;
-    ValueTask TriggerAsync<TTrigger>(TTrigger trigger, CancellationToken ct = default) where TTrigger : ITrigger;
+public interface IMessageHub {
+    bool HasSubscriptions { get; }
     
-    void StartProcessing();
+    Task StartProcessingAsync(); 
+}
+public interface IMessageHub<in TMessageHandler, TInput, TOutput> : IMessageHub where TMessageHandler : IMessageHandler<TInput, TOutput> {
+    void SubscribeHandler(TMessageHandler handler);
+    void AddPipelines<TPipeline>(TPipeline[] pipelines) where TPipeline : IPipelineStep<TInput, TOutput>;
+
+    TOutput ExecuteAsync(TInput inputData, CancellationToken ct = default);
 }

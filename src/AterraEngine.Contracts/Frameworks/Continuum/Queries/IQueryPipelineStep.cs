@@ -1,19 +1,12 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Frameworks.Continuum;
-
-namespace Workfloor.AterraEngine.Frameworks.Continuum.TriggerHandlers;
+namespace AterraEngine.Frameworks.Continuum;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class SimpleTriggerHandler : TriggerHandler<SimpleTrigger> {
+public interface IQueryPipelineStep<TQuery, TResult> : IPipelineStep<TQuery, ValueTask<TResult>>
+    where TQuery : IQuery<TResult>
+    where TResult : struct;
 
-    public override Task HandleAsync(SimpleTrigger trigger, CancellationToken ct = default) {
-        Console.WriteLine($"T1 Received at : {trigger.DateTime}");
-        Console.WriteLine($"T1 Processing event: {trigger.Input}");
-        
-        return Task.CompletedTask;
-    }
-}

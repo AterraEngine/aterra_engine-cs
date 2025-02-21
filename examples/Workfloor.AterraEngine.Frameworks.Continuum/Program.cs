@@ -3,7 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.DependencyInjection;
 using AterraEngine.Frameworks.Continuum;
-using AterraEngine.Frameworks.Continuum.Hubs;
+using AterraEngine.Frameworks.Continuum.DependencyInjectionExtensions;
 using Workfloor.AterraEngine.Frameworks.Continuum.CommandHandlers;
 using Workfloor.AterraEngine.Frameworks.Continuum.PipelineSteps;
 using Workfloor.AterraEngine.Frameworks.Continuum.QueryHandlers;
@@ -23,36 +23,30 @@ public static class Program {
         collection.AddTransient<SimpleTriggerHandler>();
         collection.AddTransient<SimpleTriggerHandler2>();
         collection.AddTransient<SimpleQueryHandler>();
+        collection.AddTransient(typeof(SimpleCommandPipelineStep<,>));
         
         // Needed for Continuum to work 
-        collection.AddTransient(typeof(ICommandHub<,>), typeof(CommandHub<,>));
-        collection.AddTransient(typeof(ITriggerHub<>), typeof(TriggerHub<>));
-        collection.AddTransient(typeof(IQueryHub<,>), typeof(QueryHub<,>));
-        collection.AddTransient(typeof(SimpleCommandPipelineStep<,>));
-        collection.AddTransientFromFactory<IMessageBus, IMessageBusFactory>();
-        collection.AddSingletonFromFactory<IMessageBusFactory>(static provider => {
-            var factory = new MessageBusFactory(provider);
-
+        collection.AddContinuum(static (_, factory) => {
             factory.AddCommand<SimpleCommand, bool>()
                 .WithHandler<SimpleCommandHandler>()
                 .WithPipelineSteps(typeof(SimpleCommandPipelineStep<,>));
-                // .WithPipelineStep<CommandPipelineStep<SimpleCommand, bool>>();
-            
+            // .WithPipelineStep<CommandPipelineStep<SimpleCommand, bool>>();
+
             factory.AddTrigger<SimpleTrigger>()
                 .WithHandler<SimpleTriggerHandler>()
                 .WithHandler<SimpleTriggerHandler2>();
-            
+
             factory.AddQuery<SimpleQuery, bool>()
                 .WithHandler<SimpleQueryHandler>();
-            
-            return factory;
         });
         
         await using IScopedProvider scopedProvider = collection.Build();
-        var messageBus = scopedProvider.GetRequiredService<IMessageBus>();
-        messageBus.StartProcessing(); // This currently means that all hub within the message bus are always running
+        var continuum = scopedProvider.GetRequiredService<IContinuum>();
+        continuum.StartProcessing(); // This currently means that all hub within the message bus are always running
 
         var doWhile = true;
+        
+        // ReSharper disable once LoopVariableIsNeverChangedInsideLoop
         while (doWhile) {
             Console.Write("Enter a string: ");
             if (Console.ReadLine() is not {} input) continue;
@@ -61,18 +55,18 @@ public static class Program {
                 try {
                     switch (input.ToLowerInvariant()) {
                         case "trigger" or "t": {
-                            await messageBus.PublishAsync(new SimpleTrigger($"{input};;{i}", DateTime.UtcNow), ct);
+                            await continuum.TriggerAsync(new SimpleTrigger($"{input};;{i}", DateTime.UtcNow), ct);
                             break;
                         }
 
                         case "command" or "c": {
-                            bool result = await messageBus.ExecuteAsync<SimpleCommand, bool>(new SimpleCommand($"{input};;{i}", DateTime.UtcNow), ct);
+                            bool result = await continuum.ExecuteAsync<SimpleCommand, bool>(new SimpleCommand($"{input};;{i}", DateTime.UtcNow), ct);
                             Console.WriteLine($"You entered: {input} and got : {result}");
                             break;
                         }
 
                         case "query" or "q" : {
-                            bool queryResult = await messageBus.QueryAsync<SimpleQuery, bool>(new SimpleQuery($"{input};;{i}", DateTime.UtcNow), ct);
+                            bool queryResult = await continuum.QueryAsync<SimpleQuery, bool>(new SimpleQuery($"{input};;{i}", DateTime.UtcNow), ct);
                             Console.WriteLine($"You entered: {input} and got : {queryResult}");
                             
                             break;

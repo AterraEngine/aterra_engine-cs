@@ -2,7 +2,6 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.Frameworks.Continuum;
-using AterraEngine.Frameworks.Continuum.Handlers;
 
 namespace Workfloor.AterraEngine.Frameworks.Continuum.TriggerHandlers;
 

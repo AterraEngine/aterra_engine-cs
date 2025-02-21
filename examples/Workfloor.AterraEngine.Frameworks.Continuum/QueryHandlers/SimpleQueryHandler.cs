@@ -1,7 +1,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Frameworks.Continuum.Handlers;
+using AterraEngine.Frameworks.Continuum;
 
 namespace Workfloor.AterraEngine.Frameworks.Continuum.QueryHandlers;
 

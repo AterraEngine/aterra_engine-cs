@@ -1,14 +1,13 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Frameworks.Continuum.Hubs;
 using System.Collections.Frozen;
 
 namespace AterraEngine.Frameworks.Continuum;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class MessageBus : IMessageBus {
+public class MessageBus : IContinuum {
     public FrozenDictionary<Type, ICommandHub> CommandHubs { private get; init; } = FrozenDictionary<Type, ICommandHub>.Empty;
     public FrozenDictionary<Type, ITriggerHub> TriggerHubs { private get; init; } = FrozenDictionary<Type, ITriggerHub>.Empty;
     public FrozenDictionary<Type, IQueryHub> QueryHubs { private get; init; } = FrozenDictionary<Type, IQueryHub>.Empty;
@@ -29,7 +28,7 @@ public class MessageBus : IMessageBus {
         return castedHub.ExecuteAsync(command, ct);
     }
 
-    public async ValueTask PublishAsync<TTrigger>(TTrigger trigger, CancellationToken ct = default) where TTrigger : ITrigger {
+    public async ValueTask TriggerAsync<TTrigger>(TTrigger trigger, CancellationToken ct = default) where TTrigger : ITrigger {
         if (!TriggerHubs.TryGetValue(typeof(TTrigger), out ITriggerHub? hub)) throw new InvalidOperationException("No trigger hub found");
         if (hub is not ITriggerHub<TTrigger> castedHub) throw new InvalidOperationException("Trigger hub is not of the expected type");
 
@@ -40,12 +39,16 @@ public class MessageBus : IMessageBus {
 
     private async Task StartProcessingAsync() {
 
-        var tasks = new Task[TriggerHubs.Count + CommandHubs.Count + QueryHubs.Count];
+        var tasks = new Task[
+            TriggerHubs.Count
+            + CommandHubs.Count
+            // + QueryHubs.Count // Queries don't rely on a Channel, and thus doesn't have to set up
+        ];
 
         // This is scuffed, but works, so hey what do we care.
         int i;
         int j;
-        int k;
+        // int k;
         for (i = 0; i < TriggerHubs.Count + 0; i++) {
             tasks[i] = TriggerHubs.Values[i].StartProcessingAsync();
         }
@@ -54,9 +57,9 @@ public class MessageBus : IMessageBus {
             tasks[j] = CommandHubs.Values[j - i].StartProcessingAsync();
         }
 
-        for (k = j; k < QueryHubs.Count + j; k++) {
-            tasks[k] = CommandHubs.Values[k - j].StartProcessingAsync();
-        }
+        // for (k = j; k < QueryHubs.Count + j; k++) {
+            // tasks[k] = CommandHubs.Values[k - j].StartProcessingAsync();
+        // }
 
         // Fire and forget the tasks
         await Task.WhenAll(tasks);
