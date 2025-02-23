@@ -6,7 +6,12 @@ namespace AterraEngine.Frameworks.Continuum;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IQueryBuilder<out TQuery, TResult>
+public interface IQueryBuilder{
+    Type QueryType { get; }
+    Type ReturnType { get; }
+}
+
+public interface IQueryBuilder<out TQuery, TResult> : IQueryBuilder
     where TQuery : IQuery<TResult>
     where TResult : struct {
 

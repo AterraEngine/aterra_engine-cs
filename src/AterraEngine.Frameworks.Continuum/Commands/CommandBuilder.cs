@@ -1,32 +1,31 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.DependencyInjection;
-
 namespace AterraEngine.Frameworks.Continuum;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class CommandBuilder<TCommand, TResult>(ICommandHub<TCommand, TResult> hub, IScopedProvider provider) : ICommandBuilder<TCommand, TResult>
+public class CommandBuilder<TCommand, TResult> : ICommandBuilder<TCommand, TResult>
     where TCommand : ICommand<TResult>
     where TResult : struct 
 {
+    public Type CommandType { get; } = typeof(TCommand);
+    public Type ReturnType { get; } = typeof(TResult);
+    
+    public Type GetCommandHubType() => typeof(ICommandHub<,>).MakeGenericType(CommandType, ReturnType);
+
+    public Type? CommandHandlerType { get; private set; }
+    public Type[] PipelineSteps { get; private set; } = [];
+
+
     public ICommandBuilder<TCommand, TResult> WithHandler<TCommandHandler>() where TCommandHandler : class, ICommandHandler<TCommand, TResult> {
-        if (hub.HasSubscriptions) throw new InvalidOperationException("Cannot add handler after command hub has been populated");
-        var handler = provider.GetRequiredService<TCommandHandler>(); 
-        hub.SubscribeHandler(handler);
-            
+        CommandHandlerType = typeof(TCommandHandler);
         return this;
     }
     
     public ICommandBuilder<TCommand, TResult> WithPipelineSteps(params Type[] types) {
-        ICommandPipelineStep<TCommand, TResult>[] pipelines = types
-            .Select(type => provider.GetRequiredService(type.MakeGenericType(typeof(TCommand), typeof(TResult))))
-            .Cast<ICommandPipelineStep<TCommand, TResult>>()
-            .ToArray();
-        
-        hub.AddPipelines(pipelines);
+        PipelineSteps = PipelineSteps.Concat(types).ToArray();
         return this;
     }
 }
