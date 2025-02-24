@@ -28,6 +28,9 @@ public abstract class MessageHub<TMessageHandler, TInput, TOutput> : IMessageHub
     }
     
     public void AddPipelines<TPipeline>(TPipeline[] pipelines) where TPipeline : IPipelineStep<TInput, TOutput> {
+        ArgumentNullException.ThrowIfNull(pipelines);
+        if (pipelines.Length == 0) return;
+        
         int subCount = SubscriberOrder.Count;
         if (subCount == 0) throw new InvalidOperationException("Cannot add pipeline(s) to a message hub that has no subscriber(s)");
         

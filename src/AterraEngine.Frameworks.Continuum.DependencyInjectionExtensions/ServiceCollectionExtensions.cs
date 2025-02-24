@@ -17,13 +17,9 @@ public static class ServiceCollectionExtensions {
         serviceCollection.AddScopedFromFactory<IContinuum, IMessageBusFactory>();
         
         // The MessageBusFactory is a singleton service
-        //      This is due to it holding its data once and then executing it when Continuum is actually called
-        serviceCollection.AddSingleton<MessageBusFactory>();
-        serviceCollection.AddSingletonFromFactory<IMessageBusFactory>(sp => {
-            var factory = sp.GetRequiredService<MessageBusFactory>();
-            configure(sp, factory);
-            return factory;
-        });
+        //      This is due to it holding its data once and then executing it when IContinuum is actually called
+        serviceCollection.AddSingleton<IMessageBusFactoryConfiguration>(new ContinuumConfiguration(configure));
+        serviceCollection.AddSingleton<IMessageBusFactory,MessageBusFactory>();
         
         return serviceCollection;
     }

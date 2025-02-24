@@ -44,7 +44,7 @@ public static class Program {
         var continuum = scopedProvider.GetRequiredService<IContinuum>();
         continuum.StartProcessing(); // This currently means that all hub within the message bus are always running
 
-        var doWhile = true;
+        bool doWhile = true;
         
         // ReSharper disable once LoopVariableIsNeverChangedInsideLoop
         while (doWhile) {
@@ -85,6 +85,5 @@ public static class Program {
         }
         
         Console.WriteLine("Exiting...");
-        return;
     }
 }
