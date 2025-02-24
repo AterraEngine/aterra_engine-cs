@@ -5,7 +5,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace AterraEngine.Frameworks.Nexities.Generators.Content.NexitiesEntity;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -16,15 +15,15 @@ public struct NexitiesEntityDto() {
 
     public ClassDeclarationSyntax ClassDeclarationSyntax { get; set; } = null!;
     public ISymbol ClassSymbol { get; set; } = null!;
-    
+
     public Location Location => ClassDeclarationSyntax.GetLocation();
 
     // -----------------------------------------------------------------------------------------------------------------
     // Constructors
     // -----------------------------------------------------------------------------------------------------------------
-    public static NexitiesEntityDto Empty = new() {IsEmpty = true};
+    public static NexitiesEntityDto Empty = new() { IsEmpty = true };
     public static NexitiesEntityDto AsEmpty(
-        ClassDeclarationSyntax classDeclaration, 
+        ClassDeclarationSyntax classDeclaration,
         ISymbol classSymbol,
         NexitiesEntityIssues issue = NexitiesEntityIssues.Undefined
     ) => new() {

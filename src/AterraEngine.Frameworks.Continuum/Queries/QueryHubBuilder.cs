@@ -5,17 +5,15 @@ using AterraEngine.DependencyInjection;
 using System.Collections.Immutable;
 
 namespace AterraEngine.Frameworks.Continuum;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class QueryHubBuilder<TQuery, TResult> : IQueryHubBuilder<TQuery, TResult>
     where TQuery : IQuery<TResult>
-    where TResult : struct
-{
+    where TResult : struct {
     private Type QueryHandlerType { get; set; } = null!;
     private ImmutableArray<Type> PipelineSteps { get; set; } = [];
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -23,12 +21,12 @@ public class QueryHubBuilder<TQuery, TResult> : IQueryHubBuilder<TQuery, TResult
         QueryHandlerType = typeof(TQueryHandler);
         return this;
     }
-    
+
     public IQueryHubBuilder<TQuery, TResult> WithPipelineSteps(params Type[] types) {
         PipelineSteps = [..PipelineSteps.Concat(types)];
         return this;
     }
-    public IQueryHub BuildHub(IScopedProvider provider)  {
+    public IQueryHub BuildHub(IScopedProvider provider) {
         var hub = provider.GetRequiredService<IQueryHub<TQuery, TResult>>();
         if (QueryHandlerType == null) throw new InvalidOperationException("No command handler specified");
 
@@ -52,7 +50,7 @@ public class QueryHubBuilder<TQuery, TResult> : IQueryHubBuilder<TQuery, TResult
             pipelines[i] = (IPipelineStep<TQuery, ValueTask<TResult>>)provider.GetRequiredService(actualType);
         }
         hub.AddPipelines(pipelines);
-                    
+
         return hub;
     }
 }

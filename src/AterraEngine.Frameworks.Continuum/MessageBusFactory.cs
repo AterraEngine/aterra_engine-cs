@@ -7,42 +7,80 @@ using System.Collections.Frozen;
 using System.Collections.Immutable;
 
 namespace AterraEngine.Frameworks.Continuum;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 // TODO Fully rework factory pattern to just save all the types, and resolve on Create()
 public class MessageBusFactory(IMessageBusFactoryConfiguration factoryConfiguration) : IMessageBusFactory {
+    private readonly Lock _configuredLock = new();
     private ConcurrentDictionary<Type, ICommandHubBuilder> _commandHubs = [];
-    private ConcurrentDictionary<Type, ITriggerHubBuilder> _triggerHubs = [];
+
+    private bool _isConfigured;
     private ConcurrentDictionary<Type, IQueryHubBuilder> _queryHubs = [];
-    
+    private ConcurrentDictionary<Type, ITriggerHubBuilder> _triggerHubs = [];
+
     private ImmutableDictionary<Type, ICommandHubBuilder> CommandHubs { get; set; } = ImmutableDictionary<Type, ICommandHubBuilder>.Empty;
     private ImmutableDictionary<Type, ITriggerHubBuilder> TriggerHubs { get; set; } = ImmutableDictionary<Type, ITriggerHubBuilder>.Empty;
     private ImmutableDictionary<Type, IQueryHubBuilder> QueryHubs { get; set; } = ImmutableDictionary<Type, IQueryHubBuilder>.Empty;
-    
-    private bool _isConfigured;
-    private readonly Lock _configuredLock = new();
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public IContinuum Create(IScopedProvider provider) {
         ConfigureMessageBusIfRequired(provider);
-        
+
         var bus = new MessageBus {
             CommandHubs = CommandHubs.ToFrozenDictionary(
-                kvp => kvp.Key,
-                kvp => kvp.Value.BuildHub(provider)),
+                keySelector: kvp => kvp.Key,
+                elementSelector: kvp => kvp.Value.BuildHub(provider)),
             TriggerHubs = TriggerHubs.ToFrozenDictionary(
-                kvp => kvp.Key,
-                kvp => kvp.Value.BuildHub(provider)),
+                keySelector: kvp => kvp.Key,
+                elementSelector: kvp => kvp.Value.BuildHub(provider)),
             QueryHubs = QueryHubs.ToFrozenDictionary(
-                kvp => kvp.Key,
-                kvp => kvp.Value.BuildHub(provider))
+                keySelector: kvp => kvp.Key,
+                elementSelector: kvp => kvp.Value.BuildHub(provider))
         };
-        
+
         bus.StartProcessing();
         return bus;
+    }
+
+    public ICommandHubBuilder<TCommand, TResult> AddCommand<TCommand, TResult>()
+        where TCommand : ICommand<TResult>
+        where TResult : struct {
+        ThrowIfConfigured();
+
+        ICommandHubBuilder builder = _commandHubs.GetOrAdd(
+            typeof(TCommand),
+            valueFactory: static _ => new CommandHubBuilder<TCommand, TResult>());
+
+        if (builder is not ICommandHubBuilder<TCommand, TResult> typedBuilder) throw new InvalidOperationException("Failed to get command builder");
+
+        return typedBuilder;
+    }
+
+
+    public ITriggerHubBuilder<TTrigger> AddTrigger<TTrigger>() where TTrigger : ITrigger {
+        ThrowIfConfigured();
+
+        ITriggerHubBuilder builder = _triggerHubs.GetOrAdd(
+            typeof(TTrigger),
+            valueFactory: static _ => new TriggerHubBuilder<TTrigger>());
+
+        if (builder is not ITriggerHubBuilder<TTrigger> typedBuilder) throw new InvalidOperationException("Failed to get typed builder");
+
+        return typedBuilder;
+    }
+
+    public IQueryHubBuilder<TQuery, TResult> AddQuery<TQuery, TResult>() where TQuery : IQuery<TResult> where TResult : struct {
+        ThrowIfConfigured();
+
+        IQueryHubBuilder builder = _queryHubs.GetOrAdd(
+            typeof(TQuery),
+            valueFactory: static _ => new QueryHubBuilder<TQuery, TResult>());
+
+        if (builder is not IQueryHubBuilder<TQuery, TResult> typedBuilder) throw new InvalidOperationException("Failed to get typed builder");
+
+        return typedBuilder;
     }
     private void ConfigureMessageBusIfRequired(IScopedProvider provider) {
         lock (_configuredLock) {
@@ -53,56 +91,17 @@ public class MessageBusFactory(IMessageBusFactoryConfiguration factoryConfigurat
             CommandHubs = _commandHubs.ToImmutableDictionary();
             TriggerHubs = _triggerHubs.ToImmutableDictionary();
             QueryHubs = _queryHubs.ToImmutableDictionary();
-            
+
             // Don't keep a reference if we don't need it anymore
             _commandHubs = null!;
             _triggerHubs = null!;
             _queryHubs = null!;
-            
+
             _isConfigured = true;
         }
     }
 
     private void ThrowIfConfigured() {
         if (_isConfigured) throw new InvalidOperationException("Cannot configure a message bus factory after it has been used");
-    }
-
-    public ICommandHubBuilder<TCommand, TResult> AddCommand<TCommand, TResult>() 
-        where TCommand : ICommand<TResult>
-        where TResult : struct {
-        ThrowIfConfigured();
-            
-        ICommandHubBuilder builder = _commandHubs.GetOrAdd(
-            typeof(TCommand),
-            static _ => new CommandHubBuilder<TCommand, TResult>());
-        
-        if (builder is not ICommandHubBuilder<TCommand, TResult> typedBuilder) throw new InvalidOperationException("Failed to get command builder");
-        
-        return typedBuilder;
-    }
-
-
-    public ITriggerHubBuilder<TTrigger> AddTrigger<TTrigger>() where TTrigger : ITrigger {
-        ThrowIfConfigured();
-        
-        ITriggerHubBuilder builder = _triggerHubs.GetOrAdd(
-            typeof(TTrigger),
-            static _ => new TriggerHubBuilder<TTrigger>());
-        
-        if (builder is not ITriggerHubBuilder<TTrigger> typedBuilder) throw new InvalidOperationException("Failed to get typed builder");
-        
-        return typedBuilder;
-    }
-
-    public IQueryHubBuilder<TQuery, TResult> AddQuery<TQuery, TResult>() where TQuery : IQuery<TResult> where TResult : struct {
-        ThrowIfConfigured();
-        
-        IQueryHubBuilder builder = _queryHubs.GetOrAdd(
-            typeof(TQuery),
-            static _ => new QueryHubBuilder<TQuery, TResult>());
-        
-        if (builder is not IQueryHubBuilder<TQuery, TResult> typedBuilder) throw new InvalidOperationException("Failed to get typed builder");
-        
-        return typedBuilder;
     }
 }

@@ -7,12 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\AterraEngine.Frameworks.Nexities.Generators\AterraEngine.Frameworks.Nexities.Generators.csproj" />
+        <ProjectReference Include="..\..\src\AterraEngine.Frameworks.Nexities.Generators\AterraEngine.Frameworks.Nexities.Generators.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="CodeOfChaos.Testing.TUnit" Version="0.7.2" />
-      <PackageReference Include="TUnit" Version="0.14.6" />
+        <PackageReference Include="CodeOfChaos.Testing.TUnit" Version="0.7.2"/>
+        <PackageReference Include="TUnit" Version="0.14.6"/>
     </ItemGroup>
 
 </Project>

@@ -2,14 +2,13 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 namespace AterraEngine.Frameworks.Omnia;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class OmniaAsset : IOmniaAsset {
     public Guid InstanceId { get; private set; }
     public OmniaId OmniaId { get; private set; }
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -17,7 +16,7 @@ public class OmniaAsset : IOmniaAsset {
         InstanceId = Guid.CreateVersion7();
         OmniaId = assetId;
     }
-    
+
     public virtual void Cleanup() {
         InstanceId = Guid.Empty;
         OmniaId = OmniaId.Empty;

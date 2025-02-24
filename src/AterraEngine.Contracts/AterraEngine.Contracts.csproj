@@ -4,16 +4,16 @@
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        
+
         <RootNamespace>AterraEngine</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\AterraEngine.Common\AterraEngine.Common.csproj" />
+        <ProjectReference Include="..\AterraEngine.Common\AterraEngine.Common.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="AterraEngine.DependencyInjection.Contracts" Version="4.10.0" />
+        <PackageReference Include="AterraEngine.DependencyInjection.Contracts" Version="4.10.0"/>
     </ItemGroup>
 
 </Project>

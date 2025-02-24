@@ -7,7 +7,6 @@ using CodeOfChaos.Testing.TUnit;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace Tests.AterraEngine.Frameworks.Nexities.Generators;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -34,7 +33,7 @@ public class ValidKeyedInstanceAnalyzerTests {
         // Assert
         await Assert.That(compilation).DoesNotContainDiagnostic(Diagnostics.InvalidGuidDescriptor.Id);
     }
-    
+
     [Test]
     public async Task Analyzer_Diagnostic_ShouldOccur() {
         // Arrange

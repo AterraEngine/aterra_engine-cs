@@ -5,7 +5,6 @@ using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 
 namespace AterraEngine.Frameworks.Omnia;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -19,8 +18,8 @@ public readonly record struct OmniaTypeRegistration(
         factory,
         new ConcurrentQueue<IOmniaAsset>()
     );
-        
-    public bool TryGetAssetFromPool<TAsset>(OmniaId assetId,[NotNullWhen(true)] out TAsset? instance) where TAsset : class, IOmniaAsset {
+
+    public bool TryGetAssetFromPool<TAsset>(OmniaId assetId, [NotNullWhen(true)] out TAsset? instance) where TAsset : class, IOmniaAsset {
         instance = default;
         if (!Pool.TryPeek(out IOmniaAsset? assetInstance) || assetInstance is not {} asset || asset.OmniaId != assetId) return false;
 
@@ -37,7 +36,7 @@ public readonly record struct OmniaTypeRegistration(
         instance = factoryResult.AsT;
         return RegisterInstance(instance);
     }
-        
+
     private bool RegisterInstance(IOmniaAsset instance) => Instances.TryAdd(instance.InstanceId, instance);
 
     public bool ReturnInstance(IOmniaAsset instance) {

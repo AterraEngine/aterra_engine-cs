@@ -7,8 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\AterraEngine.Contracts\AterraEngine.Contracts.csproj" />
-      <ProjectReference Include="..\AterraEngine.Frameworks.Omnia\AterraEngine.Frameworks.Omnia.csproj" />
+        <ProjectReference Include="..\AterraEngine.Contracts\AterraEngine.Contracts.csproj"/>
+        <ProjectReference Include="..\AterraEngine.Frameworks.Omnia\AterraEngine.Frameworks.Omnia.csproj"/>
     </ItemGroup>
 
 </Project>

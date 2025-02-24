@@ -9,7 +9,7 @@ namespace Tests.AterraEngine.Common.Frameworks.Omnia.Types;
 // ---------------------------------------------------------------------------------------------------------------------
 [TestSubject(typeof(AssetNameSpace))]
 public class AssetNameSpaceTest {
-    
+
     [Test]
     [Arguments("plugin1")]
     [Arguments("plugin_name")]
@@ -20,8 +20,7 @@ public class AssetNameSpaceTest {
 
         // Assert
         await Assert.That(result).IsTrue().Because($"Expected true for value: {value}, but got false. Regex might be failing to match.");
-        await Assert.That(pluginId).IsNotNull()
-            .And.IsTypeOf<AssetNameSpace>();
+        await Assert.That(pluginId).IsNotNull();
         await Assert.That(pluginId!.Value).IsEqualTo(value);
     }
 
@@ -50,7 +49,7 @@ public class AssetNameSpaceTest {
     public async Task Constructor_WithString_InitializesCorrectly() {
         // Arrange
         const string value = "plugin1";
-        
+
         // Act
         var pluginId = new AssetNameSpace(value);
 

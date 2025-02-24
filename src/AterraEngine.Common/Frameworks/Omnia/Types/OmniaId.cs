@@ -66,10 +66,11 @@ public struct OmniaId :
     public OmniaId(string assetId) {
         if (assetId.Length > MaxLength) throw new ArgumentException("OmniaId length cannot exceed 256 characters");
 
-        (AssetNameSpace nameSpace, AssetPath path, ReadOnlyMemory<char> cache) = GlobalCache.GetOrAdd(assetId, valueFactory: id => {
-            (AssetNameSpace nameSpace, AssetPath path) = ParseOmniaId(id);
-            return new CacheObject(nameSpace, path, GetAsMemory(nameSpace, path));
-        });
+        (AssetNameSpace nameSpace, AssetPath path, ReadOnlyMemory<char> cache) = GlobalCache.GetOrAdd(assetId,
+            valueFactory: id => {
+                (AssetNameSpace nameSpace, AssetPath path) = ParseOmniaId(id);
+                return new CacheObject(nameSpace, path, GetAsMemory(nameSpace, path));
+            });
 
         NameSpace = nameSpace;
         Path = path;

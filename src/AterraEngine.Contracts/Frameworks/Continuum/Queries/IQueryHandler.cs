@@ -2,10 +2,9 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 namespace AterraEngine.Frameworks.Continuum;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IQueryHandler<in TQuery, TResponse> : IMessageHandler<TQuery, ValueTask<TResponse>> 
+public interface IQueryHandler<in TQuery, TResponse> : IMessageHandler<TQuery, ValueTask<TResponse>>
     where TQuery : IQuery<TResponse>
     where TResponse : struct;

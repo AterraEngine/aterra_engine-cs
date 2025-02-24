@@ -50,10 +50,11 @@ public readonly struct AssetPath :
         HashCode = ComputeHashCode();
         GlobalCache[matchGroup.Value] = this;
     }
-    
+
     public AssetPath(params string[] values) {
-        if (!values.All(value => RegexLib.AssetPath.IsMatch(value)))
+        if (!values.All(value => RegexLib.AssetPath.IsMatch(value))) {
             throw new ArgumentException("Invalid Asset Name format.");
+        }
 
         string joined = string.Join('/', values);
         if (GlobalCache.TryGetValue(joined, out AssetPath existing)) {

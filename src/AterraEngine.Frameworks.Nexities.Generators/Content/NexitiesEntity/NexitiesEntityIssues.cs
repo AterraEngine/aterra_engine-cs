@@ -4,12 +4,11 @@
 using System;
 
 namespace AterraEngine.Frameworks.Nexities.Generators.Content.NexitiesEntity;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [Flags]
-public enum NexitiesEntityIssues : ulong{
+public enum NexitiesEntityIssues : ulong {
     Undefined = 0,
     NoTagAttribute = 0b1
 }

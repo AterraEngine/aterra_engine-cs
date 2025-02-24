@@ -7,12 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="AterraEngine.DependencyInjection" Version="4.10.0" />
-      <PackageReference Include="AterraEngine.DependencyInjection.Contracts" Version="4.10.0" />
+        <PackageReference Include="AterraEngine.DependencyInjection" Version="4.10.0"/>
+        <PackageReference Include="AterraEngine.DependencyInjection.Contracts" Version="4.10.0"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\AterraEngine.Frameworks.Continuum\AterraEngine.Frameworks.Continuum.csproj" />
+        <ProjectReference Include="..\AterraEngine.Frameworks.Continuum\AterraEngine.Frameworks.Continuum.csproj"/>
     </ItemGroup>
 
 </Project>

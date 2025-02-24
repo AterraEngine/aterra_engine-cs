@@ -5,7 +5,6 @@ using AterraEngine.DependencyInjection;
 using System.Collections.Immutable;
 
 namespace AterraEngine.Frameworks.Continuum;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -23,7 +22,7 @@ public class CommandHubBuilder<TCommand, TResult> : ICommandHubBuilder<TCommand,
         CommandHandlerType = typeof(TCommandHandler);
         return this;
     }
-    
+
     public ICommandHubBuilder<TCommand, TResult> WithPipelineSteps(params Type[] types) {
         PipelineSteps = [..PipelineSteps.Concat(types)];
         return this;
@@ -51,7 +50,7 @@ public class CommandHubBuilder<TCommand, TResult> : ICommandHubBuilder<TCommand,
             pipelines[i] = (IPipelineStep<TCommand, ValueTask<TResult>>)provider.GetRequiredService(actualType);
         }
         hub.AddPipelines(pipelines);
-                    
+
         return hub;
     }
 }

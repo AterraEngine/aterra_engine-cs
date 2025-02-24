@@ -2,10 +2,10 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 namespace AterraEngine.Frameworks.Continuum;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface ITriggerHub : IMessageHub;
-public interface ITriggerHub<TTrigger> : ITriggerHub, IMessageHub<ITriggerHandler<TTrigger>, TTrigger, Task> 
-    where TTrigger : ITrigger ;
+
+public interface ITriggerHub<TTrigger> : ITriggerHub, IMessageHub<ITriggerHandler<TTrigger>, TTrigger, Task>
+    where TTrigger : ITrigger;

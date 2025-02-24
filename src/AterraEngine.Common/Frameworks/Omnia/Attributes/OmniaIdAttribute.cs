@@ -2,11 +2,10 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 namespace AterraEngine.Frameworks.Omnia;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct )]
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
 public class OmniaIdAttribute(string id) : Attribute {
     public string Id { get; } = id;
 }

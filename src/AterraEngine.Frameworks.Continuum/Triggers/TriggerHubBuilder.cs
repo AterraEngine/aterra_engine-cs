@@ -5,7 +5,6 @@ using AterraEngine.DependencyInjection;
 using System.Collections.Immutable;
 
 namespace AterraEngine.Frameworks.Continuum;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -14,7 +13,7 @@ public class TriggerHubBuilder<TTrigger> : ITriggerHubBuilder<TTrigger>
 
     private ImmutableArray<Type> TriggerHandlerTypes { get; set; } = [];
     private ImmutableArray<Type> PipelineSteps { get; set; } = [];
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -22,14 +21,14 @@ public class TriggerHubBuilder<TTrigger> : ITriggerHubBuilder<TTrigger>
         TriggerHandlerTypes = TriggerHandlerTypes.Add(typeof(TTriggerHandler));
         return this;
     }
-    
+
     public ITriggerHubBuilder<TTrigger> WithPipelineSteps(params Type[] types) {
         PipelineSteps = [..PipelineSteps.Concat(types)];
         return this;
     }
-    public ITriggerHub BuildHub(IScopedProvider provider)  {
+    public ITriggerHub BuildHub(IScopedProvider provider) {
         var hub = provider.GetRequiredService<ITriggerHub<TTrigger>>();
-        
+
         // A trigger can have an unlimited amount of handlers
         for (int i = 0; i < TriggerHandlerTypes.Length; i++) {
             Type triggerHandlerType = TriggerHandlerTypes[i];
@@ -53,7 +52,7 @@ public class TriggerHubBuilder<TTrigger> : ITriggerHubBuilder<TTrigger>
             pipelines[i] = (IPipelineStep<TTrigger, Task>)provider.GetRequiredService(actualType);
         }
         hub.AddPipelines(pipelines);
-                    
+
         return hub;
     }
 }

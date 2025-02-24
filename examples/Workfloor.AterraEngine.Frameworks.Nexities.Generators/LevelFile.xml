@@ -5,9 +5,9 @@
             <Component Type="ITransform">
                 <XYZ>1;2;3</XYZ>
             </Component>
-        </Instance>        
+        </Instance>
     </LevelTreee>
-    
+
     <Library>
         <Entity Type="IEntity" Id="Guid:123">
             <Component Type="ISomeComponent" Id="Guid:456">

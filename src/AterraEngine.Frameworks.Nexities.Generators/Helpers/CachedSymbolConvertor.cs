@@ -8,37 +8,18 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace AterraEngine.Frameworks.Nexities.Generators.Helpers;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 /// <summary>
-/// Represents a caching mechanism for converting symbols in a Roslyn compilation context.
-/// This class provides functionality to cache, retrieve, and compare symbols based on their metadata names.
-/// The input is based on their string display-names.
+///     Represents a caching mechanism for converting symbols in a Roslyn compilation context.
+///     This class provides functionality to cache, retrieve, and compare symbols based on their metadata names.
+///     The input is based on their string display-names.
 /// </summary>
 public class CachedSymbolConvertor : ICollection {
     private readonly List<string> _keys = [];
     private Dictionary<string, INamedTypeSymbol?> _cache = null!;
 
-    // -----------------------------------------------------------------------------------------------------------------
-    // Methods
-    // -----------------------------------------------------------------------------------------------------------------
-    public void Add(string key) => _keys.Add(key);
-    public INamedTypeSymbol GetSymbol(string name) => _cache[name]!;
-    public bool EqualsSymbol(INamedTypeSymbol left, string right) => SymbolEqualityComparer.Default.Equals(left, GetSymbol(right));
-
-    public void ConvertAll(Compilation compilation, bool enforce = false) {
-        _cache = _keys.ToDictionary(key => key, compilation.GetTypeByMetadataName);
-
-        if (!enforce) return;
-        List<string> list = _cache.Where(kvp => kvp.Value is null)
-            .Select(kvp => kvp.Key)
-            .ToList();
-
-        list.ForEach(key => throw new Exception($"Could not find {key}"));
-    }
-    
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
@@ -48,4 +29,22 @@ public class CachedSymbolConvertor : ICollection {
     public int Count => _keys.Count;
     public bool IsSynchronized => false;
     public object SyncRoot => throw new NotImplementedException();
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    public void Add(string key) => _keys.Add(key);
+    public INamedTypeSymbol GetSymbol(string name) => _cache[name]!;
+    public bool EqualsSymbol(INamedTypeSymbol left, string right) => SymbolEqualityComparer.Default.Equals(left, GetSymbol(right));
+
+    public void ConvertAll(Compilation compilation, bool enforce = false) {
+        _cache = _keys.ToDictionary(keySelector: key => key, compilation.GetTypeByMetadataName);
+
+        if (!enforce) return;
+        List<string> list = _cache.Where(kvp => kvp.Value is null)
+            .Select(kvp => kvp.Key)
+            .ToList();
+
+        list.ForEach(key => throw new Exception($"Could not find {key}"));
+    }
 }

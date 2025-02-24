@@ -4,9 +4,7 @@
 using AterraEngine.Frameworks.Continuum;
 
 namespace Workfloor.AterraEngine.Frameworks.Continuum.CommandHandlers;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public record struct SimpleCommand(string Input, DateTime DateTime ) : ICommand<bool> {
-}
+public record struct SimpleCommand(string Input, DateTime DateTime) : ICommand<bool> {}

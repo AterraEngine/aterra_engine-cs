@@ -2,10 +2,9 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 namespace AterraEngine.Frameworks.Continuum;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ICommandHandler<in TCommand, TResponse> : IMessageHandler<TCommand, ValueTask<TResponse>> 
+public interface ICommandHandler<in TCommand, TResponse> : IMessageHandler<TCommand, ValueTask<TResponse>>
     where TCommand : ICommand<TResponse>
     where TResponse : struct;

@@ -8,10 +8,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\AterraEngine.Common\AterraEngine.Common.csproj" />
-      <ProjectReference Include="..\..\src\AterraEngine.Contracts\AterraEngine.Contracts.csproj" />
-      <ProjectReference Include="..\..\src\AterraEngine.Frameworks.Nexities\AterraEngine.Frameworks.Nexities.csproj" />
-      <ProjectReference Include="..\..\src\AterraEngine\AterraEngine.csproj" />
+        <ProjectReference Include="..\..\src\AterraEngine.Common\AterraEngine.Common.csproj"/>
+        <ProjectReference Include="..\..\src\AterraEngine.Contracts\AterraEngine.Contracts.csproj"/>
+        <ProjectReference Include="..\..\src\AterraEngine.Frameworks.Nexities\AterraEngine.Frameworks.Nexities.csproj"/>
+        <ProjectReference Include="..\..\src\AterraEngine\AterraEngine.csproj"/>
     </ItemGroup>
 
 </Project>

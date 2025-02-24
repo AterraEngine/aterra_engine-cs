@@ -4,18 +4,16 @@
 using AterraEngine.Frameworks.Continuum;
 
 namespace Workfloor.AterraEngine.Frameworks.Continuum.PipelineSteps;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class SimpleCommandPipelineStep<TCommand, TResult> : CommandPipelineStep<TCommand, TResult>
     where TCommand : ICommand<TResult>
-    where TResult : struct
-{
-    public async override ValueTask<TResult> HandleAsync(TCommand command, CancellationToken ct = default) {
+    where TResult : struct {
+    public override async ValueTask<TResult> HandleAsync(TCommand command, CancellationToken ct = default) {
         // Do stuff before next step
         Console.WriteLine("Doing stuff before next step");
-        
+
         // Do next step
         TResult result = await NextStep.HandleAsync(command, ct);
 
@@ -23,5 +21,5 @@ public class SimpleCommandPipelineStep<TCommand, TResult> : CommandPipelineStep<
         Console.WriteLine("Doing stuff after next step");
 
         return result;
-    }    
+    }
 }

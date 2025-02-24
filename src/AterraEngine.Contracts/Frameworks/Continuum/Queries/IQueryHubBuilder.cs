@@ -2,7 +2,6 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 namespace AterraEngine.Frameworks.Continuum;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -14,5 +13,5 @@ public interface IQueryHubBuilder<out TQuery, TResult> : IQueryHubBuilder
 
 
     IQueryHubBuilder<TQuery, TResult> WithHandler<TQueryHandler>() where TQueryHandler : class, IQueryHandler<TQuery, TResult>;
-    IQueryHubBuilder<TQuery, TResult> WithPipelineSteps(params Type[] types) ;
+    IQueryHubBuilder<TQuery, TResult> WithPipelineSteps(params Type[] types);
 }

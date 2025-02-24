@@ -2,11 +2,9 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 namespace AterraEngine.Frameworks.Continuum;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IQueryPipelineStep<TQuery, TResult> : IPipelineStep<TQuery, ValueTask<TResult>>
     where TQuery : IQuery<TResult>
     where TResult : struct;
-

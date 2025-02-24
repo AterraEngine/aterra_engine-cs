@@ -4,8 +4,7 @@
 using AterraEngine.Frameworks.Continuum;
 
 namespace Workfloor.AterraEngine.Frameworks.Continuum.QueryHandlers;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public record struct SimpleQuery(string Input, DateTime DateTime ) : IQuery<bool>;
+public record struct SimpleQuery(string Input, DateTime DateTime) : IQuery<bool>;

@@ -5,7 +5,6 @@ using AterraEngine.Frameworks.Nexities;
 using AterraEngine.Frameworks.Omnia;
 
 namespace Workfloor.AterraEngine.Frameworks.Nexities.Generators;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------

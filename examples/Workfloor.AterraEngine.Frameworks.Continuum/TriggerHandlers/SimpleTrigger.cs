@@ -4,10 +4,7 @@
 using AterraEngine.Frameworks.Continuum;
 
 namespace Workfloor.AterraEngine.Frameworks.Continuum.TriggerHandlers;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public record SimpleTrigger(string Input, DateTime DateTime) : ITrigger {
-    
-}
+public record SimpleTrigger(string Input, DateTime DateTime) : ITrigger {}

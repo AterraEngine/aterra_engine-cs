@@ -40,10 +40,10 @@ public class MessageBus : IContinuum {
     private async Task StartProcessingAsync() {
 
         var tasks = new Task[
-            TriggerHubs.Count
-            + CommandHubs.Count
-            // + QueryHubs.Count // Queries don't rely on a Channel, and thus doesn't have to set up
-        ];
+                TriggerHubs.Count
+                + CommandHubs.Count
+                // + QueryHubs.Count // Queries don't rely on a Channel, and thus doesn't have to set up
+            ];
 
         // This is scuffed, but works, so hey what do we care.
         int i;
@@ -58,7 +58,7 @@ public class MessageBus : IContinuum {
         }
 
         // for (k = j; k < QueryHubs.Count + j; k++) {
-            // tasks[k] = CommandHubs.Values[k - j].StartProcessingAsync();
+        // tasks[k] = CommandHubs.Values[k - j].StartProcessingAsync();
         // }
 
         // Fire and forget the tasks

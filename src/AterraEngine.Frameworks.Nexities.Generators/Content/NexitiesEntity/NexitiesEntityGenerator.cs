@@ -10,7 +10,6 @@ using System.Threading;
 using static AterraEngine.Frameworks.Nexities.Generators.SymbolNames;
 
 namespace AterraEngine.Frameworks.Nexities.Generators.Content.NexitiesEntity;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // --------------------------------------------------------------/-------------------------------------------------------
@@ -49,14 +48,14 @@ public class NexitiesEntityGenerator : IIncrementalGenerator {
         CachedSymbolConvertor symbolConvertor = [
             NexitiesEntity_DisplayString,
             INexitiesEntity_DisplayString,
-            OmniaIdAttribute_DisplayString,
+            OmniaIdAttribute_DisplayString
         ];
         symbolConvertor.ConvertAll(syntaxContext.SemanticModel.Compilation);
         NexitiesEntityDtoFactory factory = new(symbolConvertor);
-        
+
         return factory.CreateNew(classDeclaration, classSymbol, ct);
     }
-    
+
     private static void Output(SourceProductionContext context, (Compilation compilation, ImmutableArray<NexitiesEntityDto> Data) valueTuple) {
         // TODO Do something with the output of the generator
     }

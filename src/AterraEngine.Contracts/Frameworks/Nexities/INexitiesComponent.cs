@@ -4,8 +4,7 @@
 using AterraEngine.Frameworks.Omnia;
 
 namespace AterraEngine.Frameworks.Nexities;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface INexitiesComponent  : IOmniaAsset;
+public interface INexitiesComponent : IOmniaAsset;

@@ -9,7 +9,7 @@ namespace Tests.AterraEngine.Common.Frameworks.Omnia.Types;
 // ---------------------------------------------------------------------------------------------------------------------
 [TestSubject(typeof(OmniaId))]
 public class OmniaIdTest {
-    
+
     [Test]
     [Arguments("pluginName:folder/item", "pluginName", new[] { "folder", "item" })]
     [Arguments("plugin_Name:folder/item", "plugin_Name", new[] { "folder", "item" })]
@@ -59,7 +59,7 @@ public class OmniaIdTest {
     public async Task OmniaIdThoughStringPartsCreationTest(string pluginId, IEnumerable<string> assetName, string @namespace, string[] paths) {
         // Arrange & Act
         var assetId = new OmniaId(pluginId, assetName);
-        
+
         // Assert
         await Assert.That(assetId.NameSpace.Value).IsEqualTo(@namespace);
         await Assert.That(assetId.Path.Values).IsEquivalentTo(paths);
@@ -91,7 +91,7 @@ public class OmniaIdTest {
     [Arguments(@"pluginName:folder\")]
     [Arguments(@"pluginName\folder\")]
     public async Task OmniaIdCreateFailsTest(string input) {
-        await Assert.That(OmniaId.TryCreateNew(input, out var output)).IsFalse();
+        await Assert.That(OmniaId.TryCreateNew(input, out OmniaId? output)).IsFalse();
         await Assert.That(output).IsNull();
     }
 
@@ -113,7 +113,7 @@ public class OmniaIdTest {
         // Arrange & Act
         var assetA = new OmniaId(a);
         var assetB = new OmniaId(b);
-        
+
         // Assert
         await Assert.That(assetA).IsNotEqualTo(assetB);
     }
@@ -125,7 +125,7 @@ public class OmniaIdTest {
         // Arrange
         var left = new AssetNameSpace(pluginId);
         var right = new AssetPath(assetName);
-        
+
         // Act
         OmniaId newAsset = left + right;
 
@@ -146,7 +146,7 @@ public class OmniaIdTest {
     public async Task OmniaId_IsEmpty_Not() {
         // Arrange & Act
         var assetId = new OmniaId("pluginName:folder/item");
-        
+
         // Assert
         await Assert.That(assetId.IsEmpty).IsFalse();
     }

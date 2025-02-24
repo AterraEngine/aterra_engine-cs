@@ -9,7 +9,7 @@ namespace Tests.AterraEngine.Common.Frameworks.Omnia.Types;
 // ---------------------------------------------------------------------------------------------------------------------
 [TestSubject(typeof(AssetPath))]
 public class AssetPathTests {
-    
+
     [Test]
     [Arguments("ns1")]
     [Arguments("ns1_ns2")]
@@ -41,7 +41,7 @@ public class AssetPathTests {
 
     [Test]
     [Arguments("ns1/ns2", new[] { "ns1", "ns2" })]
-    [Arguments("ns1/ns2/ns3", new [] {"ns1", "ns2", "ns3"})]
+    [Arguments("ns1/ns2/ns3", new[] { "ns1", "ns2", "ns3" })]
     public async Task Constructor_WithString_InitializesCorrectly(string value, params string[] expectedValues) {
         // Arrange
         var assetName = new AssetPath(value);
@@ -59,17 +59,17 @@ public class AssetPathTests {
     [Test]
     [MatrixDataSource]
     public async Task Constructor_WithIEnumerable_InitializesCorrectly(
-        [Matrix("a", "b", "c", "d" )] string path1,
+        [Matrix("a", "b", "c", "d")] string path1,
         [Matrix("a", "b", "c", "d")] string path2,
         [Matrix("a", "b", "c", "d")] string path3,
         [Matrix("a", "b", "c", "d")] string path4
     ) {
         // Arrange
-        var assetName = new AssetPath(path1, path2, path3 , path4);
-    
+        var assetName = new AssetPath(path1, path2, path3, path4);
+
         // Act
         List<string> valuesList = assetName.Values.ToList();
-    
+
         // Assert
         await Assert.That(valuesList.Count).IsEqualTo(4);
         await Assert.That(valuesList[0]).IsEqualTo(path1);
@@ -92,7 +92,7 @@ public class AssetPathTests {
         // Act
         bool result = assetName1 == assetName2;
         bool result2 = assetName1 != assetName2;
-        
+
         // Assert
         await Assert.That(result).IsEqualTo(areEqual);
         await Assert.That(result2).IsEqualTo(!areEqual);
@@ -104,7 +104,7 @@ public class AssetPathTests {
         // Arrange
         var assetName1 = new AssetPath(value1);
         var assetName2 = new AssetPath(value2);
-        
+
         // Act
         bool result = assetName1.Equals(assetName2);
 
@@ -135,7 +135,7 @@ public class AssetPathTests {
     public async Task ToString_ShouldReturnCorrectFormat(string[] values, string expectedString) {
         // Arrange
         var assetName = new AssetPath(values);
-        
+
         // Act
         string result = assetName.ToString();
 

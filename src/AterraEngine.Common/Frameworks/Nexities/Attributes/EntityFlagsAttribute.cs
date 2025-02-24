@@ -2,7 +2,6 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 namespace AterraEngine.Frameworks.Nexities;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -14,5 +13,5 @@ public class EntityFlagsAttribute(EntityFlag flags) : Attribute {
 // TODO move this out of the file
 [Flags]
 public enum EntityFlag : ulong {
-    Undefined = 0,
+    Undefined = 0
 }
