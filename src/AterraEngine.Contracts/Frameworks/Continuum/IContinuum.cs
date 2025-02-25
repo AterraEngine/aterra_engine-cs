@@ -5,4 +5,4 @@ namespace AterraEngine.Frameworks.Continuum;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IContinuum : IMessageBus;
+public interface IContinuum : IContinuumService;

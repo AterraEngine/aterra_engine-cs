@@ -3,9 +3,9 @@
                         xml:space="preserve">
 	<s:Boolean x:Key="/Default/CodeInspection/NamespaceProvider/NamespaceFoldersToSkip/=commands/@EntryIndexedValue">True</s:Boolean>
     <s:Boolean
-        x:Key="/Default/CodeInspection/NamespaceProvider/NamespaceFoldersToSkip/=messagebusfactory/@EntryIndexedValue">True</s:Boolean>
+        x:Key="/Default/CodeInspection/NamespaceProvider/NamespaceFoldersToSkip/=ContinuumServicefactory/@EntryIndexedValue">True</s:Boolean>
     <s:Boolean
-        x:Key="/Default/CodeInspection/NamespaceProvider/NamespaceFoldersToSkip/=messagebusfactorybuilders/@EntryIndexedValue">True</s:Boolean>
+        x:Key="/Default/CodeInspection/NamespaceProvider/NamespaceFoldersToSkip/=ContinuumServicefactorybuilders/@EntryIndexedValue">True</s:Boolean>
     <s:Boolean
         x:Key="/Default/CodeInspection/NamespaceProvider/NamespaceFoldersToSkip/=queries/@EntryIndexedValue">True</s:Boolean>
     <s:Boolean x:Key="/Default/CodeInspection/NamespaceProvider/NamespaceFoldersToSkip/=triggers/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>

@@ -7,7 +7,7 @@ namespace AterraEngine.Frameworks.Continuum;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IMessageBusFactory : IFactoryService<IContinuum> {
+public interface IContinuumServiceFactory : IFactoryService<IContinuum> {
     ICommandHubBuilder<TCommand, TResult> AddCommand<TCommand, TResult>()
         where TCommand : ICommand<TResult>
         where TResult : struct;

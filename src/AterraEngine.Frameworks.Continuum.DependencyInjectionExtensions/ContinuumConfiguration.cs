@@ -8,5 +8,5 @@ namespace AterraEngine.Frameworks.Continuum.DependencyInjectionExtensions;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public record ContinuumConfiguration(
-    Action<IScopedProvider, IMessageBusFactory> ConfigureMessageBus
-) : IMessageBusFactoryConfiguration;
+    Action<IScopedProvider, IContinuumServiceFactory> ConfigureContinuumService
+) : IContinuumServiceFactoryConfiguration;

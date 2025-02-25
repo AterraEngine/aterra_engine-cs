@@ -5,6 +5,6 @@ namespace AterraEngine.Frameworks.Continuum;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IMessageBusFactoryConfiguration {
-    Action<IScopedProvider, IMessageBusFactory> ConfigureMessageBus { get; }
+public interface IContinuumServiceFactoryConfiguration {
+    Action<IScopedProvider, IContinuumServiceFactory> ConfigureContinuumService { get; }
 }

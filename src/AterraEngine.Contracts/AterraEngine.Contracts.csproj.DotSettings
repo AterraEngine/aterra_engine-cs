@@ -4,7 +4,7 @@
 	<s:Boolean
         x:Key="/Default/CodeInspection/NamespaceProvider/NamespaceFoldersToSkip/=frameworks_005Ccontinuum_005Ccommands/@EntryIndexedValue">True</s:Boolean>
     <s:Boolean
-        x:Key="/Default/CodeInspection/NamespaceProvider/NamespaceFoldersToSkip/=frameworks_005Ccontinuum_005Cmessagebusfactory/@EntryIndexedValue">True</s:Boolean>
+        x:Key="/Default/CodeInspection/NamespaceProvider/NamespaceFoldersToSkip/=frameworks_005Ccontinuum_005CContinuumServicefactory/@EntryIndexedValue">True</s:Boolean>
     <s:Boolean
         x:Key="/Default/CodeInspection/NamespaceProvider/NamespaceFoldersToSkip/=frameworks_005Ccontinuum_005Cqueries/@EntryIndexedValue">True</s:Boolean>
     <s:Boolean

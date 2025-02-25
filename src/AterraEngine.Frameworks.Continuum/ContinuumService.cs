@@ -7,7 +7,7 @@ namespace AterraEngine.Frameworks.Continuum;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class MessageBus : IContinuum {
+public class ContinuumService : IContinuum {
     public FrozenDictionary<Type, ICommandHub> CommandHubs { private get; init; } = FrozenDictionary<Type, ICommandHub>.Empty;
     public FrozenDictionary<Type, ITriggerHub> TriggerHubs { private get; init; } = FrozenDictionary<Type, ITriggerHub>.Empty;
     public FrozenDictionary<Type, IQueryHub> QueryHubs { private get; init; } = FrozenDictionary<Type, IQueryHub>.Empty;

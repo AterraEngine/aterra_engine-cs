@@ -11,7 +11,7 @@ namespace AterraEngine.Frameworks.Continuum;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 // TODO Fully rework factory pattern to just save all the types, and resolve on Create()
-public class MessageBusFactory(IMessageBusFactoryConfiguration factoryConfiguration) : IMessageBusFactory {
+public class ContinuumServiceFactory(IContinuumServiceFactoryConfiguration factoryConfiguration) : IContinuumServiceFactory {
     private readonly Lock _configuredLock = new();
     private ConcurrentDictionary<Type, ICommandHubBuilder> _commandHubs = [];
 
@@ -26,9 +26,9 @@ public class MessageBusFactory(IMessageBusFactoryConfiguration factoryConfigurat
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public IContinuum Create(IScopedProvider provider) {
-        ConfigureMessageBusIfRequired(provider);
+        ConfigureContinuumServiceIfRequired(provider);
 
-        var bus = new MessageBus {
+        var bus = new ContinuumService {
             CommandHubs = CommandHubs.ToFrozenDictionary(
                 keySelector: kvp => kvp.Key,
                 elementSelector: kvp => kvp.Value.BuildHub(provider)),
@@ -82,11 +82,11 @@ public class MessageBusFactory(IMessageBusFactoryConfiguration factoryConfigurat
 
         return typedBuilder;
     }
-    private void ConfigureMessageBusIfRequired(IScopedProvider provider) {
+    private void ConfigureContinuumServiceIfRequired(IScopedProvider provider) {
         lock (_configuredLock) {
             if (_isConfigured) return;
 
-            factoryConfiguration.ConfigureMessageBus.Invoke(provider, this);
+            factoryConfiguration.ConfigureContinuumService.Invoke(provider, this);
 
             CommandHubs = _commandHubs.ToImmutableDictionary();
             TriggerHubs = _triggerHubs.ToImmutableDictionary();
