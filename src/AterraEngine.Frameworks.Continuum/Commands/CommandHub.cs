@@ -34,6 +34,8 @@ public class CommandHub<TCommand, TOutput> : MessageHub<IMessageHandler<TCommand
 
         while (await _channel.Reader.WaitToReadAsync()) {
             while (_channel.Reader.TryRead(out CommandHubChannelDto<TCommand, TOutput>? dto)) {
+                dto.CancellationToken.ThrowIfCancellationRequested();
+                
                 IMessageHandler<TCommand, ValueTask<TOutput>> subscriber = GetSubscribers()[0];
                 TOutput result = await subscriber.HandleAsync(dto.CommandData, dto.CancellationToken);
 

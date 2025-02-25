@@ -8,7 +8,7 @@ namespace AterraEngine.Frameworks.Continuum;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class CommandHubBuilder<TCommand, TResult> : ICommandHubBuilder<TCommand, TResult>
+public class CommandHubBuilder<TCommand, TResult>(IServiceCollection serviceCollection) : ICommandHubBuilder<TCommand, TResult>
     where TCommand : ICommand<TResult>
     where TResult : struct {
 
@@ -20,11 +20,13 @@ public class CommandHubBuilder<TCommand, TResult> : ICommandHubBuilder<TCommand,
     // -----------------------------------------------------------------------------------------------------------------
     public ICommandHubBuilder<TCommand, TResult> WithHandler<TCommandHandler>() where TCommandHandler : class, ICommandHandler<TCommand, TResult> {
         CommandHandlerType = typeof(TCommandHandler);
+        serviceCollection.AddScoped<TCommandHandler>();
         return this;
     }
 
     public ICommandHubBuilder<TCommand, TResult> WithPipelineSteps(params Type[] types) {
         PipelineSteps = [..PipelineSteps.Concat(types)];
+        foreach (Type type in types) serviceCollection.AddScoped(type);
         return this;
     }
     

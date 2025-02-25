@@ -8,7 +8,7 @@ namespace AterraEngine.Frameworks.Continuum;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class QueryHubBuilder<TQuery, TResult> : IQueryHubBuilder<TQuery, TResult>
+public class QueryHubBuilder<TQuery, TResult>(IServiceCollection serviceCollection) : IQueryHubBuilder<TQuery, TResult>
     where TQuery : IQuery<TResult>
     where TResult : struct {
     private Type QueryHandlerType { get; set; } = null!;
@@ -19,13 +19,16 @@ public class QueryHubBuilder<TQuery, TResult> : IQueryHubBuilder<TQuery, TResult
     // -----------------------------------------------------------------------------------------------------------------
     public IQueryHubBuilder<TQuery, TResult> WithHandler<TQueryHandler>() where TQueryHandler : class, IQueryHandler<TQuery, TResult> {
         QueryHandlerType = typeof(TQueryHandler);
+        serviceCollection.AddScoped<TQueryHandler>();
         return this;
     }
 
     public IQueryHubBuilder<TQuery, TResult> WithPipelineSteps(params Type[] types) {
         PipelineSteps = [..PipelineSteps.Concat(types)];
+        foreach (Type type in types) serviceCollection.AddScoped(type);
         return this;
     }
+    
     public IQueryHub BuildHub(IScopedProvider provider) {
         var hub = provider.GetRequiredService<IQueryHub<TQuery, TResult>>();
         if (QueryHandlerType == null) throw new InvalidOperationException("No command handler specified");

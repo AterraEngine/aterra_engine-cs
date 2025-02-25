@@ -16,14 +16,7 @@ namespace Workfloor.AterraEngine.Frameworks.Continuum;
 public static class Program {
     public static async Task Main() {
         var collection = new ServiceCollection();
-
-        // Handlers
-        collection.AddTransient<SimpleCommandHandler>();
-        collection.AddTransient<SimpleTriggerHandler>();
-        collection.AddTransient<SimpleTriggerHandler2>();
-        collection.AddTransient<SimpleQueryHandler>();
-        collection.AddTransient(typeof(SimpleCommandPipelineStep<,>));
-
+        
         // Needed for Continuum to work 
         collection.AddContinuum(static factory => {
             factory.AddCommand<SimpleCommand, bool>()
@@ -34,7 +27,9 @@ public static class Program {
             factory.AddTrigger<SimpleTrigger>()
                 .WithHandler<SimpleTriggerHandler>()
                 .WithHandler<SimpleTriggerHandler2>();
+        });
 
+        collection.WithContinuum(static factory => {
             factory.AddQuery<SimpleQuery, bool>()
                 .WithHandler<SimpleQueryHandler>();
         });
@@ -66,6 +61,18 @@ public static class Program {
                     bool queryResult = await continuum.QueryAsync<SimpleQuery, bool>(new SimpleQuery($"{input}", DateTime.UtcNow), ct);
                     Console.WriteLine($"You entered: {input} and got : {queryResult}");
 
+                    break;
+                }
+
+                case "cancel": {
+                    try {
+                        CancellationToken ctNew = new CancellationTokenSource( TimeSpan.FromMilliseconds(500) ).Token;
+                        bool result = await continuum.ExecuteAsync<SimpleCommand, bool>(new SimpleCommand($"{input}", DateTime.UtcNow), ctNew);
+                        Console.WriteLine($"You entered: {input} and got : {result}");
+                    }
+                    catch (Exception e) {
+                        Console.WriteLine(e);
+                    }
                     break;
                 }
 

@@ -48,6 +48,7 @@ public abstract class MessageHub<TMessageHandler, TInput, TOutput> : IMessageHub
             Subscribers.AddOrUpdate(id, currentPipeline);
         }
     }
+    
     public abstract TOutput ExecuteAsync(TInput inputData, CancellationToken ct = default);
 
     protected Span<TMessageHandler> GetSubscribers() {

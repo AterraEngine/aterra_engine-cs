@@ -10,7 +10,7 @@ namespace AterraEngine.Frameworks.Continuum;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class ContinuumServiceFactory : IContinuumServiceFactory {
+public class ContinuumServiceFactory(IServiceCollection serviceCollection) : IContinuumServiceFactory {
     private readonly Lock _configuredLock = new();
     private ConcurrentDictionary<Type, ICommandHubBuilder> _commandHubs = [];
 
@@ -25,7 +25,7 @@ public class ContinuumServiceFactory : IContinuumServiceFactory {
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public IContinuum Create(IScopedProvider provider) {
-        ConfigureContinuumServiceIfRequired(provider);
+        ConfigureContinuumServiceIfRequired();
 
         var bus = new ContinuumService {
             CommandHubs = CommandHubs.ToFrozenDictionary(
@@ -50,7 +50,9 @@ public class ContinuumServiceFactory : IContinuumServiceFactory {
 
         ICommandHubBuilder builder = _commandHubs.GetOrAdd(
             typeof(TCommand),
-            valueFactory: static _ => new CommandHubBuilder<TCommand, TResult>());
+            valueFactory: static (_, sc) => new CommandHubBuilder<TCommand, TResult>(sc),
+            serviceCollection
+        );
 
         if (builder is not ICommandHubBuilder<TCommand, TResult> typedBuilder) throw new InvalidOperationException("Failed to get command builder");
 
@@ -63,7 +65,9 @@ public class ContinuumServiceFactory : IContinuumServiceFactory {
 
         ITriggerHubBuilder builder = _triggerHubs.GetOrAdd(
             typeof(TTrigger),
-            valueFactory: static _ => new TriggerHubBuilder<TTrigger>());
+            valueFactory: static (_, sc) => new TriggerHubBuilder<TTrigger>(sc),
+            serviceCollection
+        );
 
         if (builder is not ITriggerHubBuilder<TTrigger> typedBuilder) throw new InvalidOperationException("Failed to get typed builder");
 
@@ -75,24 +79,18 @@ public class ContinuumServiceFactory : IContinuumServiceFactory {
 
         IQueryHubBuilder builder = _queryHubs.GetOrAdd(
             typeof(TQuery),
-            valueFactory: static _ => new QueryHubBuilder<TQuery, TResult>());
+            valueFactory: static (_, sc) => new QueryHubBuilder<TQuery, TResult>(sc),
+            serviceCollection
+        );
 
         if (builder is not IQueryHubBuilder<TQuery, TResult> typedBuilder) throw new InvalidOperationException("Failed to get typed builder");
 
         return typedBuilder;
     }
-    
-    private void ConfigureContinuumServiceIfRequired(IScopedProvider provider) {
+
+    private void ConfigureContinuumServiceIfRequired() {
         lock (_configuredLock) {
             if (_isConfigured) return;
-            
-            // TODO Fix this so it doesn't work with the weird IEnumerable approach?
-            //      Although technically speaking, the engine would allow for a plugin to add to this configuration
-            //      So we need to support it in some way or another
-            var factoryConfiguration = provider.GetRequiredService<IEnumerable<IContinuumConfiguration>>();
-            foreach (IContinuumConfiguration configuration in factoryConfiguration) {
-                configuration.ConfigureContinuumFactory.Invoke(this);
-            }
             
             CommandHubs = _commandHubs.ToImmutableDictionary();
             TriggerHubs = _triggerHubs.ToImmutableDictionary();
