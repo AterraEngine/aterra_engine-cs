@@ -25,7 +25,7 @@ public static class Program {
         collection.AddTransient(typeof(SimpleCommandPipelineStep<,>));
 
         // Needed for Continuum to work 
-        collection.AddContinuum(static (_, factory) => {
+        collection.AddContinuum(static factory => {
             factory.AddCommand<SimpleCommand, bool>()
                 .WithHandler<SimpleCommandHandler>()
                 .WithPipelineSteps(typeof(SimpleCommandPipelineStep<,>));
@@ -41,49 +41,39 @@ public static class Program {
 
         await using IScopedProvider scopedProvider = collection.Build();
         var continuum = scopedProvider.GetRequiredService<IContinuum>();
-        continuum.StartProcessing();// This currently means that all hub within the message bus are always running
 
         bool doWhile = true;
-
+        CancellationToken ct = CancellationToken.None;
+        
         // ReSharper disable once LoopVariableIsNeverChangedInsideLoop
         while (doWhile) {
             Console.Write("Enter a string: ");
             if (Console.ReadLine() is not {} input) continue;
 
-            await Parallel.ForAsync(0,
-                10,
-                CancellationToken.None,
-                async (i, ct) => {
-                    try {
-                        switch (input.ToLowerInvariant()) {
-                            case "trigger" or "t": {
-                                await continuum.TriggerAsync(new SimpleTrigger($"{input};;{i}", DateTime.UtcNow), ct);
-                                break;
-                            }
+            switch (input.ToLowerInvariant()) {
+                case "trigger" or "t": {
+                    await continuum.TriggerAsync(new SimpleTrigger($"{input}", DateTime.UtcNow), ct);
+                    break;
+                }
 
-                            case "command" or "c": {
-                                bool result = await continuum.ExecuteAsync<SimpleCommand, bool>(new SimpleCommand($"{input};;{i}", DateTime.UtcNow), ct);
-                                Console.WriteLine($"You entered: {input} and got : {result}");
-                                break;
-                            }
+                case "command" or "c": {
+                    bool result = await continuum.ExecuteAsync<SimpleCommand, bool>(new SimpleCommand($"{input}", DateTime.UtcNow), ct);
+                    Console.WriteLine($"You entered: {input} and got : {result}");
+                    break;
+                }
 
-                            case "query" or "q": {
-                                bool queryResult = await continuum.QueryAsync<SimpleQuery, bool>(new SimpleQuery($"{input};;{i}", DateTime.UtcNow), ct);
-                                Console.WriteLine($"You entered: {input} and got : {queryResult}");
+                case "query" or "q": {
+                    bool queryResult = await continuum.QueryAsync<SimpleQuery, bool>(new SimpleQuery($"{input}", DateTime.UtcNow), ct);
+                    Console.WriteLine($"You entered: {input} and got : {queryResult}");
 
-                                break;
-                            }
+                    break;
+                }
 
-                            case "exit" or "x": {
-                                doWhile = false;
-                                break;
-                            }
-                        }
-                    }
-                    catch (OperationCanceledException ex) {
-                        Console.WriteLine($"Operation canceled: {ex.Message}");
-                    }
-                });
+                case "exit" or "x": {
+                    doWhile = false;
+                    break;
+                }
+            }
         }
 
         Console.WriteLine("Exiting...");

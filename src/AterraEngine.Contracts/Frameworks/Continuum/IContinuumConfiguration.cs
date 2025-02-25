@@ -5,6 +5,6 @@ namespace AterraEngine.Frameworks.Continuum;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IContinuumServiceFactoryConfiguration {
-    Action<IScopedProvider, IContinuumServiceFactory> ConfigureContinuumService { get; }
+public interface IContinuumConfiguration {
+    Action<IContinuumServiceFactory> ConfigureContinuumFactory { get; }
 }

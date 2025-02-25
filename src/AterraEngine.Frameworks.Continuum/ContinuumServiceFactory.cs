@@ -10,8 +10,7 @@ namespace AterraEngine.Frameworks.Continuum;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-// TODO Fully rework factory pattern to just save all the types, and resolve on Create()
-public class ContinuumServiceFactory(IContinuumServiceFactoryConfiguration factoryConfiguration) : IContinuumServiceFactory {
+public class ContinuumServiceFactory : IContinuumServiceFactory {
     private readonly Lock _configuredLock = new();
     private ConcurrentDictionary<Type, ICommandHubBuilder> _commandHubs = [];
 
@@ -82,12 +81,19 @@ public class ContinuumServiceFactory(IContinuumServiceFactoryConfiguration facto
 
         return typedBuilder;
     }
+    
     private void ConfigureContinuumServiceIfRequired(IScopedProvider provider) {
         lock (_configuredLock) {
             if (_isConfigured) return;
-
-            factoryConfiguration.ConfigureContinuumService.Invoke(provider, this);
-
+            
+            // TODO Fix this so it doesn't work with the weird IEnumerable approach?
+            //      Although technically speaking, the engine would allow for a plugin to add to this configuration
+            //      So we need to support it in some way or another
+            var factoryConfiguration = provider.GetRequiredService<IEnumerable<IContinuumConfiguration>>();
+            foreach (IContinuumConfiguration configuration in factoryConfiguration) {
+                configuration.ConfigureContinuumFactory.Invoke(this);
+            }
+            
             CommandHubs = _commandHubs.ToImmutableDictionary();
             TriggerHubs = _triggerHubs.ToImmutableDictionary();
             QueryHubs = _queryHubs.ToImmutableDictionary();

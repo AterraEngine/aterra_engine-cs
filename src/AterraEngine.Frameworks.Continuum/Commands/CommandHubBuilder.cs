@@ -27,6 +27,7 @@ public class CommandHubBuilder<TCommand, TResult> : ICommandHubBuilder<TCommand,
         PipelineSteps = [..PipelineSteps.Concat(types)];
         return this;
     }
+    
     public ICommandHub BuildHub(IScopedProvider provider) {
         var hub = provider.GetRequiredService<ICommandHub<TCommand, TResult>>();
         // A command has just one handler
