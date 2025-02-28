@@ -26,8 +26,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FlexiPlug", "FlexiPlug", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{1B50191E-73D0-4519-94C0-776FE219827E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Workfloor.AterraEngine.Frameworks.Nexities.Generators", "examples\Workfloor.AterraEngine.Frameworks.Nexities.Generators\Workfloor.AterraEngine.Frameworks.Nexities.Generators.csproj", "{AC6A188D-48EB-4826-AE03-8FCAE4864738}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Frameworks.Omnia", "src\AterraEngine.Frameworks.Omnia\AterraEngine.Frameworks.Omnia.csproj", "{86363B1C-1B8F-4D31-8ACD-CAA74A4D37A1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Omnia", "Omnia", "{CA5385AC-AD2D-48A5-9D18-8E99049BEC50}"
@@ -46,6 +44,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Workfloor.AterraEngine.Fram
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Frameworks.Continuum.DependencyInjectionExtensions", "src\AterraEngine.Frameworks.Continuum.DependencyInjectionExtensions\AterraEngine.Frameworks.Continuum.DependencyInjectionExtensions.csproj", "{1248E9EF-3634-48DD-AD31-D1F8EDC5678C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Workfloor.AterraEngine.Frameworks.Omnia", "examples\Workfloor.AterraEngine.Frameworks.Omnia\Workfloor.AterraEngine.Frameworks.Omnia.csproj", "{EA8DD9D7-31AB-4330-A5BF-C59F87E06038}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Frameworks.Omnia.PreProcessor", "src\AterraEngine.Frameworks.Omnia.PreProcessor\AterraEngine.Frameworks.Omnia.PreProcessor.csproj", "{821AC869-572F-47FB-92F3-D6ADB3D7A325}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Frameworks.FlexiPlug", "src\AterraEngine.Frameworks.FlexiPlug\AterraEngine.Frameworks.FlexiPlug.csproj", "{79417DA6-0ADD-4AA7-B8F1-B03ED6692169}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Frameworks.FlexiPlug.PreProcessor", "src\AterraEngine.Frameworks.FlexiPlug.PreProcessor\AterraEngine.Frameworks.FlexiPlug.PreProcessor.csproj", "{7ACF6F96-BCD3-467A-AA51-84573BFE3D6B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,7 +68,6 @@ Global
 		{F1E75471-A4EA-4966-9A10-1D217217C4F2} = {D5464FB9-C907-4F70-8D1A-7DA467E16925}
 		{2841E28F-8EF1-4A70-883D-604280CAC265} = {D5464FB9-C907-4F70-8D1A-7DA467E16925}
 		{15ADC8F0-F52A-4507-8229-72A6BFB4A0A7} = {A5A7C72C-9D49-4DEE-866D-D45A8C981A80}
-		{AC6A188D-48EB-4826-AE03-8FCAE4864738} = {E4DFBCC3-6E11-439F-964F-67F359ADBF5B}
 		{CA5385AC-AD2D-48A5-9D18-8E99049BEC50} = {A5A7C72C-9D49-4DEE-866D-D45A8C981A80}
 		{86363B1C-1B8F-4D31-8ACD-CAA74A4D37A1} = {CA5385AC-AD2D-48A5-9D18-8E99049BEC50}
 		{BA5D90C4-D49B-434D-9A1F-E1A3DE058A33} = {1B50191E-73D0-4519-94C0-776FE219827E}
@@ -72,6 +77,10 @@ Global
 		{B5CC5CA4-6D7F-4C44-95EA-D0FD5FD16694} = {54758794-25D7-4DFF-B1FD-2A20F1753723}
 		{60217295-FABB-422C-85F6-F74B623B3B57} = {E4DFBCC3-6E11-439F-964F-67F359ADBF5B}
 		{1248E9EF-3634-48DD-AD31-D1F8EDC5678C} = {54758794-25D7-4DFF-B1FD-2A20F1753723}
+		{EA8DD9D7-31AB-4330-A5BF-C59F87E06038} = {E4DFBCC3-6E11-439F-964F-67F359ADBF5B}
+		{821AC869-572F-47FB-92F3-D6ADB3D7A325} = {CA5385AC-AD2D-48A5-9D18-8E99049BEC50}
+		{79417DA6-0ADD-4AA7-B8F1-B03ED6692169} = {15ADC8F0-F52A-4507-8229-72A6BFB4A0A7}
+		{7ACF6F96-BCD3-467A-AA51-84573BFE3D6B} = {15ADC8F0-F52A-4507-8229-72A6BFB4A0A7}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{71B371EA-3406-497A-A4B2-C20617113C0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -98,10 +107,6 @@ Global
 		{2841E28F-8EF1-4A70-883D-604280CAC265}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2841E28F-8EF1-4A70-883D-604280CAC265}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2841E28F-8EF1-4A70-883D-604280CAC265}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AC6A188D-48EB-4826-AE03-8FCAE4864738}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AC6A188D-48EB-4826-AE03-8FCAE4864738}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AC6A188D-48EB-4826-AE03-8FCAE4864738}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AC6A188D-48EB-4826-AE03-8FCAE4864738}.Release|Any CPU.Build.0 = Release|Any CPU
 		{86363B1C-1B8F-4D31-8ACD-CAA74A4D37A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{86363B1C-1B8F-4D31-8ACD-CAA74A4D37A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86363B1C-1B8F-4D31-8ACD-CAA74A4D37A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -126,5 +131,21 @@ Global
 		{1248E9EF-3634-48DD-AD31-D1F8EDC5678C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1248E9EF-3634-48DD-AD31-D1F8EDC5678C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1248E9EF-3634-48DD-AD31-D1F8EDC5678C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA8DD9D7-31AB-4330-A5BF-C59F87E06038}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA8DD9D7-31AB-4330-A5BF-C59F87E06038}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA8DD9D7-31AB-4330-A5BF-C59F87E06038}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA8DD9D7-31AB-4330-A5BF-C59F87E06038}.Release|Any CPU.Build.0 = Release|Any CPU
+		{821AC869-572F-47FB-92F3-D6ADB3D7A325}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{821AC869-572F-47FB-92F3-D6ADB3D7A325}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{821AC869-572F-47FB-92F3-D6ADB3D7A325}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{821AC869-572F-47FB-92F3-D6ADB3D7A325}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79417DA6-0ADD-4AA7-B8F1-B03ED6692169}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79417DA6-0ADD-4AA7-B8F1-B03ED6692169}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79417DA6-0ADD-4AA7-B8F1-B03ED6692169}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79417DA6-0ADD-4AA7-B8F1-B03ED6692169}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7ACF6F96-BCD3-467A-AA51-84573BFE3D6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7ACF6F96-BCD3-467A-AA51-84573BFE3D6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7ACF6F96-BCD3-467A-AA51-84573BFE3D6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7ACF6F96-BCD3-467A-AA51-84573BFE3D6B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

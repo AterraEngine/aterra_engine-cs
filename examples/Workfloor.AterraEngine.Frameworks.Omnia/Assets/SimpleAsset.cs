@@ -1,14 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace AterraEngine.Frameworks.Omnia;
+using AterraEngine.Frameworks.Omnia;
+
+namespace Workfloor.AterraEngine.Frameworks.Omnia.Assets;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IOmniaAsset {
-    Guid InstanceId { get; }
-    OmniaId OmniaId { get; }
-
-    void Initialize(OmniaId assetId);
-    bool Cleanup();
+public class SimpleAsset : OmniaAsset {
+    
 }

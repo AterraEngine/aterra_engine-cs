@@ -16,4 +16,8 @@
         <PackageReference Include="AterraEngine.DependencyInjection.Contracts" Version="4.12.0"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Frameworks\Nexities\" />
+    </ItemGroup>
+
 </Project>

@@ -1,10 +1,12 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Frameworks.Omnia;
+namespace AterraEngine.Frameworks.Omnia.PreProcessor;
 
-namespace AterraEngine.Frameworks.Nexities;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class NexitiesComponent : OmniaAsset, INexitiesComponent;
+public interface IOmniaRegistrationCollector {
+    IOmniaRegistrationCollector AddRegistration(IOmniaRegistration registration, CancellationToken ct = default) ;
+    IEnumerable<IOmniaRegistration> GetRegistrations();
+}

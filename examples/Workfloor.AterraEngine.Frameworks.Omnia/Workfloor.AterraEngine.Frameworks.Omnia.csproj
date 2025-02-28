@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="AterraEngine.DependencyInjection" Version="4.12.0" />
+      <PackageReference Include="CodeOfChaos.Types.TypedValueStore" Version="0.25.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\AterraEngine.Contracts\AterraEngine.Contracts.csproj" />
+      <ProjectReference Include="..\..\src\AterraEngine.Frameworks.Omnia.PreProcessor\AterraEngine.Frameworks.Omnia.PreProcessor.csproj" />
+      <ProjectReference Include="..\..\src\AterraEngine.Frameworks.Omnia\AterraEngine.Frameworks.Omnia.csproj" />
+      <ProjectReference Include="..\..\src\AterraEngine\AterraEngine.csproj" />
+    </ItemGroup>
+
+</Project>

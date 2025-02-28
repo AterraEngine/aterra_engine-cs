@@ -1,10 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Frameworks.Omnia;
+using AterraEngine.DependencyInjection.Services;
 
-namespace AterraEngine.Frameworks.Nexities;
+namespace AterraEngine.Frameworks.Omnia;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface INexitiesEntity : IOmniaAsset;
+public interface IOmniaRegistrationLibraryFactory : IFactoryService<IOmniaRegistrationLibrary> {
+    
+}

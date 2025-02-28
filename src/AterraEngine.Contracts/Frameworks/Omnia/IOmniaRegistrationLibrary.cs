@@ -1,10 +1,13 @@
-// ---------------------------------------------------------------------------------------------------------------------
+﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using System.Diagnostics.CodeAnalysis;
+
 namespace AterraEngine.Frameworks.Omnia;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IOmniaFactory {
-    Result<TAsset> CreateAsset<TAsset>() where TAsset : class, IOmniaAsset;
+public interface IOmniaRegistrationLibrary {
+    bool TryGetRegistration(OmniaId omniaId,[NotNullWhen(true)] out IOmniaRegistration? registration);
 }

@@ -1,10 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Frameworks.Omnia;
+namespace AterraEngine;
 
-namespace AterraEngine.Frameworks.Nexities;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface INexitiesComponent : IOmniaAsset;
+public class AterraEngine : IAterraEngine {
+    public async Task RunAsync() => await Task.CompletedTask;
+}
+
+public interface IAterraEngine {
+     Task RunAsync();
+}

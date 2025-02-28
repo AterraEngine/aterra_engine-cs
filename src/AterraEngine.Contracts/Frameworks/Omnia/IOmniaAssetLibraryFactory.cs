@@ -1,14 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraEngine.DependencyInjection.Services;
+
 namespace AterraEngine.Frameworks.Omnia;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IOmniaAsset {
-    Guid InstanceId { get; }
-    OmniaId OmniaId { get; }
-
-    void Initialize(OmniaId assetId);
-    bool Cleanup();
+public interface IOmniaAssetLibraryFactory : IFactoryService<IOmniaAssetLibrary> {
+    
 }

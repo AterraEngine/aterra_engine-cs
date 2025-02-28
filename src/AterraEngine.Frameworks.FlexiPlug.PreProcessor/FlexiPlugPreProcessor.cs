@@ -3,15 +3,19 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.DependencyInjection;
 
-namespace AterraEngine.Frameworks.Omnia;
+namespace AterraEngine.Frameworks.FlexiPlug.PreProcessor;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class OmniaFactory(IScopedProvider provider) : IOmniaFactory {
-
-    public Result<TAsset> CreateAsset<TAsset>() where TAsset : class, IOmniaAsset {
-        if (provider.GetService<TAsset>() is {} serviceInstance) return serviceInstance;
-
-        return Result<TAsset>.FromError("Failed to create asset");
+public class FlexiPlugPreProcessor(IScopedProvider provider) {
+    public async Task StartAsync() {
+        // Check config file for plugin list
+        
+        // Check for available plugins in actual folder location
+        
+        // Verify plugins
+        
+        // Start parsing plugins in a pre-processing state
     }
 }

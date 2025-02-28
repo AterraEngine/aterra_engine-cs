@@ -1,14 +1,13 @@
-// ---------------------------------------------------------------------------------------------------------------------
+﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.Frameworks.Nexities;
-using AterraEngine.Frameworks.Omnia;
+using AterraEngine.DependencyInjection;
 
-namespace Workfloor.AterraEngine.Frameworks.Nexities.Generators;
+namespace AterraEngine.Frameworks.Omnia;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[OmniaId("example:component")]
-public class ExampleComponent : NexitiesComponent {
-    public int Value { get; set; }
+public class OmniaAssetLibraryFactory : IOmniaAssetLibraryFactory {
+
+    public IOmniaAssetLibrary Create(IScopedProvider provider) => throw new NotImplementedException();
 }
