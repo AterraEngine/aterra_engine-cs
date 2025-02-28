@@ -21,7 +21,7 @@ public class ContinuumService : IContinuum {
 
         return await castedHub.ExecuteAsync(query, ct);
     }
-    
+
     public ValueTask<TOutput> ExecuteAsync<TCommand, TOutput>(TCommand command, CancellationToken ct = default) where TCommand : ICommand<TOutput> where TOutput : struct {
         if (!CommandHubs.TryGetValue(typeof(TCommand), out ICommandHub? hub)) throw new InvalidOperationException("No command hub found");
         if (hub is not ICommandHub<TCommand, TOutput> castedHub) throw new InvalidOperationException("Command hub is not of the expected type");

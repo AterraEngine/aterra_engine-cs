@@ -11,8 +11,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="CodeOfChaos.Testing.TUnit" Version="0.8.1" />
-        <PackageReference Include="TUnit" Version="0.14.10" />
+        <PackageReference Include="CodeOfChaos.Testing.TUnit" Version="0.8.1"/>
+        <PackageReference Include="TUnit" Version="0.15.18"/>
     </ItemGroup>
 
 </Project>

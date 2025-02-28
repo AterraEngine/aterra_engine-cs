@@ -8,7 +8,7 @@ namespace AterraEngine.Frameworks.Continuum.DependencyInjectionExtensions;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public static class ServiceCollectionExtensions {
-    private static IContinuumServiceFactory? Factory { get; set; } = null;
+    private static IContinuumServiceFactory? Factory { get; set; }
     public static IServiceCollection AddContinuum(this IServiceCollection serviceCollection, Action<IContinuumServiceFactory> configure) {
         serviceCollection.AddScoped(typeof(ICommandHub<,>), typeof(CommandHub<,>));
         serviceCollection.AddScoped(typeof(ITriggerHub<>), typeof(TriggerHub<>));
@@ -27,7 +27,7 @@ public static class ServiceCollectionExtensions {
         IContinuumServiceFactory factory = Factory ??= new ContinuumServiceFactory(serviceCollection);
         configure(factory);
         serviceCollection.AddSingleton(factory);
-        
+
         return serviceCollection;
     }
 }

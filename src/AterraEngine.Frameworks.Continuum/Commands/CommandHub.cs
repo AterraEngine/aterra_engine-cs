@@ -35,7 +35,7 @@ public class CommandHub<TCommand, TOutput> : MessageHub<IMessageHandler<TCommand
         while (await _channel.Reader.WaitToReadAsync()) {
             while (_channel.Reader.TryRead(out CommandHubChannelDto<TCommand, TOutput>? dto)) {
                 dto.CancellationToken.ThrowIfCancellationRequested();
-                
+
                 IMessageHandler<TCommand, ValueTask<TOutput>> subscriber = GetSubscribers()[0];
                 TOutput result = await subscriber.HandleAsync(dto.CommandData, dto.CancellationToken);
 
@@ -55,6 +55,7 @@ public class CommandHub<TCommand, TOutput> : MessageHub<IMessageHandler<TCommand
             if (!_replyChannel.Reader.TryRead(out TOutput result)) continue;
             return result;
         }
+
         throw new InvalidOperationException("No reply was received");
     }
 }

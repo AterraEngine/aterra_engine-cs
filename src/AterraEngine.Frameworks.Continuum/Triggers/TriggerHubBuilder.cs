@@ -28,7 +28,7 @@ public class TriggerHubBuilder<TTrigger>(IServiceCollection serviceCollection) :
         foreach (Type type in types) serviceCollection.AddScoped(type);
         return this;
     }
-    
+
     public ITriggerHub BuildHub(IScopedProvider provider) {
         var hub = provider.GetRequiredService<ITriggerHub<TTrigger>>();
 
@@ -55,6 +55,7 @@ public class TriggerHubBuilder<TTrigger>(IServiceCollection serviceCollection) :
 
             pipelines[i] = (IPipelineStep<TTrigger, Task>)provider.GetRequiredService(actualType);
         }
+
         hub.AddPipelines(pipelines);
 
         return hub;

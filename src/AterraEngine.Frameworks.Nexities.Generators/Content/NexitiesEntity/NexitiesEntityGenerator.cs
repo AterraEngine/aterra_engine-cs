@@ -50,6 +50,7 @@ public class NexitiesEntityGenerator : IIncrementalGenerator {
             INexitiesEntity_DisplayString,
             OmniaIdAttribute_DisplayString
         ];
+
         symbolConvertor.ConvertAll(syntaxContext.SemanticModel.Compilation);
         NexitiesEntityDtoFactory factory = new(symbolConvertor);
 

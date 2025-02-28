@@ -22,14 +22,14 @@ public class TriggerHub<TTrigger> : MessageHub<ITriggerHandler<TTrigger>, TTrigg
         while (await _channel.Reader.WaitToReadAsync()) {
             while (_channel.Reader.TryRead(out TriggerHubChannelDto<TTrigger>? dto)) {
                 dto.CancellationToken.ThrowIfCancellationRequested();
-                
+
                 Span<ITriggerHandler<TTrigger>> subscribers = GetSubscribers();
                 var tasks = new Task[SubscriberCount];
-                
+
                 for (int i = Subscribers.Count - 1; i >= 0; i--) {
                     tasks[i] = subscribers[i].HandleAsync(dto.Trigger, dto.CancellationToken);
                 }
-                
+
                 await Task.WhenAll(tasks);
             }
         }

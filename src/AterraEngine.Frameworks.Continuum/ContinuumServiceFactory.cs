@@ -91,7 +91,7 @@ public class ContinuumServiceFactory(IServiceCollection serviceCollection) : ICo
     private void ConfigureContinuumServiceIfRequired() {
         lock (_configuredLock) {
             if (_isConfigured) return;
-            
+
             CommandHubs = _commandHubs.ToImmutableDictionary();
             TriggerHubs = _triggerHubs.ToImmutableDictionary();
             QueryHubs = _queryHubs.ToImmutableDictionary();

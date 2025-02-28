@@ -28,7 +28,7 @@ public class QueryHubBuilder<TQuery, TResult>(IServiceCollection serviceCollecti
         foreach (Type type in types) serviceCollection.AddScoped(type);
         return this;
     }
-    
+
     public IQueryHub BuildHub(IScopedProvider provider) {
         var hub = provider.GetRequiredService<IQueryHub<TQuery, TResult>>();
         if (QueryHandlerType == null) throw new InvalidOperationException("No command handler specified");
@@ -52,6 +52,7 @@ public class QueryHubBuilder<TQuery, TResult>(IServiceCollection serviceCollecti
 
             pipelines[i] = (IPipelineStep<TQuery, ValueTask<TResult>>)provider.GetRequiredService(actualType);
         }
+
         hub.AddPipelines(pipelines);
 
         return hub;

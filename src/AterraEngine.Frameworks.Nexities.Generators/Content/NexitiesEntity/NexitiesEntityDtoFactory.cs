@@ -67,6 +67,7 @@ public class NexitiesEntityDtoFactory(CachedSymbolConvertor symbolConvertor) {
             }
             // Add more if statements the more tags we need to find.
         }
+
         return tagAttribute is not null;
     }
     #endregion

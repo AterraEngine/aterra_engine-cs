@@ -14,7 +14,7 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="CodeOfChaos.Extensions" Version="0.40.1" />
+        <PackageReference Include="CodeOfChaos.Extensions" Version="0.41.0"/>
     </ItemGroup>
 
 </Project>

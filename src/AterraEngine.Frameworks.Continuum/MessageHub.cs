@@ -48,7 +48,7 @@ public abstract class MessageHub<TMessageHandler, TInput, TOutput> : IMessageHub
             Subscribers.AddOrUpdate(id, currentPipeline);
         }
     }
-    
+
     public abstract TOutput ExecuteAsync(TInput inputData, CancellationToken ct = default);
 
     protected Span<TMessageHandler> GetSubscribers() {
@@ -56,6 +56,7 @@ public abstract class MessageHub<TMessageHandler, TInput, TOutput> : IMessageHub
         for (int i = SubscriberCount - 1; i >= 0; i--) {
             subscribers[i] = Subscribers[SubscriberOrder[i]] as TMessageHandler ?? throw new InvalidOperationException("Subscriber is not of the expected type");
         }
+
         return subscribers;
     }
 }

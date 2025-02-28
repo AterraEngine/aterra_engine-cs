@@ -29,7 +29,7 @@ public class CommandHubBuilder<TCommand, TResult>(IServiceCollection serviceColl
         foreach (Type type in types) serviceCollection.AddScoped(type);
         return this;
     }
-    
+
     public ICommandHub BuildHub(IScopedProvider provider) {
         var hub = provider.GetRequiredService<ICommandHub<TCommand, TResult>>();
         // A command has just one handler
@@ -52,6 +52,7 @@ public class CommandHubBuilder<TCommand, TResult>(IServiceCollection serviceColl
 
             pipelines[i] = (IPipelineStep<TCommand, ValueTask<TResult>>)provider.GetRequiredService(actualType);
         }
+
         hub.AddPipelines(pipelines);
 
         return hub;

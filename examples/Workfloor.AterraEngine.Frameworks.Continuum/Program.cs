@@ -16,7 +16,7 @@ namespace Workfloor.AterraEngine.Frameworks.Continuum;
 public static class Program {
     public static async Task Main() {
         var collection = new ServiceCollection();
-        
+
         // Needed for Continuum to work 
         collection.AddContinuum(static factory => {
             factory.AddCommand<SimpleCommand, bool>()
@@ -39,7 +39,7 @@ public static class Program {
 
         bool doWhile = true;
         CancellationToken ct = CancellationToken.None;
-        
+
         // ReSharper disable once LoopVariableIsNeverChangedInsideLoop
         while (doWhile) {
             Console.Write("Enter a string: ");
@@ -66,13 +66,14 @@ public static class Program {
 
                 case "cancel": {
                     try {
-                        CancellationToken ctNew = new CancellationTokenSource( TimeSpan.FromMilliseconds(500) ).Token;
+                        CancellationToken ctNew = new CancellationTokenSource(TimeSpan.FromMilliseconds(500)).Token;
                         bool result = await continuum.ExecuteAsync<SimpleCommand, bool>(new SimpleCommand($"{input}", DateTime.UtcNow), ctNew);
                         Console.WriteLine($"You entered: {input} and got : {result}");
                     }
                     catch (Exception e) {
                         Console.WriteLine(e);
                     }
+
                     break;
                 }
 

@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.Frameworks.Nexities.Generators;
 using AterraEngine.Frameworks.Nexities.Generators.Content.SyntaxCheckers;
+using CodeOfChaos.Testing;
 using CodeOfChaos.Testing.TUnit;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -23,7 +24,7 @@ public class ValidKeyedInstanceAnalyzerTests {
             }
             """;
 
-        var runner = new RoslynCompilationRunner()
+        RoslynCompilationRunner runner = new RoslynCompilationRunner()
             .AddDocument("TestClass.cs", testCode)
             .AddDiagnosticAnalyzer<ValidKeyedInstanceAnalyzer>();
 
@@ -46,7 +47,7 @@ public class ValidKeyedInstanceAnalyzerTests {
             }
             """;
 
-        var runner = new RoslynCompilationRunner()
+        RoslynCompilationRunner runner = new RoslynCompilationRunner()
             .AddDocument("TestClass.cs", testCode)
             .AddDiagnosticAnalyzer<ValidKeyedInstanceAnalyzer>();
 

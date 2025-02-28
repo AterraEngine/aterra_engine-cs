@@ -15,7 +15,7 @@ public class QueryHub<TQuery, TOutput> : MessageHub<IMessageHandler<TQuery, Valu
     public override async ValueTask<TOutput> ExecuteAsync(TQuery inputData, CancellationToken ct = default) {
         if (!HasSubscriptions) throw new InvalidOperationException("Cannot publish to a command hub that has no subscriber");
         ct.ThrowIfCancellationRequested();
-        
+
         // One Query handler per query type
         IMessageHandler<TQuery, ValueTask<TOutput>> subscriber = GetSubscribers()[0];
         TOutput result = await subscriber.HandleAsync(inputData, ct);
