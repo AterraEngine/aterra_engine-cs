@@ -2,7 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.DependencyInjection;
-using System.Collections.Concurrent;
+using AterraEngine.Frameworks.Omnia.PreProcessor;
 using System.Collections.Frozen;
 
 namespace AterraEngine.Frameworks.Omnia;
@@ -10,41 +10,33 @@ namespace AterraEngine.Frameworks.Omnia;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class OmniaRegistrationLibraryFactory : IOmniaRegistrationLibraryFactory {
-    private ConcurrentQueue<IOmniaRegistration> Registrations { get; } = new();
-    private FrozenDictionary<OmniaId, IOmniaRegistration> FrozenRegistrations { get; set; } = FrozenDictionary<OmniaId, IOmniaRegistration>.Empty;
-    public bool IsFrozen { get; private set; }
-    public bool IsEmpty => IsFrozen ? FrozenRegistrations.IsEmpty() : Registrations.IsEmpty;
+public class OmniaRegistrationLibraryFactory(IOmniaRegistrationCollector registrationCollector, IOmniaRegistrationComparer comparer) : IOmniaRegistrationLibraryFactory {
+    private readonly Lazy<FrozenDictionary<IOmniaRegistrationKey, IOmniaRegistration>> _emptyRegistration = new(
+        () => new Dictionary<IOmniaRegistrationKey, IOmniaRegistration>().ToFrozenDictionary(comparer:comparer)
+    );
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public void AddRegistration(IOmniaRegistration registration) {
-        if (IsFrozen) throw new InvalidOperationException("Cannot add registration to a frozen library.");
-        Registrations.Enqueue(registration);
-    }
-
-    public IOmniaRegistrationLibraryFactory ToFrozen() {
-        if (IsFrozen) return this;
-
-        var tempDictionary = new Dictionary<OmniaId, IOmniaRegistration>();
-        while (Registrations.TryDequeue(out IOmniaRegistration? result)) {
-            // Still do some extra checks here to ensure valid registrations
-            tempDictionary.Add(result.OmniaId, result);
-        }
-
-        FrozenRegistrations = tempDictionary.ToFrozenDictionary();
-
-        IsFrozen = true;
-        return this;
-    }
-
-    public IOmniaRegistrationLibrary Create(IScopedProvider provider) {
-        if (IsEmpty) return new OmniaRegistrationLibrary();
-        if (!IsFrozen) ToFrozen();
-        
+    private static OmniaRegistrationLibrary CreateFromDictionary(FrozenDictionary<IOmniaRegistrationKey, IOmniaRegistration> frozenRegistrations ) {
         return new OmniaRegistrationLibrary {
-            Registrations = FrozenRegistrations
+            Registrations = frozenRegistrations,
+            RegistrationsByOmniaId = frozenRegistrations.GetAlternateLookup<OmniaId>(),
+            RegistrationsByType = frozenRegistrations.GetAlternateLookup<Type>()
         };
+    }
+    
+    public IOmniaRegistrationLibrary Create(IScopedProvider _) {
+        if (registrationCollector.IsEmpty) return CreateFromDictionary(_emptyRegistration.Value);
+        
+        FrozenDictionary<IOmniaRegistrationKey, IOmniaRegistration> frozenRegistrations = registrationCollector
+            .GetRegistrations()
+            .ToFrozenDictionary(
+                registration => registration.GetLookupKey() ,
+                registration => registration,
+                comparer: comparer
+            );
+        
+        return CreateFromDictionary(frozenRegistrations);
     }
 }

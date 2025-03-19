@@ -10,7 +10,9 @@ namespace AterraEngine.Frameworks.Omnia.PreProcessor;
 // ---------------------------------------------------------------------------------------------------------------------
 public class OmniaRegistrationCollector : IOmniaRegistrationCollector {
     private ConcurrentDictionary<OmniaId, IOmniaRegistration> _registrations = new(); // < OmniaId, IOmniaRegistration>
-    
+
+    public bool IsEmpty => _registrations.IsEmpty;
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------

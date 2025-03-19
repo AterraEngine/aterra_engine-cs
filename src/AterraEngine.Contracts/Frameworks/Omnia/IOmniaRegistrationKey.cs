@@ -1,13 +1,12 @@
-﻿// ---------------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using AterraEngine.DependencyInjection;
-
 namespace AterraEngine.Frameworks.Omnia;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class OmniaAssetLibraryFactory : IOmniaAssetLibraryFactory {
-
-    public IOmniaAssetLibrary Create(IScopedProvider provider) => throw new NotImplementedException();
+public interface IOmniaRegistrationKey {
+    OmniaId OmniaId { get; }
+    Type AssetType { get; }
 }

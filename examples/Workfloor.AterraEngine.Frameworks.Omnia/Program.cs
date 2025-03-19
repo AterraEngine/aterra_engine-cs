@@ -25,6 +25,37 @@ public static class Program {
         Console.WriteLine($"Result: {result}");
         Console.WriteLine($"Registration: {registration}");
         
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.WriteLine();
+        
+        bool resultByType = registrationLibrary.TryGetRegistration(typeof(SimpleAsset), out IOmniaRegistration? registrationB);
+        Console.WriteLine($"Result: {resultByType}");
+        Console.WriteLine($"Registration: {registrationB}");
+        
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.WriteLine();
+        
+        var library = engineProvider.GetRequiredService<IOmniaAssetLibrary>();
+        bool instanceResult = library.TryGetInstance("workfloor:assets/simple", out SimpleAsset? instance);
+        Console.WriteLine($"Result: {instanceResult}");
+        Console.WriteLine($"Instance: {instance?.InstanceId} - {instance?.OmniaId}");
+        Console.WriteLine($"name: {instance?.Name}");
+        
+        Console.WriteLine();
+        Console.WriteLine("Cleaning up");
+        library.ReturnInstance(instance!);
+        
+        
+        Console.WriteLine($"Instance: {instance?.InstanceId} - {instance?.OmniaId}");
+        Console.WriteLine($"name: {instance?.Name}");
+        
+        
+        
+        
         // var engine = engineProvider.GetRequiredService<IAterraEngine>();
         // await engine.RunAsync();
     }
@@ -32,7 +63,7 @@ public static class Program {
     private static async Task<IScopedProvider> PluginInit() {
         var serviceCollection = new ServiceCollection();
         serviceCollection.AddSingleton<IOmniaRegistrationCollector, OmniaRegistrationCollector>();
-        serviceCollection.AddTransient(typeof(OmniaAssetPoolPolicy<>));
+        
         IScopedProvider provider = serviceCollection.Build();
         
         // Actual stuff the pre-processor should do
@@ -41,7 +72,7 @@ public static class Program {
         // These sort of registrations should be automagically assigned by a generator? Appended to with data from a .json file?
         collector.AddRegistration(new OmniaRegistration<SimpleAsset>("workfloor:assets/simple") {
             MaxPoolSize = 1000,
-            PoolPolicy = provider.GetRequiredService<OmniaAssetPoolPolicy<SimpleAsset>>(),
+            PoolPolicyBuilder = static provider => provider.GetRequiredService<OmniaAssetPoolPolicy<SimpleAsset>>()
         });
         
         return provider;
@@ -49,18 +80,16 @@ public static class Program {
 
     private static async Task<IScopedProvider> PostPluginInit(IScopedProvider pluginProvider) {
         var serviceCollection = new ServiceCollection();
-                
-        serviceCollection.AddSingletonFromFactory<IOmniaRegistrationLibrary>(_ => {
-            var collector = pluginProvider.GetRequiredService<IOmniaRegistrationCollector>();
-            
-            var factory = new OmniaRegistrationLibraryFactory();
-            foreach (IOmniaRegistration registration in collector.GetRegistrations()) {
-                factory.AddRegistration(registration);
-            }
-            
-            IOmniaRegistrationLibraryFactory frozen = factory.ToFrozen();
-            return frozen.Create(pluginProvider);
-        });
+        
+        serviceCollection.AddSingleton<IOmniaRegistrationCollector>(pluginProvider.GetRequiredService<IOmniaRegistrationCollector>());
+        serviceCollection.AddTransient(typeof(OmniaAssetPoolPolicy<>));
+        
+        serviceCollection.AddTransient<SimpleAsset>();
+        
+        serviceCollection.AddSingleton<IOmniaRegistrationComparer, OmniaRegistrationComparer>();
+        serviceCollection.AddSingleton<IOmniaRegistrationLibraryFactory, OmniaRegistrationLibraryFactory>();
+        serviceCollection.AddSingletonFromFactory<IOmniaRegistrationLibrary, IOmniaRegistrationLibraryFactory>();
+        serviceCollection.AddSingleton<IOmniaAssetLibrary, OmniaAssetLibrary>();
         
         IScopedProvider provider = serviceCollection.Build();
         return provider;

@@ -9,4 +9,6 @@ namespace AterraEngine.Frameworks.Omnia.PreProcessor;
 public interface IOmniaRegistrationCollector {
     IOmniaRegistrationCollector AddRegistration(IOmniaRegistration registration, CancellationToken ct = default) ;
     IEnumerable<IOmniaRegistration> GetRegistrations();
+    
+    bool IsEmpty { get; }
 }

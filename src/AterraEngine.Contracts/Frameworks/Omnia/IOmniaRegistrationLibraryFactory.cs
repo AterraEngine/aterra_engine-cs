@@ -8,6 +8,4 @@ namespace AterraEngine.Frameworks.Omnia;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IOmniaRegistrationLibraryFactory : IFactoryService<IOmniaRegistrationLibrary> {
-    
-}
+public interface IOmniaRegistrationLibraryFactory : IFactoryService<IOmniaRegistrationLibrary>;

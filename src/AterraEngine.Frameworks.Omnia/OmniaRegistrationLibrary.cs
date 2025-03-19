@@ -9,16 +9,25 @@ namespace AterraEngine.Frameworks.Omnia;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class OmniaRegistrationLibrary : IOmniaRegistrationLibrary {
-    public FrozenDictionary<OmniaId, IOmniaRegistration> Registrations { private get; init; } = FrozenDictionary<OmniaId, IOmniaRegistration>.Empty;
+using RegistrationsDictionary = FrozenDictionary<IOmniaRegistrationKey, IOmniaRegistration>;
 
+public class OmniaRegistrationLibrary : IOmniaRegistrationLibrary {
+    public required RegistrationsDictionary Registrations { private get; init; }
+
+    // TODO look into performance impact of always having the alternate lookups in memory
+    public required RegistrationsDictionary.AlternateLookup<OmniaId> RegistrationsByOmniaId { private get; init; }
+    public required RegistrationsDictionary.AlternateLookup<Type> RegistrationsByType { private get; init; }
+    
     // -----------------------------------------------------------------------------------------------------------------
-    // Methods
+    // Lookup Methods
     // -----------------------------------------------------------------------------------------------------------------
     public bool TryGetRegistration(OmniaId omniaId,[NotNullWhen(true)] out IOmniaRegistration? registration) {
         registration = null;
         if (omniaId.IsEmpty) return false;
         
-        return Registrations.TryGetValue(omniaId, out registration);
+        return RegistrationsByOmniaId.TryGetValue(omniaId, out registration);
     }
+    
+    public bool TryGetRegistration(Type assetType, [NotNullWhen(true)] out IOmniaRegistration? registration) 
+        => RegistrationsByType.TryGetValue(assetType, out registration);
 }

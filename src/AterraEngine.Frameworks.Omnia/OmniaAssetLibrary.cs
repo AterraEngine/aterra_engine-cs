@@ -19,10 +19,17 @@ public class OmniaAssetLibrary(IOmniaRegistrationLibrary registrationLibrary, IS
         
         // Do checks if the registrations calls for a new one every time, per level, etc...
         //      Then why don't we do this through he coped provider?
-        if (!registration.AssetType.IsAssignableFrom(typeof(T))) return false;
+        if (!typeof(T).IsAssignableFrom(registration.AssetType)) return false;
         if (!registration.TryCreateInstance(provider, out T? castedAsset)) return false;
         
+        castedAsset.Initialize(omniaId);
         asset = castedAsset;
+        
         return true;
+    }
+    
+    public void ReturnInstance<T>(T asset) where T : class, IOmniaAsset {
+        registrationLibrary.TryGetRegistration(asset.OmniaId, out IOmniaRegistration? registration);
+        registration?.ReturnToPool(asset);
     }
 }
