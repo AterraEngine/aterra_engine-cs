@@ -2,9 +2,15 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using AterraEngine.DependencyInjection;
+using AterraEngine.DependencyInjection.Bridges.Microsoft;
 using AterraEngine.Frameworks.Omnia;
 using AterraEngine.Frameworks.Omnia.PreProcessor;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Serilog;
 using Workfloor.AterraEngine.Frameworks.Omnia.Assets;
+using ILogger=Microsoft.Extensions.Logging.ILogger;
+using ServiceCollection=AterraEngine.DependencyInjection.ServiceCollection;
 
 namespace Workfloor.AterraEngine.Frameworks.Omnia;
 
@@ -18,46 +24,36 @@ public static class Program {
         
         // Post Plugin Initialization
         IScopedProvider engineProvider = await PostPluginInit(pluginProvider);
+        ILogger logger = engineProvider.GetRequiredService<ILoggerFactory>().CreateLogger("Main");
 
         var registrationLibrary = engineProvider.GetRequiredService<IOmniaRegistrationLibrary>();
         bool result = registrationLibrary.TryGetRegistration("workfloor:assets/simple", out IOmniaRegistration? registration);
         
-        Console.WriteLine($"Result: {result}");
-        Console.WriteLine($"Registration: {registration}");
-        
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
+        logger.Information("Result: {result}", result);
+        logger.Information("Registration: {registration}", registration);
         
         bool resultByType = registrationLibrary.TryGetRegistration(typeof(SimpleAsset), out IOmniaRegistration? registrationB);
-        Console.WriteLine($"Result: {resultByType}");
-        Console.WriteLine($"Registration: {registrationB}");
-        
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
+    
+        logger.Information("Result 2: {result}", resultByType);
+        logger.Information("Registration 2: {registration}", registrationB);
         
         var library = engineProvider.GetRequiredService<IOmniaAssetLibrary>();
         bool instanceResult = library.TryGetInstance("workfloor:assets/simple", out SimpleAsset? instance);
-        Console.WriteLine($"Result: {instanceResult}");
-        Console.WriteLine($"Instance: {instance?.InstanceId} - {instance?.OmniaId}");
-        Console.WriteLine($"name: {instance?.Name}");
+        logger.Information("Instance Result: {result}", instanceResult);
+        logger.Information("Instance: {instance}", instance);
+        logger.Information("Instance OmniaId: {omniaId}", instance?.OmniaId);
+        logger.Information("Instance Name: {name}", instance?.Name);
         
-        Console.WriteLine();
-        Console.WriteLine("Cleaning up");
+        logger.Information("Cleaning up...");
         library.ReturnInstance(instance!);
+
+        logger.Information("Cleaned up!");
+        logger.Information("Instance Result: {result}", instanceResult);
+        logger.Information("Instance: {instance}", instance);
+        logger.Information("Instance OmniaId: {omniaId}", instance?.OmniaId);
+        logger.Information("Instance Name: {name}", instance?.Name);
         
-        
-        Console.WriteLine($"Instance: {instance?.InstanceId} - {instance?.OmniaId}");
-        Console.WriteLine($"name: {instance?.Name}");
-        
-        
-        
-        
-        // var engine = engineProvider.GetRequiredService<IAterraEngine>();
-        // await engine.RunAsync();
+        await Log.CloseAndFlushAsync();
     }
     
     private static async Task<IScopedProvider> PluginInit() {
@@ -79,7 +75,7 @@ public static class Program {
     }
 
     private static async Task<IScopedProvider> PostPluginInit(IScopedProvider pluginProvider) {
-        var serviceCollection = new ServiceCollection();
+        var serviceCollection = new MsBridgeServiceCollection();
         
         serviceCollection.AddSingleton<IOmniaRegistrationCollector>(pluginProvider.GetRequiredService<IOmniaRegistrationCollector>());
         serviceCollection.AddTransient(typeof(OmniaAssetPoolPolicy<>));
@@ -90,6 +86,15 @@ public static class Program {
         serviceCollection.AddSingleton<IOmniaRegistrationLibraryFactory, OmniaRegistrationLibraryFactory>();
         serviceCollection.AddSingletonFromFactory<IOmniaRegistrationLibrary, IOmniaRegistrationLibraryFactory>();
         serviceCollection.AddSingleton<IOmniaAssetLibrary, OmniaAssetLibrary>();
+        
+        Log.Logger = new LoggerConfiguration()
+            .AsAnnaSasDevServerConsole(
+                24,
+                configure: asyncConsoleConfig => asyncConsoleConfig.ApplyThemeToRedirectedOutput = true)
+            .Enrich.FromLogContext()
+            .CreateLogger();
+
+        serviceCollection.MsServiceCollection.AddLogging(builder => builder.AddSerilog());
         
         IScopedProvider provider = serviceCollection.Build();
         return provider;
