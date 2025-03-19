@@ -36,6 +36,12 @@ public record OmniaRegistration<T>(OmniaId OmniaId) : IOmniaRegistration where T
     }
 
     public TAsset CreateInstance<TAsset>(IScopedProvider scopedProvider) where TAsset : IOmniaAsset{
+        // Use the pool if it is present
+        if (UsesPool && GetPool(scopedProvider) is { } pool) {
+            if (pool.Get() is not TAsset obj) throw new InvalidOperationException("Could not get an instance from the pool.");
+            return obj;
+        }
+        
         // This feels incredibly weird
         if (!typeof(T).IsAssignableFrom(typeof(TAsset))) throw new InvalidOperationException("The asset type is not assignable from the registration type.");
         var asset = scopedProvider.GetRequiredService<T>();
@@ -47,7 +53,7 @@ public record OmniaRegistration<T>(OmniaId OmniaId) : IOmniaRegistration where T
     public bool TryCreateInstance<TAsset>(IScopedProvider scopedProvider, [NotNullWhen(true)] out TAsset? asset) where TAsset : IOmniaAsset {
         asset = default;
 
-        // Create tzo different classes. One with a pool one without a pool. This wa we negate one if check
+        // Create two different classes. One with a pool one without a pool. This wa we negate one if check
         if (UsesPool && GetPool(scopedProvider) is { } pool) {
             if (pool.Get() is not TAsset obj) return false;
             asset = obj;
