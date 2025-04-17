@@ -13,7 +13,7 @@
 
     <ItemGroup>
       <PackageReference Include="AterraEngine.DependencyInjection" Version="4.13.0" />
-      <PackageReference Include="Microsoft.Extensions.ObjectPool" Version="9.0.3" />
+      <PackageReference Include="Microsoft.Extensions.ObjectPool" Version="9.0.4" />
     </ItemGroup>
 
 </Project>
