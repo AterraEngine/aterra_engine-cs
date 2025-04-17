@@ -52,6 +52,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Frameworks.Fle
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AterraEngine.Frameworks.FlexiPlug.PreProcessor", "src\AterraEngine.Frameworks.FlexiPlug.PreProcessor\AterraEngine.Frameworks.FlexiPlug.PreProcessor.csproj", "{7ACF6F96-BCD3-467A-AA51-84573BFE3D6B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmarks.Groundfloor", "src\Benchmarks.Groundfloor\Benchmarks.Groundfloor.csproj", "{BB4ADD77-5209-44AF-B7C0-83E71FE8AC84}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,7 @@ Global
 		{821AC869-572F-47FB-92F3-D6ADB3D7A325} = {CA5385AC-AD2D-48A5-9D18-8E99049BEC50}
 		{79417DA6-0ADD-4AA7-B8F1-B03ED6692169} = {15ADC8F0-F52A-4507-8229-72A6BFB4A0A7}
 		{7ACF6F96-BCD3-467A-AA51-84573BFE3D6B} = {15ADC8F0-F52A-4507-8229-72A6BFB4A0A7}
+		{BB4ADD77-5209-44AF-B7C0-83E71FE8AC84} = {E4DFBCC3-6E11-439F-964F-67F359ADBF5B}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{71B371EA-3406-497A-A4B2-C20617113C0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -147,5 +150,9 @@ Global
 		{7ACF6F96-BCD3-467A-AA51-84573BFE3D6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7ACF6F96-BCD3-467A-AA51-84573BFE3D6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7ACF6F96-BCD3-467A-AA51-84573BFE3D6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB4ADD77-5209-44AF-B7C0-83E71FE8AC84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB4ADD77-5209-44AF-B7C0-83E71FE8AC84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB4ADD77-5209-44AF-B7C0-83E71FE8AC84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB4ADD77-5209-44AF-B7C0-83E71FE8AC84}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
