@@ -2,33 +2,36 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using System.Numerics;
 using AterraEngine.Contracts;
 using CodeOfChaos.Extensions.DependencyInjection;
 using Raylib_cs;
 
-namespace AterraEngine.Frameworks.Nexities.Variants;
+namespace AterraEngine;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[InjectableSingleton<RenderEntitySystem>]
-public class RenderEntitySystem(ITextureProvider textureProvider) : NexitiesSystem<BasicEntity>{
-    private readonly Rectangle _duckySource = new(0,0,256,256);
-    
+[InjectableSingleton<ITextureProvider>]
+public class TextureProvider : ITextureProvider {
+    private readonly Dictionary<string, Texture2D> _textures = new();
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public override void Update(in BasicEntity entity, float delta) {
-        if (!textureProvider.TryGetTexture(entity.Sprite.TextureId, out Texture2D texture)) return;
-        (TransformComponent transform, SpriteComponent sprite) = entity;
+    public bool TryGetTexture(string id, out Texture2D texture)
+        => _textures.TryGetValue(id, out texture);
+    
+    public bool TryAddTexture(string id, string path) {
+        try {
+            if (_textures.ContainsKey(id)) return false;
+            if (!Path.Exists(path)) return false;
             
-        Raylib.DrawTexturePro(
-            texture,
-            _duckySource,
-            transform.Rectangle,
-            Vector2.One,
-            transform.Rotation,
-            sprite.Tint
-        );
+            Texture2D texture = Raylib.LoadTexture(path);
+            _textures.Add(id, texture);
+            return true;
+        }
+        catch (Exception e) {
+            Console.WriteLine(e);
+            return false;
+        }
     }
 }

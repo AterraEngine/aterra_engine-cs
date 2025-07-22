@@ -8,20 +8,22 @@ using System.Runtime.InteropServices;
 using ImGuiNET;
 using Raylib_cs;
 using AterraEngine;
+using AterraEngine.Contracts;
 using AterraEngine.Frameworks.Nexities;
 using AterraEngine.Frameworks.Nexities.Variants;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Example.Game;
 // -----------------------------------------------------------------------------------------------------------------
 // Methods
 // -----------------------------------------------------------------------------------------------------------------
 public static class Program {
-    public static NexitiesEntity[] Entities { get; } = new NexitiesEntity[EntityCountI*EntityCountJ];
-    
-    public static RenderEntitySystem RenderSystem { get; } = new();
-    public static MoveEntitySystem MoveSystem { get; } = new();
-    
-    public static Camera2D Camera { get; } = new() {
+    private static NexitiesEntity[] Entities { get; } = new NexitiesEntity[EntityCountI*EntityCountJ];
+
+    private static RenderEntitySystem RenderSystem { get; set; } = null!;
+    private static MoveEntitySystem MoveSystem { get; } = new();
+
+    private static Camera2D Camera { get; } = new() {
         Target = new Vector2(0, 0),
         Offset = new Vector2(400, 200), // Center of screen (half of 800x400)
         Rotation = 0.0f,
@@ -36,11 +38,13 @@ public static class Program {
     // -----------------------------------------------------------------------------------------------------------------
     public static async Task Main(string[] args) {
         using Engine engine =  Engine.Initialize();
+        RenderSystem = engine.ServiceProvider.GetRequiredService<RenderEntitySystem>();
         
         engine.SetupWindow();
         Raylib.SetWindowMonitor(2);
-        Texture2D texture = Raylib.LoadTexture("Assets/RubberDuck-Chaos-256.png");
-        RenderSystem.TextureLookup.Add("duck", texture);
+
+        var textureProvider = engine.ServiceProvider.GetRequiredService<ITextureProvider>();
+        textureProvider.TryAddTexture("duck", "Assets/RubberDuck-Chaos-256.png");
         
         var index = 0;
         for (int i = -(EntityCountI/2); i < EntityCountI/2; i++) {
@@ -62,7 +66,6 @@ public static class Program {
     }
 
     private static void Update() {
-        
         ImGui.Begin("Main UI");
         ImGui.BeginChild("SmallBox");
 
@@ -76,10 +79,11 @@ public static class Program {
         Raylib.BeginMode2D(Camera);
         
         var entitySpan = MemoryMarshal.CreateSpan(ref Unsafe.As<NexitiesEntity, BasicEntity>(ref Entities[0]), Entities.Length);
+        var delta = Raylib.GetFrameTime();
         
         foreach (BasicEntity entity in entitySpan) {
-            MoveSystem.Update(entity);
-            RenderSystem.Update(entity);
+            MoveSystem.Update(entity, delta);
+            RenderSystem.Update(entity, delta);
         }
         
         Raylib.EndMode2D();

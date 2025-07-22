@@ -13,14 +13,13 @@ public class MoveEntitySystem : NexitiesSystem<BasicEntity>{
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public override void Update(in BasicEntity entity) {
+    public override void Update(in BasicEntity entity, float delta) {
         TransformComponent transform = entity.Transform;
             
-        float x = Random.Shared.NextSingle();
-        float y = Random.Shared.NextSingle();
-        if (x < 0.5f) x = -x;
-        if (y < 0.5f) y = -y;
         
-        transform.Position += new Vector2(x*0.5f, y*0.5f);
+        float x = (Random.Shared.NextSingle() - 0.5f) * 2f; // Range: -1 to 1
+        float y = (Random.Shared.NextSingle() - 0.5f) * 2f; // Range: -1 to 1
+    
+        transform.Position += new Vector2(x * 100f, y * 100f) * delta;
     }
 }

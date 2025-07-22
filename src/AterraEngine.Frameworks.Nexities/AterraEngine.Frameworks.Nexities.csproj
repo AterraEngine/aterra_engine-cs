@@ -7,8 +7,18 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="CodeOfChaos.Extensions.DependencyInjection" />
+      <PackageReference Include="CodeOfChaos.Extensions.DependencyInjection.Generators">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
       <PackageReference Include="Microsoft.Extensions.ObjectPool" />
       <PackageReference Include="Raylib-cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\AterraEngine.Contracts\AterraEngine.Contracts.csproj" />
     </ItemGroup>
 
 </Project>

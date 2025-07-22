@@ -1,12 +1,13 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using Raylib_cs;
 
-namespace AterraEngine.Frameworks.Nexities;
-
+namespace AterraEngine.Contracts;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class NexitiesSystem<TEntity> where TEntity : NexitiesEntity {
-    public abstract void Update(in TEntity entity, float delta);
+public interface ITextureProvider {
+    bool TryGetTexture(string id, out Texture2D texture);
+    bool TryAddTexture(string id, string path);
 }
