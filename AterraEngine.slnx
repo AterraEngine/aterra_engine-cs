@@ -1,1 +1,13 @@
-﻿<Solution />
+﻿<Solution>
+  <Folder Name="/.dev-tools/" />
+  <Folder Name="/.dev-tools/github/">
+    <File Path=".github\workflows\workflow-todo.yml" />
+  </Folder>
+  <Folder Name="/example/">
+    <Project Path="examples\Example.Game\Example.Game.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src\AterraEngine.Frameworks.Nexities\AterraEngine.Frameworks.Nexities.csproj" Type="Classic C#" />
+    <Project Path="src\AterraEngine\AterraEngine.csproj" Type="Classic C#" />
+  </Folder>
+</Solution>

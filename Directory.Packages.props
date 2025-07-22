@@ -4,6 +4,11 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
-    
+  </ItemGroup>
+  <ItemGroup>
+    <PackageVersion Include="ImGui.NET" Version="1.91.6.1" />
+    <PackageVersion Include="Microsoft.Extensions.ObjectPool" Version="9.0.7" />
+    <PackageVersion Include="Raylib-cs" Version="7.0.1" />
+    <PackageVersion Include="rlImgui-cs" Version="3.2.0" />
   </ItemGroup>
 </Project>
