@@ -11,23 +11,15 @@ namespace AterraEngine.Frameworks.Nexities;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class NexitiesEntity<TEntity> : INexitiesEntity
-    where TEntity : class, INexitiesEntity, new()
+public abstract class NexitiesEntity<TEntity>(int initialComponentCapacity = 0) : INexitiesEntity
+    where TEntity : class, INexitiesEntity, new() 
 {
-    private readonly int _initialComponentCapacity;
-    private INexitiesComponent[] Components { get; set; }
-    private uint ComponentCount { get; set; }
+    private INexitiesComponent[] Components { get; set; } = ArrayPool<INexitiesComponent>.Shared.Rent(initialComponentCapacity);
+    public int ComponentCount { get; private set => field = Math.Max(0, value); }
 
     // -----------------------------------------------------------------------------------------------------------------
     // Constructors
     // -----------------------------------------------------------------------------------------------------------------
-    
-    protected NexitiesEntity(int initialComponentCapacity = 0) {
-        _initialComponentCapacity = initialComponentCapacity;
-        Components = ArrayPool<INexitiesComponent>.Shared.Rent(initialComponentCapacity);
-        PopulateComponents();
-    }
-    
     protected abstract void PopulateComponents();
     
     // -----------------------------------------------------------------------------------------------------------------
@@ -36,28 +28,28 @@ public abstract class NexitiesEntity<TEntity> : INexitiesEntity
     private void ResizeComponentsArrayIfNeeded(int newSize) {
         if (newSize <= Components.Length) return;
         
-        var newComponents = ArrayPool<INexitiesComponent>.Shared.Rent(newSize);
+        var newComponents = ArrayPool<INexitiesComponent>.Shared.Rent(ComponentCount * 2);
         Components.CopyTo(newComponents, 0);
         
         ArrayPool<INexitiesComponent>.Shared.Return(Components);
         Components = newComponents;
     }
 
-    protected void SetComponent(INexitiesComponent component, int index) {
+    public void SetComponent(INexitiesComponent component, int index) {
         ResizeComponentsArrayIfNeeded(index + 1);
         Components[index] = component;
         ComponentCount++;
     }
     
-    protected void SetComponent<TComponent>(int index) where TComponent : class, INexitiesComponent, new() 
+    public void SetComponent<TComponent>(int index) where TComponent : class, INexitiesComponent, new() 
         => SetComponent(new TComponent(), index);
     
-    protected TComponent GetComponent<TComponent>(int index) where TComponent : INexitiesComponent {
+    public TComponent GetComponent<TComponent>(int index) where TComponent : INexitiesComponent {
         if (index >= ComponentCount) throw new IndexOutOfRangeException();
         return Unsafe.As<INexitiesComponent, TComponent>(ref Components[index]);
     }
 
-    protected bool TryGetComponent<TComponent>(int index, [NotNullWhen(true)] out TComponent? component)
+    public bool TryGetComponent<TComponent>(int index, [NotNullWhen(true)] out TComponent? component)
         where TComponent : INexitiesComponent {
         component = default;
         if (index + 1 >= ComponentCount) return false;
@@ -65,11 +57,15 @@ public abstract class NexitiesEntity<TEntity> : INexitiesEntity
         component = componentCasted;
         return true;
     }
+    
+    public ReadOnlySpan<INexitiesComponent> GetComponents() 
+        => Components.AsSpan(0, ComponentCount);
 
     // -----------------------------------------------------------------------------------------------------------------
     // Cleanup Methods
     // -----------------------------------------------------------------------------------------------------------------
     public virtual bool TryReset() {
+        int oldComponentCount = ComponentCount;
         ComponentCount = 0;
         
         for (var i = 0; i < ComponentCount; i++) {
@@ -78,7 +74,7 @@ public abstract class NexitiesEntity<TEntity> : INexitiesEntity
         }
         
         ArrayPool<INexitiesComponent>.Shared.Return(Components, true);
-        Components = ArrayPool<INexitiesComponent>.Shared.Rent(_initialComponentCapacity);
+        Components = ArrayPool<INexitiesComponent>.Shared.Rent(oldComponentCount);
         PopulateComponents();
         
         return true;

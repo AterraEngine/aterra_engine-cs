@@ -10,14 +10,20 @@ namespace AterraEngine.Frameworks.Nexities.Library.Entities;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public sealed class BasicEntity : NexitiesEntity<BasicEntity>, IBasicEntity {
-    public ITransformComponent Transform => GetComponent<ITransformComponent>(0);
-    public ISpriteComponent Sprite =>  GetComponent<ISpriteComponent>(1);
+    private const int TransformIndex = 0;
+    private const int SpriteIndex = 1;
+    
+    public ITransformComponent Transform => GetComponent<ITransformComponent>(TransformIndex);
+    public ISpriteComponent Sprite =>  GetComponent<ISpriteComponent>(SpriteIndex);
 
     // -----------------------------------------------------------------------------------------------------------------
     // Constructors
     // -----------------------------------------------------------------------------------------------------------------
-    public BasicEntity() : base(2) {
-        PopulateComponents();
+    public BasicEntity() : base(2) => PopulateComponents();
+    
+    protected override void PopulateComponents() {
+        SetComponent<TransformComponent>(TransformIndex);
+        SetComponent<SpriteComponent>(SpriteIndex);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -26,10 +32,5 @@ public sealed class BasicEntity : NexitiesEntity<BasicEntity>, IBasicEntity {
     public void Deconstruct(out ITransformComponent transform, out ISpriteComponent sprite) {
         transform = Transform;
         sprite = Sprite;
-    }
-    
-    protected override void PopulateComponents() {
-        SetComponent<TransformComponent>(0);
-        SetComponent<SpriteComponent>(1);
     }
 }
