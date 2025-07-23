@@ -13,8 +13,8 @@ public sealed class TransformComponent : NexitiesComponent<TransformComponent>, 
     public Vector2 Position {
         get;
         set {
-            field = value;
-            Rectangle = new Rectangle(field, Scale);
+            field = value; 
+            Rectangle = new Rectangle(value, Scale);
         }
     } = Vector2.Zero;
 
@@ -22,7 +22,7 @@ public sealed class TransformComponent : NexitiesComponent<TransformComponent>, 
         get;
         set {
             field = value;
-            Rectangle = new Rectangle(Scale, field);
+            Rectangle = new Rectangle(Scale, value);
         }
     } = Vector2.One;
 
@@ -32,6 +32,7 @@ public sealed class TransformComponent : NexitiesComponent<TransformComponent>, 
     }
 
     public Rectangle Rectangle { get; private set; }
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------

@@ -4,12 +4,14 @@
 using System.Numerics;
 using AterraEngine.Frameworks.Nexities.Library.Components;
 using AterraEngine.Frameworks.Nexities.Library.Entities;
+using CodeOfChaos.Extensions.DependencyInjection;
 
 namespace AterraEngine.Frameworks.Nexities.Library.Systems;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
+[InjectableSingleton<MoveEntitySystem>]
 public class MoveEntitySystem : NexitiesSystem<IBasicEntity>{
     
     // -----------------------------------------------------------------------------------------------------------------

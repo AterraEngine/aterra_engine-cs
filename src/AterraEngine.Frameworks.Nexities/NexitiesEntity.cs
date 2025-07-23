@@ -11,11 +11,24 @@ namespace AterraEngine.Frameworks.Nexities;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class NexitiesEntity<TEntity>(int initialComponentCapacity = 0) : INexitiesEntity
+public abstract class NexitiesEntity<TEntity> : INexitiesEntity
     where TEntity : class, INexitiesEntity, new()
 {
-    private INexitiesComponent[] Components { get; set; } = ArrayPool<INexitiesComponent>.Shared.Rent(initialComponentCapacity);
+    private readonly int _initialComponentCapacity;
+    private INexitiesComponent[] Components { get; set; }
     private uint ComponentCount { get; set; }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Constructors
+    // -----------------------------------------------------------------------------------------------------------------
+    
+    protected NexitiesEntity(int initialComponentCapacity = 0) {
+        _initialComponentCapacity = initialComponentCapacity;
+        Components = ArrayPool<INexitiesComponent>.Shared.Rent(initialComponentCapacity);
+        PopulateComponents();
+    }
+    
+    protected abstract void PopulateComponents();
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
@@ -61,11 +74,12 @@ public class NexitiesEntity<TEntity>(int initialComponentCapacity = 0) : INexiti
         
         for (var i = 0; i < ComponentCount; i++) {
             INexitiesComponent component = Components[i];
-            component.ReturnToPool();
+            component.TryReset();
         }
         
         ArrayPool<INexitiesComponent>.Shared.Return(Components, true);
-        Components = ArrayPool<INexitiesComponent>.Shared.Rent(initialComponentCapacity);
+        Components = ArrayPool<INexitiesComponent>.Shared.Rent(_initialComponentCapacity);
+        PopulateComponents();
         
         return true;
     }

@@ -17,8 +17,7 @@ public sealed class BasicEntity : NexitiesEntity<BasicEntity>, IBasicEntity {
     // Constructors
     // -----------------------------------------------------------------------------------------------------------------
     public BasicEntity() : base(2) {
-        SetComponent<TransformComponent>(0);
-        SetComponent<SpriteComponent>(1);
+        PopulateComponents();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -27,5 +26,10 @@ public sealed class BasicEntity : NexitiesEntity<BasicEntity>, IBasicEntity {
     public void Deconstruct(out ITransformComponent transform, out ISpriteComponent sprite) {
         transform = Transform;
         sprite = Sprite;
+    }
+    
+    protected override void PopulateComponents() {
+        SetComponent<TransformComponent>(0);
+        SetComponent<SpriteComponent>(1);
     }
 }

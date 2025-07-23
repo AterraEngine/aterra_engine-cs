@@ -21,9 +21,10 @@ namespace Example.Game;
 // -----------------------------------------------------------------------------------------------------------------
 public static class Program {
     private static INexitiesEntity[] Entities { get; } = new INexitiesEntity[EntityCountI*EntityCountJ];
+    private static Lock Lock { get; } = new();
 
     private static RenderEntitySystem RenderSystem { get; set; } = null!;
-    private static MoveEntitySystem MoveSystem { get; } = new();
+    private static MoveEntitySystem MoveSystem { get; set; } = null!;
 
     private static Camera2D Camera { get; } = new() {
         Target = new Vector2(0, 0),
@@ -41,13 +42,20 @@ public static class Program {
     public static async Task Main(string[] args) {
         Engine engine =  Engine.Initialize();
         RenderSystem = engine.ServiceProvider.GetRequiredService<RenderEntitySystem>();
+        MoveSystem = engine.ServiceProvider.GetRequiredService<MoveEntitySystem>();
         
         engine.SetupWindow();
         Raylib.SetWindowMonitor(2);
 
         var textureProvider = engine.ServiceProvider.GetRequiredService<ITextureProvider>();
         textureProvider.TryAddTexture("duck", "Assets/RubberDuck-Chaos-256.png");
+
+        AddEntities();
         
+        engine.Run(Update);
+    }
+
+    private static void AddEntities() {
         var index = 0;
         for (int i = -(EntityCountI/2); i < EntityCountI/2; i++) {
             for (int j = -(EntityCountJ/2); j < EntityCountJ/2; j++) {
@@ -58,8 +66,16 @@ public static class Program {
                 Entities[index++] = basicEntity;   
             }
         }
-        
-        engine.Run(Update);
+    }
+
+    private static void RemoveEntities() {
+        var index = 0;
+        foreach (INexitiesEntity entity in Entities) {
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+            if (entity == null) continue;
+            entity.ReturnToPool();
+            Entities[index++] = null!;
+        }
     }
 
     private static void Update() {
@@ -69,6 +85,12 @@ public static class Program {
         ImGui.Text($"FPS: {Raylib.GetFPS()}");
         ImGui.Text($"Entites: {EntityCountI * EntityCountJ}");
         ImGui.Text($"batched draw calls: {1 + EntityCountI * EntityCountJ/Rlgl.DEFAULT_BATCH_BUFFER_ELEMENTS}");
+        if (ImGui.Button("Reset Entities")){
+            lock (Lock) {
+                RemoveEntities();
+                AddEntities();
+            }
+        }
 
         ImGui.EndChild();
         ImGui.End();
