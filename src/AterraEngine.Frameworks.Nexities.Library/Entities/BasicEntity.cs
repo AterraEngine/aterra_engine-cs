@@ -9,7 +9,7 @@ namespace AterraEngine.Frameworks.Nexities.Library.Entities;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class BasicEntity : NexitiesEntity<BasicEntity>, IBasicEntity {
+public sealed class BasicEntity : NexitiesEntity<BasicEntity>, IBasicEntity {
     public ITransformComponent Transform => GetComponent<ITransformComponent>(0);
     public ISpriteComponent Sprite =>  GetComponent<ISpriteComponent>(1);
 

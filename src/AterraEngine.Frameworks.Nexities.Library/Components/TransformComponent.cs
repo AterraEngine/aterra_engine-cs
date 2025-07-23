@@ -9,13 +9,29 @@ namespace AterraEngine.Frameworks.Nexities.Library.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public sealed partial class TransformComponent : NexitiesComponent<TransformComponent>, ITransformComponent {
-    public Vector2 Position { get; set; } = Vector2.Zero;
-    public Vector2 Scale { get; set; } = Vector2.One;
-    public float Rotation { get; set; } = 0f;
+public sealed class TransformComponent : NexitiesComponent<TransformComponent>, ITransformComponent {
+    public Vector2 Position {
+        get;
+        set {
+            field = value;
+            Rectangle = new Rectangle(field, Scale);
+        }
+    } = Vector2.Zero;
 
-    public Rectangle Rectangle => new(Position.X, Position.Y, Scale.X, Scale.Y);
+    public Vector2 Scale {
+        get;
+        set {
+            field = value;
+            Rectangle = new Rectangle(Scale, field);
+        }
+    } = Vector2.One;
 
+    public float Rotation {
+        get;
+        set => field = (value % 360f + 360f) % 360f;
+    }
+
+    public Rectangle Rectangle { get; private set; }
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------

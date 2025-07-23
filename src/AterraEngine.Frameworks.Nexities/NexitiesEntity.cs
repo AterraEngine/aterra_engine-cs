@@ -11,10 +11,10 @@ namespace AterraEngine.Frameworks.Nexities;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class NexitiesEntity<TEntity>(int initialCapacity = 0) : INexitiesEntity
+public class NexitiesEntity<TEntity>(int initialComponentCapacity = 0) : INexitiesEntity
     where TEntity : class, INexitiesEntity, new()
 {
-    private INexitiesComponent[] Components { get; set; } = ArrayPool<INexitiesComponent>.Shared.Rent(initialCapacity);
+    private INexitiesComponent[] Components { get; set; } = ArrayPool<INexitiesComponent>.Shared.Rent(initialComponentCapacity);
     private uint ComponentCount { get; set; }
     
     // -----------------------------------------------------------------------------------------------------------------
@@ -65,7 +65,7 @@ public class NexitiesEntity<TEntity>(int initialCapacity = 0) : INexitiesEntity
         }
         
         ArrayPool<INexitiesComponent>.Shared.Return(Components, true);
-        Components = ArrayPool<INexitiesComponent>.Shared.Rent(initialCapacity);
+        Components = ArrayPool<INexitiesComponent>.Shared.Rent(initialComponentCapacity);
         
         return true;
     }

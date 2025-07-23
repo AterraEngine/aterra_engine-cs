@@ -8,7 +8,7 @@ namespace AterraEngine.Frameworks.Nexities.Library.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public sealed partial class SpriteComponent : NexitiesComponent<TransformComponent>, ISpriteComponent {
+public sealed class SpriteComponent : NexitiesComponent<TransformComponent>, ISpriteComponent {
     public string TextureId { get; set; } = string.Empty;
     public Color Tint { get; set; } = Color.White;
 

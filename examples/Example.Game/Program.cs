@@ -12,6 +12,7 @@ using AterraEngine.Contracts;
 using AterraEngine.Frameworks.Nexities;
 using AterraEngine.Frameworks.Nexities.Library.Entities;
 using AterraEngine.Frameworks.Nexities.Library.Systems;
+using AterraEngine.Frameworks.Nexities.Pools;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Example.Game;
@@ -50,16 +51,11 @@ public static class Program {
         var index = 0;
         for (int i = -(EntityCountI/2); i < EntityCountI/2; i++) {
             for (int j = -(EntityCountJ/2); j < EntityCountJ/2; j++) {
-                var entity = new BasicEntity {
-                    Sprite = {
-                        TextureId = "duck"
-                    },
-                    Transform = {
-                        Position = new Vector2(i, j),
-                        Rotation = Random.Shared.NextSingle() * 360f,
-                    }
-                };
-                Entities[index++] = entity;   
+                BasicEntity basicEntity = EntityPool<BasicEntity>.Shared.Get();
+                basicEntity.Sprite.TextureId = "duck";
+                basicEntity.Transform.Position = new Vector2(i, j);
+                basicEntity.Transform.Rotation = Random.Shared.NextSingle() * 360f;
+                Entities[index++] = basicEntity;   
             }
         }
         
