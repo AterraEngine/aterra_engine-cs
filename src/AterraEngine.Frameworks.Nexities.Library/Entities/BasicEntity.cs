@@ -14,7 +14,7 @@ public sealed class BasicEntity : NexitiesEntity<BasicEntity>, IBasicEntity {
     private const int SpriteIndex = 1;
     
     public ITransformComponent Transform => GetComponent<ITransformComponent>(TransformIndex);
-    public ISpriteComponent Sprite =>  GetComponent<ISpriteComponent>(SpriteIndex);
+    public ISpriteComponent Sprite => GetComponent<ISpriteComponent>(SpriteIndex);
 
     // -----------------------------------------------------------------------------------------------------------------
     // Constructors

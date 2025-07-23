@@ -42,7 +42,7 @@ public abstract class NexitiesEntity<TEntity>(int initialComponentCapacity = 0) 
     }
     
     public void SetComponent<TComponent>(int index) where TComponent : class, INexitiesComponent, new() 
-        => SetComponent(new TComponent(), index);
+        => SetComponent(ComponentPool<TComponent>.Shared.Get(), index);
     
     public TComponent GetComponent<TComponent>(int index) where TComponent : INexitiesComponent {
         if (index >= ComponentCount) throw new IndexOutOfRangeException();
@@ -70,10 +70,11 @@ public abstract class NexitiesEntity<TEntity>(int initialComponentCapacity = 0) 
         
         for (var i = 0; i < ComponentCount; i++) {
             INexitiesComponent component = Components[i];
-            component.TryReset();
+            component.ReturnToPool();
+            Components[i] = null!;
         }
         
-        ArrayPool<INexitiesComponent>.Shared.Return(Components, true);
+        ArrayPool<INexitiesComponent>.Shared.Return(Components);
         Components = ArrayPool<INexitiesComponent>.Shared.Rent(oldComponentCount);
         PopulateComponents();
         
