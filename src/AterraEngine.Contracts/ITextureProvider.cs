@@ -8,6 +8,7 @@ namespace AterraEngine.Contracts;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface ITextureProvider {
-    bool TryGetTexture(string id, out Texture2D texture);
-    bool TryAddTexture(string id, string path);
+    bool TryGetTexture(uint id, out Texture2D texture);
+    bool TryAddTexture(string id, string path, out Texture2D texture);
+    bool TryGetId(string duck, out uint id);
 }

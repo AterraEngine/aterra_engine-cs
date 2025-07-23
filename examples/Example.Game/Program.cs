@@ -48,19 +48,21 @@ public static class Program {
         Raylib.SetWindowMonitor(2);
 
         var textureProvider = engine.ServiceProvider.GetRequiredService<ITextureProvider>();
-        textureProvider.TryAddTexture("duck", "Assets/RubberDuck-Chaos-256.png");
-
+        textureProvider.TryAddTexture("duck", "Assets/RubberDuck-Chaos-256.png", out _);
         AddEntities();
         
         engine.Run(Update);
     }
 
     private static void AddEntities() {
+        var textureProvider = Engine.Instance.ServiceProvider.GetRequiredService<ITextureProvider>();
+        if (!textureProvider.TryGetId("duck", out uint textureId)) return;
+        
         var index = 0;
         for (int i = -(EntityCountI/2); i < EntityCountI/2; i++) {
             for (int j = -(EntityCountJ/2); j < EntityCountJ/2; j++) {
                 BasicEntity basicEntity = EntityPool<BasicEntity>.Shared.Get();
-                basicEntity.Sprite.TextureId = "duck";
+                basicEntity.Sprite.TextureId = textureId;
                 basicEntity.Transform.Position = new Vector2(i, j);
                 basicEntity.Transform.Rotation = Random.Shared.NextSingle() * 360f;
                 Entities[index++] = basicEntity;   

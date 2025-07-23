@@ -14,7 +14,7 @@ namespace AterraEngine;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public sealed class Engine : IDisposable {
-    private static Engine Instance { get; set; } = null!;
+    public static Engine Instance { get; set; } = null!;
     public IServiceProvider ServiceProvider { get; private set; } = null!;
     private static bool IsInitialized { get; set; }
     private bool _disposed;

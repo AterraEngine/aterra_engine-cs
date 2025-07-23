@@ -9,6 +9,6 @@ namespace AterraEngine.Frameworks.Nexities.Library.Components;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface ISpriteComponent : INexitiesComponent {
-    string TextureId { get; set; }
+    uint TextureId { get; set; }
     Color Tint { get; set; }
 }
