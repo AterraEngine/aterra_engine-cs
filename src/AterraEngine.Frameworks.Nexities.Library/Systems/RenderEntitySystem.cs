@@ -20,13 +20,9 @@ public class RenderEntitySystem(ITextureProvider textureProvider) : NexitiesSyst
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public override void Update(in IBasicEntity entity, float delta) {
-        if (!Textures.TryGetValue(entity.Sprite.TextureId, out Texture2D texture)) {
-            if (!textureProvider.TryGetTexture(entity.Sprite.TextureId, out texture)) return;
-            Textures.Add(entity.Sprite.TextureId, texture);
-        }
-        
+       
         Raylib.DrawTexturePro(
-            texture,
+            entity.Sprite.Texture2D,
             _duckySource,
             entity.Transform.Rectangle,
             Vector2.One,

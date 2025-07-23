@@ -9,7 +9,7 @@ namespace AterraEngine.Frameworks.Nexities.Library.Components;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public sealed class SpriteComponent : NexitiesComponent<TransformComponent>, ISpriteComponent {
-    public uint TextureId { get; set; }
+    public Texture2D Texture2D { get; set; }
     public Color Tint { get; set; } = Color.White;
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -17,7 +17,7 @@ public sealed class SpriteComponent : NexitiesComponent<TransformComponent>, ISp
     // -----------------------------------------------------------------------------------------------------------------
     public override bool TryReset() {
         if (!base.TryReset()) return false;
-        TextureId = 0;
+        Texture2D = default;
         Tint = Color.White;
         return true;
     }

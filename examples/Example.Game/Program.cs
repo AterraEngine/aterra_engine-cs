@@ -57,12 +57,13 @@ public static class Program {
     private static void AddEntities() {
         var textureProvider = Engine.Instance.ServiceProvider.GetRequiredService<ITextureProvider>();
         if (!textureProvider.TryGetId("duck", out uint textureId)) return;
+        textureProvider.TryGetTexture(textureId, out Texture2D texture2d);
         
         var index = 0;
         for (int i = -(EntityCountI/2); i < EntityCountI/2; i++) {
             for (int j = -(EntityCountJ/2); j < EntityCountJ/2; j++) {
                 BasicEntity basicEntity = EntityPool<BasicEntity>.Shared.Get();
-                basicEntity.Sprite.TextureId = textureId;
+                basicEntity.Sprite.Texture2D = texture2d;
                 basicEntity.Transform.Position = new Vector2(i, j);
                 basicEntity.Transform.Rotation = Random.Shared.NextSingle() * 360f;
                 Entities[index++] = basicEntity;   
