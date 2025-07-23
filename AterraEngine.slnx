@@ -7,8 +7,13 @@
     <Project Path="examples\Example.Game\Example.Game.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/src/">
+    <Project Path="AterraEngine.Shared\AterraEngine.Shared.csproj" Type="Classic C#" />
     <Project Path="src\AterraEngine.Contracts\AterraEngine.Contracts.csproj" Type="Classic C#" />
-    <Project Path="src\AterraEngine.Frameworks.Nexities\AterraEngine.Frameworks.Nexities.csproj" Type="Classic C#" />
     <Project Path="src\AterraEngine\AterraEngine.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/src/frameworks/">
+    <Project Path="src\AterraEngine.Frameworks.Nexities.Library\AterraEngine.Frameworks.Nexities.Library.csproj" Type="Classic C#" />
+    <Project Path="src\AterraEngine.Frameworks.Nexities.Shared\AterraEngine.Frameworks.Nexities.Shared.csproj" Type="Classic C#" />
+    <Project Path="src\AterraEngine.Frameworks.Nexities\AterraEngine.Frameworks.Nexities.csproj" Type="Classic C#" />
   </Folder>
 </Solution>

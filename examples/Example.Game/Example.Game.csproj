@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\src\AterraEngine.Frameworks.Nexities.Library\AterraEngine.Frameworks.Nexities.Library.csproj" />
       <ProjectReference Include="..\..\src\AterraEngine.Frameworks.Nexities\AterraEngine.Frameworks.Nexities.csproj" />
       <ProjectReference Include="..\..\src\AterraEngine\AterraEngine.csproj" />
     </ItemGroup>

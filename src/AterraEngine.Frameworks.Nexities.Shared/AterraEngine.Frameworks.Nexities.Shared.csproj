@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>AterraEngine.Frameworks.Nexities</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Raylib-cs" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <Folder Include="Library\Systems\" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\..\AterraEngine.Shared\AterraEngine.Shared.csproj" />
+    </ItemGroup>
+
+</Project>

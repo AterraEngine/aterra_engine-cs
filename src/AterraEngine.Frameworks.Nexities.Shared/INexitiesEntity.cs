@@ -1,15 +1,13 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using Microsoft.Extensions.ObjectPool;
 
-using Raylib_cs;
-
-namespace AterraEngine.Frameworks.Nexities.Variants;
+namespace AterraEngine.Frameworks.Nexities;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public sealed class SpriteComponent : NexitiesComponent {
-    public string TextureId { get; set; } = string.Empty;
-    public Color Tint { get; set; } = Color.White;
+public interface INexitiesEntity : IResettable {
+    void ReturnToPool();
 }

@@ -2,13 +2,14 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-namespace AterraEngine.Frameworks.Nexities;
+using CodeOfChaos.Extensions.ObjectPool;
+using Microsoft.Extensions.ObjectPool;
+
+namespace AterraEngine.Frameworks.Nexities.Pools;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class NexitiesSystem<TEntity> : INexitiesSystem
-    where TEntity : INexitiesEntity
-{
-    public abstract void Update(in TEntity entity, float delta);
+public static class EntityPool<TEntity> where TEntity : class, INexitiesEntity, new() {
+    public static ObjectPool<TEntity> Shared { get; } = new DefaultObjectPool<TEntity>(new ResettablePoolPolicy<TEntity>());
 }

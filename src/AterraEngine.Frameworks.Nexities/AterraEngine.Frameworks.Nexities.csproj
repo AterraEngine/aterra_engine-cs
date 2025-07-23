@@ -19,6 +19,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\AterraEngine.Contracts\AterraEngine.Contracts.csproj" />
+      <ProjectReference Include="..\AterraEngine.Frameworks.Nexities.Shared\AterraEngine.Frameworks.Nexities.Shared.csproj" />
     </ItemGroup>
 
 </Project>

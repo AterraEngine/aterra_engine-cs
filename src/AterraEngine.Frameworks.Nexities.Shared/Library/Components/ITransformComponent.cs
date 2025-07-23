@@ -1,14 +1,18 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using System.Numerics;
+using Raylib_cs;
 
-namespace AterraEngine.Frameworks.Nexities;
+namespace AterraEngine.Frameworks.Nexities.Library.Components;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class NexitiesSystem<TEntity> : INexitiesSystem
-    where TEntity : INexitiesEntity
-{
-    public abstract void Update(in TEntity entity, float delta);
+public interface ITransformComponent : INexitiesComponent {
+    Vector2 Position { get; set; }
+    Vector2 Scale { get; set; } 
+    float Rotation { get; set; }
+    
+    Rectangle Rectangle { get; }
 }

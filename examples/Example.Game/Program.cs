@@ -10,7 +10,8 @@ using Raylib_cs;
 using AterraEngine;
 using AterraEngine.Contracts;
 using AterraEngine.Frameworks.Nexities;
-using AterraEngine.Frameworks.Nexities.Variants;
+using AterraEngine.Frameworks.Nexities.Library.Entities;
+using AterraEngine.Frameworks.Nexities.Library.Systems;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Example.Game;
@@ -18,7 +19,7 @@ namespace Example.Game;
 // Methods
 // -----------------------------------------------------------------------------------------------------------------
 public static class Program {
-    private static NexitiesEntity[] Entities { get; } = new NexitiesEntity[EntityCountI*EntityCountJ];
+    private static INexitiesEntity[] Entities { get; } = new INexitiesEntity[EntityCountI*EntityCountJ];
 
     private static RenderEntitySystem RenderSystem { get; set; } = null!;
     private static MoveEntitySystem MoveSystem { get; } = new();
@@ -37,7 +38,7 @@ public static class Program {
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public static async Task Main(string[] args) {
-        using Engine engine =  Engine.Initialize();
+        Engine engine =  Engine.Initialize();
         RenderSystem = engine.ServiceProvider.GetRequiredService<RenderEntitySystem>();
         
         engine.SetupWindow();
@@ -78,8 +79,8 @@ public static class Program {
 
         Raylib.BeginMode2D(Camera);
         
-        var entitySpan = MemoryMarshal.CreateSpan(ref Unsafe.As<NexitiesEntity, BasicEntity>(ref Entities[0]), Entities.Length);
-        var delta = Raylib.GetFrameTime();
+        var entitySpan = MemoryMarshal.CreateSpan(ref Unsafe.As<INexitiesEntity, BasicEntity>(ref Entities[0]), Entities.Length);
+        float delta = Raylib.GetFrameTime();
         
         foreach (BasicEntity entity in entitySpan) {
             MoveSystem.Update(entity, delta);

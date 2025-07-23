@@ -8,10 +8,17 @@
   <ItemGroup>
     <PackageVersion Include="CodeOfChaos.Extensions.DependencyInjection" Version="0.70.1" />
     <PackageVersion Include="CodeOfChaos.Extensions.DependencyInjection.Generators" Version="0.70.1" />
+    <PackageVersion Include="CodeOfChaos.Extensions.ObjectPool" Version="0.70.1" />
     <PackageVersion Include="ImGui.NET" Version="1.91.6.1" />
+    <PackageVersion Include="IsExternalInit" Version="1.0.3" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="4.14.0" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.Common" Version="4.14.0" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.7" />
     <PackageVersion Include="Microsoft.Extensions.ObjectPool" Version="9.0.7" />
+    <PackageVersion Include="Nullable" Version="1.3.1" />
     <PackageVersion Include="Raylib-cs" Version="7.0.1" />
+    <PackageVersion Include="Required" Version="1.0.0" />
     <PackageVersion Include="rlImgui-cs" Version="3.2.0" />
   </ItemGroup>
 </Project>

@@ -2,20 +2,21 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Numerics;
+using AterraEngine.Frameworks.Nexities.Library.Components;
+using AterraEngine.Frameworks.Nexities.Library.Entities;
 
-namespace AterraEngine.Frameworks.Nexities.Variants;
+namespace AterraEngine.Frameworks.Nexities.Library.Systems;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class MoveEntitySystem : NexitiesSystem<BasicEntity>{
+public class MoveEntitySystem : NexitiesSystem<IBasicEntity>{
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public override void Update(in BasicEntity entity, float delta) {
-        TransformComponent transform = entity.Transform;
-            
+    public override void Update(in IBasicEntity entity, float delta) {
+        ITransformComponent transform = entity.Transform;
         
         float x = (Random.Shared.NextSingle() - 0.5f) * 2f; // Range: -1 to 1
         float y = (Random.Shared.NextSingle() - 0.5f) * 2f; // Range: -1 to 1

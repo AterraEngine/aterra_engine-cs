@@ -2,13 +2,13 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
+using Microsoft.Extensions.ObjectPool;
+
 namespace AterraEngine.Frameworks.Nexities;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class NexitiesSystem<TEntity> : INexitiesSystem
-    where TEntity : INexitiesEntity
-{
-    public abstract void Update(in TEntity entity, float delta);
+public interface INexitiesComponent : IResettable {
+    void ReturnToPool();
 }

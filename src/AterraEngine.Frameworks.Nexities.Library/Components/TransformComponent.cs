@@ -1,34 +1,29 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
 using System.Numerics;
-using AterraEngine.Contracts;
-using CodeOfChaos.Extensions.DependencyInjection;
 using Raylib_cs;
 
-namespace AterraEngine.Frameworks.Nexities.Variants;
+namespace AterraEngine.Frameworks.Nexities.Library.Components;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[InjectableSingleton<RenderEntitySystem>]
-public class RenderEntitySystem(ITextureProvider textureProvider) : NexitiesSystem<BasicEntity>{
-    private readonly Rectangle _duckySource = new(0,0,256,256);
-    
+public sealed partial class TransformComponent : NexitiesComponent<TransformComponent>, ITransformComponent {
+    public Vector2 Position { get; set; } = Vector2.Zero;
+    public Vector2 Scale { get; set; } = Vector2.One;
+    public float Rotation { get; set; } = 0f;
+
+    public Rectangle Rectangle => new(Position.X, Position.Y, Scale.X, Scale.Y);
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public override void Update(in BasicEntity entity, float delta) {
-        if (!textureProvider.TryGetTexture(entity.Sprite.TextureId, out Texture2D texture)) return;
-        (TransformComponent transform, SpriteComponent sprite) = entity;
-            
-        Raylib.DrawTexturePro(
-            texture,
-            _duckySource,
-            transform.Rectangle,
-            Vector2.One,
-            transform.Rotation,
-            sprite.Tint
-        );
+    public override bool TryReset() {
+        if (!base.TryReset()) return false;
+        Position = Vector2.Zero;
+        Scale = Vector2.One;
+        Rotation = 0f;
+        return true;
     }
 }

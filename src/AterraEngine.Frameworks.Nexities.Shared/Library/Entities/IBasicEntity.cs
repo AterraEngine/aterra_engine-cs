@@ -1,14 +1,17 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraEngine.Frameworks.Nexities.Library.Components;
+using AterraEngine.Shared;
 
-namespace AterraEngine.Frameworks.Nexities;
+namespace AterraEngine.Frameworks.Nexities.Library.Entities;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class NexitiesSystem<TEntity> : INexitiesSystem
-    where TEntity : INexitiesEntity
+public interface IBasicEntity : INexitiesEntity,
+    IDeconstructable<ITransformComponent, ISpriteComponent> 
 {
-    public abstract void Update(in TEntity entity, float delta);
+    ITransformComponent Transform { get; }
+    ISpriteComponent Sprite { get; }
 }

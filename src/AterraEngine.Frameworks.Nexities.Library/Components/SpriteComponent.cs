@@ -2,21 +2,23 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using System.Runtime.CompilerServices;
-using AterraEngine.Frameworks.Nexities.Pools;
+using Raylib_cs;
 
-namespace AterraEngine.Frameworks.Nexities;
-
+namespace AterraEngine.Frameworks.Nexities.Library.Components;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public abstract class NexitiesComponent<TComponent> : INexitiesComponent where TComponent : class, INexitiesComponent, new() {
+public sealed partial class SpriteComponent : NexitiesComponent<TransformComponent>, ISpriteComponent {
+    public string TextureId { get; set; } = string.Empty;
+    public Color Tint { get; set; } = Color.White;
+
     // -----------------------------------------------------------------------------------------------------------------
-    // Cleanup Methods
+    // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public virtual bool TryReset() {
+    public override bool TryReset() {
+        if (!base.TryReset()) return false;
+        TextureId = string.Empty;
+        Tint = Color.White;
         return true;
     }
-
-    public virtual void ReturnToPool() => ComponentPool<TComponent>.Shared.Return(Unsafe.As<TComponent>(this));
 }
