@@ -1,7 +1,6 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
 using AterraEngine.Frameworks.Nexities.Library.Components;
 
 namespace AterraEngine.Frameworks.Nexities.Library.Entities;
@@ -20,10 +19,10 @@ public sealed class BasicEntity : NexitiesEntity<BasicEntity>, IBasicEntity {
     // Constructors
     // -----------------------------------------------------------------------------------------------------------------
     public BasicEntity() : base(2) => PopulateComponents();
-    
+
     protected override void PopulateComponents() {
-        SetComponent<TransformComponent>(TransformIndex);
-        SetComponent<SpriteComponent>(SpriteIndex);
+        SetComponent(ComponentProvider.GetComponent<TransformComponent>(), TransformIndex);
+        SetComponent(ComponentProvider.GetComponent<SpriteComponent>(), SpriteIndex);
     }
 
     // -----------------------------------------------------------------------------------------------------------------

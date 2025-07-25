@@ -8,8 +8,13 @@
 
     <ItemGroup>
       <PackageReference Include="CodeOfChaos.Extensions.ObjectPool" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
       <PackageReference Include="Raylib-cs" />
       <PackageReference Include="rlImgui-cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\src\AterraEngine.Contracts\AterraEngine.Contracts.csproj" />
     </ItemGroup>
 
 </Project>

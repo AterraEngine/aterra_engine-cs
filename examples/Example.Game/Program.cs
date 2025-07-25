@@ -10,9 +10,11 @@ using Raylib_cs;
 using AterraEngine;
 using AterraEngine.Contracts;
 using AterraEngine.Frameworks.Nexities;
+using AterraEngine.Frameworks.Nexities.Library.Components;
 using AterraEngine.Frameworks.Nexities.Library.Entities;
 using AterraEngine.Frameworks.Nexities.Library.Systems;
 using AterraEngine.Frameworks.Nexities.Pools;
+using AterraEngine.Shared;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Example.Game;
@@ -41,14 +43,20 @@ public static class Program {
     // -----------------------------------------------------------------------------------------------------------------
     public static async Task Main(string[] args) {
         Engine engine =  Engine.Initialize();
-        RenderSystem = engine.ServiceProvider.GetRequiredService<RenderEntitySystem>();
-        MoveSystem = engine.ServiceProvider.GetRequiredService<MoveEntitySystem>();
+        RenderSystem = engine.GetRequiredService<RenderEntitySystem>();
+        MoveSystem = engine.GetRequiredService<MoveEntitySystem>();
         
         engine.SetupWindow();
         Raylib.SetWindowMonitor(2);
 
-        var textureProvider = engine.ServiceProvider.GetRequiredService<ITextureProvider>();
-        textureProvider.TryAddTexture("duck", "Assets/RubberDuck-Chaos-256.png", out _);
+        var textureProvider = engine.GetRequiredService<ITextureProvider>();
+        textureProvider.TryAddTexture("duck", "Assets/RubberDuck-Chaos-256.png", out Texture2D texture);
+
+        var componentProvider = engine.GetRequiredService<INexitiesComponentProvider>();
+
+        var sprite = new SpriteComponent { Texture2D = texture };
+        componentProvider.RegisterSingleton(sprite);
+        
         AddEntities();
         
         engine.Run(Update);

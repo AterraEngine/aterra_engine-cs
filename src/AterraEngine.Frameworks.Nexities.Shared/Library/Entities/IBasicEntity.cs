@@ -1,8 +1,8 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using AterraEngine.Contracts;
 using AterraEngine.Frameworks.Nexities.Library.Components;
-using AterraEngine.Shared;
 
 namespace AterraEngine.Frameworks.Nexities.Library.Entities;
 

@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
+using AterraEngine.Contracts;
 using AterraEngine.Frameworks.Nexities;
 using AterraEngine.Frameworks.Nexities.Library;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,12 +14,11 @@ namespace AterraEngine;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public sealed class Engine : IDisposable {
-    public static Engine Instance { get; set; } = null!;
+public sealed class Engine : IEngine, IDisposable {
+    public static Engine Instance { get; private set; } = null!;
     public IServiceProvider ServiceProvider { get; private set; } = null!;
     private static bool IsInitialized { get; set; }
     private bool _disposed;
-
     
     // -----------------------------------------------------------------------------------------------------------------
     // Constructors
@@ -28,7 +28,13 @@ public sealed class Engine : IDisposable {
         if (IsInitialized) throw new InvalidOperationException("Engine is already initialized");
         
         var services = new ServiceCollection();
-        services.AddSingleton(new Engine());
+        var engine = new Engine();
+        Instance = engine;
+        IEngine.Instance = Instance;
+        
+        services.AddSingleton(engine);
+        services.AddSingleton<IEngine>(engine);
+        
         services.RegisterServicesFromAterraEngine();
         services.RegisterServicesFromAterraEngineFrameworksNexities();
         services.RegisterServicesFromAterraEngineFrameworksNexitiesLibrary();
@@ -36,7 +42,6 @@ public sealed class Engine : IDisposable {
         setupServices?.Invoke(services);
         
         ServiceProvider serviceProvider = services.BuildServiceProvider();
-        Instance = serviceProvider.GetRequiredService<Engine>();
         Instance.ServiceProvider = serviceProvider;
         
         IsInitialized = true;
@@ -55,7 +60,7 @@ public sealed class Engine : IDisposable {
     }
     
     public void Run(Action? update = null) {
-        Action onUpdate = update ?? (() => { });
+        update ??= static () => { };
         
         while (!Raylib.WindowShouldClose()) {
             Raylib.BeginDrawing();
@@ -63,7 +68,7 @@ public sealed class Engine : IDisposable {
             
             rlImGui.Begin();
             
-            onUpdate();
+            update();
             
             rlImGui.End();
             Raylib.EndDrawing();

@@ -2,14 +2,13 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using Microsoft.Extensions.ObjectPool;
-
-namespace AterraEngine.Frameworks.Nexities;
+namespace AterraEngine.Contracts;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface INexitiesComponent : IResettable {
-    Guid Id { get; }
-    void ReturnToPool();
+public interface IEngine {
+    public static IEngine Instance { get; protected internal set; } = null!;
+    
+    IServiceProvider ServiceProvider { get; }
 }

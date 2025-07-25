@@ -1,20 +1,16 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Diagnostics.CodeAnalysis;
-using Microsoft.Extensions.ObjectPool;
 
 namespace AterraEngine.Frameworks.Nexities;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface INexitiesEntity : IResettable {
+public interface INexitiesComponentProvider {
+    TComponent GetComponent<TComponent>(Guid guid) where TComponent : class, INexitiesComponent, new();
+    TComponent GetComponent<TComponent>() where TComponent : class, INexitiesComponent, new();
+    void RegisterSingleton<T>(T component) where T : class, INexitiesComponent;
 
-    void SetComponent(INexitiesComponent component, int index);
-    TComponent GetComponent<TComponent>(int index) where TComponent : INexitiesComponent;
-    bool TryGetComponent<TComponent>(int index, [NotNullWhen(true)] out TComponent? component) where TComponent : INexitiesComponent;
-    ReadOnlySpan<INexitiesComponent> GetComponents();
-    
-    void ReturnToPool();
+    void ReturnComponent(in INexitiesComponent component);
 }

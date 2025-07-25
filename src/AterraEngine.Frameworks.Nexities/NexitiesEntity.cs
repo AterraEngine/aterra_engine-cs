@@ -2,9 +2,12 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Buffers;
+using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using AterraEngine.Contracts;
 using AterraEngine.Frameworks.Nexities.Pools;
+using AterraEngine.Shared;
 
 namespace AterraEngine.Frameworks.Nexities;
 
@@ -15,7 +18,11 @@ public abstract class NexitiesEntity<TEntity>(int initialComponentCapacity = 0) 
     where TEntity : class, INexitiesEntity, new() 
 {
     private INexitiesComponent[] Components { get; set; } = ArrayPool<INexitiesComponent>.Shared.Rent(initialComponentCapacity);
+    private ConcurrentDictionary<Guid, int> ComponentIdMap { get; } = new();
+    
     public int ComponentCount { get; private set => field = Math.Max(0, value); }
+
+    protected static INexitiesComponentProvider ComponentProvider { get; } = IEngine.Instance.GetRequiredService<INexitiesComponentProvider>();
 
     // -----------------------------------------------------------------------------------------------------------------
     // Constructors
@@ -38,11 +45,9 @@ public abstract class NexitiesEntity<TEntity>(int initialComponentCapacity = 0) 
     public void SetComponent(INexitiesComponent component, int index) {
         ResizeComponentsArrayIfNeeded(index + 1);
         Components[index] = component;
+        ComponentIdMap.AddOrUpdate(component.Id, index, (_, _) => index);
         ComponentCount++;
     }
-    
-    public void SetComponent<TComponent>(int index) where TComponent : class, INexitiesComponent, new() 
-        => SetComponent(ComponentPool<TComponent>.Shared.Get(), index);
     
     public TComponent GetComponent<TComponent>(int index) where TComponent : INexitiesComponent {
         if (index >= ComponentCount) throw new IndexOutOfRangeException();
@@ -69,13 +74,13 @@ public abstract class NexitiesEntity<TEntity>(int initialComponentCapacity = 0) 
         ComponentCount = 0;
         
         for (var i = 0; i < ComponentCount; i++) {
-            INexitiesComponent component = Components[i];
-            component.ReturnToPool();
+            ComponentProvider.ReturnComponent(Components[i]);
             Components[i] = null!;
         }
         
         ArrayPool<INexitiesComponent>.Shared.Return(Components);
         Components = ArrayPool<INexitiesComponent>.Shared.Rent(oldComponentCount);
+
         PopulateComponents();
         
         return true;
